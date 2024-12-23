@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/enums/processing/dialog_name_enum.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../widgets/general/app_logo.dart';

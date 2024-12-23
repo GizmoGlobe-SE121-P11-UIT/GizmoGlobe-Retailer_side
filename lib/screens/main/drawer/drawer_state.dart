@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 
 class DrawerState {

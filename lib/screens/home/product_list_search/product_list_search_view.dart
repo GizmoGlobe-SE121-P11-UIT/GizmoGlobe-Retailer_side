@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gizmoglobe_client/screens/home/product_list_search/product_list_search_state.dart';
-import 'package:gizmoglobe_client/widgets/general/app_logo.dart';
 import 'package:gizmoglobe_client/widgets/general/checkbox_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import '../../../enums/processing/sort_enum.dart';
 import '../../../widgets/filter/advanced_filter_search/advanced_filter_search_view.dart';
 import '../../../widgets/general/app_text_style.dart';
-import '../../../widgets/general/gradient_radio_button.dart';
 import 'product_list_search_cubit.dart';
 
 class ProductListSearchScreen extends StatefulWidget {

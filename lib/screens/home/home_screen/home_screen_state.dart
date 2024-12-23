@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../objects/product_related/product.dart';
 
 class HomeScreenState extends Equatable {
   final String username;

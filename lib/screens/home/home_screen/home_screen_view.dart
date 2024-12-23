@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gizmoglobe_client/widgets/general/app_logo.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_button.dart';
 
 import '../../../widgets/general/gradient_icon_button.dart';
 import '../../../widgets/general/field_with_icon.dart';
