@@ -2,14 +2,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/objects/product_related/product.dart';
+import 'package:gizmoglobe_client/screens/invoice/invoice_screen_view.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dart';
+import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
+import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_view.dart';
 import '../../../widgets/general/selectable_gradient_icon.dart';
-import '../../cart/cart_screen/cart_screen_view.dart';
 import '../../home/home_screen/home_screen_view.dart';
 import '../../user/user_screen/user_screen_view.dart';
-import '../drawer/drawer_cubit.dart';
-import '../drawer/drawer_state.dart';
-import '../drawer/drawer_view.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -20,17 +20,20 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int index = 0;
+  MainScreenCubit get cubit => context.read<MainScreenCubit>();
 
   final List<Widget Function()> widgetList = [
         () => HomeScreen.newInstance(),
-        () => Container(),
+        () => ProductScreen.newInstance(),
+        () => InvoiceScreen.newInstance(),
+        () => StakeholderScreen.newInstance(),
         () => UserScreen.newInstance(),
   ];
 
   @override
   void initState() {
     super.initState();
-    context.read<MainScreenCubit>().getUserName();
+    cubit.getUserName();
   }
 
   @override
@@ -47,12 +50,7 @@ class _MainScreenState extends State<MainScreen> {
             child: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               onTap: (value) {
-                if (value == 1) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CartScreen()),
-                  );
-                } else if (value != index) {
+                if (value != index) {
                   setState(() {
                     index = value;
                   });
@@ -68,47 +66,46 @@ class _MainScreenState extends State<MainScreen> {
                   icon: SelectableGradientIcon(
                     icon: Icons.home,
                     isSelected: index == 0,
+                    label: 'Home',
                   ),
                   label: "Home",
                 ),
-                const BottomNavigationBarItem(
+                BottomNavigationBarItem(
                   icon: SelectableGradientIcon(
-                    icon: Icons.shopping_cart,
-                    isSelected: false,
+                    icon: Icons.inventory,
+                    isSelected: index == 1,
+                    label: 'Product',
                   ),
-                  label: "Cart",
+                  label: "Product",
                 ),
                 BottomNavigationBarItem(
                   icon: SelectableGradientIcon(
-                    icon: Icons.person,
+                    icon: Icons.receipt,
                     isSelected: index == 2,
+                    label: 'Invoice',
                   ),
-                  label: "User",
+                  label: "Invoice",
+                ),
+                BottomNavigationBarItem(
+                  icon: SelectableGradientIcon(
+                    icon: Icons.groups,
+                    isSelected: index == 3,
+                    label: 'Stakeholder',
+                  ),
+                  label: "Home",
+                ),
+                BottomNavigationBarItem(
+                  icon: SelectableGradientIcon(
+                    icon: Icons.account_circle,
+                    isSelected: index == 4,
+                    label: 'Profile',
+                  ),
+                  label: "Profile",
                 ),
               ],
             ),
           ),
         ),
-        BlocBuilder<DrawerCubit, DrawerState>(
-          builder: (context, state) {
-            if (state.isOpen) {
-              return GestureDetector(
-                onTap: () => context.read<DrawerCubit>().closeDrawer(),
-                child: Container(
-                  color: Colors.black.withOpacity(0.5),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ),
-                ),
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-        const DrawerView(),
       ],
     );
   }

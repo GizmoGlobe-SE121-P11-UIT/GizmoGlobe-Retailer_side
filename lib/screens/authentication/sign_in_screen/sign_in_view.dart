@@ -69,7 +69,7 @@ class _SignInScreen extends State<SignInScreen> {
                     fontWeight: FontWeight.normal,
                     textColor: Theme.of(context).colorScheme.primary,
                     hintTextColor: Theme.of(context).colorScheme.onPrimary,
-                    onChange: (value) {
+                    onChanged: (value) {
                       cubit.emailChanged(value);
                     },
                   ),
@@ -84,7 +84,7 @@ class _SignInScreen extends State<SignInScreen> {
                     obscureText: true,
                     textColor: Theme.of(context).colorScheme.primary,
                     hintTextColor: Theme.of(context).colorScheme.onPrimary,
-                    onChange: (value) {
+                    onChanged: (value) {
                       cubit.passwordChanged(value);
                     },
                   ),
@@ -118,7 +118,7 @@ class _SignInScreen extends State<SignInScreen> {
                           ),
                         );
                       }
-
+                      else
                       if (state.processState == ProcessState.success) {
                         showDialog(
                             context: context,
@@ -136,46 +136,16 @@ class _SignInScreen extends State<SignInScreen> {
                       if (state.processState == ProcessState.loading) {
                         return const CircularProgressIndicator();
                       }
-                      return Column(
-                        children: [
-                          GradientButton(
-                            onPress: () {
-                              cubit.signInWithEmailPassword();
-                            },
-                            text: 'Sign in',
-                            gradient: LinearGradient(
-                              colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Expanded(child: Divider(color: Theme.of(context).colorScheme.primary)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(
-                                  'or',
-                                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                                ),
-                              ),
-                              Expanded(child: Divider(color: Theme.of(context).colorScheme.primary)),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          GradientButton(
-                            onPress: () {
-                              cubit.signInWithGoogle();
-                            },
-                            text: 'Continue with Google',
-                            gradient: LinearGradient(
-                              colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                          ),
-                        ],
+                      return GradientButton(
+                        onPress: () {
+                          cubit.signInWithEmailPassword();
+                        },
+                        text: 'Sign in',
+                        gradient: LinearGradient(
+                          colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
                       );
                     },
                   ),
@@ -185,7 +155,7 @@ class _SignInScreen extends State<SignInScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Don't have an account?",
+                    "Authorized by admin?",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w400,
