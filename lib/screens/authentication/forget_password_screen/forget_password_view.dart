@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
@@ -8,6 +9,7 @@ import 'forget_password_cubit.dart';
 import '../../../widgets/general/app_logo.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import 'forget_password_state.dart';
+import '../../../enums/processing/notify_message_enum.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
@@ -96,7 +98,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 obscureText: false,
                 textColor: Theme.of(context).colorScheme.primary,
                 hintTextColor: Theme.of(context).colorScheme.onPrimary,
-                onChange: (value) {
+                onChanged: (value) {
                   cubit.emailChanged(value);
                 },
               ),

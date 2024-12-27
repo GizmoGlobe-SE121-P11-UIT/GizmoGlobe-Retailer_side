@@ -1,7 +1,10 @@
 enum SortEnum {
-  bestSeller('Best seller'),
-  lowestPrice('Lowest price'),
-  highestPrice('Highest price');
+  releaseLatest('Release date: Latest'),
+  releaseOldest('Release date: Oldest'),
+  stockHighest('Stock: Highest'),
+  stockLowest('Stock: Lowest'),
+  salesHighest('Sale: Highest'),
+  salesLowest('Sale: Lowest');
 
   final String description;
   const SortEnum(this.description);

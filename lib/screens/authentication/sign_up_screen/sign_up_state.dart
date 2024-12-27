@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gizmoglobe_client/enums/processing/dialog_name_enum.dart';
 import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
