@@ -27,7 +27,7 @@ class InformationScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'About GoodGadget',
+              'About GizmoGlobe',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -36,11 +36,11 @@ class InformationScreen extends StatelessWidget {
             const SizedBox(height: 24),
             _buildInfoSection(
               title: 'About Us',
-              content: 'GoodGadget is your trusted partner in computer hardware shop solutions.',
+              content: 'GizmoGlobe is your trusted provider for computer hardware solutions.',
             ),
             _buildInfoSection(
               title: 'Our Mission',
-              content: 'To provide excellent service and quality products to your customers.',
+              content: 'To provide excellent service and quality products to you, our beloved customers.',
             ),
             _buildInfoSection(
               title: 'Contact Information',

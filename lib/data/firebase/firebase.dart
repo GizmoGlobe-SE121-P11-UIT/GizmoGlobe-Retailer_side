@@ -31,6 +31,7 @@ import '../../objects/manufacturer.dart';
 import '../../objects/product_related/product.dart';
 import '../../objects/product_related/product_factory.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> pushProductSamplesToFirebase() async {
   try {
@@ -1148,7 +1149,7 @@ class Firebase {
       final customerDetails = await getCustomerDetails(invoice.customerID);
       invoice.customerName = customerDetails['customerName'];
 
-      // Lấy chi tiết hóa đơn và thông tin sản phẩm
+      // Lấy chi ti��t hóa đơn và thông tin sản phẩm
       final detailsSnapshot = await FirebaseFirestore.instance
           .collection('sales_invoice_details')
           .where('salesInvoiceID', isEqualTo: invoiceID)
@@ -1491,6 +1492,65 @@ class Firebase {
       Database().updateProductList(products);
     } catch (e) {
       print('Error updating product stock and sales: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserProfile(String userID, String newUsername) async {
+    try {
+      // Cập nhật thông tin trong collection users
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .update({
+        'username': newUsername,
+      });
+
+      // Kiểm tra và cập nhật thông tin trong collection customers nếu là khách hàng
+      QuerySnapshot customerSnapshot = await FirebaseFirestore.instance
+          .collection('customers')
+          .where('customerID', isEqualTo: userID)
+          .get();
+
+      if (customerSnapshot.docs.isNotEmpty) {
+        await FirebaseFirestore.instance
+            .collection('customers')
+            .doc(customerSnapshot.docs.first.id)
+            .update({
+          'customerName': newUsername,
+        });
+      }
+
+      // Kiểm tra và cập nhật thông tin trong collection employees nếu là nhân viên
+      QuerySnapshot employeeSnapshot = await FirebaseFirestore.instance
+          .collection('employees')
+          .where('employeeID', isEqualTo: userID)
+          .get();
+
+      if (employeeSnapshot.docs.isNotEmpty) {
+        await FirebaseFirestore.instance
+            .collection('employees')
+            .doc(employeeSnapshot.docs.first.id)
+            .update({
+          'employeeName': newUsername,
+        });
+      }
+    } catch (e) {
+      print('Error updating user profile: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserPassword(String newPassword) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await user.updatePassword(newPassword);
+      } else {
+        throw Exception('No user is currently signed in');
+      }
+    } catch (e) {
+      print('Error updating password: $e');
       rethrow;
     }
   }
