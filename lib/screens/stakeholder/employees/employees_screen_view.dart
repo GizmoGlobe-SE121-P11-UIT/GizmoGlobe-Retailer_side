@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,6 +27,23 @@ class EmployeesScreen extends StatefulWidget {
 class _EmployeesScreenState extends State<EmployeesScreen> {
   final TextEditingController searchController = TextEditingController();
   EmployeesScreenCubit get cubit => context.read<EmployeesScreenCubit>();
+  String? userRole;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserRole();
+  }
+
+  Future<void> _fetchUserRole() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      setState(() {
+        userRole = doc.data()?['role'];
+      });
+    }
+  }
 
   void _showAddEmployeeDialog() {
     final nameController = TextEditingController();
@@ -464,11 +483,12 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       onPressed: _showFilterDialog,
                     ),
                     const SizedBox(width: 8),
-                    GradientIconButton(
-                      icon: Icons.person_add,
-                      iconSize: 32,
-                      onPressed: _showAddEmployeeDialog,
-                    )
+                    if (userRole == 'admin')
+                      GradientIconButton(
+                        icon: Icons.person_add,
+                        iconSize: 32,
+                        onPressed: _showAddEmployeeDialog,
+                      ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -500,6 +520,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => EmployeeDetailScreen(
                                     employee: employee,
+                                    userRole: userRole ?? 'employee',
                                   ),
                                 ),
                               );
@@ -537,37 +558,38 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) => EmployeeDetailScreen(
-                                                    employee: employee,
+                                                    employee: employee,userRole: userRole ?? 'employee',
                                                   ),
                                                 ),
                                               );
                                             },
                                           ),
-                                          ListTile(
-                                            dense: true,
-                                            leading: const Icon(
-                                              Icons.edit_outlined,
-                                              size: 20,
-                                              color: Colors.white,
+                                          if (userRole == 'admin')
+                                            ListTile(
+                                              dense: true,
+                                              leading: const Icon(
+                                                Icons.edit_outlined,
+                                                size: 20,
+                                                color: Colors.white,
+                                              ),
+                                              title: const Text('Edit'),
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                cubit.setSelectedIndex(null);
+                                                final updatedEmployee = await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => EmployeeEditScreen(
+                                                      employee: employee,
+                                                    ),
+                                                  ),
+                                                );
+
+                                                if (updatedEmployee != null) {
+                                                  await cubit.updateEmployee(updatedEmployee);
+                                                }
+                                              },
                                             ),
-                                            title: const Text('Edit'),
-                                            onTap: () async {
-                                              Navigator.pop(context);
-                                              cubit.setSelectedIndex(null);
-                                              final updatedEmployee = await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => EmployeeEditScreen(
-                                                    employee: employee,
-                                                  ),
-                                                ),
-                                              );
-                                              
-                                              if (updatedEmployee != null) {
-                                                await cubit.updateEmployee(updatedEmployee);
-                                              }
-                                            },
-                                          ),
                                           ListTile(
                                             dense: true,
                                             leading: Icon(
