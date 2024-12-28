@@ -54,15 +54,15 @@ class Address {
 
   Map<String, dynamic> toMap() {
     return {
-      'AddressID': addressID,
-      'CustomerID': customerID,
-      'ReceiverName': receiverName,
-      'ReceiverPhone': receiverPhone,
-      'ProvinceCode': province?.code,
-      'DistrictCode': district?.code,
-      'WardCode': ward?.code,
-      'Street': street,
-      'Hidden': hidden,
+      'addressID': addressID,
+      'customerID': customerID,
+      'receiverName': receiverName,
+      'receiverPhone': receiverPhone,
+      'provinceCode': province?.code,
+      'districtCode': district?.code,
+      'wardCode': ward?.code,
+      'street': street,
+      'hidden': hidden,
     };
   }
 
