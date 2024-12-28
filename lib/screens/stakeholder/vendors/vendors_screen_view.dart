@@ -8,12 +8,17 @@ import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_detail/vend
 import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_edit/vendor_edit_view.dart';
 
 class VendorsScreen extends StatefulWidget {
-  const VendorsScreen({super.key});
+  final String userRole;
 
-  static Widget newInstance() => BlocProvider(
-        create: (context) => VendorsScreenCubit(),
-        child: const VendorsScreen(),
-      );
+  const VendorsScreen({
+    super.key,
+    required this.userRole,
+  });
+
+  static Widget newInstance(String userRole) => BlocProvider(
+    create: (context) => VendorsScreenCubit(),
+    child: VendorsScreen(userRole: userRole),
+  );
 
   @override
   State<VendorsScreen> createState() => _VendorsScreenState();
@@ -22,7 +27,7 @@ class VendorsScreen extends StatefulWidget {
 class _VendorsScreenState extends State<VendorsScreen> {
   final TextEditingController searchController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
-  
+
   VendorsScreenCubit get cubit => context.read<VendorsScreenCubit>();
 
   void _showAddManufacturerModal() {
@@ -77,7 +82,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                     ),
                     labelStyle: const TextStyle(color: Colors.white),
                     floatingLabelStyle: MaterialStateTextStyle.resolveWith(
-                      (states) => TextStyle(
+                          (states) => TextStyle(
                         color: states.contains(MaterialState.focused)
                             ? Theme.of(context).primaryColor
                             : Colors.white,
@@ -221,12 +226,14 @@ class _VendorsScreenState extends State<VendorsScreen> {
                         prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    GradientIconButton(
-                      icon: Icons.business_center,
-                      iconSize: 32,
-                      onPressed: _showAddManufacturerModal,
-                    )
+                    if (widget.userRole == 'admin') ...[
+                      const SizedBox(width: 8),
+                      GradientIconButton(
+                        icon: Icons.business_center,
+                        iconSize: 32,
+                        onPressed: _showAddManufacturerModal,
+                      ),
+                    ]
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -254,6 +261,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => VendorDetailScreen(
                                     manufacturer: manufacturer,
+                                    userRole: widget.userRole,
                                   ),
                                 ),
                               );
@@ -292,81 +300,38 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                 MaterialPageRoute(
                                                   builder: (context) => VendorDetailScreen(
                                                     manufacturer: manufacturer,
+                                                    userRole: widget.userRole,
                                                   ),
                                                 ),
                                               );
                                             },
                                           ),
-                                          ListTile(
-                                            dense: true,
-                                            leading: const Icon(
-                                              Icons.edit_outlined,
-                                              size: 20,
-                                              color: Colors.white,
-                                            ),
-                                            title: const Text('Edit'),
-                                            onTap: () async {
-                                              Navigator.pop(context);
-                                              cubit.setSelectedIndex(null);
-                                              final updatedManufacturer = await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => VendorEditScreen(
-                                                    manufacturer: manufacturer,
-                                                  ),
-                                                ),
-                                              );
-                                              
-                                              if (updatedManufacturer != null) {
-                                                await cubit.updateManufacturer(updatedManufacturer);
-                                              }
-                                            },
-                                          ),
-                                          ListTile(
-                                            dense: true,
-                                            leading: Icon(
-                                              Icons.delete_outlined,
-                                              size: 20,
-                                              color: Theme.of(context).colorScheme.error,
-                                            ),
-                                            title: Text(
-                                              'Delete',
-                                              style: TextStyle(
-                                                color: Theme.of(context).colorScheme.error,
+                                          if (widget.userRole == 'admin' )
+                                            ListTile(
+                                              dense: true,
+                                              leading: const Icon(
+                                                Icons.edit_outlined,
+                                                size: 20,
+                                                color: Colors.white,
                                               ),
+                                              title: const Text('Edit'),
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                cubit.setSelectedIndex(null);
+                                                final updatedManufacturer = await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => VendorEditScreen(
+                                                      manufacturer: manufacturer,
+                                                    ),
+                                                  ),
+                                                );
+                                                if (updatedManufacturer != null) {
+                                                  await cubit.updateManufacturer(updatedManufacturer);
+                                                }
+                                              },
                                             ),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              cubit.setSelectedIndex(null);
-                                              showDialog(
-                                                context: context,
-                                                builder: (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: const Text('Delete Manufacturer'),
-                                                    content: Text('Are you sure you want to delete ${manufacturer.manufacturerName}?'),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () => Navigator.pop(context),
-                                                        child: const Text('Cancel'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () async {
-                                                          Navigator.pop(context);
-                                                          await cubit.deleteManufacturer(manufacturer.manufacturerID!);
-                                                        },
-                                                        child: Text(
-                                                          'Delete',
-                                                          style: TextStyle(
-                                                            color: Theme.of(context).colorScheme.error,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          ),
+
                                         ],
                                       ),
                                     ),
@@ -382,8 +347,8 @@ class _VendorsScreenState extends State<VendorsScreen> {
                               child: Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 decoration: BoxDecoration(
-                                  color: state.selectedIndex == index 
-                                      ? Theme.of(context).primaryColor.withOpacity(0.1) 
+                                  color: state.selectedIndex == index
+                                      ? Theme.of(context).primaryColor.withOpacity(0.1)
                                       : Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(8),
                                 ),

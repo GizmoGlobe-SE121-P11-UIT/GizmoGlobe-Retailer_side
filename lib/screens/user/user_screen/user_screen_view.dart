@@ -619,7 +619,7 @@ class _UserScreen extends State<UserScreen> {
                   label: const Text(
                     'Username',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.grey,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(

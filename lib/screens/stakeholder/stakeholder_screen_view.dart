@@ -62,8 +62,10 @@ class _StakeholderScreenState extends State<StakeholderScreen> {
       tabViews.add(EmployeesScreen.newInstance());
     }
 
-    tabs.add(const Tab(text: 'Vendors'));
-    tabViews.add(VendorsScreen.newInstance());
+    if (userRole != null) {
+      tabs.add(const Tab(text: 'Vendors'));
+      tabViews.add(VendorsScreen.newInstance(userRole!));
+    }
 
     return BlocBuilder<StakeholderScreenCubit, StakeholderScreenState>(
       builder: (context, state) {

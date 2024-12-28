@@ -402,51 +402,51 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                               }
                                             },
                                           ),
-                                          ListTile(
-                                            dense: true,
-                                            leading: Icon(
-                                              Icons.delete_outlined,
-                                              size: 20,
-                                              color: Theme.of(context).colorScheme.error,
-                                            ),
-                                            title: Text(
-                                              'Delete',
-                                              style: TextStyle(
-                                                color: Theme.of(context).colorScheme.error,
-                                              ),
-                                            ),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              cubit.setSelectedIndex(null);
-                                              showDialog(
-                                                context: context,
-                                                builder: (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: const Text('Delete Customer'),
-                                                    content: Text('Are you sure you want to delete ${customer.customerName}?'),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () => Navigator.pop(context),
-                                                        child: const Text('Cancel'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () async {
-                                                          Navigator.pop(context);
-                                                          await cubit.deleteCustomer(customer.customerID!);
-                                                        },
-                                                        child: Text(
-                                                          'Delete',
-                                                          style: TextStyle(
-                                                            color: Theme.of(context).colorScheme.error,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          ),
+                                          // ListTile(
+                                          //   dense: true,
+                                          //   leading: Icon(
+                                          //     Icons.delete_outlined,
+                                          //     size: 20,
+                                          //     color: Theme.of(context).colorScheme.error,
+                                          //   ),
+                                          //   title: Text(
+                                          //     'Delete',
+                                          //     style: TextStyle(
+                                          //       color: Theme.of(context).colorScheme.error,
+                                          //     ),
+                                          //   ),
+                                          //   onTap: () {
+                                          //     Navigator.pop(context);
+                                          //     cubit.setSelectedIndex(null);
+                                          //     showDialog(
+                                          //       context: context,
+                                          //       builder: (BuildContext context) {
+                                          //         return AlertDialog(
+                                          //           title: const Text('Delete Customer'),
+                                          //           content: Text('Are you sure you want to delete ${customer.customerName}?'),
+                                          //           actions: [
+                                          //             TextButton(
+                                          //               onPressed: () => Navigator.pop(context),
+                                          //               child: const Text('Cancel'),
+                                          //             ),
+                                          //             TextButton(
+                                          //               onPressed: () async {
+                                          //                 Navigator.pop(context);
+                                          //                 await cubit.deleteCustomer(customer.customerID!);
+                                          //               },
+                                          //               child: Text(
+                                          //                 'Delete',
+                                          //                 style: TextStyle(
+                                          //                   color: Theme.of(context).colorScheme.error,
+                                          //                 ),
+                                          //               ),
+                                          //             ),
+                                          //           ],
+                                          //         );
+                                          //       },
+                                          //     );
+                                          //   },
+                                          // ),
                                         ],
                                       ),
                                     ),

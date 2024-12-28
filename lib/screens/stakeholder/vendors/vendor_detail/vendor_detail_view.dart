@@ -8,10 +8,12 @@ import '../vendor_edit/vendor_edit_view.dart';
 
 class VendorDetailScreen extends StatefulWidget {
   final Manufacturer manufacturer;
+  final String userRole;
 
   const VendorDetailScreen({
     super.key,
     required this.manufacturer,
+    required this.userRole,
   });
 
   @override
@@ -102,73 +104,32 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                   ),
                   child: Row(
                     children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () async {
-                            final updatedManufacturer = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => VendorEditScreen(
-                                  manufacturer: state.manufacturer,
+                      if (widget.userRole != 'employee')
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              final updatedManufacturer = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => VendorEditScreen(
+                                    manufacturer: state.manufacturer,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
 
-                            if (updatedManufacturer != null) {
-                              final cubit = context.read<VendorDetailCubit>();
-                              cubit.updateManufacturer(updatedManufacturer);
-                            }
-                          },
-                          icon: const Icon(Icons.edit, color: Colors.white),
-                          label: const Text('Edit', style: TextStyle(color: Colors.white)),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                              if (updatedManufacturer != null) {
+                                final cubit = context.read<VendorDetailCubit>();
+                                cubit.updateManufacturer(updatedManufacturer);
+                              }
+                            },
+                            icon: const Icon(Icons.edit, color: Colors.white),
+                            label: const Text('Edit', style: TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            final cubit = context.read<VendorDetailCubit>();
-                            showDialog(
-                              context: context,
-                              builder: (dialogContext) => AlertDialog(
-                                title: const Text('Delete Manufacturer'),
-                                content: const Text(
-                                  'Are you sure you want to delete this manufacturer?',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(dialogContext),
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () async {
-                                      Navigator.pop(dialogContext);
-                                      await cubit.deleteManufacturer();
-                                      if (mounted) {
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    child: const Text(
-                                      'Delete',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.delete, color: Colors.white),
-                          label: const Text('Delete', style: TextStyle(color: Colors.white)),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -204,4 +165,4 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
       ),
     );
   }
-} 
+}

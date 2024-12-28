@@ -190,31 +190,31 @@ class _SalesScreenState extends State<SalesScreen> {
                                                     }
                                                   },
                                                 ),
-                                                ListTile(
-                                                  dense: true,
-                                                  leading: const Icon(
-                                                    Icons.edit_outlined,
-                                                    size: 20,
-                                                    color: Colors.white,
-                                                  ),
-                                                  title: const Text('Change order status'),
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                    cubit.setSelectedIndex(null);
-                                                    // Navigator.push(
-                                                    //   context,
-                                                    //   MaterialPageRoute(
-                                                    //     builder: (context) => SalesEditScreen(
-                                                    //       invoice: invoice,
-                                                    //     ),
-                                                    //   ),
-                                                    // ).then((updatedInvoice) {
-                                                    //   if (updatedInvoice != null) {
-                                                    //     cubit.updateSalesInvoice(updatedInvoice);
-                                                    //   }
-                                                    // });
-                                                  },
-                                                ),
+                                                // ListTile(
+                                                //   dense: true,
+                                                //   leading: const Icon(
+                                                //     Icons.edit_outlined,
+                                                //     size: 20,
+                                                //     color: Colors.white,
+                                                //   ),
+                                                //   title: const Text('Change order status'),
+                                                //   onTap: () {
+                                                //     Navigator.pop(context);
+                                                //     cubit.setSelectedIndex(null);
+                                                //     // Navigator.push(
+                                                //     //   context,
+                                                //     //   MaterialPageRoute(
+                                                //     //     builder: (context) => SalesEditScreen(
+                                                //     //       invoice: invoice,
+                                                //     //     ),
+                                                //     //   ),
+                                                //     // ).then((updatedInvoice) {
+                                                //     //   if (updatedInvoice != null) {
+                                                //     //     cubit.updateSalesInvoice(updatedInvoice);
+                                                //     //   }
+                                                //     // });
+                                                //   },
+                                                // ),
                                               ],
                                             ),
                                           ),
