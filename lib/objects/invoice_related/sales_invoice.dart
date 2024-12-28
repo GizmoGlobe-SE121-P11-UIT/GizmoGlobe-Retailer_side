@@ -78,11 +78,11 @@ class SalesInvoice {
       address: address,
       date: (map['date'] as Timestamp).toDate(),
       paymentStatus: PaymentStatus.values.firstWhere(
-        (e) => e.toString() == map['paymentStatus'],
+        (e) => e.getName() == map['paymentStatus'],
         orElse: () => PaymentStatus.unpaid,
       ),
       salesStatus: SalesStatus.values.firstWhere(
-        (e) => e.toString() == map['salesStatus'],
+        (e) => e.getName() == map['salesStatus'],
         orElse: () => SalesStatus.pending,
       ),
       totalPrice: (map['totalPrice'] ?? 0).toDouble(),
