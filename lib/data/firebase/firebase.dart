@@ -145,7 +145,7 @@ Future<void> pushAddressSamplesToFirebase() async {
         'districtCode': address.district?.code,
         'wardCode': address.ward?.code,
         'street': address.street ?? '',
-        'isDefault': address.isDefault,
+        'hidden': address.hidden,
       });
 
       // Cập nhật lại document với addressID

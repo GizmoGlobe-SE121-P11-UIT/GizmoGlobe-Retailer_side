@@ -4,15 +4,15 @@ import 'package:gizmoglobe_client/objects/address_related/province.dart';
 import 'package:gizmoglobe_client/objects/address_related/ward.dart';
 
 class Address {
-  final String? addressID;
-  final String customerID;
-  final String receiverName;
-  final String receiverPhone;
-  final Province? province;
-  final District? district;
-  final Ward? ward;
-  final String? street;
-  final bool isDefault;
+  String? addressID;
+  String customerID;
+  String receiverName;
+  String receiverPhone;
+  Province? province;
+  District? district;
+  Ward? ward;
+  String? street;
+  bool hidden;
 
   Address({
     this.addressID,
@@ -23,17 +23,34 @@ class Address {
     this.district,
     this.ward,
     this.street,
-    required this.isDefault,
+    this.hidden = false,
   });
 
   @override
   String toString() {
     return '$receiverName - $receiverPhone'
-          '${street != null ? ', $street' : ''}'
-          '${ward != null ? ', $ward' : ''}'
-          '${district != null ? ', $district' : ''}'
-          '${province != null ? ', $province' : ''}';
+        '${street != null && street!.isNotEmpty ? ', $street' : ''}'
+        '${ward != null &&  ward!.fullNameEn.isNotEmpty ? ', ${ward!.fullNameEn}' : ''}'
+        '${district != null && district!.fullNameEn.isNotEmpty ? ', ${district!.fullNameEn}' : ''}'
+        '${province != null && province!.fullNameEn.isNotEmpty ? ', ${province!.fullNameEn}' : ''}';
   }
+
+  String firstLine() {
+    return '$receiverName - $receiverPhone';
+  }
+
+  String secondLine() {
+    return '${street != null && street!.isNotEmpty ? '$street, ' : ''}'
+        '${ward != null && ward!.fullNameEn.isNotEmpty ? '${ward!.fullNameEn}, ' : ''}'
+        '${district != null && district!.fullNameEn.isNotEmpty ? '${district!.fullNameEn}, ' : ''}'
+        '${province != null && province!.fullNameEn.isNotEmpty ? province!.fullNameEn : ''}';
+  }
+
+  static Address nullAddress = Address(
+    customerID: '',
+    receiverName: '',
+    receiverPhone: '',
+  );
 
   Map<String, dynamic> toMap() {
     return {
@@ -45,25 +62,25 @@ class Address {
       'DistrictCode': district?.code,
       'WardCode': ward?.code,
       'Street': street,
-      'IsDefault': isDefault,
+      'Hidden': hidden,
     };
   }
 
   static Address fromMap(Map<String, dynamic> map) {
-    final province = Database().provinceList.firstWhere((p) => p.code == map['ProvinceCode'], orElse: () => Province.nullProvince);
-    final district = province.districts?.firstWhere((d) => d.code == map['DistrictCode'], orElse: () => District.nullDistrict) ?? District.nullDistrict;
-    final ward = district.wards?.firstWhere((w) => w.code == map['WardCode'], orElse: () => Ward.nullWard) ?? Ward.nullWard;
+    final province = Database().provinceList.firstWhere((p) => p.code == map['provinceCode'], orElse: () => Province.nullProvince);
+    final district = province.districts?.firstWhere((d) => d.code == map['districtCode'], orElse: () => District.nullDistrict) ?? District.nullDistrict;
+    final ward = district.wards?.firstWhere((w) => w.code == map['wardCode'], orElse: () => Ward.nullWard) ?? Ward.nullWard;
 
     return Address(
-      addressID: map['AddressID'],
-      customerID: map['CustomerID'],
-      receiverName: map['ReceiverName'],
-      receiverPhone: map['ReceiverPhone'],
+      addressID: map['addressID'],
+      customerID: map['customerID'],
+      receiverName: map['receiverName'],
+      receiverPhone: map['receiverPhone'],
       province: province,
       district: district,
       ward: ward,
-      street: map['Street'],
-      isDefault: map['IsDefault'],
+      street: map['street'],
+      hidden: map['hidden'],
     );
   }
 }

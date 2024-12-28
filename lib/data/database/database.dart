@@ -55,63 +55,6 @@ class Database {
   Future<void> initialize() async {
     provinceList = await fetchProvinces();
 
-    addressList = [
-      Address(
-        customerID: '4e2PT6vyB9tszKqEcx6I',
-        receiverName: 'DuyVu',
-        receiverPhone: '123456789',
-        isDefault: true,
-        province: provinceList[0],
-        district: provinceList[0].districts![0],
-        ward: provinceList[0].districts![0].wards![0],
-        street: '123 Nguyen Trai',
-      ),
-
-      Address(
-        customerID: 'DyyMyOTtZ7J2SQzsr6IZ',
-        receiverName: 'Terry',
-        receiverPhone: '123456780',
-        isDefault: false,
-        province: provinceList[0],
-        district: provinceList[0].districts![2],
-        ward: provinceList[0].districts![2].wards![5],
-        street: '456 Le Loi',
-      ),
-
-      Address(
-        customerID: 'dKV74hSAXozpmhPgXerv',
-        receiverName: 'QuanDo',
-        receiverPhone: '123456780',
-        isDefault: false,
-        province: provinceList[0],
-        district: provinceList[0].districts![2],
-        ward: provinceList[0].districts![2].wards![2],
-        street: '789 Tran Hung Dao',
-      ),
-
-      Address(
-        customerID: 'noxiFkqUTN4bum27HPCq',
-        receiverName: 'NhatTan',
-        receiverPhone: '123456789',
-        isDefault: true,
-        province: provinceList[1],
-        district: provinceList[1].districts![0],
-        ward: provinceList[1].districts![0].wards![0],
-        street: '123 Nguyen Trai',
-      ),
-
-      Address(
-        customerID: 'tqyMZqXphgCTdKudaWyV',
-        receiverName: 'NguyenKhoa',
-        receiverPhone: '123456790',
-        isDefault: false,
-        province: provinceList[1],
-        district: provinceList[1].districts![1],
-        ward: provinceList[1].districts![1].wards![1],
-        street: '456 Le Loi',
-      ),
-    ];
-
     try {
       await fetchDataFromFirestore();
     } catch (e) {
@@ -199,6 +142,8 @@ class Database {
           return Future.error('Error processing product ${doc.id}: $e');
         }
       }));
+
+      await fetchAddress();
 
       print('Số lượng products trong list: ${productList.length}');
 
@@ -1105,83 +1050,6 @@ class Database {
         role: RoleEnum.owner,
       ),
     ];
-
-    salesInvoiceList = [
-      SalesInvoice(
-        customerID: 'noxiFkqUTN4bum27HPCq', // Tran Nhat Tan
-        address: '123 Nguyen Van Cu, District 5, Ho Chi Minh City',
-        date: DateTime(2024, 3, 15),
-        paymentStatus: PaymentStatus.paid,
-        salesStatus: SalesStatus.completed,
-        totalPrice: 639.96,
-        details: [
-          SalesInvoiceDetail(
-            salesInvoiceID: '',
-            productID: '7eugMyslQdaIX59qzD8x', // AMD Ryzen 5 7600X
-            sellingPrice: 229.99,
-            quantity: 1,
-            subtotal: 229.99,
-          ),
-          SalesInvoiceDetail(
-            salesInvoiceID: '',
-            productID: 'PCSKvpsEj5FPBV1U7njG', // MSI MAG B760M MORTAR
-            sellingPrice: 229.99,
-            quantity: 1,
-            subtotal: 229.99,
-          ),
-          SalesInvoiceDetail(
-            salesInvoiceID: '',
-            productID: '2xMyMBUL86Gv16kxUC8V', // G.Skill Ripjaws V DDR4
-            sellingPrice: 89.99,
-            quantity: 2,
-            subtotal: 179.98,
-          ),
-        ],
-      ),
-
-      SalesInvoice(
-        customerID: 'dKV74hSAXozpmhPgXerv', // Do Hong Quan
-        address: '456 Le Hong Phong, District 10, Ho Chi Minh City',
-        date: DateTime(2024, 3, 16),
-        paymentStatus: PaymentStatus.unpaid,
-        salesStatus: SalesStatus.pending,
-        totalPrice: 349.99,
-        details: [
-          SalesInvoiceDetail(
-            salesInvoiceID: '',
-            productID: '9xKyNBWL86Gv16kxUC8Z', // AMD Ryzen 7 7800X3D
-            sellingPrice: 349.99,
-            quantity: 1,
-            subtotal: 349.99,
-          ),
-        ],
-      ),
-
-      SalesInvoice(
-        customerID: '4e2PT6vyB9tszKqEcx6I', // Nguyen Duy Vu
-        address: '789 Ly Thuong Kiet, District 11, Ho Chi Minh City',
-        date: DateTime(2024, 3, 17),
-        paymentStatus: PaymentStatus.paid,
-        salesStatus: SalesStatus.shipping,
-        totalPrice: 1649.98,
-        details: [
-          SalesInvoiceDetail(
-            salesInvoiceID: '',
-            productID: '3zLxMBWL86Gv16kxUC8Y', // AMD Threadripper PRO 5995WX
-            sellingPrice: 1199.99,
-            quantity: 1,
-            subtotal: 1199.99,
-          ),
-          SalesInvoiceDetail(
-            salesInvoiceID: '',
-            productID: '5vNwMBWL86Gv16kxUC8X', // ASUS ROG MAXIMUS Z790 HERO
-            sellingPrice: 449.99,
-            quantity: 1,
-            subtotal: 449.99,
-          ),
-        ],
-      ),
-    ];
   }
 
   void generateSampleData() {
@@ -1228,5 +1096,15 @@ class Database {
 
   void updateProductList (List<Product> productList) {
     this.productList = productList;
+  }
+
+  Future<void> fetchAddress() async {
+    final addressSnapshot = await FirebaseFirestore.instance
+        .collection('addresses')
+        .get();
+
+    addressList = addressSnapshot.docs.map((doc) {
+      return Address.fromMap(doc.data());
+    }).toList();
   }
 }

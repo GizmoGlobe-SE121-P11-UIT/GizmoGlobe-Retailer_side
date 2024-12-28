@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/screens/invoice/sales/sales_add/sales_add_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_detail/sales_detail_view.dart';
-import 'package:gizmoglobe_client/screens/invoice/sales/sales_edit/sales_edit_view.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
@@ -199,23 +197,22 @@ class _SalesScreenState extends State<SalesScreen> {
                                                     size: 20,
                                                     color: Colors.white,
                                                   ),
-                                                  title: const Text('Edit'),
+                                                  title: const Text('Change order status'),
                                                   onTap: () {
                                                     Navigator.pop(context);
                                                     cubit.setSelectedIndex(null);
-                                                    // Navigate to edit screen
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) => SalesEditScreen(
-                                                          invoice: invoice,
-                                                        ),
-                                                      ),
-                                                    ).then((updatedInvoice) {
-                                                      if (updatedInvoice != null) {
-                                                        cubit.updateSalesInvoice(updatedInvoice);
-                                                      }
-                                                    });
+                                                    // Navigator.push(
+                                                    //   context,
+                                                    //   MaterialPageRoute(
+                                                    //     builder: (context) => SalesEditScreen(
+                                                    //       invoice: invoice,
+                                                    //     ),
+                                                    //   ),
+                                                    // ).then((updatedInvoice) {
+                                                    //   if (updatedInvoice != null) {
+                                                    //     cubit.updateSalesInvoice(updatedInvoice);
+                                                    //   }
+                                                    // });
                                                   },
                                                 ),
                                               ],
@@ -290,6 +287,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                 ],
                                               ),
                                             ),
+                                            const SizedBox(width: 8),
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,

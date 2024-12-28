@@ -5,7 +5,6 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
 import 'sales_detail_cubit.dart';
 import 'sales_detail_state.dart';
-import '../sales_edit/sales_edit_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../enums/product_related/category_enum.dart';
 
@@ -177,7 +176,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                           _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)),
                           _buildInfoRow(
                             'Address', 
-                            state.invoice.address, 
+                            state.invoice.address.toString(),
                             wrap: true,
                             maxWidth: MediaQuery.of(context).size.width * 0.6,
                           ),
@@ -390,7 +389,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
-              textAlign: wrap ? TextAlign.left : TextAlign.right,
+              textAlign: TextAlign.right,
               softWrap: wrap,
             ),
           ),

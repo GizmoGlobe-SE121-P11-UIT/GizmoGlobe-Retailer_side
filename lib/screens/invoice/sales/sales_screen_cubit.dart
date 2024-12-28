@@ -55,7 +55,7 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
 
     final filteredInvoices = state.invoices.where((invoice) {
       return invoice.customerID.toLowerCase().contains(query.toLowerCase()) ||
-             invoice.address.toLowerCase().contains(query.toLowerCase());
+             invoice.address.toString().toLowerCase().contains(query.toLowerCase());
     }).toList();
 
     emit(state.copyWith(invoices: filteredInvoices));

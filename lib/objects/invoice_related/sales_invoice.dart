@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
+import 'package:gizmoglobe_client/objects/address_related/address.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice_detail.dart';
+
+import '../../data/database/database.dart';
 
 class SalesInvoice {
   String? salesInvoiceID;
   String customerID;
   String? customerName;
-  String address;
+  Address address;
   DateTime date;
   PaymentStatus paymentStatus;
   SalesStatus salesStatus;
@@ -30,7 +33,7 @@ class SalesInvoice {
     String? salesInvoiceID,
     String? customerID,
     String? customerName,
-    String? address,
+    Address? address,
     DateTime? date,
     PaymentStatus? paymentStatus,
     SalesStatus? salesStatus,
@@ -55,7 +58,7 @@ class SalesInvoice {
       'salesInvoiceID': salesInvoiceID,
       'customerID': customerID,
       'customerName': customerName,
-      'address': address,
+      'address': address.addressID,
       'date': date,
       'paymentStatus': paymentStatus.toString(),
       'salesStatus': salesStatus.toString(),
@@ -64,11 +67,15 @@ class SalesInvoice {
   }
 
   static SalesInvoice fromMap(String id, Map<String, dynamic> map) {
+    Address address = Database().addressList.firstWhere(
+          (address) => address.addressID == map['address'],
+    );
+
     return SalesInvoice(
       salesInvoiceID: id,
       customerID: map['customerID'] ?? '',
       customerName: map['customerName'],
-      address: map['address'] ?? '',
+      address: address,
       date: (map['date'] as Timestamp).toDate(),
       paymentStatus: PaymentStatus.values.firstWhere(
         (e) => e.toString() == map['paymentStatus'],
