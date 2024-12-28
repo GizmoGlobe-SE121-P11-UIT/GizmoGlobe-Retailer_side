@@ -8,6 +8,7 @@ import 'user_screen_cubit.dart';
 import 'user_screen_state.dart';
 import 'package:gizmoglobe_client/screens/user/information/information_screen_view.dart';
 import 'package:gizmoglobe_client/screens/user/support/support_screen_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -207,14 +208,14 @@ class _UserScreen extends State<UserScreen> {
                     icon: Icons.person_outline,
                     title: "Edit Profile",
                     subtitle: "Update your personal information",
-                    onTap: () {},
+                    onTap: () => showEditProfileBottomSheet(context),
                     iconColor: Colors.blue,
                   ),
                   _buildSettingsItem(
                     icon: Icons.lock_outline,
                     title: "Change Password",
                     subtitle: "Manage your account security",
-                    onTap: () {},
+                    onTap: () => showChangePasswordBottomSheet(context),
                     iconColor: Colors.orange,
                   ),
                   
@@ -579,6 +580,169 @@ class _UserScreen extends State<UserScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void showEditProfileBottomSheet(BuildContext context) {
+    final TextEditingController usernameController = TextEditingController();
+    
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Edit Profile',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: usernameController,
+                decoration: const InputDecoration(
+                  labelText: 'Username',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null && usernameController.text.isNotEmpty) {
+                      await Firebase().updateUserProfile(
+                        user.uid,
+                        usernameController.text,
+                      );
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Update profile successfully'),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error: $e'),
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Save changes'),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showChangePasswordBottomSheet(BuildContext context) {
+    final TextEditingController newPasswordController = TextEditingController();
+    final TextEditingController confirmPasswordController = TextEditingController();
+    
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Change Password',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: newPasswordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'New Password',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: confirmPasswordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Confirm Password',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    if (newPasswordController.text.isEmpty || 
+                        confirmPasswordController.text.isEmpty) {
+                      throw Exception('Please fill in all fields');
+                    }
+                    
+                    if (newPasswordController.text != confirmPasswordController.text) {
+                      throw Exception('Passwords do not match');
+                    }
+
+                    if (newPasswordController.text.length < 6) {
+                      throw Exception('Password must be at least 6 characters');
+                    }
+
+                    await Firebase().updateUserPassword(newPasswordController.text);
+                    
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Password updated successfully'),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error: $e'),
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Save changes'),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
     );
   }
 }

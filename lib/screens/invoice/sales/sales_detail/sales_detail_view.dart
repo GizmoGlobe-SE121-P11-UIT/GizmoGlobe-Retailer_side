@@ -321,41 +321,41 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                       ),
                     ],
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () async {
-                            final updatedInvoice = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SalesEditScreen(
-                                  invoice: state.invoice,
-                                ),
-                              ),
-                            );
-
-                            if (updatedInvoice != null) {
-                              final cubit = context.read<SalesDetailCubit>();
-                              cubit.updateSalesInvoice(updatedInvoice);
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                          label: const Text(
-                            'Edit',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // child: Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: ElevatedButton.icon(
+                  //         onPressed: () async {
+                  //           final updatedInvoice = await Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //               builder: (context) => SalesEditScreen(
+                  //                 invoice: state.invoice,
+                  //               ),
+                  //             ),
+                  //           );
+                  //
+                  //           if (updatedInvoice != null) {
+                  //             final cubit = context.read<SalesDetailCubit>();
+                  //             cubit.updateSalesInvoice(updatedInvoice);
+                  //           }
+                  //         },
+                  //         icon: const Icon(
+                  //           Icons.edit,
+                  //           color: Colors.white,
+                  //         ),
+                  //         label: const Text(
+                  //           'Edit',
+                  //           style: TextStyle(color: Colors.white),
+                  //         ),
+                  //         style: ElevatedButton.styleFrom(
+                  //           backgroundColor: Colors.green,
+                  //           padding: const EdgeInsets.symmetric(vertical: 12),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ],
             ),

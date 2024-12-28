@@ -54,23 +54,23 @@ class _SalesScreenState extends State<SalesScreen> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    GradientIconButton(
-                      icon: Icons.add,
-                      iconSize: 32,
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SalesAddScreen(),
-                          ),
-                        );
-                        
-                        // Refresh list if new invoice was created
-                        if (result != null && mounted) {
-                          context.read<SalesScreenCubit>().loadInvoices();
-                        }
-                      },
-                    )
+                    // GradientIconButton(
+                    //   icon: Icons.add,
+                    //   iconSize: 32,
+                    //   onPressed: () async {
+                    //     final result = await Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => const SalesAddScreen(),
+                    //       ),
+                    //     );
+                    //
+                    //     // Refresh list if new invoice was created
+                    //     if (result != null && mounted) {
+                    //       context.read<SalesScreenCubit>().loadInvoices();
+                    //     }
+                    //   },
+                    // )
                   ],
                 ),
                 const SizedBox(height: 16),
