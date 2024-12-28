@@ -25,7 +25,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     return BlocBuilder<InvoiceScreenCubit, InvoiceScreenState>(
       builder: (context, state) {
         return DefaultTabController(
-          length: 3,
+          // length: 3,
+          length: 1,
           child: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
@@ -45,8 +46,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   dividerColor: Colors.transparent,
                   tabs: const [
                     Tab(text: 'Sales'),
-                    Tab(text: 'Incoming'),
-                    Tab(text: 'Warranty'),
+                    // Tab(text: 'Incoming'),
+                    // Tab(text: 'Warranty'),
                   ],
                 ),
               ),
