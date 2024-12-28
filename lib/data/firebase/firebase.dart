@@ -1540,18 +1540,4 @@ class Firebase {
       rethrow;
     }
   }
-
-  Future<void> updateUserPassword(String newPassword) async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await user.updatePassword(newPassword);
-      } else {
-        throw Exception('No user is currently signed in');
-      }
-    } catch (e) {
-      print('Error updating password: $e');
-      rethrow;
-    }
-  }
 }
