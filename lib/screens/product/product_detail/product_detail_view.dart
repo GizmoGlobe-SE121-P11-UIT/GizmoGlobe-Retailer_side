@@ -12,6 +12,7 @@ import '../../../objects/product_related/mainboard.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../objects/product_related/psu.dart';
 import '../../../objects/product_related/ram.dart';
+import '../../stakeholder/customers/customer_edit/customer_edit_view.dart';
 
 
 class ProductDetailScreen extends StatelessWidget {
@@ -165,6 +166,102 @@ class ProductDetailScreen extends StatelessWidget {
                       SizedBox(height: 16),
                       
                       ..._buildProductSpecificDetails(context, product, state.technicalSpecs),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, -4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            // final updatedCustomer = await Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => CustomerEditScreen(
+                            //       customer: state.customer,
+                            //     ),
+                            //   ),
+                            // );
+                            //
+                            // if (updatedCustomer != null) {
+                            //   // Update the customer in Firebase
+                            //   cubit.updateCustomer(updatedCustomer);
+                            // }
+                          },
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                          label: const Text(
+                            'Edit',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (dialogContext) => AlertDialog(
+                            //     title: const Text('Delete Customer'),
+                            //     content: const Text(
+                            //       'Are you sure you want to delete this customer?',
+                            //     ),
+                            //     actions: [
+                            //       TextButton(
+                            //         onPressed: () => Navigator.pop(dialogContext),
+                            //         child: const Text('Cancel'),
+                            //       ),
+                            //       TextButton(
+                            //         onPressed: () async {
+                            //           Navigator.pop(dialogContext); // Close dialog
+                            //           await cubit.deleteCustomer();
+                            //           if (mounted) {
+                            //             Navigator.pop(context); // Return to list
+                            //           }
+                            //         },
+                            //         child: const Text(
+                            //           'Delete',
+                            //           style: TextStyle(color: Colors.red),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // );
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                          label: const Text(
+                            'Discontinue',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
