@@ -21,6 +21,7 @@ import 'package:gizmoglobe_client/objects/product_related/mainboard.dart';
 import 'package:gizmoglobe_client/objects/product_related/psu.dart';
 import 'package:gizmoglobe_client/objects/product_related/ram.dart';
 
+import '../../enums/invoice_related/sales_status.dart';
 import '../../enums/product_related/category_enum.dart';
 import '../../enums/product_related/product_status_enum.dart';
 import '../../enums/stakeholders/employee_role.dart';
@@ -242,6 +243,7 @@ Future<void> pushSalesInvoiceSampleData() async {
 
 class Firebase {
   static final Firebase _firebase = Firebase._internal();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   factory Firebase() {
     return _firebase;
@@ -1537,6 +1539,20 @@ class Firebase {
       }
     } catch (e) {
       print('Error updating user profile: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> changeSalesInvoiceStatus(SalesInvoice salesInvoice) async {
+    try {
+      await _firestore.collection('sales_invoices')
+          .doc(salesInvoice.salesInvoiceID).update({
+        'salesStatus': SalesStatus.completed.getName(),
+      });
+
+      //await Database().fetchSalesInvoice();
+    } catch (e) {
+      print('Error confirming delivery: $e');
       rethrow;
     }
   }
