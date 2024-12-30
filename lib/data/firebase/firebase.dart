@@ -735,7 +735,7 @@ class Firebase {
         if (manufacturer == null) continue;
 
         // Chuyển đổi category string thành enum
-        CategoryEnum category = CategoryEnum.values.firstWhere(
+        CategoryEnum category = CategoryEnum.nonEmptyValues.firstWhere(
           (e) => e.getName() == data['category'],
           orElse: () => CategoryEnum.ram,
         );
@@ -844,6 +844,9 @@ class Firebase {
               ),
             });
             break;
+
+          default:
+            print('Unknown category: ${data['category']}');
         }
 
         // Tạo product instance thông qua factory
@@ -872,7 +875,7 @@ class Firebase {
           Manufacturer? manufacturer = await getManufacturerById(manufacturerId);
           if (manufacturer == null) continue;
 
-          CategoryEnum category = CategoryEnum.values.firstWhere(
+          CategoryEnum category = CategoryEnum.nonEmptyValues.firstWhere(
             (e) => e.getName() == data['category'],
             orElse: () => CategoryEnum.ram,
           );
@@ -984,6 +987,9 @@ class Firebase {
                 ),
               });
               break;
+
+            default:
+              print('Unknown category: ${data['category']}');
           }
 
           Product product = ProductFactory.createProduct(category, productProps);

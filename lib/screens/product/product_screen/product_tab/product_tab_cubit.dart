@@ -22,17 +22,29 @@ import 'product_tab_state.dart';
 abstract class TabCubit extends Cubit<TabState> {
   TabCubit() : super(const TabState());
 
-  void initialize(FilterArgument filter) {
+  void initialize(FilterArgument filter, {String? searchText, List<Product>? initialProducts}) {
     emit(state.copyWith(
-      productList: Database().productList,
+      productList: initialProducts!.isEmpty ? Database().productList : initialProducts,
+      filteredProductList: initialProducts.isEmpty ? Database().productList : initialProducts,
+      searchText: searchText ?? '',
     ));
     emit(state.copyWith(
       manufacturerList: getManufacturerList(),
-      filterArgument: filter.copyWith(
-        manufacturerList: getManufacturerList(),
+      filterArgument: filter.copyWith(manufacturerList: getManufacturerList()
       ),
     ));
     applyFilters();
+  }
+  Future<void> _fetchProducts() async {
+    try {
+      emit(state.copyWith(processState: ProcessState.loading));
+      List<Product> products = await Firebase().getProducts();
+      Database().updateProductList(products);
+      emit(state.copyWith(productList: products, processState: ProcessState.success));
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(processState: ProcessState.failure));
+    }
   }
 
   void updateFilter({
@@ -53,7 +65,7 @@ abstract class TabCubit extends Cubit<TabState> {
   }
 
   void updateTabIndex(int index) {
-    emit(state.copyWith(filterArgument: state.filterArgument.copyWith(categoryList: [CategoryEnum.values[index]])));
+    emit(state.copyWith(filterArgument: state.filterArgument.copyWith(categoryList: [CategoryEnum.nonEmptyValues[index]])));
     applyFilters();
   }
 
@@ -115,7 +127,7 @@ abstract class TabCubit extends Cubit<TabState> {
       }
 
       return matchFilter(product, state.filterArgument);
-     }).toList();
+    }).toList();
 
     switch (state.selectedSortOption) {
       case SortEnum.releaseLatest:
@@ -137,7 +149,7 @@ abstract class TabCubit extends Cubit<TabState> {
         filteredProducts.sort((a, b) => a.sales.compareTo(b.sales));
     }
 
-    emit(state.copyWith(productList: filteredProducts));
+    emit(state.copyWith(filteredProductList: filteredProducts));
   }
 
   Future<void> changeStatus(Product product) async {
@@ -152,11 +164,10 @@ abstract class TabCubit extends Cubit<TabState> {
       } else {
         status = ProductStatusEnum.discontinued;
       }
-      
-      await Firebase().changeProductStatus(product.productID!, status);
 
-      emit(state.copyWith(productList: Database().productList, processState: ProcessState.success));
+      await Firebase().changeProductStatus(product.productID!, status);
       applyFilters();
+      _fetchProducts();
     } catch (e) {
       print(e);
       emit(state.copyWith(processState: ProcessState.failure));

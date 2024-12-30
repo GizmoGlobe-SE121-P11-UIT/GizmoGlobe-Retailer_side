@@ -7,13 +7,18 @@ import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_
 import 'package:gizmoglobe_client/screens/product/product_screen/product_tab/product_tab_view.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import '../../../enums/product_related/category_enum.dart';
+import '../../../objects/product_related/product.dart';
+import '../../../widgets/general/gradient_dropdown.dart';
+import '../add_product/add_product_view.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+  final List<Product>? initialProducts;
 
-  static Widget newInstance() => BlocProvider(
+  const ProductScreen({super.key, this.initialProducts});
+
+  static Widget newInstance({List<Product>? initialProducts}) => BlocProvider(
     create: (context) => ProductScreenCubit(),
-    child: const ProductScreen(),
+    child: ProductScreen(initialProducts: initialProducts),
   );
 
   @override
@@ -31,7 +36,8 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
     super.initState();
     searchController = TextEditingController();
     searchFocusNode = FocusNode();
-    tabController = TabController(length: CategoryEnum.values.length + 1, vsync: this);
+    tabController = TabController(length: getTabCount(), vsync: this);
+    cubit.initialize(widget.initialProducts ?? []);
   }
 
   @override
@@ -41,7 +47,7 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
     super.dispose();
   }
 
-  int getTabCount() => CategoryEnum.values.length + 1;
+  int getTabCount() => CategoryEnum.nonEmptyValues.length + 1;
 
   void onTabChanged(int index) {
     cubit.updateSelectedTabIndex(index);
@@ -80,7 +86,12 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
             actions: [
               ElevatedButton.icon(
                 onPressed: () {
-                  // Add your onPressed code here!
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddProductScreen.newInstance(),
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.add, color: Colors.white),
                 label: const Text('Add', style: TextStyle(color: Colors.white)),
@@ -105,8 +116,9 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
               indicator: const BoxDecoration(),
               tabs: [
                 const Tab(text: 'All'),
-                ...CategoryEnum.values.map((category) => Tab(
-                  text: category.toString().split('.').last,
+                ...CategoryEnum.nonEmptyValues
+                    .map((category) => Tab(
+                  text: category.toString(),
                 )),
               ],
             ),
@@ -117,13 +129,13 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                 return TabBarView(
                   controller: tabController,
                   children: [
-                    ProductTab.newInstance(),
-                    ProductTab.newRam(),
-                    ProductTab.newCpu(),
-                    ProductTab.newPsu(),
-                    ProductTab.newGpu(),
-                    ProductTab.newDrive(),
-                    ProductTab.newMainboard(),
+                    ProductTab.newInstance(searchText: state.searchText, initialProducts: state.initialProducts),
+                    ProductTab.newRam(searchText: state.searchText, initialProducts: state.initialProducts),
+                    ProductTab.newCpu(searchText: state.searchText, initialProducts: state.initialProducts),
+                    ProductTab.newPsu(searchText: state.searchText, initialProducts: state.initialProducts),
+                    ProductTab.newGpu(searchText: state.searchText, initialProducts: state.initialProducts),
+                    ProductTab.newDrive(searchText: state.searchText, initialProducts: state.initialProducts),
+                    ProductTab.newMainboard(searchText: state.searchText, initialProducts: state.initialProducts),
                   ],
                 );
               },

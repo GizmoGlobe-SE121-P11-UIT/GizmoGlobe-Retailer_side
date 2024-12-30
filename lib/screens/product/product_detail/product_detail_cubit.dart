@@ -74,6 +74,9 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
           'Modular': psu.modular.toString(),
         });
         break;
+
+      default:
+        print('Unknown category');
     }
 
     emit(state.copyWith(technicalSpecs: specs));

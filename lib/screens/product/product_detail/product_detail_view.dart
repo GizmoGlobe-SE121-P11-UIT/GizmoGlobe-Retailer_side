@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/screens/product/edit_product/edit_product_view.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_state.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
@@ -12,7 +13,6 @@ import '../../../objects/product_related/mainboard.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../objects/product_related/psu.dart';
 import '../../../objects/product_related/ram.dart';
-import '../../stakeholder/customers/customer_edit/customer_edit_view.dart';
 
 
 class ProductDetailScreen extends StatelessWidget {
@@ -20,9 +20,9 @@ class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({super.key, required this.product});
 
   static Widget newInstance(Product product) => BlocProvider(
-        create: (context) => ProductDetailCubit(product),
-        child: ProductDetailScreen(product: product),
-      );
+    create: (context) => ProductDetailCubit(product),
+    child: ProductDetailScreen(product: product),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class ProductDetailScreen extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                 ),
-                
+
                 // Product Info Section
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -89,33 +89,33 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 16),
-                      
+
                       _buildInfoRow(
                         icon: Icons.inventory_2,
                         title: 'Product',
                         value: product.productName,
                       ),
-                      
+
                       _buildInfoRow(
                         icon: Icons.category,
                         title: 'Category',
                         value: product.category.toString().split('.').last,
                       ),
-                      
+
                       _buildInfoRow(
                         icon: Icons.business,
                         title: 'Manufacturer',
                         value: product.manufacturer.manufacturerName,
                       ),
-                      
+
                       // Thêm thông tin về giá và discount
                       _buildPriceSection(
                         sellingPrice: product.sellingPrice,
                         discount: product.discount,
                       ),
-                      
+
                       SizedBox(height: 24),
-                      
+
                       // Status Information Section
                       Text(
                         'Status Information',
@@ -125,17 +125,17 @@ class ProductDetailScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 16),
-                      
+
                       Row(
                         children: [
                           _buildStatusChip(product.status),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           Icon(
                             product.stock > 0 ? Icons.check_circle : Icons.error,
                             color: product.stock > 0 ? Colors.green : Colors.red,
                             size: 16,
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
                             'Stock: ${product.stock}',
                             style: TextStyle(
@@ -145,16 +145,15 @@ class ProductDetailScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
+
                       _buildInfoRow(
                         icon: Icons.calendar_today,
                         title: 'Release Date',
                         value: DateFormat('dd/MM/yyyy').format(product.release),
                       ),
-                      
-                      SizedBox(height: 24),
-                      
+                      const SizedBox(height: 24),
+
                       // Technical Specifications Section
                       Text(
                         'Technical Specifications',
@@ -163,104 +162,85 @@ class ProductDetailScreen extends StatelessWidget {
                           color: Colors.blue[300],
                         ),
                       ),
-                      SizedBox(height: 16),
-                      
-                      ..._buildProductSpecificDetails(context, product, state.technicalSpecs),
-                    ],
-                  ),
-                ),
+                      const SizedBox(height: 16),
 
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, -4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () async {
-                            // final updatedCustomer = await Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => CustomerEditScreen(
-                            //       customer: state.customer,
-                            //     ),
-                            //   ),
-                            // );
-                            //
-                            // if (updatedCustomer != null) {
-                            //   // Update the customer in Firebase
-                            //   cubit.updateCustomer(updatedCustomer);
-                            // }
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Colors.white,
+                      ..._buildProductSpecificDetails(context, product, state.technicalSpecs),
+
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditProductScreen.newInstance(product),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                              label: const Text(
+                                'Edit',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                            ),
                           ),
-                          label: const Text(
-                            'Edit',
-                            style: TextStyle(color: Colors.white),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (dialogContext) => AlertDialog(
+                                //     title: const Text('Delete Customer'),
+                                //     content: const Text(
+                                //       'Are you sure you want to delete this customer?',
+                                //     ),
+                                //     actions: [
+                                //       TextButton(
+                                //         onPressed: () => Navigator.pop(dialogContext),
+                                //         child: const Text('Cancel'),
+                                //       ),
+                                //       TextButton(
+                                //         onPressed: () async {
+                                //           Navigator.pop(dialogContext); // Close dialog
+                                //           await cubit.deleteCustomer();
+                                //           if (mounted) {
+                                //             Navigator.pop(context); // Return to list
+                                //           }
+                                //         },
+                                //         child: const Text(
+                                //           'Delete',
+                                //           style: TextStyle(color: Colors.red),
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // );
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                              label: const Text(
+                                'Discontinue',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                            ),
                           ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (dialogContext) => AlertDialog(
-                            //     title: const Text('Delete Customer'),
-                            //     content: const Text(
-                            //       'Are you sure you want to delete this customer?',
-                            //     ),
-                            //     actions: [
-                            //       TextButton(
-                            //         onPressed: () => Navigator.pop(dialogContext),
-                            //         child: const Text('Cancel'),
-                            //       ),
-                            //       TextButton(
-                            //         onPressed: () async {
-                            //           Navigator.pop(dialogContext); // Close dialog
-                            //           await cubit.deleteCustomer();
-                            //           if (mounted) {
-                            //             Navigator.pop(context); // Return to list
-                            //           }
-                            //         },
-                            //         child: const Text(
-                            //           'Delete',
-                            //           style: TextStyle(color: Colors.red),
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // );
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                          label: const Text(
-                            'Discontinue',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -277,7 +257,7 @@ class ProductDetailScreen extends StatelessWidget {
     // Xác định màu sắc dựa trên status
     Color chipColor;
     Color textColor;
-    
+
     switch(status.toString().toLowerCase()) {
       case 'active':
         chipColor = Colors.green.withOpacity(0.1);
@@ -346,12 +326,12 @@ class ProductDetailScreen extends StatelessWidget {
   }
 
   List<Widget> _buildProductSpecificDetails(
-    BuildContext context, 
-    Product product,
-    Map<String, String> specs
-  ) {
-    return specs.entries.map((entry) => 
-      _buildSpecificationRow(entry.key, entry.value)
+      BuildContext context,
+      Product product,
+      Map<String, String> specs
+      ) {
+    return specs.entries.map((entry) =>
+        _buildSpecificationRow(entry.key, entry.value)
     ).toList();
   }
 
@@ -390,7 +370,7 @@ class ProductDetailScreen extends StatelessWidget {
     required double discount,
   }) {
     final discountedPrice = sellingPrice * (1 - discount);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(

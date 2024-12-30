@@ -9,7 +9,6 @@ import 'package:gizmoglobe_client/screens/authentication/sign_up_screen/sign_up_
 import 'package:gizmoglobe_client/screens/home/home_screen/home_screen_view.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_view.dart';
-import 'package:gizmoglobe_client/screens/main/drawer/drawer_cubit.dart';
 import 'package:gizmoglobe_client/data/database/database.dart';
 import 'package:gizmoglobe_client/firebase_options.dart';
 
@@ -42,7 +41,6 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => MainScreenCubit()),
-        BlocProvider(create: (context) => DrawerCubit()),
       ],
       child: MaterialApp(
         title: 'GizmoGlobe',
@@ -67,7 +65,7 @@ class MyApp extends StatelessWidget {
           '/sign-in': (context) => SignInScreen.newInstance(),
           '/sign-up': (context) => SignUpScreen.newInstance(),
           '/forget-password': (context) => ForgetPasswordScreen.newInstance(),
-          '/main': (context) => const MainScreen(),
+          '/main': (context) => MainScreen(),
           '/home': (context) => HomeScreen.newInstance(),
         },
         home: const AuthWrapper(),
@@ -88,7 +86,7 @@ class AuthWrapper extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasData) {
-          return const MainScreen();
+          return MainScreen();
         }
         return SignInScreen.newInstance();
       },

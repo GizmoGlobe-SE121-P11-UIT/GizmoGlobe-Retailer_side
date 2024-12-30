@@ -85,7 +85,7 @@ class _AdvancedFilterSearchScreenState extends State<AdvancedFilterSearchScreen>
               children: [
                 OptionFilterView<CategoryEnum>(
                   name: 'Category',
-                  enumValues: CategoryEnum.values,
+                  enumValues: CategoryEnum.nonEmptyValues,
                   selectedValues: state.selectedCategories,
                   onToggleSelection: cubit.toggleCategory,
                 ),
