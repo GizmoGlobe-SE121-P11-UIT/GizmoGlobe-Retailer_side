@@ -7,9 +7,7 @@ class ProductScreenCubit extends Cubit<ProductScreenState> {
   ProductScreenCubit() : super(const ProductScreenState());
 
   void initialize(List<Product> initialProducts) {
-    emit(state.copyWith(
-      initialProducts: initialProducts,
-    ));
+    emit(state.copyWith(initialProducts: initialProducts));
   }
 
   void updateSelectedTabIndex(int index) {
@@ -17,7 +15,8 @@ class ProductScreenCubit extends Cubit<ProductScreenState> {
   }
 
   void updateSearchText(String? searchText) {
-    emit(state.copyWith(searchText: searchText));
+    emit(state.copyWith(searchText: searchText,
+    ));
   }
 
   void updateSortOption(SortEnum selectedOption) {

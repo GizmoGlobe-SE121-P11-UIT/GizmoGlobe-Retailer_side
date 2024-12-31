@@ -31,13 +31,6 @@ import '../../../enums/product_related/ram_enums/ram_bus.dart';
 import '../../../enums/product_related/ram_enums/ram_capacity_enum.dart';
 import '../../../enums/product_related/ram_enums/ram_type.dart';
 import '../../../objects/manufacturer.dart';
-import '../../../objects/product_related/cpu.dart';
-import '../../../objects/product_related/drive.dart';
-import '../../../objects/product_related/gpu.dart';
-import '../../../objects/product_related/mainboard.dart';
-import '../../../objects/product_related/product.dart';
-import '../../../objects/product_related/psu.dart';
-import '../../../objects/product_related/ram.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
 import '../../main/main_screen/main_screen_view.dart';
@@ -129,15 +122,7 @@ class _AddProductState extends State<AddProductScreen> {
                     title: state.dialogName.toString(),
                     content: state.notifyMessage.toString(),
                     onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MainScreen(),
-                        ),
-                      ).then((_) {
-                        MainScreen().setIndex(1);
-                      });
+                      Navigator.pop(context, state.processState);
                     },
                   ),
             );
@@ -149,12 +134,13 @@ class _AddProductState extends State<AddProductScreen> {
                     InformationDialog(
                       title: state.dialogName.toString(),
                       content: state.notifyMessage.toString(),
-                      onPressed: () {},
+                      onPressed: () {
+                        cubit.toIdle();
+                      },
                     ),
               );
             }
           }
-          cubit.toIdle();
         },
         builder: (context, state) {
           return SingleChildScrollView(

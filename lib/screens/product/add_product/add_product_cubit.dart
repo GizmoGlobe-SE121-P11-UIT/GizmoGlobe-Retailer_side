@@ -30,6 +30,10 @@ class AddProductCubit extends Cubit<AddProductState> {
     emit(state.copyWith(productArgument: productArgument));
   }
 
+  void toSuccess() {
+    emit(state.copyWith(processState: ProcessState.success));
+  }
+
   void toIdle() {
     emit(state.copyWith(processState: ProcessState.idle));
   }

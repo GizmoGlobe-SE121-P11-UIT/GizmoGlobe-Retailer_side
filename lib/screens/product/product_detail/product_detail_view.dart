@@ -6,33 +6,46 @@ import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
 
-import '../../../objects/product_related/cpu.dart';
-import '../../../objects/product_related/drive.dart';
-import '../../../objects/product_related/gpu.dart';
-import '../../../objects/product_related/mainboard.dart';
+import '../../../enums/processing/process_state_enum.dart';
+import '../../../enums/product_related/product_status_enum.dart';
 import '../../../objects/product_related/product.dart';
-import '../../../objects/product_related/psu.dart';
-import '../../../objects/product_related/ram.dart';
+import '../../../widgets/dialog/information_dialog.dart';
 
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends StatefulWidget {
   final Product product;
   const ProductDetailScreen({super.key, required this.product});
 
-  static Widget newInstance(Product product) => BlocProvider(
-    create: (context) => ProductDetailCubit(product),
-    child: ProductDetailScreen(product: product),
-  );
+  static Widget newInstance(Product product) =>
+      BlocProvider(
+        create: (context) => ProductDetailCubit(product),
+        child: ProductDetailScreen(product: product),
+      );
+
+  @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  ProductDetailCubit get cubit => context.read<ProductDetailCubit>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: GradientIconButton(
-          icon: Icons.chevron_left,
-          onPressed: () => Navigator.pop(context),
-          fillColor: Colors.transparent,
+        leading: BlocBuilder<ProductDetailCubit, ProductDetailState>(
+          builder: (context, state) => GradientIconButton(
+            icon: Icons.chevron_left,
+            onPressed: () => {
+              if (widget.product != state.product) {
+                Navigator.pop(context, ProcessState.success)
+              } else {
+                Navigator.pop(context, state.processState)
+              }
+            },
+            fillColor: Colors.transparent,
+          ),
         ),
         actions: [
           IconButton(
@@ -51,7 +64,7 @@ class ProductDetailScreen extends StatelessWidget {
         title: BlocBuilder<ProductDetailCubit, ProductDetailState>(
           builder: (context, state) => Text(
             state.product.productName,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
         ),
       ),
@@ -93,25 +106,25 @@ class ProductDetailScreen extends StatelessWidget {
                       _buildInfoRow(
                         icon: Icons.inventory_2,
                         title: 'Product',
-                        value: product.productName,
+                        value: state.product.productName,
                       ),
 
                       _buildInfoRow(
                         icon: Icons.category,
                         title: 'Category',
-                        value: product.category.toString().split('.').last,
+                        value: state.product.category.toString().split('.').last,
                       ),
 
                       _buildInfoRow(
                         icon: Icons.business,
                         title: 'Manufacturer',
-                        value: product.manufacturer.manufacturerName,
+                        value: state.product.manufacturer.manufacturerName,
                       ),
 
                       // Thêm thông tin về giá và discount
                       _buildPriceSection(
-                        sellingPrice: product.sellingPrice,
-                        discount: product.discount,
+                        sellingPrice: state.product.sellingPrice,
+                        discount: state.product.discount,
                       ),
 
                       SizedBox(height: 24),
@@ -128,18 +141,18 @@ class ProductDetailScreen extends StatelessWidget {
 
                       Row(
                         children: [
-                          _buildStatusChip(product.status),
+                          _buildStatusChip(state.product.status),
                           const SizedBox(width: 16),
                           Icon(
-                            product.stock > 0 ? Icons.check_circle : Icons.error,
-                            color: product.stock > 0 ? Colors.green : Colors.red,
+                            state.product.stock > 0 ? Icons.check_circle : Icons.error,
+                            color: state.product.stock > 0 ? Colors.green : Colors.red,
                             size: 16,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            'Stock: ${product.stock}',
+                            'Stock: ${state.product.stock}',
                             style: TextStyle(
-                              color: product.stock > 0 ? Colors.green : Colors.red,
+                              color: state.product.stock > 0 ? Colors.green : Colors.red,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -150,7 +163,7 @@ class ProductDetailScreen extends StatelessWidget {
                       _buildInfoRow(
                         icon: Icons.calendar_today,
                         title: 'Release Date',
-                        value: DateFormat('dd/MM/yyyy').format(product.release),
+                        value: DateFormat('dd/MM/yyyy').format(state.product.release),
                       ),
                       const SizedBox(height: 24),
 
@@ -164,83 +177,94 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
 
-                      ..._buildProductSpecificDetails(context, product, state.technicalSpecs),
+                      ..._buildProductSpecificDetails(context, state.product, state.technicalSpecs),
 
                       const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => EditProductScreen.newInstance(product),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                              ),
-                              label: const Text(
-                                'Edit',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                // showDialog(
-                                //   context: context,
-                                //   builder: (dialogContext) => AlertDialog(
-                                //     title: const Text('Delete Customer'),
-                                //     content: const Text(
-                                //       'Are you sure you want to delete this customer?',
-                                //     ),
-                                //     actions: [
-                                //       TextButton(
-                                //         onPressed: () => Navigator.pop(dialogContext),
-                                //         child: const Text('Cancel'),
-                                //       ),
-                                //       TextButton(
-                                //         onPressed: () async {
-                                //           Navigator.pop(dialogContext); // Close dialog
-                                //           await cubit.deleteCustomer();
-                                //           if (mounted) {
-                                //             Navigator.pop(context); // Return to list
-                                //           }
-                                //         },
-                                //         child: const Text(
-                                //           'Delete',
-                                //           style: TextStyle(color: Colors.red),
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // );
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                              ),
-                              label: const Text(
-                                'Discontinue',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                      BlocConsumer<ProductDetailCubit, ProductDetailState>(
+                        listener: (context, state) {
+                          if (state.processState == ProcessState.success) {
+                            showDialog(
+                                context: context,
+                                builder:  (context) =>
+                                    InformationDialog(
+                                      title: state.dialogName.toString(),
+                                      content: state.notifyMessage.toString(),
+                                      onPressed: () {},
+                                    )
+                            );
+                          } else if (state.processState == ProcessState.failure) {
+                            showDialog(
+                                context: context,
+                                builder:  (context) =>
+                                    InformationDialog(
+                                      title: state.dialogName.toString(),
+                                      content: state.notifyMessage.toString(),
+                                      onPressed: () {
+                                        cubit.toIdle();
+                                      },
+                                    )
+                            );
+                          }
+                        },
+                        builder: (context, state) => Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  ProcessState processState =  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditProductScreen.newInstance(state.product),
+                                    ),
+                                  );
+
+                                  if (processState == ProcessState.success) {
+                                    cubit.updateProduct();
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                                label: const Text(
+                                  'Edit',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  cubit.toLoading();
+                                  cubit.changeProductStatus();
+                                },
+                                icon: Icon(
+                                  state.product.status == ProductStatusEnum.discontinued
+                                      ? Icons.refresh
+                                      : Icons.cancel,
+                                  color: Colors.white,
+                                ),
+                                label: Text(
+                                  state.product.status == ProductStatusEnum.discontinued
+                                      ? 'Re-activate'
+                                      : 'Discontinue',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: state.product.status == ProductStatusEnum.discontinued
+                                      ? Colors.blue
+                                      : Colors.red,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

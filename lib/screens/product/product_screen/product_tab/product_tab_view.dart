@@ -20,37 +20,37 @@ import 'product_tab_state.dart';
 class ProductTab extends StatefulWidget {
   const ProductTab({super.key});
 
-  static Widget newInstance({String? searchText, List<Product>? initialProducts}) => BlocProvider<TabCubit>(
+  static Widget newInstance({String? searchText, required List<Product> initialProducts}) => BlocProvider<TabCubit>(
     create: (context) => AllTabCubit()..initialize(const FilterArgument(), searchText: searchText, initialProducts: initialProducts),
     child: const ProductTab(),
   );
 
-  static Widget newRam({String? searchText, List<Product>? initialProducts}) => BlocProvider<TabCubit>(
+  static Widget newRam({String? searchText, required List<Product> initialProducts}) => BlocProvider<TabCubit>(
     create: (context) => RamTabCubit()..initialize(const FilterArgument(), searchText: searchText, initialProducts: initialProducts),
     child: const ProductTab(),
   );
 
-  static Widget newCpu({String? searchText, List<Product>? initialProducts}) => BlocProvider<TabCubit>(
+  static Widget newCpu({String? searchText, required List<Product> initialProducts}) => BlocProvider<TabCubit>(
     create: (context) => CpuTabCubit()..initialize(const FilterArgument(), searchText: searchText, initialProducts: initialProducts),
     child: const ProductTab(),
   );
 
-  static Widget newPsu({String? searchText, List<Product>? initialProducts}) => BlocProvider<TabCubit>(
+  static Widget newPsu({String? searchText, required List<Product> initialProducts}) => BlocProvider<TabCubit>(
     create: (context) => PsuTabCubit()..initialize(const FilterArgument(), searchText: searchText, initialProducts: initialProducts),
     child: const ProductTab(),
   );
 
-  static Widget newGpu({String? searchText, List<Product>? initialProducts}) => BlocProvider<TabCubit>(
+  static Widget newGpu({String? searchText, required List<Product> initialProducts}) => BlocProvider<TabCubit>(
     create: (context) => GpuTabCubit()..initialize(const FilterArgument(), searchText: searchText, initialProducts: initialProducts),
     child: const ProductTab(),
   );
 
-  static Widget newDrive({String? searchText, List<Product>? initialProducts}) => BlocProvider<TabCubit>(
+  static Widget newDrive({String? searchText, required List<Product> initialProducts}) => BlocProvider<TabCubit>(
     create: (context) => DriveTabCubit()..initialize(const FilterArgument(), searchText: searchText, initialProducts: initialProducts),
     child: const ProductTab(),
   );
 
-  static Widget newMainboard({String? searchText, List<Product>? initialProducts}) => BlocProvider<TabCubit>(
+  static Widget newMainboard({String? searchText, required List<Product> initialProducts}) => BlocProvider<TabCubit>(
     create: (context) => MainboardTabCubit()..initialize(const FilterArgument(), searchText: searchText, initialProducts: initialProducts),
     child: const ProductTab(),
   );
@@ -170,13 +170,17 @@ class _ProductTabState extends State<ProductTab> with SingleTickerProviderStateM
                             }
 
                             return GestureDetector(
-                              onTap: () {
+                              onTap: () async{
                                 cubit.setSelectedProduct(null);
-                                Navigator.of(context).push(
+                                ProcessState result = await Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => ProductDetailScreen.newInstance(product),
                                   ),
                                 );
+
+                                if (result == ProcessState.success) {
+                                  await cubit.reloadProducts();
+                                }
                               },
                               onLongPress: () {
                                 cubit.setSelectedProduct(product);
@@ -236,12 +240,16 @@ class _ProductTabState extends State<ProductTab> with SingleTickerProviderStateM
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedProduct(null);
-                                                Navigator.push(
+                                                ProcessState processState = await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) => EditProductScreen.newInstance(product),
                                                   ),
                                                 );
+
+                                                if (processState == ProcessState.success) {
+                                                  await cubit.reloadProducts();
+                                                }
                                               },
                                             ),
                                             ListTile(

@@ -2,6 +2,7 @@ import 'package:gizmoglobe_client/enums/product_related/drive_enums/drive_capaci
 import 'package:gizmoglobe_client/enums/product_related/drive_enums/drive_type.dart';
 
 import '../../enums/product_related/category_enum.dart';
+import '../../enums/product_related/product_status_enum.dart';
 import '../manufacturer.dart';
 import 'product.dart';
 
@@ -26,6 +27,7 @@ class Drive extends Product {
 
   @override
   void updateProduct({
+    String? productID,
     String? productName,
     double? importPrice,
     double? sellingPrice,
@@ -36,8 +38,10 @@ class Drive extends Product {
     Manufacturer? manufacturer,
     DriveType? type,
     DriveCapacity? capacity,
+    ProductStatusEnum? status,
   }) {
     super.updateProduct(
+      productID: productID,
       productName: productName,
       importPrice: importPrice,
       sellingPrice: sellingPrice,
@@ -45,6 +49,8 @@ class Drive extends Product {
       release: release,
       sales: sales,
       manufacturer: manufacturer,
+      stock: stock,
+      status: status,
     );
 
     this.type = type ?? this.type;

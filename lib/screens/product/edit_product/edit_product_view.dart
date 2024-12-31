@@ -2,14 +2,10 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_state.dart';
-import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
-import 'package:intl/intl.dart';
 
 import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
@@ -31,15 +27,11 @@ import '../../../enums/product_related/ram_enums/ram_capacity_enum.dart';
 import '../../../enums/product_related/ram_enums/ram_type.dart';
 import '../../../objects/manufacturer.dart';
 import '../../../objects/product_related/cpu.dart';
-import '../../../objects/product_related/drive.dart';
 import '../../../objects/product_related/gpu.dart';
-import '../../../objects/product_related/mainboard.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../objects/product_related/psu.dart';
-import '../../../objects/product_related/ram.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
-import '../../main/main_screen/main_screen_view.dart';
 import 'edit_product_state.dart';
 import 'edit_product_cubit.dart';
 
@@ -155,15 +147,11 @@ class _EditProductState extends State<EditProductScreen> {
                     title: state.dialogName.toString(),
                     content: state.notifyMessage.toString(),
                     onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MainScreen(),
-                        ),
-                            (Route<dynamic> route) => false,
-                      ).then((_) {
-                        MainScreen().setIndex(1);
-                      });
+                      if (state.productArgument?.buildProduct() != widget.product) {
+                        Navigator.pop(context, ProcessState.success);
+                      } else {
+                        Navigator.pop(context, state.processState);
+                      }
                     },
                   ),
             );
@@ -175,12 +163,13 @@ class _EditProductState extends State<EditProductScreen> {
                     InformationDialog(
                       title: state.dialogName.toString(),
                       content: state.notifyMessage.toString(),
-                      onPressed: () {},
+                      onPressed: (){
+                        cubit.toIdle();
+                      },
                     ),
               );
             }
           }
-          cubit.toIdle();
         },
         builder: (context, state) {
           return SingleChildScrollView(

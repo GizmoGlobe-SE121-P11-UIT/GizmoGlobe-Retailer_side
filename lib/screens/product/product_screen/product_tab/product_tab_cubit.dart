@@ -22,12 +22,13 @@ import 'product_tab_state.dart';
 abstract class TabCubit extends Cubit<TabState> {
   TabCubit() : super(const TabState());
 
-  void initialize(FilterArgument filter, {String? searchText, List<Product>? initialProducts}) {
+  void initialize(FilterArgument filter, {String? searchText, required List<Product> initialProducts}) {
     emit(state.copyWith(
-      productList: initialProducts!.isEmpty ? Database().productList : initialProducts,
+      productList: initialProducts.isEmpty ? Database().productList : initialProducts,
       filteredProductList: initialProducts.isEmpty ? Database().productList : initialProducts,
       searchText: searchText ?? '',
     ));
+
     emit(state.copyWith(
       manufacturerList: getManufacturerList(),
       filterArgument: filter.copyWith(manufacturerList: getManufacturerList()
@@ -35,24 +36,20 @@ abstract class TabCubit extends Cubit<TabState> {
     ));
     applyFilters();
   }
+
   Future<void> _fetchProducts() async {
     try {
-      emit(state.copyWith(processState: ProcessState.loading));
       List<Product> products = await Firebase().getProducts();
       Database().updateProductList(products);
-      emit(state.copyWith(productList: products, processState: ProcessState.success));
+
+      emit(state.copyWith(productList: Database().productList, filteredProductList: Database().productList));
     } catch (e) {
       print(e);
-      emit(state.copyWith(processState: ProcessState.failure));
     }
   }
 
-  void updateFilter({
-    FilterArgument? filter,
-  }) {
-    emit(state.copyWith(
-      filterArgument: filter,
-    ));
+  void updateFilter({FilterArgument? filter}) {
+    emit(state.copyWith(filterArgument: filter));
   }
 
   void toLoading() {
@@ -71,6 +68,11 @@ abstract class TabCubit extends Cubit<TabState> {
 
   void updateSortOption(SortEnum selectedOption) {
     emit(state.copyWith(selectedSortOption: selectedOption));
+    applyFilters();
+  }
+
+  void updateProduct(List<Product> products) {
+    emit(state.copyWith(productList: products));
     applyFilters();
   }
 
@@ -130,9 +132,6 @@ abstract class TabCubit extends Cubit<TabState> {
     }).toList();
 
     switch (state.selectedSortOption) {
-      case SortEnum.releaseLatest:
-        filteredProducts.sort((a, b) => b.release.compareTo(a.release));
-        break;
       case SortEnum.releaseOldest:
         filteredProducts.sort((a, b) => a.release.compareTo(b.release));
         break;
@@ -147,6 +146,9 @@ abstract class TabCubit extends Cubit<TabState> {
         break;
       case SortEnum.salesLowest:
         filteredProducts.sort((a, b) => a.sales.compareTo(b.sales));
+        break;
+      default:
+        filteredProducts.sort((a, b) => b.release.compareTo(a.release));
     }
 
     emit(state.copyWith(filteredProductList: filteredProducts));
@@ -166,12 +168,22 @@ abstract class TabCubit extends Cubit<TabState> {
       }
 
       await Firebase().changeProductStatus(product.productID!, status);
+      await reloadProducts();
+
+      emit(state.copyWith(processState: ProcessState.success));
       applyFilters();
-      _fetchProducts();
     } catch (e) {
       print(e);
       emit(state.copyWith(processState: ProcessState.failure));
     }
+  }
+
+  Future<void> reloadProducts() async {
+    toLoading();
+    await _fetchProducts();
+    emit(state.copyWith(manufacturerList: getManufacturerList()));
+    applyFilters();
+    emit(state.copyWith(processState: ProcessState.idle));
   }
 
   int getIndex();
@@ -193,9 +205,9 @@ abstract class TabCubit extends Cubit<TabState> {
 
       case CategoryEnum.cpu:
         product as CPU;
-        final matchesCpuCore = matchesMinMax(product.core?.toDouble() ?? 0, state.filterArgument.minCpuCore, state.filterArgument.maxCpuCore);
-        final matchesCpuThread = matchesMinMax(product.thread?.toDouble() ?? 0, state.filterArgument.minCpuThread, state.filterArgument.maxCpuThread);
-        final matchesCpuClockSpeed = matchesMinMax(product.clockSpeed?.toDouble() ?? 0, state.filterArgument.minCpuClockSpeed, state.filterArgument.maxCpuClockSpeed);
+        final matchesCpuCore = matchesMinMax(product.core.toDouble(), state.filterArgument.minCpuCore, state.filterArgument.maxCpuCore);
+        final matchesCpuThread = matchesMinMax(product.thread.toDouble(), state.filterArgument.minCpuThread, state.filterArgument.maxCpuThread);
+        final matchesCpuClockSpeed = matchesMinMax(product.clockSpeed.toDouble(), state.filterArgument.minCpuClockSpeed, state.filterArgument.maxCpuClockSpeed);
         return filterArgument.cpuFamilyList.contains(product.family) &&
             matchesCpuCore &&
             matchesCpuThread &&
@@ -203,7 +215,7 @@ abstract class TabCubit extends Cubit<TabState> {
 
       case CategoryEnum.gpu:
         product as GPU;
-        final matchesGpuClockSpeed = matchesMinMax(product.clockSpeed ?? 0, state.filterArgument.minGpuClockSpeed, state.filterArgument.maxGpuClockSpeed);
+        final matchesGpuClockSpeed = matchesMinMax(product.clockSpeed, state.filterArgument.minGpuClockSpeed, state.filterArgument.maxGpuClockSpeed);
         return filterArgument.gpuBusList.contains(product.bus) &&
             filterArgument.gpuCapacityList.contains(product.capacity) &&
             filterArgument.gpuSeriesList.contains(product.series) &&
@@ -222,7 +234,7 @@ abstract class TabCubit extends Cubit<TabState> {
 
       case CategoryEnum.psu:
         product as PSU;
-        final matchesPsuWattage = matchesMinMax(product.wattage?.toDouble() ?? 0, state.filterArgument.minPsuWattage, state.filterArgument.maxPsuWattage);
+        final matchesPsuWattage = matchesMinMax(product.wattage.toDouble(), state.filterArgument.minPsuWattage, state.filterArgument.maxPsuWattage);
         return filterArgument.psuModularList.contains(product.modular) &&
             filterArgument.psuEfficiencyList.contains(product.efficiency) &&
             matchesPsuWattage;
