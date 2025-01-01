@@ -14,6 +14,7 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
   EmployeesScreenCubit() : super(const EmployeesScreenState()) {
     _employeesStream = _firebase.employeesStream();
     _listenToEmployees();
+    _loadUserRole();
     loadEmployees();
   }
 
@@ -129,5 +130,14 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
     }).toList();
 
     emit(state.copyWith(employees: filteredEmployees));
+  }
+
+  Future<void> _loadUserRole() async {
+    try {
+      final userRole = await _firebase.getUserRole();
+      emit(state.copyWith(userRole: userRole));
+    } catch (e) {
+      print('Error loading user role: $e');
+    }
   }
 }

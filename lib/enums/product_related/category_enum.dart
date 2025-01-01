@@ -1,4 +1,5 @@
 enum CategoryEnum {
+  empty(''),
   ram('RAM'),
   cpu('CPU'),
   psu('PSU'),
@@ -18,10 +19,14 @@ enum CategoryEnum {
   String toString() {
     return description;
   }
+
+  static List<CategoryEnum> get nonEmptyValues {
+    return CategoryEnum.values.where((e) => e != CategoryEnum.empty).toList();
+  }
 }
 
 extension CategoryEnumExtension on CategoryEnum {
   static CategoryEnum fromName(String name) {
-    return CategoryEnum.values.firstWhere((e) => e.getName() == name);
+    return CategoryEnum.nonEmptyValues.firstWhere((e) => e.getName() == name);
   }
 }

@@ -70,14 +70,32 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: GradientText(text: 'Edit Customer'),
-          elevation: 2,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           automaticallyImplyLeading: false,
           leading: GradientIconButton(
             icon: Icons.chevron_left,
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
+            fillColor: Colors.transparent,
           ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: GradientIconButton(
+                icon: Icons.check,
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final updatedCustomer = widget.customer.copyWith(
+                      customerName: customerName.trim(),
+                      phoneNumber: phoneNumber.trim(),
+                    );
+                    Navigator.pop(context, updatedCustomer);
+                  }
+                },
+                fillColor: Colors.transparent,
+              ),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -86,50 +104,68 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
               key: _formKey,
               onChanged: () => setState(() => _isFormDirty = true),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Card(
                     elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 40),
-                            child: TextFormField(
-                              focusNode: _nameFocusNode,
-                              initialValue: customerName,
-                              decoration: InputDecoration(
-                                labelText: 'Full Name',
-                                labelStyle: const TextStyle(color: Colors.white),
-                                floatingLabelStyle: MaterialStateTextStyle.resolveWith(
-                                  (states) => TextStyle(
-                                    color: states.contains(MaterialState.focused) 
-                                      ? Theme.of(context).primaryColor 
+                          const Text(
+                            'Customer Information',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          TextFormField(
+                            focusNode: _nameFocusNode,
+                            initialValue: customerName,
+                            decoration: InputDecoration(
+                              labelText: 'Full Name',
+                              labelStyle: const TextStyle(color: Colors.white),
+                              floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                                (states) => TextStyle(
+                                  color: states.contains(MaterialState.focused)
+                                      ? Theme.of(context).primaryColor
                                       : Colors.white,
-                                  ),
-                                ),
-                                prefixIcon: const Icon(Icons.person, color: Colors.white,),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              textInputAction: TextInputAction.next,
-                              onChanged: (value) => setState(() {
-                                customerName = value;
-                                _isFormDirty = true;
-                              }),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Name is required';
-                                }
-                                if (value.length < 2) {
-                                  return 'Name must be at least 2 characters';
-                                }
-                                return null;
-                              },
+                              prefixIcon: const Icon(Icons.person, color: Colors.white),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: Colors.white),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                              ),
                             ),
-                          ),                          
+                            textInputAction: TextInputAction.next,
+                            onChanged: (value) => setState(() {
+                              customerName = value;
+                              _isFormDirty = true;
+                            }),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Name is required';
+                              }
+                              if (value.length < 2) {
+                                return 'Name must be at least 2 characters';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
                           TextFormField(
                             focusNode: _phoneFocusNode,
                             initialValue: phoneNumber,
@@ -138,14 +174,22 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                               labelStyle: const TextStyle(color: Colors.white),
                               floatingLabelStyle: MaterialStateTextStyle.resolveWith(
                                 (states) => TextStyle(
-                                  color: states.contains(MaterialState.focused) 
-                                    ? Theme.of(context).primaryColor 
-                                    : Colors.white,
+                                  color: states.contains(MaterialState.focused)
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.white,
                                 ),
                               ),
                               prefixIcon: const Icon(Icons.phone, color: Colors.white),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(color: Colors.white),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(color: Theme.of(context).primaryColor),
                               ),
                               hintText: '+84 xxx xxx xxx',
                             ),
@@ -171,32 +215,6 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          final updatedCustomer = widget.customer.copyWith(
-                            customerName: customerName.trim(),
-                            phoneNumber: phoneNumber.trim(),
-                          );
-                          Navigator.pop(context, updatedCustomer);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                      ),
-                      icon: const Icon(Icons.save, color: Colors.white),
-                      label: const Text(
-                        'SAVE CHANGES',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  )
-
                 ],
               ),
             ),

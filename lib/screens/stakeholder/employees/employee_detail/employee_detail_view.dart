@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
+import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+import '../permissions/employee_permissions.dart';
 import 'employee_detail_cubit.dart';
 import 'employee_detail_state.dart';
 import '../employee_edit/employee_edit_view.dart';
 
 class EmployeeDetailScreen extends StatefulWidget {
   final Employee employee;
-  final String userRole;
+  final bool readOnly;
 
   const EmployeeDetailScreen({
     super.key,
     required this.employee,
-    required this.userRole,
+    this.readOnly = false,
   });
 
   @override
@@ -34,158 +36,25 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
               elevation: 0,
               leading: GradientIconButton(
                 icon: Icons.chevron_left,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context),
                 fillColor: Theme.of(context).colorScheme.surface,
               ),
+              title: GradientText(text: 'Employee Detail'),
             ),
             body: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: CircleAvatar(
-                              radius: 50,
-                              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                              child: Icon(
-                                Icons.person,
-                                size: 50,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              state.employee.employeeName,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const SizedBox(height: 32),
-                          const Text(
-                            'Employee Information',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          _buildInfoRow('Email', state.employee.email),
-                          _buildInfoRow('Phone', state.employee.phoneNumber),
-                          _buildInfoRow('Role', state.employee.role.toString()),
-                        ],
-                      ),
+                    child: Column(
+                      children: [
+                        _buildHeaderSection(context, state),
+                        const SizedBox(height: 24),
+                        _buildInfoSection(context, state),
+                      ],
                     ),
                   ),
                 ),
-                if (widget.userRole == 'admin')
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, -4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () async {
-                                  final updatedEmployee = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EmployeeEditScreen(
-                                        employee: state.employee,
-                                      ),
-                                    ),
-                                  );
-
-                                  if (updatedEmployee != null) {
-                                    final cubit = context.read<EmployeeDetailCubit>();
-                                    cubit.updateEmployee(updatedEmployee);
-                                  }
-                                },
-                                icon: const Icon(Icons.edit, color: Colors.white),
-                                label: const Text('Edit', style: TextStyle(color: Colors.white)),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  final cubit = context.read<EmployeeDetailCubit>();
-                                  showDialog(
-                                    context: context,
-                                    builder: (dialogContext) => AlertDialog(
-                                      title: const Text('Delete Employee'),
-                                      content: const Text(
-                                        'Are you sure you want to delete this employee?',
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () => Navigator.pop(dialogContext),
-                                          child: const Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            Navigator.pop(dialogContext);
-                                            await cubit.deleteEmployee();
-                                            if (mounted) {
-                                              Navigator.pop(context);
-                                            }
-                                          },
-                                          child: const Text(
-                                            'Delete',
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.delete, color: Colors.white),
-                                label: const Text(
-                                  'Delete',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                _buildActionButtons(context, state),
               ],
             ),
           );
@@ -194,28 +63,246 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {Color? valueColor}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildHeaderSection(BuildContext context, EmployeeDetailState state) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).colorScheme.primary.withOpacity(0.8),
+            Theme.of(context).colorScheme.primary.withOpacity(0.6),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
+          Hero(
+            tag: 'employee_avatar_${state.employee.employeeID}',
+            child: CircleAvatar(
+              radius: 60,
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              child: Icon(
+                Icons.person,
+                size: 60,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
+          const SizedBox(height: 16),
           Text(
-            value,
-            style: TextStyle(
-              color: valueColor ?? Colors.white,
+            state.employee.employeeName,
+            style: const TextStyle(
+              fontSize: 28,
               fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              state.employee.role.toString(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
       ),
     );
   }
-}
+
+  Widget _buildInfoSection(BuildContext context, EmployeeDetailState state) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Employee Information',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildInfoRow('Email', state.employee.email),
+              _buildInfoRow('Phone', state.employee.phoneNumber),
+              _buildInfoRow('Role', state.employee.role.toString()),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(
+              label,
+              textAlign: TextAlign.end,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            flex: 3,
+            child: Text(
+              value,
+              textAlign: TextAlign.start,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context, EmployeeDetailState state) {
+    if (widget.readOnly) return const SizedBox.shrink();
+    
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 8,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          if (EmployeePermissions.canEditEmployee(state.userRole, state.employee))
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () => _handleEdit(context, state),
+                icon: const Icon(Icons.edit, color: Colors.white),
+                label: const Text('Edit', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+          if (EmployeePermissions.canEditEmployee(state.userRole, state.employee) &&
+              EmployeePermissions.canDeleteEmployee(state.userRole, state.employee))
+            const SizedBox(width: 16),
+          if (EmployeePermissions.canDeleteEmployee(state.userRole, state.employee))
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () => _handleDelete(context),
+                icon: const Icon(Icons.delete, color: Colors.white),
+                label: const Text('Delete', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _handleEdit(BuildContext context, EmployeeDetailState state) async {
+    final updatedEmployee = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EmployeeEditScreen(
+          employee: state.employee,
+          userRole: state.userRole,
+        ),
+      ),
+    );
+
+    if (updatedEmployee != null) {
+      final cubit = context.read<EmployeeDetailCubit>();
+      cubit.updateEmployee(updatedEmployee);
+    }
+  }
+
+  void _handleDelete(BuildContext context) async {
+    final cubit = context.read<EmployeeDetailCubit>();
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Delete Employee'),
+        content: const Text(
+          'Are you sure you want to delete this employee?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              await cubit.deleteEmployee();
+              if (mounted) {
+                Navigator.pop(context);
+              }
+            },
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+} 

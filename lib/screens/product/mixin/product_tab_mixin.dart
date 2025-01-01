@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/processing/sort_enum.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_state.dart';
 
+import '../../../objects/product_related/product.dart';
 import '../product_screen/product_screen_cubit.dart';
 import '../product_screen/product_tab/product_tab_cubit.dart';
 
@@ -14,6 +15,7 @@ mixin TabMixin<T extends StatefulWidget> on State<T> {
   String searchText = '';
   int selectedTabIndex = 0;
   SortEnum selectedSortOption = SortEnum.releaseLatest;
+  List<Product> initialProducts = [];
   TabCubit get tabCubit => context.read<TabCubit>();
 
   @override
@@ -33,6 +35,11 @@ mixin TabMixin<T extends StatefulWidget> on State<T> {
       if (state.selectedSortOption != selectedSortOption) {
         selectedSortOption = state.selectedSortOption;
         tabCubit.updateSortOption(selectedSortOption);
+      }
+
+      if (state.initialProducts != initialProducts) {
+        initialProducts = state.initialProducts;
+        tabCubit.updateProduct(initialProducts);
       }
     });
   }

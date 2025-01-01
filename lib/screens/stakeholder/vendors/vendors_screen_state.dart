@@ -6,12 +6,14 @@ class VendorsScreenState extends Equatable {
   final bool isLoading;
   final String searchQuery;
   final int? selectedIndex;
+  final String? userRole;
 
   const VendorsScreenState({
     this.manufacturers = const [],
     this.isLoading = false,
     this.searchQuery = '',
     this.selectedIndex,
+    this.userRole,
   });
 
   VendorsScreenState copyWith({
@@ -19,15 +21,23 @@ class VendorsScreenState extends Equatable {
     bool? isLoading,
     String? searchQuery,
     int? selectedIndex,
+    String? userRole,
   }) {
     return VendorsScreenState(
       manufacturers: manufacturers ?? this.manufacturers,
       isLoading: isLoading ?? this.isLoading,
       searchQuery: searchQuery ?? this.searchQuery,
       selectedIndex: selectedIndex,
+      userRole: userRole ?? this.userRole,
     );
   }
 
   @override
-  List<Object?> get props => [manufacturers, isLoading, searchQuery, selectedIndex];
+  List<Object?> get props => [
+    manufacturers, 
+    isLoading, 
+    searchQuery, 
+    selectedIndex,
+    userRole,
+  ];
 }

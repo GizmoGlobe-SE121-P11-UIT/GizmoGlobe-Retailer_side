@@ -16,6 +16,7 @@ class TabState extends Equatable{
   final FilterArgument filterArgument;
   final Product? selectedProduct;
   final List<Manufacturer> manufacturerList;
+  final List<Product> filteredProductList;
 
   const TabState({
     this.searchText = '',
@@ -25,6 +26,7 @@ class TabState extends Equatable{
     this.selectedProduct,
     this.filterArgument = const FilterArgument(),
     this.processState = ProcessState.idle,
+    this.filteredProductList = const [],
   });
 
   @override
@@ -36,6 +38,7 @@ class TabState extends Equatable{
     selectedProduct,
     filterArgument,
     processState,
+    filteredProductList,
   ];
 
   TabState copyWith({
@@ -46,6 +49,7 @@ class TabState extends Equatable{
     FilterArgument? filterArgument,
     ProcessState? processState,
     List<Manufacturer>? manufacturerList,
+    List<Product>? filteredProductList,
   }) {
     return TabState(
       searchText: searchText ?? this.searchText,
@@ -55,6 +59,7 @@ class TabState extends Equatable{
       filterArgument: filterArgument ?? this.filterArgument,
       processState: processState ?? this.processState,
       manufacturerList: manufacturerList ?? this.manufacturerList,
+      filteredProductList: filteredProductList ?? this.filteredProductList,
     );
   }
 }

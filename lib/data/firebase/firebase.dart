@@ -21,18 +21,28 @@ import 'package:gizmoglobe_client/objects/product_related/mainboard.dart';
 import 'package:gizmoglobe_client/objects/product_related/psu.dart';
 import 'package:gizmoglobe_client/objects/product_related/ram.dart';
 
+import '../../enums/invoice_related/payment_status.dart';
 import '../../enums/invoice_related/sales_status.dart';
 import '../../enums/product_related/category_enum.dart';
 import '../../enums/product_related/product_status_enum.dart';
 import '../../enums/stakeholders/employee_role.dart';
+import '../../enums/stakeholders/manufacturer_status.dart';
+import '../../objects/address_related/address.dart';
+import '../../objects/address_related/district.dart';
+import '../../objects/address_related/province.dart';
+import '../../objects/address_related/ward.dart';
 import '../../objects/customer.dart';
 import '../../objects/employee.dart';
+import '../../objects/invoice_related/incoming_invoice.dart';
+import '../../objects/invoice_related/incoming_invoice_detail.dart';
 import '../../objects/invoice_related/sales_invoice_detail.dart';
+import '../../objects/invoice_related/warranty_invoice_detail.dart';
 import '../../objects/manufacturer.dart';
 import '../../objects/product_related/product.dart';
 import '../../objects/product_related/product_factory.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
 
 Future<void> pushProductSamplesToFirebase() async {
   try {
@@ -244,12 +254,16 @@ Future<void> pushSalesInvoiceSampleData() async {
 class Firebase {
   static final Firebase _firebase = Firebase._internal();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   factory Firebase() {
     return _firebase;
   }
 
   Firebase._internal();
+
+  // Thêm getter để lấy current user ID
+  String? get currentUserId => _auth.currentUser?.uid;
 
   Future<void> pushCustomerSampleData() async {
     try {
@@ -307,7 +321,7 @@ class Firebase {
         throw Exception('Customer ID cannot be null');
       }
 
-      // Cập nhật thông tin khách hàng
+      // Update customer information
       await FirebaseFirestore.instance
           .collection('customers')
           .doc(customer.customerID)
@@ -316,7 +330,7 @@ class Firebase {
         'phoneNumber': customer.phoneNumber,
       });
 
-      // Cập nhật thông tin user tương ứng
+      // Update corresponding user information
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('userID', isEqualTo: customer.customerID)
@@ -330,8 +344,23 @@ class Firebase {
           'username': customer.customerName,
         });
       }
+
+      // Fetch and update matched addresses
+      QuerySnapshot addressSnapshot = await FirebaseFirestore.instance
+          .collection('addresses')
+          .where('customerID', isEqualTo: customer.customerID)
+          .get();
+
+      for (var doc in addressSnapshot.docs) {
+        await FirebaseFirestore.instance
+            .collection('addresses')
+            .doc(doc.id)
+            .update({
+          'receiverName': customer.customerName,
+        });
+      }
     } catch (e) {
-      print('Lỗi khi cập nhật khách hàng: $e');
+      print('Error updating customer: $e');
       rethrow;
     }
   }
@@ -410,6 +439,41 @@ class Firebase {
       );
     } catch (e) {
       print('Lỗi khi tìm khách hàng theo email: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> createAddress(Address address) async {
+    try {
+      // Add address to collection addresses
+      DocumentReference addressRef = await FirebaseFirestore.instance
+          .collection('addresses')
+          .add(address.toMap());
+
+      String addressId = addressRef.id;
+      address.addressID = addressId;
+
+      // Update addressID in the document address
+      await addressRef.update({'addressID': addressId});
+      await FirebaseFirestore.instance
+          .collection('addresses')
+          .doc(addressId)
+          .set({
+        'addressID': addressId,
+        'customerID': address.customerID,
+        'receiverName': address.receiverName,
+        'receiverPhone': address.receiverPhone,
+        'provinceCode': address.province?.code,
+        'districtCode': address.district?.code,
+        'wardCode': address.ward?.code,
+        'street': address.street ?? '',
+        'hidden': address.hidden,
+      });
+
+      await Database().fetchAddress();
+      Database().customerList = await getCustomers();
+    } catch (e) {
+      print('Error creating new address: $e');
       rethrow;
     }
   }
@@ -563,61 +627,35 @@ class Firebase {
   // Manufacturer-related functions
   Future<List<Manufacturer>> getManufacturers() async {
     try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('manufacturers')
-          .get();
-
-      return snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        return Manufacturer(
-          manufacturerID: data['manufacturerID'] ?? '',
-          manufacturerName: data['manufacturerName'] ?? '',
-        );
-      }).toList();
+      final snapshot = await _firestore.collection('manufacturers').get();
+      return snapshot.docs
+          .map((doc) => _mapManufacturerFromJson(
+                doc.data(),
+                doc.id,
+              ))
+          .toList();
     } catch (e) {
-      print('Error getting manufacturers list: $e');
+      print('Error getting manufacturers: $e');
       rethrow;
     }
   }
 
   Stream<List<Manufacturer>> manufacturersStream() {
-    return FirebaseFirestore.instance
+    return _firestore
         .collection('manufacturers')
         .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-        return Manufacturer(
-          manufacturerID: data['manufacturerID'] ?? '',
-          manufacturerName: data['manufacturerName'] ?? '',
-        );
-      }).toList();
-    });
+        .map((snapshot) => snapshot.docs
+            .map((doc) => _mapManufacturerFromJson(
+                  doc.data(),
+                  doc.id,
+                ))
+            .toList());
   }
 
   Future<void> updateManufacturer(Manufacturer manufacturer) async {
     try {
-      if (manufacturer.manufacturerID == null) {
-        throw Exception('Manufacturer ID cannot be null');
-      }
-
-      // Find document by manufacturerID field
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('manufacturers')
-          .where('manufacturerID', isEqualTo: manufacturer.manufacturerID)
-          .get();
-
-      if (querySnapshot.docs.isEmpty) {
-        throw Exception('Manufacturer not found');
-      }
-
-      await FirebaseFirestore.instance
-          .collection('manufacturers')
-          .doc(querySnapshot.docs.first.id)
-          .update({
-        'manufacturerID': manufacturer.manufacturerID,
-        'manufacturerName': manufacturer.manufacturerName,
-      });
+      final doc = _firestore.collection('manufacturers').doc(manufacturer.manufacturerID);
+      await doc.update(_mapManufacturerToJson(manufacturer));
     } catch (e) {
       print('Error updating manufacturer: $e');
       rethrow;
@@ -661,15 +699,10 @@ class Firebase {
 
   Future<void> createManufacturer(Manufacturer manufacturer) async {
     try {
-      // Let Firestore generate the document ID
-      await FirebaseFirestore.instance
-          .collection('manufacturers')
-          .add({
-        'manufacturerID': manufacturer.manufacturerID,
-        'manufacturerName': manufacturer.manufacturerName,
-      });
+      final doc = _firestore.collection('manufacturers').doc(manufacturer.manufacturerID);
+      await doc.set(_mapManufacturerToJson(manufacturer));
     } catch (e) {
-      print('Error creating new manufacturer: $e');
+      print('Error creating manufacturer: $e');
       rethrow;
     }
   }
@@ -687,6 +720,7 @@ class Firebase {
       return Manufacturer(
         manufacturerID: data['manufacturerID'] ?? '',
         manufacturerName: data['manufacturerName'] ?? '',
+        status: _mapManufacturerStatus(data['status'] as String? ?? 'active'),
       );
     } catch (e) {
       print('Error finding manufacturer by ID: $e');
@@ -737,7 +771,7 @@ class Firebase {
         if (manufacturer == null) continue;
 
         // Chuyển đổi category string thành enum
-        CategoryEnum category = CategoryEnum.values.firstWhere(
+        CategoryEnum category = CategoryEnum.nonEmptyValues.firstWhere(
           (e) => e.getName() == data['category'],
           orElse: () => CategoryEnum.ram,
         );
@@ -846,6 +880,8 @@ class Firebase {
               ),
             });
             break;
+          default:
+            print('Unknown category: ${data['category']}');
         }
 
         // Tạo product instance thông qua factory
@@ -874,7 +910,7 @@ class Firebase {
           Manufacturer? manufacturer = await getManufacturerById(manufacturerId);
           if (manufacturer == null) continue;
 
-          CategoryEnum category = CategoryEnum.values.firstWhere(
+          CategoryEnum category = CategoryEnum.nonEmptyValues.firstWhere(
             (e) => e.getName() == data['category'],
             orElse: () => CategoryEnum.ram,
           );
@@ -986,6 +1022,9 @@ class Firebase {
                 ),
               });
               break;
+
+            default:
+              print('Unknown category: ${data['category']}');
           }
 
           Product product = ProductFactory.createProduct(category, productProps);
@@ -1001,22 +1040,24 @@ class Firebase {
 
   Future<List<SalesInvoice>> getSalesInvoices() async {
     try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+      final QuerySnapshot snapshot = await _firestore
           .collection('sales_invoices')
+          .orderBy('date', descending: true)
           .get();
 
       return snapshot.docs.map((doc) {
         return SalesInvoice.fromMap(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
-      print('Error getting sales invoices: $e');
+      print('Error loading sales invoices: $e');
       rethrow;
     }
   }
 
   Stream<List<SalesInvoice>> salesInvoicesStream() {
-    return FirebaseFirestore.instance
+    return _firestore
         .collection('sales_invoices')
+        .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -1151,13 +1192,13 @@ class Firebase {
       final customerDetails = await getCustomerDetails(invoice.customerID);
       invoice.customerName = customerDetails['customerName'];
 
-      // Lấy chi ti��t hóa đơn và thông tin sản phẩm
+      // Lấy chi tiết hóa đơn và thông tin sản phẩm
       final detailsSnapshot = await FirebaseFirestore.instance
           .collection('sales_invoice_details')
           .where('salesInvoiceID', isEqualTo: invoiceID)
           .get();
 
-      List<SalesInvoiceDetail> details = [];
+      List<SalesInvoiceDetail> details = [];  
       for (var doc in detailsSnapshot.docs) {
         final detailData = doc.data();
         final productDetails = await getProductDetails(detailData['productID']);
@@ -1200,7 +1241,6 @@ class Firebase {
         throw Exception('Product not found');
       }
 
-      final currentStock = productDoc.data()?['stock'] ?? 0;
       final oldDetail = await FirebaseFirestore.instance
           .collection('sales_invoice_details')
           .doc(detail.salesInvoiceDetailID)
@@ -1498,6 +1538,683 @@ class Firebase {
     }
   }
 
+  Future<void> changeSalesInvoiceStatus(SalesInvoice salesInvoice) async {
+    try {
+      await _firestore.collection('sales_invoices')
+          .doc(salesInvoice.salesInvoiceID).update({
+        'salesStatus': SalesStatus.completed.getName(),
+      });
+
+      //await Database().fetchSalesInvoice();
+    } catch (e) {
+      print('Error confirming delivery: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Address>> getCustomerAddresses(String customerID) async {
+    try {
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('addresses')
+          .where('customerID', isEqualTo: customerID)
+          .get();
+
+      return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return Address(
+          addressID: doc.id,
+          customerID: data['customerID'],
+          receiverName: data['receiverName'],
+          receiverPhone: data['receiverPhone'],
+          province: Database().provinceList.firstWhere(
+            (p) => p.code == data['provinceCode'],
+            orElse: () => Province.nullProvince,
+          ),
+          district: Database().provinceList
+            .firstWhere(
+              (p) => p.code == data['provinceCode'],
+              orElse: () => Province.nullProvince,
+            )
+            .districts
+            ?.firstWhere(
+              (d) => d.code == data['districtCode'],
+              orElse: () => District.nullDistrict,
+            ),
+          ward: Database().provinceList
+            .firstWhere(
+              (p) => p.code == data['provinceCode'],
+              orElse: () => Province.nullProvince,
+            )
+            .districts
+            ?.firstWhere(
+              (d) => d.code == data['districtCode'],
+              orElse: () => District.nullDistrict,
+            )
+            .wards
+            ?.firstWhere(
+              (w) => w.code == data['wardCode'],
+              orElse: () => Ward.nullWard,
+            ),
+          street: data['street'],
+          hidden: data['hidden'],
+        );
+      }).toList();
+    } catch (e) {
+      print('Error getting customer addresses: $e');
+      rethrow;
+    }
+  }
+
+  // Incoming Invoice Methods
+  Stream<List<IncomingInvoice>> incomingInvoicesStream() {
+    return _firestore
+        .collection('incoming_invoices')
+        .orderBy('date', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return IncomingInvoice.fromMap(doc.id, doc.data());
+      }).toList();
+    });
+  }
+
+  Future<List<IncomingInvoice>> getIncomingInvoices() async {
+    try {
+      final QuerySnapshot snapshot = await _firestore
+          .collection('incoming_invoices')
+          .orderBy('date', descending: true)
+          .get();
+
+      return snapshot.docs.map((doc) {
+        return IncomingInvoice.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      print('Error loading incoming invoices: $e');
+      rethrow;
+    }
+  }
+
+  Future<IncomingInvoice> getIncomingInvoiceWithDetails(String invoiceId) async {
+    try {
+      // Get the invoice
+      final DocumentSnapshot invoiceDoc = await _firestore
+          .collection('incoming_invoices')
+          .doc(invoiceId)
+          .get();
+
+      if (!invoiceDoc.exists) {
+        throw Exception('Invoice not found');
+      }
+
+      // Create invoice object
+      IncomingInvoice invoice = IncomingInvoice.fromMap(
+        invoiceDoc.id,
+        invoiceDoc.data() as Map<String, dynamic>,
+      );
+
+      // Get invoice details
+      final QuerySnapshot detailsSnapshot = await _firestore
+          .collection('incoming_invoice_details')
+          .where('incomingInvoiceID', isEqualTo: invoiceId)
+          .get();
+
+      // Add details to invoice
+      invoice.details = detailsSnapshot.docs.map((doc) {
+        return IncomingInvoiceDetail.fromMap(
+          doc.id,
+          doc.data() as Map<String, dynamic>,
+        );
+      }).toList();
+
+      return invoice;
+    } catch (e) {
+      print('Error loading incoming invoice details: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateIncomingInvoice(IncomingInvoice invoice) async {
+    try {
+      if (invoice.incomingInvoiceID == null) {
+        throw Exception('Invoice ID cannot be null');
+      }
+
+      // Update invoice
+      await _firestore
+          .collection('incoming_invoices')
+          .doc(invoice.incomingInvoiceID)
+          .update(invoice.toMap());
+
+      // Update details
+      for (var detail in invoice.details) {
+        if (detail.incomingInvoiceDetailID != null) {
+          await _firestore
+              .collection('incoming_invoice_details')
+              .doc(detail.incomingInvoiceDetailID)
+              .update(detail.toMap());
+        } else {
+          // Create new detail if it doesn't exist
+          final docRef = await _firestore
+              .collection('incoming_invoice_details')
+              .add(detail.toMap());
+
+          await docRef.update({
+            'incomingInvoiceDetailID': docRef.id,
+          });
+        }
+      }
+    } catch (e) {
+      print('Error updating incoming invoice: $e');
+      rethrow;
+    }
+  }
+
+  Future<String> createIncomingInvoice(IncomingInvoice invoice) async {
+    try {
+      // Create invoice
+      final docRef = await _firestore
+          .collection('incoming_invoices')
+          .add(invoice.toMap());
+
+      // Update invoice with ID
+      await docRef.update({
+        'incomingInvoiceID': docRef.id,
+      });
+
+      // Create details
+      for (var detail in invoice.details) {
+        detail.incomingInvoiceID = docRef.id;
+        final detailRef = await _firestore
+            .collection('incoming_invoice_details')
+            .add(detail.toMap());
+
+        await detailRef.update({
+          'incomingInvoiceDetailID': detailRef.id,
+        });
+      }
+
+      return docRef.id;
+    } catch (e) {
+      print('Error creating incoming invoice: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> deleteIncomingInvoice(String invoiceId) async {
+    try {
+      // Delete invoice details first
+      final QuerySnapshot detailsSnapshot = await _firestore
+          .collection('incoming_invoice_details')
+          .where('incomingInvoiceID', isEqualTo: invoiceId)
+          .get();
+
+      for (var doc in detailsSnapshot.docs) {
+        await _firestore
+            .collection('incoming_invoice_details')
+            .doc(doc.id)
+            .delete();
+      }
+
+      // Delete invoice
+      await _firestore
+          .collection('incoming_invoices')
+          .doc(invoiceId)
+          .delete();
+    } catch (e) {
+      print('Error deleting incoming invoice: $e');
+      rethrow;
+    }
+  }
+
+  Future<String?> getUserRole([String? userID]) async {
+    try {
+      final id = userID ?? currentUserId;
+      if (id == null) return null;
+
+      final doc = await _firestore.collection('users').doc(id).get();
+      if (doc.exists) {
+        return doc.data()?['role'] as String?;
+      }
+      return null;
+    } catch (e) {
+      print('Error getting user role: $e');
+      return null;
+    }
+  }
+
+  Future<Customer> getCustomer(String customerId) async {
+    try {
+      final doc = await _firestore
+          .collection('customers')
+          .doc(customerId)
+          .get();
+
+      if (!doc.exists) {
+        throw Exception('Customer not found');
+      }
+
+      return Customer.fromMap(doc.id, doc.data()!);
+    } catch (e) {
+      print('Error getting customer: $e');
+      rethrow;
+    }
+  }
+
+  Future<Product?> getProduct(String productId) async {
+    try {
+      print('Getting product: $productId');
+
+      final doc = await _firestore
+          .collection('products')
+          .doc(productId)
+          .get();
+
+      if (!doc.exists) {
+        print('Product not found: $productId');
+        return null;
+      }
+
+      final data = Map<String, dynamic>.from(doc.data()!);
+      data['productID'] = doc.id;
+
+      // Convert Timestamp to DateTime
+      if (data['release'] is Timestamp) {
+        data['release'] = (data['release'] as Timestamp).toDate();
+      }
+
+      // Get manufacturer data
+      final manufacturerDoc = await _firestore
+          .collection('manufacturers')
+          .doc(data['manufacturerID'] as String)
+          .get();
+
+      if (!manufacturerDoc.exists) {
+        print('Manufacturer not found for product $productId');
+        return null;
+      }
+
+      // Add manufacturer to product data
+      data['manufacturer'] = _mapManufacturerFromJson(
+        manufacturerDoc.data()!,
+        manufacturerDoc.id,
+      );
+
+      final categoryStr = (data['category'] as String).toLowerCase();
+      print('Product category: $categoryStr');
+
+      CategoryEnum? category;
+      try {
+        category = CategoryEnum.values.firstWhere(
+          (e) => e.getName().toLowerCase() == categoryStr,
+        );
+
+        // Convert enums based on category
+        if (category == CategoryEnum.drive) {
+          // Convert drive-specific enums
+          data['type'] = DriveType.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['type'] as String).toLowerCase(),
+            orElse: () => DriveType.hdd,
+          );
+
+          data['capacity'] = DriveCapacity.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['capacity'] as String).toLowerCase(),
+            orElse: () => DriveCapacity.gb256,
+          );
+        }
+
+        if (category == CategoryEnum.ram) {
+          // Convert RAM-specific enums
+          data['bus'] = RAMBus.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['bus'] as String).toLowerCase(),
+            orElse: () => RAMBus.mhz3200,
+          );
+
+          data['capacity'] = RAMCapacity.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['capacity'] as String).toLowerCase(),
+            orElse: () => RAMCapacity.gb8,
+          );
+
+          data['ramType'] = RAMType.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['ramType'] as String).toLowerCase(),
+            orElse: () => RAMType.ddr4,
+          );
+        }
+
+        if (category == CategoryEnum.cpu) {
+          // Convert CPU-specific enums
+          data['family'] = CPUFamily.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['family'] as String).toLowerCase(),
+            orElse: () => CPUFamily.corei3Ultra3,
+          );
+        }
+
+        if (category == CategoryEnum.gpu) {
+          // Convert GPU-specific enums
+          data['series'] = GPUSeries.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['series'] as String).toLowerCase(),
+            orElse: () => GPUSeries.rtx,
+          );
+
+          data['capacity'] = GPUCapacity.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['capacity'] as String).toLowerCase(),
+            orElse: () => GPUCapacity.gb4,
+          );
+
+          data['busWidth'] = GPUBus.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['busWidth'] as String).toLowerCase(),
+            orElse: () => GPUBus.bit128,
+          );
+        }
+
+        if (category == CategoryEnum.mainboard) {
+          // Convert mainboard-specific enums
+          data['formFactor'] = MainboardFormFactor.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['formFactor'] as String).toLowerCase(),
+            orElse: () => MainboardFormFactor.atx,
+          );
+
+          data['series'] = MainboardSeries.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['series'] as String).toLowerCase(),
+            orElse: () => MainboardSeries.h,
+          );
+
+          data['compatibility'] = MainboardCompatibility.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['compatibility'] as String).toLowerCase(),
+            orElse: () => MainboardCompatibility.intel,
+          );
+        }
+
+        if (category == CategoryEnum.psu) {
+          // Convert PSU-specific enums
+          data['efficiency'] = PSUEfficiency.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['efficiency'] as String).toLowerCase(),
+            orElse: () => PSUEfficiency.bronze,
+          );
+
+          data['modular'] = PSUModular.values.firstWhere(
+            (e) => e.getName().toLowerCase() == (data['modular'] as String).toLowerCase(),
+            orElse: () => PSUModular.nonModular,
+          );
+        }
+
+        // Convert common enums
+        data['status'] = ProductStatusEnum.values.firstWhere(
+          (e) => e.getName().toLowerCase() == (data['status'] as String).toLowerCase(),
+          orElse: () => ProductStatusEnum.active,
+        );
+
+      } catch (e) {
+        print('Invalid category for product $productId: $categoryStr');
+        return null;
+      }
+
+      final product = ProductFactory.createProduct(category, data);
+      print('Created product: ${product.productName}');
+      return product;
+    } catch (e) {
+      print('Error getting product $productId: $e');
+      return null;
+    }
+  }
+
+  Future<List<SalesInvoice>> getCustomerSalesInvoices(String customerId) async {
+    try {
+      final snapshot = await _firestore
+          .collection('sales_invoices')
+          .where('customerID', isEqualTo: customerId)
+          .where('paymentStatus', isEqualTo: PaymentStatus.paid.getName())
+          .where('salesStatus', isEqualTo: SalesStatus.completed.getName())
+          .orderBy('date', descending: true)
+          .get();
+
+      return Future.wait(snapshot.docs.map((doc) async {
+        final invoice = SalesInvoice.fromMap(doc.id, doc.data());
+
+        // Load details
+        final detailsSnapshot = await _firestore
+            .collection('sales_invoice_details')
+            .where('salesInvoiceID', isEqualTo: doc.id)
+            .get();
+
+        invoice.details = detailsSnapshot.docs
+            .map((doc) => SalesInvoiceDetail.fromMap(doc.id, doc.data()))
+            .toList();
+
+        return invoice;
+      }));
+    } catch (e) {
+      print('Error getting customer sales invoices: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<WarrantyInvoice>> getWarrantyInvoices() async {
+    try {
+      final QuerySnapshot snapshot = await _firestore
+          .collection('warranty_invoices')
+          .get();
+
+      return snapshot.docs.map((doc) {
+        return WarrantyInvoice.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      print('Error loading warranty invoices: $e');
+      rethrow;
+    }
+  }
+
+  Future<WarrantyInvoice> getWarrantyInvoiceWithDetails(String invoiceId) async {
+    try {
+      // Get the invoice
+      final DocumentSnapshot invoiceDoc = await _firestore
+          .collection('warranty_invoices')
+          .doc(invoiceId)
+          .get();
+
+      if (!invoiceDoc.exists) {
+        throw Exception('Warranty invoice not found');
+      }
+
+      // Create invoice object
+      WarrantyInvoice invoice = WarrantyInvoice.fromMap(
+        invoiceDoc.id,
+        invoiceDoc.data() as Map<String, dynamic>,
+      );
+
+      // Get invoice details
+      final QuerySnapshot detailsSnapshot = await _firestore
+          .collection('warranty_invoice_details')
+          .where('warrantyInvoiceID', isEqualTo: invoiceId)
+          .get();
+
+      // Add details to invoice
+      invoice.details = detailsSnapshot.docs.map((doc) {
+        return WarrantyInvoiceDetail.fromMap(
+          doc.id,
+          doc.data() as Map<String, dynamic>,
+        );
+      }).toList();
+
+      return invoice;
+    } catch (e) {
+      print('Error loading warranty invoice details: $e');
+      rethrow;
+    }
+  }
+
+  Stream<List<WarrantyInvoice>> warrantyInvoicesStream() {
+    return _firestore
+        .collection('warranty_invoices')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return WarrantyInvoice.fromMap(doc.id, doc.data());
+      }).toList();
+    });
+  }
+
+  Future<void> updateWarrantyInvoice(WarrantyInvoice invoice) async {
+    try {
+      await _firestore
+          .collection('warranty_invoices')
+          .doc(invoice.warrantyInvoiceID)
+          .update(invoice.toMap());
+    } catch (e) {
+      print('Error updating warranty invoice: $e');
+      rethrow;
+    }
+  }
+
+  Future<String?> createWarrantyInvoice(WarrantyInvoice invoice) async {
+    try {
+      print('Starting warranty invoice creation in Firebase');
+
+      // Create warranty invoice document
+      final docRef = await _firestore.collection('warranty_invoices').add({
+        'warrantyInvoiceID': '',  // Temporary placeholder
+        'salesInvoiceID': invoice.salesInvoiceID,
+        'customerName': invoice.customerName,
+        'customerID': invoice.customerID,
+        'date': invoice.date,
+        'status': invoice.status.toString(),
+        'reason': invoice.reason,
+      });
+
+      // Update the document with its own ID
+      await docRef.update({
+        'warrantyInvoiceID': docRef.id,
+      });
+
+      print('Created warranty invoice document with ID: ${docRef.id}');
+
+      // Create warranty details
+      final batch = _firestore.batch();
+
+      for (var detail in invoice.details) {
+        print('Processing detail: ${detail.toJson()}');
+
+        final detailRef = _firestore.collection('warranty_invoice_details').doc();
+        batch.set(detailRef, {
+          'warrantyInvoiceID': docRef.id,
+          'warrantyInvoiceDetailID': detailRef.id,
+          'productID': detail.productID,
+          'quantity': detail.quantity,
+        });
+      }
+
+      await batch.commit();
+      print('Successfully created warranty invoice and ${invoice.details.length} details');
+
+      return docRef.id;
+    } catch (e) {
+      print('Error creating warranty invoice: $e');
+      return null;
+    }
+  }
+
+  Future<void> createWarrantyInvoiceDetail(WarrantyInvoiceDetail detail) async {
+    try {
+      final docRef = await _firestore
+          .collection('warranty_invoice_details')
+          .add(detail.toMap());
+
+      await docRef.update({
+        'warrantyInvoiceDetailID': docRef.id,
+      });
+    } catch (e) {
+      print('Error creating warranty invoice detail: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateManufacturerAndProducts(Manufacturer manufacturer) async {
+    try {
+      // Start a batch write
+      final batch = _firestore.batch();
+
+      // Update manufacturer
+      final manufacturerDoc = _firestore.collection('manufacturers').doc(manufacturer.manufacturerID);
+      batch.update(manufacturerDoc, _mapManufacturerToJson(manufacturer));
+
+      // Get all products from this manufacturer
+      final productsSnapshot = await _firestore
+          .collection('products')
+          .where('manufacturerID', isEqualTo: manufacturer.manufacturerID)
+          .get();
+
+      // Update each product's status based on manufacturer status
+      final newProductStatus = manufacturer.status == ManufacturerStatus.active
+          ? ProductStatusEnum.active
+          : ProductStatusEnum.discontinued;
+
+      for (var doc in productsSnapshot.docs) {
+        final productDoc = _firestore.collection('products').doc(doc.id);
+        batch.update(productDoc, {
+          'status': newProductStatus.getName(),
+        });
+      }
+
+      // Commit all changes
+      await batch.commit();
+    } catch (e) {
+      print('Error updating manufacturer and products: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateUsername(String newUsername) async {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) throw Exception('No user logged in');
+
+      // Update username in users collection
+      await _firestore.collection('users').doc(user.uid).update({
+        'username': newUsername,
+      });
+
+      // Get user role to determine if additional updates are needed
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      final role = userDoc.data()?['role'] as String?;
+
+      // Update name in respective collection based on role
+      if (role == 'customer') {
+        final customerDoc = await _firestore
+            .collection('customers')
+            .where('email', isEqualTo: user.email)
+            .get();
+        if (customerDoc.docs.isNotEmpty) {
+          await _firestore
+              .collection('customers')
+              .doc(customerDoc.docs.first.id)
+              .update({'customerName': newUsername});
+        }
+      } else if (role == 'admin' || role == 'employee') {
+        final employeeDoc = await _firestore
+            .collection('employees')
+            .where('email', isEqualTo: user.email)
+            .get();
+        if (employeeDoc.docs.isNotEmpty) {
+          await _firestore
+              .collection('employees')
+              .doc(employeeDoc.docs.first.id)
+              .update({'employeeName': newUsername});
+        }
+      }
+    } catch (e) {
+      print('Error updating username: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print('Error sending password reset email: $e');
+      rethrow;
+    }
+  }
+
   Future<void> updateUserProfile(String userID, String newUsername) async {
     try {
       // Cập nhật thông tin trong collection users
@@ -1542,18 +2259,30 @@ class Firebase {
       rethrow;
     }
   }
+}
 
-  Future<void> changeSalesInvoiceStatus(SalesInvoice salesInvoice) async {
-    try {
-      await _firestore.collection('sales_invoices')
-          .doc(salesInvoice.salesInvoiceID).update({
-        'salesStatus': SalesStatus.completed.getName(),
-      });
+Manufacturer _mapManufacturerFromJson(Map<String, dynamic> json, String id) {
+  return Manufacturer(
+    manufacturerID: id,
+    manufacturerName: json['manufacturerName'] as String,
+    status: _mapManufacturerStatus(json['status'] as String? ?? 'active'),
+  );
+}
 
-      //await Database().fetchSalesInvoice();
-    } catch (e) {
-      print('Error confirming delivery: $e');
-      rethrow;
-    }
+Map<String, dynamic> _mapManufacturerToJson(Manufacturer manufacturer) {
+  return {
+    'manufacturerName': manufacturer.manufacturerName,
+    'status': manufacturer.status.toString().split('.').last,
+  };
+}
+
+ManufacturerStatus _mapManufacturerStatus(String status) {
+  switch (status.toLowerCase()) {
+    case 'active':
+      return ManufacturerStatus.active;
+    case 'inactive':
+      return ManufacturerStatus.inactive;
+    default:
+      return ManufacturerStatus.active;
   }
 }

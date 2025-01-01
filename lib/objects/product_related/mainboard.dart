@@ -1,6 +1,7 @@
 import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_compatibility.dart';
 import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_form_factor.dart';
 import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_series.dart';
+import 'package:gizmoglobe_client/enums/product_related/product_status_enum.dart';
 
 import '../../enums/product_related/category_enum.dart';
 import '../manufacturer.dart';
@@ -29,6 +30,7 @@ class Mainboard extends Product {
 
   @override
   void updateProduct({
+    String? productID,
     String? productName,
     double? importPrice,
     double? sellingPrice,
@@ -40,8 +42,10 @@ class Mainboard extends Product {
     MainboardFormFactor? formFactor,
     MainboardSeries? series,
     MainboardCompatibility? compatibility,
+    ProductStatusEnum? status,
   }) {
     super.updateProduct(
+      productID: productID,
       productName: productName,
       importPrice: importPrice,
       sellingPrice: sellingPrice,
@@ -49,6 +53,8 @@ class Mainboard extends Product {
       release: release,
       sales: sales,
       manufacturer: manufacturer,
+      stock: stock,
+      status: status,
     );
 
     this.formFactor = formFactor ?? this.formFactor;

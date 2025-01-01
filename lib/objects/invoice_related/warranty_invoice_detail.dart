@@ -27,4 +27,6 @@ class WarrantyInvoiceDetail {
       quantity: map['quantity'] ?? 0,
     );
   }
+
+  toJson() {}
 } 

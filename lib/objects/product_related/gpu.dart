@@ -1,6 +1,7 @@
 import 'package:gizmoglobe_client/enums/product_related/gpu_enums/gpu_bus.dart';
 import 'package:gizmoglobe_client/enums/product_related/gpu_enums/gpu_capacity.dart';
 import 'package:gizmoglobe_client/enums/product_related/gpu_enums/gpu_series.dart';
+import 'package:gizmoglobe_client/enums/product_related/product_status_enum.dart';
 
 import '../../enums/product_related/category_enum.dart';
 import '../manufacturer.dart';
@@ -31,6 +32,7 @@ class GPU extends Product {
 
   @override
   void updateProduct({
+    String? productID,
     String? productName,
     double? importPrice,
     double? sellingPrice,
@@ -43,8 +45,10 @@ class GPU extends Product {
     GPUCapacity? capacity,
     GPUBus? bus,
     double? clockSpeed,
+    ProductStatusEnum? status,
   }) {
     super.updateProduct(
+      productID: productID,
       productName: productName,
       importPrice: importPrice,
       sellingPrice: sellingPrice,
@@ -52,6 +56,8 @@ class GPU extends Product {
       release: release,
       sales: sales,
       manufacturer: manufacturer,
+      stock: stock,
+      status: status,
     );
 
     this.series = series ?? this.series;

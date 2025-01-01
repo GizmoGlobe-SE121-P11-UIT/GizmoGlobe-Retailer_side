@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../data/firebase/firebase.dart';
 import 'sales_screen_cubit.dart';
 import 'sales_screen_state.dart';
+import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 
 class SalesScreen extends StatefulWidget {
   const SalesScreen({super.key});
@@ -267,39 +268,42 @@ class _SalesScreenState extends State<SalesScreen> {
                                                   Text(
                                                     'Invoice #${invoice.salesInvoiceID}',
                                                     style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                      fontWeight: FontWeight.bold,
                                                       fontSize: 16,
                                                     ),
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
-                                                  const SizedBox(height: 4),
-                                                  Text(
-                                                    DateFormat('dd/MM/yyyy')
-                                                        .format(invoice.date),
-                                                    style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurface
-                                                          .withOpacity(0.6),
-                                                      fontSize: 14,
-                                                    ),
+                                                  const SizedBox(height: 8),
+                                                  Wrap(
+                                                    spacing: 8,
+                                                    runSpacing: 4,
+                                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                                    children: [
+                                                      StatusBadge(status: invoice.paymentStatus),
+                                                      StatusBadge(status: invoice.salesStatus),
+                                                      Text(
+                                                        DateFormat('dd/MM/yyyy').format(invoice.date),
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurface
+                                                              .withOpacity(0.6),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
                                             ),
                                             const SizedBox(width: 8),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  '\$${invoice.totalPrice.toStringAsFixed(2)}',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ],
+                                            Text(
+                                              '\$${invoice.totalPrice.toStringAsFixed(2)}',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
                                             ),
                                           ],
                                         ),

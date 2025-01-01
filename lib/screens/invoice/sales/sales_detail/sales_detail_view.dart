@@ -3,10 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
+import '../../../../data/firebase/firebase.dart';
 import 'sales_detail_cubit.dart';
 import 'sales_detail_state.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../enums/product_related/category_enum.dart';
+import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
+
 
 class SalesDetailScreen extends StatefulWidget {
   final SalesInvoice invoice;
@@ -183,12 +188,12 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                           _buildInfoRow(
                             'Payment Status', 
                             state.invoice.paymentStatus.toString(),
-                            valueColor: _getStatusColor(state.invoice.paymentStatus),
+                            isStatus: true,
                           ),
                           _buildInfoRow(
                             'Sales Status', 
                             state.invoice.salesStatus.toString(),
-                            valueColor: _getStatusColor(state.invoice.salesStatus),
+                            isStatus: true,
                           ),
                           const SizedBox(height: 16),
                           _buildTotalPriceRow(
@@ -213,9 +218,48 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                             itemBuilder: (context, index) {
                               final detail = state.invoice.details[index];
                               return GestureDetector(
-                                onTap: () {
-                                  // TODO: Navigate to product detail screen
-                                  print('Navigate to product ${detail.productID}');
+                                onTap: () async {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    },
+                                  );
+
+                                  try {
+                                    final product = await Firebase().getProduct(detail.productID);
+                                    
+                                    if (!mounted) return;
+                                    Navigator.pop(context); // Close loading dialog
+                                    
+                                    if (product == null) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text('Product not found')),
+                                      );
+                                      return;
+                                    }
+                                    
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BlocProvider(
+                                          create: (context) => ProductDetailCubit(product),
+                                          child: ProductDetailScreen(
+                                            product: product,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    if (!mounted) return;
+                                    Navigator.pop(context); // Close loading dialog
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Error loading product: $e')),
+                                    );
+                                  }
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.only(bottom: 8),
@@ -364,7 +408,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {Color? valueColor, bool wrap = false, double? maxWidth}) {
+  Widget _buildInfoRow(String label, String value, {Color? valueColor, bool wrap = false, double? maxWidth, bool isStatus = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -380,19 +424,22 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          SizedBox(
-            width: maxWidth,
-            child: Text(
-              value,
-              style: TextStyle(
-                color: valueColor ?? Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+          if (isStatus)
+            StatusBadge(status: value)
+          else
+            SizedBox(
+              width: maxWidth,
+              child: Text(
+                value,
+                style: TextStyle(
+                  color: valueColor ?? Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.right,
+                softWrap: wrap,
               ),
-              textAlign: TextAlign.right,
-              softWrap: wrap,
             ),
-          ),
         ],
       ),
     );

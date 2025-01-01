@@ -3,6 +3,7 @@ import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_capacity_e
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_type.dart';
 
 import '../../enums/product_related/category_enum.dart';
+import '../../enums/product_related/product_status_enum.dart';
 import '../manufacturer.dart';
 import 'product.dart';
 
@@ -29,6 +30,7 @@ class RAM extends Product {
 
   @override
   void updateProduct({
+    String? productID,
     String? productName,
     double? importPrice,
     double? sellingPrice,
@@ -40,8 +42,10 @@ class RAM extends Product {
     RAMBus? bus,
     RAMCapacity? capacity,
     RAMType? ramType,
+    ProductStatusEnum? status,
   }) {
     super.updateProduct(
+      productID: productID,
       productName: productName,
       importPrice: importPrice,
       sellingPrice: sellingPrice,
@@ -49,6 +53,8 @@ class RAM extends Product {
       release: release,
       sales: sales,
       manufacturer: manufacturer,
+      stock: stock,
+      status: status,
     );
 
     this.bus = bus ?? this.bus;
