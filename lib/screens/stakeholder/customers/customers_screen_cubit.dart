@@ -13,6 +13,7 @@ class CustomersScreenCubit extends Cubit<CustomersScreenState> {
     _customersStream = _firebase.customersStream();
     _listenToCustomers();
     loadCustomers();
+    _loadUserRole();
   }
 
   void _listenToCustomers() {
@@ -101,6 +102,15 @@ class CustomersScreenCubit extends Cubit<CustomersScreenState> {
     } catch (e) {
       print('Error creating customer: $e');
       return e.toString(); // Return error message
+    }
+  }
+
+  Future<void> _loadUserRole() async {
+    try {
+      final userRole = await _firebase.getUserRole();
+      emit(state.copyWith(userRole: userRole));
+    } catch (e) {
+      print('Error loading user role: $e');
     }
   }
 }

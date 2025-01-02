@@ -7,26 +7,26 @@ import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice_detail.d
 import '../../data/database/database.dart';
 
 class SalesInvoice {
-  String? salesInvoiceID;
-  String customerID;
-  String? customerName;
-  Address address;
-  DateTime date;
-  PaymentStatus paymentStatus;
-  SalesStatus salesStatus;
-  double totalPrice;
+  final String salesInvoiceID;
+  final String customerID;
+  late final String customerName;
+  final Address address;
+  final DateTime date;
+  final PaymentStatus paymentStatus;
+  final SalesStatus salesStatus;
+  final double totalPrice;
   List<SalesInvoiceDetail> details;
 
   SalesInvoice({
-    this.salesInvoiceID,
+    required this.salesInvoiceID,
     required this.customerID,
-    this.customerName,
+    required this.customerName,
     required this.address,
     required this.date,
     required this.paymentStatus,
     required this.salesStatus,
     required this.totalPrice,
-    required this.details,
+    this.details = const [],
   });
 
   SalesInvoice copyWith({
@@ -53,40 +53,45 @@ class SalesInvoice {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'salesInvoiceID': salesInvoiceID,
       'customerID': customerID,
       'customerName': customerName,
       'address': address.addressID,
-      'date': date,
-      'paymentStatus': paymentStatus.toString(),
-      'salesStatus': salesStatus.toString(),
+      'date': Timestamp.fromDate(date),
+      'paymentStatus': paymentStatus.toString().split('.').last,
+      'salesStatus': salesStatus.toString().split('.').last,
       'totalPrice': totalPrice,
     };
   }
 
-  static SalesInvoice fromMap(String id, Map<String, dynamic> map) {
-    Address address = Database().addressList.firstWhere(
-          (address) => address.addressID == map['address'],
+  factory SalesInvoice.fromMap(String id, Map<String, dynamic> map) {
+    final addressID = map['address'] as String;
+    final address = Database().addressList.firstWhere(
+      (addr) => addr.addressID == addressID,
+      orElse: () => Address.nullAddress,
     );
 
     return SalesInvoice(
       salesInvoiceID: id,
-      customerID: map['customerID'] ?? '',
-      customerName: map['customerName'],
+      customerID: map['customerID'] as String,
+      customerName: map['customerName'] as String,
       address: address,
       date: (map['date'] as Timestamp).toDate(),
       paymentStatus: PaymentStatus.values.firstWhere(
-        (e) => e.getName() == map['paymentStatus'],
+        (e) => e.getName().split('.').last == map['paymentStatus'],
         orElse: () => PaymentStatus.unpaid,
       ),
       salesStatus: SalesStatus.values.firstWhere(
-        (e) => e.getName() == map['salesStatus'],
+        (e) => e.getName().split('.').last == map['salesStatus'],
         orElse: () => SalesStatus.pending,
       ),
-      totalPrice: (map['totalPrice'] ?? 0).toDouble(),
-      details: [],
+      totalPrice: (map['totalPrice'] as num).toDouble(),
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return toJson();
   }
 } 

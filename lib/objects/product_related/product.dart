@@ -41,15 +41,18 @@ abstract class Product {
   }
 
   void updateProduct({
+    String? productID,
     String? productName,
+    Manufacturer? manufacturer,
     double? importPrice,
     double? sellingPrice,
     double? discount,
     DateTime? release,
     int? sales,
     int? stock,
-    Manufacturer? manufacturer,
+    ProductStatusEnum? status,
   }) {
+    this.productID = productID ?? this.productID;
     this.productName = productName ?? this.productName;
     this.importPrice = importPrice ?? this.importPrice;
     this.sellingPrice = sellingPrice ?? this.sellingPrice;
@@ -58,6 +61,6 @@ abstract class Product {
     this.sales = sales ?? this.sales;
     this.stock = stock ?? this.stock;
     this.manufacturer = manufacturer ?? this.manufacturer;
+    this.status = status ?? this.status;
   }
-
 }

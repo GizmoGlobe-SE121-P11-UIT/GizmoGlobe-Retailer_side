@@ -14,7 +14,7 @@ class FilterScreenCubit extends Cubit<FilterScreenState> {
     required List<Manufacturer> manufacturerList,
   }) {
     emit(state.copyWith(
-      filterArgument: initialFilterValue,
+      filterArgument: initialFilterValue.copyWith(categoryList: CategoryEnum.nonEmptyValues),
       selectedTabIndex: selectedTabIndex,
       manufacturerList: manufacturerList,
     ));

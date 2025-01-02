@@ -8,6 +8,7 @@ class EmployeesScreenState extends Equatable {
   final String searchQuery;
   final int? selectedIndex;
   final RoleEnum? selectedRoleFilter;
+  final String? userRole;
 
   const EmployeesScreenState({
     this.employees = const [],
@@ -15,6 +16,7 @@ class EmployeesScreenState extends Equatable {
     this.searchQuery = '',
     this.selectedIndex,
     this.selectedRoleFilter,
+    this.userRole,
   });
 
   EmployeesScreenState copyWith({
@@ -23,6 +25,7 @@ class EmployeesScreenState extends Equatable {
     String? searchQuery,
     int? selectedIndex,
     RoleEnum? selectedRoleFilter,
+    String? userRole,
   }) {
     return EmployeesScreenState(
       employees: employees ?? this.employees,
@@ -30,9 +33,17 @@ class EmployeesScreenState extends Equatable {
       searchQuery: searchQuery ?? this.searchQuery,
       selectedIndex: selectedIndex,
       selectedRoleFilter: selectedRoleFilter,
+      userRole: userRole ?? this.userRole,
     );
   }
 
   @override
-  List<Object?> get props => [employees, isLoading, searchQuery, selectedIndex, selectedRoleFilter];
+  List<Object?> get props => [
+    employees, 
+    isLoading, 
+    searchQuery, 
+    selectedIndex,
+    selectedRoleFilter,
+    userRole,
+  ];
 }

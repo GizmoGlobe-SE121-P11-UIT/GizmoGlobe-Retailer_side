@@ -7,7 +7,18 @@ class EmployeeDetailCubit extends Cubit<EmployeeDetailState> {
   final Firebase _firebase = Firebase();
 
   EmployeeDetailCubit(Employee employee) 
-      : super(EmployeeDetailState(employee: employee));
+      : super(EmployeeDetailState(employee: employee)) {
+    _loadUserRole();
+  }
+
+  Future<void> _loadUserRole() async {
+    try {
+      final userRole = await _firebase.getUserRole();
+      emit(state.copyWith(userRole: userRole));
+    } catch (e) {
+      print('Error loading user role: $e');
+    }
+  }
 
   Future<void> updateEmployee(Employee updatedEmployee) async {
     emit(state.copyWith(isLoading: true));

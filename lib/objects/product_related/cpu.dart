@@ -30,6 +30,7 @@ class CPU extends Product {
 
   @override
   void updateProduct({
+    String? productID,
     String? productName,
     double? importPrice,
     double? sellingPrice,
@@ -42,15 +43,19 @@ class CPU extends Product {
     int? core,
     int? thread,
     double? clockSpeed,
+    ProductStatusEnum? status,
   }) {
     super.updateProduct(
+      productID: productID,
       productName: productName,
       importPrice: importPrice,
       sellingPrice: sellingPrice,
       discount: discount,
       release: release,
       sales: sales,
+      stock: stock,
       manufacturer: manufacturer,
+      status: status,
     );
 
     this.family = family ?? this.family;

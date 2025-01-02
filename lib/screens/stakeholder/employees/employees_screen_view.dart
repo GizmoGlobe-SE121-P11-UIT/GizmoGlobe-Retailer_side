@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +9,7 @@ import 'employees_screen_state.dart';
 import 'employee_detail/employee_detail_view.dart';
 import 'employee_edit/employee_edit_view.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
+import 'permissions/employee_permissions.dart';
 
 class EmployeesScreen extends StatefulWidget {
   const EmployeesScreen({super.key});
@@ -27,23 +26,6 @@ class EmployeesScreen extends StatefulWidget {
 class _EmployeesScreenState extends State<EmployeesScreen> {
   final TextEditingController searchController = TextEditingController();
   EmployeesScreenCubit get cubit => context.read<EmployeesScreenCubit>();
-  String? userRole;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserRole();
-  }
-
-  Future<void> _fetchUserRole() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-      setState(() {
-        userRole = doc.data()?['role'];
-      });
-    }
-  }
 
   void _showAddEmployeeDialog() {
     final nameController = TextEditingController();
@@ -482,13 +464,14 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       iconSize: 32,
                       onPressed: _showFilterDialog,
                     ),
-                    const SizedBox(width: 8),
-                    if (userRole == 'admin')
+                    if (EmployeePermissions.canAddEmployees(state.userRole)) ...[
+                      const SizedBox(width: 8),
                       GradientIconButton(
                         icon: Icons.person_add,
                         iconSize: 32,
                         onPressed: _showAddEmployeeDialog,
                       ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -520,7 +503,6 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                 MaterialPageRoute(
                                   builder: (context) => EmployeeDetailScreen(
                                     employee: employee,
-                                    userRole: userRole ?? 'employee',
                                   ),
                                 ),
                               );
@@ -558,13 +540,14 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) => EmployeeDetailScreen(
-                                                    employee: employee,userRole: userRole ?? 'employee',
+                                                    employee: employee,
+                                                    readOnly: !EmployeePermissions.canEditEmployee(state.userRole, employee),
                                                   ),
                                                 ),
                                               );
                                             },
                                           ),
-                                          if (userRole == 'admin')
+                                          if (EmployeePermissions.canEditEmployee(state.userRole, employee)) ...[
                                             ListTile(
                                               dense: true,
                                               leading: const Icon(
@@ -581,60 +564,64 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                   MaterialPageRoute(
                                                     builder: (context) => EmployeeEditScreen(
                                                       employee: employee,
+                                                      userRole: state.userRole,
                                                     ),
                                                   ),
                                                 );
-
+                                                
                                                 if (updatedEmployee != null) {
                                                   await cubit.updateEmployee(updatedEmployee);
                                                 }
                                               },
                                             ),
-                                          ListTile(
-                                            dense: true,
-                                            leading: Icon(
-                                              Icons.delete_outlined,
-                                              size: 20,
-                                              color: Theme.of(context).colorScheme.error,
-                                            ),
-                                            title: Text(
-                                              'Delete',
-                                              style: TextStyle(
+                                          ],
+                                          if (EmployeePermissions.canDeleteEmployee(state.userRole, employee)) ...[
+                                            ListTile(
+                                              dense: true,
+                                              leading: Icon(
+                                                Icons.delete_outlined,
+                                                size: 20,
                                                 color: Theme.of(context).colorScheme.error,
                                               ),
-                                            ),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              cubit.setSelectedIndex(null);
-                                              showDialog(
-                                                context: context,
-                                                builder: (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: const Text('Delete Employee'),
-                                                    content: Text('Are you sure you want to delete ${employee.employeeName}?'),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () => Navigator.pop(context),
-                                                        child: const Text('Cancel'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () async {
-                                                          Navigator.pop(context);
-                                                          await cubit.deleteEmployee(employee.employeeID!);
-                                                        },
-                                                        child: Text(
-                                                          'Delete',
-                                                          style: TextStyle(
-                                                            color: Theme.of(context).colorScheme.error,
+                                              title: Text(
+                                                'Delete',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.error,
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                cubit.setSelectedIndex(null);
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return AlertDialog(
+                                                      title: const Text('Delete Employee'),
+                                                      content: Text('Are you sure you want to delete ${employee.employeeName}?'),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () => Navigator.pop(context),
+                                                          child: const Text('Cancel'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () async {
+                                                            Navigator.pop(context);
+                                                            await cubit.deleteEmployee(employee.employeeID!);
+                                                          },
+                                                          child: Text(
+                                                            'Delete',
+                                                            style: TextStyle(
+                                                              color: Theme.of(context).colorScheme.error,
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ],
                                         ],
                                       ),
                                     ),

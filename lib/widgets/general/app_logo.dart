@@ -15,7 +15,7 @@ class AppLogo extends StatelessWidget {
     return Align(
       alignment: alignment,
       child: Image.asset(
-        'lib/GizmoGlobeLogo.png', // Path to your logo asset
+        'lib/GIzmoGlobe.png', // Path to your logo asset
         height: height,
       ),
     );

@@ -3,10 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
+import '../../../../data/firebase/firebase.dart';
+import '../permissions/sales_invoice_permissions.dart';
+import '../sales_edit/sales_edit_view.dart';
 import 'sales_detail_cubit.dart';
 import 'sales_detail_state.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../enums/product_related/category_enum.dart';
+import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
+
 
 class SalesDetailScreen extends StatefulWidget {
   final SalesInvoice invoice;
@@ -52,17 +59,6 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
     }
   }
 
-  Color _getStatusColor(dynamic status) {
-    final statusStr = status.toString().toLowerCase();
-    if (statusStr.contains('paid') || statusStr.contains('completed')) {
-      return Colors.green;
-    } else if (statusStr.contains('pending')) {
-      return Colors.orange;
-    } else if (statusStr.contains('cancelled') || statusStr.contains('failed')) {
-      return Colors.red;
-    }
-    return Colors.grey;
-  }
 
   Widget _buildTotalPriceRow(String label, String value) {
     return Container(
@@ -127,6 +123,25 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                 },
                 fillColor: Colors.transparent,
               ),
+              actions: [
+                if (SalesInvoicePermissions.canEditInvoice(state.userRole, state.invoice))
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SalesEditScreen(
+                            invoice: state.invoice,
+                          ),
+                        ),
+                      );
+                      if (result != null) {
+                        context.read<SalesDetailCubit>().updateSalesInvoice(result);
+                      }
+                    },
+                  ),
+              ],
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,15 +195,41 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                             wrap: true,
                             maxWidth: MediaQuery.of(context).size.width * 0.6,
                           ),
-                          _buildInfoRow(
-                            'Payment Status', 
-                            state.invoice.paymentStatus.toString(),
-                            valueColor: _getStatusColor(state.invoice.paymentStatus),
+                          // Payment Status Row
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Payment Status',
+                                  style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                StatusBadge(status: state.invoice.paymentStatus),
+                              ],
+                            ),
                           ),
-                          _buildInfoRow(
-                            'Sales Status', 
-                            state.invoice.salesStatus.toString(),
-                            valueColor: _getStatusColor(state.invoice.salesStatus),
+                          // Sales Status Row
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Sales Status',
+                                  style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                StatusBadge(status: state.invoice.salesStatus),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 16),
                           _buildTotalPriceRow(
@@ -212,10 +253,23 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                             itemCount: state.invoice.details.length,
                             itemBuilder: (context, index) {
                               final detail = state.invoice.details[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  // TODO: Navigate to product detail screen
-                                  print('Navigate to product ${detail.productID}');
+                              return InkWell(
+                                onTap: () async {
+                                  // Get product details and navigate
+                                  final product = await context.read<SalesDetailCubit>().getProduct(detail.productID);
+                                  if (product != null && context.mounted) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BlocProvider(
+                                          create: (context) => ProductDetailCubit(product),
+                                          child: ProductDetailScreen(
+                                            product: product,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.only(bottom: 8),
@@ -320,41 +374,42 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                       ),
                     ],
                   ),
-                  // child: Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: ElevatedButton.icon(
-                  //         onPressed: () async {
-                  //           final updatedInvoice = await Navigator.push(
-                  //             context,
-                  //             MaterialPageRoute(
-                  //               builder: (context) => SalesEditScreen(
-                  //                 invoice: state.invoice,
-                  //               ),
-                  //             ),
-                  //           );
-                  //
-                  //           if (updatedInvoice != null) {
-                  //             final cubit = context.read<SalesDetailCubit>();
-                  //             cubit.updateSalesInvoice(updatedInvoice);
-                  //           }
-                  //         },
-                  //         icon: const Icon(
-                  //           Icons.edit,
-                  //           color: Colors.white,
-                  //         ),
-                  //         label: const Text(
-                  //           'Edit',
-                  //           style: TextStyle(color: Colors.white),
-                  //         ),
-                  //         style: ElevatedButton.styleFrom(
-                  //           backgroundColor: Colors.green,
-                  //           padding: const EdgeInsets.symmetric(vertical: 12),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+                  child: Row(
+                    children: [
+                      if (SalesInvoicePermissions.canEditInvoice(state.userRole, state.invoice))
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              final updatedInvoice = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SalesEditScreen(
+                                    invoice: state.invoice,
+                                  ),
+                                ),
+                              );
+
+                              if (updatedInvoice != null) {
+                                final cubit = context.read<SalesDetailCubit>();
+                                cubit.updateSalesInvoice(updatedInvoice);
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            label: const Text(
+                              'Edit Invoice',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).colorScheme.primary,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -389,7 +444,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
-              textAlign: TextAlign.right,
+              textAlign: wrap ? TextAlign.left : TextAlign.right,
               softWrap: wrap,
             ),
           ),

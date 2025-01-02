@@ -189,7 +189,7 @@ class _FilterScreenState extends State<FilterScreen> {
       children: [
         OptionFilter(
           name: 'Category',
-          enumValues: CategoryEnum.values,
+          enumValues: CategoryEnum.nonEmptyValues,
           selectedValues: List<CategoryEnum>.from(state.filterArgument.categoryList),
           onToggleSelection: (category) {
             final selected = List<CategoryEnum>.from(state.filterArgument.categoryList);

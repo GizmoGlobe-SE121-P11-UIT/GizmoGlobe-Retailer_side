@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_compatibility.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
@@ -30,6 +31,10 @@ import '../../objects/address_related/province.dart';
 import '../../objects/invoice_related/sales_invoice.dart';
 import '../../objects/invoice_related/sales_invoice_detail.dart';
 import '../../objects/product_related/product_factory.dart';
+import '../firebase/firebase.dart';
+import '../../objects/invoice_related/warranty_invoice.dart';
+import '../../objects/invoice_related/incoming_invoice.dart';
+import '../../objects/invoice_related/incoming_invoice_detail.dart';
 
 class Database {
   static final Database _database = Database._internal();
@@ -39,12 +44,14 @@ class Database {
   RoleEnum? role;
 
   List<Manufacturer> manufacturerList = [];
+  List<Address> addressList = [];
   List<Customer> customerList = [];
   List<Employee> employeeList = [];
   List<Province> provinceList = [];
-  List<Address> addressList = [];
   List<SalesInvoice> salesInvoiceList = [];
   List<Product> productList = [];
+  List<WarrantyInvoice> warrantyInvoiceList = [];
+  List<IncomingInvoice> incomingInvoiceList = [];
 
   factory Database() {
     return _database;
@@ -55,10 +62,80 @@ class Database {
   Future<void> initialize() async {
     provinceList = await fetchProvinces();
 
+    // addressList = [
+    //   Address(
+    //     customerID: '4e2PT6vyB9tszKqEcx6I',
+    //     receiverName: 'DuyVu',
+    //     receiverPhone: '123456789',
+    //     isDefault: true,
+    //     province: provinceList[0],
+    //     district: provinceList[0].districts![0],
+    //     ward: provinceList[0].districts![0].wards![0],
+    //     street: '123 Nguyen Trai',
+    //   ),
+    //
+    //   Address(
+    //     customerID: 'DyyMyOTtZ7J2SQzsr6IZ',
+    //     receiverName: 'Terry',
+    //     receiverPhone: '123456780',
+    //     isDefault: false,
+    //     province: provinceList[0],
+    //     district: provinceList[0].districts![2],
+    //     ward: provinceList[0].districts![2].wards![5],
+    //     street: '456 Le Loi',
+    //   ),
+    //
+    //   Address(
+    //     customerID: 'DyyMyOTtZ7J2SQzsr6IZ',
+    //     receiverName: 'Terry',
+    //     receiverPhone: '123456780',
+    //     isDefault: true,
+    //     province: provinceList[0],
+    //     district: provinceList[0].districts![2],
+    //     ward: provinceList[0].districts![2].wards![5],
+    //     street: '456 Le Loi',
+    //   ),
+    //
+    //   Address(
+    //     customerID: 'dKV74hSAXozpmhPgXerv',
+    //     receiverName: 'QuanDo',
+    //     receiverPhone: '123456780',
+    //     isDefault: true,
+    //     province: provinceList[0],
+    //     district: provinceList[0].districts![2],
+    //     ward: provinceList[0].districts![2].wards![2],
+    //     street: '789 Tran Hung Dao',
+    //   ),
+    //
+    //   Address(
+    //     customerID: 'noxiFkqUTN4bum27HPCq',
+    //     receiverName: 'NhatTan',
+    //     receiverPhone: '123456789',
+    //     isDefault: true,
+    //     province: provinceList[1],
+    //     district: provinceList[1].districts![0],
+    //     ward: provinceList[1].districts![0].wards![0],
+    //     street: '123 Nguyen Trai',
+    //   ),
+    //
+    //   Address(
+    //     customerID: 'tqyMZqXphgCTdKudaWyV',
+    //     receiverName: 'NguyenKhoa',
+    //     receiverPhone: '123456790',
+    //     isDefault: true,
+    //     province: provinceList[1],
+    //     district: provinceList[1].districts![1],
+    //     ward: provinceList[1].districts![1].wards![1],
+    //     street: '456 Le Loi',
+    //   ),
+    // ];
+
     try {
       await fetchDataFromFirestore();
     } catch (e) {
-      print('Lỗi khi khởi tạo database: $e');
+      if (kDebugMode) {
+        print('Lỗi khi khởi tạo database: $e');
+      }
       // Nếu không lấy được dữ liệu từ Firestore, sử dụng dữ liệu mẫu
       // _initializeSampleData();
     }
@@ -66,7 +143,9 @@ class Database {
 
   Future<void> fetchDataFromFirestore() async {
     try {
-      print('Bắt đầu lấy dữ liệu từ Firestore');
+      if (kDebugMode) {
+        print('Bắt đầu lấy dữ liệu từ Firestore');
+      }
       final manufacturerSnapshot = await FirebaseFirestore.instance
           .collection('manufacturers')
           .get();
@@ -78,14 +157,18 @@ class Database {
         );
       }).toList();
 
-      print('Số lượng manufacturers: ${manufacturerList.length}');
+      if (kDebugMode) {
+        print('Số lượng manufacturers: ${manufacturerList.length}');
+      }
 
       // Lấy danh sách products từ Firestore
       final productSnapshot = await FirebaseFirestore.instance
           .collection('products')
           .get();
 
-      print('Số lượng products trong snapshot: ${productSnapshot.docs.length}');
+      if (kDebugMode) {
+        print('Số lượng products trong snapshot: ${productSnapshot.docs.length}');
+      }
 
       productList = await Future.wait(productSnapshot.docs.map((doc) async {
         try {
@@ -95,23 +178,29 @@ class Database {
           final manufacturer = manufacturerList.firstWhere(
                 (m) => m.manufacturerID == data['manufacturerID'],
             orElse: () {
-              print('Manufacturer not found for product ${doc.id}');
+              if (kDebugMode) {
+                print('Manufacturer not found for product ${doc.id}');
+              }
               throw Exception('Manufacturer not found for product ${doc.id}');
             },
           );
 
           // Chuyển đổi dữ liệu từ Firestore sang enum
-          final category = CategoryEnum.values.firstWhere(
+          final category = CategoryEnum.nonEmptyValues.firstWhere(
                 (c) => c.getName() == data['category'],
             orElse: () {
-              print('Invalid category for product ${doc.id}');
+              if (kDebugMode) {
+                print('Invalid category for product ${doc.id}');
+              }
               throw Exception('Invalid category for product ${doc.id}');
             },
           );
 
           final specificData = _getSpecificProductData(data, category);
           if (specificData.isEmpty) {
-            print('Cannot get specific data for product ${doc.id}');
+            if (kDebugMode) {
+              print('Cannot get specific data for product ${doc.id}');
+            }
             throw Exception('Cannot get specific data for product ${doc.id}');
           }
 
@@ -129,7 +218,9 @@ class Database {
               'status': ProductStatusEnum.values.firstWhere(
                     (s) => s.getName() == data['status'],
                 orElse: () {
-                  print('Invalid status for product ${doc.id}');
+                  if (kDebugMode) {
+                    print('Invalid status for product ${doc.id}');
+                  }
                   throw Exception('Invalid status for product ${doc.id}');
                 },
               ),
@@ -146,6 +237,8 @@ class Database {
       await fetchAddress();
 
       print('Số lượng products trong list: ${productList.length}');
+
+      customerList = await Firebase().getCustomers();
 
     } catch (e) {
       print('Error fetching data: $e');
@@ -1050,6 +1143,207 @@ class Database {
         role: RoleEnum.owner,
       ),
     ];
+
+    // salesInvoiceList = [
+    //   SalesInvoice(
+    //     customerID: 'noxiFkqUTN4bum27HPCq', // Tran Nhat Tan
+    //     address: '123 Nguyen Van Cu, District 5, Ho Chi Minh City',
+    //     date: DateTime(2024, 3, 15),
+    //     paymentStatus: PaymentStatus.paid,
+    //     salesStatus: SalesStatus.completed,
+    //     totalPrice: 639.96,
+    //     details: [
+    //       SalesInvoiceDetail(
+    //         salesInvoiceID: '',
+    //         productID: '7eugMyslQdaIX59qzD8x', // AMD Ryzen 5 7600X
+    //         sellingPrice: 229.99,
+    //         quantity: 1,
+    //         subtotal: 229.99,
+    //       ),
+    //       SalesInvoiceDetail(
+    //         salesInvoiceID: '',
+    //         productID: 'PCSKvpsEj5FPBV1U7njG', // MSI MAG B760M MORTAR
+    //         sellingPrice: 229.99,
+    //         quantity: 1,
+    //         subtotal: 229.99,
+    //       ),
+    //       SalesInvoiceDetail(
+    //         salesInvoiceID: '',
+    //         productID: '2xMyMBUL86Gv16kxUC8V', // G.Skill Ripjaws V DDR4
+    //         sellingPrice: 89.99,
+    //         quantity: 2,
+    //         subtotal: 179.98,
+    //       ),
+    //     ],
+    //   ),
+    //
+    //   SalesInvoice(
+    //     customerID: 'dKV74hSAXozpmhPgXerv', // Do Hong Quan
+    //     address: '456 Le Hong Phong, District 10, Ho Chi Minh City',
+    //     date: DateTime(2024, 3, 16),
+    //     paymentStatus: PaymentStatus.unpaid,
+    //     salesStatus: SalesStatus.pending,
+    //     totalPrice: 349.99,
+    //     details: [
+    //       SalesInvoiceDetail(
+    //         salesInvoiceID: '',
+    //         productID: '9xKyNBWL86Gv16kxUC8Z', // AMD Ryzen 7 7800X3D
+    //         sellingPrice: 349.99,
+    //         quantity: 1,
+    //         subtotal: 349.99,
+    //       ),
+    //     ],
+    //   ),
+    //
+    //   SalesInvoice(
+    //     customerID: '4e2PT6vyB9tszKqEcx6I', // Nguyen Duy Vu
+    //     address: '789 Ly Thuong Kiet, District 11, Ho Chi Minh City',
+    //     date: DateTime(2024, 3, 17),
+    //     paymentStatus: PaymentStatus.paid,
+    //     salesStatus: SalesStatus.shipping,
+    //     totalPrice: 1649.98,
+    //     details: [
+    //       SalesInvoiceDetail(
+    //         salesInvoiceID: '',
+    //         productID: '3zLxMBWL86Gv16kxUC8Y', // AMD Threadripper PRO 5995WX
+    //         sellingPrice: 1199.99,
+    //         quantity: 1,
+    //         subtotal: 1199.99,
+    //       ),
+    //       SalesInvoiceDetail(
+    //         salesInvoiceID: '',
+    //         productID: '5vNwMBWL86Gv16kxUC8X', // ASUS ROG MAXIMUS Z790 HERO
+    //         sellingPrice: 449.99,
+    //         quantity: 1,
+    //         subtotal: 449.99,
+    //       ),
+    //     ],
+    //   ),
+    // ];
+
+    // warrantyInvoiceList = [
+    //   WarrantyInvoice(
+    //     customerID: 'noxiFkqUTN4bum27HPCq', // Tran Nhat Tan
+    //     date: DateTime(2024, 3, 1),
+    //     status: WarrantyStatus.pending,
+    //     reason: 'RAM không hoạt động',
+    //     details: [
+    //       WarrantyInvoiceDetail(
+    //         warrantyInvoiceID: '',
+    //         productID: '2xMyMBUL86Gv16kxUC8V', // G.Skill Ripjaws V DDR4
+    //         quantity: 1,
+    //       ),
+    //     ],
+    //   ),
+    //
+    //   WarrantyInvoice(
+    //     customerID: 'dKV74hSAXozpmhPgXerv', // Do Hong Quan
+    //     date: DateTime(2024, 3, 10),
+    //     status: WarrantyStatus.processing,
+    //     reason: 'CPU quá nóng khi sử dụng',
+    //     details: [
+    //       WarrantyInvoiceDetail(
+    //         warrantyInvoiceID: '',
+    //         productID: '3udzXJtFke9jwkqhVh46', // Intel Core i5-13600K
+    //         quantity: 1,
+    //       ),
+    //     ],
+    //   ),
+    //
+    //   WarrantyInvoice(
+    //     customerID: 'DyyMyOTtZ7J2SQzsr6IZ', // To Vinh Tien
+    //     date: DateTime(2024, 3, 15),
+    //     status: WarrantyStatus.completed,
+    //     reason: 'Mainboard không nhận RAM',
+    //     details: [
+    //       WarrantyInvoiceDetail(
+    //         warrantyInvoiceID: '',
+    //         productID: 'mL08tBQDtbM95zDqAbbj', // MSI PRO H610I
+    //         quantity: 1,
+    //       ),
+    //     ],
+    //   ),
+    // ];
+
+    incomingInvoiceList = [
+      IncomingInvoice(
+        manufacturerID: 'Corsair',
+        date: DateTime(2024, 3, 1),
+        status: PaymentStatus.paid,
+        totalPrice: 2499.95,
+        details: [
+          IncomingInvoiceDetail(
+            incomingInvoiceID: '',
+            productID: productList[0].productID!, // Kingston HyperX Fury DDR3
+            importPrice: 49.99,
+            quantity: 50,
+            subtotal: 2499.95,
+          ),
+        ],
+      ),
+
+      IncomingInvoice(
+        manufacturerID: 'Intel',
+        date: DateTime(2024, 3, 5),
+        status: PaymentStatus.unpaid,
+        totalPrice: 9999.90,
+        details: [
+          IncomingInvoiceDetail(
+            incomingInvoiceID: '',
+            productID: productList[8].productID!, // Intel Core i3-13100
+            importPrice: 99.99,
+            quantity: 100,
+            subtotal: 9999.90,
+          ),
+        ],
+      ),
+
+      IncomingInvoice(
+        manufacturerID: 'Samsung',
+        date: DateTime(2024, 3, 10),
+        status: PaymentStatus.unpaid,
+        totalPrice: 29999.25,
+        details: [
+          IncomingInvoiceDetail(
+            incomingInvoiceID: '',
+            productID: productList[20].productID!, // Samsung 870 EVO
+            importPrice: 79.99,
+            quantity: 250,
+            subtotal: 19997.50,
+          ),
+          IncomingInvoiceDetail(
+            incomingInvoiceID: '',
+            productID: productList[21].productID!, // Samsung 970 EVO Plus
+            importPrice: 199.99,
+            quantity: 50,
+            subtotal: 9999.75,
+          ),
+        ],
+      ),
+
+      IncomingInvoice(
+        manufacturerID: 'AMD',
+        date: DateTime(2024, 3, 15),
+        status: PaymentStatus.paid,
+        totalPrice: 149997.00,
+        details: [
+          IncomingInvoiceDetail(
+            incomingInvoiceID: '',
+            productID: productList[13].productID!, // AMD Ryzen 5 7600X
+            importPrice: 199.99,
+            quantity: 300,
+            subtotal: 59997.00,
+          ),
+          IncomingInvoiceDetail(
+            incomingInvoiceID: '',
+            productID: productList[14].productID!, // AMD Ryzen 7 7800X3D
+            importPrice: 299.99,
+            quantity: 300,
+            subtotal: 89997.00,
+          ),
+        ],
+      ),
+    ];
   }
 
   void generateSampleData() {
@@ -1094,17 +1388,38 @@ class Database {
     }
   }
 
+  Future<void> fetchAddress() async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final addressSnapshot = await FirebaseFirestore.instance
+          .collection('addresses')
+          .get();
+
+      addressList = addressSnapshot.docs.map((doc) {
+        return Address.fromMap(doc.data());
+      }).toList();
+    }
+  }
+
   void updateProductList (List<Product> productList) {
     this.productList = productList;
   }
 
-  Future<void> fetchAddress() async {
-    final addressSnapshot = await FirebaseFirestore.instance
-        .collection('addresses')
-        .get();
+  Future<bool> isUserAdmin() async {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
 
-    addressList = addressSnapshot.docs.map((doc) {
-      return Address.fromMap(doc.data());
-    }).toList();
+        return userDoc['role'] == 'admin';
+      }
+      return false;
+    } catch (e) {
+      print('Error checking admin status: $e');
+      return false;
+    }
   }
 }
