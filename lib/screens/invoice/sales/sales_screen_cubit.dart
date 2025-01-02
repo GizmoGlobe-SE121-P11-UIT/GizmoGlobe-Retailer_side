@@ -6,29 +6,18 @@ import 'sales_screen_state.dart';
 
 class SalesScreenCubit extends Cubit<SalesScreenState> {
   final _firebase = Firebase();
-  late final Stream<List<SalesInvoice>> _invoicesStream;
-  StreamSubscription<List<SalesInvoice>>? _subscription;
+  StreamSubscription<List<SalesInvoice>>? _salesSubscription;
+  String? _currentSortCriteria;
+  bool _currentSortDescending = true;
 
   SalesScreenCubit() : super(const SalesScreenState()) {
-    _invoicesStream = _firebase.salesInvoicesStream();
-    _listenToInvoices();
+    _init();
+  }
+
+  Future<void> _init() async {
+    final userRole = await _firebase.getCurrentUserRole();
+    emit(state.copyWith(userRole: userRole));
     loadInvoices();
-  }
-
-  void _listenToInvoices() {
-    _subscription = _invoicesStream.listen((invoices) {
-      if (state.searchQuery.isEmpty) {
-        emit(state.copyWith(invoices: invoices));
-      } else {
-        searchInvoices(state.searchQuery);
-      }
-    });
-  }
-
-  @override
-  Future<void> close() {
-    _subscription?.cancel();
-    return super.close();
   }
 
   Future<void> loadInvoices() async {
@@ -39,9 +28,52 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
         invoices: invoices,
         isLoading: false,
       ));
+      _subscribeToSales();
     } catch (e) {
       print('Error loading sales invoices: $e');
-      emit(state.copyWith(isLoading: false));
+      emit(state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      ));
+    }
+  }
+
+  void _subscribeToSales() {
+    _salesSubscription?.cancel();
+    _salesSubscription = _firebase.salesInvoicesStream().listen(
+      (invoices) {
+        if (state.searchQuery.isEmpty) {
+          final sortedInvoices = _applySorting(invoices);
+          emit(state.copyWith(
+            invoices: sortedInvoices,
+            isLoading: false,
+          ));
+        } else {
+          searchInvoices(state.searchQuery);
+        }
+      },
+      onError: (error) {
+        emit(state.copyWith(
+          error: error.toString(),
+          isLoading: false,
+        ));
+      },
+    );
+  }
+
+  Future<void> refreshInvoices() async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final invoices = await _firebase.getSalesInvoices();
+      emit(state.copyWith(
+        invoices: invoices,
+        isLoading: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      ));
     }
   }
 
@@ -49,13 +81,13 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
     emit(state.copyWith(searchQuery: query));
     
     if (query.isEmpty) {
-      loadInvoices();
+      _subscribeToSales();
       return;
     }
 
     final filteredInvoices = state.invoices.where((invoice) {
-      return invoice.customerID.toLowerCase().contains(query.toLowerCase()) ||
-             invoice.address.toString().toLowerCase().contains(query.toLowerCase());
+      return invoice.customerName.toLowerCase().contains(query.toLowerCase()) ||
+             invoice.salesInvoiceID.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
     emit(state.copyWith(invoices: filteredInvoices));
@@ -70,6 +102,7 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
       await _firebase.updateSalesInvoice(invoice);
     } catch (e) {
       print('Error updating sales invoice: $e');
+      emit(state.copyWith(error: e.toString()));
     }
   }
 
@@ -81,5 +114,46 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
       print('Error creating sales invoice: $e');
       return e.toString();
     }
+  }
+
+  void sortInvoices(String criteria, bool descending) {
+    _currentSortCriteria = criteria;
+    _currentSortDescending = descending;
+    
+    if (state.invoices.isEmpty) return;
+
+    final sortedInvoices = _applySorting(state.invoices);
+    
+    emit(state.copyWith(
+      invoices: sortedInvoices,
+      isLoading: false,
+    ));
+  }
+
+  List<SalesInvoice> _applySorting(List<SalesInvoice> invoices) {
+    if (_currentSortCriteria == null) return invoices;
+
+    final sortedInvoices = List<SalesInvoice>.from(invoices);
+    
+    switch (_currentSortCriteria) {
+      case 'date':
+        sortedInvoices.sort((a, b) => _currentSortDescending
+            ? b.date.compareTo(a.date)
+            : a.date.compareTo(b.date));
+        break;
+      case 'price':
+        sortedInvoices.sort((a, b) => _currentSortDescending
+            ? b.totalPrice.compareTo(a.totalPrice)
+            : a.totalPrice.compareTo(b.totalPrice));
+        break;
+    }
+    
+    return sortedInvoices;
+  }
+
+  @override
+  Future<void> close() {
+    _salesSubscription?.cancel();
+    return super.close();
   }
 }

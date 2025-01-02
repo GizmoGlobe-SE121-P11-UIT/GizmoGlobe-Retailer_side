@@ -83,4 +83,47 @@ class Address {
       hidden: map['hidden'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'addressID': addressID,
+      'customerID': customerID,
+      'receiverName': receiverName,
+      'receiverPhone': receiverPhone,
+      'provinceCode': province?.code,
+      'districtCode': district?.code,
+      'wardCode': ward?.code,
+      'street': street,
+      'hidden': hidden,
+    };
+  }
+
+  factory Address.fromJson(Map<String, dynamic> json) {
+    final province = Database().provinceList.firstWhere(
+      (p) => p.code == json['provinceCode'], 
+      orElse: () => Province.nullProvince,
+    );
+    
+    final district = province.districts?.firstWhere(
+      (d) => d.code == json['districtCode'], 
+      orElse: () => District.nullDistrict,
+    ) ?? District.nullDistrict;
+    
+    final ward = district.wards?.firstWhere(
+      (w) => w.code == json['wardCode'], 
+      orElse: () => Ward.nullWard,
+    ) ?? Ward.nullWard;
+
+    return Address(
+      addressID: json['addressID'] as String?,
+      customerID: json['customerID'] as String,
+      receiverName: json['receiverName'] as String,
+      receiverPhone: json['receiverPhone'] as String,
+      province: province,
+      district: district,
+      ward: ward,
+      street: json['street'] as String?,
+      hidden: json['hidden'] as bool? ?? false,
+    );
+  }
 }

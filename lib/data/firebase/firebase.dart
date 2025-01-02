@@ -1059,56 +1059,117 @@ class Firebase {
         .collection('sales_invoices')
         .orderBy('date', descending: true)
         .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return SalesInvoice.fromMap(doc.id, doc.data());
-      }).toList();
-    });
+        .asyncMap((snapshot) async {
+        List<SalesInvoice> invoices = [];
+        
+        for (var doc in snapshot.docs) {
+          // Create the invoice
+          final invoice = SalesInvoice.fromMap(doc.id, doc.data());
+          
+          // Get details for this invoice
+          final details = await getSalesInvoiceDetails(invoice.salesInvoiceID);
+          invoice.details = details;
+          
+          invoices.add(invoice);
+        }
+        
+        return invoices;
+      });
   }
 
-  Future<void> updateSalesInvoice(SalesInvoice invoice) async {
+  Future<SalesInvoice?> createSalesInvoice(SalesInvoice invoice) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('sales_invoices')
-          .doc(invoice.salesInvoiceID)
-          .update({
-            ...invoice.toMap(),
-            'paymentStatus': invoice.paymentStatus.toString(),
-            'salesStatus': invoice.salesStatus.toString(),
-          });
-    } catch (e) {
-      print('Error updating sales invoice: $e');
-      rethrow;
-    }
-  }
+      final batch = FirebaseFirestore.instance.batch();
 
-  Future<String> createSalesInvoice(SalesInvoice invoice) async {
-    try {
-      // Tạo document mới và lấy ID
-      final docRef = await FirebaseFirestore.instance
+      final docRef = FirebaseFirestore.instance
           .collection('sales_invoices')
-          .add({
-            ...invoice.toMap(),
-            'date': Timestamp.fromDate(invoice.date),
-            'paymentStatus': invoice.paymentStatus.toString(),
-            'salesStatus': invoice.salesStatus.toString(),
-          });
+          .doc(invoice.salesInvoiceID);
 
-      // Cập nhật lại document với ID
-      await docRef.update({
-        'salesInvoiceID': docRef.id,
+      // Store only the addressID instead of the full address object
+      batch.set(docRef, {
+        'salesInvoiceID': invoice.salesInvoiceID,
+        'customerID': invoice.customerID,
+        'customerName': invoice.customerName,
+        'address': invoice.address.addressID, // Just store the ID
+        'paymentStatus': invoice.paymentStatus.getName(),
+        'salesStatus': invoice.salesStatus.getName(),
+        'totalPrice': invoice.totalPrice,
+        'date': invoice.date,
       });
 
-      return docRef.id;
+      // Add details...
+      for (final detail in invoice.details) {
+        final detailRef = FirebaseFirestore.instance
+            .collection('sales_invoice_details')
+            .doc();
+            
+        batch.set(detailRef, {
+          'salesInvoiceDetailID': detailRef.id,
+          'salesInvoiceID': invoice.salesInvoiceID,
+          'productID': detail.productID,
+          'productName': detail.productName,
+          'quantity': detail.quantity,
+          'sellingPrice': detail.sellingPrice,
+          'subtotal': detail.subtotal,
+        });
+      }
+
+      await batch.commit();
+      return invoice;
     } catch (e) {
       print('Error creating sales invoice: $e');
-      rethrow;
+      return null;
     }
+  }
+
+  // Add a method to fetch invoice details
+  Future<List<SalesInvoiceDetail>> getSalesInvoiceDetails(String invoiceId) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('sales_invoice_details')
+          .where('salesInvoiceID', isEqualTo: invoiceId)
+          .get();
+
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return SalesInvoiceDetail(
+          salesInvoiceID: data['salesInvoiceID'] ?? '',
+          productID: data['productID'] ?? '',
+          productName: data['productName'] ?? '',
+          quantity: data['quantity'] ?? 0,
+          sellingPrice: (data['sellingPrice'] ?? 0).toDouble(),
+          subtotal: (data['subtotal'] ?? 0).toDouble(),
+        );
+      }).toList();
+    } catch (e) {
+      print('Error fetching sales invoice details: $e');
+      return [];
+    }
+  }
+
+  Future<void> _updateProductStock(String productID, int quantity) async {
+    final productRef = _firestore.collection('products').doc(productID);
+    
+    return _firestore.runTransaction((transaction) async {
+      final productDoc = await transaction.get(productRef);
+      if (!productDoc.exists) {
+        throw Exception('Product not found');
+      }
+
+      final currentStock = productDoc.data()?['stock'] as int;
+      if (currentStock < quantity) {
+        throw Exception('Not enough stock');
+      }
+
+      transaction.update(productRef, {
+        'stock': currentStock - quantity,
+      });
+    });
   }
 
   Future<Map<String, dynamic>> getCustomerDetails(String customerID) async {
     try {
-      final doc = await FirebaseFirestore.instance
+      final doc = await _firestore
           .collection('customers')
           .doc(customerID)
           .get();
@@ -1121,6 +1182,7 @@ class Firebase {
           'email': data['email'],
         };
       }
+
       return {
         'customerName': 'Unknown Customer',
         'phoneNumber': '',
@@ -1138,7 +1200,7 @@ class Firebase {
 
   Future<Map<String, dynamic>> getProductDetails(String productID) async {
     try {
-      final doc = await FirebaseFirestore.instance
+      final doc = await _firestore
           .collection('products')
           .doc(productID)
           .get();
@@ -1176,8 +1238,8 @@ class Firebase {
 
   Future<SalesInvoice> getSalesInvoiceWithDetails(String invoiceID) async {
     try {
-      // Lấy thông tin hóa đơn
-      final invoiceDoc = await FirebaseFirestore.instance
+      // Get the invoice document
+      final invoiceDoc = await _firestore
           .collection('sales_invoices')
           .doc(invoiceID)
           .get();
@@ -1186,53 +1248,58 @@ class Firebase {
         throw Exception('Invoice not found');
       }
 
-      final invoice = SalesInvoice.fromMap(invoiceID, invoiceDoc.data()!);
+      final data = invoiceDoc.data()!;
+      
+      // Get customer details
+      final customerDetails = await getCustomerDetails(data['customerID'] as String);
+      data['customerName'] = customerDetails['customerName'];
 
-      // Lấy thông tin khách hàng
-      final customerDetails = await getCustomerDetails(invoice.customerID);
-      invoice.customerName = customerDetails['customerName'];
+      // Create the invoice
+      final invoice = SalesInvoice.fromMap(invoiceDoc.id, data);
 
-      // Lấy chi tiết hóa đơn và thông tin sản phẩm
-      final detailsSnapshot = await FirebaseFirestore.instance
+      // Get and set the details
+      final detailsSnapshot = await _firestore
           .collection('sales_invoice_details')
           .where('salesInvoiceID', isEqualTo: invoiceID)
           .get();
 
-      List<SalesInvoiceDetail> details = [];  
-      for (var doc in detailsSnapshot.docs) {
-        final detailData = doc.data();
-        final productDetails = await getProductDetails(detailData['productID']);
-
+      // Process each detail and get product information
+      List<SalesInvoiceDetail> details = [];
+      for (var detailDoc in detailsSnapshot.docs) {
+        final detailData = detailDoc.data();
+        final productDetails = await getProductDetails(detailData['productID'] as String);
+        
         details.add(SalesInvoiceDetail(
-          salesInvoiceDetailID: doc.id,
-          salesInvoiceID: detailData['salesInvoiceID'],
-          productID: detailData['productID'],
+          salesInvoiceID: detailData['salesInvoiceID'] as String,
+          productID: detailData['productID'] as String,
           productName: productDetails['productName'],
           category: productDetails['category'],
-          sellingPrice: detailData['sellingPrice'].toDouble(),
-          quantity: detailData['quantity'],
-          subtotal: detailData['subtotal'].toDouble(),
+          quantity: detailData['quantity'] as int,
+          sellingPrice: (detailData['sellingPrice'] as num).toDouble(),
+          subtotal: (detailData['subtotal'] as num).toDouble(),
         ));
       }
 
       invoice.details = details;
       return invoice;
     } catch (e) {
-      print('Error getting invoice with details: $e');
+      print('Error getting sales invoice details: $e');
       rethrow;
     }
   }
 
   Future<void> updateSalesInvoiceDetail(SalesInvoiceDetail detail) async {
     try {
-      // Cập nhật chi tiết hóa đơn
-      await FirebaseFirestore.instance
+      // Create a new document reference if needed
+      final detailRef = _firestore
           .collection('sales_invoice_details')
-          .doc(detail.salesInvoiceDetailID)
-          .update(detail.toMap());
+          .doc();
 
-      // Cập nhật stock của sản phẩm
-      final productDoc = await FirebaseFirestore.instance
+      // Update the detail document
+      await detailRef.set(detail.toJson());
+
+      // Update product stock
+      final productDoc = await _firestore
           .collection('products')
           .doc(detail.productID)
           .get();
@@ -1241,15 +1308,17 @@ class Firebase {
         throw Exception('Product not found');
       }
 
-      final oldDetail = await FirebaseFirestore.instance
+      // Get the old detail to calculate stock difference
+      final oldDetailQuery = await _firestore
           .collection('sales_invoice_details')
-          .doc(detail.salesInvoiceDetailID)
+          .where('salesInvoiceID', isEqualTo: detail.salesInvoiceID)
+          .where('productID', isEqualTo: detail.productID)
           .get();
 
-      if (oldDetail.exists) {
-        final oldQuantity = oldDetail.data()?['quantity'] ?? 0;
-        // Đảm bảo các giá trị không null khi tính toán
-        final stockChange = (oldQuantity as int) - detail.quantity;
+      if (oldDetailQuery.docs.isNotEmpty) {
+        final oldDetail = oldDetailQuery.docs.first;
+        final oldQuantity = oldDetail.data()['quantity'] as int;
+        final stockChange = oldQuantity - detail.quantity;
         await updateProductStock(detail.productID, stockChange);
       }
     } catch (e) {
@@ -1258,31 +1327,27 @@ class Firebase {
     }
   }
 
-  Future<void> deleteSalesInvoiceDetail(String detailId) async {
+  Future<void> deleteSalesInvoiceDetail(String salesInvoiceID, String productID) async {
     try {
-      // Lấy thông tin chi tiết trước khi xóa
-      final detailDoc = await FirebaseFirestore.instance
+      // Find the detail document
+      final detailQuery = await _firestore
           .collection('sales_invoice_details')
-          .doc(detailId)
+          .where('salesInvoiceID', isEqualTo: salesInvoiceID)
+          .where('productID', isEqualTo: productID)
           .get();
 
-      if (!detailDoc.exists) {
+      if (detailQuery.docs.isEmpty) {
         throw Exception('Invoice detail not found');
       }
 
-      final productId = detailDoc.data()?['productID'];
-      final quantity = detailDoc.data()?['quantity'] ?? 0;
+      final detailDoc = detailQuery.docs.first;
+      final quantity = detailDoc.data()['quantity'] as int;
 
-      // Xóa chi tiết hóa đơn
-      await FirebaseFirestore.instance
-          .collection('sales_invoice_details')
-          .doc(detailId)
-          .delete();
+      // Delete the detail document
+      await detailDoc.reference.delete();
 
-      // Hoàn lại stock
-      if (productId != null) {
-        await updateProductStock(productId, quantity);
-      }
+      // Return stock
+      await updateProductStock(productID, quantity);
     } catch (e) {
       print('Error deleting sales invoice detail: $e');
       rethrow;
@@ -1977,7 +2042,7 @@ class Firebase {
             .get();
 
         invoice.details = detailsSnapshot.docs
-            .map((doc) => SalesInvoiceDetail.fromMap(doc.id, doc.data()))
+            .map((doc) => SalesInvoiceDetail.fromMap(doc.data()))
             .toList();
 
         return invoice;
@@ -2235,9 +2300,7 @@ class Firebase {
         await FirebaseFirestore.instance
             .collection('customers')
             .doc(customerSnapshot.docs.first.id)
-            .update({
-          'customerName': newUsername,
-        });
+            .update({'customerName': newUsername});
       }
 
       // Kiểm tra và cập nhật thông tin trong collection employees nếu là nhân viên
@@ -2250,12 +2313,87 @@ class Firebase {
         await FirebaseFirestore.instance
             .collection('employees')
             .doc(employeeSnapshot.docs.first.id)
-            .update({
-          'employeeName': newUsername,
-        });
+            .update({'employeeName': newUsername});
       }
     } catch (e) {
       print('Error updating user profile: $e');
+      rethrow;
+    }
+  }
+
+  Future<String> getCurrentUserRole() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) return 'employee';
+
+      final userDoc = await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (!userDoc.exists) return 'employee';
+      
+      return userDoc.data()?['role'] ?? 'employee';
+    } catch (e) {
+      print('Error getting user role: $e');
+      return 'employee'; // Default role if there's an error
+    }
+  }
+
+  Future<String> generateSalesInvoiceID() async {
+    final salesRef = _firestore.collection('sales');
+    final docRef = salesRef.doc();
+    return docRef.id;
+  }
+
+  Future<void> updateSalesInvoice(SalesInvoice invoice) async {
+    try {
+      final batch = FirebaseFirestore.instance.batch();
+
+      final docRef = FirebaseFirestore.instance
+          .collection('sales_invoices')
+          .doc(invoice.salesInvoiceID);
+
+      // Update with only the addressID
+      batch.update(docRef, {
+        'customerID': invoice.customerID,
+        'customerName': invoice.customerName,
+        'address': invoice.address.addressID, // Just store the ID
+        'paymentStatus': invoice.paymentStatus.getName(),
+        'salesStatus': invoice.salesStatus.getName(),
+        'totalPrice': invoice.totalPrice,
+        'date': invoice.date,
+      });
+
+      // Update details...
+      final existingDetails = await FirebaseFirestore.instance
+          .collection('sales_invoice_details')
+          .where('salesInvoiceID', isEqualTo: invoice.salesInvoiceID)
+          .get();
+
+      for (var doc in existingDetails.docs) {
+        batch.delete(doc.reference);
+      }
+
+      for (final detail in invoice.details) {
+        final detailRef = FirebaseFirestore.instance
+            .collection('sales_invoice_details')
+            .doc();
+            
+        batch.set(detailRef, {
+          'salesInvoiceDetailID': detailRef.id,
+          'salesInvoiceID': invoice.salesInvoiceID,
+          'productID': detail.productID,
+          'productName': detail.productName,
+          'quantity': detail.quantity,
+          'sellingPrice': detail.sellingPrice,
+          'subtotal': detail.subtotal,
+        });
+      }
+
+      await batch.commit();
+    } catch (e) {
+      print('Error updating sales invoice: $e');
       rethrow;
     }
   }

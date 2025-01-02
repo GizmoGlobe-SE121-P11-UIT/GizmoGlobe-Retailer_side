@@ -17,10 +17,10 @@ class StatusBadge extends StatelessWidget {
     if (text.toLowerCase().contains('cancelled') || text.toLowerCase().contains('unpaid') || text.toLowerCase().contains('denied') || text.toLowerCase().contains('inactive') || text.toLowerCase().contains('discontinued')) {
       color = Colors.red;
       icon = Icons.cancel;
-    } else if (text.toLowerCase().contains('pending') || text.toLowerCase().contains('preparing') || text.toLowerCase().contains('shipping') || text.toLowerCase().contains('processing')) {
+    } else if (text.toLowerCase().contains('pending') || text.toLowerCase().contains('preparing') || text.toLowerCase().contains('shipping') || text.toLowerCase().contains('processing') || text.toLowerCase().contains('out of stock')) {
       color = Colors.orange;
       icon = Icons.pending;
-    } else if (text.toLowerCase().contains('paid') || text.toLowerCase().contains('completed') || text.toLowerCase().contains('active')) {
+    } else if (text.toLowerCase().contains('paid') || text.toLowerCase().contains('completed') || text.toLowerCase().contains('active') || text.toLowerCase().contains('shipped')) {
       color = Colors.green;
       icon = Icons.check_circle;
     } else {
