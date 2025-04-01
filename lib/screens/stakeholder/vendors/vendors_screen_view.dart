@@ -62,7 +62,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                         const SizedBox(width: 12),
                         const Flexible(
                           child: Text(
-                            'Add New Manufacturer',
+                            'Add New Manufacturer', //Thêm nhà sản xuất mới
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -76,15 +76,15 @@ class _VendorsScreenState extends State<VendorsScreen> {
                     TextFormField(
                       controller: nameController,
                       decoration: InputDecoration(
-                        labelText: 'Manufacturer Name',
+                        labelText: 'Manufacturer Name', //Tên nhà sản xuất
                         prefixIcon: Icon(
                           Icons.business_center,
                           color: Theme.of(context).primaryColor,
                         ),
                         labelStyle: const TextStyle(color: Colors.white),
-                        floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                        floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                           (states) => TextStyle(
-                            color: states.contains(MaterialState.focused)
+                            color: states.contains(WidgetState.focused)
                                 ? Theme.of(context).primaryColor
                                 : Colors.white,
                           ),
@@ -111,15 +111,15 @@ class _VendorsScreenState extends State<VendorsScreen> {
                     DropdownButtonFormField<ManufacturerStatus>(
                       value: selectedStatus,
                       decoration: InputDecoration(
-                        labelText: 'Status',
+                        labelText: 'Status', //Trạng thái
                         prefixIcon: Icon(
                           Icons.circle,
                           color: Theme.of(context).primaryColor,
                         ),
                         labelStyle: const TextStyle(color: Colors.white),
-                        floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                        floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                           (states) => TextStyle(
-                            color: states.contains(MaterialState.focused)
+                            color: states.contains(WidgetState.focused)
                                 ? Theme.of(context).primaryColor
                                 : Colors.white,
                           ),
@@ -171,7 +171,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                             ),
                           ),
                           child: Text(
-                            'Cancel',
+                            'Cancel', //Hủy
                             style: TextStyle(
                               color: Colors.grey.shade400,
                               fontSize: 14,
@@ -185,7 +185,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                               if (nameController.text.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Please enter manufacturer name'),
+                                    content: Text('Please enter manufacturer name'), //Vui lòng nhập tên nhà sản xuất
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -211,7 +211,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                   Navigator.pop(context);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('Manufacturer added successfully'),
+                                      content: Text('Manufacturer added successfully'), //Thêm nhà sản xuất thành công
                                       backgroundColor: Colors.green,
                                     ),
                                   );
@@ -229,7 +229,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                               ),
                             ),
                             child: const Text(
-                              'Add Manufacturer',
+                              'Add Manufacturer', //Thêm nhà sản xuất
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.white,
@@ -275,7 +275,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find manufacturers...',
+                        hintText: 'Find manufacturers...', //Tìm kiếm nhà sản xuất
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchManufacturers(value);
@@ -303,7 +303,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
 
                       if (state.manufacturers.isEmpty) {
                         return const Center(
-                          child: Text('No matching manufacturers found'),
+                          child: Text('No matching manufacturers found'), //Không tìm thấy nhà sản xuất nào phù hợp
                         );
                       }
 
@@ -347,7 +347,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                               size: 20,
                                               color: Colors.white,
                                             ),
-                                            title: const Text('View'),
+                                            title: const Text('View'), //Xem
                                             onTap: () {
                                               Navigator.pop(context);
                                               cubit.setSelectedIndex(null);
@@ -370,7 +370,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                 size: 20,
                                                 color: Colors.white,
                                               ),
-                                              title: const Text('Edit'),
+                                              title: const Text('Edit'), //Chỉnh sửa
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedIndex(null);
@@ -423,11 +423,12 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                       ),
                                                       content: Text(
                                                         'Are you sure you want to ${manufacturer.status == ManufacturerStatus.active ? "deactivate" : "activate"} ${manufacturer.manufacturerName}?'
+                                                        //Bạn có chắc chắn muốn ${manufacturer.status == ManufacturerStatus.active ? "vô hiệu hóa" : "kích hoạt"} ${manufacturer.manufacturerName}?
                                                       ),
                                                       actions: [
                                                         TextButton(
                                                           onPressed: () => Navigator.pop(context),
-                                                          child: const Text('Cancel'),
+                                                          child: const Text('Cancel'), //Hủy
                                                         ),
                                                         TextButton(
                                                           onPressed: () async {

@@ -1,8 +1,8 @@
 enum DialogName {
   empty(''),
-  success('Success'),
-  failure('Failure'),
-  confirm('Confirm'),
+  success('Success'), // Thành công
+  failure('Failure'), // Thất bại
+  confirm('Confirm'), // Xác nhận
   ;
 
   final String description;

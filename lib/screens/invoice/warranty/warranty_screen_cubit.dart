@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
@@ -36,7 +37,9 @@ class WarrantyScreenCubit extends Cubit<WarrantyScreenState> {
       final userRole = await _firebase.getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
-      print('Error loading user role: $e');
+      if (kDebugMode) {
+        print('Error loading user role: $e');
+      } // Lỗi load user role
     }
   }
 
@@ -59,7 +62,9 @@ class WarrantyScreenCubit extends Cubit<WarrantyScreenState> {
         ));
       }
     } catch (e) {
-      print('Error loading warranty invoices: $e');
+      if (kDebugMode) {
+        print('Error loading warranty invoices: $e');
+      } // Lỗi lấy hóa đơn
       if (!_isClosed) {
         emit(state.copyWith(isLoading: false));
       }
@@ -106,7 +111,9 @@ class WarrantyScreenCubit extends Cubit<WarrantyScreenState> {
       await _firebase.updateWarrantyInvoice(updatedInvoice);
       // Refresh will be handled through stream listener
     } catch (e) {
-      print('Error updating warranty status: $e');
+      if (kDebugMode) {
+        print('Error updating warranty status: $e');
+      } // Lỗi cập nhật trạng thái bảo hành
     }
   }
 

@@ -39,7 +39,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                 onPressed: () => Navigator.pop(context),
                 fillColor: Theme.of(context).colorScheme.surface,
               ),
-              title: GradientText(text: 'Employee Detail'),
+              title: const GradientText(text: 'Employee Detail'), //Thông tin nhân viên
             ),
             body: Column(
               children: [
@@ -153,7 +153,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Employee Information',
+                    'Employee Information', //Thông tin nhân viên
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -163,9 +163,9 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              _buildInfoRow('Email', state.employee.email),
-              _buildInfoRow('Phone', state.employee.phoneNumber),
-              _buildInfoRow('Role', state.employee.role.toString()),
+              _buildInfoRow('Email', state.employee.email), //Email
+              _buildInfoRow('Phone', state.employee.phoneNumber), //Số điện thoại
+              _buildInfoRow('Role', state.employee.role.toString()), //Chức vụ
             ],
           ),
         ),
@@ -230,7 +230,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
               child: ElevatedButton.icon(
                 onPressed: () => _handleEdit(context, state),
                 icon: const Icon(Icons.edit, color: Colors.white),
-                label: const Text('Edit', style: TextStyle(color: Colors.white)),
+                label: const Text('Edit', style: TextStyle(color: Colors.white)), //Chỉnh sửa
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -245,7 +245,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
               child: ElevatedButton.icon(
                 onPressed: () => _handleDelete(context),
                 icon: const Icon(Icons.delete, color: Colors.white),
-                label: const Text('Delete', style: TextStyle(color: Colors.white)),
+                label: const Text('Delete', style: TextStyle(color: Colors.white)), //Xóa
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -279,14 +279,14 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Delete Employee'),
+        title: const Text('Delete Employee'), //Xóa nhân viên
         content: const Text(
-          'Are you sure you want to delete this employee?',
+          'Are you sure you want to delete this employee?', //Bạn có chắc chắn muốn xóa nhân viên này?
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
+            child: const Text('Cancel'), //Hủy
           ),
           TextButton(
             onPressed: () async {
@@ -297,7 +297,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
               }
             },
             child: const Text(
-              'Delete',
+              'Delete', //Xóa
               style: TextStyle(color: Colors.red),
             ),
           ),

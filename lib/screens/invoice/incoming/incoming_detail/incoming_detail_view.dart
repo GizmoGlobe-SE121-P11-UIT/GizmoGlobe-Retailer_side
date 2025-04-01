@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:intl/intl.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'incoming_detail_cubit.dart';
@@ -124,10 +123,10 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                 ),
                               ),
                               const SizedBox(height: 24),
-                              Container(
+                              SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  'Invoice #${state.invoice.incomingInvoiceID}',
+                                  'Invoice #${state.invoice.incomingInvoiceID}', // Hóa đơn #${state.invoice.incomingInvoiceID}
                                   style: const TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
@@ -146,15 +145,15 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                 ),
                               ),
                               const SizedBox(height: 24),
-                              _buildInfoRow('Manufacturer', state.manufacturer?.manufacturerName ?? 'Unknown'),
-                              _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)),
+                              _buildInfoRow('Manufacturer', state.manufacturer?.manufacturerName ?? 'Unknown'), // Nhà sản xuất
+                              _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)), // Ngày
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Payment Status',
+                                      'Payment Status', // Trạng thái thanh toán
                                       style: TextStyle(
                                         color: Colors.grey[400],
                                         fontSize: 15,
@@ -166,12 +165,12 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                 ),
                               ),
                               _buildTotalPriceRow(
-                                'Total Price',
+                                'Total Price', // Tổng giá
                                 '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
                               ),
                               const SizedBox(height: 32),
                               const Text(
-                                'Products',
+                                'Products', // Sản phẩm
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -206,13 +205,13 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                         }
                                       },
                                       title: Text(
-                                        product?.productName ?? 'Product #${detail.productID}',
+                                        product?.productName ?? 'Product #${detail.productID}', // Sản phẩm #${detail.productID}
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                       subtitle: Text(
-                                        'Import Price: \$${detail.importPrice.toStringAsFixed(2)}',
+                                        'Import Price: \$${detail.importPrice.toStringAsFixed(2)}', // Giá nhập: \$${detail.importPrice.toStringAsFixed(2)}
                                         style: TextStyle(
                                           color: Theme
                                               .of(context)
@@ -222,7 +221,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                         ),
                                       ),
                                       trailing: Text(
-                                        'Quantity: ${detail.quantity}',
+                                        'Quantity: ${detail.quantity}', // Số lượng: ${detail.quantity}
                                         style: TextStyle(
                                           color: Theme
                                               .of(context)
@@ -262,12 +261,12 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text('Confirm Payment'),
-                                        content: const Text('Mark this invoice as paid?'),
+                                        title: const Text('Confirm Payment'), // Xác nhận thanh toán
+                                        content: const Text('Mark this invoice as paid?'), // Đánh dấu hóa đơn này đã thanh toán?
                                         actions: [
                                           TextButton(
                                             onPressed: () => Navigator.pop(context),
-                                            child: const Text('Cancel'),
+                                            child: const Text('Cancel'), // Hủy
                                           ),
                                           TextButton(
                                             onPressed: () async {
@@ -276,7 +275,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                                   PaymentStatus.paid);
                                               Navigator.pop(context);
                                             },
-                                            child: const Text('Confirm'),
+                                            child: const Text('Confirm'), // Xác nhận
                                           ),
                                         ],
                                       );
@@ -284,7 +283,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                   );
                                 },
                                 icon: const Icon(Icons.check_circle_outline, color: Colors.white),
-                                label: const Text('Mark as Paid', style: TextStyle(color: Colors.white)),
+                                label: const Text('Mark as Paid', style: TextStyle(color: Colors.white)), // Đánh dấu đã thanh toán
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
                                   padding: const EdgeInsets.symmetric(vertical: 12),

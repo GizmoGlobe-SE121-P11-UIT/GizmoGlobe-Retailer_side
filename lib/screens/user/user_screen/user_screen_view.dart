@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import '../../../data/firebase/firebase.dart';
-import '../../../widgets/general/invisible_gradient_button.dart';
 import 'user_screen_cubit.dart';
 import 'user_screen_state.dart';
 import 'package:gizmoglobe_client/screens/user/information/information_screen_view.dart';
@@ -156,7 +153,7 @@ class _UserScreen extends State<UserScreen> {
                       Expanded(
                         child: _buildQuickActionItem(
                           icon: Icons.info_outline,
-                          title: "Information",
+                          title: "Information", //Thông tin
                           color: Colors.blue,
                           onTap: () {
                             Navigator.push(
@@ -172,7 +169,7 @@ class _UserScreen extends State<UserScreen> {
                       Expanded(
                         child: _buildQuickActionItem(
                           icon: Icons.headset_mic_outlined,
-                          title: "Support",
+                          title: "Support", //Hỗ trợ
                           color: Colors.orange,
                           onTap: () {
                             Navigator.push(
@@ -197,7 +194,7 @@ class _UserScreen extends State<UserScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Account Settings",
+                    "Account Settings", //Cài đặt tài khoản
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -206,15 +203,15 @@ class _UserScreen extends State<UserScreen> {
                   const SizedBox(height: 16),
                   _buildSettingsItem(
                     icon: Icons.person_outline,
-                    title: "Edit Profile",
-                    subtitle: "Update your personal information",
+                    title: "Edit Profile", //Chỉnh sửa hồ sơ
+                    subtitle: "Update your personal information", //Cập nhật thông tin cá nhân
                     onTap: () => showEditProfileBottomSheet(context),
                     iconColor: Colors.blue,
                   ),
                   _buildSettingsItem(
                     icon: Icons.lock_outline,
-                    title: "Change Password",
-                    subtitle: "Manage your account security",
+                    title: "Change Password", //Đổi mật khẩu
+                    subtitle: "Manage your account security", //Quản lý bảo mật tài khoản của bạn
                     onTap: () => showChangePasswordBottomSheet(context),
                     iconColor: Colors.orange,
                   ),
@@ -248,10 +245,10 @@ class _UserScreen extends State<UserScreen> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(16),
                         onTap: () => cubit.logOut(context),
-                        child: Center(
+                        child: const Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.logout_rounded,
                                 color: Colors.white,
@@ -259,7 +256,7 @@ class _UserScreen extends State<UserScreen> {
                               ),
                               SizedBox(width: 12),
                               Text(
-                                'Sign Out',
+                                'Sign Out', //Đăng xuất
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -413,38 +410,38 @@ class _UserScreen extends State<UserScreen> {
   //   );
   // }
 
-  Widget _buildStatItem({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    return Column(
-      children: [
-        Icon(
-          icon,
-          color: Colors.white,
-          size: 24,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.8),
-            fontSize: 14,
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildStatItem({
+  //   required IconData icon,
+  //   required String label,
+  //   required String value,
+  // }) {
+  //   return Column(
+  //     children: [
+  //       Icon(
+  //         icon,
+  //         color: Colors.white,
+  //         size: 24,
+  //       ),
+  //       const SizedBox(height: 8),
+  //       Text(
+  //         value,
+  //         style: const TextStyle(
+  //           color: Colors.white,
+  //           fontSize: 20,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //       const SizedBox(height: 4),
+  //       Text(
+  //         label,
+  //         style: TextStyle(
+  //           color: Colors.white.withOpacity(0.8),
+  //           fontSize: 14,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildQuickActionItem({
     required IconData icon,
@@ -605,7 +602,7 @@ class _UserScreen extends State<UserScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
-                'Edit Profile',
+                'Edit Profile', //Chỉnh sửa hồ sơ
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -617,7 +614,7 @@ class _UserScreen extends State<UserScreen> {
                 controller: usernameController,
                 decoration: InputDecoration(
                   label: const Text(
-                    'Username',
+                    'Username', //Tên người dùng
                     style: TextStyle(
                       color: Colors.grey,
                     ),
@@ -643,19 +640,19 @@ class _UserScreen extends State<UserScreen> {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Update profile successfully'),
+                          content: Text('Update profile successfully'), //Cập nhật hồ sơ thành công
                         ),
                       );
                     }
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Error: $e'),
+                        content: Text('Error: $e'), //Lỗi: $e
                       ),
                     );
                   }
                 },
-                child: const Text('Save changes'),
+                child: const Text('Save changes'), //Lưu thay đổi
               ),
               const SizedBox(height: 20),
             ],
@@ -671,7 +668,7 @@ class _UserScreen extends State<UserScreen> {
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('No user is currently signed in'),
+          content: Text('No user is currently signed in'), //Không có người dùng nào đang đăng nhập
         ),
       );
       return;
@@ -696,7 +693,7 @@ class _UserScreen extends State<UserScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Text(
-                'Change Password',
+                'Change Password', //Đổi mật khẩu
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -705,7 +702,7 @@ class _UserScreen extends State<UserScreen> {
               ),
               const SizedBox(height: 20),
               Text(
-                'A password reset email will be sent to ${user.email}',
+                'A password reset email will be sent to ${user.email}', //Một email đặt lại mật khẩu sẽ được gửi đến ${user.email}
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -722,18 +719,18 @@ class _UserScreen extends State<UserScreen> {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Password reset email sent successfully'),
+                        content: Text('Password reset email sent successfully'), //Email đặt lại mật khẩu đã được gửi thành công
                       ),
                     );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Error: $e'),
+                        content: Text('Error: $e'), //Lỗi: $e
                       ),
                     );
                   }
                 },
-                child: const Text('Send Password Reset Email'),
+                child: const Text('Send Password Reset Email'), //Gửi email đặt lại mật khẩu
               ),
               const SizedBox(height: 20),
             ],

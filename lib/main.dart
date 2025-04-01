@@ -26,7 +26,7 @@ void main() async {
       runApp(MaterialApp(
         home: Scaffold(
           body: Center(
-            child: Text('Error initializing Firebase: $e'),
+            child: Text('Error initializing Firebase: $e'), // Lỗi khởi tạo Firebase
           ),
         ),
       ));

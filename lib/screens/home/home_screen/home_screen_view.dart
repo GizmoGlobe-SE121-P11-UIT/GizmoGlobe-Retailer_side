@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gizmoglobe_client/screens/home/home_screen/home_screen_state.dart';
 import 'package:gizmoglobe_client/widgets/general/app_logo.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_button.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:intl/intl.dart';
 
-import '../../../widgets/general/gradient_icon_button.dart';
-import '../../../widgets/general/field_with_icon.dart';
 import 'home_screen_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -57,7 +53,7 @@ class _HomeScreen extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GradientText(text: 'Welcome back,'),
+                      const GradientText(text: 'Welcome back,'), // Chào mừng trở lại
                       Text(
                         state.username,
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -75,7 +71,7 @@ class _HomeScreen extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Overview',
+                        'Overview', // Tổng quan
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -92,28 +88,28 @@ class _HomeScreen extends State<HomeScreen> {
                           _buildStatsCard(
                             context,
                             icon: Icons.inventory_2_rounded,
-                            title: 'Products',
+                            title: 'Products', // Sản phẩm
                             value: state.totalProducts.toString(),
                             color: Colors.blue,
                           ),
                           _buildStatsCard(
                             context,
                             icon: Icons.people_alt_rounded,
-                            title: 'Customers',
+                            title: 'Customers', // Khách hàng
                             value: state.totalCustomers.toString(),
                             color: Colors.green,
                           ),
                           _buildStatsCard(
                             context,
                             icon: Icons.payments_rounded,
-                            title: 'Revenue',
+                            title: 'Revenue', // Doanh thu
                             value: currencyFormat.format(state.totalRevenue),
                             color: Colors.orange,
                           ),
                           _buildStatsCard(
                             context,
                             icon: Icons.trending_up_rounded,
-                            title: 'Avg. Income',
+                            title: 'Avg. Income', // Thu nhập trung bình
                             value: currencyFormat.format(
                               state.totalOrders > 0 ? state.totalRevenue / state.totalOrders : 0
                             ),
@@ -145,7 +141,7 @@ class _HomeScreen extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Monthly Sales',
+                                'Monthly Sales', // Doanh số hàng tháng
                                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -154,12 +150,12 @@ class _HomeScreen extends State<HomeScreen> {
                                 icon: const Icon(Icons.more_vert),
                                 itemBuilder: (context) => [
                                   const PopupMenuItem(
-                                    value: 'year',
-                                    child: Text('Last 12 months'),
+                                    value: 'year', // năm
+                                    child: Text('Last 12 months'), // 12 tháng qua
                                   ),
                                   const PopupMenuItem(
                                     value: 'quarter',
-                                    child: Text('Last 3 months'),
+                                    child: Text('Last 3 months'), // 3 tháng qua
                                   ),
                                 ],
                               ),
@@ -267,8 +263,8 @@ class _HomeScreen extends State<HomeScreen> {
             },
           ),
           titlesData: FlTitlesData(
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -306,7 +302,7 @@ class _HomeScreen extends State<HomeScreen> {
               ),
               barWidth: 3,
               isStrokeCapRound: true,
-              dotData: FlDotData(show: false),
+              dotData: const FlDotData(show: false),
               belowBarData: BarAreaData(
                 show: true,
                 gradient: LinearGradient(
@@ -325,103 +321,103 @@ class _HomeScreen extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCategoryDistribution(Map<String, double> salesByCategory) {
-    return SizedBox(
-      height: 300,
-      child: Column(
-        children: [
-          Expanded(
-            child: PieChart(
-              PieChartData(
-                sectionsSpace: 2,
-                centerSpaceRadius: 40,
-                sections: _generatePieChartSections(salesByCategory),
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 32),
-            child: Wrap(
-              spacing: 16,
-              runSpacing: 8,
-              alignment: WrapAlignment.center,
-              children: salesByCategory.entries.map((entry) {
-                final index = salesByCategory.keys.toList().indexOf(entry.key);
-                final colors = [
-                  Colors.blue,
-                  Colors.green,
-                  Colors.orange,
-                  Colors.purple,
-                  Colors.red,
-                  Colors.teal,
-                ];
-                
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: colors[index % colors.length],
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      entry.key,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      NumberFormat.currency(locale: 'en_US', symbol: '\$')
-                          .format(entry.value),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildCategoryDistribution(Map<String, double> salesByCategory) {
+  //   return SizedBox(
+  //     height: 300,
+  //     child: Column(
+  //       children: [
+  //         Expanded(
+  //           child: PieChart(
+  //             PieChartData(
+  //               sectionsSpace: 2,
+  //               centerSpaceRadius: 40,
+  //               sections: _generatePieChartSections(salesByCategory),
+  //             ),
+  //           ),
+  //         ),
+  //         Container(
+  //           margin: const EdgeInsets.only(top: 32),
+  //           child: Wrap(
+  //             spacing: 16,
+  //             runSpacing: 8,
+  //             alignment: WrapAlignment.center,
+  //             children: salesByCategory.entries.map((entry) {
+  //               final index = salesByCategory.keys.toList().indexOf(entry.key);
+  //               final colors = [
+  //                 Colors.blue,
+  //                 Colors.green,
+  //                 Colors.orange,
+  //                 Colors.purple,
+  //                 Colors.red,
+  //                 Colors.teal,
+  //               ];
+  //
+  //               return Row(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   Container(
+  //                     width: 12,
+  //                     height: 12,
+  //                     decoration: BoxDecoration(
+  //                       color: colors[index % colors.length],
+  //                       shape: BoxShape.circle,
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 8),
+  //                   Text(
+  //                     entry.key,
+  //                     style: Theme.of(context).textTheme.bodyMedium,
+  //                   ),
+  //                   const SizedBox(width: 4),
+  //                   Text(
+  //                     NumberFormat.currency(locale: 'en_US', symbol: '\$')
+  //                         .format(entry.value),
+  //                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               );
+  //             }).toList(),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  List<PieChartSectionData> _generatePieChartSections(Map<String, double> data) {
-    final colors = [
-      Colors.blue,
-      Colors.green,
-      Colors.orange,
-      Colors.purple,
-      Colors.red,
-      Colors.teal,
-    ];
-
-    final total = data.values.fold(0.0, (sum, value) => sum + value);
-    
-    return data.entries.map((entry) {
-      final index = data.keys.toList().indexOf(entry.key);
-      final percentage = total > 0 ? (entry.value / total * 100) : 0;
-      
-      return PieChartSectionData(
-        color: colors[index % colors.length],
-        value: entry.value,
-        title: '${percentage.toStringAsFixed(1)}%',
-        radius: 100,
-        titleStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      );
-    }).toList();
-  }
-
-  Widget _buildTopProducts(HomeScreenState state) {
-    // TODO: Implement top products table
-    return const SizedBox.shrink();
-  }
+  // List<PieChartSectionData> _generatePieChartSections(Map<String, double> data) {
+  //   final colors = [
+  //     Colors.blue,
+  //     Colors.green,
+  //     Colors.orange,
+  //     Colors.purple,
+  //     Colors.red,
+  //     Colors.teal,
+  //   ];
+  //
+  //   final total = data.values.fold(0.0, (sum, value) => sum + value);
+  //
+  //   return data.entries.map((entry) {
+  //     final index = data.keys.toList().indexOf(entry.key);
+  //     final percentage = total > 0 ? (entry.value / total * 100) : 0;
+  //
+  //     return PieChartSectionData(
+  //       color: colors[index % colors.length],
+  //       value: entry.value,
+  //       title: '${percentage.toStringAsFixed(1)}%',
+  //       radius: 100,
+  //       titleStyle: const TextStyle(
+  //         fontSize: 12,
+  //         fontWeight: FontWeight.bold,
+  //         color: Colors.white,
+  //       ),
+  //     );
+  //   }).toList();
+  // }
+  //
+  // Widget _buildTopProducts(HomeScreenState state) {
+  //   // TODO: Implement top products table
+  //   return const SizedBox.shrink();
+  // }
 }

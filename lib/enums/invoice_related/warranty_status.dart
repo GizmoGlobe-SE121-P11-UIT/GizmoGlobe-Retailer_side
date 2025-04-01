@@ -1,8 +1,8 @@
 enum WarrantyStatus {
-  pending("Pending"),
-  processing("Processing"),
-  completed("Completed"),
-  denied("Denied");
+  pending("Pending"), //Đang chờ
+  processing("Processing"), //Đang xử lý
+  completed("Completed"), //Đã hoàn thành
+  denied("Denied"); //Từ chối
 
   final String description;
 

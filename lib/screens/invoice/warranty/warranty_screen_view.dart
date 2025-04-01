@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
@@ -45,7 +46,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find warranty invoices...',
+                        hintText: 'Find warranty invoices...', // Tìm hóa đơn bảo hành
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
@@ -72,7 +73,9 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                         );
                         
                         if (result == true) {
-                          print('Warranty invoice created, refreshing list');
+                          if (kDebugMode) {
+                            print('Warranty invoice created, refreshing list');
+                          } // Hóa đơn bảo hành được tạo, làm mới danh sách
                           cubit.loadInvoices();
                         }
                       },
@@ -86,11 +89,11 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                       : state.invoices.isEmpty
                           ? Center(
                               child: Text(
-                                'No warranty invoices found',
+                                'No warranty invoices found', // Không tìm thấy hóa đơn bảo hành
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onBackground
+                                      .onSurface
                                       .withOpacity(0.6),
                                 ),
                               ),
@@ -99,7 +102,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                               itemCount: state.invoices.length,
                               itemBuilder: (context, index) {
                                 final invoice = state.invoices[index];
-                                final isSelected = state.selectedIndex == index;
+                                // final isSelected = state.selectedIndex == index;
 
                                 return GestureDetector(
                                   behavior: HitTestBehavior.opaque,
@@ -129,7 +132,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                     size: 20,
                                                     color: Colors.white,
                                                   ),
-                                                  title: const Text('View'),
+                                                  title: const Text('View'), // Xem
                                                   onTap: () => _handleViewFromMenu(context, invoice),
                                                 ),
                                                 if (WarrantyInvoicePermissions.canEditStatus(state.userRole, invoice))
@@ -140,7 +143,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                       size: 20,
                                                       color: Colors.white,
                                                     ),
-                                                    title: const Text('Mark as Completed'),
+                                                    title: const Text('Mark as Completed'), // Đánh dấu là đã hoàn thành
                                                     onTap: () {
                                                       Navigator.pop(context);
                                                       cubit.setSelectedIndex(null);
@@ -200,7 +203,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Warranty #${invoice.warrantyInvoiceID}',
+                                                    'Warranty #${invoice.warrantyInvoiceID}', // Bảo hành #
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
                                                       fontSize: 16,
@@ -210,7 +213,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
-                                                    invoice.customerName ?? 'Unknown Customer',
+                                                    invoice.customerName ?? 'Unknown Customer', // Khách hàng không xác định
                                                     style: TextStyle(
                                                       color: Theme.of(context)
                                                           .colorScheme
@@ -228,7 +231,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                     children: [
                                                       StatusBadge(status: invoice.status),
                                                       Text(
-                                                        DateFormat('dd/MM/yyyy').format(invoice.date),
+                                                        DateFormat('dd/MM/yyyy').format(invoice.date), // dd/MM/yyyy
                                                         style: TextStyle(
                                                           fontSize: 12,
                                                           color: Theme.of(context)
@@ -290,7 +293,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
       
       if (!mounted) return;
       ScaffoldMessenger.of(dialogContext).showSnackBar(
-        SnackBar(content: Text('Error loading invoice details: $e')),
+        SnackBar(content: Text('Error loading invoice details: $e')), // Lỗi khi load chi tiết hóa đơn
       );
     }
   }
@@ -326,7 +329,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                       ),
                       const SizedBox(width: 8),
                       const Text(
-                        'Sort By',
+                        'Sort By', // Sắp xếp theo
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -338,7 +341,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                   const SizedBox(height: 16),
                   ListTile(
                     title: const Text(
-                      'Date (Newest First)',
+                      'Date (Newest First)', // Ngày (Mới nhất trước)
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
@@ -355,7 +358,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                   ),
                   ListTile(
                     title: const Text(
-                      'Date (Oldest First)',
+                      'Date (Oldest First)', // Ngày (Cũ nhất trước)
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Icon(

@@ -30,7 +30,7 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: GradientText(text: 'Edit Manufacturer'),
+        title: const GradientText(text: 'Edit Manufacturer'), //Chỉnh sửa nhà sản xuất
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -78,7 +78,7 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Manufacturer Information',
+                          'Manufacturer Information', //Thông tin nhà sản xuất
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -88,11 +88,11 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                         TextFormField(
                           initialValue: manufacturerName,
                           decoration: InputDecoration(
-                            labelText: 'Name',
+                            labelText: 'Name', //Tên nhà sản xuất
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
-                                color: states.contains(MaterialState.focused)
+                                color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),
@@ -113,7 +113,7 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                           onChanged: (value) => manufacturerName = value,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a name';
+                              return 'Please enter a name'; //Vui lòng nhập tên
                             }
                             return null;
                           },
@@ -122,11 +122,11 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                         DropdownButtonFormField<ManufacturerStatus>(
                           value: status,
                           decoration: InputDecoration(
-                            labelText: 'Status',
+                            labelText: 'Status', //Trạng thái
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
-                                color: states.contains(MaterialState.focused)
+                                color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),

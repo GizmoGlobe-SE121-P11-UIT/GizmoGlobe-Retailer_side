@@ -1,9 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import '../../../data/database/database.dart';
 import '../../../data/firebase/firebase.dart';
 import 'home_screen_state.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreenCubit extends Cubit<HomeScreenState> {
   final Database db = Database();
@@ -36,7 +36,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       for (var invoice in salesInvoices) {
         if (invoice.paymentStatus == PaymentStatus.paid) {
           // Lấy chi tiết của từng hóa đơn
-          final invoiceWithDetails = await Firebase().getSalesInvoiceWithDetails(invoice.salesInvoiceID!);
+          final invoiceWithDetails = await Firebase().getSalesInvoiceWithDetails(invoice.salesInvoiceID);
           for (var detail in invoiceWithDetails.details) {
             final category = detail.category.toString();
             // Tính doanh thu = số lượng * giá bán
@@ -75,7 +75,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         monthlySales: monthlySales,
       ));
     } catch (e) {
-      print('Error initializing dashboard: $e');
+      if (kDebugMode) {
+        print('Error initializing dashboard: $e');
+      } // Lỗi khởi tạo dashboard
       // Optionally emit error state
     }
   }

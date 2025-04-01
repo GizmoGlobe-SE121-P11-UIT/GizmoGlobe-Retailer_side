@@ -1,0 +1,2 @@
+D:/Temp/SE121.P11-GizmoGlobe-Retailer_side/android/app/.cxx/Debug/n34362n1/x86_64/CMakeFiles/edit_cache.dir
+D:/Temp/SE121.P11-GizmoGlobe-Retailer_side/android/app/.cxx/Debug/n34362n1/x86_64/CMakeFiles/rebuild_cache.dir

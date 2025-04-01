@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
-import 'package:intl/intl.dart';
 import '../../../../objects/product_related/product.dart';
 import 'sales_add_cubit.dart';
 import 'sales_add_state.dart';
@@ -46,7 +43,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
     if (invoice != null && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Tạo hóa đơn thành công'),
+          content: Text('Invoice created successfully.'), // Tạo hóa đơn thành công
           backgroundColor: Colors.green,
         ),
       );
@@ -54,7 +51,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(state.error ?? 'Có lỗi xảy ra'),
+          content: Text(state.error ?? 'Error occurred'), // Có lỗi xảy ra
           backgroundColor: Colors.red,
         ),
       );
@@ -62,7 +59,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
   }
 
   void _showAddProductDialog(BuildContext dialogContext) {
-    final _quantityController = TextEditingController(text: '1');
+    final quantityController = TextEditingController(text: '1');
 
     showDialog(
       context: dialogContext,
@@ -71,7 +68,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
         child: BlocBuilder<SalesAddCubit, SalesAddState>(
           builder: (context, state) {
             return AlertDialog(
-              title: const Text('Add Product'),
+              title: const Text('Add Product'), // Thêm sản phẩm
               content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
@@ -83,8 +80,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         context.read<SalesAddCubit>().updateSelectedModalProduct(product);
                       },
                       decoration: InputDecoration(
-                        labelText: 'Product',
-                        hintText: 'Select product',
+                        labelText: 'Product', // Sản phẩm
+                        hintText: 'Select product', // Chọn sản phẩm
                         labelStyle: const TextStyle(color: Colors.white),
                         hintStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
                         border: OutlineInputBorder(
@@ -100,7 +97,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         ),
                       ),
                       hint: Text(
-                        'Select product',
+                        'Select product', // Chọn sản phẩm
                         style: TextStyle(color: Colors.white.withOpacity(0.7)),
                       ),
                       items: state.products
@@ -145,10 +142,10 @@ class _SalesAddViewState extends State<_SalesAddView> {
                     ),
                     const SizedBox(height: 16),
                     TextField(
-                      controller: _quantityController,
+                      controller: quantityController,
                       decoration: InputDecoration(
-                        labelText: 'Quantity',
-                        hintText: 'Enter quantity',
+                        labelText: 'Quantity', // Số lượng
+                        hintText: 'Enter quantity', // Nhập số lượng
                         labelStyle: const TextStyle(color: Colors.white),
                         hintStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
                         border: OutlineInputBorder(
@@ -175,28 +172,28 @@ class _SalesAddViewState extends State<_SalesAddView> {
                     context.read<SalesAddCubit>().updateSelectedModalProduct(null);
                     Navigator.pop(context);
                   },
-                  child: const Text('Cancel'),
+                  child: const Text('Cancel'), // Hủy
                 ),
                 TextButton(
                   onPressed: () {
                     if (state.selectedModalProduct == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please select a product')),
+                        const SnackBar(content: Text('Please select a product')), // Vui lòng chọn sản phẩm
                       );
                       return;
                     }
 
-                    final quantity = int.tryParse(_quantityController.text) ?? 0;
+                    final quantity = int.tryParse(quantityController.text) ?? 0;
                     if (quantity <= 0) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Quantity must be greater than 0')),
+                        const SnackBar(content: Text('Quantity must be greater than 0')), // Số lượng phải lớn hơn 0
                       );
                       return;
                     }
 
                     if (quantity > state.selectedModalProduct!.stock) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Not enough stock')),
+                        const SnackBar(content: Text('Not enough stock')), // Không đủ hàng tồn
                       );
                       return;
                     }
@@ -208,7 +205,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                     context.read<SalesAddCubit>().updateSelectedModalProduct(null);
                     Navigator.pop(context);
                   },
-                  child: const Text('Add'),
+                  child: const Text('Add'), // Thêm
                 ),
               ],
             );
@@ -223,7 +220,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
       if (state.selectedCustomer == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Please select a customer first'),
+            content: Text('Please select a customer first'), // Vui lòng chọn khách hàng trước
             backgroundColor: Colors.red,
           ),
         );
@@ -256,7 +253,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Enter Address',
+                    'Enter Address', // Nhập địa chỉ
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -272,7 +269,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
               if (addresses.isEmpty)
                 const Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Text('No address found'),
+                  child: Text('No address found'), // Không tìm thấy địa chỉ
                 )
               else
                 ListView.builder(
@@ -331,7 +328,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e'),
+            content: Text('Error: $e'), // Lỗi
             backgroundColor: Colors.red,
           ),
         );
@@ -353,7 +350,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
               onPressed: () => Navigator.pop(context),
               fillColor: Colors.transparent,
             ),
-            title: GradientText(text: 'New Invoice'),
+            title: const GradientText(text: 'New Invoice'), // Hóa đơn mới
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
@@ -392,7 +389,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Customer Information',
+                              'Customer Information', // Thông tin khách hàng
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -402,11 +399,11 @@ class _SalesAddViewState extends State<_SalesAddView> {
                             DropdownButtonFormField<Customer>(
                               value: state.selectedCustomer,
                               hint: Text(
-                                'Select customer',
+                                'Select customer', // Chọn khách hàng
                                 style: TextStyle(color: Colors.white.withOpacity(0.7)),
                               ),
                               decoration: InputDecoration(
-                                labelText: 'Customer',
+                                labelText: 'Customer', // Khách hàng
                                 labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
                                 prefixIcon: Icon(Icons.person_outline, color: Colors.white.withOpacity(0.7)),
                                 border: OutlineInputBorder(
@@ -448,7 +445,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               },
                               validator: (value) {
                                 if (value == null) {
-                                  return 'Please select a customer';
+                                  return 'Please select a customer'; // Vui lòng chọn khách hàng
                                 }
                                 return null;
                               },
@@ -459,7 +456,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               readOnly: true,
                               onTap: () => _showAddressBottomSheet(context, state),
                               decoration: InputDecoration(
-                                labelText: 'Address',
+                                labelText: 'Address', // Địa chỉ
                                 labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
                                 prefixIcon: Icon(
                                   Icons.location_on_outlined,
@@ -490,7 +487,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               maxLines: 3,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Vui lòng chọn địa chỉ giao hàng';
+                                  return 'Please select an address'; // Vui lòng chọn địa chỉ
                                 }
                                 return null;
                               },
@@ -511,7 +508,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Invoice Details',
+                              'Invoice Details', // Chi tiết hóa đơn
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -525,7 +522,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Payment Status',
+                                        'Payment Status', // Trạng thái thanh toán
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.white.withOpacity(0.8),
@@ -550,7 +547,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Sales Status',
+                                        'Sales Status', // Trạng thái bán hàng
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.white.withOpacity(0.8),
@@ -609,7 +606,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                         ),
                                         const SizedBox(width: 12),
                                         const Text(
-                                          'Total Amount',
+                                          'Total Amount', // Tổng số tiền
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.white,
@@ -651,7 +648,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text(
-                                  'Products',
+                                  'Products', // Sản phẩm
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -660,7 +657,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 ElevatedButton.icon(
                                   onPressed: () => _showAddProductDialog(context),
                                   icon: const Icon(Icons.add, color: Colors.white,),
-                                  label: const Text('Add Product'),
+                                  label: const Text('Add Product'), // Thêm sản phẩm
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Theme.of(context).primaryColor,
                                     foregroundColor: Colors.white,
@@ -677,7 +674,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Text(
-                                    'No products added yet',
+                                    'No products added yet', // Chưa thêm sản phẩm nào
                                     style: TextStyle(color: Colors.white.withOpacity(0.7)),
                                   ),
                                 ),
@@ -728,7 +725,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                             crossAxisAlignment: WrapCrossAlignment.center,
                                             children: [
                                               Text(
-                                                'Price: \$${detail.sellingPrice.toStringAsFixed(2)}',
+                                                'Price: \$${detail.sellingPrice.toStringAsFixed(2)}', // Giá:
                                                 style: TextStyle(
                                                   color: Colors.white.withOpacity(0.8),
                                                 ),
@@ -784,16 +781,16 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                               ),
                                             ],
                                           ),
-                                          if (product != null) ...[
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              'Available stock: ${product.stock}',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.white.withOpacity(0.6),
-                                              ),
+                                          ...[
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Available stock: ${product.stock}', // Hàng tồn kho:
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white.withOpacity(0.6),
                                             ),
-                                          ],
+                                          ),
+                                        ],
                                         ],
                                       ),
                                     ),
@@ -809,7 +806,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
-                                        'Total Amount',
+                                        'Total Amount', // Tổng số tiền
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.white.withOpacity(0.8),

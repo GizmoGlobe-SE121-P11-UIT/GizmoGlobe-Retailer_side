@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
-import '../../../../objects/invoice_related/sales_invoice_detail.dart';
 import 'sales_detail_state.dart';
 
 class SalesDetailCubit extends Cubit<SalesDetailState> {
@@ -28,7 +27,7 @@ class SalesDetailCubit extends Cubit<SalesDetailState> {
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: 'Error loading product: $e',
+        error: 'Error loading product: $e', // Lỗi khi load sản phẩm
       ));
       return null;
     }
@@ -37,7 +36,7 @@ class SalesDetailCubit extends Cubit<SalesDetailState> {
   Future<void> _loadInvoiceDetails() async {
     emit(state.copyWith(isLoading: true));
     try {
-      final updatedInvoice = await _firebase.getSalesInvoiceWithDetails(state.invoice.salesInvoiceID!);
+      final updatedInvoice = await _firebase.getSalesInvoiceWithDetails(state.invoice.salesInvoiceID);
       emit(state.copyWith(
         invoice: updatedInvoice,
         isLoading: false,

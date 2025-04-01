@@ -12,7 +12,7 @@ class InformationScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const GradientText(text: 'Information'),
+        title: const GradientText(text: 'Information'), //Thông tin
         leading: GradientIconButton(
           icon: Icons.chevron_left,
           onPressed: () {
@@ -27,7 +27,7 @@ class InformationScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'About GizmoGlobe',
+              'About GizmoGlobe', //Về GizmoGlobe
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -35,20 +35,21 @@ class InformationScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             _buildInfoSection(
-              title: 'About Us',
-              content: 'GizmoGlobe is your trusted provider for computer hardware solutions.',
+              title: 'About Us', //Về chúng tôi
+              content: 'GizmoGlobe is your trusted provider for computer hardware solutions.', //Giải pháp phần cứng máy tính đáng tin cậy của bạn
             ),
             _buildInfoSection(
-              title: 'Our Mission',
-              content: 'To provide excellent service and quality products to you, our beloved customers.',
+              title: 'Our Mission', //Sứ mệnh của chúng tôi
+              content: 'To provide excellent service and quality products to you, our beloved customers.', //Cung cấp dịch vụ xuất sắc và sản phẩm chất lượng cho bạn, khách hàng thân yêu của chúng tôi
             ),
             _buildInfoSection(
-              title: 'Contact Information',
-              content: 'Address: UIT',
+              title: 'Contact Information', //Thông tin liên hệ
+              content: 'Address: UIT', //Địa chỉ: UIT
             ),
             _buildInfoSection(
-              title: 'Business Hours',
+              title: 'Business Hours', //Giờ làm việc
               content: 'Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed',
+              //Thứ Hai - Thứ Sáu: 9:00 sáng - 6:00 chiều\nThứ Bảy: 10:00 sáng - 4:00 chiều\nChủ Nhật: Đóng cửa
             ),
           ],
         ),

@@ -116,7 +116,7 @@ class _EditProductState extends State<EditProductScreen> {
           onPressed: () => Navigator.pop(context, ProcessState.idle),
           fillColor: Colors.transparent,
         ),
-        title: const GradientText(text: 'Edit Product'),
+        title: const GradientText(text: 'Edit Product'), //Chỉnh sửa sản phẩm
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
@@ -222,7 +222,7 @@ class _EditProductState extends State<EditProductScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Basic Information',
+                            'Basic Information', //Thông tin cơ bản
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -231,7 +231,7 @@ class _EditProductState extends State<EditProductScreen> {
                           ),
                           const SizedBox(height: 16),
                           buildInputWidget<String>(
-                            'Product Name',
+                            'Product Name', //Tên sản phẩm
                             productNameController,
                             state.productArgument?.productName,
                                 (value) {
@@ -243,7 +243,7 @@ class _EditProductState extends State<EditProductScreen> {
                             children: [
                               Expanded(
                                 child: buildInputWidget<double>(
-                                  'Import Price',
+                                  'Import Price', //Giá nhập
                                   importPriceController,
                                   state.productArgument?.importPrice,
                                       (value) {
@@ -254,7 +254,7 @@ class _EditProductState extends State<EditProductScreen> {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: buildInputWidget<double>(
-                                  'Selling Price',
+                                  'Selling Price', //Giá bán
                                   sellingPriceController,
                                   state.productArgument?.sellingPrice,
                                       (value) {
@@ -269,7 +269,7 @@ class _EditProductState extends State<EditProductScreen> {
                             children: [
                               Expanded(
                                 child: buildInputWidget<double>(
-                                  'Discount',
+                                  'Discount', //Giảm giá
                                   discountController,
                                   state.productArgument?.discount,
                                       (value) {
@@ -280,7 +280,7 @@ class _EditProductState extends State<EditProductScreen> {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: buildInputWidget<int>(
-                                  'Stock',
+                                  'Stock', //Tồn kho
                                   stockController,
                                   state.productArgument?.stock,
                                       (value) {
@@ -311,7 +311,7 @@ class _EditProductState extends State<EditProductScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Additional Information',
+                            'Additional Information', //Thông tin bổ sung
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -320,7 +320,7 @@ class _EditProductState extends State<EditProductScreen> {
                           ),
                           const SizedBox(height: 16),
                           buildInputWidget<DateTime>(
-                            'Release Date',
+                            'Release Date', //Ngày phát hành
                             TextEditingController(),
                             state.productArgument?.release ?? DateTime.now(),
                                 (value) {
@@ -329,7 +329,7 @@ class _EditProductState extends State<EditProductScreen> {
                           ),
                           const SizedBox(height: 16),
                           buildInputWidget<CategoryEnum>(
-                            'Category',
+                            'Category', //Danh mục
                             TextEditingController(),
                             state.productArgument?.category,
                                 (value) {
@@ -341,7 +341,7 @@ class _EditProductState extends State<EditProductScreen> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Text('Manufacturer', style: AppTextStyle.smallText),
+                              const Text('Manufacturer', style: AppTextStyle.smallText), //Nhà sản xuất
                               const SizedBox(height: 8),
                               DropdownSearch<Manufacturer>(
                                 items: (String filter, dynamic infiniteScrollProps) => Database().manufacturerList,
@@ -353,7 +353,7 @@ class _EditProductState extends State<EditProductScreen> {
                                 selectedItem: state.productArgument?.manufacturer,
                                 decoratorProps: DropDownDecoratorProps(
                                   decoration: InputDecoration(
-                                    hintText: 'Select Manufacturer',
+                                    hintText: 'Select Manufacturer', //Chọn nhà sản xuất
                                     hintStyle: const TextStyle(color: Colors.grey),
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                     border: OutlineInputBorder(
@@ -376,7 +376,7 @@ class _EditProductState extends State<EditProductScreen> {
                                   showSearchBox: true,
                                   searchFieldProps: TextFieldProps(
                                     decoration: InputDecoration(
-                                      hintText: 'Search manufacturer...',
+                                      hintText: 'Search manufacturer...', //Tìm kiếm nhà sản xuất
                                       hintStyle: const TextStyle(color: Colors.grey),
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                       border: OutlineInputBorder(
@@ -392,7 +392,7 @@ class _EditProductState extends State<EditProductScreen> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Text('Status', style: AppTextStyle.smallText),
+                              const Text('Status', style: AppTextStyle.smallText), //Trạng thái
                               const SizedBox(height: 8),
                               BlocBuilder<EditProductCubit, EditProductState>(
                                 builder: (context, state) {
@@ -455,7 +455,7 @@ class _EditProductState extends State<EditProductScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${state.productArgument?.category.toString()} Specifications',
+                              '${state.productArgument?.category.toString()} Specifications', //Thông số kỹ thuật
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -488,7 +488,7 @@ class _EditProductState extends State<EditProductScreen> {
         return Column(
           children: [
             buildInputWidget<RAMBus>(
-              'RAM Bus',
+              'RAM Bus', //Bus RAM
               TextEditingController(),
               state.productArgument?.ramBus,
                   (value) {
@@ -497,7 +497,7 @@ class _EditProductState extends State<EditProductScreen> {
               RAMBus.values,
             ),
             buildInputWidget<RAMCapacity>(
-              'RAM Capacity',
+              'RAM Capacity', //Dung lượng RAM
               TextEditingController(),
               state.productArgument?.ramCapacity,
                   (value) {
@@ -506,7 +506,7 @@ class _EditProductState extends State<EditProductScreen> {
               RAMCapacity.values,
             ),
             buildInputWidget<RAMType>(
-              'RAM Type',
+              'RAM Type', //Loại RAM
               TextEditingController(),
               state.productArgument?.ramType,
                   (value) {
@@ -520,7 +520,7 @@ class _EditProductState extends State<EditProductScreen> {
         return Column(
           children: [
             buildInputWidget<CPUFamily>(
-              'CPU Family',
+              'CPU Family', //Loại CPU
               TextEditingController(),
               state.productArgument?.family,
                   (value) {
@@ -529,7 +529,7 @@ class _EditProductState extends State<EditProductScreen> {
               CPUFamily.values,
             ),
             buildInputWidget<int>(
-              'CPU Core',
+              'CPU Core', //Số nhân CPU
               cpuCoreController,
               state.productArgument?.core,
                   (value) {
@@ -537,7 +537,7 @@ class _EditProductState extends State<EditProductScreen> {
               },
             ),
             buildInputWidget<int>(
-              'CPU Thread',
+              'CPU Thread', //Số luồng CPU
               cpuThreadController,
               state.productArgument?.thread,
                   (value) {
@@ -545,7 +545,7 @@ class _EditProductState extends State<EditProductScreen> {
               },
             ),
             buildInputWidget<double>(
-              'CPU Clock Speed',
+              'CPU Clock Speed', //Tốc độ xung nhịp CPU
               cpuClockSpeedController,
               state.productArgument?.cpuClockSpeed,
                   (value) {
@@ -558,7 +558,7 @@ class _EditProductState extends State<EditProductScreen> {
         return Column(
           children: [
             buildInputWidget<int>(
-              'PSU Wattage',
+              'PSU Wattage', //Công suất PSU
               psuWattageController,
               state.productArgument?.wattage,
                   (value) {
@@ -566,7 +566,7 @@ class _EditProductState extends State<EditProductScreen> {
               },
             ),
             buildInputWidget<PSUEfficiency>(
-              'PSU Efficiency',
+              'PSU Efficiency', //Hiệu suất PSU
               TextEditingController(),
               state.productArgument?.efficiency,
                   (value) {
@@ -575,7 +575,7 @@ class _EditProductState extends State<EditProductScreen> {
               PSUEfficiency.values,
             ),
             buildInputWidget<PSUModular>(
-              'PSU Modular',
+              'PSU Modular', //Loại PSU
               TextEditingController(),
               state.productArgument?.modular,
                   (value) {
@@ -589,7 +589,7 @@ class _EditProductState extends State<EditProductScreen> {
         return Column(
           children: [
             buildInputWidget<GPUSeries>(
-              'GPU Series',
+              'GPU Series', //Dòng GPU
               TextEditingController(),
               state.productArgument?.gpuSeries,
                   (value) {
@@ -598,7 +598,7 @@ class _EditProductState extends State<EditProductScreen> {
               GPUSeries.values,
             ),
             buildInputWidget<GPUCapacity>(
-              'GPU Capacity',
+              'GPU Capacity', //Dung lượng GPU
               TextEditingController(),
               state.productArgument?.gpuCapacity,
                   (value) {
@@ -607,7 +607,7 @@ class _EditProductState extends State<EditProductScreen> {
               GPUCapacity.values,
             ),
             buildInputWidget<GPUBus>(
-              'GPU Bus',
+              'GPU Bus', //Bus GPU
               TextEditingController(),
               state.productArgument?.gpuBus,
                   (value) {
@@ -616,7 +616,7 @@ class _EditProductState extends State<EditProductScreen> {
               GPUBus.values,
             ),
             buildInputWidget<double>(
-              'GPU Clock Speed',
+              'GPU Clock Speed', //Tốc độ xung nhịp GPU
               gpuClockSpeedController,
               state.productArgument?.gpuClockSpeed,
                   (value) {
@@ -629,7 +629,7 @@ class _EditProductState extends State<EditProductScreen> {
         return Column(
           children: [
             buildInputWidget<MainboardFormFactor>(
-              'Form Factor',
+              'Form Factor', //Kích thước Mainboard
               TextEditingController(),
               state.productArgument?.formFactor,
                   (value) {
@@ -638,7 +638,7 @@ class _EditProductState extends State<EditProductScreen> {
               MainboardFormFactor.values,
             ),
             buildInputWidget<MainboardSeries>(
-              'Series',
+              'Series', //Dòng Mainboard
               TextEditingController(),
               state.productArgument?.mainboardSeries,
                   (value) {
@@ -647,7 +647,7 @@ class _EditProductState extends State<EditProductScreen> {
               MainboardSeries.values,
             ),
             buildInputWidget<MainboardCompatibility>(
-              'Compatibility',
+              'Compatibility', //Tương thích Mainboard
               TextEditingController(),
               state.productArgument?.compatibility,
                   (value) {
@@ -661,7 +661,7 @@ class _EditProductState extends State<EditProductScreen> {
         return Column(
           children: [
             buildInputWidget<DriveType>(
-              'Drive Type',
+              'Drive Type', //Loại ổ đĩa
               TextEditingController(),
               state.productArgument?.driveType,
                   (value) {
@@ -670,7 +670,7 @@ class _EditProductState extends State<EditProductScreen> {
               DriveType.values,
             ),
             buildInputWidget<DriveCapacity>(
-              'Drive Capacity',
+              'Drive Capacity', //Dung lượng ổ đĩa
               TextEditingController(),
               state.productArgument?.driveCapacity,
                   (value) {
@@ -794,7 +794,7 @@ Widget buildInputWidget<T>(
                 itemAsString: (T d) => d.toString(),
                 onChanged: onChanged,
                 selectedItem: propertyValue,
-                hintText: 'Select $propertyName',
+                hintText: 'Select $propertyName', //Chọn $propertyName
               ),
             ],
           );
@@ -832,7 +832,7 @@ Widget buildInputWidget<T>(
               Text(propertyName, style: AppTextStyle.smallText),
               FieldWithIcon(
                 controller: controller,
-                hintText: 'Enter $propertyName',
+                hintText: 'Enter $propertyName', //Nhập $propertyName
                 onChanged: (value) {
                   if (value.isEmpty) {
                     onChanged(null);
@@ -866,4 +866,3 @@ Widget buildInputWidget<T>(
       }
   );
 }
-

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'customers_screen_cubit.dart';
@@ -61,7 +60,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     ),
                     const SizedBox(width: 12),
                     const Text(
-                      'Add New Customer',
+                      'Add New Customer', //Thêm khách hàng mới
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -73,15 +72,15 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 TextFormField(
                   controller: nameController,
                   decoration: InputDecoration(
-                    labelText: 'Full Name',
+                    labelText: 'Full Name', //Họ và tên
                     prefixIcon: Icon(
                       Icons.person_outline,
                       color: Theme.of(context).primaryColor,
                     ),
                     labelStyle: const TextStyle(color: Colors.white),
-                    floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                    floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                       (states) => TextStyle(
-                        color: states.contains(MaterialState.focused)
+                        color: states.contains(WidgetState.focused)
                             ? Theme.of(context).primaryColor
                             : Colors.white,
                       ),
@@ -108,15 +107,15 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 TextFormField(
                   controller: emailController,
                   decoration: InputDecoration(
-                    labelText: 'Email',
+                    labelText: 'Email', //Email
                     prefixIcon: Icon(
                       Icons.email_outlined,
                       color: Theme.of(context).primaryColor,
                     ),
                     labelStyle: const TextStyle(color: Colors.white),
-                    floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                    floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                       (states) => TextStyle(
-                        color: states.contains(MaterialState.focused)
+                        color: states.contains(WidgetState.focused)
                             ? Theme.of(context).primaryColor
                             : Colors.white,
                       ),
@@ -143,15 +142,15 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 TextFormField(
                   controller: phoneController,
                   decoration: InputDecoration(
-                    labelText: 'Phone Number',
+                    labelText: 'Phone Number', //Số điện thoại
                     prefixIcon: Icon(
                       Icons.phone_outlined,
                       color: Theme.of(context).primaryColor,
                     ),
                     labelStyle: const TextStyle(color: Colors.white),
-                    floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                    floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                       (states) => TextStyle(
-                        color: states.contains(MaterialState.focused)
+                        color: states.contains(WidgetState.focused)
                             ? Theme.of(context).primaryColor
                             : Colors.white,
                       ),
@@ -187,7 +186,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         ),
                       ),
                       child: Text(
-                        'Cancel',
+                        'Cancel', //Hủy
                         style: TextStyle(
                           color: Colors.grey.shade400,
                           fontSize: 16,
@@ -202,7 +201,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                             phoneController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Please fill in all fields'),
+                              content: Text('Please fill in all fields'), //Vui lòng điền tất cả các trường
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -229,7 +228,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Customer added successfully'),
+                                content: Text('Customer added successfully'), //Khách hàng đã được thêm thành công
                                 backgroundColor: Colors.green,
                               ),
                             );
@@ -247,7 +246,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         ),
                       ),
                       child: const Text(
-                        'Add Customer',
+                        'Add Customer', //Thêm khách hàng
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white,
@@ -292,7 +291,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find customers...',
+                        hintText: 'Find customers...', //Tìm kiếm khách hàng
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchCustomers(value);
@@ -322,7 +321,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
 
                       if (state.customers.isEmpty) {
                         return const Center(
-                          child: Text('No matching customers found'),
+                          child: Text('No matching customers found'), //Không tìm thấy khách hàng nào phù hợp
                         );
                       }
 
@@ -330,7 +329,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         itemCount: state.customers.length,
                         itemBuilder: (context, index) {
                           final customer = state.customers[index];
-                          final isSelected = state.selectedIndex == index;
+                          // final isSelected = state.selectedIndex == index;
 
                           return GestureDetector(
                             onTap: () {
@@ -369,7 +368,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                               size: 20,
                                               color: Colors.white,
                                             ),
-                                            title: const Text('View'),
+                                            title: const Text('View'), //Xem
                                             onTap: () {
                                               Navigator.pop(context);
                                               cubit.setSelectedIndex(null);
@@ -392,7 +391,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                                 size: 20,
                                                 color: Colors.white,
                                               ),
-                                              title: const Text('Edit'),
+                                              title: const Text('Edit'), //Chỉnh sửa
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedIndex(null);

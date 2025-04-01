@@ -80,7 +80,7 @@ class _ProductTabState extends State<ProductTab> with SingleTickerProviderStateM
                       return Row(
                         children: [
                           const Text(
-                            'Sort by: ',
+                            'Sort by: ', //Sắp xếp theo
                             style: AppTextStyle.smallText,
                           ),
                           const SizedBox(width: 8),
@@ -142,7 +142,7 @@ class _ProductTabState extends State<ProductTab> with SingleTickerProviderStateM
                       builder: (context, state) {
                         if (state.filteredProductList.isEmpty) {
                           return const Center(
-                            child: Text('No products found'),
+                            child: Text('No products found'), //Không tìm thấy sản phẩm nào
                           );
                         }
                         return ListView.builder(
@@ -220,7 +220,7 @@ class _ProductTabState extends State<ProductTab> with SingleTickerProviderStateM
                                                 size: 20,
                                                 color: Colors.white,
                                               ),
-                                              title: const Text('View'),
+                                              title: const Text('View'), //Xem
                                               onTap: () {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedProduct(null);
@@ -240,7 +240,7 @@ class _ProductTabState extends State<ProductTab> with SingleTickerProviderStateM
                                                   size: 20,
                                                   color: Colors.white,
                                                 ),
-                                                title: const Text('Edit'),
+                                                title: const Text('Edit'), //Chỉnh sửa
                                                 onTap: () async {
                                                   Navigator.pop(context);
                                                   cubit.setSelectedProduct(null);
@@ -266,8 +266,8 @@ class _ProductTabState extends State<ProductTab> with SingleTickerProviderStateM
                                                   color: Colors.white,
                                                 ),
                                                 title: product.status == ProductStatusEnum.discontinued
-                                                    ? const Text('Activate', style: TextStyle())
-                                                    : const Text('Discontinue', style: TextStyle()),
+                                                    ? const Text('Activate', style: TextStyle()) //Đang hoạt động
+                                                    : const Text('Discontinue', style: TextStyle()), //Ngừng hoạt động
                                                 onTap: () async {
                                                   Navigator.pop(context);
                                                   cubit.toLoading();

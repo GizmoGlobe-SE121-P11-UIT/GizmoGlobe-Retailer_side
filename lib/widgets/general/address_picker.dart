@@ -1,4 +1,3 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/database/database.dart';
@@ -52,7 +51,7 @@ class _AddressPickerState extends State<AddressPicker> {
               widget.onAddressChanged?.call(_provinceSelected, null, null);
             },
             selectedItem: _provinceSelected,
-            hintText: 'Choose Province',
+            hintText: 'Choose Province', // Tỉnh/Thành phố
           ),
           const SizedBox(height: 8),
 
@@ -68,7 +67,7 @@ class _AddressPickerState extends State<AddressPicker> {
               widget.onAddressChanged?.call(_provinceSelected, _districtSelected, null);
             },
             selectedItem: _districtSelected,
-            hintText: 'Choose District',
+            hintText: 'Choose District', // Quận/Huyện
           ),
           const SizedBox(height: 8),
 
@@ -83,7 +82,7 @@ class _AddressPickerState extends State<AddressPicker> {
               widget.onAddressChanged?.call(_provinceSelected, _districtSelected, _wardSelected);
             },
             selectedItem: _wardSelected,
-            hintText: 'Choose Ward',
+            hintText: 'Choose Ward', // Phường/Xã
           ),
         ],
       ),

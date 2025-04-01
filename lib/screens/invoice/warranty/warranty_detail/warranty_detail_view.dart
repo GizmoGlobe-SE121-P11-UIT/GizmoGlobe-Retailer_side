@@ -4,7 +4,6 @@ import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart'
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
-import '../../../../enums/product_related/category_enum.dart';
 import 'warranty_detail_cubit.dart';
 import 'warranty_detail_state.dart';
 import '../permissions/warranty_invoice_permissions.dart';
@@ -74,7 +73,7 @@ class _WarrantyDetailView extends StatelessWidget {
                             SizedBox(
                               width: double.infinity,
                               child: Text(
-                                'Warranty #${state.invoice.warrantyInvoiceID}',
+                                'Warranty #${state.invoice.warrantyInvoiceID}', // Biên lai bảo hành
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -85,7 +84,7 @@ class _WarrantyDetailView extends StatelessWidget {
                             ),
                             const SizedBox(height: 32),
                             const Text(
-                              'Warranty Information',
+                              'Warranty Information', // Thông tin bảo hành
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -93,16 +92,16 @@ class _WarrantyDetailView extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 24),
-                            _buildInfoRow('Customer', state.invoice.customerName ?? 'Unknown Customer'),
-                            _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)),
-                            _buildInfoRow('Sales Invoice', '#${state.invoice.salesInvoiceID}'),
+                            _buildInfoRow('Customer', state.invoice.customerName ?? 'Unknown Customer'), // Khách hàng
+                            _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)), // Ngày
+                            _buildInfoRow('Sales Invoice', '#${state.invoice.salesInvoiceID}'), // Hóa đơn bán hàng
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Status',
+                                    'Status', // Trạng thái
                                     style: TextStyle(
                                       color: Colors.grey[400],
                                       fontSize: 15,
@@ -129,7 +128,7 @@ class _WarrantyDetailView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Reason for Warranty',
+                                    'Reason for Warranty', // Lý do bảo hành
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.primary,
                                       fontSize: 16,
@@ -149,7 +148,7 @@ class _WarrantyDetailView extends StatelessWidget {
                             ),
                             const SizedBox(height: 32),
                             const Text(
-                              'Products Under Warranty',
+                              'Products Under Warranty', // Sản phẩm được bảo hành
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -183,13 +182,13 @@ class _WarrantyDetailView extends StatelessWidget {
                                       }
                                     },
                                     title: Text(
-                                      product?.productName ?? 'Product #${detail.productID}',
+                                      product?.productName ?? 'Product #${detail.productID}', // Sản phẩm
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     subtitle: Text(
-                                      product?.category.toString() ?? 'Unknown Category',
+                                      product?.category.toString() ?? 'Unknown Category', // Danh mục
                                       style: TextStyle(
                                         color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                                       ),
@@ -236,7 +235,7 @@ class _WarrantyDetailView extends StatelessWidget {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title: const Text('Update Warranty Status'),
+                                              title: const Text('Update Warranty Status'), // Cập nhật trạng thái bảo hành
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
@@ -268,7 +267,7 @@ class _WarrantyDetailView extends StatelessWidget {
                                               actions: [
                                                 TextButton(
                                                   onPressed: () => Navigator.pop(dialogContext),
-                                                  child: const Text('Cancel'),
+                                                  child: const Text('Cancel'), // Hủy
                                                 ),
                                                 TextButton(
                                                   onPressed: selectedStatus == state.invoice.status ? null : () async {
@@ -276,18 +275,18 @@ class _WarrantyDetailView extends StatelessWidget {
                                                       context: dialogContext,
                                                       builder: (BuildContext confirmContext) {
                                                         return AlertDialog(
-                                                          title: const Text('Confirm Status Update'),
+                                                          title: const Text('Confirm Status Update'), // Xác nhận cập nhật trạng thái
                                                           content: Text(
-                                                            'Are you sure you want to change the status to ${selectedStatus.toString().split('.').last}?'
+                                                            'Are you sure you want to change the status to ${selectedStatus.toString().split('.').last}?' // Bạn có chắc chắn muốn thay đổi trạng thái thành
                                                           ),
                                                           actions: [
                                                             TextButton(
                                                               onPressed: () => Navigator.pop(confirmContext, false),
-                                                              child: const Text('Cancel'),
+                                                              child: const Text('Cancel'), // Hủy
                                                             ),
                                                             TextButton(
                                                               onPressed: () => Navigator.pop(confirmContext, true),
-                                                              child: const Text('Confirm'),
+                                                              child: const Text('Confirm'), // Xác nhận
                                                             ),
                                                           ],
                                                         );
@@ -299,7 +298,7 @@ class _WarrantyDetailView extends StatelessWidget {
                                                       cubit.updateWarrantyStatus(selectedStatus!);
                                                     }
                                                   },
-                                                  child: const Text('Save'),
+                                                  child: const Text('Save'), // Lưu
                                                 ),
                                               ],
                                             );
@@ -309,7 +308,7 @@ class _WarrantyDetailView extends StatelessWidget {
                                     );
                                   },
                                   icon: const Icon(Icons.edit),
-                                  label: const Text('Update Status'),
+                                  label: const Text('Update Status'), // Cập nhật trạng thái
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -352,34 +351,34 @@ class _WarrantyDetailView extends StatelessWidget {
     );
   }
 
-  IconData _getCategoryIcon(String? category) {
-    if (category == null) return Icons.device_unknown;
-    
-    // Convert string to CategoryEnum
-    CategoryEnum? categoryEnum;
-    try {
-      categoryEnum = CategoryEnum.nonEmptyValues.firstWhere(
-        (e) => e.getName().toLowerCase() == category.toLowerCase()
-      );
-    } catch (e) {
-      return Icons.device_unknown;
-    }
-
-    switch (categoryEnum) {
-      case CategoryEnum.ram:
-        return Icons.memory;
-      case CategoryEnum.cpu:
-        return Icons.computer;
-      case CategoryEnum.psu:
-        return Icons.power;
-      case CategoryEnum.gpu:
-        return Icons.videogame_asset;
-      case CategoryEnum.drive:
-        return Icons.storage;
-      case CategoryEnum.mainboard:
-        return Icons.developer_board;
-      default:
-        return Icons.device_unknown;
-    }
-  }
+  // IconData _getCategoryIcon(String? category) {
+  //   if (category == null) return Icons.device_unknown;
+  //
+  //   // Convert string to CategoryEnum
+  //   CategoryEnum? categoryEnum;
+  //   try {
+  //     categoryEnum = CategoryEnum.nonEmptyValues.firstWhere(
+  //       (e) => e.getName().toLowerCase() == category.toLowerCase()
+  //     );
+  //   } catch (e) {
+  //     return Icons.device_unknown;
+  //   }
+  //
+  //   switch (categoryEnum) {
+  //     case CategoryEnum.ram:
+  //       return Icons.memory;
+  //     case CategoryEnum.cpu:
+  //       return Icons.computer;
+  //     case CategoryEnum.psu:
+  //       return Icons.power;
+  //     case CategoryEnum.gpu:
+  //       return Icons.videogame_asset;
+  //     case CategoryEnum.drive:
+  //       return Icons.storage;
+  //     case CategoryEnum.mainboard:
+  //       return Icons.developer_board;
+  //     default:
+  //       return Icons.device_unknown;
+  //   }
+  // }
 }

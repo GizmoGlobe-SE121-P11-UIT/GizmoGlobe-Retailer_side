@@ -72,13 +72,13 @@ class SalesAddCubit extends Cubit<SalesAddState> {
       // Check if new quantity exceeds available stock
       if (newQuantity > product.stock) {
         emit(state.copyWith(
-          error: 'Not enough stock available'
+          error: 'Not enough stock available' // Không đủ hàng trong kho
         ));
         return;
       }
 
       details[existingIndex] = SalesInvoiceDetail(
-        productID: existingDetail.productID ?? '',
+        productID: existingDetail.productID,
         productName: existingDetail.productName ?? '',
         quantity: newQuantity,
         sellingPrice: existingDetail.sellingPrice,
@@ -107,7 +107,7 @@ class SalesAddCubit extends Cubit<SalesAddState> {
     final details = List<SalesInvoiceDetail>.from(state.invoiceDetails);
     final detail = details[index];
     details[index] = SalesInvoiceDetail(
-      productID: detail.productID ?? '',
+      productID: detail.productID,
       productName: detail.productName ?? '',
       quantity: newQuantity,
       sellingPrice: detail.sellingPrice,
@@ -128,11 +128,11 @@ class SalesAddCubit extends Cubit<SalesAddState> {
       emit(state.copyWith(isLoading: true));
       
       if (state.selectedCustomer == null || state.address == null) {
-        throw Exception('Customer and address are required');
+        throw Exception('Customer and address are required'); // Khách hàng và địa chỉ là bắt buộc
       }
 
       if (state.invoiceDetails.isEmpty) {
-        throw Exception('At least one product is required');
+        throw Exception('At least one product is required'); // Ít nhất một sản phẩm là bắt buộc
       }
 
       // Generate a new document ID
@@ -143,12 +143,12 @@ class SalesAddCubit extends Cubit<SalesAddState> {
       final invoice = SalesInvoice(
         salesInvoiceID: invoiceID, // Use the generated ID
         customerID: state.selectedCustomer!.customerID ?? '',
-        customerName: state.selectedCustomer!.customerName ?? '',
+        customerName: state.selectedCustomer!.customerName,
         address: state.address!,
         details: state.invoiceDetails.map((detail) => 
           SalesInvoiceDetail(
             salesInvoiceID: invoiceID, // Set the invoice ID for each detail
-            productID: detail.productID ?? '',
+            productID: detail.productID,
             productName: detail.productName ?? '',
             quantity: detail.quantity,
             sellingPrice: detail.sellingPrice,

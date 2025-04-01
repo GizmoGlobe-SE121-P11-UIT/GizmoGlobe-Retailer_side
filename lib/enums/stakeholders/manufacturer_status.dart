@@ -5,9 +5,9 @@ enum ManufacturerStatus {
   String getName() {
     switch (this) {
       case ManufacturerStatus.active:
-        return 'Active';
+        return 'Active'; // Hoạt động
       case ManufacturerStatus.inactive:
-        return 'Inactive';
+        return 'Inactive'; // Không hoạt động
     }
   }
 } 

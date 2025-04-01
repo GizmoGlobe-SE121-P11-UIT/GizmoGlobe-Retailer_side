@@ -31,7 +31,7 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
       ));
     } catch (e) {
       emit(state.copyWith(
-        errorMessage: 'Error loading manufacturers: $e',
+        errorMessage: 'Error loading manufacturers: $e', // Lỗi khi load dữ liệu nhà sản xuất
         isLoading: false,
       ));
     }
@@ -57,7 +57,7 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
       ));
     } catch (e) {
       emit(state.copyWith(
-        errorMessage: 'Error loading products: $e',
+        errorMessage: 'Error loading products: $e', // Lỗi khi load dữ liệu sản phẩm
         isLoading: false,
       ));
     }
@@ -65,12 +65,12 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
 
   void addDetail(Product product, double importPrice, int quantity) {
     if (importPrice <= 0) {
-      emit(state.copyWith(errorMessage: 'Import price must be greater than 0'));
+      emit(state.copyWith(errorMessage: 'Import price must be greater than 0')); // Giá nhập phải lớn hơn 0
       return;
     }
 
     if (quantity <= 0) {
-      emit(state.copyWith(errorMessage: 'Quantity must be greater than 0'));
+      emit(state.copyWith(errorMessage: 'Quantity must be greater than 0')); // Số lượng phải lớn hơn 0
       return;
     }
 
@@ -119,7 +119,7 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
 
   void updateDetailQuantity(int index, int newQuantity) {
     if (newQuantity <= 0) {
-      emit(state.copyWith(errorMessage: 'Quantity must be greater than 0'));
+      emit(state.copyWith(errorMessage: 'Quantity must be greater than 0')); // Số lượng phải lớn hơn 0
       return;
     }
 
@@ -143,12 +143,12 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
 
   Future<bool> submitInvoice() async {
     if (state.selectedManufacturer == null) {
-      emit(state.copyWith(errorMessage: 'Please select a manufacturer'));
+      emit(state.copyWith(errorMessage: 'Please select a manufacturer')); // Vui lòng chọn nhà sản xuất
       return false;
     }
 
     if (state.details.isEmpty) {
-      emit(state.copyWith(errorMessage: 'Please add at least one product'));
+      emit(state.copyWith(errorMessage: 'Please add at least one product')); // Vui lòng thêm ít nhất một sản phẩm
       return false;
     }
 
@@ -187,7 +187,7 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
 
         // Add specific properties based on product type
         switch (product.runtimeType) {
-          case RAM:
+          case const (RAM):
             final ram = product as RAM;
             productProps.addAll({
               'bus': ram.bus,
@@ -195,7 +195,7 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
               'ramType': ram.ramType,
             });
             break;
-          case CPU:
+          case const (CPU):
             final cpu = product as CPU;
             productProps.addAll({
               'family': cpu.family,
@@ -204,7 +204,7 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
               'clockSpeed': cpu.clockSpeed,
             });
             break;
-          case GPU:
+          case const (GPU):
             final gpu = product as GPU;
             productProps.addAll({
               'series': gpu.series,
@@ -213,7 +213,7 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
               'clockSpeed': gpu.clockSpeed,
             });
             break;
-          case Mainboard:
+          case const (Mainboard):
             final mainboard = product as Mainboard;
             productProps.addAll({
               'formFactor': mainboard.formFactor,
@@ -221,14 +221,14 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
               'compatibility': mainboard.compatibility,
             });
             break;
-          case Drive:
+          case const (Drive):
             final drive = product as Drive;
             productProps.addAll({
               'type': drive.type,
               'capacity': drive.capacity,
             });
             break;
-          case PSU:
+          case const (PSU):
             final psu = product as PSU;
             productProps.addAll({
               'wattage': psu.wattage,
@@ -252,7 +252,7 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
     } catch (e) {
       emit(state.copyWith(
         isSubmitting: false,
-        errorMessage: 'Error creating invoice: $e',
+        errorMessage: 'Error creating invoice: $e', // Lỗi khi tạo hóa đơn
       ));
       return false;
     }

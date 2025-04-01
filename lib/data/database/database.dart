@@ -10,7 +10,6 @@ import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
 import '../../enums/invoice_related/payment_status.dart';
-import '../../enums/invoice_related/sales_status.dart';
 import '../../enums/product_related/category_enum.dart';
 import '../../enums/product_related/cpu_enums/cpu_family.dart';
 import '../../enums/product_related/drive_enums/drive_capacity.dart';
@@ -29,7 +28,6 @@ import '../../enums/product_related/ram_enums/ram_type.dart';
 import '../../objects/address_related/address.dart';
 import '../../objects/address_related/province.dart';
 import '../../objects/invoice_related/sales_invoice.dart';
-import '../../objects/invoice_related/sales_invoice_detail.dart';
 import '../../objects/product_related/product_factory.dart';
 import '../firebase/firebase.dart';
 import '../../objects/invoice_related/warranty_invoice.dart';
@@ -134,7 +132,7 @@ class Database {
       await fetchDataFromFirestore();
     } catch (e) {
       if (kDebugMode) {
-        print('Lỗi khi khởi tạo database: $e');
+        print('Error when initializing database: $e'); // Lỗi khi khởi tạo database
       }
       // Nếu không lấy được dữ liệu từ Firestore, sử dụng dữ liệu mẫu
       // _initializeSampleData();
@@ -144,7 +142,7 @@ class Database {
   Future<void> fetchDataFromFirestore() async {
     try {
       if (kDebugMode) {
-        print('Bắt đầu lấy dữ liệu từ Firestore');
+        print('Initializing connection to Firebase'); //Bắt đầu lấy dữ liệu từ Firestore
       }
       final manufacturerSnapshot = await FirebaseFirestore.instance
           .collection('manufacturers')
@@ -158,7 +156,7 @@ class Database {
       }).toList();
 
       if (kDebugMode) {
-        print('Số lượng manufacturers: ${manufacturerList.length}');
+        print('Manufacturers: ${manufacturerList.length}'); //Nhà sản xuất
       }
 
       // Lấy danh sách products từ Firestore
@@ -167,7 +165,7 @@ class Database {
           .get();
 
       if (kDebugMode) {
-        print('Số lượng products trong snapshot: ${productSnapshot.docs.length}');
+        print('Products: ${productSnapshot.docs.length}'); //Sản phẩm
       }
 
       productList = await Future.wait(productSnapshot.docs.map((doc) async {
@@ -229,19 +227,25 @@ class Database {
             },
           );
         } catch (e) {
-          print('Error processing product ${doc.id}: $e');
+          if (kDebugMode) {
+            print('Error processing product ${doc.id}: $e');
+          }
           return Future.error('Error processing product ${doc.id}: $e');
         }
       }));
 
       await fetchAddress();
 
-      print('Số lượng products trong list: ${productList.length}');
+      if (kDebugMode) {
+        print('Products: ${productList.length}');
+      } //Sản phẩm
 
       customerList = await Firebase().getCustomers();
 
     } catch (e) {
-      print('Error fetching data: $e');
+      if (kDebugMode) {
+        print('Error fetching data: $e');
+      } //Lỗi khi lấy dữ liệu
     }
   }
 
@@ -291,7 +295,6 @@ class Database {
   }
 
   void _initializeSampleData() {
-    // Di chuyển code khởi tạo dữ liệu mẫu hiện tại vào đây
     manufacturerList = [
       Manufacturer(
         manufacturerID: 'Corsair',
@@ -1373,18 +1376,18 @@ class Database {
     try {
       final String response = await rootBundle.loadString(filePath);
       if (response.isEmpty) {
-        throw Exception('JSON file is empty');
+        throw Exception('JSON file is empty'); // File JSON rỗng
       }
 
       final List? jsonList = jsonDecode(response) as List<dynamic>?;
       if (jsonList == null) {
-        throw Exception('Error parsing JSON data');
+        throw Exception('Error parsing JSON data'); // Lỗi khi parse JSON
       }
 
       List<Province> provinceList = jsonList.map((province) => Province.fromJson(province)).toList();
       return provinceList;
     } catch (e) {
-      throw Exception('Error loading provinces from file: $e');
+      throw Exception('Error loading provinces from file: $e'); // Lỗi khi load dữ liệu từ file
     }
   }
 
@@ -1418,7 +1421,9 @@ class Database {
       }
       return false;
     } catch (e) {
-      print('Error checking admin status: $e');
+      if (kDebugMode) {
+        print('Error checking admin status: $e');
+      } // Lỗi khi kiểm tra quyền admin
       return false;
     }
   }

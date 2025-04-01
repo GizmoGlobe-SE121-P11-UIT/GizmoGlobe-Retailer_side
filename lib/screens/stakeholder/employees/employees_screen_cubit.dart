@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
@@ -46,7 +47,9 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
         isLoading: false,
       ));
     } catch (e) {
-      print('Error when loading the employee list: $e');
+      if (kDebugMode) {
+        print('Error when loading the employee list: $e');
+      } // Lỗi khi tải danh sách nhân viên
       emit(state.copyWith(isLoading: false));
     }
   }
@@ -78,7 +81,9 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
       await _firebase.updateEmployee(employee);
       // No need to manually update state as the stream will handle it
     } catch (e) {
-      print('Error updating employee: $e');
+      if (kDebugMode) {
+        print('Error updating employee: $e');
+      } // Lỗi khi cập nhật nhân viên
       // You might want to handle the error appropriately
     }
   }
@@ -88,7 +93,9 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
       await _firebase.deleteEmployee(employeeId);
       // No need to manually update state as the stream will handle it
     } catch (e) {
-      print('Error deleting employee: $e');
+      if (kDebugMode) {
+        print('Error deleting employee: $e');
+      } // Lỗi khi xóa nhân viên
       // You might want to handle the error appropriately
     }
   }
@@ -112,7 +119,9 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
       return null; // Return null if successful
       
     } catch (e) {
-      print('Error creating employee: $e');
+      if (kDebugMode) {
+        print('Error creating employee: $e');
+      } // Lỗi khi tạo nhân viên
       return e.toString(); // Return error message
     }
   }
@@ -137,7 +146,9 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
       final userRole = await _firebase.getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
-      print('Error loading user role: $e');
+      if (kDebugMode) {
+        print('Error loading user role: $e');
+      } // Lỗi khi tải vai trò người dùng
     }
   }
 }

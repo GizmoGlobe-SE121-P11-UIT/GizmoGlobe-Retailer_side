@@ -2,15 +2,10 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_state.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
-import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
-import 'package:intl/intl.dart';
 
 import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
@@ -33,7 +28,6 @@ import '../../../enums/product_related/ram_enums/ram_type.dart';
 import '../../../objects/manufacturer.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
-import '../../main/main_screen/main_screen_view.dart';
 import 'add_product_state.dart';
 import 'add_product_cubit.dart';
 
@@ -91,7 +85,7 @@ class _AddProductState extends State<AddProductScreen> {
           onPressed: () => Navigator.pop(context, ProcessState.idle),
           fillColor: Colors.transparent,
         ),
-        title: GradientText(text: 'Add Product'),
+        title: const GradientText(text: 'Add Product'), // Thêm sản phẩm
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
@@ -193,7 +187,7 @@ class _AddProductState extends State<AddProductScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Basic Information',
+                            'Basic Information', // Thông tin cơ bản
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -202,7 +196,7 @@ class _AddProductState extends State<AddProductScreen> {
                           ),
                           const SizedBox(height: 16),
                           buildInputWidget<String>(
-                            'Product Name',
+                            'Product Name', // Tên sản phẩm
                             productNameController,
                             state.productArgument?.productName,
                                 (value) {
@@ -214,7 +208,7 @@ class _AddProductState extends State<AddProductScreen> {
                             children: [
                               Expanded(
                                 child: buildInputWidget<double>(
-                                  'Import Price',
+                                  'Import Price', // Giá nhập
                                   importPriceController,
                                   state.productArgument?.importPrice,
                                       (value) {
@@ -225,7 +219,7 @@ class _AddProductState extends State<AddProductScreen> {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: buildInputWidget<double>(
-                                  'Selling Price',
+                                  'Selling Price', // Giá bán
                                   sellingPriceController,
                                   state.productArgument?.sellingPrice,
                                       (value) {
@@ -240,7 +234,7 @@ class _AddProductState extends State<AddProductScreen> {
                             children: [
                               Expanded(
                                 child: buildInputWidget<double>(
-                                  'Discount',
+                                  'Discount', // Giảm giá
                                   discountController,
                                   state.productArgument?.discount,
                                       (value) {
@@ -251,7 +245,7 @@ class _AddProductState extends State<AddProductScreen> {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: buildInputWidget<int>(
-                                  'Stock',
+                                  'Stock', // Số lượng
                                   stockController,
                                   state.productArgument?.stock,
                                       (value) {
@@ -282,7 +276,7 @@ class _AddProductState extends State<AddProductScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Additional Information',
+                            'Additional Information', // Thông tin bổ sung
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -291,7 +285,7 @@ class _AddProductState extends State<AddProductScreen> {
                           ),
                           const SizedBox(height: 16),
                           buildInputWidget<DateTime>(
-                            'Release Date',
+                            'Release Date', // Ngày phát hành
                             TextEditingController(),
                             state.productArgument?.release ?? DateTime.now(),
                                 (value) {
@@ -300,7 +294,7 @@ class _AddProductState extends State<AddProductScreen> {
                           ),
                           const SizedBox(height: 16),
                           buildInputWidget<CategoryEnum>(
-                            'Category',
+                            'Category', // Danh mục
                             TextEditingController(),
                             state.productArgument?.category,
                                 (value) {
@@ -312,7 +306,7 @@ class _AddProductState extends State<AddProductScreen> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Text('Manufacturer', style: AppTextStyle.smallText),
+                              const Text('Manufacturer', style: AppTextStyle.smallText), // Nhà sản xuất
                               const SizedBox(height: 8),
                               DropdownSearch<Manufacturer>(
                                 items: (String filter, dynamic infiniteScrollProps) => Database().manufacturerList,
@@ -324,7 +318,7 @@ class _AddProductState extends State<AddProductScreen> {
                                 selectedItem: state.productArgument?.manufacturer,
                                 decoratorProps: DropDownDecoratorProps(
                                   decoration: InputDecoration(
-                                    hintText: 'Select Manufacturer',
+                                    hintText: 'Select Manufacturer', // Chọn nhà sản xuất
                                     hintStyle: const TextStyle(color: Colors.grey),
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                     border: OutlineInputBorder(
@@ -347,7 +341,7 @@ class _AddProductState extends State<AddProductScreen> {
                                   showSearchBox: true,
                                   searchFieldProps: TextFieldProps(
                                     decoration: InputDecoration(
-                                      hintText: 'Search manufacturer...',
+                                      hintText: 'Search manufacturer...', // Tìm kiếm nhà sản xuất...
                                       hintStyle: const TextStyle(color: Colors.grey),
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                       border: OutlineInputBorder(
@@ -363,7 +357,7 @@ class _AddProductState extends State<AddProductScreen> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Text('Status', style: AppTextStyle.smallText),
+                              const Text('Status', style: AppTextStyle.smallText), // Trạng thái
                               const SizedBox(height: 8),
                               BlocBuilder<AddProductCubit, AddProductState>(
                                 builder: (context, state) {
@@ -426,7 +420,7 @@ class _AddProductState extends State<AddProductScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${state.productArgument?.category.toString()} Specifications',
+                              '${state.productArgument?.category.toString()} Specifications', // Thông số kỹ thuật
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -459,7 +453,7 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<RAMBus>(
-              'RAM Bus',
+              'RAM Bus', // Bus RAM
               TextEditingController(),
               state.productArgument?.ramBus,
                   (value) {
@@ -468,7 +462,7 @@ class _AddProductState extends State<AddProductScreen> {
               RAMBus.values,
             ),
             buildInputWidget<RAMCapacity>(
-              'RAM Capacity',
+              'RAM Capacity', // Dung lượng RAM
               TextEditingController(),
               state.productArgument?.ramCapacity,
                   (value) {
@@ -477,7 +471,7 @@ class _AddProductState extends State<AddProductScreen> {
               RAMCapacity.values,
             ),
             buildInputWidget<RAMType>(
-              'RAM Type',
+              'RAM Type', // Loại RAM
               TextEditingController(),
               state.productArgument?.ramType,
                   (value) {
@@ -491,7 +485,7 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<CPUFamily>(
-              'CPU Family',
+              'CPU Family', // Dòng CPU
               TextEditingController(),
               state.productArgument?.family,
                   (value) {
@@ -500,7 +494,7 @@ class _AddProductState extends State<AddProductScreen> {
               CPUFamily.values,
             ),
             buildInputWidget<int>(
-              'CPU Core',
+              'CPU Core', // Số nhân CPU
               cpuCoreController,
               state.productArgument?.core,
                   (value) {
@@ -508,7 +502,7 @@ class _AddProductState extends State<AddProductScreen> {
               },
             ),
             buildInputWidget<int>(
-              'CPU Thread',
+              'CPU Thread', // Số luồng CPU
               cpuThreadController,
               state.productArgument?.thread,
                   (value) {
@@ -516,7 +510,7 @@ class _AddProductState extends State<AddProductScreen> {
               },
             ),
             buildInputWidget<double>(
-              'CPU Clock Speed',
+              'CPU Clock Speed', // Tốc độ xung nhịp CPU
               cpuClockSpeedController,
               state.productArgument?.cpuClockSpeed,
                   (value) {
@@ -529,7 +523,7 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<int>(
-              'PSU Wattage',
+              'PSU Wattage', // Công suất PSU
               psuWattageController,
               state.productArgument?.wattage,
                   (value) {
@@ -537,7 +531,7 @@ class _AddProductState extends State<AddProductScreen> {
               },
             ),
             buildInputWidget<PSUEfficiency>(
-              'PSU Efficiency',
+              'PSU Efficiency', // Hiệu suất PSU
               TextEditingController(),
               state.productArgument?.efficiency,
                   (value) {
@@ -546,7 +540,7 @@ class _AddProductState extends State<AddProductScreen> {
               PSUEfficiency.values,
             ),
             buildInputWidget<PSUModular>(
-              'PSU Modular',
+              'PSU Modular', // Mô-đun PSU
               TextEditingController(),
               state.productArgument?.modular,
                   (value) {
@@ -560,7 +554,7 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<GPUSeries>(
-              'GPU Series',
+              'GPU Series', // Dòng GPU
               TextEditingController(),
               state.productArgument?.gpuSeries,
                   (value) {
@@ -569,7 +563,7 @@ class _AddProductState extends State<AddProductScreen> {
               GPUSeries.values,
             ),
             buildInputWidget<GPUCapacity>(
-              'GPU Capacity',
+              'GPU Capacity', // Dung lượng GPU
               TextEditingController(),
               state.productArgument?.gpuCapacity,
                   (value) {
@@ -578,7 +572,7 @@ class _AddProductState extends State<AddProductScreen> {
               GPUCapacity.values,
             ),
             buildInputWidget<GPUBus>(
-              'GPU Bus',
+              'GPU Bus', // Bus GPU
               TextEditingController(),
               state.productArgument?.gpuBus,
                   (value) {
@@ -587,7 +581,7 @@ class _AddProductState extends State<AddProductScreen> {
               GPUBus.values,
             ),
             buildInputWidget<double>(
-              'GPU Clock Speed',
+              'GPU Clock Speed', // Tốc độ xung nhịp GPU
               gpuClockSpeedController,
               state.productArgument?.gpuClockSpeed,
                   (value) {
@@ -600,7 +594,7 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<MainboardFormFactor>(
-              'Form Factor',
+              'Form Factor', // Kiểu dáng
               TextEditingController(),
               state.productArgument?.formFactor,
                   (value) {
@@ -609,7 +603,7 @@ class _AddProductState extends State<AddProductScreen> {
               MainboardFormFactor.values,
             ),
             buildInputWidget<MainboardSeries>(
-              'Series',
+              'Series', // Dòng sản phẩm
               TextEditingController(),
               state.productArgument?.mainboardSeries,
                   (value) {
@@ -618,7 +612,7 @@ class _AddProductState extends State<AddProductScreen> {
               MainboardSeries.values,
             ),
             buildInputWidget<MainboardCompatibility>(
-              'Compatibility',
+              'Compatibility', // Tương thích
               TextEditingController(),
               state.productArgument?.compatibility,
                   (value) {
@@ -632,7 +626,7 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<DriveType>(
-              'Drive Type',
+              'Drive Type', // Loại ổ đĩa
               TextEditingController(),
               state.productArgument?.driveType,
                   (value) {
@@ -641,7 +635,7 @@ class _AddProductState extends State<AddProductScreen> {
               DriveType.values,
             ),
             buildInputWidget<DriveCapacity>(
-              'Drive Capacity',
+              'Drive Capacity', // Dung lượng ổ đĩa
               TextEditingController(),
               state.productArgument?.driveCapacity,
                   (value) {
@@ -765,7 +759,7 @@ Widget buildInputWidget<T>(
                 itemAsString: (T d) => d.toString(),
                 onChanged: onChanged,
                 selectedItem: propertyValue,
-                hintText: 'Select $propertyName',
+                hintText: 'Select $propertyName', // Chọn $propertyName
               ),
             ],
           );
@@ -834,8 +828,6 @@ Widget buildInputWidget<T>(
             ],
           );
         }
-        return Container();
       }
   );
 }
-

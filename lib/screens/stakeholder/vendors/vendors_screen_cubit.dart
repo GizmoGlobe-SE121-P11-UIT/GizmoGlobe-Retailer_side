@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
@@ -42,7 +43,9 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
         isLoading: false,
       ));
     } catch (e) {
-      print('Lỗi khi tải danh sách nhà sản xuất: $e');
+      if (kDebugMode) {
+        print('Error loading manufacturer list: $e');
+      } // Lỗi khi tải danh sách nhà sản xuất
       emit(state.copyWith(isLoading: false));
     }
   }
@@ -70,7 +73,9 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
     try {
       await _firebase.updateManufacturer(manufacturer);
     } catch (e) {
-      print('Error updating manufacturer: $e');
+      if (kDebugMode) {
+        print('Error updating manufacturer: $e');
+      } // Lỗi khi cập nhật nhà sản xuất
     }
   }
 
@@ -81,7 +86,9 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
       );
       await _firebase.updateManufacturer(updatedManufacturer);
     } catch (e) {
-      print('Error deactivating manufacturer: $e');
+      if (kDebugMode) {
+        print('Error deactivating manufacturer: $e');
+      } // Lỗi khi vô hiệu hóa nhà sản xuất
     }
   }
 
@@ -95,7 +102,9 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
       await _firebase.createManufacturer(manufacturer);
       return null;
     } catch (e) {
-      print('Error creating manufacturer: $e');
+      if (kDebugMode) {
+        print('Error creating manufacturer: $e');
+      } // Lỗi khi tạo nhà sản xuất
       return e.toString();
     }
   }
@@ -111,7 +120,9 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
       );
       await _firebase.updateManufacturerAndProducts(updatedManufacturer);
     } catch (e) {
-      print('Error toggling manufacturer status: $e');
+      if (kDebugMode) {
+        print('Error toggling manufacturer status: $e');
+      } // Lỗi khi chuyển đổi trạng thái nhà sản xuất
     }
   }
 
@@ -120,7 +131,9 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
       final userRole = await _firebase.getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
-      print('Error loading user role: $e');
+      if (kDebugMode) {
+        print('Error loading user role: $e');
+      } // Lỗi khi tải vai trò người dùng
     }
   }
 }

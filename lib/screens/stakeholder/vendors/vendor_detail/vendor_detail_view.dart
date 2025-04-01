@@ -42,7 +42,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                 },
                 fillColor: Theme.of(context).colorScheme.surface,
               ),
-              title: GradientText(text: 'Manufacturer Detail'),
+              title: const GradientText(text: 'Manufacturer Detail'), // Chi tiết nhà cung cấp
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,7 +95,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                               }
                             },
                             icon: const Icon(Icons.edit, color: Colors.white),
-                            label: const Text('Edit', style: TextStyle(color: Colors.white)),
+                            label: const Text('Edit', style: TextStyle(color: Colors.white)), // Chỉnh sửa
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
                               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -112,11 +112,11 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                                 builder: (dialogContext) => AlertDialog(
                                   title: Text(
                                     state.manufacturer.status == ManufacturerStatus.active 
-                                      ? 'Deactivate Manufacturer' 
+                                      ? 'Deactivate Manufacturer'
                                       : 'Activate Manufacturer'
                                   ),
                                   content: Text(
-                                    'Are you sure you want to ${state.manufacturer.status == ManufacturerStatus.active ? "deactivate" : "activate"} this manufacturer?',
+                                    'Are you sure you want to ${state.manufacturer.status == ManufacturerStatus.active ? "deactivate" : "activate"} this manufacturer?', // Bạn có chắc chắn muốn ${state.manufacturer.status == ManufacturerStatus.active ? "vô hiệu hóa" : "kích hoạt"} nhà cung cấp này?
                                   ),
                                   actions: [
                                     TextButton(
@@ -288,7 +288,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Manufacturer Information',
+                    'Manufacturer Information', //Thông tin nhà cung cấp
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -298,12 +298,12 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              _buildInfoRow('Name',
+              _buildInfoRow('Name', //Tên nhà cung cấp
                   state.manufacturer.manufacturerName,
                 valueColor: Colors.white,
               ),
               _buildInfoRow(
-                'Status', 
+                'Status', // Trạng thái
                 state.manufacturer.status.getName(),
                 valueColor: state.manufacturer.status == ManufacturerStatus.active 
                     ? Colors.green.shade400 
