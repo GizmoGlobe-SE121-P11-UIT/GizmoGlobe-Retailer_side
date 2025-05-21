@@ -31,14 +31,14 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
     super.initState();
     employeeName = widget.employee.employeeName;
     phoneNumber = widget.employee.phoneNumber;
-    role = widget.employee.role as RoleEnum;
+    role = widget.employee.role;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: GradientText(text: 'Edit Employee'),
+        title: const GradientText(text: 'Edit Employee'), //Chỉnh sửa nhân viên
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -86,7 +86,7 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Employee Information',
+                          'Employee Information', //Thông tin nhân viên
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -96,11 +96,11 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                         TextFormField(
                           initialValue: employeeName,
                           decoration: InputDecoration(
-                            labelText: 'Full Name',
+                            labelText: 'Full Name', //Họ và tên
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
-                                color: states.contains(MaterialState.focused)
+                                color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),
@@ -121,7 +121,7 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                           onChanged: (value) => employeeName = value,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a name';
+                              return 'Please enter a name'; //Vui lòng nhập tên
                             }
                             return null;
                           },
@@ -130,11 +130,11 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                         TextFormField(
                           initialValue: phoneNumber,
                           decoration: InputDecoration(
-                            labelText: 'Phone Number',
+                            labelText: 'Phone Number', //Số điện thoại
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
-                                color: states.contains(MaterialState.focused)
+                                color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),
@@ -156,7 +156,7 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                           onChanged: (value) => phoneNumber = value,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a phone number';
+                              return 'Please enter a phone number'; //Vui lòng nhập số điện thoại
                             }
                             return null;
                           },
@@ -165,11 +165,11 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                         DropdownButtonFormField<RoleEnum>(
                           value: role,
                           decoration: InputDecoration(
-                            labelText: 'Role',
+                            labelText: 'Role', //Vai trò
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
-                                color: states.contains(MaterialState.focused)
+                                color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),
@@ -212,7 +212,7 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                               : null,
                           validator: (value) {
                             if (value == null) {
-                              return 'Please select a role';
+                              return 'Please select a role'; //Vui lòng chọn vai trò
                             }
                             return null;
                           },

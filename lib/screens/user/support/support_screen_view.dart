@@ -12,7 +12,7 @@ class SupportScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const GradientText(text: 'Support'),
+        title: const GradientText(text: 'Support'), // Hỗ trợ
         leading: GradientIconButton(
           icon: Icons.chevron_left,
           onPressed: () {
@@ -27,7 +27,7 @@ class SupportScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Members of teams',
+              'Members of teams', // Thành viên nhóm
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -42,7 +42,7 @@ class SupportScreen extends StatelessWidget {
                 context,
                 name: 'Tô Vĩnh Tiến',
                 studentId: '22521474',
-                role: 'Developer',
+                role: 'Developer', // Lập trình viên
                 email: '22521474@gm.uit.edu.vn',
               ),
             ),
@@ -54,7 +54,7 @@ class SupportScreen extends StatelessWidget {
                 context,
                 name: 'Đỗ Hồng Quân',
                 studentId: '22521175',
-                role: 'Developer',
+                role: 'Developer', // Lập trình viên
                 email: '22521175@gm.uit.edu.vn',
               ),
             ),
@@ -127,9 +127,9 @@ class SupportScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            _buildDetailRow(Icons.badge_outlined, 'Student ID: $studentId'),
-            _buildDetailRow(Icons.work_outline, 'Role: $role'),
-            _buildDetailRow(Icons.email_outlined, 'Email: $email'),
+            _buildDetailRow(Icons.badge_outlined, 'Student ID: $studentId'), // Mã số sinh viên
+            _buildDetailRow(Icons.work_outline, 'Role: $role'), // Vai trò
+            _buildDetailRow(Icons.email_outlined, 'Email: $email'), // Email
             const SizedBox(height: 16),
           ],
         ),

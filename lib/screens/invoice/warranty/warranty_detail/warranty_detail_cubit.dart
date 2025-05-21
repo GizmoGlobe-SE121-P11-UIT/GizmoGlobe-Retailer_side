@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
@@ -29,7 +30,7 @@ class WarrantyDetailCubit extends Cubit<WarrantyDetailState> {
       for (var detail in updatedInvoice.details) {
         final product = allProducts.firstWhere(
           (p) => p.productID == detail.productID,
-          orElse: () => throw Exception('Product not found: ${detail.productID}'),
+          orElse: () => throw Exception('Product not found: ${detail.productID}'), // Không tìm thấy sản phẩm
         );
         products[detail.productID] = product;
       }
@@ -57,7 +58,9 @@ class WarrantyDetailCubit extends Cubit<WarrantyDetailState> {
       final userRole = await _firebase.getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
-      print('Error loading user role: $e');
+      if (kDebugMode) {
+        print('Error loading user role: $e');
+      } // Lỗi load phân quyền user
     }
   }
 
@@ -68,7 +71,7 @@ class WarrantyDetailCubit extends Cubit<WarrantyDetailState> {
       await _firebase.updateWarrantyInvoice(updatedInvoice);
       emit(state.copyWith(invoice: updatedInvoice));
     } catch (e) {
-      emit(state.copyWith(error: 'Error updating warranty status: $e'));
+      emit(state.copyWith(error: 'Error updating warranty status: $e')); // Lỗi khi cập nhật trạng thái bảo hành
     }
   }
 
@@ -83,7 +86,9 @@ class WarrantyDetailCubit extends Cubit<WarrantyDetailState> {
     try {
       return await _firebase.getProduct(productId);
     } catch (e) {
-      print('Error loading product: $e');
+      if (kDebugMode) {
+        print('Error loading product: $e');
+      } // Lỗi khi load sản phẩm
       return null;
     }
   }

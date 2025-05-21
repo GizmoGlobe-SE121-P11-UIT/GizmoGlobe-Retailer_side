@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/database/database.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
@@ -29,60 +30,62 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       case CategoryEnum.ram:
         final ram = product as RAM;
         specs.addAll({
-          'Bus': ram.bus.toString(),
-          'Capacity': ram.capacity.toString(),
-          'Type': ram.ramType.toString(),
+          'Bus': ram.bus.toString(), //Tốc độ bus
+          'Capacity': ram.capacity.toString(), //Dung lượng
+          'Type': ram.ramType.toString(), //Loại RAM
         });
         break;
 
       case CategoryEnum.cpu:
         final cpu = product as CPU;
         specs.addAll({
-          'Family': cpu.family.toString(),
-          'Core': cpu.core.toString(),
-          'Thread': cpu.thread.toString(),
-          'Clock Speed': '${cpu.clockSpeed} GHz',
+          'Family': cpu.family.toString(), //Thế hệ
+          'Core': cpu.core.toString(), //Số nhân
+          'Thread': cpu.thread.toString(), //Số luồng
+          'Clock Speed': '${cpu.clockSpeed} GHz', //Tốc độ xung nhịp
         });
         break;
 
       case CategoryEnum.gpu:
         final gpu = product as GPU;
         specs.addAll({
-          'Series': gpu.series.toString(),
-          'Memory': gpu.capacity.toString(),
-          'Bus Width': gpu.bus.toString(),
-          'Clock Speed': '${gpu.clockSpeed} MHz',
+          'Series': gpu.series.toString(), //Dòng sản phẩm
+          'Memory': gpu.capacity.toString(), //Dung lượng
+          'Bus Width': gpu.bus.toString(), //Băng thông
+          'Clock Speed': '${gpu.clockSpeed} MHz', //Tốc độ xung nhịp
         });
         break;
 
       case CategoryEnum.mainboard:
         final mainboard = product as Mainboard;
         specs.addAll({
-          'Form Factor': mainboard.formFactor.toString(),
-          'Series': mainboard.series.toString(),
-          'Compatibility': mainboard.compatibility.toString(),
+          'Form Factor': mainboard.formFactor.toString(), //Kích thước
+          'Series': mainboard.series.toString(), //Dòng sản phẩm
+          'Compatibility': mainboard.compatibility.toString(), //Tương thích
         });
         break;
 
       case CategoryEnum.drive:
         final drive = product as Drive;
         specs.addAll({
-          'Type': drive.type.toString(),
-          'Capacity': drive.capacity.toString(),
+          'Type': drive.type.toString(), //Loại ổ đĩa
+          'Capacity': drive.capacity.toString(), //Dung lượng
         });
         break;
 
       case CategoryEnum.psu:
         final psu = product as PSU;
         specs.addAll({
-          'Wattage': '${psu.wattage}W',
-          'Efficiency': psu.efficiency.toString(),
-          'Modular': psu.modular.toString(),
+          'Wattage': '${psu.wattage}W', //Công suất
+          'Efficiency': psu.efficiency.toString(), //Hiệu suất
+          'Modular': psu.modular.toString(), //Modular
         });
         break;
 
       default:
-        print('Unknown category');
+        if (kDebugMode) {
+          print('Unknown category');
+        } //Danh mục không xác định
     }
 
     emit(state.copyWith(technicalSpecs: specs));
@@ -113,7 +116,9 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
       emit(state.copyWith(processState: ProcessState.success, notifyMessage: NotifyMessage.msg15, dialogName: DialogName.success));
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       emit(state.copyWith(processState: ProcessState.failure, notifyMessage: NotifyMessage.msg16, dialogName: DialogName.failure));
     }
   }

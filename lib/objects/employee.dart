@@ -1,5 +1,4 @@
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Employee {
   String? employeeID;

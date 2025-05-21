@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/enums/product_related/cpu_enums/cpu_family.dart';
 import 'package:gizmoglobe_client/enums/product_related/drive_enums/drive_capacity.dart';
 import 'package:gizmoglobe_client/enums/product_related/drive_enums/drive_type.dart';
@@ -44,212 +45,220 @@ import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
 
-Future<void> pushProductSamplesToFirebase() async {
-  try {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+// Future<void> pushProductSamplesToFirebase() async {
+//   try {
+//     final FirebaseFirestore firestore = FirebaseFirestore.instance;
+//
+//     Database().generateSampleData();
+//     for (var manufacturer in Database().manufacturerList) {
+//       await firestore.collection('manufacturers').doc(manufacturer.manufacturerID).set({
+//         'manufacturerID': manufacturer.manufacturerID,
+//         'manufacturerName': manufacturer.manufacturerName,
+//       });
+//     }
+//
+//     // Push products to Firestore
+//     for (var product in Database().productList) {
+//       Map<String, dynamic> productData = {
+//         'productName': product.productName,
+//         'importPrice': product.importPrice,
+//         'sellingPrice': product.sellingPrice,
+//         'discount': product.discount,
+//         'release': product.release,
+//         'sales': product.sales,
+//         'stock': product.stock,
+//         'status': product.status.getName(),
+//         'manufacturerID': product.manufacturer.manufacturerID,
+//         'category': product.category.getName(),
+//       };
+//
+//       // Thêm các thuộc tính đặc thù cho từng loại sản phẩm
+//       switch (product.runtimeType) {
+//         case const (RAM):
+//           final ram = product as RAM;
+//           productData.addAll({
+//             'bus': ram.bus.getName(),
+//             'capacity': ram.capacity.getName(),
+//             'ramType': ram.ramType.getName(),
+//           });
+//           break;
+//
+//         case const (CPU):
+//           final cpu = product as CPU;
+//           productData.addAll({
+//             'family': cpu.family.getName(),
+//             'core': cpu.core,
+//             'thread': cpu.thread,
+//             'clockSpeed': cpu.clockSpeed,
+//           });
+//           break;
+//
+//         case const (GPU):
+//           final gpu = product as GPU;
+//           productData.addAll({
+//             'series': gpu.series.getName(),
+//             'capacity': gpu.capacity.getName(),
+//             'busWidth': gpu.bus.getName(),
+//             'clockSpeed': gpu.clockSpeed,
+//           });
+//           break;
+//
+//         case const (Mainboard):
+//           final mainboard = product as Mainboard;
+//           productData.addAll({
+//             'formFactor': mainboard.formFactor.getName(),
+//             'series': mainboard.series.getName(),
+//             'compatibility': mainboard.compatibility.getName(),
+//           });
+//           break;
+//
+//         case const (Drive):
+//           final drive = product as Drive;
+//           productData.addAll({
+//             'type': drive.type.getName(),
+//             'capacity': drive.capacity.getName(),
+//           });
+//           break;
+//
+//         case const (PSU):
+//           final psu = product as PSU;
+//           productData.addAll({
+//             'wattage': psu.wattage,
+//             'efficiency': psu.efficiency.getName(),
+//             'modular': psu.modular.getName(),
+//           });
+//           break;
+//       }
+//
+//       // Thêm sản phẩm vào Firestore và lấy document reference
+//       DocumentReference docRef = await firestore.collection('products').add(productData);
+//
+//       // Cập nhật lại document với productID
+//       await docRef.update({
+//         'productID': docRef.id
+//       });
+//     }
+//   } catch (e) {
+//     if (kDebugMode) {
+//       print('Error pushing product samples to Firebase: $e');
+//     } // In ra lỗi
+//   }
+// }
 
-    Database().generateSampleData();
-    for (var manufacturer in Database().manufacturerList) {
-      await firestore.collection('manufacturers').doc(manufacturer.manufacturerID).set({
-        'manufacturerID': manufacturer.manufacturerID,
-        'manufacturerName': manufacturer.manufacturerName,
-      });
-    }
+// Future<void> pushAddressSamplesToFirebase() async {
+//   try {
+//     final FirebaseFirestore firestore = FirebaseFirestore.instance;
+//     Database().generateSampleData();
+//
+//     for (var address in Database().addressList) {
+//       DocumentReference docRef = await firestore.collection('addresses').add({
+//         'customerID': address.customerID,
+//         'receiverName': address.receiverName,
+//         'receiverPhone': address.receiverPhone,
+//         'provinceCode': address.province?.code,
+//         'districtCode': address.district?.code,
+//         'wardCode': address.ward?.code,
+//         'street': address.street ?? '',
+//         'hidden': address.hidden,
+//       });
+//
+//       // Cập nhật lại document với addressID
+//       await docRef.update({'addressID': docRef.id});
+//     }
+//   } catch (e) {
+//     if (kDebugMode) {
+//       print('Error pushing address samples to Firebase: $e');
+//     } //Lỗi khi push dữ liệu địa chỉ
+//     rethrow;
+//   }
+// }
 
-    // Push products to Firestore
-    for (var product in Database().productList) {
-      Map<String, dynamic> productData = {
-        'productName': product.productName,
-        'importPrice': product.importPrice,
-        'sellingPrice': product.sellingPrice,
-        'discount': product.discount,
-        'release': product.release,
-        'sales': product.sales,
-        'stock': product.stock,
-        'status': product.status.getName(),
-        'manufacturerID': product.manufacturer.manufacturerID,
-        'category': product.category.getName(),
-      };
-
-      // Thêm các thuộc tính đặc thù cho từng loại sản phẩm
-      switch (product.runtimeType) {
-        case RAM:
-          final ram = product as RAM;
-          productData.addAll({
-            'bus': ram.bus.getName(),
-            'capacity': ram.capacity.getName(),
-            'ramType': ram.ramType.getName(),
-          });
-          break;
-
-        case CPU:
-          final cpu = product as CPU;
-          productData.addAll({
-            'family': cpu.family.getName(),
-            'core': cpu.core,
-            'thread': cpu.thread,
-            'clockSpeed': cpu.clockSpeed,
-          });
-          break;
-
-        case GPU:
-          final gpu = product as GPU;
-          productData.addAll({
-            'series': gpu.series.getName(),
-            'capacity': gpu.capacity.getName(),
-            'busWidth': gpu.bus.getName(),
-            'clockSpeed': gpu.clockSpeed,
-          });
-          break;
-
-        case Mainboard:
-          final mainboard = product as Mainboard;
-          productData.addAll({
-            'formFactor': mainboard.formFactor.getName(),
-            'series': mainboard.series.getName(),
-            'compatibility': mainboard.compatibility.getName(),
-          });
-          break;
-
-        case Drive:
-          final drive = product as Drive;
-          productData.addAll({
-            'type': drive.type.getName(),
-            'capacity': drive.capacity.getName(),
-          });
-          break;
-
-        case PSU:
-          final psu = product as PSU;
-          productData.addAll({
-            'wattage': psu.wattage,
-            'efficiency': psu.efficiency.getName(),
-            'modular': psu.modular.getName(),
-          });
-          break;
-      }
-
-      // Thêm sản phẩm vào Firestore và lấy document reference
-      DocumentReference docRef = await firestore.collection('products').add(productData);
-
-      // Cập nhật lại document với productID
-      await docRef.update({
-        'productID': docRef.id
-      });
-    }
-  } catch (e) {
-    print('Error pushing product samples to Firebase: $e');
-  }
-}
-
-Future<void> pushAddressSamplesToFirebase() async {
-  try {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    Database().generateSampleData();
-
-    for (var address in Database().addressList) {
-      DocumentReference docRef = await firestore.collection('addresses').add({
-        'customerID': address.customerID,
-        'receiverName': address.receiverName,
-        'receiverPhone': address.receiverPhone,
-        'provinceCode': address.province?.code,
-        'districtCode': address.district?.code,
-        'wardCode': address.ward?.code,
-        'street': address.street ?? '',
-        'hidden': address.hidden,
-      });
-
-      // Cập nhật lại document với addressID
-      await docRef.update({'addressID': docRef.id});
-    }
-  } catch (e) {
-    print('Error pushing address samples to Firebase: $e');
-    rethrow;
-  }
-}
-
-Future<void> pushSalesInvoiceSampleData() async {
-  try {
-    final db = FirebaseFirestore.instance;
-    final batch = db.batch();
-    final Database database = Database();
-
-    // Khởi tạo dữ liệu mẫu trước khi upload
-    database.generateSampleData();
-
-    // Kiểm tra dữ liệu
-    if (database.salesInvoiceList.isEmpty) {
-      throw Exception('No sales invoice data to upload');
-    }
-
-    for (var invoice in database.salesInvoiceList) {
-      if (invoice.customerID.isEmpty) {
-        throw Exception('CustomerID cannot be empty');
-      }
-      for (var detail in invoice.details) {
-        if (detail.productID.isEmpty) {
-          throw Exception('ProductID cannot be empty');
-        }
-      }
-    }
-
-    // Tạo bảng nếu chưa tồn tại
-    final salesInvoicesCollection = db.collection('sales_invoices');
-    final salesInvoiceDetailsCollection = db.collection('sales_invoice_details');
-
-    // Kiểm tra xem collection đã tồn tại chưa
-    final salesInvoicesDoc = await salesInvoicesCollection.limit(1).get();
-    if (salesInvoicesDoc.docs.isEmpty) {
-      await salesInvoicesCollection.doc('placeholder').set({});
-      await salesInvoicesCollection.doc('placeholder').delete();
-    }
-
-    final salesInvoiceDetailsDoc = await salesInvoiceDetailsCollection.limit(1).get();
-    if (salesInvoiceDetailsDoc.docs.isEmpty) {
-      await salesInvoiceDetailsCollection.doc('placeholder').set({});
-      await salesInvoiceDetailsCollection.doc('placeholder').delete();
-    }
-
-    // Xóa dữ liệu cũ nếu có
-    final existingInvoices = await salesInvoicesCollection.get();
-    for (var doc in existingInvoices.docs) {
-      batch.delete(doc.reference);
-    }
-
-    final existingDetails = await salesInvoiceDetailsCollection.get();
-    for (var doc in existingDetails.docs) {
-      batch.delete(doc.reference);
-    }
-
-    // Upload dữ liệu mới
-    for (var invoice in database.salesInvoiceList) {
-      final String invoiceID = db.collection('sales_invoices').doc().id;
-
-      final invoiceData = invoice.toMap();
-      invoiceData['salesInvoiceID'] = invoiceID;
-
-      batch.set(db.collection('sales_invoices').doc(invoiceID), invoiceData);
-
-      for (var detail in invoice.details) {
-        final String detailID = db.collection('sales_invoice_details').doc().id;
-        final detailData = detail.toMap();
-
-        detailData['salesInvoiceDetailID'] = detailID;
-        detailData['salesInvoiceID'] = invoiceID;
-
-        batch.set(db.collection('sales_invoice_details').doc(detailID), detailData);
-      }
-    }
-
-    // Thực thi batch
-    await batch.commit();
-
-    print('Successfully pushed sales invoice samples to Firestore');
-  } catch (e) {
-    print('Error in pushSalesInvoiceSampleData: $e');
-    rethrow;
-  }
-}
+// Future<void> pushSalesInvoiceSampleData() async {
+//   try {
+//     final db = FirebaseFirestore.instance;
+//     final batch = db.batch();
+//     final Database database = Database();
+//
+//     // Khởi tạo dữ liệu mẫu trước khi upload
+//     database.generateSampleData();
+//
+//     // Kiểm tra dữ liệu
+//     if (database.salesInvoiceList.isEmpty) {
+//       throw Exception('No sales invoice data to upload'); //Không có dữ liệu hóa đơn bán hàng để upload
+//     }
+//
+//     for (var invoice in database.salesInvoiceList) {
+//       if (invoice.customerID.isEmpty) {
+//         throw Exception('CustomerID cannot be empty'); //CustomerID không thể trống
+//       }
+//       for (var detail in invoice.details) {
+//         if (detail.productID.isEmpty) {
+//           throw Exception('ProductID cannot be empty'); //ProductID không thể trống
+//         }
+//       }
+//     }
+//
+//     // Tạo bảng nếu chưa tồn tại
+//     final salesInvoicesCollection = db.collection('sales_invoices');
+//     final salesInvoiceDetailsCollection = db.collection('sales_invoice_details');
+//
+//     // Kiểm tra xem collection đã tồn tại chưa
+//     final salesInvoicesDoc = await salesInvoicesCollection.limit(1).get();
+//     if (salesInvoicesDoc.docs.isEmpty) {
+//       await salesInvoicesCollection.doc('placeholder').set({});
+//       await salesInvoicesCollection.doc('placeholder').delete();
+//     }
+//
+//     final salesInvoiceDetailsDoc = await salesInvoiceDetailsCollection.limit(1).get();
+//     if (salesInvoiceDetailsDoc.docs.isEmpty) {
+//       await salesInvoiceDetailsCollection.doc('placeholder').set({});
+//       await salesInvoiceDetailsCollection.doc('placeholder').delete();
+//     }
+//
+//     // Xóa dữ liệu cũ nếu có
+//     final existingInvoices = await salesInvoicesCollection.get();
+//     for (var doc in existingInvoices.docs) {
+//       batch.delete(doc.reference);
+//     }
+//
+//     final existingDetails = await salesInvoiceDetailsCollection.get();
+//     for (var doc in existingDetails.docs) {
+//       batch.delete(doc.reference);
+//     }
+//
+//     // Upload dữ liệu mới
+//     for (var invoice in database.salesInvoiceList) {
+//       final String invoiceID = db.collection('sales_invoices').doc().id;
+//
+//       final invoiceData = invoice.toMap();
+//       invoiceData['salesInvoiceID'] = invoiceID;
+//
+//       batch.set(db.collection('sales_invoices').doc(invoiceID), invoiceData);
+//
+//       for (var detail in invoice.details) {
+//         final String detailID = db.collection('sales_invoice_details').doc().id;
+//         final detailData = detail.toMap();
+//
+//         detailData['salesInvoiceDetailID'] = detailID;
+//         detailData['salesInvoiceID'] = invoiceID;
+//
+//         batch.set(db.collection('sales_invoice_details').doc(detailID), detailData);
+//       }
+//     }
+//
+//     // Thực thi batch
+//     await batch.commit();
+//
+//     if (kDebugMode) {
+//       print('Successfully pushed sales invoice samples to Firestore');
+//     } //Upload dữ liệu mẫu hóa đơn bán hàng thành công
+//   } catch (e) {
+//     if (kDebugMode) {
+//       print('Error in pushSalesInvoiceSampleData: $e');
+//     } //Lỗi khi upload dữ liệu mẫu hóa đơn bán hàng
+//     rethrow;
+//   }
+// }
 
 class Firebase {
   static final Firebase _firebase = Firebase._internal();
@@ -265,29 +274,33 @@ class Firebase {
   // Thêm getter để lấy current user ID
   String? get currentUserId => _auth.currentUser?.uid;
 
-  Future<void> pushCustomerSampleData() async {
-    try {
-      final FirebaseFirestore firestore = FirebaseFirestore.instance;
-      Database().generateSampleData();
-
-      for (var customer in Database().customerList) {
-        DocumentReference docRef = await firestore.collection('customers').add(
-          customer.toMap(),
-        );
-        
-        customer.customerID = docRef.id;
-        // Cập nhật lại document với ID
-        await docRef.update({
-          'customerID': docRef.id,
-          ...customer.toMap()
-        });
-      }
-      print('Successfully pushed customer data');
-    } catch (e) {
-      print('Error pushing sample data: $e');
-      rethrow;
-    }
-  }
+  // Future<void> pushCustomerSampleData() async {
+  //   try {
+  //     final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  //     Database().generateSampleData();
+  //
+  //     for (var customer in Database().customerList) {
+  //       DocumentReference docRef = await firestore.collection('customers').add(
+  //         customer.toMap(),
+  //       );
+  //
+  //       customer.customerID = docRef.id;
+  //       // Cập nhật lại document với ID
+  //       await docRef.update({
+  //         'customerID': docRef.id,
+  //         ...customer.toMap()
+  //       });
+  //     }
+  //     if (kDebugMode) {
+  //       print('Successfully pushed customer data');
+  //     } // Thành công khi push dữ liệu khách hàng
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print('Error pushing sample data: $e');
+  //     } // Lỗi khi push dữ liệu mẫu
+  //     rethrow;
+  //   }
+  // }
 
   Future<List<Customer>> getCustomers() async {
     try {
@@ -299,7 +312,9 @@ class Firebase {
         return Customer.fromMap(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
-      print('Lỗi khi lấy danh sách khách hàng: $e');
+      if (kDebugMode) {
+        print('Error getting customers data : $e');
+      } // Lỗi khi lấy danh sách khách hàng
       rethrow;
     }
   }
@@ -318,7 +333,7 @@ class Firebase {
   Future<void> updateCustomer(Customer customer) async {
     try {
       if (customer.customerID == null) {
-        throw Exception('Customer ID cannot be null');
+        throw Exception('Customer ID cannot be null'); // ID khách hàng không thể trống
       }
 
       // Update customer information
@@ -360,7 +375,9 @@ class Firebase {
         });
       }
     } catch (e) {
-      print('Error updating customer: $e');
+      if (kDebugMode) {
+        print('Error updating customer: $e');
+      } // Lỗi khi cập nhật thông tin khách hàng
       rethrow;
     }
   }
@@ -390,7 +407,9 @@ class Firebase {
       // như orders, cart items, etc.
 
     } catch (e) {
-      print('Lỗi khi xóa khách hàng: $e');
+      if (kDebugMode) {
+        print('Error deleting customers data: $e');
+      } // Lỗi khi xóa khách hàng
       rethrow;
     }
   }
@@ -419,7 +438,9 @@ class Firebase {
         'userID': customerId
       });
     } catch (e) {
-      print('Lỗi khi tạo khách hàng mới: $e');
+      if (kDebugMode) {
+        print('Error creating new customer: $e');
+      } // Lỗi khi tạo khách hàng mới
       rethrow;
     }
   }
@@ -438,7 +459,9 @@ class Firebase {
         snapshot.docs.first.data() as Map<String, dynamic>,
       );
     } catch (e) {
-      print('Lỗi khi tìm khách hàng theo email: $e');
+      if (kDebugMode) {
+        print('Error searching customer by email: $e');
+      } // Lỗi khi tìm kiếm khách hàng theo email
       rethrow;
     }
   }
@@ -473,7 +496,9 @@ class Firebase {
       await Database().fetchAddress();
       Database().customerList = await getCustomers();
     } catch (e) {
-      print('Error creating new address: $e');
+      if (kDebugMode) {
+        print('Error creating new address: $e');
+      } // Lỗi khi tạo địa chỉ mới
       rethrow;
     }
   }
@@ -489,7 +514,9 @@ class Firebase {
         return Employee.fromMap(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
-      print('Lỗi khi lấy danh sách nhân viên: $e');
+      if (kDebugMode) {
+        print('Error getting employees list: $e');
+      } // Lỗi khi lấy danh sách nhân viên
       rethrow;
     }
   }
@@ -508,7 +535,7 @@ class Firebase {
   Future<void> updateEmployee(Employee employee) async {
     try {
       if (employee.employeeID == null) {
-        throw Exception('Employee ID cannot be null');
+        throw Exception('Employee ID cannot be null'); // ID nhân viên không thể trống
       }
 
       // Lấy thông tin employee cũ trước khi cập nhật
@@ -518,7 +545,7 @@ class Firebase {
           .get();
 
       if (!oldEmployeeDoc.exists) {
-        throw Exception('Employee not found');
+        throw Exception('Employee not found'); // Không tìm thấy nhân viên
       }
 
       Map<String, dynamic> oldEmployeeData = oldEmployeeDoc.data() as Map<String, dynamic>;
@@ -549,7 +576,9 @@ class Firebase {
         });
       }
     } catch (e) {
-      print('Lỗi khi cập nhật nhân viên: $e');
+      if (kDebugMode) {
+        print('Error updating employees information: $e');
+      } // Lỗi khi cập nhật thông tin nhân viên
       rethrow;
     }
   }
@@ -585,7 +614,9 @@ class Firebase {
         }
       }
     } catch (e) {
-      print('Lỗi khi xóa nhân viên: $e');
+      if (kDebugMode) {
+        print('Error deleting employee: $e');
+      } // Lỗi khi xóa nhân viên
       rethrow;
     }
   }
@@ -599,7 +630,7 @@ class Firebase {
           .get();
 
       if (existingEmployees.docs.isNotEmpty) {
-        throw Exception('Email has already been registered');
+        throw Exception('Email has already been registered'); // Email đã được đăng ký
       }
 
       // Thêm nhân viên mới vào collection employees
@@ -619,7 +650,9 @@ class Firebase {
       });
 
     } catch (e) {
-      print('Error adding employee: $e');
+      if (kDebugMode) {
+        print('Error adding employee: $e');
+      } // Lỗi khi thêm nhân viên
       rethrow;
     }
   }
@@ -635,7 +668,9 @@ class Firebase {
               ))
           .toList();
     } catch (e) {
-      print('Error getting manufacturers: $e');
+      if (kDebugMode) {
+        print('Error getting manufacturers: $e');
+      } // Lỗi khi lấy danh sách nhà sản xuất
       rethrow;
     }
   }
@@ -657,7 +692,9 @@ class Firebase {
       final doc = _firestore.collection('manufacturers').doc(manufacturer.manufacturerID);
       await doc.update(_mapManufacturerToJson(manufacturer));
     } catch (e) {
-      print('Error updating manufacturer: $e');
+      if (kDebugMode) {
+        print('Error updating manufacturer: $e');
+      } // Lỗi khi cập nhật thông tin nhà sản xuất
       rethrow;
     }
   }
@@ -671,7 +708,7 @@ class Firebase {
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        throw Exception('Manufacturer not found');
+        throw Exception('Manufacturer not found'); // Không tìm thấy nhà sản xuất
       }
 
       await FirebaseFirestore.instance
@@ -692,7 +729,9 @@ class Firebase {
             .update({'status': 'discontinued'});
       }
     } catch (e) {
-      print('Error deleting manufacturer: $e');
+      if (kDebugMode) {
+        print('Error deleting manufacturer: $e');
+      } // Lỗi khi xóa nhà sản xuất
       rethrow;
     }
   }
@@ -702,7 +741,9 @@ class Firebase {
       final doc = _firestore.collection('manufacturers').doc(manufacturer.manufacturerID);
       await doc.set(_mapManufacturerToJson(manufacturer));
     } catch (e) {
-      print('Error creating manufacturer: $e');
+      if (kDebugMode) {
+        print('Error creating manufacturer: $e');
+      } // Lỗi khi tạo nhà sản xuất
       rethrow;
     }
   }
@@ -723,7 +764,9 @@ class Firebase {
         status: _mapManufacturerStatus(data['status'] as String? ?? 'active'),
       );
     } catch (e) {
-      print('Error finding manufacturer by ID: $e');
+      if (kDebugMode) {
+        print('Error finding manufacturer by ID: $e');
+      } // Lỗi khi tìm nhà sản xuất theo ID
       rethrow;
     }
   }
@@ -735,7 +778,9 @@ class Firebase {
           .doc(userId)
           .update(userData);
     } catch (e) {
-      print('Lỗi khi cập nhật thông tin user: $e');
+      if (kDebugMode) {
+        print('Error updating user data: $e');
+      } // Lỗi khi cập nhật thông tin user
       rethrow;
     }
   }
@@ -749,7 +794,9 @@ class Firebase {
 
       return userSnapshot.docs.isNotEmpty;
     } catch (e) {
-      print('Error checking user exists in database: $e');
+      if (kDebugMode) {
+        print('Error checking user exists in database: $e');
+      } // Lỗi khi kiểm tra user tồn tại trong database
       rethrow;
     }
   }
@@ -881,7 +928,9 @@ class Firebase {
             });
             break;
           default:
-            print('Unknown category: ${data['category']}');
+            if (kDebugMode) {
+              print('Unknown category: ${data['category']}');
+            } // Loại sản phẩm không xác định
         }
 
         // Tạo product instance thông qua factory
@@ -891,7 +940,9 @@ class Firebase {
 
       return products;
     } catch (e) {
-      print('Error getting products: $e');
+      if (kDebugMode) {
+        print('Error getting products: $e');
+      } // Lỗi khi lấy danh sách sản phẩm
       rethrow;
     }
   }
@@ -1024,13 +1075,17 @@ class Firebase {
               break;
 
             default:
-              print('Unknown category: ${data['category']}');
+              if (kDebugMode) {
+                print('Unknown category: ${data['category']}');
+              } // Loại sản phẩm không xác định
           }
 
           Product product = ProductFactory.createProduct(category, productProps);
           products.add(product);
         } catch (e) {
-          print('Error processing product ${doc.id}: $e');
+          if (kDebugMode) {
+            print('Error processing product ${doc.id}: $e');
+          } // Lỗi khi xử lý sản phẩm
           continue;
         }
       }
@@ -1049,7 +1104,9 @@ class Firebase {
         return SalesInvoice.fromMap(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
-      print('Error loading sales invoices: $e');
+      if (kDebugMode) {
+        print('Error loading sales invoices: $e');
+      } // Lỗi khi tải danh sách hóa đơn bán hàng
       rethrow;
     }
   }
@@ -1117,7 +1174,9 @@ class Firebase {
       await batch.commit();
       return invoice;
     } catch (e) {
-      print('Error creating sales invoice: $e');
+      if (kDebugMode) {
+        print('Error creating sales invoice: $e');
+      } //Lỗi khi tạo hóa đơn bán hàng
       return null;
     }
   }
@@ -1142,30 +1201,32 @@ class Firebase {
         );
       }).toList();
     } catch (e) {
-      print('Error fetching sales invoice details: $e');
+      if (kDebugMode) {
+        print('Error fetching sales invoice details: $e');
+      } //Lỗi khi tải chi tiết hóa đơn bán hàng
       return [];
     }
   }
 
-  Future<void> _updateProductStock(String productID, int quantity) async {
-    final productRef = _firestore.collection('products').doc(productID);
-    
-    return _firestore.runTransaction((transaction) async {
-      final productDoc = await transaction.get(productRef);
-      if (!productDoc.exists) {
-        throw Exception('Product not found');
-      }
-
-      final currentStock = productDoc.data()?['stock'] as int;
-      if (currentStock < quantity) {
-        throw Exception('Not enough stock');
-      }
-
-      transaction.update(productRef, {
-        'stock': currentStock - quantity,
-      });
-    });
-  }
+  // Future<void> _updateProductStock(String productID, int quantity) async {
+  //   final productRef = _firestore.collection('products').doc(productID);
+  //
+  //   return _firestore.runTransaction((transaction) async {
+  //     final productDoc = await transaction.get(productRef);
+  //     if (!productDoc.exists) {
+  //       throw Exception('Product not found'); // Không tìm thấy sản phẩm
+  //     }
+  //
+  //     final currentStock = productDoc.data()?['stock'] as int;
+  //     if (currentStock < quantity) {
+  //       throw Exception('Not enough stock'); // Không đủ hàng trong kho
+  //     }
+  //
+  //     transaction.update(productRef, {
+  //       'stock': currentStock - quantity,
+  //     });
+  //   });
+  // }
 
   Future<Map<String, dynamic>> getCustomerDetails(String customerID) async {
     try {
@@ -1189,7 +1250,9 @@ class Firebase {
         'email': '',
       };
     } catch (e) {
-      print('Error getting customer details: $e');
+      if (kDebugMode) {
+        print('Error getting customer details: $e');
+      } // Lỗi khi lấy thông tin khách hàng
       return {
         'customerName': 'Unknown Customer',
         'phoneNumber': '',
@@ -1216,7 +1279,9 @@ class Firebase {
         };
       }
 
-      print('Product not found: $productID');
+      if (kDebugMode) {
+        print('Product not found: $productID');
+      } // Không tìm thấy sản phẩm
       return {
         'productName': 'Unknown Product',
         'category': '',
@@ -1225,7 +1290,9 @@ class Firebase {
         'sellingPrice': 0,
       };
     } catch (e) {
-      print('Error getting product details for $productID: $e');
+      if (kDebugMode) {
+        print('Error getting product details for $productID: $e');
+      } // Lỗi khi lấy thông tin sản phẩm
       return {
         'productName': 'Unknown Product',
         'category': '',
@@ -1245,7 +1312,7 @@ class Firebase {
           .get();
 
       if (!invoiceDoc.exists) {
-        throw Exception('Invoice not found');
+        throw Exception('Invoice not found'); // Không tìm thấy hóa đơn
       }
 
       final data = invoiceDoc.data()!;
@@ -1283,7 +1350,9 @@ class Firebase {
       invoice.details = details;
       return invoice;
     } catch (e) {
-      print('Error getting sales invoice details: $e');
+      if (kDebugMode) {
+        print('Error getting sales invoice details: $e');
+      } // Lỗi khi lấy chi tiết hóa đơn bán hàng
       rethrow;
     }
   }
@@ -1305,7 +1374,7 @@ class Firebase {
           .get();
 
       if (!productDoc.exists) {
-        throw Exception('Product not found');
+        throw Exception('Product not found'); // Không tìm thấy sản phẩm
       }
 
       // Get the old detail to calculate stock difference
@@ -1322,7 +1391,9 @@ class Firebase {
         await updateProductStock(detail.productID, stockChange);
       }
     } catch (e) {
-      print('Error updating sales invoice detail: $e');
+      if (kDebugMode) {
+        print('Error updating sales invoice detail: $e');
+      } // Lỗi khi cập nhật chi tiết hóa đơn bán hàng
       rethrow;
     }
   }
@@ -1337,7 +1408,7 @@ class Firebase {
           .get();
 
       if (detailQuery.docs.isEmpty) {
-        throw Exception('Invoice detail not found');
+        throw Exception('Invoice detail not found'); // Không tìm thấy chi tiết hóa đơn
       }
 
       final detailDoc = detailQuery.docs.first;
@@ -1349,7 +1420,9 @@ class Firebase {
       // Return stock
       await updateProductStock(productID, quantity);
     } catch (e) {
-      print('Error deleting sales invoice detail: $e');
+      if (kDebugMode) {
+        print('Error deleting sales invoice detail: $e');
+      } // Lỗi khi xóa chi tiết hóa đơn bán hàng
       rethrow;
     }
   }
@@ -1362,7 +1435,7 @@ class Firebase {
           .get();
 
       if (!doc.exists) {
-        throw Exception('Product not found');
+        throw Exception('Product not found'); // Không tìm thấy sản phẩm
       }
 
       // Đảm bảo currentStock không null
@@ -1372,7 +1445,9 @@ class Firebase {
         'stock': currentStock + stockChange
       });
     } catch (e) {
-      print('Error updating product stock: $e');
+      if (kDebugMode) {
+        print('Error updating product stock: $e');
+      } // Lỗi khi cập nhật số lượng sản phẩm
       rethrow;
     }
   }
@@ -1387,7 +1462,9 @@ class Firebase {
         'salesInvoiceDetailID': docRef.id,
       });
     } catch (e) {
-      print('Error creating sales invoice detail: $e');
+      if (kDebugMode) {
+        print('Error creating sales invoice detail: $e');
+      } // Lỗi khi tạo chi tiết hóa đơn bán hàng
       rethrow;
     }
   }
@@ -1402,7 +1479,9 @@ class Firebase {
       List<Product> products = await getProducts();
       Database().updateProductList(products);
     } catch (e) {
-      print('Error changing product status: $e');
+      if (kDebugMode) {
+        print('Error changing product status: $e');
+      } // Lỗi khi thay đổi trạng thái sản phẩm
       rethrow;
     }
   }
@@ -1423,7 +1502,7 @@ class Firebase {
       };
 
       switch (product.runtimeType) {
-        case RAM:
+        case const (RAM):
           final ram = product as RAM;
           productData.addAll({
             'bus': ram.bus.getName(),
@@ -1432,7 +1511,7 @@ class Firebase {
           });
           break;
 
-        case CPU:
+        case const (CPU):
           final cpu = product as CPU;
           productData.addAll({
             'family': cpu.family.getName(),
@@ -1442,7 +1521,7 @@ class Firebase {
           });
           break;
 
-        case GPU:
+        case const (GPU):
           final gpu = product as GPU;
           productData.addAll({
             'series': gpu.series.getName(),
@@ -1452,7 +1531,7 @@ class Firebase {
           });
           break;
 
-        case Mainboard:
+        case const (Mainboard):
           final mainboard = product as Mainboard;
           productData.addAll({
             'formFactor': mainboard.formFactor.getName(),
@@ -1461,7 +1540,7 @@ class Firebase {
           });
           break;
 
-        case Drive:
+        case const (Drive):
           final drive = product as Drive;
           productData.addAll({
             'type': drive.type.getName(),
@@ -1469,7 +1548,7 @@ class Firebase {
           });
           break;
 
-        case PSU:
+        case const (PSU):
           final psu = product as PSU;
           productData.addAll({
             'wattage': psu.wattage,
@@ -1487,7 +1566,9 @@ class Firebase {
       List<Product> products = await getProducts();
       Database().updateProductList(products);
     } catch (e) {
-      print('Error updating product: $e');
+      if (kDebugMode) {
+        print('Error updating product: $e');
+      } // Lỗi khi cập nhật sản phẩm
       rethrow;
     }
   }
@@ -1508,7 +1589,7 @@ class Firebase {
       };
 
       switch (product.runtimeType) {
-        case RAM:
+        case const (RAM):
           final ram = product as RAM;
           productData.addAll({
             'bus': ram.bus.getName(),
@@ -1517,7 +1598,7 @@ class Firebase {
           });
           break;
 
-        case CPU:
+        case const (CPU):
           final cpu = product as CPU;
           productData.addAll({
             'family': cpu.family.getName(),
@@ -1527,7 +1608,7 @@ class Firebase {
           });
           break;
 
-        case GPU:
+        case const (GPU):
           final gpu = product as GPU;
           productData.addAll({
             'series': gpu.series.getName(),
@@ -1537,7 +1618,7 @@ class Firebase {
           });
           break;
 
-        case Mainboard:
+        case const (Mainboard):
           final mainboard = product as Mainboard;
           productData.addAll({
             'formFactor': mainboard.formFactor.getName(),
@@ -1546,7 +1627,7 @@ class Firebase {
           });
           break;
 
-        case Drive:
+        case const (Drive):
           final drive = product as Drive;
           productData.addAll({
             'type': drive.type.getName(),
@@ -1554,7 +1635,7 @@ class Firebase {
           });
           break;
 
-        case PSU:
+        case const (PSU):
           final psu = product as PSU;
           productData.addAll({
             'wattage': psu.wattage,
@@ -1568,7 +1649,9 @@ class Firebase {
       List<Product> products = await getProducts();
       Database().updateProductList(products);
     } catch (e) {
-      print('Error adding product: $e');
+      if (kDebugMode) {
+        print('Error adding product: $e');
+      } // Lỗi khi thêm sản phẩm
       rethrow;
     }
   }
@@ -1581,7 +1664,7 @@ class Firebase {
           .get();
 
       if (!doc.exists) {
-        throw Exception('Product not found');
+        throw Exception('Product not found'); // Không tìm thấy sản phẩm
       }
 
       // Đảm bảo các giá trị không null
@@ -1598,7 +1681,9 @@ class Firebase {
       List<Product> products = await getProducts();
       Database().updateProductList(products);
     } catch (e) {
-      print('Error updating product stock and sales: $e');
+      if (kDebugMode) {
+        print('Error updating product stock and sales: $e');
+      } // Lỗi khi cập nhật số lượng sản phẩm và doanh số
       rethrow;
     }
   }
@@ -1612,7 +1697,9 @@ class Firebase {
 
       //await Database().fetchSalesInvoice();
     } catch (e) {
-      print('Error confirming delivery: $e');
+      if (kDebugMode) {
+        print('Error confirming delivery: $e');
+      } // Lỗi khi xác nhận giao hàng
       rethrow;
     }
   }
@@ -1665,7 +1752,9 @@ class Firebase {
         );
       }).toList();
     } catch (e) {
-      print('Error getting customer addresses: $e');
+      if (kDebugMode) {
+        print('Error getting customer addresses: $e');
+      } // Lỗi khi lấy danh sách địa chỉ khách hàng
       rethrow;
     }
   }
@@ -1694,7 +1783,9 @@ class Firebase {
         return IncomingInvoice.fromMap(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
-      print('Error loading incoming invoices: $e');
+      if (kDebugMode) {
+        print('Error loading incoming invoices: $e');
+      } // Lỗi khi tải danh sách hóa đơn nhập hàng
       rethrow;
     }
   }
@@ -1708,7 +1799,7 @@ class Firebase {
           .get();
 
       if (!invoiceDoc.exists) {
-        throw Exception('Invoice not found');
+        throw Exception('Invoice not found'); // Không tìm thấy hóa đơn
       }
 
       // Create invoice object
@@ -1733,7 +1824,9 @@ class Firebase {
 
       return invoice;
     } catch (e) {
-      print('Error loading incoming invoice details: $e');
+      if (kDebugMode) {
+        print('Error loading incoming invoice details: $e');
+      } // Lỗi khi tải chi tiết hóa đơn nhập hàng
       rethrow;
     }
   }
@@ -1741,7 +1834,7 @@ class Firebase {
   Future<void> updateIncomingInvoice(IncomingInvoice invoice) async {
     try {
       if (invoice.incomingInvoiceID == null) {
-        throw Exception('Invoice ID cannot be null');
+        throw Exception('Invoice ID cannot be null'); // ID hóa đơn không thể null
       }
 
       // Update invoice
@@ -1769,7 +1862,9 @@ class Firebase {
         }
       }
     } catch (e) {
-      print('Error updating incoming invoice: $e');
+      if (kDebugMode) {
+        print('Error updating incoming invoice: $e');
+      } // Lỗi khi cập nhật hóa đơn nhập hàng
       rethrow;
     }
   }
@@ -1800,7 +1895,9 @@ class Firebase {
 
       return docRef.id;
     } catch (e) {
-      print('Error creating incoming invoice: $e');
+      if (kDebugMode) {
+        print('Error creating incoming invoice: $e');
+      } // Lỗi khi tạo hóa đơn nhập hàng
       rethrow;
     }
   }
@@ -1826,7 +1923,9 @@ class Firebase {
           .doc(invoiceId)
           .delete();
     } catch (e) {
-      print('Error deleting incoming invoice: $e');
+      if (kDebugMode) {
+        print('Error deleting incoming invoice: $e');
+      } // Lỗi khi xóa hóa đơn nhập hàng
       rethrow;
     }
   }
@@ -1842,7 +1941,9 @@ class Firebase {
       }
       return null;
     } catch (e) {
-      print('Error getting user role: $e');
+      if (kDebugMode) {
+        print('Error getting user role: $e');
+      } // Lỗi khi lấy vai trò người dùng
       return null;
     }
   }
@@ -1860,14 +1961,18 @@ class Firebase {
 
       return Customer.fromMap(doc.id, doc.data()!);
     } catch (e) {
-      print('Error getting customer: $e');
+      if (kDebugMode) {
+        print('Error getting customer: $e');
+      } // Lỗi khi lấy thông tin khách hàng
       rethrow;
     }
   }
 
   Future<Product?> getProduct(String productId) async {
     try {
-      print('Getting product: $productId');
+      if (kDebugMode) {
+        print('Getting product: $productId');
+      }
 
       final doc = await _firestore
           .collection('products')
@@ -1875,7 +1980,9 @@ class Firebase {
           .get();
 
       if (!doc.exists) {
-        print('Product not found: $productId');
+        if (kDebugMode) {
+          print('Product not found: $productId');
+        }
         return null;
       }
 
@@ -1894,7 +2001,9 @@ class Firebase {
           .get();
 
       if (!manufacturerDoc.exists) {
-        print('Manufacturer not found for product $productId');
+        if (kDebugMode) {
+          print('Manufacturer not found for product $productId');
+        } // Không tìm thấy nhà sản xuất cho sản phẩm
         return null;
       }
 
@@ -1905,7 +2014,9 @@ class Firebase {
       );
 
       final categoryStr = (data['category'] as String).toLowerCase();
-      print('Product category: $categoryStr');
+      if (kDebugMode) {
+        print('Product category: $categoryStr');
+      } // Loại sản phẩm
 
       CategoryEnum? category;
       try {
@@ -2009,15 +2120,21 @@ class Firebase {
         );
 
       } catch (e) {
-        print('Invalid category for product $productId: $categoryStr');
+        if (kDebugMode) {
+          print('Invalid category for product $productId: $categoryStr');
+        } // Loại sản phẩm không hợp lệ
         return null;
       }
 
       final product = ProductFactory.createProduct(category, data);
-      print('Created product: ${product.productName}');
+      if (kDebugMode) {
+        print('Created product: ${product.productName}');
+      }
       return product;
     } catch (e) {
-      print('Error getting product $productId: $e');
+      if (kDebugMode) {
+        print('Error getting product $productId: $e');
+      } // Lỗi khi lấy thông tin sản phẩm
       return null;
     }
   }
@@ -2048,7 +2165,9 @@ class Firebase {
         return invoice;
       }));
     } catch (e) {
-      print('Error getting customer sales invoices: $e');
+      if (kDebugMode) {
+        print('Error getting customer sales invoices: $e');
+      } // Lỗi khi lấy danh sách hóa đơn bán hàng của khách hàng
       rethrow;
     }
   }
@@ -2056,14 +2175,16 @@ class Firebase {
   Future<List<WarrantyInvoice>> getWarrantyInvoices() async {
     try {
       final QuerySnapshot snapshot = await _firestore
-          .collection('warranty_invoices')
+          .collection('warranty_invoices') // Bảo hành
           .get();
 
       return snapshot.docs.map((doc) {
         return WarrantyInvoice.fromMap(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
-      print('Error loading warranty invoices: $e');
+      if (kDebugMode) {
+        print('Error loading warranty invoices: $e');
+      } // Lỗi khi tải danh sách hóa đơn bảo hành
       rethrow;
     }
   }
@@ -2077,7 +2198,7 @@ class Firebase {
           .get();
 
       if (!invoiceDoc.exists) {
-        throw Exception('Warranty invoice not found');
+        throw Exception('Warranty invoice not found'); // Không tìm thấy hóa đơn bảo hành
       }
 
       // Create invoice object
@@ -2102,7 +2223,9 @@ class Firebase {
 
       return invoice;
     } catch (e) {
-      print('Error loading warranty invoice details: $e');
+      if (kDebugMode) {
+        print('Error loading warranty invoice details: $e');
+      } // Lỗi khi tải chi tiết hóa đơn bảo hành
       rethrow;
     }
   }
@@ -2125,14 +2248,18 @@ class Firebase {
           .doc(invoice.warrantyInvoiceID)
           .update(invoice.toMap());
     } catch (e) {
-      print('Error updating warranty invoice: $e');
+      if (kDebugMode) {
+        print('Error updating warranty invoice: $e');
+      } // Lỗi khi cập nhật hóa đơn bảo hành
       rethrow;
     }
   }
 
   Future<String?> createWarrantyInvoice(WarrantyInvoice invoice) async {
     try {
-      print('Starting warranty invoice creation in Firebase');
+      if (kDebugMode) {
+        print('Starting warranty invoice creation in Firebase');
+      } // Bắt đầu tạo hóa đơn bảo hành trong Firebase
 
       // Create warranty invoice document
       final docRef = await _firestore.collection('warranty_invoices').add({
@@ -2150,13 +2277,17 @@ class Firebase {
         'warrantyInvoiceID': docRef.id,
       });
 
-      print('Created warranty invoice document with ID: ${docRef.id}');
+      if (kDebugMode) {
+        print('Created warranty invoice document with ID: ${docRef.id}');
+      } // Đã tạo hóa đơn bảo hành với ID
 
       // Create warranty details
       final batch = _firestore.batch();
 
       for (var detail in invoice.details) {
-        print('Processing detail: ${detail.toJson()}');
+        if (kDebugMode) {
+          print('Processing detail: ${detail.toJson()}');
+        }
 
         final detailRef = _firestore.collection('warranty_invoice_details').doc();
         batch.set(detailRef, {
@@ -2168,11 +2299,15 @@ class Firebase {
       }
 
       await batch.commit();
-      print('Successfully created warranty invoice and ${invoice.details.length} details');
+      if (kDebugMode) {
+        print('Successfully created warranty invoice and ${invoice.details.length} details');
+      } // Đã tạo hóa đơn bảo hành và chi tiết
 
       return docRef.id;
     } catch (e) {
-      print('Error creating warranty invoice: $e');
+      if (kDebugMode) {
+        print('Error creating warranty invoice: $e');
+      } // Lỗi khi tạo hóa đơn bảo hành
       return null;
     }
   }
@@ -2187,7 +2322,9 @@ class Firebase {
         'warrantyInvoiceDetailID': docRef.id,
       });
     } catch (e) {
-      print('Error creating warranty invoice detail: $e');
+      if (kDebugMode) {
+        print('Error creating warranty invoice detail: $e');
+      } // Lỗi khi tạo chi tiết hóa đơn bảo hành
       rethrow;
     }
   }
@@ -2222,7 +2359,9 @@ class Firebase {
       // Commit all changes
       await batch.commit();
     } catch (e) {
-      print('Error updating manufacturer and products: $e');
+      if (kDebugMode) {
+        print('Error updating manufacturer and products: $e');
+      } // Lỗi khi cập nhật nhà sản xuất và sản phẩm
       rethrow;
     }
   }
@@ -2230,7 +2369,7 @@ class Firebase {
   Future<void> updateUsername(String newUsername) async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) throw Exception('No user logged in');
+      if (user == null) throw Exception('No user logged in'); // Không có người dùng đăng nhập
 
       // Update username in users collection
       await _firestore.collection('users').doc(user.uid).update({
@@ -2266,7 +2405,9 @@ class Firebase {
         }
       }
     } catch (e) {
-      print('Error updating username: $e');
+      if (kDebugMode) {
+        print('Error updating username: $e');
+      } // Lỗi khi cập nhật tên người dùng
       rethrow;
     }
   }
@@ -2275,7 +2416,9 @@ class Firebase {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     } catch (e) {
-      print('Error sending password reset email: $e');
+      if (kDebugMode) {
+        print('Error sending password reset email: $e');
+      } // Lỗi khi gửi email đặt lại mật khẩu
       rethrow;
     }
   }
@@ -2316,7 +2459,9 @@ class Firebase {
             .update({'employeeName': newUsername});
       }
     } catch (e) {
-      print('Error updating user profile: $e');
+      if (kDebugMode) {
+        print('Error updating user profile: $e');
+      } // Lỗi khi cập nhật thông tin người dùng
       rethrow;
     }
   }
@@ -2335,7 +2480,9 @@ class Firebase {
       
       return userDoc.data()?['role'] ?? 'employee';
     } catch (e) {
-      print('Error getting user role: $e');
+      if (kDebugMode) {
+        print('Error getting user role: $e');
+      } // Lỗi khi lấy vai trò người dùng
       return 'employee'; // Default role if there's an error
     }
   }
@@ -2393,7 +2540,9 @@ class Firebase {
 
       await batch.commit();
     } catch (e) {
-      print('Error updating sales invoice: $e');
+      if (kDebugMode) {
+        print('Error updating sales invoice: $e');
+      } // Lỗi khi cập nhật hóa đơn bán hàng
       rethrow;
     }
   }

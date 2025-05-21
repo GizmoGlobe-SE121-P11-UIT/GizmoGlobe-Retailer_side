@@ -1,10 +1,10 @@
 enum SalesStatus {
-  pending('Pending'),
-  preparing('Preparing'),
-  shipping('Shipping'),
-  shipped('Shipped'),
-  completed('Completed'),
-  cancelled('Cancelled');
+  pending('Pending'), //Đang chờ
+  preparing('Preparing'), //Đang chuẩn bị
+  shipping('Shipping'), //Đang giao hàng
+  shipped('Shipped'), //Đã giao hàng
+  completed('Completed'), //Đã hoàn thành
+  cancelled('Cancelled'); //Đã hủy
 
   final String description;
 

@@ -7,7 +7,6 @@ import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 import '../../../../widgets/general/address_picker.dart';
 import '../../../../widgets/general/field_with_icon.dart';
-import '../../../../widgets/general/gradient_checkbox.dart';
 import 'customer_detail_cubit.dart';
 import 'customer_detail_state.dart';
 import '../customer_edit/customer_edit_view.dart';
@@ -79,7 +78,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        'Add New Address',
+                        'Add New Address', //Thêm địa chỉ mới
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -92,7 +91,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
                   // Receiver Name Field
                   Text(
-                    'Receiver Name',
+                    'Receiver Name', //Tên người nhận
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -102,7 +101,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   const SizedBox(height: 8),
                   FieldWithIcon(
                     controller: receiverNameController,
-                    hintText: 'Enter receiver name',
+                    hintText: 'Enter receiver name', //Nhập tên người nhận
                     prefixIcon: const Icon(Icons.person_outline, color: Colors.white70,),
                     onChanged: (value) {
                       cubit.updateNewAddress(
@@ -115,7 +114,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
                   // Receiver Phone Field
                   Text(
-                    'Receiver Phone',
+                    'Receiver Phone', //Số điện thoại người nhận
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -125,7 +124,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   const SizedBox(height: 8),
                   FieldWithIcon(
                     controller: receiverPhoneController,
-                    hintText: 'Enter phone number',
+                    hintText: 'Enter phone number', //Nhập số điện thoại
                     prefixIcon: const Icon(Icons.phone_outlined, color: Colors.white70,),
                     onChanged: (value) {
                       cubit.updateNewAddress(
@@ -140,7 +139,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
                   // Address Picker
                   Text(
-                    'Location',
+                    'Location', //Địa chỉ
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -161,7 +160,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
                   // Street Field
                   Text(
-                    'Street Address',
+                    'Street Address', //Địa chỉ cụ thể
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -171,7 +170,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   const SizedBox(height: 8),
                   FieldWithIcon(
                     controller: streetController,
-                    hintText: 'Street name, building, house no.',
+                    hintText: 'Street name, building, house no.', //Địa chỉ cụ thể
                     prefixIcon: const Icon(Icons.home_outlined, color: Colors.white70,),
                     onChanged: (value) {
                       cubit.updateNewAddress(
@@ -195,7 +194,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           ),
                         ),
                         child: Text(
-                          'Cancel',
+                          'Cancel', //Hủy
                           style: TextStyle(
                             color: Colors.grey.shade400,
                             fontSize: 16,
@@ -210,7 +209,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                               receiverPhoneController.text.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Please fill in all required fields'),
+                                content: Text('Please fill in all required fields'), //Vui lòng điền tất cả các trường bắt buộc
                                 backgroundColor: Colors.red,
                               ),
                             );
@@ -237,7 +236,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                             Icon(Icons.add_location, color: Colors.white),
                             SizedBox(width: 8),
                             Text(
-                              'Add Address',
+                              'Add Address', //Thêm địa chỉ
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -285,7 +284,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 },
                 fillColor: Theme.of(context).colorScheme.surface,
               ),
-              title: GradientText(text: 'Customer Detail'),
+              title: GradientText(text: 'Customer Detail'), //Chi tiết khách hàng
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -344,7 +343,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                                   color: Colors.white,
                               ),
                               label: const Text(
-                                  'Edit',
+                                  'Edit', //Chỉnh sửa
                                   style: TextStyle(color: Colors.white),
                               ),
                               style: ElevatedButton.styleFrom(
@@ -440,7 +439,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Customer Information',
+                    'Customer Information', //Thông tin khách hàng
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -450,9 +449,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              _buildInfoRow('Name', state.customer.customerName),
-              _buildInfoRow('Email', state.customer.email),
-              _buildInfoRow('Phone', state.customer.phoneNumber),
+              _buildInfoRow('Name', state.customer.customerName), //Tên khách hàng
+              _buildInfoRow('Email', state.customer.email), //Email
+              _buildInfoRow('Phone', state.customer.phoneNumber), //Số điện thoại
             ],
           ),
         ),
@@ -483,7 +482,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Addresses',
+                        'Addresses', //Địa chỉ
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -571,4 +570,3 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     );
   }
 }
-

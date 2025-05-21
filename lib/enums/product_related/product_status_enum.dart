@@ -1,7 +1,7 @@
 enum ProductStatusEnum {
-  active('Active'),
-  outOfStock('Out of Stock'),
-  discontinued('Discontinued');
+  active('Active'), // Đang hoạt động
+  outOfStock('Out of Stock'), // Hết hàng
+  discontinued('Discontinued'); // Ngừng kinh doanh
 
   final String description;
 

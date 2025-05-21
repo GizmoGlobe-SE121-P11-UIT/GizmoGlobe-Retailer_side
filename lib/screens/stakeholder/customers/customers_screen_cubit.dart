@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
@@ -41,7 +42,9 @@ class CustomersScreenCubit extends Cubit<CustomersScreenState> {
         isLoading: false,
       ));
     } catch (e) {
-      print('Lỗi khi tải danh sách khách hàng: $e');
+      if (kDebugMode) {
+        print('Error loading customer list: $e');
+      } // Lỗi khi tải danh sách khách hàng
       emit(state.copyWith(isLoading: false));
     }
   }
@@ -72,7 +75,9 @@ class CustomersScreenCubit extends Cubit<CustomersScreenState> {
       await _firebase.updateCustomer(customer);
       // No need to manually update state as the stream will handle it
     } catch (e) {
-      print('Error updating customer: $e');
+      if (kDebugMode) {
+        print('Error updating customer: $e');
+      } // Lỗi khi cập nhật thông tin khách hàng
       // You might want to handle the error appropriately
     }
   }
@@ -82,7 +87,9 @@ class CustomersScreenCubit extends Cubit<CustomersScreenState> {
       await _firebase.deleteCustomer(customerId);
       // No need to manually update state as the stream will handle it
     } catch (e) {
-      print('Error deleting customer: $e');
+      if (kDebugMode) {
+        print('Error deleting customer: $e');
+      } // Lỗi khi xóa khách hàng
       // You might want to handle the error appropriately
     }
   }
@@ -100,7 +107,9 @@ class CustomersScreenCubit extends Cubit<CustomersScreenState> {
       return null; // Return null if successful
       
     } catch (e) {
-      print('Error creating customer: $e');
+      if (kDebugMode) {
+        print('Error creating customer: $e');
+      } // Lỗi khi tạo khách hàng
       return e.toString(); // Return error message
     }
   }
@@ -110,7 +119,9 @@ class CustomersScreenCubit extends Cubit<CustomersScreenState> {
       final userRole = await _firebase.getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
-      print('Error loading user role: $e');
+      if (kDebugMode) {
+        print('Error loading user role: $e');
+      } // Lỗi khi tải vai trò người dùng
     }
   }
 }

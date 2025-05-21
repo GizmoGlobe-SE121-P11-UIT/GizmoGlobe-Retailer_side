@@ -10,7 +10,6 @@ import '../../../enums/product_related/category_enum.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/general/gradient_icon_button.dart';
 import '../add_product/add_product_view.dart';
-import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 
 class ProductScreen extends StatefulWidget {
   final List<Product>? initialProducts;
@@ -77,7 +76,7 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
               height: 40,
               controller: searchController,
               focusNode: searchFocusNode,
-              hintText: 'Find your item...',
+              hintText: 'Find your item...', //Tìm kiếm sản phẩm
               fillColor: Theme.of(context).colorScheme.surface,
               prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
               onChanged: (value) {
@@ -123,7 +122,7 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
               isScrollable: true,
               indicator: const BoxDecoration(),
               tabs: [
-                const Tab(text: 'All'),
+                const Tab(text: 'All'), //Tất cả
                 ...CategoryEnum.nonEmptyValues
                     .map((category) => Tab(
                   text: category.toString(),

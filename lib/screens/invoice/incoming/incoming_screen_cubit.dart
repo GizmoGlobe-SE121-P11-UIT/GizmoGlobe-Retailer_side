@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart';
@@ -22,7 +23,9 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
       final userRole = await _firebase.getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
-      print('Error loading user role: $e');
+      if (kDebugMode) {
+        print('Error loading user role: $e');
+      } // Lỗi load user role
     }
   }
 
@@ -51,7 +54,9 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
         isLoading: false,
       ));
     } catch (e) {
-      print('Error loading incoming invoices: $e');
+      if (kDebugMode) {
+        print('Error loading incoming invoices: $e');
+      } // Lỗi lấy hóa đơn
       emit(state.copyWith(isLoading: false));
     }
   }
@@ -81,7 +86,9 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
     try {
       await _firebase.updateIncomingInvoice(invoice);
     } catch (e) {
-      print('Error updating incoming invoice: $e');
+      if (kDebugMode) {
+        print('Error updating incoming invoice: $e');
+      } // Lỗi cập nhật hóa đơn
     }
   }
 
@@ -90,7 +97,9 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
       final invoiceId = await _firebase.createIncomingInvoice(invoice);
       return invoiceId;
     } catch (e) {
-      print('Error creating incoming invoice: $e');
+      if (kDebugMode) {
+        print('Error creating incoming invoice: $e');
+      } // Lỗi tạo hóa đơn
       return null;
     }
   }
@@ -99,7 +108,9 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
     try {
       await _firebase.deleteIncomingInvoice(invoiceId);
     } catch (e) {
-      print('Error deleting incoming invoice: $e');
+      if (kDebugMode) {
+        print('Error deleting incoming invoice: $e');
+      } // Lỗi xóa hóa đơn
     }
   }
 
@@ -107,7 +118,9 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
     try {
       return await _firebase.getIncomingInvoiceWithDetails(invoiceId);
     } catch (e) {
-      print('Error getting invoice details: $e');
+      if (kDebugMode) {
+        print('Error getting invoice details: $e');
+      } // Lỗi lấy chi tiết hóa đơn
       return null;
     }
   }
@@ -127,7 +140,9 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
       await _firebase.updateIncomingInvoice(updatedInvoice);
       // Refresh sẽ được xử lý thông qua stream listener
     } catch (e) {
-      print('Error updating payment status: $e');
+      if (kDebugMode) {
+        print('Error updating payment status: $e');
+      } // Lỗi cập nhật trạng thái thanh toán
     }
   }
 

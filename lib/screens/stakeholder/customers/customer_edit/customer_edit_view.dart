@@ -47,16 +47,16 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
     return await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Discard Changes?'),
-        content: const Text('You have unsaved changes. Do you want to discard them?'),
+        title: const Text('Discard Changes?'), //Hủy bỏ thay đổi?
+        content: const Text('You have unsaved changes. Do you want to discard them?'), //Bạn có muốn hủy bỏ chúng?
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('CANCEL'),
+            child: const Text('CANCEL'), //HỦY
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('DISCARD'),
+            child: const Text('DISCARD'), //BỎ QUA
           ),
         ],
       ),
@@ -69,7 +69,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: GradientText(text: 'Edit Customer'),
+          title: const GradientText(text: 'Edit Customer'), //Chỉnh sửa khách hàng
           backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: false,
@@ -117,7 +117,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Customer Information',
+                            'Customer Information', //Thông tin khách hàng
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -128,11 +128,11 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             focusNode: _nameFocusNode,
                             initialValue: customerName,
                             decoration: InputDecoration(
-                              labelText: 'Full Name',
+                              labelText: 'Full Name', //Họ và tên
                               labelStyle: const TextStyle(color: Colors.white),
-                              floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                              floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                                 (states) => TextStyle(
-                                  color: states.contains(MaterialState.focused)
+                                  color: states.contains(WidgetState.focused)
                                       ? Theme.of(context).primaryColor
                                       : Colors.white,
                                 ),
@@ -157,10 +157,10 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             }),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Name is required';
+                                return 'Name is required'; //Tên là bắt buộc
                               }
                               if (value.length < 2) {
-                                return 'Name must be at least 2 characters';
+                                return 'Name must be at least 2 characters'; //Tên phải có ít nhất 2 ký tự
                               }
                               return null;
                             },
@@ -170,11 +170,11 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             focusNode: _phoneFocusNode,
                             initialValue: phoneNumber,
                             decoration: InputDecoration(
-                              labelText: 'Phone Number',
+                              labelText: 'Phone Number', //Số điện thoại
                               labelStyle: const TextStyle(color: Colors.white),
-                              floatingLabelStyle: MaterialStateTextStyle.resolveWith(
+                              floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                                 (states) => TextStyle(
-                                  color: states.contains(MaterialState.focused)
+                                  color: states.contains(WidgetState.focused)
                                       ? Theme.of(context).primaryColor
                                       : Colors.white,
                                 ),
@@ -203,10 +203,10 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             }),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Phone number is required';
+                                return 'Phone number is required'; //Số điện thoại là bắt buộc
                               }
                               if (!isValidPhone(value)) {
-                                return 'Please enter a valid phone number';
+                                return 'Please enter a valid phone number'; //Vui lòng nhập số điện thoại hợp lệ
                               }
                               return null;
                             },

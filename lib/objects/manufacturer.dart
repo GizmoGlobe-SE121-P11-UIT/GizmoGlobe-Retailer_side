@@ -12,7 +12,7 @@ class Manufacturer {
   });
 
   static Manufacturer nullManufacturer = Manufacturer(
-    manufacturerName: 'Unknown',
+    manufacturerName: 'Unknown', // Không xác định
     manufacturerID: '',
     status: ManufacturerStatus.inactive,
   );

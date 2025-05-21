@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gizmoglobe_client/objects/employee.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'employees_screen_cubit.dart';
@@ -31,7 +29,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
     final nameController = TextEditingController();
     final emailController = TextEditingController();
     final phoneController = TextEditingController();
-    final passwordController = TextEditingController();
+    // final passwordController = TextEditingController();
     RoleEnum selectedRole = RoleEnum.employee;
     final formKey = GlobalKey<FormState>();
 
@@ -72,7 +70,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           ),
                           const SizedBox(width: 12),
                           const Text(
-                            'Add New Employee',
+                            'Add New Employee', //Thêm nhân viên mới
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -86,13 +84,13 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                         controller: nameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter employee name';
+                            return 'Please enter employee name'; //Vui lòng nhập tên nhân viên
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          labelText: 'Name',
-                          hintText: 'Enter employee name',
+                          labelText: 'Name', //Tên
+                          hintText: 'Enter employee name', //Nhập tên nhân viên
                           prefixIcon: Icon(
                             Icons.person_outline,
                             color: Theme.of(context).primaryColor,
@@ -134,13 +132,13 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                         controller: emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter email address';
+                            return 'Please enter email address'; //Vui lòng nhập địa chỉ email
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          labelText: 'Email',
-                          hintText: 'Enter email address',
+                          labelText: 'Email', //Email
+                          hintText: 'Enter email address', //Nhập địa chỉ email
                           prefixIcon: Icon(
                             Icons.email_outlined,
                             color: Theme.of(context).primaryColor,
@@ -182,8 +180,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       TextFormField(
                         controller: phoneController,
                         decoration: InputDecoration(
-                          labelText: 'Phone Number',
-                          hintText: 'Enter phone number',
+                          labelText: 'Phone Number', //Số điện thoại
+                          hintText: 'Enter phone number', //Nhập số điện thoại
                           prefixIcon: Icon(
                             Icons.phone_outlined,
                             color: Theme.of(context).primaryColor,
@@ -227,7 +225,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           return DropdownButtonFormField<RoleEnum>(
                             value: selectedRole,
                             decoration: InputDecoration(
-                              labelText: 'Role',
+                              labelText: 'Role', //Vai trò
                               prefixIcon: Icon(
                                 Icons.work_outline,
                                 color: Theme.of(context).primaryColor,
@@ -288,7 +286,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           TextButton(
                             onPressed: () => Navigator.pop(context),
                             child: Text(
-                              'Cancel',
+                              'Cancel', //Hủy
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -319,7 +317,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                     Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                        content: Text('Employee added successfully.'),
+                                        content: Text('Employee added successfully.'), //Nhân viên đã được thêm thành công
                                         backgroundColor: Colors.green,
                                       ),
                                     );
@@ -338,7 +336,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                               ),
                             ),
                             child: const Text(
-                              'Add Employee',
+                              'Add Employee', //Thêm nhân viên
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -384,7 +382,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       ),
                       const SizedBox(width: 8),
                       const Text(
-                        'Filter by Role',
+                        'Filter by Role', //Lọc theo vai trò
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -407,10 +405,10 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       cubit.filterByRole(role);
                       Navigator.pop(context);
                     },
-                  )).toList(),
+                  )),
                   ListTile(
                     title: const Text(
-                      'Clear Filter',
+                      'Clear Filter', //Xóa bộ lọc
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
@@ -450,7 +448,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find employees...',
+                        hintText: 'Find employees...', //Tìm kiếm nhân viên
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchEmployees(value);
@@ -485,7 +483,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       if (state.employees.isEmpty) {
                         return const Center(
                           child: Text(
-                            'No employees found',
+                            'No employees found', //Không tìm thấy nhân viên nào
                             style: TextStyle(color: Colors.white),
                           ),
                         );
@@ -532,7 +530,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                               size: 20,
                                               color: Colors.white,
                                             ),
-                                            title: const Text('View'),
+                                            title: const Text('View'), //Xem
                                             onTap: () {
                                               Navigator.pop(context);
                                               cubit.setSelectedIndex(null);
@@ -555,7 +553,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                 size: 20,
                                                 color: Colors.white,
                                               ),
-                                              title: const Text('Edit'),
+                                              title: const Text('Edit'), //Chỉnh sửa
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedIndex(null);
@@ -584,7 +582,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                 color: Theme.of(context).colorScheme.error,
                                               ),
                                               title: Text(
-                                                'Delete',
+                                                'Delete', //Xóa
                                                 style: TextStyle(
                                                   color: Theme.of(context).colorScheme.error,
                                                 ),
@@ -596,12 +594,12 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                   context: context,
                                                   builder: (BuildContext context) {
                                                     return AlertDialog(
-                                                      title: const Text('Delete Employee'),
-                                                      content: Text('Are you sure you want to delete ${employee.employeeName}?'),
+                                                      title: const Text('Delete Employee'), //Xóa nhân viên
+                                                      content: Text('Are you sure you want to delete ${employee.employeeName}?'), //Bạn có chắc chắn muốn xóa ${employee.employeeName}?
                                                       actions: [
                                                         TextButton(
                                                           onPressed: () => Navigator.pop(context),
-                                                          child: const Text('Cancel'),
+                                                          child: const Text('Cancel'), //Hủy
                                                         ),
                                                         TextButton(
                                                           onPressed: () async {
@@ -609,7 +607,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                             await cubit.deleteEmployee(employee.employeeID!);
                                                           },
                                                           child: Text(
-                                                            'Delete',
+                                                            'Delete', //Xóa
                                                             style: TextStyle(
                                                               color: Theme.of(context).colorScheme.error,
                                                             ),

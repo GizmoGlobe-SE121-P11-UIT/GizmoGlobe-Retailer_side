@@ -49,7 +49,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find incoming invoices...',
+                        hintText: 'Find incoming invoices...', // Tìm hóa đơn nhập...
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
@@ -91,11 +91,11 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       : state.invoices.isEmpty
                           ? Center(
                               child: Text(
-                                'No incoming invoices found',
+                                'No incoming invoices found', // Không tìm thấy hóa đơn nhập
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onBackground
+                                      .onSurface
                                       .withOpacity(0.6),
                                 ),
                               ),
@@ -104,7 +104,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                               itemCount: state.invoices.length,
                               itemBuilder: (context, index) {
                                 final invoice = state.invoices[index];
-                                final isSelected = state.selectedIndex == index;
+                                // final isSelected = state.selectedIndex == index;
 
                                 return GestureDetector(
                                   onTap: () async {
@@ -133,7 +133,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                     } catch (e) {
                                       Navigator.pop(context);
                                       ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('Error loading invoice details: $e')),
+                                        SnackBar(content: Text('Error loading invoice details: $e')), // Lỗi khi tải chi tiết hóa đơn
                                       );
                                     }
                                   },
@@ -164,7 +164,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                     size: 20,
                                                     color: Colors.white,
                                                   ),
-                                                  title: const Text('View'),
+                                                  title: const Text('View'), // Xem
                                                   onTap: () => _handleViewInvoice(context, invoice),
                                                 ),
                                                 if (IncomingInvoicePermissions.canEditPaymentStatus(state.userRole, invoice))
@@ -175,7 +175,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                       size: 20,
                                                       color: Colors.white,
                                                     ),
-                                                    title: const Text('Edit Payment'),
+                                                    title: const Text('Edit Payment'), // Chỉnh sửa thanh toán
                                                     onTap: () => _handleEditInvoice(context, invoice),
                                                   ),
                                               ],
@@ -228,7 +228,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Invoice #${invoice.incomingInvoiceID}',
+                                                    'Invoice #${invoice.incomingInvoiceID}', // Hóa đơn #
                                                     style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -330,7 +330,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
       
       if (!mounted) return;
       ScaffoldMessenger.of(dialogContext).showSnackBar(
-        SnackBar(content: Text('Error loading invoice details: $e')),
+        SnackBar(content: Text('Error loading invoice details: $e')), // Lỗi khi tải chi tiết hóa đơn.
       );
     }
   }
@@ -339,7 +339,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
     // Chỉ cho phép chỉnh sửa từ unpaid sang paid
     if (invoice.status != PaymentStatus.unpaid) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Only unpaid invoices can be marked as paid')),
+        const SnackBar(content: Text('Only unpaid invoices can be marked as paid')), // Chỉ hóa đơn chưa thanh toán mới có thể đánh dấu là đã thanh toán.
       );
       Navigator.pop(contextDialog);
       return;
@@ -354,16 +354,16 @@ class _IncomingScreenState extends State<IncomingScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Payment'),
-          content: const Text('Mark this invoice as paid?'),
+          title: const Text('Confirm Payment'), // Xác nhận thanh toán
+          content: const Text('Mark this invoice as paid?'), // Đánh dấu hóa đơn này là đã thanh toán?
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: const Text('Cancel'), // Hủy
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Confirm'),
+              child: const Text('Confirm'), // Xác nhận
             ),
           ],
         );
@@ -400,7 +400,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       ),
                       const SizedBox(width: 8),
                       const Text(
-                        'Sort By',
+                        'Sort By', // Sắp xếp theo...
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -412,7 +412,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                   const SizedBox(height: 16),
                   ListTile(
                     title: const Text(
-                      'Date (Newest First)',
+                      'Date (Newest First)', // Ngày (Mới nhất trước)
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
@@ -429,7 +429,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                   ),
                   ListTile(
                     title: const Text(
-                      'Date (Oldest First)',
+                      'Date (Oldest First)', // Ngày (Cũ nhất trước)
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
@@ -446,7 +446,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                   ),
                   ListTile(
                     title: const Text(
-                      'Price (Highest First)',
+                      'Price (Highest First)', // Giá (Cao nhất trước)
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
@@ -463,7 +463,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                   ),
                   ListTile(
                     title: const Text(
-                      'Price (Lowest First)',
+                      'Price (Lowest First)', // Giá (Thấp nhất trước)
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Icon(

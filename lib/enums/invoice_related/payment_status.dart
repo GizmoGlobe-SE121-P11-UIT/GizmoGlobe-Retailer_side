@@ -1,6 +1,6 @@
 enum PaymentStatus {
-  paid('Paid'),
-  unpaid('Unpaid');
+  paid('Paid'), // Đã thanh toán
+  unpaid('Unpaid'); // Chưa thanh toán
 
   final String description;
 

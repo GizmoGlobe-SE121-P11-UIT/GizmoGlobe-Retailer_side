@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
@@ -11,7 +12,7 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
   final _firebase = Firebase();
 
   // Add a map to store product details
-  Map<String, Product> _products = {};
+  final Map<String, Product> _products = {};
 
   WarrantyAddCubit() : super(const WarrantyAddState()) {
     _loadCustomers();
@@ -27,7 +28,7 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
       ));
     } catch (e) {
       emit(state.copyWith(
-        errorMessage: 'Error loading customers: $e',
+        errorMessage: 'Error loading customers: $e', // Lỗi khi load khách hàng
         isLoading: false,
       ));
     }
@@ -55,7 +56,7 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
       ));
     } catch (e) {
       emit(state.copyWith(
-        errorMessage: 'Error loading customer invoices: $e',
+        errorMessage: 'Error loading customer invoices: $e', // Lỗi khi load hóa đơn khách hàng
         isLoading: false,
       ));
     }
@@ -84,9 +85,11 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
         isLoading: false,
       ));
     } catch (e) {
-      print('Error loading products: $e');
+      if (kDebugMode) {
+        print('Error loading products: $e');
+      } // Lỗi khi load sản phẩm
       emit(state.copyWith(
-        errorMessage: 'Error loading product details',
+        errorMessage: 'Error loading product details', // Lỗi khi load chi tiết sản phẩm
         isLoading: false,
       ));
     }
@@ -97,84 +100,124 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
   }
 
   void selectProduct(String productId) {
-    print('Selecting product: $productId');
+    if (kDebugMode) {
+      print('Selecting product: $productId');
+    } // Chọn sản phẩm
     try {
       final newSelected = Set<String>.from(state.selectedProducts)..add(productId);
       final newQuantities = Map<String, int>.from(state.productQuantities)
         ..putIfAbsent(productId, () => 1);
-      print('New selected products: $newSelected');
-      print('New quantities: $newQuantities');
+      if (kDebugMode) {
+        print('New selected products: $newSelected');
+      } // Sản phẩm đã chọn
+      if (kDebugMode) {
+        print('New quantities: $newQuantities');
+      } // Số lượng
       emit(state.copyWith(
         selectedProducts: newSelected,
         productQuantities: newQuantities,
       ));
     } catch (e) {
-      print('Error selecting product: $e');
+      if (kDebugMode) {
+        print('Error selecting product: $e');
+      } // Lỗi khi chọn sản phẩm
     }
   }
 
   void deselectProduct(String productId) {
-    print('Deselecting product: $productId');
+    if (kDebugMode) {
+      print('Deselecting product: $productId');
+    } // Bỏ chọn sản phẩm
     try {
       final newSelected = Set<String>.from(state.selectedProducts)..remove(productId);
       final newQuantities = Map<String, int>.from(state.productQuantities)
         ..remove(productId);
-      print('New selected products: $newSelected');
-      print('New quantities: $newQuantities');
+      if (kDebugMode) {
+        print('New selected products: $newSelected');
+      } // Sản phẩm đã chọn
+      if (kDebugMode) {
+        print('New quantities: $newQuantities');
+      } // Số lượng
       emit(state.copyWith(
         selectedProducts: newSelected,
         productQuantities: newQuantities,
       ));
     } catch (e) {
-      print('Error deselecting product: $e');
+      if (kDebugMode) {
+        print('Error deselecting product: $e');
+      } // Lỗi khi bỏ chọn sản phẩm
     }
   }
 
   void updateDetailQuantity(String productId, int quantity) {
-    print('Updating quantity for product $productId to $quantity');
+    if (kDebugMode) {
+      print('Updating quantity for product $productId to $quantity');
+    } // Cập nhật số lượng cho sản phẩm
     try {
       if (!state.selectedProducts.contains(productId)) {
-        print('Product $productId not in selected products');
+        if (kDebugMode) {
+          print('Product $productId not in selected products');
+        } // Sản phẩm không nằm trong danh sách sản phẩm đã chọn
         return;
       }
       
       final detail = state.selectedSalesInvoice?.details
           .firstWhere((d) => d.productID == productId);
       if (detail == null) {
-        print('Product detail not found for $productId');
+        if (kDebugMode) {
+          print('Product detail not found for $productId');
+        } // Không tìm thấy chi tiết sản phẩm
         return;
       }
 
-      print('Available quantity: ${detail.quantity}');
+      if (kDebugMode) {
+        print('Available quantity: ${detail.quantity}');
+      } // Số lượng có sẵn
       final validQuantity = quantity.clamp(0, detail.quantity);
-      print('Clamped quantity: $validQuantity');
+      if (kDebugMode) {
+        print('Clamped quantity: $validQuantity');
+      } // Số lượng đã giới hạn
       
       final newQuantities = Map<String, int>.from(state.productQuantities)
         ..[productId] = validQuantity;
       
-      print('New quantities map: $newQuantities');
+      if (kDebugMode) {
+        print('New quantities map: $newQuantities');
+      } // Bản đồ số lượng mới
       emit(state.copyWith(productQuantities: newQuantities));
     } catch (e) {
-      print('Error updating quantity: $e');
+      if (kDebugMode) {
+        print('Error updating quantity: $e');
+      } // Lỗi khi cập nhật số lượng
     }
   }
 
   Future<WarrantyInvoice?> submit() async {
-    print('Starting warranty invoice submission');
-    print('Selected products: ${state.selectedProducts}');
-    print('Product quantities: ${state.productQuantities}');
+    if (kDebugMode) {
+      print('Starting warranty invoice submission');
+    } // Bắt đầu gửi hóa đơn bảo hành
+    if (kDebugMode) {
+      print('Selected products: ${state.selectedProducts}');
+    } // Sản phẩm đã chọn
+    if (kDebugMode) {
+      print('Product quantities: ${state.productQuantities}');
+    } // Số lượng sản phẩm
     
     try {
       // Validate required fields
       if (state.selectedCustomerId == null) {
-        print('Error: No customer selected');
-        emit(state.copyWith(errorMessage: 'Please select a customer'));
+        if (kDebugMode) {
+          print('Error: No customer selected');
+        } // Không chọn khách hàng
+        emit(state.copyWith(errorMessage: 'Please select a customer')); // Vui lòng chọn khách hàng
         return null;
       }
 
       if (state.selectedSalesInvoiceId == null) {
-        print('Error: No sales invoice selected');
-        emit(state.copyWith(errorMessage: 'Please select a sales invoice'));
+        if (kDebugMode) {
+          print('Error: No sales invoice selected');
+        } // Không chọn hóa đơn bán hàng
+        emit(state.copyWith(errorMessage: 'Please select a sales invoice')); // Vui lòng chọn hóa đơn bán hàng
         return null;
       }
 
@@ -183,8 +226,10 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
       
       // Check if selectedSalesInvoice is not null
       if (state.selectedSalesInvoice == null) {
-        print('Error: Sales invoice details not loaded');
-        emit(state.copyWith(errorMessage: 'Sales invoice details not loaded'));
+        if (kDebugMode) {
+          print('Error: Sales invoice details not loaded');
+        } // Chi tiết hóa đơn bán hàng không được tải
+        emit(state.copyWith(errorMessage: 'Sales invoice details not loaded')); // Chi tiết hóa đơn bán hàng không được tải
         return null;
       }
 
@@ -193,7 +238,9 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
         if (state.selectedProducts.contains(salesDetail.productID)) {
           final quantity = state.productQuantities[salesDetail.productID] ?? 0;
           if (quantity > 0) {
-            print('Adding warranty detail for product ${salesDetail.productID} with quantity $quantity');
+            if (kDebugMode) {
+              print('Adding warranty detail for product ${salesDetail.productID} with quantity $quantity');
+            } // Thêm chi tiết bảo hành cho sản phẩm với số lượng
             details.add(WarrantyInvoiceDetail(
               warrantyInvoiceDetailID: '',
               productID: salesDetail.productID,
@@ -204,10 +251,14 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
         }
       }
 
-      print('Created warranty details: ${details.length} items');
+      if (kDebugMode) {
+        print('Created warranty details: ${details.length} items');
+      } // Tạo chi tiết bảo hành
       if (details.isEmpty) {
-        print('Error: No products selected or all quantities are 0');
-        emit(state.copyWith(errorMessage: 'Please select at least one product'));
+        if (kDebugMode) {
+          print('Error: No products selected or all quantities are 0');
+        } // Không chọn sản phẩm hoặc tất cả số lượng là 0
+        emit(state.copyWith(errorMessage: 'Please select at least one product')); // Vui lòng chọn ít nhất một sản phẩm
         return null;
       }
 
@@ -225,17 +276,27 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
         reason: state.reason,
       );
 
-      print('Created warranty invoice: ${warrantyInvoice.warrantyInvoiceID}');
-      print('Details count: ${warrantyInvoice.details.length}');
-      print('First detail: ${warrantyInvoice.details.firstOrNull?.toJson()}');
+      if (kDebugMode) {
+        print('Created warranty invoice: ${warrantyInvoice.warrantyInvoiceID}');
+      } // Tạo hóa đơn bảo hành
+      if (kDebugMode) {
+        print('Details count: ${warrantyInvoice.details.length}');
+      } // Số lượng chi tiết
+      if (kDebugMode) {
+        print('First detail: ${warrantyInvoice.details.firstOrNull?.toJson()}');
+      } // Chi tiết đầu tiên
 
       final docId = await _firebase.createWarrantyInvoice(warrantyInvoice);
-      print('Firebase document ID: $docId');
+      if (kDebugMode) {
+        print('Firebase document ID: $docId');
+      } // ID tài liệu Firebase
 
       if (docId == null || docId.isEmpty) {
-        print('Error: Firebase returned null or empty document ID');
+        if (kDebugMode) {
+          print('Error: Firebase returned null or empty document ID');
+        } // Firebase trả về ID tài liệu null hoặc trống
         emit(state.copyWith(
-          errorMessage: 'Failed to create warranty invoice',
+          errorMessage: 'Failed to create warranty invoice', // Không thể tạo hóa đơn bảo hành
           isSuccess: false
         ));
         return null;
@@ -253,8 +314,12 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
         reason: warrantyInvoice.reason,
       );
 
-      print('Final warranty invoice created with ID: ${finalInvoice.warrantyInvoiceID}');
-      print('Final details count: ${finalInvoice.details.length}');
+      if (kDebugMode) {
+        print('Final warranty invoice created with ID: ${finalInvoice.warrantyInvoiceID}');
+      } // Hóa đơn bảo hành cuối cùng được tạo với ID
+      if (kDebugMode) {
+        print('Final details count: ${finalInvoice.details.length}');
+      } // Số lượng chi tiết cuối cùng
       
       emit(state.copyWith(
         errorMessage: null,
@@ -264,7 +329,9 @@ class WarrantyAddCubit extends Cubit<WarrantyAddState> {
       return finalInvoice;
 
     } catch (e) {
-      print('Error in submit: $e');
+      if (kDebugMode) {
+        print('Error in submit: $e');
+      } // Lỗi khi gửi
       emit(state.copyWith(
         errorMessage: e.toString(),
         isSuccess: false

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/screens/invoice/sales/permissions/sales_invoice_permissions.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_add/sales_add_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_detail/sales_detail_view.dart';
-import 'package:gizmoglobe_client/screens/invoice/sales/sales_edit/sales_edit_view.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
@@ -49,7 +47,7 @@ class _SalesScreenState extends State<SalesScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find sales invoices...',
+                        hintText: 'Find sales invoices...', // Tìm hóa đơn bán hàng
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
@@ -92,7 +90,7 @@ class _SalesScreenState extends State<SalesScreen> {
                       : state.invoices.isEmpty
                           ? Center(
                               child: Text(
-                                'No sales invoices found',
+                                'No sales invoices found', // Không tìm thấy hóa đơn bán hàng
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -105,7 +103,7 @@ class _SalesScreenState extends State<SalesScreen> {
                               itemCount: state.invoices.length,
                               itemBuilder: (context, index) {
                                 final invoice = state.invoices[index];
-                                final isSelected = state.selectedIndex == index;
+                                // final isSelected = state.selectedIndex == index;
 
                                 return InkWell(
                                   onTap: () {
@@ -144,7 +142,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                     size: 20,
                                                     color: Colors.white,
                                                   ),
-                                                  title: const Text('View'),
+                                                  title: const Text('View'), // Xem
                                                   onTap: () => _handleViewInvoice(context, invoice),
                                                 ),
                                                 // if (SalesInvoicePermissions.canEditInvoice(state.userRole, invoice))
@@ -208,7 +206,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Invoice #${invoice.salesInvoiceID}',
+                                                    'Invoice #${invoice.salesInvoiceID}', // Hóa đơn #
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
                                                       fontSize: 16,
@@ -225,7 +223,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                       StatusBadge(status: invoice.paymentStatus),
                                                       StatusBadge(status: invoice.salesStatus),
                                                       Text(
-                                                        DateFormat('dd/MM/yyyy').format(invoice.date),
+                                                        DateFormat('dd/MM/yyyy').format(invoice.date), // Ngày
                                                         style: TextStyle(
                                                           fontSize: 12,
                                                           color: Theme.of(context)
@@ -264,18 +262,18 @@ class _SalesScreenState extends State<SalesScreen> {
     );
   }
 
-  Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'paid':
-        return Colors.green;
-      case 'unpaid':
-        return Colors.red;
-      case 'pending':
-        return Colors.orange;
-      default:
-        return Colors.grey;
-    }
-  }
+  // Color _getStatusColor(String status) {
+  //   switch (status.toLowerCase()) {
+  //     case 'paid':
+  //       return Colors.green;
+  //     case 'unpaid':
+  //       return Colors.red;
+  //     case 'pending':
+  //       return Colors.orange;
+  //     default:
+  //       return Colors.grey;
+  //   }
+  // }
 
   void _showSortOptions(BuildContext context) {
     final cubit = context.read<SalesScreenCubit>();
@@ -309,7 +307,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Sort Options',
+                          'Sort Options', // Tùy chọn sắp xếp
                           style: TextStyle(
                             color: Theme.of(dialogContext).colorScheme.onSurface,
                             fontSize: 18,
@@ -326,7 +324,7 @@ class _SalesScreenState extends State<SalesScreen> {
                       children: [
                         _buildSortOption(
                           dialogContext,
-                          'Date (Newest First)',
+                          'Date (Newest First)', // Ngày (Mới nhất trước)
                           Icons.calendar_today,
                           () {
                             cubit.sortInvoices('date', true);
@@ -336,7 +334,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         const SizedBox(height: 8),
                         _buildSortOption(
                           dialogContext,
-                          'Date (Oldest First)',
+                          'Date (Oldest First)', // Ngày (Cũ nhất trước)
                           Icons.calendar_today_outlined,
                           () {
                             cubit.sortInvoices('date', false);
@@ -346,7 +344,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         const SizedBox(height: 8),
                         _buildSortOption(
                           dialogContext,
-                          'Price (Highest First)',
+                          'Price (Highest First)', // Giá (Cao nhất trước)
                           Icons.attach_money,
                           () {
                             cubit.sortInvoices('price', true);
@@ -356,7 +354,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         const SizedBox(height: 8),
                         _buildSortOption(
                           dialogContext,
-                          'Price (Lowest First)',
+                          'Price (Lowest First)', // Giá (Thấp nhất trước)
                           Icons.money_off,
                           () {
                             cubit.sortInvoices('price', false);
@@ -456,60 +454,60 @@ class _SalesScreenState extends State<SalesScreen> {
       
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading invoice details: $e')),
+        SnackBar(content: Text('Error loading invoice details: $e')), // Lỗi tải chi tiết hóa đơn
       );
     }
   }
 
-  Future<void> _handleEditInvoice(BuildContext contextDialog, SalesInvoice invoice) async {
-    // Close menu dialog first
-    Navigator.pop(contextDialog);
-    cubit.setSelectedIndex(null);
-
-    if (!mounted) return;
-
-    // Show loading dialog
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-
-    try {
-      // Get invoice details
-      final details = await firebase.getSalesInvoiceDetails(invoice.salesInvoiceID);
-      invoice.details = details;
-
-      if (!mounted) return;
-      // Close loading dialog
-      Navigator.pop(context);
-
-      // Navigate to edit screen with full invoice
-      final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SalesEditScreen(
-            invoice: invoice,
-          ),
-        ),
-      );
-
-      if (result != null && mounted) {
-        context.read<SalesScreenCubit>().refreshInvoices();
-      }
-    } catch (e) {
-      if (!mounted) return;
-      // Close loading dialog
-      Navigator.pop(context);
-      
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading invoice details: $e')),
-      );
-    }
-  }
+  // Future<void> _handleEditInvoice(BuildContext contextDialog, SalesInvoice invoice) async {
+  //   // Close menu dialog first
+  //   Navigator.pop(contextDialog);
+  //   cubit.setSelectedIndex(null);
+  //
+  //   if (!mounted) return;
+  //
+  //   // Show loading dialog
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return const Center(
+  //         child: CircularProgressIndicator(),
+  //       );
+  //     },
+  //   );
+  //
+  //   try {
+  //     // Get invoice details
+  //     final details = await firebase.getSalesInvoiceDetails(invoice.salesInvoiceID);
+  //     invoice.details = details;
+  //
+  //     if (!mounted) return;
+  //     // Close loading dialog
+  //     Navigator.pop(context);
+  //
+  //     // Navigate to edit screen with full invoice
+  //     final result = await Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => SalesEditScreen(
+  //           invoice: invoice,
+  //         ),
+  //       ),
+  //     );
+  //
+  //     if (result != null && mounted) {
+  //       context.read<SalesScreenCubit>().refreshInvoices();
+  //     }
+  //   } catch (e) {
+  //     if (!mounted) return;
+  //     // Close loading dialog
+  //     Navigator.pop(context);
+  //
+  //     // Show error message
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Error loading invoice details: $e')), // Lỗi tải chi tiết hóa đơn
+  //     );
+  //   }
+  // }
 }

@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../../../objects/product_related/ram.dart';
 import '../../../objects/product_related/cpu.dart';
 import '../../../objects/product_related/psu.dart';
@@ -8,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
-import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_tab/product_tab_cubit.dart';
 import 'package:intl/intl.dart';
 
@@ -19,7 +20,7 @@ import '../../../data/database/database.dart'; // Import the Database class
 class AddEditProductDialog extends StatefulWidget {
   final Product? product;
 
-  const AddEditProductDialog({Key? key, this.product}) : super(key: key);
+  const AddEditProductDialog({super.key, this.product});
 
   @override
   State<AddEditProductDialog> createState() => _AddEditProductDialogState();
@@ -113,40 +114,40 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
     switch (_selectedCategory) {
       case CategoryEnum.ram:
         return [
-          TextFormField(controller: ramBusController, decoration: const InputDecoration(labelText: 'RAM Bus'), validator: _validateField),
-          TextFormField(controller: ramCapacityController, decoration: const InputDecoration(labelText: 'RAM Capacity'), validator: _validateField),
-          TextFormField(controller: ramTypeController, decoration: const InputDecoration(labelText: 'RAM Type'), validator: _validateField),
+          TextFormField(controller: ramBusController, decoration: const InputDecoration(labelText: 'RAM Bus'), validator: _validateField), //Tốc độ bus RAM
+          TextFormField(controller: ramCapacityController, decoration: const InputDecoration(labelText: 'RAM Capacity'), validator: _validateField), //Dung lượng RAM
+          TextFormField(controller: ramTypeController, decoration: const InputDecoration(labelText: 'RAM Type'), validator: _validateField), //Loại RAM
         ];
       case CategoryEnum.cpu:
         return [
-          TextFormField(controller: cpuFamilyController, decoration: const InputDecoration(labelText: 'CPU Family'), validator: _validateField),
-          TextFormField(controller: cpuCoreController, decoration: const InputDecoration(labelText: 'CPU Core'), keyboardType: TextInputType.number, validator: _validateField),
-          TextFormField(controller: cpuThreadController, decoration: const InputDecoration(labelText: 'CPU Thread'), keyboardType: TextInputType.number, validator: _validateField),
-          TextFormField(controller: cpuClockSpeedController, decoration: const InputDecoration(labelText: 'CPU Clock Speed'), keyboardType: TextInputType.number, validator: _validateField),
+          TextFormField(controller: cpuFamilyController, decoration: const InputDecoration(labelText: 'CPU Family'), validator: _validateField), //Thương hiệu CPU
+          TextFormField(controller: cpuCoreController, decoration: const InputDecoration(labelText: 'CPU Core'), keyboardType: TextInputType.number, validator: _validateField), //Số nhân CPU
+          TextFormField(controller: cpuThreadController, decoration: const InputDecoration(labelText: 'CPU Thread'), keyboardType: TextInputType.number, validator: _validateField), //Số luồng CPU
+          TextFormField(controller: cpuClockSpeedController, decoration: const InputDecoration(labelText: 'CPU Clock Speed'), keyboardType: TextInputType.number, validator: _validateField), //Tốc độ xung nhịp CPU
         ];
       case CategoryEnum.psu:
         return [
-          TextFormField(controller: psuWattageController, decoration: const InputDecoration(labelText: 'PSU Wattage'), keyboardType: TextInputType.number, validator: _validateField),
-          TextFormField(controller: psuEfficiencyController, decoration: const InputDecoration(labelText: 'PSU Efficiency'), validator: _validateField),
-          TextFormField(controller: psuModularController, decoration: const InputDecoration(labelText: 'PSU Modular'), validator: _validateField),
+          TextFormField(controller: psuWattageController, decoration: const InputDecoration(labelText: 'PSU Wattage'), keyboardType: TextInputType.number, validator: _validateField), //Công suất PSU
+          TextFormField(controller: psuEfficiencyController, decoration: const InputDecoration(labelText: 'PSU Efficiency'), validator: _validateField), //Hiệu suất PSU
+          TextFormField(controller: psuModularController, decoration: const InputDecoration(labelText: 'PSU Modular'), validator: _validateField), //Loại PSU
         ];
       case CategoryEnum.gpu:
         return [
-          TextFormField(controller: gpuSeriesController, decoration: const InputDecoration(labelText: 'GPU Series'), validator: _validateField),
-          TextFormField(controller: gpuCapacityController, decoration: const InputDecoration(labelText: 'GPU Capacity'), validator: _validateField),
-          TextFormField(controller: gpuBusWidthController, decoration: const InputDecoration(labelText: 'GPU Bus Width'), validator: _validateField),
-          TextFormField(controller: gpuClockSpeedController, decoration: const InputDecoration(labelText: 'GPU Clock Speed'), keyboardType: TextInputType.number, validator: _validateField),
+          TextFormField(controller: gpuSeriesController, decoration: const InputDecoration(labelText: 'GPU Series'), validator: _validateField), //Thương hiệu GPU
+          TextFormField(controller: gpuCapacityController, decoration: const InputDecoration(labelText: 'GPU Capacity'), validator: _validateField), //Dung lượng GPU
+          TextFormField(controller: gpuBusWidthController, decoration: const InputDecoration(labelText: 'GPU Bus Width'), validator: _validateField), //Băng thông GPU
+          TextFormField(controller: gpuClockSpeedController, decoration: const InputDecoration(labelText: 'GPU Clock Speed'), keyboardType: TextInputType.number, validator: _validateField), //Tốc độ xung nhịp GPU
         ];
       case CategoryEnum.mainboard:
         return [
-          TextFormField(controller: mainboardFormFactorController, decoration: const InputDecoration(labelText: 'Mainboard Form Factor'), validator: _validateField),
-          TextFormField(controller: mainboardSeriesController, decoration: const InputDecoration(labelText: 'Mainboard Series'), validator: _validateField),
-          TextFormField(controller: mainboardCompatibilityController, decoration: const InputDecoration(labelText: 'Mainboard Compatibility'), validator: _validateField),
+          TextFormField(controller: mainboardFormFactorController, decoration: const InputDecoration(labelText: 'Mainboard Form Factor'), validator: _validateField), //Kích thước mainboard
+          TextFormField(controller: mainboardSeriesController, decoration: const InputDecoration(labelText: 'Mainboard Series'), validator: _validateField), //Thương hiệu mainboard
+          TextFormField(controller: mainboardCompatibilityController, decoration: const InputDecoration(labelText: 'Mainboard Compatibility'), validator: _validateField), //Tương thích mainboard
         ];
       case CategoryEnum.drive:
         return [
-          TextFormField(controller: driveTypeController, decoration: const InputDecoration(labelText: 'Drive Type'), validator: _validateField),
-          TextFormField(controller: driveCapacityController, decoration: const InputDecoration(labelText: 'Drive Capacity'), validator: _validateField),
+          TextFormField(controller: driveTypeController, decoration: const InputDecoration(labelText: 'Drive Type'), validator: _validateField), //Loại ổ cứng
+          TextFormField(controller: driveCapacityController, decoration: const InputDecoration(labelText: 'Drive Capacity'), validator: _validateField), //Dung lượng ổ cứng
         ];
       default:
         return [];
@@ -154,7 +155,7 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
   }
   String? _validateField(String? value) {
     if (value == null || value.isEmpty) {
-      return 'This field is required';
+      return 'This field is required'; //Trường này là bắt buộc
     }
     return null;
   }
@@ -163,7 +164,7 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.product == null ? 'Add Product' : 'Edit Product'),
+      title: Text(widget.product == null ? 'Add Product' : 'Edit Product'), //Thêm sản phẩm hoặc Chỉnh sửa sản phẩm
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -172,7 +173,7 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
             children: [
               DropdownButtonFormField<CategoryEnum>(
                 value: _selectedCategory,
-                decoration: const InputDecoration(labelText: 'Category'),
+                decoration: const InputDecoration(labelText: 'Category'), //Danh mục
                 items: CategoryEnum.nonEmptyValues.map((CategoryEnum category) {
                   return DropdownMenuItem<CategoryEnum>(
                     value: category,
@@ -187,13 +188,13 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
                   }
                 },
               ),
-              TextFormField(controller: productNameController, decoration: const InputDecoration(labelText: 'Product Name'), validator: _validateField),
-              TextFormField(controller: importPriceController, decoration: const InputDecoration(labelText: 'Import Price'), keyboardType: TextInputType.number, validator: _validateField),
-              TextFormField(controller: sellingPriceController, decoration: const InputDecoration(labelText: 'Selling Price'), keyboardType: TextInputType.number, validator: _validateField),
-              TextFormField(controller: discountController, decoration: const InputDecoration(labelText: 'Discount'), keyboardType: TextInputType.number, validator: _validateField),
+              TextFormField(controller: productNameController, decoration: const InputDecoration(labelText: 'Product Name'), validator: _validateField), //Tên sản phẩm
+              TextFormField(controller: importPriceController, decoration: const InputDecoration(labelText: 'Import Price'), keyboardType: TextInputType.number, validator: _validateField), //Giá nhập
+              TextFormField(controller: sellingPriceController, decoration: const InputDecoration(labelText: 'Selling Price'), keyboardType: TextInputType.number, validator: _validateField), //Giá bán
+              TextFormField(controller: discountController, decoration: const InputDecoration(labelText: 'Discount'), keyboardType: TextInputType.number, validator: _validateField), //Giá khuyến mãi
               TextFormField(
                 controller: releaseDateController,
-                decoration: const InputDecoration(labelText: 'Release Date'),
+                decoration: const InputDecoration(labelText: 'Release Date'), //Ngày phát hành
                 onTap: () async {
                   DateTime? pickedDate = await showDatePicker(
                       context: context,
@@ -201,7 +202,7 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2025));
                   if (pickedDate != null) {
-                    String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                    String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // Format date as yyyy-MM-dd
                     setState(() {
                       releaseDateController.text = formattedDate;
                     });
@@ -209,7 +210,7 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
                 },
                 validator: _validateField,
               ),
-              TextFormField(controller: stockController, decoration: const InputDecoration(labelText: 'Stock'), keyboardType: TextInputType.number, validator: _validateField),
+              TextFormField(controller: stockController, decoration: const InputDecoration(labelText: 'Stock'), keyboardType: TextInputType.number, validator: _validateField), //Số lượng tồn kho
               const SizedBox(height: 16),
               ..._buildCategorySpecificFields(),
             ],
@@ -218,13 +219,13 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('Cancel'),
+          child: const Text('Cancel'), // Hủy
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: const Text('Save'),
+          child: const Text('Save'), // Lưu
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               // Prepare product data
@@ -282,14 +283,18 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
               final tabCubit = context.read<TabCubit>(); // Or ProductScreenCubit if more appropriate
               if (widget.product == null) {
                 // Handle add logic using tabCubit
-                print('Adding product: $productData');
+                if (kDebugMode) {
+                  print('Adding product: $productData');
+                } // Đang thêm sản phẩm
                 await Firebase().addProduct(product);
                 tabCubit.applyFilters();
                 // tabCubit.addProduct(productData); // Implement this in your Cubit
               } else {
                 // Handle edit logic using tabCubit, include product ID
                 product.productID = widget.product!.productID;
-                print('Editing product: $productData');
+                if (kDebugMode) {
+                  print('Editing product: $productData');
+                } //Chỉnh sửa sản phẩm
                 await Firebase().updateProduct(product);
                 tabCubit.applyFilters();
                 // tabCubit.updateProduct(productData); // Implement this in your Cubit

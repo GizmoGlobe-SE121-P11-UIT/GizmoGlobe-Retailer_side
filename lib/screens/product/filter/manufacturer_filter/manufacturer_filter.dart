@@ -3,7 +3,6 @@ import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 import 'package:gizmoglobe_client/widgets/general/checkbox_button.dart';
 
-import '../../../../data/database/database.dart';
 
 class ManufacturerFilter extends StatelessWidget {
   final List<Manufacturer> selectedManufacturers;
@@ -23,7 +22,7 @@ class ManufacturerFilter extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Manufacturer',
+          'Manufacturer', //Nhà sản xuất
           style: AppTextStyle.buttonTextBold,
         ),
         Wrap(

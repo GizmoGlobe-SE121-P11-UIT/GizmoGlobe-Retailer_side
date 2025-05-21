@@ -1,13 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import '../../../enums/processing/dialog_name_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import 'sign_in_state.dart';
 import '../../../enums/processing/notify_message_enum.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../data/firebase/firebase.dart';
 
 extension StringExtension on String {
   String capitalize() {
@@ -18,7 +14,6 @@ extension StringExtension on String {
 
 class SignInCubit extends Cubit<SignInState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final Firebase _firebase = Firebase();
 
   SignInCubit() : super(const SignInState());
 

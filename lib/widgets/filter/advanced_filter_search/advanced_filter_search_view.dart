@@ -61,7 +61,7 @@ class _AdvancedFilterSearchScreenState extends State<AdvancedFilterSearchScreen>
                 Navigator.of(context).pop();
               },
             ),
-            title: const Text('Filter', style: AppTextStyle.bigText),
+            title: const Text('Filter', style: AppTextStyle.bigText), //Lọc
             actions: [
               TextButton(
                 onPressed: () {
@@ -84,7 +84,7 @@ class _AdvancedFilterSearchScreenState extends State<AdvancedFilterSearchScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 OptionFilterView<CategoryEnum>(
-                  name: 'Category',
+                  name: 'Category', //Danh mục
                   enumValues: CategoryEnum.values,
                   selectedValues: state.selectedCategories,
                   onToggleSelection: cubit.toggleCategory,
@@ -98,7 +98,7 @@ class _AdvancedFilterSearchScreenState extends State<AdvancedFilterSearchScreen>
                 const SizedBox(height: 16.0),
 
                 RangeFilter(
-                  name: 'Price',
+                  name: 'Price', //Giá
                   fromController: fromController,
                   toController: toController,
                   onFromValueChanged: (value) {

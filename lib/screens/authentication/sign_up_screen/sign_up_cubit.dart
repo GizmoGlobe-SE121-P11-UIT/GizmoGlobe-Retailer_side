@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/enums/processing/dialog_name_enum.dart';
 import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
 import '../../../data/firebase/firebase.dart';
@@ -140,29 +141,33 @@ class SignUpCubit extends Cubit<SignUpState> {
             message: NotifyMessage.msg6
           ));
         } catch (firestoreError) {
-          print('Firestore Error: $firestoreError');
+          if (kDebugMode) {
+            print('Firestore Error: $firestoreError');
+          } // Lỗi kết nối Firestore
           // Xóa tài khoản Auth nếu có lỗi
           await userCredential.user?.delete();
-          throw firestoreError;
+          rethrow;
         }
       }
     } catch (error) {
-      print('Sign Up Error: $error');
+      if (kDebugMode) {
+        print('Sign Up Error: $error');
+      }
       
-      String errorMessage = 'Đăng ký thất bại';
+      String errorMessage = 'Sign up failed'; // Đăng ký thất bại
       if (error is FirebaseAuthException) {
         switch (error.code) {
           case 'email-already-in-use':
-            errorMessage = 'Email đã được sử dụng';
+            errorMessage = 'Email already in use'; // Email đã được sử dụng
             break;
           case 'weak-password':
-            errorMessage = 'Mật khẩu quá yếu';
+            errorMessage = 'Weak Password'; // Mật khẩu quá yếu
             break;
           case 'invalid-email':
-            errorMessage = 'Email không hợp lệ';
+            errorMessage = 'Invalid email'; // Email không hợp lệ
             break;
           default:
-            errorMessage = error.message ?? 'Lỗi không xác định';
+            errorMessage = error.message ?? 'Unidentified error'; // Lỗi không xác định
         }
       }
 

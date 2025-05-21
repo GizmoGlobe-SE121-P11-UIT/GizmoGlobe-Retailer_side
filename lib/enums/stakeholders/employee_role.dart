@@ -1,7 +1,7 @@
 enum RoleEnum {
-  owner('Owner'),
-  manager('Manager'),
-  employee('Employee');
+  owner('Owner'), // Chủ sở hữu
+  manager('Manager'), // Quản lý
+  employee('Employee'); // Nhân viên
 
   final String description;
 

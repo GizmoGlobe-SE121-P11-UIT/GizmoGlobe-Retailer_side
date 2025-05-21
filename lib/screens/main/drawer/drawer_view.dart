@@ -34,7 +34,7 @@ class DrawerView extends StatelessWidget {
                           child: BlocBuilder<MainScreenCubit, MainScreenState>(
                             builder: (context, state) {
                               return Text(
-                                'Hello! ${state.username}',
+                                'Hello! ${state.username}', // Xin chào
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.onSurface,
                                   fontSize: 16,
@@ -71,7 +71,7 @@ class DrawerView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Contact Us:',
+                          'Contact Us:', // Liên hệ
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 16,
@@ -79,7 +79,7 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'gizmoglobe@gg.com',
+                          'gizmoglobe@gg.com', // Email
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 16,
@@ -87,7 +87,7 @@ class DrawerView extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          '0XXX-XXX-XXX',
+                          '0XXX-XXX-XXX', // Phone number
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 16,
@@ -101,7 +101,7 @@ class DrawerView extends StatelessWidget {
                         cubit.logOut(context);
                       },
                       suffixIcon: Icons.logout,
-                      text: 'Log out',
+                      text: 'Log out', // Đăng xuất
                     ),
                     const SizedBox(height: 16),
                   ],

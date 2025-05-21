@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice_detail.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';

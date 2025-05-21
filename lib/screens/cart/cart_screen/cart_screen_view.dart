@@ -51,7 +51,7 @@ class _CartScreen extends State<CartScreen> {
           child: Column(
             children: [
               Text(
-                '[Cart Screen Content]',
+                '[Cart Screen Content]', // Thông tin giỏ hàng
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Theme.of(context).colorScheme.primary,

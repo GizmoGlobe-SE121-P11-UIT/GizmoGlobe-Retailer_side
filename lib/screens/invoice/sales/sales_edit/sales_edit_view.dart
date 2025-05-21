@@ -136,7 +136,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surfaceVariant,
+                                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                                   borderRadius: BorderRadius.circular(6),
                                   border: Border.all(
                                     color: Theme.of(context).dividerColor.withOpacity(0.1),
@@ -183,7 +183,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            state.invoice.customerName ?? 'Unknown Customer',
+                            state.invoice.customerName,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
