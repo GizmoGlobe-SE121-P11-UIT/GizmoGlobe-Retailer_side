@@ -8,6 +8,7 @@ class Customer {
   String email;
   String phoneNumber;
   List<Address>? addresses;
+  double totalLoyaltyPoints;
 
   Customer({
     this.customerID,
@@ -15,6 +16,7 @@ class Customer {
     required this.email,
     required this.phoneNumber,
     this.addresses,
+    this.totalLoyaltyPoints = 0,
   });
 
   Customer copyWith({
@@ -23,6 +25,7 @@ class Customer {
     String? email,
     String? phoneNumber,
     List<Address>? addresses,
+    double? totalLoyaltyPoints,
   }) {
     return Customer(
       customerID: customerID ?? this.customerID,
@@ -30,6 +33,7 @@ class Customer {
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       addresses: addresses ?? this.addresses,
+      totalLoyaltyPoints: totalLoyaltyPoints ?? this.totalLoyaltyPoints,
     );
   }
 
@@ -38,6 +42,7 @@ class Customer {
       'customerName': customerName,
       'email': email,
       'phoneNumber': phoneNumber,
+      'totalLoyaltyPoints': totalLoyaltyPoints,
     };
   }
 
@@ -50,6 +55,7 @@ class Customer {
       email: map['email'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
       addresses: addressList,
+      totalLoyaltyPoints: map['totalLoyaltyPoints'] ?? 0,
     );
 
     if (kDebugMode) {

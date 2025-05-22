@@ -145,6 +145,7 @@ class SalesAddCubit extends Cubit<SalesAddState> {
         customerID: state.selectedCustomer!.customerID ?? '',
         customerName: state.selectedCustomer!.customerName,
         address: state.address!,
+        loyaltyPoints: 0,
         details: state.invoiceDetails.map((detail) => 
           SalesInvoiceDetail(
             salesInvoiceID: invoiceID, // Set the invoice ID for each detail

@@ -27,4 +27,14 @@ class Converter {
     }
     return result;
   }
+
+  static String formatDouble(double value) {
+    if (value % 1 == 0) {
+      return value.toStringAsFixed(0);
+    } else if ((value * 10) % 1 == 0) {
+      return value.toStringAsFixed(1);
+    } else {
+      return value.toStringAsFixed(2);
+    }
+  }
 }

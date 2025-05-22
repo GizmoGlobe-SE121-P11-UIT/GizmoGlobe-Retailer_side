@@ -15,6 +15,7 @@ class SalesInvoice {
   final PaymentStatus paymentStatus;
   final SalesStatus salesStatus;
   final double totalPrice;
+  final double loyaltyPoints;
   List<SalesInvoiceDetail> details;
 
   SalesInvoice({
@@ -26,6 +27,7 @@ class SalesInvoice {
     required this.paymentStatus,
     required this.salesStatus,
     required this.totalPrice,
+    required this.loyaltyPoints,
     this.details = const [],
   });
 
@@ -38,6 +40,7 @@ class SalesInvoice {
     PaymentStatus? paymentStatus,
     SalesStatus? salesStatus,
     double? totalPrice,
+    double? loyaltyPoints,
     List<SalesInvoiceDetail>? details,
   }) {
     return SalesInvoice(
@@ -49,6 +52,7 @@ class SalesInvoice {
       paymentStatus: paymentStatus ?? this.paymentStatus,
       salesStatus: salesStatus ?? this.salesStatus,
       totalPrice: totalPrice ?? this.totalPrice,
+      loyaltyPoints: loyaltyPoints ?? this.loyaltyPoints,
       details: details ?? this.details,
     );
   }
@@ -63,6 +67,7 @@ class SalesInvoice {
       'paymentStatus': paymentStatus.toString().split('.').last,
       'salesStatus': salesStatus.toString().split('.').last,
       'totalPrice': totalPrice,
+      'loyaltyPoints': loyaltyPoints,
     };
   }
 
@@ -88,6 +93,7 @@ class SalesInvoice {
         orElse: () => SalesStatus.pending,
       ),
       totalPrice: (map['totalPrice'] as num).toDouble(),
+      loyaltyPoints: (map['loyaltyPoints'] as num).toDouble(),
     );
   }
 

@@ -14,6 +14,7 @@ import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_modular.da
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_bus.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_capacity_enum.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_type.dart';
+import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../data/database/database.dart';
 import 'package:gizmoglobe_client/objects/product_related/cpu.dart';
 import 'package:gizmoglobe_client/objects/product_related/drive.dart';
@@ -2543,6 +2544,23 @@ class Firebase {
       if (kDebugMode) {
         print('Error updating sales invoice: $e');
       } // Lỗi khi cập nhật hóa đơn bán hàng
+      rethrow;
+    }
+  }
+
+  Future<List<Voucher>> getVouchers() async {
+    try {
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('vouchers')
+          .get();
+
+      return snapshot.docs.map((doc) {
+        return Voucher.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+      }).toList();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting customers data : $e');
+      } // Lỗi khi lấy danh sách voucher
       rethrow;
     }
   }

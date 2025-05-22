@@ -41,6 +41,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
       paymentStatus: widget.invoice.paymentStatus,
       salesStatus: widget.invoice.salesStatus,
       totalPrice: widget.invoice.totalPrice,
+      loyaltyPoints: widget.invoice.loyaltyPoints,
       details: List.from(widget.invoice.details), // Create a copy of the details list
     );
     

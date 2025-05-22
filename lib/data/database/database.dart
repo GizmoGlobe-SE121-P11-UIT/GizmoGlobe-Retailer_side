@@ -5,10 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_compatibility.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/voucher_status.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
+import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/invoice_related/payment_status.dart';
 import '../../enums/product_related/category_enum.dart';
 import '../../enums/product_related/cpu_enums/cpu_family.dart';
@@ -50,6 +52,7 @@ class Database {
   List<Product> productList = [];
   List<WarrantyInvoice> warrantyInvoiceList = [];
   List<IncomingInvoice> incomingInvoiceList = [];
+  List<Voucher> voucherList = [];
 
   factory Database() {
     return _database;
@@ -241,6 +244,78 @@ class Database {
       } //Sản phẩm
 
       customerList = await Firebase().getCustomers();
+
+      //voucherList = await Firebase().getVouchers();
+      voucherList = [
+        Voucher.createPercentageVoucher(
+          voucherID: 'voucher1',
+          voucherName: 'Discount 10%',
+          startTime: DateTime(2025, 5, 1),
+          haveEndTime: true,
+          endTime: DateTime(2025, 5, 31),
+          discountValue: 10,
+          minimumPurchase: 0,
+          maximumValue: 100,
+          quantity: 10,
+          maxUsagePerPerson: 1,
+          isVisible: true,
+          isEnabled: true,
+        ),
+        Voucher.createAmountVoucher(
+          voucherID: 'voucher2',
+          voucherName: 'Discount 20\$',
+          discountValue: 20,
+          minimumPurchase: 50,
+          quantity: 0,
+          maxUsagePerPerson: 1,
+          startTime: DateTime(2025, 6, 1),
+          haveEndTime: true,
+          endTime: DateTime(2025, 6, 30),
+          isVisible: false,
+          isEnabled: true,
+        ),
+        Voucher.createPercentageVoucher(
+          voucherID: 'voucher3',
+          voucherName: 'Discount 30%',
+          startTime: DateTime(2025, 6, 1),
+          haveEndTime: true,
+          endTime: DateTime(2025, 6, 31),
+          discountValue: 30,
+          minimumPurchase: 0,
+          maximumValue: 100,
+          quantity: 10,
+          maxUsagePerPerson: 1,
+          isVisible: true,
+          isEnabled: true,
+        ),
+        Voucher.createAmountVoucher(
+          voucherID: 'voucher4',
+          voucherName: 'Discount 50\$',
+          discountValue: 50,
+          minimumPurchase: 100,
+          quantity: 5,
+          maxUsagePerPerson: 1,
+          startTime: DateTime(2025, 5, 1),
+          haveEndTime: false,
+          endTime: DateTime(2025, 7, 30),
+          isVisible: true,
+          isEnabled: false,
+        ),
+        Voucher.createPercentageVoucher(
+          voucherID: 'voucher5',
+          voucherName: 'Discount 15%',
+          startTime: DateTime(2025, 4, 1),
+          haveEndTime: true,
+          endTime: DateTime(2025, 4, 30),
+          discountValue: 15,
+          minimumPurchase: 0,
+          maximumValue: 100,
+          quantity: 10,
+          maxUsagePerPerson: 1,
+          isVisible: true,
+          isEnabled: true,
+        ),
+      ];
 
     } catch (e) {
       if (kDebugMode) {
@@ -1428,3 +1503,4 @@ class Database {
     }
   }
 }
+

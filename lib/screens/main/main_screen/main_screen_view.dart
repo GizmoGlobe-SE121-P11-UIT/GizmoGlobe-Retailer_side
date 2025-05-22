@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/screens/invoice/invoice_screen_view.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_view.dart';
+import 'package:gizmoglobe_client/screens/voucher/voucher_screen_view.dart';
 import '../../../widgets/general/selectable_gradient_icon.dart';
 import '../../home/home_screen/home_screen_view.dart';
 import '../../user/user_screen/user_screen_view.dart';
@@ -25,6 +26,7 @@ class _MainScreenState extends State<MainScreen> {
         () => ProductScreen.newInstance(),
         () => InvoiceScreen.newInstance(),
         () => StakeholderScreen.newInstance(),
+        () => VoucherScreen.newInstance(),
         () => UserScreen.newInstance(),
   ];
 
@@ -94,8 +96,16 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: SelectableGradientIcon(
-                    icon: Icons.account_circle,
+                    icon: Icons.discount,
                     isSelected: index == 4,
+                    label: 'Voucher',
+                  ),
+                  label: "Home",
+                ),
+                BottomNavigationBarItem(
+                  icon: SelectableGradientIcon(
+                    icon: Icons.account_circle,
+                    isSelected: index == 5,
                     label: 'Profile',
                   ),
                   label: "Profile",
