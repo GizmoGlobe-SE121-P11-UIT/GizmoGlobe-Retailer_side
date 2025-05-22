@@ -54,6 +54,108 @@ class Database {
   List<IncomingInvoice> incomingInvoiceList = [];
   List<Voucher> voucherList = [];
 
+  final List<Map<String, dynamic>> voucherDataList = [
+    {
+      'voucherID': 'voucher1',
+      'voucherName': 'Discount 10%',
+      'startTime': DateTime(2025, 5, 1),
+      'discountValue': 10.0,
+      'minimumPurchase': 0.0,
+      'maxUsagePerPerson': 1,
+      'isVisible': true,
+      'isEnabled': true,
+      'description': '',
+
+      'hasEndTime': true,
+      'endTime': DateTime(2025, 5, 31),
+
+      'isLimited': true,
+      'maximumUsage': 100,
+      'usageLeft': 0,
+
+      'isPercentage': true,
+      'maximumDiscountValue': 100.0,
+    },
+    {
+      'voucherID': 'voucher2',
+      'voucherName': 'Discount \$20',
+      'startTime': DateTime(2025, 6, 1),
+      'discountValue': 20.0,
+      'minimumPurchase': 50.0,
+      'maxUsagePerPerson': 1,
+      'isVisible': false,
+      'isEnabled': false,
+      'description': '\$20 off orders over \$50',
+
+      'hasEndTime': true,
+      'endTime': DateTime(2025, 6, 30),
+
+      'isLimited': false,
+
+      'isPercentage': false,
+    },
+    {
+      'voucherID': 'voucher3',
+      'voucherName': 'Discount 30%',
+      'startTime': DateTime(2025, 5, 1),
+      'discountValue': 30.0,
+      'minimumPurchase': 0.0,
+      'maxUsagePerPerson': 1,
+      'isVisible': true,
+      'isEnabled': true,
+      'description': '30% off, up to \$100',
+
+      'hasEndTime': false,
+
+      'isLimited': true,
+      'maximumUsage': 50,
+      'usageLeft': 10,
+
+      'isPercentage': true,
+      'maximumDiscountValue': 100.0,
+    },
+    {
+      'voucherID': 'voucher4',
+      'voucherName': 'Discount \$50',
+      'startTime': DateTime(2025, 6, 1),
+      'discountValue': 50.0,
+      'minimumPurchase': 100.0,
+      'maxUsagePerPerson': 1,
+      'isVisible': false,
+      'isEnabled': true,
+      'description': '\$50 off orders over \$100',
+
+      'hasEndTime': false,
+
+      'isLimited': true,
+      'maximumUsage': 5,
+      'usageLeft': 5,
+
+      'isPercentage': false,
+    },
+    {
+      'voucherID': 'voucher5',
+      'voucherName': 'Discount 15%',
+      'startTime': DateTime(2025, 4, 1),
+      'discountValue': 15.0,
+      'minimumPurchase': 0.0,
+      'maxUsagePerPerson': 1,
+      'isVisible': true,
+      'isEnabled': true,
+      'description': '15% off, up to \$100',
+
+      'hasEndTime': true,
+      'endTime': DateTime(2025, 4, 30),
+
+      'isLimited': true,
+      'maximumUsage': 5,
+      'usageLeft': 5,
+
+      'isPercentage': true,
+      'maximumDiscountValue': 100.0,
+    },
+  ];
+
   factory Database() {
     return _database;
   }
@@ -244,79 +346,7 @@ class Database {
       } //Sản phẩm
 
       customerList = await Firebase().getCustomers();
-
-      //voucherList = await Firebase().getVouchers();
-      voucherList = [
-        Voucher.createPercentageVoucher(
-          voucherID: 'voucher1',
-          voucherName: 'Discount 10%',
-          startTime: DateTime(2025, 5, 1),
-          haveEndTime: true,
-          endTime: DateTime(2025, 5, 31),
-          discountValue: 10,
-          minimumPurchase: 0,
-          maximumValue: 100,
-          quantity: 10,
-          maxUsagePerPerson: 1,
-          isVisible: true,
-          isEnabled: true,
-        ),
-        Voucher.createAmountVoucher(
-          voucherID: 'voucher2',
-          voucherName: 'Discount 20\$',
-          discountValue: 20,
-          minimumPurchase: 50,
-          quantity: 0,
-          maxUsagePerPerson: 1,
-          startTime: DateTime(2025, 6, 1),
-          haveEndTime: true,
-          endTime: DateTime(2025, 6, 30),
-          isVisible: false,
-          isEnabled: true,
-        ),
-        Voucher.createPercentageVoucher(
-          voucherID: 'voucher3',
-          voucherName: 'Discount 30%',
-          startTime: DateTime(2025, 6, 1),
-          haveEndTime: true,
-          endTime: DateTime(2025, 6, 31),
-          discountValue: 30,
-          minimumPurchase: 0,
-          maximumValue: 100,
-          quantity: 10,
-          maxUsagePerPerson: 1,
-          isVisible: true,
-          isEnabled: true,
-        ),
-        Voucher.createAmountVoucher(
-          voucherID: 'voucher4',
-          voucherName: 'Discount 50\$',
-          discountValue: 50,
-          minimumPurchase: 100,
-          quantity: 5,
-          maxUsagePerPerson: 1,
-          startTime: DateTime(2025, 5, 1),
-          haveEndTime: false,
-          endTime: DateTime(2025, 7, 30),
-          isVisible: true,
-          isEnabled: false,
-        ),
-        Voucher.createPercentageVoucher(
-          voucherID: 'voucher5',
-          voucherName: 'Discount 15%',
-          startTime: DateTime(2025, 4, 1),
-          haveEndTime: true,
-          endTime: DateTime(2025, 4, 30),
-          discountValue: 15,
-          minimumPurchase: 0,
-          maximumValue: 100,
-          quantity: 10,
-          maxUsagePerPerson: 1,
-          isVisible: true,
-          isEnabled: true,
-        ),
-      ];
-
+      voucherList = Firebase().getVouchers();
     } catch (e) {
       if (kDebugMode) {
         print('Error fetching data: $e');

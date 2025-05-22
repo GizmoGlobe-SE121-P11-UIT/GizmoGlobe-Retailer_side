@@ -15,6 +15,7 @@ import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_bus.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_capacity_enum.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_type.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
+import 'package:gizmoglobe_client/objects/voucher_related/voucher_factory.dart';
 import '../../data/database/database.dart';
 import 'package:gizmoglobe_client/objects/product_related/cpu.dart';
 import 'package:gizmoglobe_client/objects/product_related/drive.dart';
@@ -2548,14 +2549,14 @@ class Firebase {
     }
   }
 
-  Future<List<Voucher>> getVouchers() async {
+  List<Voucher> getVouchers() {
     try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('vouchers')
-          .get();
+      // final QuerySnapshot snapshot = await FirebaseFirestore.instance
+      //     .collection('vouchers')
+      //     .get();
 
-      return snapshot.docs.map((doc) {
-        return Voucher.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+      return Database().voucherDataList.map((map) {
+        return VoucherFactory.fromMap(map['voucherID'], map);
       }).toList();
     } catch (e) {
       if (kDebugMode) {

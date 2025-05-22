@@ -74,7 +74,7 @@ class _VoucherScreenState extends State<VoucherScreen>
               Tab(text: 'All'),
               Tab(text: 'Ongoing'),
               Tab(text: 'Upcoming'),
-              Tab(text: 'Expired'),
+              Tab(text: 'InactiveList'),
             ],
           ),
         ),
@@ -101,7 +101,7 @@ class _VoucherScreenState extends State<VoucherScreen>
             },
             builder: (context, state) {
               return Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TabBarView(
                   controller: tabController,
                   children: [
@@ -160,7 +160,7 @@ class _VoucherScreenState extends State<VoucherScreen>
                             },
                           ),
                     // Tab 4: Inactive voucher list
-                    state.expiredList.isEmpty
+                    state.inactiveList.isEmpty
                         ? const Center(
                             child: Text(
                               'No vouchers available',
@@ -168,9 +168,9 @@ class _VoucherScreenState extends State<VoucherScreen>
                             ),
                           )
                         : ListView.builder(
-                            itemCount: state.expiredList.length,
+                            itemCount: state.inactiveList.length,
                             itemBuilder: (context, index) {
-                              final voucher = state.expiredList[index];
+                              final voucher = state.inactiveList[index];
                               return VoucherWidget(
                                 voucher: voucher,
                                 onPressed: () {},

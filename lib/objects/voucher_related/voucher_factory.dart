@@ -23,7 +23,7 @@ class VoucherFactory {
       description: props['description'],
 
       maximumUsage: props['maximumUsage'],
-      usageLeft: props['numberOfUsage'],
+      usageLeft: props['usageLeft'],
       maximumDiscountValue: props['maximumDiscountValue'],
       endTime: props['endTime'],
     )..voucherID = props['voucherID'],
@@ -39,7 +39,7 @@ class VoucherFactory {
       description: props['description'],
 
       maximumUsage: props['maximumUsage'],
-      usageLeft: props['numberOfUsage'],
+      usageLeft: props['usageLeft'],
       maximumDiscountValue: props['maximumDiscountValue'],
     )..voucherID = props['voucherID'],
 
@@ -54,7 +54,7 @@ class VoucherFactory {
       description: props['description'],
 
       maximumUsage: props['maximumUsage'],
-      usageLeft: props['numberOfUsage'],
+      usageLeft: props['usageLeft'],
       endTime: props['endTime'],
     )..voucherID = props['voucherID'],
 
@@ -69,7 +69,7 @@ class VoucherFactory {
       description: props['description'],
 
       maximumUsage: props['maximumUsage'],
-      usageLeft: props['numberOfUsage'],
+      usageLeft: props['usageLeft'],
     )..voucherID = props['voucherID'],
 
     'unlimited_percentage_end': (props) => UnlimitedPercentageVoucherWithEndTime(
@@ -148,5 +148,14 @@ class VoucherFactory {
     final constructor = voucherConstructors[key];
     if (constructor == null) throw Exception('Invalid voucher type: $key');
     return constructor(properties);
+  }
+
+  static Voucher fromMap(String voucherID, Map<String, dynamic> map) {
+    return createVoucher(
+      isLimited: map['isLimited'] as bool,
+      isPercentage: map['isPercentage'] as bool,
+      haveEndTime: map['hasEndTime'] as bool,
+      properties: map,
+    );
   }
 }

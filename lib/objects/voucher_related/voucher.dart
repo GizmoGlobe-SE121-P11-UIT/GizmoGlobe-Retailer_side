@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../enums/voucher_related/voucher_status.dart';
 
@@ -14,7 +15,7 @@ abstract class Voucher {
   String? description;
 
   bool isPercentage;
-  bool haveEndTime;
+  bool hasEndTime;
   bool isLimited;
 
   Voucher({
@@ -29,7 +30,7 @@ abstract class Voucher {
     this.description,
 
     required this.isPercentage,
-    required this.haveEndTime,
+    required this.hasEndTime,
     required this.isLimited,
   });
 
@@ -55,47 +56,8 @@ abstract class Voucher {
     this.description = description ?? this.description;
   }
 
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'voucherName': voucherName,
-  //     'startTime': Timestamp.fromDate(startTime),
-  //     'haveEndTime': haveEndTime,
-  //     'endTime': haveEndTime ? Timestamp.fromDate(endTime) : null,
-  //     'isPercentage': isPercentage,
-  //     'discountValue': discountValue,
-  //     'minimumPurchase': minimumPurchase,
-  //     'maximumUsage': maximumValue,
-  //     'quantity': usageLeft,
-  //     'maxUsagePerPerson': maxUsagePerPerson,
-  //     'description': description ?? '',
-  //     'isVisible': isVisible,
-  //     'isEnabled': isEnabled,
-  //   };
-  // }
-
-  // static Voucher fromMap(String id, Map<String, dynamic> map) {
-  //   Voucher voucher = Voucher(
-  //     voucherID: id,
-  //     voucherName: map['voucherName'],
-  //     startTime: (map['startTime'] as Timestamp).toDate(),
-  //     haveEndTime: map['haveEndTime'],
-  //     endTime: map['haveEndTime'] == true
-  //         ? (map['endTime'] as Timestamp).toDate()
-  //         : DateTime.now(),
-  //     isPercentage: map['isPercentage'],
-  //     discountValue: (map['discountValue'] as num).toDouble(),
-  //     minimumPurchase: (map['minimumPurchase'] as num).toDouble(),
-  //     maximumValue: (map['maximumUsage'] as num).toDouble(),
-  //     usageLeft: map['usageLeft'],
-  //     maxUsagePerPerson: map['maxUsagePerPerson'],
-  //     description: map['description'] ?? '',
-  //     isVisible: map['isVisible'] ?? true,
-  //     isEnabled: map['isEnabled'] ?? true,
-  //     );
-  //
-  //   return voucher;
-  // }
-
-  VoucherTimeStatus get voucherStatus;
+  VoucherTimeStatus get voucherTimeStatus;
+  bool get voucherRanOut;
+  Widget detailsWidget(BuildContext context);
 }
 

@@ -1,10 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/functions/converter.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
+import '../../widgets/general/app_text_style.dart';
+import 'end_time_interface.dart';
+import 'limited_interface.dart';
 
-class LimitedAmountVoucherWithEndTime extends Voucher {
-  int maximumUsage;
-  int usageLeft;
-  DateTime endTime;
+class LimitedAmountVoucherWithEndTime
+    extends Voucher
+    implements LimitedInterface, EndTimeInterface {
+  int _maximumUsage;
+  int _usageLeft;
+  DateTime _endTime;
 
   LimitedAmountVoucherWithEndTime({
     super.voucherID,
@@ -18,13 +26,31 @@ class LimitedAmountVoucherWithEndTime extends Voucher {
     super.description,
 
     super.isPercentage = true,
-    super.haveEndTime = true,
+    super.hasEndTime = true,
     super.isLimited = true,
 
-    required this.maximumUsage,
-    required this.usageLeft,
-    required this.endTime,
-  });
+    required int maximumUsage,
+    required int usageLeft,
+    required DateTime endTime,
+  }) :
+        _maximumUsage = maximumUsage,
+        _usageLeft = usageLeft,
+        _endTime = endTime;
+
+  @override
+  int get maximumUsage => _maximumUsage;
+  @override
+  set maximumUsage(int value) => _maximumUsage = value;
+
+  @override
+  int get usageLeft => _usageLeft;
+  @override
+  set usageLeft(int value) => _usageLeft = value;
+
+  @override
+  DateTime get endTime => _endTime;
+  @override
+  set endTime(DateTime value) => _endTime = value;
 
   @override
   void updateVoucher({
@@ -60,7 +86,7 @@ class LimitedAmountVoucherWithEndTime extends Voucher {
   }
 
   @override
-  VoucherTimeStatus get voucherStatus {
+  VoucherTimeStatus get voucherTimeStatus {
     if (startTime.isAfter(DateTime.now())) {
       return VoucherTimeStatus.upcoming;
     }
@@ -68,5 +94,72 @@ class LimitedAmountVoucherWithEndTime extends Voucher {
       return VoucherTimeStatus.expired;
     }
     return VoucherTimeStatus.ongoing;
+  }
+
+  @override
+  bool get voucherRanOut {
+    if (usageLeft <= 0) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  Widget detailsWidget(BuildContext context) {
+    String time = Helper.getShortVoucherTimeWithEnd(startTime, endTime);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          voucherName,
+          style: AppTextStyle.regularTitle
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          'Discount \$$discountValue',
+          style: AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          'Minimum purchase: \$$minimumPurchase',
+          style: AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        usageLeft > 0 ?
+        Text(
+          'Usage left: $usageLeft/$maximumUsage',
+          style: AppTextStyle.regularText,
+        ) :
+        Text(
+          'Ran out',
+          style: AppTextStyle.regularText.copyWith(color: Colors.red),
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          Helper.getShortVoucherTimeWithEnd(startTime, endTime),
+          style: time == 'Expired' ? AppTextStyle.regularText.copyWith(color: Colors.red) : AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        !isVisible ?
+        Text(
+          'Hidden',
+          style: AppTextStyle.regularText.copyWith(color: Colors.blue),
+        ) : Container(),
+        const SizedBox(height: 4),
+
+        !isEnabled ?
+        Text(
+          'Disabled',
+          style: AppTextStyle.regularText.copyWith(color: Colors.red),
+        ) : Container(),
+        const SizedBox(height: 4),
+      ],
+    );
   }
 }

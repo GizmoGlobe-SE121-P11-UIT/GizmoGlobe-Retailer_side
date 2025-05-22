@@ -1,9 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/objects/voucher_related/percentage_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
+import '../../functions/helper.dart';
+import '../../widgets/general/app_text_style.dart';
+import 'end_time_interface.dart';
 
-class UnlimitedPercentageVoucherWithEndTime extends Voucher {
-  double maximumDiscountValue;
-  DateTime endTime;
+class UnlimitedPercentageVoucherWithEndTime
+    extends Voucher
+    implements EndTimeInterface, PercentageInterface {
+  double _maximumDiscountValue;
+  DateTime _endTime;
 
   UnlimitedPercentageVoucherWithEndTime({
     super.voucherID,
@@ -17,12 +24,24 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher {
     super.description,
 
     super.isPercentage = true,
-    super.haveEndTime = true,
+    super.hasEndTime = true,
     super.isLimited = false,
 
-    required this.endTime,
-    required this.maximumDiscountValue,
-  });
+    required DateTime endTime,
+    required double maximumDiscountValue,
+  }) :
+        _endTime = endTime,
+        _maximumDiscountValue = maximumDiscountValue;
+
+  @override
+  DateTime get endTime => _endTime;
+  @override
+  set endTime(DateTime value) => _endTime = value;
+
+  @override
+  double get maximumDiscountValue => _maximumDiscountValue;
+  @override
+  set maximumDiscountValue(double value) => _maximumDiscountValue = value;
 
   @override
   void updateVoucher({
@@ -56,7 +75,56 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher {
   }
 
   @override
-  VoucherTimeStatus get voucherStatus {
+  Widget detailsWidget(BuildContext context) {
+    String time = Helper.getShortVoucherTimeWithEnd(startTime, endTime);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+            voucherName,
+            style: AppTextStyle.regularTitle
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          'Discount $discountValue% maximum discount \$$maximumDiscountValue',
+          style: AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          'Minimum purchase: \$$minimumPurchase',
+          style: AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          Helper.getShortVoucherTimeWithEnd(startTime, endTime),
+          style: time == 'Expired' ? AppTextStyle.regularText.copyWith(color: Colors.red) : AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+
+        !isVisible ?
+        Text(
+          'Hidden',
+          style: AppTextStyle.regularText.copyWith(color: Colors.blue),
+        ) : Container(),
+        const SizedBox(height: 4),
+
+        !isEnabled ?
+        Text(
+          'Disabled',
+          style: AppTextStyle.regularText.copyWith(color: Colors.red),
+        ) : Container(),
+        const SizedBox(height: 4),
+      ],
+    );
+  }
+
+  @override
+  VoucherTimeStatus get voucherTimeStatus {
     if (startTime.isAfter(DateTime.now())) {
       return VoucherTimeStatus.upcoming;
     }
@@ -64,5 +132,10 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher {
       return VoucherTimeStatus.expired;
     }
     return VoucherTimeStatus.ongoing;
+  }
+
+  @override
+  bool get voucherRanOut {
+    return false;
   }
 }

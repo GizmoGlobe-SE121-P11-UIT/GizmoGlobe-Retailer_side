@@ -1,8 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
+import '../../functions/helper.dart';
+import '../../widgets/general/app_text_style.dart';
+import 'end_time_interface.dart';
+import 'limited_interface.dart';
 
-class UnlimitedAmountVoucherWithEndTime extends Voucher {
-  DateTime endTime;
+class UnlimitedAmountVoucherWithEndTime
+    extends Voucher
+    implements EndTimeInterface {
+  DateTime _endTime;
 
   UnlimitedAmountVoucherWithEndTime({
     super.voucherID,
@@ -16,11 +23,17 @@ class UnlimitedAmountVoucherWithEndTime extends Voucher {
     super.description,
 
     super.isPercentage = true,
-    super.haveEndTime = true,
+    super.hasEndTime = true,
     super.isLimited = false,
 
-    required this.endTime,
-  });
+    required DateTime endTime,
+  }) :
+        _endTime = endTime;
+
+  @override
+  DateTime get endTime => _endTime;
+  @override
+  set endTime(DateTime value) => _endTime = value;
 
   @override
   void updateVoucher({
@@ -52,7 +65,55 @@ class UnlimitedAmountVoucherWithEndTime extends Voucher {
   }
 
   @override
-  VoucherTimeStatus get voucherStatus {
+  Widget detailsWidget(BuildContext context) {
+    String time = Helper.getShortVoucherTimeWithEnd(startTime, endTime);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+            voucherName,
+            style: AppTextStyle.regularTitle
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          'Discount \$$discountValue',
+          style: AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          'Minimum purchase: \$$minimumPurchase',
+          style: AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        Text(
+          Helper.getShortVoucherTimeWithEnd(startTime, endTime),
+          style: time == 'Expired' ? AppTextStyle.regularText.copyWith(color: Colors.red) : AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        !isVisible ?
+        Text(
+          'Hidden',
+          style: AppTextStyle.regularText.copyWith(color: Colors.blue),
+        ) : Container(),
+        const SizedBox(height: 4),
+
+        !isEnabled ?
+        Text(
+          'Disabled',
+          style: AppTextStyle.regularText.copyWith(color: Colors.red),
+        ) : Container(),
+        const SizedBox(height: 4),
+      ],
+    );
+  }
+
+  @override
+  VoucherTimeStatus get voucherTimeStatus {
     if (startTime.isAfter(DateTime.now())) {
       return VoucherTimeStatus.upcoming;
     }
@@ -60,5 +121,10 @@ class UnlimitedAmountVoucherWithEndTime extends Voucher {
       return VoucherTimeStatus.expired;
     }
     return VoucherTimeStatus.ongoing;
+  }
+
+  @override
+  bool get voucherRanOut {
+    return false;
   }
 }
