@@ -17,7 +17,7 @@ class UnlimitedAmountVoucherWithoutEndTime
     required super.isEnabled,
     super.description,
 
-    super.isPercentage = true,
+    super.isPercentage = false,
     super.hasEndTime = true,
     super.isLimited = false,
   });

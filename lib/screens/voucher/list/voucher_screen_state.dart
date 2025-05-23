@@ -1,9 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:gizmoglobe_client/enums/processing/process_state_enum.dart';
-import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 
-import '../../enums/processing/dialog_name_enum.dart';
+import '../../../enums/processing/dialog_name_enum.dart';
 
 class VoucherScreenState extends Equatable {
   final List<Voucher> voucherList;

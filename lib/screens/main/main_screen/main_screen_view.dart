@@ -5,7 +5,7 @@ import 'package:gizmoglobe_client/screens/invoice/invoice_screen_view.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_view.dart';
-import 'package:gizmoglobe_client/screens/voucher/voucher_screen_view.dart';
+import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_view.dart';
 import '../../../widgets/general/selectable_gradient_icon.dart';
 import '../../home/home_screen/home_screen_view.dart';
 import '../../user/user_screen/user_screen_view.dart';

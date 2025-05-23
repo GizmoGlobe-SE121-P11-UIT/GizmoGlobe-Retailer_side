@@ -37,13 +37,14 @@ abstract class Voucher {
   void updateVoucher({
     String? voucherID,
     String? voucherName,
-    DateTime? startTime,
     double? discountValue,
     double? minimumPurchase,
     int? maxUsagePerPerson,
+    DateTime? startTime,
+
+    String? description,
     bool? isVisible,
     bool? isEnabled,
-    String? description,
   }) {
     this.voucherID = voucherID ?? this.voucherID;
     this.voucherName = voucherName ?? this.voucherName;

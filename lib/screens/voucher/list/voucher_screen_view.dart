@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
-import 'package:gizmoglobe_client/screens/voucher/voucher_screen_cubit.dart';
-import 'package:gizmoglobe_client/screens/voucher/voucher_screen_state.dart';
+import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_cubit.dart';
+import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_state.dart';
+import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_view.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
-import '../../../enums/processing/process_state_enum.dart';
-import '../../../widgets/dialog/information_dialog.dart';
-import '../../../widgets/general/app_text_style.dart';
-import '../../../widgets/general/gradient_icon_button.dart';
-import '../../widgets/voucher/voucher_widget.dart';
-import '../main/main_screen/main_screen_view.dart';
+import '../../../../enums/processing/process_state_enum.dart';
+import '../../../../widgets/dialog/information_dialog.dart';
+import '../../../../widgets/general/app_text_style.dart';
+import '../../../../widgets/general/gradient_icon_button.dart';
+import '../../../widgets/voucher/voucher_widget.dart';
+import '../../main/main_screen/main_screen_view.dart';
 
 class VoucherScreen extends StatefulWidget {
   const VoucherScreen({super.key});
@@ -119,7 +120,14 @@ class _VoucherScreenState extends State<VoucherScreen>
                               final voucher = state.voucherList[index];
                               return VoucherWidget(
                                 voucher: voucher,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VoucherDetailScreen.newInstance(voucher),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),
@@ -137,7 +145,14 @@ class _VoucherScreenState extends State<VoucherScreen>
                               final voucher = state.ongoingList[index];
                               return VoucherWidget(
                                 voucher: voucher,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VoucherDetailScreen.newInstance(voucher),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),
@@ -155,7 +170,14 @@ class _VoucherScreenState extends State<VoucherScreen>
                               final voucher = state.upcomingList[index];
                               return VoucherWidget(
                                 voucher: voucher,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VoucherDetailScreen.newInstance(voucher),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),
@@ -173,7 +195,14 @@ class _VoucherScreenState extends State<VoucherScreen>
                               final voucher = state.inactiveList[index];
                               return VoucherWidget(
                                 voucher: voucher,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VoucherDetailScreen.newInstance(voucher),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),

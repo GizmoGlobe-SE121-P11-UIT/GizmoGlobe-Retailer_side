@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/end_time_interface.dart';
-import '../../enums/voucher_related/voucher_status.dart';
 import '../../objects/voucher_related/voucher.dart';
-import '../general/app_text_style.dart';
 
 class VoucherWidget extends StatelessWidget {
   final Voucher voucher;

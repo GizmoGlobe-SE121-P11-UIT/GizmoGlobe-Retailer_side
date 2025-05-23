@@ -22,7 +22,7 @@ class LimitedAmountVoucherWithoutEndTime
     required super.isEnabled,
     super.description,
 
-    super.isPercentage = true,
+    super.isPercentage = false,
     super.hasEndTime = false,
     super.isLimited = true,
 

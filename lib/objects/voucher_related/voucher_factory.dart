@@ -137,13 +137,13 @@ class VoucherFactory {
   static Voucher createVoucher({
     required bool isLimited,
     required bool isPercentage,
-    required bool haveEndTime,
+    required bool hasEndTime,
     required Map<String, dynamic> properties,
   }) {
     final key = getKey(
       isLimited: isLimited,
       isPercentage: isPercentage,
-      haveEndTime: haveEndTime,
+      haveEndTime: hasEndTime,
     );
     final constructor = voucherConstructors[key];
     if (constructor == null) throw Exception('Invalid voucher type: $key');
@@ -154,7 +154,7 @@ class VoucherFactory {
     return createVoucher(
       isLimited: map['isLimited'] as bool,
       isPercentage: map['isPercentage'] as bool,
-      haveEndTime: map['hasEndTime'] as bool,
+      hasEndTime: map['hasEndTime'] as bool,
       properties: map,
     );
   }

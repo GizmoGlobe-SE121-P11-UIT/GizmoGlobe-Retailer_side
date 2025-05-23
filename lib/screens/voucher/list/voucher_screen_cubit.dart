@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/limited_interface.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/voucher_status.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
-import 'package:gizmoglobe_client/screens/voucher/voucher_screen_state.dart';
-import '../../../data/database/database.dart';
-import '../../objects/voucher_related/end_time_interface.dart';
+import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_state.dart';
+import '../../../../data/database/database.dart';
+import '../../../objects/voucher_related/end_time_interface.dart';
 
 class VoucherScreenCubit extends Cubit<VoucherScreenState> {
   VoucherScreenCubit() : super(const VoucherScreenState());
@@ -19,7 +19,7 @@ class VoucherScreenCubit extends Cubit<VoucherScreenState> {
     final now = DateTime.now();
 
     for (var voucher in voucherList) {
-      if (voucher.voucherTimeStatus.description == "Expired" || voucher.voucherRanOut || !voucher.isEnabled) {
+      if (voucher.voucherTimeStatus == VoucherTimeStatus.expired || voucher.voucherRanOut || !voucher.isEnabled) {
         inactiveList.add(voucher);
       } else if (voucher.startTime.isAfter(now)) {
         upcomingList.add(voucher);
