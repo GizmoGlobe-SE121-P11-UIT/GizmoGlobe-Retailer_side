@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/functions/converter.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
-import '../../functions/helper.dart';
 import '../../widgets/general/app_text_style.dart';
-import 'end_time_interface.dart';
-import 'limited_interface.dart';
+import '../voucher_related/end_time_interface.dart';
+import '../voucher_related/limited_interface.dart';
 
-class UnlimitedAmountVoucherWithEndTime
+class LimitedAmountVoucherWithEndTime
     extends Voucher
-    implements EndTimeInterface {
+    implements LimitedInterface, EndTimeInterface {
+  int _maximumUsage;
+  int _usageLeft;
   DateTime _endTime;
 
-  UnlimitedAmountVoucherWithEndTime({
+  LimitedAmountVoucherWithEndTime({
     super.voucherID,
     required super.voucherName,
     required super.startTime,
@@ -24,11 +27,25 @@ class UnlimitedAmountVoucherWithEndTime
 
     super.isPercentage = false,
     super.hasEndTime = true,
-    super.isLimited = false,
+    super.isLimited = true,
 
+    required int maximumUsage,
+    required int usageLeft,
     required DateTime endTime,
   }) :
+        _maximumUsage = maximumUsage,
+        _usageLeft = usageLeft,
         _endTime = endTime;
+
+  @override
+  int get maximumUsage => _maximumUsage;
+  @override
+  set maximumUsage(int value) => _maximumUsage = value;
+
+  @override
+  int get usageLeft => _usageLeft;
+  @override
+  set usageLeft(int value) => _usageLeft = value;
 
   @override
   DateTime get endTime => _endTime;
@@ -47,7 +64,10 @@ class UnlimitedAmountVoucherWithEndTime
     bool? isEnabled,
     String? description,
 
+    int? maximumUsage,
+    int? usageLeft,
     DateTime? endTime,
+    double? maximumDiscountValue,
   }) {
     super.updateVoucher(
       voucherID: voucherID,
@@ -57,11 +77,31 @@ class UnlimitedAmountVoucherWithEndTime
       minimumPurchase: minimumPurchase,
       maxUsagePerPerson: maxUsagePerPerson,
       isVisible: isVisible,
-      isEnabled: isEnabled,
       description: description,
     );
 
+    this.maximumUsage = maximumUsage ?? this.maximumUsage;
+    this.usageLeft = usageLeft ?? this.usageLeft;
     this.endTime = endTime ?? this.endTime;
+  }
+
+  @override
+  VoucherTimeStatus get voucherTimeStatus {
+    if (startTime.isAfter(DateTime.now())) {
+      return VoucherTimeStatus.upcoming;
+    }
+    if (endTime.isBefore(DateTime.now())) {
+      return VoucherTimeStatus.expired;
+    }
+    return VoucherTimeStatus.ongoing;
+  }
+
+  @override
+  bool get voucherRanOut {
+    if (usageLeft <= 0) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -72,8 +112,8 @@ class UnlimitedAmountVoucherWithEndTime
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-            voucherName,
-            style: AppTextStyle.regularTitle
+          voucherName,
+          style: AppTextStyle.regularTitle
         ),
         const SizedBox(height: 4),
 
@@ -86,6 +126,17 @@ class UnlimitedAmountVoucherWithEndTime
         Text(
           'Minimum purchase: \$$minimumPurchase',
           style: AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        usageLeft > 0 ?
+        Text(
+          'Usage left: $usageLeft/$maximumUsage',
+          style: AppTextStyle.regularText,
+        ) :
+        Text(
+          'Ran out',
+          style: AppTextStyle.regularText.copyWith(color: Colors.red),
         ),
         const SizedBox(height: 4),
 
@@ -110,21 +161,5 @@ class UnlimitedAmountVoucherWithEndTime
         const SizedBox(height: 4),
       ],
     );
-  }
-
-  @override
-  VoucherTimeStatus get voucherTimeStatus {
-    if (startTime.isAfter(DateTime.now())) {
-      return VoucherTimeStatus.upcoming;
-    }
-    if (endTime.isBefore(DateTime.now())) {
-      return VoucherTimeStatus.expired;
-    }
-    return VoucherTimeStatus.ongoing;
-  }
-
-  @override
-  bool get voucherRanOut {
-    return false;
   }
 }

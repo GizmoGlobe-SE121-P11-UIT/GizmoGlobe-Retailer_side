@@ -4,15 +4,13 @@ import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
 import '../../functions/helper.dart';
 import '../../widgets/general/app_text_style.dart';
-import 'end_time_interface.dart';
 
-class UnlimitedPercentageVoucherWithEndTime
+class UnlimitedPercentageVoucherWithoutEndTime
     extends Voucher
-    implements EndTimeInterface, PercentageInterface {
+    implements PercentageInterface {
   double _maximumDiscountValue;
-  DateTime _endTime;
 
-  UnlimitedPercentageVoucherWithEndTime({
+  UnlimitedPercentageVoucherWithoutEndTime({
     super.voucherID,
     required super.voucherName,
     required super.startTime,
@@ -23,20 +21,13 @@ class UnlimitedPercentageVoucherWithEndTime
     required super.isEnabled,
     super.description,
 
-    super.isPercentage = true,
+    super.isPercentage = false,
     super.hasEndTime = true,
     super.isLimited = false,
 
-    required DateTime endTime,
     required double maximumDiscountValue,
   }) :
-        _endTime = endTime,
         _maximumDiscountValue = maximumDiscountValue;
-
-  @override
-  DateTime get endTime => _endTime;
-  @override
-  set endTime(DateTime value) => _endTime = value;
 
   @override
   double get maximumDiscountValue => _maximumDiscountValue;
@@ -70,14 +61,11 @@ class UnlimitedPercentageVoucherWithEndTime
       description: description,
     );
 
-    this.endTime = endTime ?? this.endTime;
     this.maximumDiscountValue = maximumDiscountValue ?? this.maximumDiscountValue;
   }
 
   @override
   Widget detailsWidget(BuildContext context) {
-    String time = Helper.getShortVoucherTimeWithEnd(startTime, endTime);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -100,11 +88,10 @@ class UnlimitedPercentageVoucherWithEndTime
         const SizedBox(height: 4),
 
         Text(
-          Helper.getShortVoucherTimeWithEnd(startTime, endTime),
-          style: time == 'Expired' ? AppTextStyle.regularText.copyWith(color: Colors.red) : AppTextStyle.regularText,
+          Helper.getShortVoucherTimeWithoutEnd(startTime),
+          style: AppTextStyle.regularText,
         ),
         const SizedBox(height: 4),
-
 
         !isVisible ?
         Text(
@@ -128,9 +115,7 @@ class UnlimitedPercentageVoucherWithEndTime
     if (startTime.isAfter(DateTime.now())) {
       return VoucherTimeStatus.upcoming;
     }
-    if (endTime.isBefore(DateTime.now())) {
-      return VoucherTimeStatus.expired;
-    }
+
     return VoucherTimeStatus.ongoing;
   }
 

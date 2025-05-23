@@ -274,7 +274,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   icon: const Icon(Icons.edit, color: Colors.white),
                                   label: const Text('Edit', style: TextStyle(color: Colors.white)), //Chỉnh sửa
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green,
+                                    backgroundColor: Colors.blue,
                                     padding: const EdgeInsets.symmetric(vertical: 12),
                                   ),
                                 ),
@@ -300,7 +300,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: state.product.status == ProductStatusEnum.discontinued
-                                        ? Colors.blue
+                                        ? Colors.green
                                         : Colors.red,
                                     padding: const EdgeInsets.symmetric(vertical: 12),
                                   ),

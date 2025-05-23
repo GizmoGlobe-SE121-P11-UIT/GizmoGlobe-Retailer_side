@@ -1,20 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/percentage_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
 import '../../functions/helper.dart';
 import '../../widgets/general/app_text_style.dart';
-import 'limited_interface.dart';
+import '../voucher_related/end_time_interface.dart';
+import '../voucher_related/limited_interface.dart';
 
-class LimitedPercentageVoucherWithoutEndTime
+class UnlimitedAmountVoucherWithEndTime
     extends Voucher
-    implements LimitedInterface, PercentageInterface {
-  int _maximumUsage;
-  int _usageLeft;
-  double _maximumDiscountValue;
+    implements EndTimeInterface {
+  DateTime _endTime;
 
-  LimitedPercentageVoucherWithoutEndTime({
+  UnlimitedAmountVoucherWithEndTime({
     super.voucherID,
     required super.voucherName,
     required super.startTime,
@@ -25,32 +22,18 @@ class LimitedPercentageVoucherWithoutEndTime
     required super.isEnabled,
     super.description,
 
-    super.isPercentage = true,
-    super.hasEndTime = false,
-    super.isLimited = true,
+    super.isPercentage = false,
+    super.hasEndTime = true,
+    super.isLimited = false,
 
-    required int maximumUsage,
-    required int usageLeft,
-    required double maximumDiscountValue,
+    required DateTime endTime,
   }) :
-        _maximumUsage = maximumUsage,
-        _usageLeft = usageLeft,
-        _maximumDiscountValue = maximumDiscountValue;
+        _endTime = endTime;
 
   @override
-  int get maximumUsage => _maximumUsage;
+  DateTime get endTime => _endTime;
   @override
-  set maximumUsage(int value) => _maximumUsage = value;
-
-  @override
-  int get usageLeft => _usageLeft;
-  @override
-  set usageLeft(int value) => _usageLeft = value;
-
-  @override
-  double get maximumDiscountValue => _maximumDiscountValue;
-  @override
-  set maximumDiscountValue(double value) => _maximumDiscountValue = value;
+  set endTime(DateTime value) => _endTime = value;
 
   @override
   void updateVoucher({
@@ -64,9 +47,7 @@ class LimitedPercentageVoucherWithoutEndTime
     bool? isEnabled,
     String? description,
 
-    int? maximumUsage,
-    int? usageLeft,
-    double? maximumDiscountValue,
+    DateTime? endTime,
   }) {
     super.updateVoucher(
       voucherID: voucherID,
@@ -80,13 +61,13 @@ class LimitedPercentageVoucherWithoutEndTime
       description: description,
     );
 
-    this.maximumUsage = maximumUsage ?? this.maximumUsage;
-    this.usageLeft = usageLeft ?? this.usageLeft;
-    this.maximumDiscountValue = maximumDiscountValue ?? this.maximumDiscountValue;
+    this.endTime = endTime ?? this.endTime;
   }
 
   @override
   Widget detailsWidget(BuildContext context) {
+    String time = Helper.getShortVoucherTimeWithEnd(startTime, endTime);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -97,7 +78,7 @@ class LimitedPercentageVoucherWithoutEndTime
         const SizedBox(height: 4),
 
         Text(
-          'Discount $discountValue% maximum discount \$$maximumDiscountValue',
+          'Discount \$$discountValue',
           style: AppTextStyle.regularText,
         ),
         const SizedBox(height: 4),
@@ -108,20 +89,9 @@ class LimitedPercentageVoucherWithoutEndTime
         ),
         const SizedBox(height: 4),
 
-        usageLeft > 0 ?
         Text(
-          'Usage left: $usageLeft/$maximumUsage',
-          style: AppTextStyle.regularText,
-        ) :
-        Text(
-          'Ran out',
-          style: AppTextStyle.regularText.copyWith(color: Colors.red),
-        ),
-        const SizedBox(height: 4),
-
-        Text(
-          Helper.getShortVoucherTimeWithoutEnd(startTime),
-          style: AppTextStyle.regularText,
+          Helper.getShortVoucherTimeWithEnd(startTime, endTime),
+          style: time == 'Expired' ? AppTextStyle.regularText.copyWith(color: Colors.red) : AppTextStyle.regularText,
         ),
         const SizedBox(height: 4),
 
@@ -147,15 +117,14 @@ class LimitedPercentageVoucherWithoutEndTime
     if (startTime.isAfter(DateTime.now())) {
       return VoucherTimeStatus.upcoming;
     }
-
+    if (endTime.isBefore(DateTime.now())) {
+      return VoucherTimeStatus.expired;
+    }
     return VoucherTimeStatus.ongoing;
   }
 
   @override
   bool get voucherRanOut {
-    if (usageLeft <= 0) {
-      return true;
-    }
     return false;
   }
 }

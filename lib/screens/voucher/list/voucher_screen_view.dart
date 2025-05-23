@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
+import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_view.dart';
 import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_state.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_view.dart';
@@ -8,9 +8,9 @@ import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import '../../../../enums/processing/process_state_enum.dart';
 import '../../../../widgets/dialog/information_dialog.dart';
 import '../../../../widgets/general/app_text_style.dart';
-import '../../../../widgets/general/gradient_icon_button.dart';
+import '../../../data/database/database.dart';
+import '../../../widgets/general/gradient_icon_button.dart';
 import '../../../widgets/voucher/voucher_widget.dart';
-import '../../main/main_screen/main_screen_view.dart';
 
 class VoucherScreen extends StatefulWidget {
   const VoucherScreen({super.key});
@@ -62,6 +62,35 @@ class _VoucherScreenState extends State<VoucherScreen>
           elevation: 0,
           //title: GradientText(text: S.of(context).orders),
           title: const GradientText(text: "Voucher"),
+          actions: [
+            FutureBuilder<bool>(
+              future: Database().isUserAdmin(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data == true) {
+                  return Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    child: GradientIconButton(
+                      icon: Icons.add,
+                      iconSize: 32,
+                      onPressed: () async {
+                        ProcessState result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddVoucherScreen.newInstance(),
+                          ),
+                        );
+
+                        // if (result == ProcessState.success) {
+                        //   cubit.initialize(Database().productList);
+                        // }
+                      },
+                    ),
+                  );
+                }
+                return Container();
+              },
+            ),
+          ],
           bottom: TabBar(
             controller: tabController,
             labelColor: Theme.of(context).colorScheme.primary,

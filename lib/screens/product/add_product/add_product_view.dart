@@ -85,7 +85,7 @@ class _AddProductState extends State<AddProductScreen> {
           onPressed: () => Navigator.pop(context, ProcessState.idle),
           fillColor: Colors.transparent,
         ),
-        title: const GradientText(text: 'Add Product'), // Thêm sản phẩm
+        title: const GradientText(text: 'Add Product'),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
@@ -111,6 +111,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
         ],
       ),
+
       body: BlocConsumer<AddProductCubit, AddProductState>(
         listener: (context, state) {
           if (state.processState == ProcessState.success) {

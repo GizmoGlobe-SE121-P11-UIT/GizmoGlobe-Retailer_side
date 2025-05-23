@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/percentage_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
 import '../../functions/helper.dart';
 import '../../widgets/general/app_text_style.dart';
+import '../voucher_related/limited_interface.dart';
 
-class UnlimitedPercentageVoucherWithoutEndTime
+class LimitedAmountVoucherWithoutEndTime
     extends Voucher
-    implements PercentageInterface {
-  double _maximumDiscountValue;
+    implements LimitedInterface {
+  int _maximumUsage;
+  int _usageLeft;
 
-  UnlimitedPercentageVoucherWithoutEndTime({
+  LimitedAmountVoucherWithoutEndTime({
     super.voucherID,
     required super.voucherName,
     required super.startTime,
@@ -21,18 +22,25 @@ class UnlimitedPercentageVoucherWithoutEndTime
     required super.isEnabled,
     super.description,
 
-    super.isPercentage = true,
-    super.hasEndTime = true,
-    super.isLimited = false,
+    super.isPercentage = false,
+    super.hasEndTime = false,
+    super.isLimited = true,
 
-    required double maximumDiscountValue,
+    required int maximumUsage,
+    required int usageLeft,
   }) :
-        _maximumDiscountValue = maximumDiscountValue;
+        _maximumUsage = maximumUsage,
+        _usageLeft = usageLeft;
 
   @override
-  double get maximumDiscountValue => _maximumDiscountValue;
+  int get maximumUsage => _maximumUsage;
   @override
-  set maximumDiscountValue(double value) => _maximumDiscountValue = value;
+  set maximumUsage(int value) => _maximumUsage = value;
+
+  @override
+  int get usageLeft => _usageLeft;
+  @override
+  set usageLeft(int value) => _usageLeft = value;
 
   @override
   void updateVoucher({
@@ -46,8 +54,8 @@ class UnlimitedPercentageVoucherWithoutEndTime
     bool? isEnabled,
     String? description,
 
-    DateTime? endTime,
-    double? maximumDiscountValue,
+    int? maximumUsage,
+    int? usageLeft,
   }) {
     super.updateVoucher(
       voucherID: voucherID,
@@ -61,7 +69,24 @@ class UnlimitedPercentageVoucherWithoutEndTime
       description: description,
     );
 
-    this.maximumDiscountValue = maximumDiscountValue ?? this.maximumDiscountValue;
+    this.maximumUsage = maximumUsage ?? this.maximumUsage;
+    this.usageLeft = usageLeft ?? this.usageLeft;
+  }
+
+  @override
+  VoucherTimeStatus get voucherTimeStatus {
+    if (startTime.isAfter(DateTime.now())) {
+      return VoucherTimeStatus.upcoming;
+    }
+    return VoucherTimeStatus.ongoing;
+  }
+
+  @override
+  bool get voucherRanOut {
+    if (usageLeft <= 0) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -76,7 +101,7 @@ class UnlimitedPercentageVoucherWithoutEndTime
         const SizedBox(height: 4),
 
         Text(
-          'Discount $discountValue% maximum discount \$$maximumDiscountValue',
+          'Discount \$$discountValue',
           style: AppTextStyle.regularText,
         ),
         const SizedBox(height: 4),
@@ -84,6 +109,17 @@ class UnlimitedPercentageVoucherWithoutEndTime
         Text(
           'Minimum purchase: \$$minimumPurchase',
           style: AppTextStyle.regularText,
+        ),
+        const SizedBox(height: 4),
+
+        usageLeft > 0 ?
+        Text(
+          'Usage left: $usageLeft/$maximumUsage',
+          style: AppTextStyle.regularText,
+        ) :
+        Text(
+          'Ran out',
+          style: AppTextStyle.regularText.copyWith(color: Colors.red),
         ),
         const SizedBox(height: 4),
 
@@ -108,19 +144,5 @@ class UnlimitedPercentageVoucherWithoutEndTime
         const SizedBox(height: 4),
       ],
     );
-  }
-
-  @override
-  VoucherTimeStatus get voucherTimeStatus {
-    if (startTime.isAfter(DateTime.now())) {
-      return VoucherTimeStatus.upcoming;
-    }
-
-    return VoucherTimeStatus.ongoing;
-  }
-
-  @override
-  bool get voucherRanOut {
-    return false;
   }
 }

@@ -1,11 +1,11 @@
-import 'package:gizmoglobe_client/objects/voucher_related/limited_percentage_voucher_with_end_time.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/limited_percentage_voucher_without_end_time.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/limited_amount_voucher_with_end_time.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/limited_amount_voucher_without_end_time.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/unlimited_percentage_voucher_with_end_time.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/unlimited_percentage_voucher_without_end_time.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/unlimited_amount_voucher_with_end_time.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/unlimited_amount_voucher_without_end_time.dart';
+import 'package:gizmoglobe_client/objects/voucher_children/limited_percentage_voucher_with_end_time.dart';
+import 'package:gizmoglobe_client/objects/voucher_children/limited_percentage_voucher_without_end_time.dart';
+import 'package:gizmoglobe_client/objects/voucher_children/limited_amount_voucher_with_end_time.dart';
+import 'package:gizmoglobe_client/objects/voucher_children/limited_amount_voucher_without_end_time.dart';
+import 'package:gizmoglobe_client/objects/voucher_children/unlimited_percentage_voucher_with_end_time.dart';
+import 'package:gizmoglobe_client/objects/voucher_children/unlimited_percentage_voucher_without_end_time.dart';
+import 'package:gizmoglobe_client/objects/voucher_children/unlimited_amount_voucher_with_end_time.dart';
+import 'package:gizmoglobe_client/objects/voucher_children/unlimited_amount_voucher_without_end_time.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 
 typedef VoucherConstructor = Voucher Function(Map<String, dynamic>);
@@ -127,11 +127,11 @@ class VoucherFactory {
   static String getKey({
     required bool isLimited,
     required bool isPercentage,
-    required bool haveEndTime,
+    required bool hasEndTime,
   }) {
     return '${isLimited ? "limited" : "unlimited"}_'
         '${isPercentage ? "percentage" : "amount"}_'
-        '${haveEndTime ? "end" : "noend"}';
+        '${hasEndTime ? "end" : "noend"}';
   }
 
   static Voucher createVoucher({
@@ -143,7 +143,7 @@ class VoucherFactory {
     final key = getKey(
       isLimited: isLimited,
       isPercentage: isPercentage,
-      haveEndTime: hasEndTime,
+      hasEndTime: hasEndTime,
     );
     final constructor = voucherConstructors[key];
     if (constructor == null) throw Exception('Invalid voucher type: $key');
