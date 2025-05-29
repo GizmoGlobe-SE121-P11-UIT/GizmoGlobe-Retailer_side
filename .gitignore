@@ -141,3 +141,5 @@ app.*.symbols
 !.vscode/settings.json
 android/local.properties
 android/local.properties
+firebase_options.dart
+.env

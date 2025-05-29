@@ -45,7 +45,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
               onPressed: () => Navigator.pop(context),
               fillColor: Colors.transparent,
             ),
-            title: const GradientText(text: 'New Incoming Invoice'), // Tạo hóa đơn nhập mới
+            title: const GradientText(
+                text: 'New Incoming Invoice'), // Tạo hóa đơn nhập mới
           ),
           body: state.isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -80,7 +81,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
       decoration: InputDecoration(
         labelText: 'Select Manufacturer', // Chọn nhà sản xuất
         border: const OutlineInputBorder(),
-        labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+        labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
         floatingLabelStyle: TextStyle(color: Theme.of(context).primaryColor),
       ),
       value: state.selectedManufacturer,
@@ -111,7 +112,10 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
         ),
         ElevatedButton.icon(
           onPressed: () => _showAddProductDialog(context),
-          icon: const Icon(Icons.add, color: Colors.white,),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
           label: const Text('Add Product'), // Thêm sản phẩm
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).primaryColor,
@@ -196,7 +200,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                           child: Text(
                             'Import Price: \$${detail.importPrice.toStringAsFixed(2)}', // Giá nhập
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
+                              color: Colors.white.withValues(alpha: 0.8),
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -215,12 +219,18 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                                     icon: Icon(
                                       Icons.remove_circle_outline,
                                       color: detail.quantity > 1
-                                          ? Theme.of(context).colorScheme.primary
-                                          : Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.3),
                                       size: 20,
                                     ),
                                     onPressed: detail.quantity > 1
-                                        ? () => cubit.updateDetailQuantity(index, detail.quantity - 1)
+                                        ? () => cubit.updateDetailQuantity(
+                                            index, detail.quantity - 1)
                                         : null,
                                     padding: EdgeInsets.zero,
                                   ),
@@ -309,7 +319,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
         labelText: 'Payment Status', // Trạng thái thanh toán
         border: const OutlineInputBorder(),
         labelStyle: TextStyle(
-          color: Colors.white.withOpacity(0.8),
+          color: Colors.white.withValues(alpha: 0.8),
         ),
         floatingLabelStyle: TextStyle(
           color: Theme.of(context).primaryColor,
@@ -356,10 +366,10 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
 
     final inputDecoration = InputDecoration(
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white.withOpacity(0.7)),
+        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white.withOpacity(0.7)),
+        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Theme.of(context).primaryColor),
@@ -385,7 +395,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                   children: [
                     DropdownButtonFormField<Product>(
                       value: selectedProduct,
-                      decoration: inputDecoration.copyWith(labelText: 'Select Product'), // Chọn sản phẩm
+                      decoration: inputDecoration.copyWith(
+                          labelText: 'Select Product'), // Chọn sản phẩm
                       dropdownColor: Theme.of(context).cardColor,
                       style: const TextStyle(color: Colors.white),
                       items: state.products.map((product) {
@@ -401,21 +412,25 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                       onChanged: (product) {
                         selectedProduct = product;
                         if (product != null) {
-                          importPriceController.text = product.importPrice.toString();
+                          importPriceController.text =
+                              product.importPrice.toString();
                         }
                       },
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: importPriceController,
-                      decoration: inputDecoration.copyWith(labelText: 'Import Price'), // Giá nhập
+                      decoration: inputDecoration.copyWith(
+                          labelText: 'Import Price'), // Giá nhập
                       style: const TextStyle(color: Colors.white),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: quantityController,
-                      decoration: inputDecoration.copyWith(labelText: 'Quantity'), // Số lượng
+                      decoration: inputDecoration.copyWith(
+                          labelText: 'Quantity'), // Số lượng
                       style: const TextStyle(color: Colors.white),
                       keyboardType: TextInputType.number,
                     ),
@@ -435,7 +450,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
             TextButton(
               onPressed: () {
                 if (selectedProduct != null) {
-                  final importPrice = double.tryParse(importPriceController.text);
+                  final importPrice =
+                      double.tryParse(importPriceController.text);
                   final quantity = int.tryParse(quantityController.text);
 
                   if (importPrice != null && quantity != null) {
@@ -501,15 +517,17 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
     IncomingInvoiceDetail detail,
   ) async {
     Product? selectedProduct = currentProduct;
-    final quantityController = TextEditingController(text: detail.quantity.toString());
-    final importPriceController = TextEditingController(text: detail.importPrice.toString());
+    final quantityController =
+        TextEditingController(text: detail.quantity.toString());
+    final importPriceController =
+        TextEditingController(text: detail.importPrice.toString());
 
     final inputDecoration = InputDecoration(
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white.withOpacity(0.7)),
+        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white.withOpacity(0.7)),
+        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Theme.of(context).primaryColor),
@@ -526,7 +544,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
       builder: (dialogContext) => BlocProvider.value(
         value: cubit,
         child: AlertDialog(
-          title: const Text('Edit Product Detail'), // Chỉnh sửa chi tiết sản phẩm
+          title:
+              const Text('Edit Product Detail'), // Chỉnh sửa chi tiết sản phẩm
           content: BlocBuilder<IncomingAddCubit, IncomingAddState>(
             builder: (context, state) {
               return SingleChildScrollView(
@@ -535,7 +554,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                   children: [
                     DropdownButtonFormField<Product>(
                       value: selectedProduct,
-                      decoration: inputDecoration.copyWith(labelText: 'Select Product'), // Chọn sản phẩm
+                      decoration: inputDecoration.copyWith(
+                          labelText: 'Select Product'), // Chọn sản phẩm
                       dropdownColor: Theme.of(context).cardColor,
                       style: const TextStyle(color: Colors.white),
                       items: state.products.map((product) {
@@ -551,21 +571,25 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                       onChanged: (product) {
                         selectedProduct = product;
                         if (product != null) {
-                          importPriceController.text = product.importPrice.toString();
+                          importPriceController.text =
+                              product.importPrice.toString();
                         }
                       },
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: importPriceController,
-                      decoration: inputDecoration.copyWith(labelText: 'Import Price'), // Giá nhập
+                      decoration: inputDecoration.copyWith(
+                          labelText: 'Import Price'), // Giá nhập
                       style: const TextStyle(color: Colors.white),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: quantityController,
-                      decoration: inputDecoration.copyWith(labelText: 'Quantity'), // Số lượng
+                      decoration: inputDecoration.copyWith(
+                          labelText: 'Quantity'), // Số lượng
                       style: const TextStyle(color: Colors.white),
                       keyboardType: TextInputType.number,
                     ),
@@ -585,7 +609,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
             TextButton(
               onPressed: () {
                 if (selectedProduct != null) {
-                  final importPrice = double.tryParse(importPriceController.text);
+                  final importPrice =
+                      double.tryParse(importPriceController.text);
                   final quantity = int.tryParse(quantityController.text);
 
                   if (importPrice != null && quantity != null) {
@@ -605,4 +630,4 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
       ),
     );
   }
-} 
+}

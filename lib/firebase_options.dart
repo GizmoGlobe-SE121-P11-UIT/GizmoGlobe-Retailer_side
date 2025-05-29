@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -17,13 +18,37 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      return FirebaseOptions(
+        apiKey: dotenv.env['FIREBASE_WEB_API_KEY']!,
+        appId: dotenv.env['FIREBASE_WEB_APP_ID']!,
+        messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID']!,
+        projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID']!,
+        authDomain: dotenv.env['FIREBASE_WEB_AUTH_DOMAIN'],
+        storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'],
+        measurementId: dotenv.env['FIREBASE_WEB_MEASUREMENT_ID'],
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        return FirebaseOptions(
+          apiKey: dotenv.env['FIREBASE_ANDROID_API_KEY']!,
+          appId: dotenv.env['FIREBASE_ANDROID_APP_ID']!,
+          messagingSenderId:
+              dotenv.env['FIREBASE_ANDROID_MESSAGING_SENDER_ID']!,
+          projectId: dotenv.env['FIREBASE_ANDROID_PROJECT_ID']!,
+          storageBucket: dotenv.env['FIREBASE_ANDROID_STORAGE_BUCKET'],
+        );
       case TargetPlatform.iOS:
-        return ios;
+        return FirebaseOptions(
+          apiKey: dotenv.env['FIREBASE_IOS_API_KEY']!,
+          appId: dotenv.env['FIREBASE_IOS_APP_ID']!,
+          messagingSenderId: dotenv.env['FIREBASE_IOS_MESSAGING_SENDER_ID']!,
+          projectId: dotenv.env['FIREBASE_IOS_PROJECT_ID']!,
+          storageBucket: dotenv.env['FIREBASE_IOS_STORAGE_BUCKET'],
+          androidClientId: dotenv.env['FIREBASE_IOS_ANDROID_CLIENT_ID'],
+          iosClientId: dotenv.env['FIREBASE_IOS_CLIENT_ID'],
+          iosBundleId: dotenv.env['FIREBASE_IOS_BUNDLE_ID'],
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -41,38 +66,7 @@ class DefaultFirebaseOptions {
         );
       default:
         throw UnsupportedError(
-          'DefaultFirebaseOptions are not supported for this platform.',
-        );
+            'This platform is not supported for Firebase initialization via dotenv.');
     }
   }
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD19PvPONLG89r_mW99GZJmSSt4JfWTa_E',
-    appId: '1:413433346211:android:1155fb688243e1cd73a716',
-    messagingSenderId: '413433346211',
-    projectId: 'se121p11-gizmoglobe',
-    storageBucket: 'se121p11-gizmoglobe.firebasestorage.app',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCq4dF121oymhtwO5gtkzDXZNEQDN9jaKw',
-    appId: '1:413433346211:ios:5efab11c91b01c5973a716',
-    messagingSenderId: '413433346211',
-    projectId: 'se121p11-gizmoglobe',
-    storageBucket: 'se121p11-gizmoglobe.firebasestorage.app',
-    androidClientId: '413433346211-e37ub7irjajc7p3lnl8f7e3km9qbpus7.apps.googleusercontent.com',
-    iosClientId: '413433346211-mhgq3nbgt2ht9vp8sn2l5g9e8u5tlb2e.apps.googleusercontent.com',
-    iosBundleId: 'com.example.gizmoglobeRetailer',
-  );
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCaDBZZt21DTBGiDiE9VtWNyTTEIHFwzBo',
-    appId: '1:413433346211:web:a637ea3bf231305373a716',
-    messagingSenderId: '413433346211',
-    projectId: 'se121p11-gizmoglobe',
-    authDomain: 'se121p11-gizmoglobe.firebaseapp.com',
-    storageBucket: 'se121p11-gizmoglobe.firebasestorage.app',
-    measurementId: 'G-QC4HB14SR4',
-  );
-
 }

@@ -46,7 +46,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2), 
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -110,7 +110,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                          fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
                           labelStyle: const TextStyle(
                             color: Colors.white,
                           ),
@@ -158,7 +158,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                          fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8), 
                           labelStyle: const TextStyle(
                             color: Colors.white,
                           ),
@@ -201,7 +201,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                          fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8), 
                           labelStyle: const TextStyle(
                             color: Colors.white,
                           ),
@@ -245,7 +245,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                 ),
                               ),
                               filled: true,
-                              fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                              fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8), 
                               labelStyle: const TextStyle(
                                 color: Colors.white,
                               ),
@@ -636,7 +636,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                 margin: const EdgeInsets.only(bottom: 8),
                                 decoration: BoxDecoration(
                                   color: state.selectedIndex == index 
-                                      ? Theme.of(context).primaryColor.withOpacity(0.1) 
+                                      ? Theme.of(context).primaryColor.withValues(alpha: 0.1) 
                                       : Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(8),
                                 ),

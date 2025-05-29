@@ -36,10 +36,10 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
       margin: const EdgeInsets.symmetric(vertical: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
           width: 1,
         ),
       ),
@@ -217,7 +217,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                               .of(context)
                                               .colorScheme
                                               .onSurface
-                                              .withOpacity(0.6),
+                                              .withValues(alpha: 0.6),
                                         ),
                                       ),
                                       trailing: Text(
@@ -227,7 +227,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                               .of(context)
                                               .colorScheme
                                               .onSurface
-                                              .withOpacity(0.6),
+                                              .withValues(alpha: 0.6),
                                         ),
                                       ),
                                     ),
@@ -246,7 +246,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                           color: Theme.of(context).colorScheme.surface,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 8,
                               offset: const Offset(0, -4),
                             ),

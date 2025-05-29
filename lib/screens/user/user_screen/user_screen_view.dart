@@ -1,11 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/screens/user/information/information_screen_view.dart';
+import 'package:gizmoglobe_client/screens/user/support/support_screen_view.dart';
+
 import '../../../data/firebase/firebase.dart';
 import 'user_screen_cubit.dart';
 import 'user_screen_state.dart';
-import 'package:gizmoglobe_client/screens/user/information/information_screen_view.dart';
-import 'package:gizmoglobe_client/screens/user/support/support_screen_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -49,7 +50,7 @@ class _UserScreen extends State<UserScreen> {
                   end: Alignment.bottomRight,
                   colors: [
                     Theme.of(context).primaryColor,
-                    Theme.of(context).primaryColor.withOpacity(0.7),
+                    Theme.of(context).primaryColor.withValues(alpha: 0.7),
                   ],
                 ),
                 borderRadius: const BorderRadius.only(
@@ -58,7 +59,8 @@ class _UserScreen extends State<UserScreen> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                    color:
+                        Theme.of(context).primaryColor.withValues(alpha: 0.2),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -74,10 +76,10 @@ class _UserScreen extends State<UserScreen> {
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.15),
+                              color: Colors.white.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 width: 1,
                               ),
                             ),
@@ -108,7 +110,7 @@ class _UserScreen extends State<UserScreen> {
                                     vertical: 6,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.1),
+                                    color: Colors.white.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Row(
@@ -117,14 +119,16 @@ class _UserScreen extends State<UserScreen> {
                                       Icon(
                                         Icons.email_outlined,
                                         size: 16,
-                                        color: Colors.white.withOpacity(0.9),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.9),
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
                                         state.email,
                                         style: TextStyle(
                                           fontSize: 14,
-                                          color: Colors.white.withOpacity(0.9),
+                                          color: Colors.white
+                                              .withValues(alpha: 0.9),
                                         ),
                                       ),
                                     ],
@@ -204,20 +208,22 @@ class _UserScreen extends State<UserScreen> {
                   _buildSettingsItem(
                     icon: Icons.person_outline,
                     title: "Edit Profile", //Chỉnh sửa hồ sơ
-                    subtitle: "Update your personal information", //Cập nhật thông tin cá nhân
+                    subtitle:
+                        "Update your personal information", //Cập nhật thông tin cá nhân
                     onTap: () => showEditProfileBottomSheet(context),
                     iconColor: Colors.blue,
                   ),
                   _buildSettingsItem(
                     icon: Icons.lock_outline,
                     title: "Change Password", //Đổi mật khẩu
-                    subtitle: "Manage your account security", //Quản lý bảo mật tài khoản của bạn
+                    subtitle:
+                        "Manage your account security", //Quản lý bảo mật tài khoản của bạn
                     onTap: () => showChangePasswordBottomSheet(context),
                     iconColor: Colors.orange,
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Logout Button
                   Container(
                     width: double.infinity,
@@ -228,13 +234,19 @@ class _UserScreen extends State<UserScreen> {
                         end: Alignment.centerRight,
                         colors: [
                           Theme.of(context).colorScheme.error,
-                          Theme.of(context).colorScheme.error.withOpacity(0.8),
+                          Theme.of(context)
+                              .colorScheme
+                              .error
+                              .withValues(alpha: 0.8),
                         ],
                       ),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context).colorScheme.error.withOpacity(0.2),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .error
+                              .withValues(alpha: 0.2),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -455,7 +467,7 @@ class _UserScreen extends State<UserScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -473,7 +485,7 @@ class _UserScreen extends State<UserScreen> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -511,12 +523,12 @@ class _UserScreen extends State<UserScreen> {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.grey.withOpacity(0.1),
+          color: Colors.grey.withValues(alpha: 0.1),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -534,7 +546,7 @@ class _UserScreen extends State<UserScreen> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.1),
+                    color: iconColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -561,7 +573,10 @@ class _UserScreen extends State<UserScreen> {
                         subtitle,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.6),
                         ),
                       ),
                     ],
@@ -569,7 +584,10 @@ class _UserScreen extends State<UserScreen> {
                 ),
                 Icon(
                   Icons.chevron_right,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.3),
                   size: 24,
                 ),
               ],
@@ -582,7 +600,7 @@ class _UserScreen extends State<UserScreen> {
 
   void showEditProfileBottomSheet(BuildContext context) {
     final TextEditingController usernameController = TextEditingController();
-    
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -620,10 +638,12 @@ class _UserScreen extends State<UserScreen> {
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[200] ?? Colors.blue, width: 1.0),
+                    borderSide: BorderSide(
+                        color: Colors.blue[200] ?? Colors.blue, width: 1.0),
                   ),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue[200] ?? Colors.blue, width: 1.0),
+                    borderSide: BorderSide(
+                        color: Colors.blue[200] ?? Colors.blue, width: 1.0),
                   ),
                 ),
               ),
@@ -640,7 +660,8 @@ class _UserScreen extends State<UserScreen> {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Update profile successfully'), //Cập nhật hồ sơ thành công
+                          content: Text(
+                              'Update profile successfully'), //Cập nhật hồ sơ thành công
                         ),
                       );
                     }
@@ -668,7 +689,8 @@ class _UserScreen extends State<UserScreen> {
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('No user is currently signed in'), //Không có người dùng nào đang đăng nhập
+          content: Text(
+              'No user is currently signed in'), //Không có người dùng nào đang đăng nhập
         ),
       );
       return;
@@ -719,7 +741,8 @@ class _UserScreen extends State<UserScreen> {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Password reset email sent successfully'), //Email đặt lại mật khẩu đã được gửi thành công
+                        content: Text(
+                            'Password reset email sent successfully'), //Email đặt lại mật khẩu đã được gửi thành công
                       ),
                     );
                   } catch (e) {
@@ -730,7 +753,8 @@ class _UserScreen extends State<UserScreen> {
                     );
                   }
                 },
-                child: const Text('Send Password Reset Email'), //Gửi email đặt lại mật khẩu
+                child: const Text(
+                    'Send Password Reset Email'), //Gửi email đặt lại mật khẩu
               ),
               const SizedBox(height: 20),
             ],

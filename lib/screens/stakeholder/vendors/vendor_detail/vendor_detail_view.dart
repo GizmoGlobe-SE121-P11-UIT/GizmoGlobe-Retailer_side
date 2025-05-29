@@ -67,7 +67,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                     color: Theme.of(context).colorScheme.surface,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2), 
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
@@ -185,8 +185,8 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Theme.of(context).colorScheme.primary.withOpacity(0.8),
-            Theme.of(context).colorScheme.primary.withOpacity(0.6),
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8), 
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -194,7 +194,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
         borderRadius: const BorderRadius.all(Radius.circular(30)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),

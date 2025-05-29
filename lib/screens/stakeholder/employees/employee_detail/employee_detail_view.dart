@@ -71,8 +71,8 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Theme.of(context).colorScheme.primary.withOpacity(0.8),
-            Theme.of(context).colorScheme.primary.withOpacity(0.6),
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8), 
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -80,7 +80,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1), 
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -116,7 +116,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -217,7 +217,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
         color: Theme.of(context).colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2), 
             blurRadius: 8,
             offset: const Offset(0, -4),
           ),

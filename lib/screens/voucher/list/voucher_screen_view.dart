@@ -76,7 +76,8 @@ class _VoucherScreenState extends State<VoucherScreen>
                         ProcessState result = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AddVoucherScreen.newInstance(),
+                            builder: (context) =>
+                                AddVoucherScreen.newInstance(),
                           ),
                         );
 
@@ -95,7 +96,7 @@ class _VoucherScreenState extends State<VoucherScreen>
             controller: tabController,
             labelColor: Theme.of(context).colorScheme.primary,
             unselectedLabelColor:
-                Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
             labelPadding: const EdgeInsets.symmetric(horizontal: 8),
             indicatorColor: Theme.of(context).colorScheme.primary,
             tabAlignment: TabAlignment.fill,
@@ -104,7 +105,7 @@ class _VoucherScreenState extends State<VoucherScreen>
               Tab(text: 'All'),
               Tab(text: 'Ongoing'),
               Tab(text: 'Upcoming'),
-              Tab(text: 'InactiveList'),
+              Tab(text: 'Inactive'),
             ],
           ),
         ),
@@ -121,9 +122,10 @@ class _VoucherScreenState extends State<VoucherScreen>
                     content: state.dialogMessage,
                     onPressed: () {
                       Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => VoucherScreen.newInstance())
-                        );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  VoucherScreen.newInstance()));
                     },
                   ),
                 );
@@ -153,7 +155,9 @@ class _VoucherScreenState extends State<VoucherScreen>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VoucherDetailScreen.newInstance(voucher),
+                                      builder: (context) =>
+                                          VoucherDetailScreen.newInstance(
+                                              voucher),
                                     ),
                                   );
                                 },
@@ -178,7 +182,9 @@ class _VoucherScreenState extends State<VoucherScreen>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VoucherDetailScreen.newInstance(voucher),
+                                      builder: (context) =>
+                                          VoucherDetailScreen.newInstance(
+                                              voucher),
                                     ),
                                   );
                                 },
@@ -203,7 +209,9 @@ class _VoucherScreenState extends State<VoucherScreen>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VoucherDetailScreen.newInstance(voucher),
+                                      builder: (context) =>
+                                          VoucherDetailScreen.newInstance(
+                                              voucher),
                                     ),
                                   );
                                 },
@@ -228,7 +236,9 @@ class _VoucherScreenState extends State<VoucherScreen>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VoucherDetailScreen.newInstance(voucher),
+                                      builder: (context) =>
+                                          VoucherDetailScreen.newInstance(
+                                              voucher),
                                     ),
                                   );
                                 },

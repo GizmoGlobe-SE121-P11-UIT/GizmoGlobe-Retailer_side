@@ -219,7 +219,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     color: Theme.of(context).scaffoldBackgroundColor,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1), 
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
@@ -476,7 +476,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.1),
+                color: Colors.red.withValues(alpha: 0.1), 
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(

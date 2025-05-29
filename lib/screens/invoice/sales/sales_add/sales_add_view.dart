@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
+import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
-import 'package:gizmoglobe_client/data/firebase/firebase.dart';
+import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+
+import '../../../../objects/customer.dart';
 import '../../../../objects/product_related/product.dart';
 import 'sales_add_cubit.dart';
 import 'sales_add_state.dart';
-
-import '../../../../objects/customer.dart';
 
 class SalesAddScreen extends StatelessWidget {
   const SalesAddScreen({super.key});
@@ -43,7 +43,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
     if (invoice != null && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Invoice created successfully.'), // Tạo hóa đơn thành công
+          content:
+              Text('Invoice created successfully.'), // Tạo hóa đơn thành công
           backgroundColor: Colors.green,
         ),
       );
@@ -77,13 +78,16 @@ class _SalesAddViewState extends State<_SalesAddView> {
                     DropdownButtonFormField<Product>(
                       value: state.selectedModalProduct,
                       onChanged: (product) {
-                        context.read<SalesAddCubit>().updateSelectedModalProduct(product);
+                        context
+                            .read<SalesAddCubit>()
+                            .updateSelectedModalProduct(product);
                       },
                       decoration: InputDecoration(
                         labelText: 'Product', // Sản phẩm
                         hintText: 'Select product', // Chọn sản phẩm
                         labelStyle: const TextStyle(color: Colors.white),
-                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                        hintStyle: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.7)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -93,12 +97,14 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                          borderSide:
+                              BorderSide(color: Theme.of(context).primaryColor),
                         ),
                       ),
                       hint: Text(
                         'Select product', // Chọn sản phẩm
-                        style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                        style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.7)),
                       ),
                       items: state.products
                           .where((product) => product.stock > 0)
@@ -127,7 +133,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 Text(
                                   '[${product.stock}]',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7),
+                                    color: Colors.white.withValues(alpha: 0.7),
                                     fontSize: 12,
                                   ),
                                 ),
@@ -147,7 +153,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         labelText: 'Quantity', // Số lượng
                         hintText: 'Enter quantity', // Nhập số lượng
                         labelStyle: const TextStyle(color: Colors.white),
-                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                        hintStyle: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.7)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -157,7 +164,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                          borderSide:
+                              BorderSide(color: Theme.of(context).primaryColor),
                         ),
                       ),
                       keyboardType: TextInputType.number,
@@ -169,7 +177,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    context.read<SalesAddCubit>().updateSelectedModalProduct(null);
+                    context
+                        .read<SalesAddCubit>()
+                        .updateSelectedModalProduct(null);
                     Navigator.pop(context);
                   },
                   child: const Text('Cancel'), // Hủy
@@ -178,7 +188,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
                   onPressed: () {
                     if (state.selectedModalProduct == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please select a product')), // Vui lòng chọn sản phẩm
+                        const SnackBar(
+                            content: Text(
+                                'Please select a product')), // Vui lòng chọn sản phẩm
                       );
                       return;
                     }
@@ -186,23 +198,29 @@ class _SalesAddViewState extends State<_SalesAddView> {
                     final quantity = int.tryParse(quantityController.text) ?? 0;
                     if (quantity <= 0) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Quantity must be greater than 0')), // Số lượng phải lớn hơn 0
+                        const SnackBar(
+                            content: Text(
+                                'Quantity must be greater than 0')), // Số lượng phải lớn hơn 0
                       );
                       return;
                     }
 
                     if (quantity > state.selectedModalProduct!.stock) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Not enough stock')), // Không đủ hàng tồn
+                        const SnackBar(
+                            content:
+                                Text('Not enough stock')), // Không đủ hàng tồn
                       );
                       return;
                     }
 
                     context.read<SalesAddCubit>().addInvoiceDetail(
-                      state.selectedModalProduct!,
-                      quantity,
-                    );
-                    context.read<SalesAddCubit>().updateSelectedModalProduct(null);
+                          state.selectedModalProduct!,
+                          quantity,
+                        );
+                    context
+                        .read<SalesAddCubit>()
+                        .updateSelectedModalProduct(null);
                     Navigator.pop(context);
                   },
                   child: const Text('Add'), // Thêm
@@ -215,19 +233,22 @@ class _SalesAddViewState extends State<_SalesAddView> {
     );
   }
 
-  void _showAddressBottomSheet(BuildContext context, SalesAddState state) async {
+  void _showAddressBottomSheet(
+      BuildContext context, SalesAddState state) async {
     try {
       if (state.selectedCustomer == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Please select a customer first'), // Vui lòng chọn khách hàng trước
+            content: Text(
+                'Please select a customer first'), // Vui lòng chọn khách hàng trước
             backgroundColor: Colors.red,
           ),
         );
         return;
       }
 
-      final addresses = await Firebase().getCustomerAddresses(state.selectedCustomer!.customerID!);
+      final addresses = await Firebase()
+          .getCustomerAddresses(state.selectedCustomer!.customerID!);
 
       if (!mounted) return;
 
@@ -279,11 +300,14 @@ class _SalesAddViewState extends State<_SalesAddView> {
                     final address = addresses[index];
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .surface
+                          .withValues(alpha: 0.5),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                         ),
                       ),
                       child: ListTile(
@@ -301,7 +325,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         subtitle: Text(
                           address.toString(),
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
+                            color: Colors.white.withValues(alpha: 0.7),
                           ),
                         ),
                         trailing: address.hidden
@@ -400,37 +424,49 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               value: state.selectedCustomer,
                               hint: Text(
                                 'Select customer', // Chọn khách hàng
-                                style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                                style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.7)),
                               ),
                               decoration: InputDecoration(
                                 labelText: 'Customer', // Khách hàng
-                                labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
-                                prefixIcon: Icon(Icons.person_outline, color: Colors.white.withOpacity(0.7)),
+                                labelStyle: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.8)),
+                                prefixIcon: Icon(Icons.person_outline,
+                                    color: Colors.white.withValues(alpha: 0.7)),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Colors.white),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor),
                                 ),
                                 filled: true,
-                                fillColor: Theme.of(context).colorScheme.surface,
+                                fillColor:
+                                    Theme.of(context).colorScheme.surface,
                               ),
                               style: const TextStyle(color: Colors.white),
-                              dropdownColor: Theme.of(context).colorScheme.surface,
-                              icon: Icon(Icons.arrow_drop_down, color: Colors.white.withOpacity(0.7)),
+                              dropdownColor:
+                                  Theme.of(context).colorScheme.surface,
+                              icon: Icon(Icons.arrow_drop_down,
+                                  color: Colors.white.withValues(alpha: 0.7)),
                               iconEnabledColor: Colors.white,
-                              iconDisabledColor: Colors.white.withOpacity(0.5),
+                              iconDisabledColor: Colors.white.withValues(alpha: 0.5),
                               items: state.customers.map((customer) {
                                 return DropdownMenuItem(
                                   value: customer,
                                   child: Row(
                                     children: [
-                                      const Icon(Icons.account_circle, size: 20, color: Colors.white,),
+                                      const Icon(
+                                        Icons.account_circle,
+                                        size: 20,
+                                        color: Colors.white,
+                                      ),
                                       const SizedBox(width: 8),
                                       Text(customer.customerName),
                                     ],
@@ -454,33 +490,39 @@ class _SalesAddViewState extends State<_SalesAddView> {
                             TextFormField(
                               controller: _addressController,
                               readOnly: true,
-                              onTap: () => _showAddressBottomSheet(context, state),
+                              onTap: () =>
+                                  _showAddressBottomSheet(context, state),
                               decoration: InputDecoration(
                                 labelText: 'Address', // Địa chỉ
-                                labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                labelStyle: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.8)),
                                 prefixIcon: Icon(
                                   Icons.location_on_outlined,
-                                  color: Colors.white.withOpacity(0.7),
+                                  color: Colors.white.withValues(alpha: 0.7),
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Colors.white),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor),
                                 ),
                                 filled: true,
-                                fillColor: Theme.of(context).colorScheme.surface,
+                                fillColor:
+                                    Theme.of(context).colorScheme.surface,
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     Icons.arrow_drop_down_circle_outlined,
-                                    color: Colors.white.withOpacity(0.7),
+                                    color: Colors.white.withValues(alpha: 0.7),
                                   ),
-                                  onPressed: () => _showAddressBottomSheet(context, state),
+                                  onPressed: () =>
+                                      _showAddressBottomSheet(context, state),
                                 ),
                               ),
                               style: const TextStyle(color: Colors.white),
@@ -519,13 +561,15 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Payment Status', // Trạng thái thanh toán
                                         style: TextStyle(
                                           fontSize: 14,
-                                          color: Colors.white.withOpacity(0.8),
+                                          color: Colors.white
+                                              .withValues(alpha: 0.8),
                                         ),
                                       ),
                                       const SizedBox(height: 8),
@@ -544,13 +588,15 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Sales Status', // Trạng thái bán hàng
                                         style: TextStyle(
                                           fontSize: 14,
-                                          color: Colors.white.withOpacity(0.8),
+                                          color: Colors.white
+                                              .withValues(alpha: 0.8),
                                         ),
                                       ),
                                       const SizedBox(height: 8),
@@ -578,7 +624,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
-                                      Theme.of(context).primaryColor.withOpacity(0.8),
+                                      Theme.of(context)
+                                          .primaryColor
+                                          .withValues(alpha: 0.8),
                                       Theme.of(context).primaryColor,
                                     ],
                                     begin: Alignment.topLeft,
@@ -586,17 +634,21 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                   ),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 16),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
                                         Container(
                                           padding: const EdgeInsets.all(8),
                                           decoration: BoxDecoration(
-                                            color: Colors.white.withOpacity(0.2),
-                                            borderRadius: BorderRadius.circular(8),
+                                            color: Colors.white
+                                                .withValues(alpha: 0.2),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
                                           child: const Icon(
                                             Icons.attach_money,
@@ -655,11 +707,17 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                   ),
                                 ),
                                 ElevatedButton.icon(
-                                  onPressed: () => _showAddProductDialog(context),
-                                  icon: const Icon(Icons.add, color: Colors.white,),
-                                  label: const Text('Add Product'), // Thêm sản phẩm
+                                  onPressed: () =>
+                                      _showAddProductDialog(context),
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text(
+                                      'Add Product'), // Thêm sản phẩm
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(context).primaryColor,
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
                                     foregroundColor: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
@@ -675,7 +733,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                   padding: const EdgeInsets.all(16.0),
                                   child: Text(
                                     'No products added yet', // Chưa thêm sản phẩm nào
-                                    style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                                    style: TextStyle(
+                                        color: Colors.white.withValues(alpha: 0.7)),
                                   ),
                                 ),
                               )
@@ -689,13 +748,14 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                   final product = state.products.firstWhere(
                                     (p) => p.productID == detail.productID,
                                   );
-                                  
+
                                   return Card(
                                     margin: const EdgeInsets.only(bottom: 8),
                                     child: Padding(
                                       padding: const EdgeInsets.all(12),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
@@ -706,15 +766,18 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16,
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
                                               IconButton(
                                                 icon: const Icon(Icons.delete),
-                                                onPressed: () => cubit.removeDetail(index),
+                                                onPressed: () =>
+                                                    cubit.removeDetail(index),
                                                 color: Colors.red,
                                                 padding: EdgeInsets.zero,
-                                                constraints: const BoxConstraints(),
+                                                constraints:
+                                                    const BoxConstraints(),
                                               ),
                                             ],
                                           ),
@@ -722,12 +785,14 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                           Wrap(
                                             spacing: 16,
                                             runSpacing: 8,
-                                            crossAxisAlignment: WrapCrossAlignment.center,
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.center,
                                             children: [
                                               Text(
                                                 'Price: \$${detail.sellingPrice.toStringAsFixed(2)}', // Giá:
                                                 style: TextStyle(
-                                                  color: Colors.white.withOpacity(0.8),
+                                                  color: Colors.white
+                                                      .withValues(alpha: 0.8),
                                                 ),
                                               ),
                                               Row(
@@ -735,40 +800,68 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                                 children: [
                                                   IconButton(
                                                     icon: Icon(
-                                                      Icons.remove_circle_outline,
-                                                      color: detail.quantity > 1 
-                                                          ? Theme.of(context).colorScheme.primary
-                                                          : Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+                                                      Icons
+                                                          .remove_circle_outline,
+                                                      color: detail.quantity > 1
+                                                          ? Theme.of(context)
+                                                              .colorScheme
+                                                              .primary
+                                                          : Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurface
+                                                              .withValues(alpha: 0.3),
                                                     ),
-                                                    onPressed: detail.quantity > 1
-                                                        ? () => cubit.updateDetailQuantity(index, detail.quantity - 1)
+                                                    onPressed: detail.quantity >
+                                                            1
+                                                        ? () => cubit
+                                                            .updateDetailQuantity(
+                                                                index,
+                                                                detail.quantity -
+                                                                    1)
                                                         : null,
                                                     padding: EdgeInsets.zero,
-                                                    constraints: const BoxConstraints(),
+                                                    constraints:
+                                                        const BoxConstraints(),
                                                   ),
                                                   Container(
-                                                    constraints: const BoxConstraints(minWidth: 40),
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            minWidth: 40),
                                                     child: Text(
                                                       '${detail.quantity}',
                                                       style: const TextStyle(
-                                                        fontWeight: FontWeight.w500,
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                         fontSize: 16,
                                                       ),
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                     ),
                                                   ),
                                                   IconButton(
                                                     icon: Icon(
                                                       Icons.add_circle_outline,
-                                                      color: detail.quantity < product.stock
-                                                          ? Theme.of(context).colorScheme.primary
-                                                          : Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+                                                      color: detail.quantity <
+                                                              product.stock
+                                                          ? Theme.of(context)
+                                                              .colorScheme
+                                                              .primary
+                                                          : Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurface
+                                                              .withValues(alpha: 0.3),
                                                     ),
-                                                    onPressed: detail.quantity < product.stock
-                                                        ? () => cubit.updateDetailQuantity(index, detail.quantity + 1)
+                                                    onPressed: detail.quantity <
+                                                            product.stock
+                                                        ? () => cubit
+                                                            .updateDetailQuantity(
+                                                                index,
+                                                                detail.quantity +
+                                                                    1)
                                                         : null,
                                                     padding: EdgeInsets.zero,
-                                                    constraints: const BoxConstraints(),
+                                                    constraints:
+                                                        const BoxConstraints(),
                                                   ),
                                                 ],
                                               ),
@@ -782,15 +875,16 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                             ],
                                           ),
                                           ...[
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            'Available stock: ${product.stock}', // Hàng tồn kho:
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white.withOpacity(0.6),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              'Available stock: ${product.stock}', // Hàng tồn kho:
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white
+                                                    .withValues(alpha: 0.6),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
                                         ],
                                       ),
                                     ),
@@ -809,7 +903,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                         'Total Amount', // Tổng số tiền
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: Colors.white.withOpacity(0.8),
+                                          color: Colors.white.withValues(alpha: 0.8),
                                         ),
                                       ),
                                       const SizedBox(height: 4),

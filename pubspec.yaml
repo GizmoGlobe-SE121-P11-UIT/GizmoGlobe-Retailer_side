@@ -30,17 +30,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  firebase_core: any
+  firebase_auth: any
+  firebase_app_check: any
+  flutter_bloc: any
+  flutter_dotenv: any
+  flutter_localizations:
+    sdk: flutter
+  flutter_stripe: any
+  shared_preferences: any
+  permission_handler: any
+  provider: any
+  intl: any
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
-  firebase_core: ^3.8.1
-  firebase_auth: ^5.3.3
   google_sign_in: ^6.2.2
   cloud_firestore: ^5.5.0
-  intl: ^0.18.0
-  flutter_bloc: ^8.1.6
   font_awesome_flutter: ^10.8.0
   flutter_colorpicker: ^1.1.0
   equatable: ^2.0.5
@@ -52,13 +59,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_gen: any
+  intl_utils: any
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  flutter_lints: ^3.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -73,6 +82,8 @@ flutter:
   assets:
     - lib/GIzmoGlobe.png
     - lib/data/database/full_json_generated_data_vn_units.json
+    - lib/l10n/
+    - .env
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -104,3 +115,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  generate: true

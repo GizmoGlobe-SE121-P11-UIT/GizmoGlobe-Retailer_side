@@ -480,7 +480,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2), 
           ),
           child: Row(
             children: [

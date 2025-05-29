@@ -3,7 +3,6 @@ import 'package:gizmoglobe_client/enums/voucher_related/voucher_status.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_state.dart';
 import '../../../../data/database/database.dart';
-import '../../../objects/voucher_related/end_time_interface.dart';
 
 class VoucherScreenCubit extends Cubit<VoucherScreenState> {
   VoucherScreenCubit() : super(const VoucherScreenState());

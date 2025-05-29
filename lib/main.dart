@@ -1,32 +1,50 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:gizmoglobe_client/data/database/database.dart';
+import 'package:gizmoglobe_client/firebase_options.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/presentation/resources/app_theme.dart';
+import 'package:gizmoglobe_client/providers/language_provider.dart';
+import 'package:gizmoglobe_client/providers/theme_provider.dart';
 import 'package:gizmoglobe_client/screens/authentication/forget_password_screen/forget_password_view.dart';
 import 'package:gizmoglobe_client/screens/authentication/sign_in_screen/sign_in_view.dart';
 import 'package:gizmoglobe_client/screens/authentication/sign_up_screen/sign_up_view.dart';
-import 'package:gizmoglobe_client/screens/home/home_screen/home_screen_view.dart';
+import 'package:gizmoglobe_client/screens/main/drawer/drawer_cubit.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_view.dart';
-import 'package:gizmoglobe_client/screens/main/drawer/drawer_cubit.dart';
-import 'package:gizmoglobe_client/data/database/database.dart';
-import 'package:gizmoglobe_client/firebase_options.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+  await _setup();
   try {
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.android,
+      options: DefaultFirebaseOptions.currentPlatform,
     );
-    Database().initialize();
+    await FirebaseAppCheck.instance.activate(
+      androidProvider:
+          kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
+      appleProvider: AppleProvider.deviceCheck,
+    );
+    FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
+    await Database().initialize();
+    await Permission.camera.request();
+    await Permission.photos.request();
     runApp(const MyApp());
   } catch (e) {
     if (kDebugMode) {
       runApp(MaterialApp(
         home: Scaffold(
           body: Center(
-            child: Text('Error initializing Firebase: $e'), // Lỗi khởi tạo Firebase
+            child: Text('Error initializing Firebase: $e'),
           ),
         ),
       ));
@@ -34,43 +52,84 @@ void main() async {
   }
 }
 
+Future<void> _setup() async {
+  WidgetsFlutterBinding.ensureInitialized();
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiProvider(
       providers: [
-        BlocProvider(create: (context) => MainScreenCubit()),
-        BlocProvider(create: (context) => DrawerCubit()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
       ],
-      child: MaterialApp(
-        title: 'GizmoGlobe',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          colorScheme: const ColorScheme(
-            primary: Color(0xFF6CC4F4),
-            onPrimary: Color(0xFF4A94F1),
-            secondary: Color(0xFF6465F1),
-            onSecondary: Color(0xFF292B5C),
-            primaryContainer: Color(0xFF323F73),
-            secondaryContainer: Color(0xFF608BC1),
-            surface: Color(0xFF202046),
-            onSurface: Color(0xFFF3F3E0),
-            onSurfaceVariant: Color(0xFF202046),
-            error: Colors.red,
-            onError: Colors.white,
-            brightness: Brightness.light,
-          ),
-        ),
-        routes: {
-          '/sign-in': (context) => SignInScreen.newInstance(),
-          '/sign-up': (context) => SignUpScreen.newInstance(),
-          '/forget-password': (context) => ForgetPasswordScreen.newInstance(),
-          '/main': (context) => const MainScreen(),
-          '/home': (context) => HomeScreen.newInstance(),
+      child: Consumer2<ThemeProvider, LanguageProvider>(
+        builder: (context, themeProvider, languageProvider, child) {
+          if (kDebugMode) {
+            print('Current locale: \\${languageProvider.currentLocale}');
+            print('Supported locales: \\${[const Locale('en'), const Locale('vi')]}');
+          }
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => MainScreenCubit()),
+              BlocProvider(create: (context) => DrawerCubit()),
+            ],
+            child: MaterialApp(
+              title: 'GizmoGlobe',
+              themeMode: themeProvider.themeMode,
+              locale: languageProvider.currentLocale,
+              supportedLocales: const [
+                Locale('en'),
+                Locale('vi'),
+              ],
+              localizationsDelegates: const [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              localeResolutionCallback: (locale, supportedLocales) {
+                if (kDebugMode) {
+                  print('Locale resolution callback called');
+                  print('Requested locale: \\$locale');
+                  print('Supported locales: \\$supportedLocales');
+                }
+                if (!supportedLocales.contains(locale)) {
+                  if (kDebugMode) {
+                    print('Locale not supported, returning Vietnamese');
+                  }
+                  return const Locale('vi');
+                }
+                return locale;
+              },
+              builder: (context, child) {
+                if (kDebugMode) {
+                  print('MaterialApp builder called');
+                  print(
+                      'Current locale in builder: \\${Localizations.localeOf(context)}');
+                }
+                return Localizations.override(
+                  context: context,
+                  locale: languageProvider.currentLocale,
+                  child: child!,
+                );
+              },
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              routes: {
+                '/sign-in': (context) => SignInScreen.newInstance(),
+                '/sign-up': (context) => SignUpScreen.newInstance(),
+                '/forget-password': (context) =>
+                    ForgetPasswordScreen.newInstance(),
+                '/main': (context) => const MainScreen(),
+              },
+              home: const AuthWrapper(),
+            ),
+          );
         },
-        home: const AuthWrapper(),
       ),
     );
   }
@@ -87,9 +146,21 @@ class AuthWrapper extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
+
+        // Get the current route name
+        final currentRoute = ModalRoute.of(context)?.settings.name;
+
+        // If we're on the sign-up screen, don't redirect
+        if (currentRoute == '/sign-up') {
+          return SignUpScreen.newInstance();
+        }
+
         if (snapshot.hasData) {
+          // return const MainScreen();
           return const MainScreen();
         }
+
+        // For all other cases, show sign in screen
         return SignInScreen.newInstance();
       },
     );

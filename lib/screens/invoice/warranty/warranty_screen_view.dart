@@ -94,7 +94,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onSurface
-                                      .withOpacity(0.6),
+                                      .withValues(alpha: 0.6), 
                                 ),
                               ),
                             )
@@ -174,7 +174,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                         color: state.selectedIndex == index
                                             ? Theme.of(context)
                                                 .primaryColor
-                                                .withOpacity(0.1)
+                                                .withValues(alpha: 0.1) 
                                             : Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -218,7 +218,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .onSurface
-                                                          .withOpacity(0.6),
+                                                          .withValues(alpha: 0.6),
                                                     ),
                                                     maxLines: 1,
                                                     overflow: TextOverflow.ellipsis,
@@ -237,7 +237,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                           color: Theme.of(context)
                                                               .colorScheme
                                                               .onSurface
-                                                              .withOpacity(0.6),
+                                                              .withValues(alpha: 0.6), 
                                                         ),
                                                       ),
                                                     ],
@@ -350,7 +350,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                     ),
                     selected: cubit.state.sortField == SortField.date && 
                              cubit.state.sortOrder == SortOrder.descending,
-                    selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    selectedTileColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), 
                     onTap: () {
                       cubit.sortInvoices(SortField.date, SortOrder.descending);
                       Navigator.pop(context);
@@ -367,7 +367,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                     ),
                     selected: cubit.state.sortField == SortField.date && 
                              cubit.state.sortOrder == SortOrder.ascending,
-                    selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    selectedTileColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), 
                     onTap: () {
                       cubit.sortInvoices(SortField.date, SortOrder.ascending);
                       Navigator.pop(context);

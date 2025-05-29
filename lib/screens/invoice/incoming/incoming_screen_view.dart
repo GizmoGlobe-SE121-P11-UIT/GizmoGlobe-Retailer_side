@@ -6,12 +6,13 @@ import 'package:gizmoglobe_client/screens/invoice/incoming/permissions/incoming_
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
+
 import '../../../enums/invoice_related/payment_status.dart';
 import '../../../objects/invoice_related/incoming_invoice.dart';
+import '../../../widgets/general/status_badge.dart';
 import 'incoming_detail/incoming_detail_view.dart';
 import 'incoming_screen_cubit.dart';
 import 'incoming_screen_state.dart';
-import '../../../widgets/general/status_badge.dart';
 
 class IncomingScreen extends StatefulWidget {
   const IncomingScreen({super.key});
@@ -49,12 +50,14 @@ class _IncomingScreenState extends State<IncomingScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find incoming invoices...', // Tìm hóa đơn nhập...
+                        hintText:
+                            'Find incoming invoices...', // Tìm hóa đơn nhập...
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
                         },
-                        prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+                        prefixIcon: Icon(Icons.search,
+                            color: Theme.of(context).primaryColor),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -63,8 +66,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       iconSize: 32,
                       onPressed: _showFilterDialog,
                     ),
-                    if (state.userRole == 'admin')
-                      const SizedBox(width: 8),
+                    if (state.userRole == 'admin') const SizedBox(width: 8),
                     if (state.userRole == 'admin')
                       GradientIconButton(
                         icon: Icons.add,
@@ -73,10 +75,11 @@ class _IncomingScreenState extends State<IncomingScreen> {
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => IncomingAddScreen.newInstance(),
+                              builder: (context) =>
+                                  IncomingAddScreen.newInstance(),
                             ),
                           );
-                          
+
                           if (result != null && mounted) {
                             context.read<IncomingScreenCubit>().loadInvoices();
                           }
@@ -96,7 +99,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onSurface
-                                      .withOpacity(0.6),
+                                      .withValues(alpha: 0.6),
                                 ),
                               ),
                             )
@@ -119,21 +122,28 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                     );
 
                                     try {
-                                      final detailedInvoice = await firebase.getIncomingInvoiceWithDetails(invoice.incomingInvoiceID!);
-                                      
+                                      final detailedInvoice = await firebase
+                                          .getIncomingInvoiceWithDetails(
+                                              invoice.incomingInvoiceID!);
+
                                       if (!mounted) return;
-                                      
+
                                       Navigator.pop(context);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => IncomingDetailScreen.newInstance(detailedInvoice),
+                                          builder: (context) =>
+                                              IncomingDetailScreen.newInstance(
+                                                  detailedInvoice),
                                         ),
                                       );
                                     } catch (e) {
                                       Navigator.pop(context);
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('Error loading invoice details: $e')), // Lỗi khi tải chi tiết hóa đơn
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'Error loading invoice details: $e')), // Lỗi khi tải chi tiết hóa đơn
                                       );
                                     }
                                   },
@@ -150,7 +160,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                           content: Container(
                                             width: 120,
                                             decoration: BoxDecoration(
-                                              color: Theme.of(context).cardColor,
+                                              color:
+                                                  Theme.of(context).cardColor,
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                             ),
@@ -164,10 +175,16 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                     size: 20,
                                                     color: Colors.white,
                                                   ),
-                                                  title: const Text('View'), // Xem
-                                                  onTap: () => _handleViewInvoice(context, invoice),
+                                                  title:
+                                                      const Text('View'), // Xem
+                                                  onTap: () =>
+                                                      _handleViewInvoice(
+                                                          context, invoice),
                                                 ),
-                                                if (IncomingInvoicePermissions.canEditPaymentStatus(state.userRole, invoice))
+                                                if (IncomingInvoicePermissions
+                                                    .canEditPaymentStatus(
+                                                        state.userRole,
+                                                        invoice))
                                                   ListTile(
                                                     dense: true,
                                                     leading: const Icon(
@@ -175,8 +192,11 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                       size: 20,
                                                       color: Colors.white,
                                                     ),
-                                                    title: const Text('Edit Payment'), // Chỉnh sửa thanh toán
-                                                    onTap: () => _handleEditInvoice(context, invoice),
+                                                    title: const Text(
+                                                        'Edit Payment'), // Chỉnh sửa thanh toán
+                                                    onTap: () =>
+                                                        _handleEditInvoice(
+                                                            context, invoice),
                                                   ),
                                               ],
                                             ),
@@ -199,7 +219,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                         color: state.selectedIndex == index
                                             ? Theme.of(context)
                                                 .primaryColor
-                                                .withOpacity(0.1)
+                                                .withValues(alpha: 0.1)
                                             : Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -235,29 +255,47 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                       fontSize: 16,
                                                     ),
                                                     maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
                                                     invoice.manufacturerID,
                                                     style: TextStyle(
-                                                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface
+                                                          .withValues(
+                                                              alpha: 0.6),
                                                     ),
                                                     maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                   const SizedBox(height: 8),
                                                   Wrap(
                                                     spacing: 8,
                                                     runSpacing: 4,
-                                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                                    crossAxisAlignment:
+                                                        WrapCrossAlignment
+                                                            .center,
                                                     children: [
-                                                      StatusBadge(status: invoice.status),
+                                                      StatusBadge(
+                                                          status:
+                                                              invoice.status),
                                                       Text(
-                                                        DateFormat('dd/MM/yyyy').format(invoice.date),
+                                                        DateFormat('dd/MM/yyyy')
+                                                            .format(
+                                                                invoice.date),
                                                         style: TextStyle(
                                                           fontSize: 12,
-                                                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onSurface
+                                                                  .withValues(
+                                                                      alpha:
+                                                                          0.6),
                                                         ),
                                                       ),
                                                     ],
@@ -290,7 +328,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
     );
   }
 
-  Future<void> _handleViewInvoice(BuildContext contextDialog, IncomingInvoice invoice) async {
+  Future<void> _handleViewInvoice(
+      BuildContext contextDialog, IncomingInvoice invoice) async {
     // Đóng dialog menu trước
     Navigator.pop(contextDialog);
     cubit.setSelectedIndex(null);
@@ -309,37 +348,44 @@ class _IncomingScreenState extends State<IncomingScreen> {
     );
 
     try {
-      final detailedInvoice = await firebase.getIncomingInvoiceWithDetails(invoice.incomingInvoiceID!);
-      
+      final detailedInvoice = await firebase
+          .getIncomingInvoiceWithDetails(invoice.incomingInvoiceID!);
+
       if (!mounted) return;
       // Đóng dialog loading
       Navigator.of(dialogContext).pop();
-      
+
       if (!mounted) return;
       // Navigate to detail screen
       await Navigator.push(
         dialogContext,
         MaterialPageRoute(
-          builder: (context) => IncomingDetailScreen.newInstance(detailedInvoice),
+          builder: (context) =>
+              IncomingDetailScreen.newInstance(detailedInvoice),
         ),
       );
     } catch (e) {
       if (!mounted) return;
       // Đóng dialog loading
       Navigator.of(dialogContext).pop();
-      
+
       if (!mounted) return;
       ScaffoldMessenger.of(dialogContext).showSnackBar(
-        SnackBar(content: Text('Error loading invoice details: $e')), // Lỗi khi tải chi tiết hóa đơn.
+        SnackBar(
+            content: Text(
+                'Error loading invoice details: $e')), // Lỗi khi tải chi tiết hóa đơn.
       );
     }
   }
 
-  Future<void> _handleEditInvoice(BuildContext contextDialog, IncomingInvoice invoice) async {
+  Future<void> _handleEditInvoice(
+      BuildContext contextDialog, IncomingInvoice invoice) async {
     // Chỉ cho phép chỉnh sửa từ unpaid sang paid
     if (invoice.status != PaymentStatus.unpaid) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Only unpaid invoices can be marked as paid')), // Chỉ hóa đơn chưa thanh toán mới có thể đánh dấu là đã thanh toán.
+        const SnackBar(
+            content: Text(
+                'Only unpaid invoices can be marked as paid')), // Chỉ hóa đơn chưa thanh toán mới có thể đánh dấu là đã thanh toán.
       );
       Navigator.pop(contextDialog);
       return;
@@ -355,7 +401,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirm Payment'), // Xác nhận thanh toán
-          content: const Text('Mark this invoice as paid?'), // Đánh dấu hóa đơn này là đã thanh toán?
+          content: const Text(
+              'Mark this invoice as paid?'), // Đánh dấu hóa đơn này là đã thanh toán?
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
@@ -371,7 +418,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
     );
 
     if (confirmed == true && mounted) {
-      await cubit.quickUpdatePaymentStatus(invoice.incomingInvoiceID!, PaymentStatus.paid);
+      await cubit.quickUpdatePaymentStatus(
+          invoice.incomingInvoiceID!, PaymentStatus.paid);
     }
   }
 
@@ -419,9 +467,12 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       Icons.calendar_today,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    selected: cubit.state.sortField == SortField.date && 
-                             cubit.state.sortOrder == SortOrder.descending,
-                    selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    selected: cubit.state.sortField == SortField.date &&
+                        cubit.state.sortOrder == SortOrder.descending,
+                    selectedTileColor: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.1),
                     onTap: () {
                       cubit.sortInvoices(SortField.date, SortOrder.descending);
                       Navigator.pop(context);
@@ -436,9 +487,12 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       Icons.calendar_today,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    selected: cubit.state.sortField == SortField.date && 
-                             cubit.state.sortOrder == SortOrder.ascending,
-                    selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    selected: cubit.state.sortField == SortField.date &&
+                        cubit.state.sortOrder == SortOrder.ascending,
+                    selectedTileColor: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.1),
                     onTap: () {
                       cubit.sortInvoices(SortField.date, SortOrder.ascending);
                       Navigator.pop(context);
@@ -453,11 +507,15 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       Icons.attach_money,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    selected: cubit.state.sortField == SortField.totalPrice && 
-                             cubit.state.sortOrder == SortOrder.descending,
-                    selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    selected: cubit.state.sortField == SortField.totalPrice &&
+                        cubit.state.sortOrder == SortOrder.descending,
+                    selectedTileColor: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.1),
                     onTap: () {
-                      cubit.sortInvoices(SortField.totalPrice, SortOrder.descending);
+                      cubit.sortInvoices(
+                          SortField.totalPrice, SortOrder.descending);
                       Navigator.pop(context);
                     },
                   ),
@@ -470,11 +528,15 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       Icons.attach_money,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    selected: cubit.state.sortField == SortField.totalPrice && 
-                             cubit.state.sortOrder == SortOrder.ascending,
-                    selectedTileColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    selected: cubit.state.sortField == SortField.totalPrice &&
+                        cubit.state.sortOrder == SortOrder.ascending,
+                    selectedTileColor: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.1),
                     onTap: () {
-                      cubit.sortInvoices(SortField.totalPrice, SortOrder.ascending);
+                      cubit.sortInvoices(
+                          SortField.totalPrice, SortOrder.ascending);
                       Navigator.pop(context);
                     },
                   ),

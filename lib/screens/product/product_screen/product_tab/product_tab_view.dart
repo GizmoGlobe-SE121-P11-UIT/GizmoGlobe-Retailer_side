@@ -292,7 +292,7 @@ class _ProductTabState extends State<ProductTab> with SingleTickerProviderStateM
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: isSelected
-                                        ? Theme.of(context).primaryColor.withOpacity(0.1)
+                                        ? Theme.of(context).primaryColor.withValues(alpha: 0.1) 
                                         : Colors.transparent,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -347,7 +347,7 @@ class _ProductTabState extends State<ProductTab> with SingleTickerProviderStateM
                 if (state.processState == ProcessState.loading) {
                   return Stack(
                     children: [
-                      ModalBarrier(dismissible: false, color: Colors.black.withOpacity(0.5)),
+                      ModalBarrier(dismissible: false, color: Colors.black.withValues(alpha: 0.5)), 
                       const Center(child: CircularProgressIndicator()),
                     ],
                   );

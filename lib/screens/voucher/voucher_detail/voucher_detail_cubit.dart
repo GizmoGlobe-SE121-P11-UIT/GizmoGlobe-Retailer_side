@@ -1,15 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/data/database/database.dart';
-import 'package:gizmoglobe_client/enums/voucher_related/voucher_status.dart';
-import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_state.dart';
 
-import '../../../data/firebase/firebase.dart';
-import '../../../enums/processing/dialog_name_enum.dart';
-import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
-import '../../../enums/product_related/product_status_enum.dart';
 import '../../../objects/voucher_related/voucher.dart';
 
 class VoucherDetailCubit extends Cubit<VoucherDetailState> {

@@ -117,10 +117,10 @@ class _WarrantyDetailView extends StatelessWidget {
                               width: double.infinity,
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+                                color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3), 
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
                                   width: 1,
                                 ),
                               ),
@@ -190,7 +190,7 @@ class _WarrantyDetailView extends StatelessWidget {
                                     subtitle: Text(
                                       product?.category.toString() ?? 'Unknown Category', // Danh mục
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
                                       ),
                                     ),
                                     trailing: Container(

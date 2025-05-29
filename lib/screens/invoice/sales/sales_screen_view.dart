@@ -94,8 +94,8 @@ class _SalesScreenState extends State<SalesScreen> {
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onBackground
-                                      .withOpacity(0.6),
+                                      .onSurface
+                                      .withValues(alpha: 0.6), 
                                 ),
                               ),
                             )
@@ -177,7 +177,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                         color: state.selectedIndex == index
                                             ? Theme.of(context)
                                                 .primaryColor
-                                                .withOpacity(0.1)
+                                                .withValues(alpha: 0.1) 
                                             : Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -229,7 +229,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                           color: Theme.of(context)
                                                               .colorScheme
                                                               .onSurface
-                                                              .withOpacity(0.6),
+                                                              .withValues(alpha: 0.6), 
                                                         ),
                                                       ),
                                                     ],

@@ -88,8 +88,8 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                             value: state.selectedCustomerId,
                             decoration: InputDecoration(
                               labelText: 'Select Customer', // Chọn khách hàng
-                              labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
-                              prefixIcon: Icon(Icons.person_outline, color: Colors.white.withOpacity(0.7)),
+                              labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)), 
+                              prefixIcon: Icon(Icons.person_outline, color: Colors.white.withValues(alpha: 0.7)),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -189,7 +189,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                               DropdownButtonFormField<String>(
                                 decoration: InputDecoration(
                                   labelText: 'Sales Invoice', // Hóa đơn bán hàng
-                                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
+                                  labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)), 
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -240,8 +240,8 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                 controller: _reasonController,
                                 decoration: InputDecoration(
                                   labelText: 'Reason for Warranty', // Lý do bảo hành
-                                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.8)),
-                                  prefixIcon: Icon(Icons.description_outlined, color: Colors.white.withOpacity(0.7)),
+                                  labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)), 
+                                  prefixIcon: Icon(Icons.description_outlined, color: Colors.white.withValues(alpha: 0.7)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -307,7 +307,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                           activeColor: Theme.of(context).primaryColor,
                                           checkColor: Colors.white,
                                           side: BorderSide(
-                                            color: Colors.white.withOpacity(0.8),
+                                            color: Colors.white.withValues(alpha: 0.8),
                                             width: 2,
                                           ),
                                         ),
@@ -327,7 +327,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                 Container(
                                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                                   decoration: BoxDecoration(
-                                                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                                    color: Theme.of(context).primaryColor.withValues(alpha: 0.1), 
                                                     borderRadius: BorderRadius.circular(12),
                                                   ),
                                                   child: Text(
@@ -343,7 +343,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                 Container(
                                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                                   decoration: BoxDecoration(
-                                                    color: Colors.green.withOpacity(0.1),
+                                                    color: Colors.green.withValues(alpha: 0.1), 
                                                     borderRadius: BorderRadius.circular(12),
                                                   ),
                                                   child: Text(
@@ -399,7 +399,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                         Container(
                                                           width: 40,
                                                           decoration: BoxDecoration(
-                                                            color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                                            color: Theme.of(context).primaryColor.withValues(alpha: 0.1), 
                                                             borderRadius: BorderRadius.circular(8),
                                                           ),
                                                           padding: const EdgeInsets.symmetric(vertical: 4),
@@ -500,9 +500,9 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
       context: dialogContext,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async => false,
-          child: const Center(
+        return const PopScope(
+          canPop: false,
+          child: Center(
             child: CircularProgressIndicator(),
           ),
         );

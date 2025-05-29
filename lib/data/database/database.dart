@@ -5,13 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_compatibility.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
-import 'package:gizmoglobe_client/enums/voucher_related/voucher_status.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
-import '../../enums/invoice_related/payment_status.dart';
 import '../../enums/product_related/category_enum.dart';
 import '../../enums/product_related/cpu_enums/cpu_family.dart';
 import '../../enums/product_related/drive_enums/drive_capacity.dart';
@@ -34,7 +32,6 @@ import '../../objects/product_related/product_factory.dart';
 import '../firebase/firebase.dart';
 import '../../objects/invoice_related/warranty_invoice.dart';
 import '../../objects/invoice_related/incoming_invoice.dart';
-import '../../objects/invoice_related/incoming_invoice_detail.dart';
 
 class Database {
   static final Database _database = Database._internal();

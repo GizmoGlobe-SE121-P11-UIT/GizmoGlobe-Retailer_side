@@ -11,8 +11,7 @@ import 'home_screen_cubit.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
-  static Widget newInstance() =>
-      BlocProvider(
+  static Widget newInstance() => BlocProvider(
         create: (context) => HomeScreenCubit(),
         child: const HomeScreen(),
       );
@@ -28,8 +27,9 @@ class _HomeScreen extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
-        final currencyFormat = NumberFormat.currency(locale: 'en_US', symbol: '\$');
-        
+        final currencyFormat =
+            NumberFormat.currency(locale: 'en_US', symbol: '\$');
+
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
@@ -47,18 +47,21 @@ class _HomeScreen extends State<HomeScreen> {
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
                     borderRadius: const BorderRadius.vertical(
-                      bottom: Radius.circular(32)
-                    ),
+                        bottom: Radius.circular(32)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const GradientText(text: 'Welcome back,'), // Chào mừng trở lại
+                      const GradientText(
+                          text: 'Welcome back,'), // Chào mừng trở lại
                       Text(
                         state.username,
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
@@ -73,8 +76,8 @@ class _HomeScreen extends State<HomeScreen> {
                       Text(
                         'Overview', // Tổng quan
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       const SizedBox(height: 16),
                       GridView.count(
@@ -110,9 +113,9 @@ class _HomeScreen extends State<HomeScreen> {
                             context,
                             icon: Icons.trending_up_rounded,
                             title: 'Avg. Income', // Thu nhập trung bình
-                            value: currencyFormat.format(
-                              state.totalOrders > 0 ? state.totalRevenue / state.totalOrders : 0
-                            ),
+                            value: currencyFormat.format(state.totalOrders > 0
+                                ? state.totalRevenue / state.totalOrders
+                                : 0),
                             color: Colors.purple,
                           ),
                         ],
@@ -129,7 +132,10 @@ class _HomeScreen extends State<HomeScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .outline
+                            .withValues(alpha: 0.2),
                       ),
                     ),
                     child: Padding(
@@ -142,16 +148,20 @@ class _HomeScreen extends State<HomeScreen> {
                             children: [
                               Text(
                                 'Monthly Sales', // Doanh số hàng tháng
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
                               PopupMenuButton<String>(
                                 icon: const Icon(Icons.more_vert),
                                 itemBuilder: (context) => [
                                   const PopupMenuItem(
                                     value: 'year', // năm
-                                    child: Text('Last 12 months'), // 12 tháng qua
+                                    child:
+                                        Text('Last 12 months'), // 12 tháng qua
                                   ),
                                   const PopupMenuItem(
                                     value: 'quarter',
@@ -205,7 +215,7 @@ class _HomeScreen extends State<HomeScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
         ),
       ),
       child: Padding(
@@ -217,7 +227,7 @@ class _HomeScreen extends State<HomeScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, color: color),
@@ -226,8 +236,8 @@ class _HomeScreen extends State<HomeScreen> {
             Text(
               value,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -235,8 +245,8 @@ class _HomeScreen extends State<HomeScreen> {
             Text(
               title,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.outline,
-              ),
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -263,8 +273,10 @@ class _HomeScreen extends State<HomeScreen> {
             },
           ),
           titlesData: FlTitlesData(
-            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles:
+                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles:
+                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -297,7 +309,7 @@ class _HomeScreen extends State<HomeScreen> {
               gradient: LinearGradient(
                 colors: [
                   Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColor.withOpacity(0.5),
+                  Theme.of(context).primaryColor.withValues(alpha: 0.5),
                 ],
               ),
               barWidth: 3,
@@ -307,8 +319,8 @@ class _HomeScreen extends State<HomeScreen> {
                 show: true,
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context).primaryColor.withOpacity(0.2),
-                    Theme.of(context).primaryColor.withOpacity(0.0),
+                    Theme.of(context).primaryColor.withValues(alpha: 0.2),
+                    Theme.of(context).primaryColor.withValues(alpha: 0.0),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -417,7 +429,7 @@ class _HomeScreen extends State<HomeScreen> {
   // }
   //
   // Widget _buildTopProducts(HomeScreenState state) {
-  //   // TODO: Implement top products table
+  //   //Implement top products table
   //   return const SizedBox.shrink();
   // }
 }

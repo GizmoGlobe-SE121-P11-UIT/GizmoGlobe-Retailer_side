@@ -469,7 +469,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                 margin: const EdgeInsets.only(bottom: 8),
                                 decoration: BoxDecoration(
                                   color: state.selectedIndex == index 
-                                      ? Theme.of(context).primaryColor.withOpacity(0.1) 
+                                      ? Theme.of(context).primaryColor.withValues(alpha: 0.1)  
                                       : Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(8),
                                 ),

@@ -110,7 +110,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Theme.of(context).dividerColor.withOpacity(0.1),
+                          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),   
                         ),
                       ),
                       padding: const EdgeInsets.all(16),
@@ -140,7 +140,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                   color: Theme.of(context).colorScheme.surfaceContainerHighest,
                                   borderRadius: BorderRadius.circular(6),
                                   border: Border.all(
-                                    color: Theme.of(context).dividerColor.withOpacity(0.1),
+                                    color: Theme.of(context).dividerColor.withValues(alpha: 0.1), 
                                   ),
                                 ),
                                 child: Row(
@@ -176,7 +176,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                               Text(
                                 'Customer',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                                   fontSize: 14,
                                 ),
                               ),
@@ -207,7 +207,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                     Text(
                                       'Delivery Address',
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                                         fontSize: 14,
                                       ),
                                     ),
@@ -343,7 +343,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                     Text(
                                       'Quantity: ${detail.quantity}',
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
                                       ),
                                     ),
                                   ],
@@ -365,7 +365,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), 
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -515,11 +515,11 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                         final address = addresses[index];
                         return Card(
                           margin: const EdgeInsets.symmetric(vertical: 4),
-                          color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
+                          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5), 
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                             side: BorderSide(
-                              color: Colors.white.withOpacity(0.1),
+                              color: Colors.white.withValues(alpha: 0.1),
                             ),
                           ),
                           child: ListTile(
@@ -537,7 +537,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                             subtitle: Text(
                               address.toString(),
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.7),
+                                color: Colors.white.withValues(alpha: 0.7),
                               ),
                             ),
                             trailing: BlocBuilder<SalesEditCubit, SalesEditState>(
