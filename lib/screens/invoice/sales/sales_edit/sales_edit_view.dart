@@ -12,6 +12,7 @@ import '../permissions/sales_invoice_permissions.dart';
 import 'sales_edit_cubit.dart';
 import 'sales_edit_state.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class SalesEditScreen extends StatefulWidget {
   final SalesInvoice invoice;
@@ -70,7 +71,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                 onPressed: () => Navigator.pop(context),
                 fillColor: Colors.transparent,
               ),
-              title: const GradientText(text: 'Edit Invoice'),
+              title: GradientText(text: S.of(context).editProductDetail),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
@@ -174,7 +175,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                'Customer',
+                                S.of(context).customer,
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                                   fontSize: 14,
@@ -205,7 +206,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Delivery Address',
+                                      S.of(context).address,
                                       style: TextStyle(
                                         color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                                         fontSize: 14,
@@ -223,7 +224,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                       TextButton.icon(
                                         onPressed: _showAddressBottomSheet,
                                         icon: const Icon(Icons.edit, size: 16),
-                                        label: const Text('Change Address'),
+                                        label: Text('Change Address'),
                                         style: TextButton.styleFrom(
                                           padding: EdgeInsets.zero,
                                           minimumSize: const Size(0, 32),
@@ -241,9 +242,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                     const SizedBox(height: 24),
 
                     // Payment Status Section
-                    const Text(
-                      'Payment Status',
-                      style: TextStyle(
+                    Text(
+                      S.of(context).paymentStatus,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -267,9 +268,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                     const SizedBox(height: 24),
 
                     // Sales Status Section
-                    const Text(
-                      'Sales Status',
-                      style: TextStyle(
+                    Text(
+                      S.of(context).salesStatus,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -292,9 +293,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
 
                     // Products List
                     const SizedBox(height: 16),
-                    const Text(
-                      'Products',
-                      style: TextStyle(
+                    Text(
+                      S.of(context).products,
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
@@ -341,7 +342,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      'Quantity: ${detail.quantity}',
+                                      '${S.of(context).quantity}: ${detail.quantity}',
                                       style: TextStyle(
                                         color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
                                       ),
@@ -371,9 +372,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Total Amount',
-                            style: TextStyle(
+                          Text(
+                            S.of(context).totalAmount,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),

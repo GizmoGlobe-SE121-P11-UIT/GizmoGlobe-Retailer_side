@@ -6,6 +6,7 @@ import 'package:gizmoglobe_client/screens/invoice/incoming/permissions/incoming_
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 import '../../../enums/invoice_related/payment_status.dart';
 import '../../../objects/invoice_related/incoming_invoice.dart';
@@ -51,7 +52,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       child: FieldWithIcon(
                         controller: searchController,
                         hintText:
-                            'Find incoming invoices...', // Tìm hóa đơn nhập...
+                            S.of(context).searchIncomingInvoices,
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
@@ -94,7 +95,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       : state.invoices.isEmpty
                           ? Center(
                               child: Text(
-                                'No incoming invoices found', // Không tìm thấy hóa đơn nhập
+                                S.of(context).noIncomingInvoicesFound,
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -176,7 +177,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                     color: Colors.white,
                                                   ),
                                                   title:
-                                                      const Text('View'), // Xem
+                                                      Text(S.of(context).view),
                                                   onTap: () =>
                                                       _handleViewInvoice(
                                                           context, invoice),
@@ -192,8 +193,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                       size: 20,
                                                       color: Colors.white,
                                                     ),
-                                                    title: const Text(
-                                                        'Edit Payment'), // Chỉnh sửa thanh toán
+                                                    title: Text(
+                                                        S.of(context).editPayment),
                                                     onTap: () =>
                                                         _handleEditInvoice(
                                                             context, invoice),
@@ -248,7 +249,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Invoice #${invoice.incomingInvoiceID}', // Hóa đơn #
+                                                    '${S.of(context).invoiceDetails} #${invoice.incomingInvoiceID}',
                                                     style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -383,9 +384,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
     // Chỉ cho phép chỉnh sửa từ unpaid sang paid
     if (invoice.status != PaymentStatus.unpaid) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text(
-                'Only unpaid invoices can be marked as paid')), // Chỉ hóa đơn chưa thanh toán mới có thể đánh dấu là đã thanh toán.
+        SnackBar(
+            content: Text(S.of(context).onlyUnpaidCanBeMarkedPaid)),
       );
       Navigator.pop(contextDialog);
       return;
@@ -400,17 +400,16 @@ class _IncomingScreenState extends State<IncomingScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Payment'), // Xác nhận thanh toán
-          content: const Text(
-              'Mark this invoice as paid?'), // Đánh dấu hóa đơn này là đã thanh toán?
+          title: Text(S.of(context).paymentStatus),
+          content: Text(S.of(context).markAsPaidQuestion),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'), // Hủy
+              child: Text(S.of(context).cancel),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Confirm'), // Xác nhận
+              child: Text(S.of(context).confirm),
             ),
           ],
         );
@@ -447,9 +446,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'Sort By', // Sắp xếp theo...
-                        style: TextStyle(
+                      Text(
+                        S.of(context).sortBy,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -459,9 +458,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                   ),
                   const SizedBox(height: 16),
                   ListTile(
-                    title: const Text(
-                      'Date (Newest First)', // Ngày (Mới nhất trước)
-                      style: TextStyle(color: Colors.white),
+                    title: Text(
+                      S.of(context).dateNewestFirst,
+                      style: const TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
                       Icons.calendar_today,
@@ -479,9 +478,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                     },
                   ),
                   ListTile(
-                    title: const Text(
-                      'Date (Oldest First)', // Ngày (Cũ nhất trước)
-                      style: TextStyle(color: Colors.white),
+                    title: Text(
+                      S.of(context).dateOldestFirst,
+                      style: const TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
                       Icons.calendar_today,
@@ -499,9 +498,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                     },
                   ),
                   ListTile(
-                    title: const Text(
-                      'Price (Highest First)', // Giá (Cao nhất trước)
-                      style: TextStyle(color: Colors.white),
+                    title: Text(
+                      S.of(context).priceHighestFirst,
+                      style: const TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
                       Icons.attach_money,
@@ -520,9 +519,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                     },
                   ),
                   ListTile(
-                    title: const Text(
-                      'Price (Lowest First)', // Giá (Thấp nhất trước)
-                      style: TextStyle(color: Colors.white),
+                    title: Text(
+                      S.of(context).priceLowestFirst,
+                      style: const TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
                       Icons.attach_money,

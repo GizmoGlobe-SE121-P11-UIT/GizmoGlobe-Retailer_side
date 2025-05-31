@@ -11,6 +11,7 @@ import '../../../../enums/product_related/category_enum.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 
 class SalesDetailScreen extends StatefulWidget {
@@ -166,7 +167,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                           SizedBox(
                             width: double.infinity,
                             child: Text(
-                              'Invoice #${state.invoice.salesInvoiceID}', // Hóa đơn #${state.invoice.salesInvoiceID}
+                              '${S.of(context).invoiceDetails} #${state.invoice.salesInvoiceID}',
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -176,19 +177,19 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                             ),
                           ),
                           const SizedBox(height: 32),
-                          const Text(
-                            'Invoice Information',
-                            style: TextStyle(
+                          Text(
+                            S.of(context).invoiceDetails,
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.blue,
                             ),
                           ),
                           const SizedBox(height: 24),
-                          _buildInfoRow('Customer', state.invoice.customerName), // Khách hàng
-                          _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)), // Ngày
+                          _buildInfoRow(S.of(context).customer, state.invoice.customerName),
+                          _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)),
                           _buildInfoRow(
-                            'Address', // Địa chỉ
+                            S.of(context).address,
                             state.invoice.address.toString(),
                             wrap: true,
                             maxWidth: MediaQuery.of(context).size.width * 0.6,
@@ -200,7 +201,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Payment Status', // Trạng thái thanh toán
+                                  S.of(context).paymentStatus,
                                   style: TextStyle(
                                     color: Colors.grey[400],
                                     fontSize: 15,
@@ -218,7 +219,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Sales Status', // Trạng thái bán hàng
+                                  S.of(context).salesStatus,
                                   style: TextStyle(
                                     color: Colors.grey[400],
                                     fontSize: 15,
@@ -231,14 +232,14 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                           ),
                           const SizedBox(height: 16),
                           _buildTotalPriceRow(
-                            'Total Price', // Tổng giá
+                            S.of(context).totalPrice,
                             '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
                           ),
                           
                           const SizedBox(height: 32),
-                          const Text(
-                            'Products', // Sản phẩm
-                            style: TextStyle(
+                          Text(
+                            S.of(context).products,
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.blue,
@@ -303,7 +304,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    detail.productName ?? 'Product #${detail.productID}', // Sản phẩm #${detail.productID}
+                                                    '${S.of(context).products} #${detail.productID}',
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.w600,
                                                       fontSize: 16,
@@ -311,14 +312,14 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
-                                                    'Unit Price: \$${detail.sellingPrice.toStringAsFixed(2)}', // Đơn giá
+                                                    '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
                                                     style: TextStyle(
                                                       color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
-                                                    'Subtotal: \$${detail.subtotal.toStringAsFixed(2)}', // Tổng cộng
+                                                    'Subtotal: \$${detail.subtotal.toStringAsFixed(2)}',
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
                                                       fontSize: 16,
@@ -396,8 +397,8 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                               Icons.edit,
                               color: Colors.white,
                             ),
-                            label: const Text(
-                              'Edit Invoice', // Chỉnh sửa hóa đơn
+                            label: Text(
+                              'Edit Invoice',
                               style: TextStyle(color: Colors.white),
                             ),
                             style: ElevatedButton.styleFrom(

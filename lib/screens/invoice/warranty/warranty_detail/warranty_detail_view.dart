@@ -10,6 +10,7 @@ import '../permissions/warranty_invoice_permissions.dart';
 import '../../../../enums/invoice_related/warranty_status.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class WarrantyDetailView extends StatelessWidget {
   final WarrantyInvoice invoice;
@@ -73,7 +74,7 @@ class _WarrantyDetailView extends StatelessWidget {
                             SizedBox(
                               width: double.infinity,
                               child: Text(
-                                'Warranty #${state.invoice.warrantyInvoiceID}', // Biên lai bảo hành
+                                'Warranty #${state.invoice.warrantyInvoiceID}', // TODO: Add to ARB
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -84,7 +85,7 @@ class _WarrantyDetailView extends StatelessWidget {
                             ),
                             const SizedBox(height: 32),
                             const Text(
-                              'Warranty Information', // Thông tin bảo hành
+                              'Warranty Information', // TODO: Add to ARB
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -92,16 +93,16 @@ class _WarrantyDetailView extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 24),
-                            _buildInfoRow('Customer', state.invoice.customerName ?? 'Unknown Customer'), // Khách hàng
-                            _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)), // Ngày
-                            _buildInfoRow('Sales Invoice', '#${state.invoice.salesInvoiceID}'), // Hóa đơn bán hàng
+                            _buildInfoRow(S.of(context).customer, state.invoice.customerName ?? 'Unknown Customer'),
+                            _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)), // TODO: Add to ARB
+                            _buildInfoRow('Sales Invoice', '#${state.invoice.salesInvoiceID}'), // TODO: Add to ARB
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Status', // Trạng thái
+                                    'Status', // TODO: Add to ARB
                                     style: TextStyle(
                                       color: Colors.grey[400],
                                       fontSize: 15,
@@ -128,7 +129,7 @@ class _WarrantyDetailView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Reason for Warranty', // Lý do bảo hành
+                                    'Reason for Warranty', // TODO: Add to ARB
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.primary,
                                       fontSize: 16,
@@ -148,7 +149,7 @@ class _WarrantyDetailView extends StatelessWidget {
                             ),
                             const SizedBox(height: 32),
                             const Text(
-                              'Products Under Warranty', // Sản phẩm được bảo hành
+                              'Products Under Warranty', // TODO: Add to ARB
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -182,13 +183,13 @@ class _WarrantyDetailView extends StatelessWidget {
                                       }
                                     },
                                     title: Text(
-                                      product?.productName ?? 'Product #${detail.productID}', // Sản phẩm
+                                      product?.productName ?? '${S.of(context).products} #${detail.productID}',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     subtitle: Text(
-                                      product?.category.toString() ?? 'Unknown Category', // Danh mục
+                                      product?.category.toString() ?? 'Unknown Category', // TODO: Add to ARB
                                       style: TextStyle(
                                         color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
                                       ),

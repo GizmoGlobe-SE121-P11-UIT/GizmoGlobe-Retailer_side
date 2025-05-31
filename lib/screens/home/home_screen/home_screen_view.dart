@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/widgets/general/app_logo.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:intl/intl.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 import 'home_screen_cubit.dart';
 
@@ -52,8 +53,8 @@ class _HomeScreen extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const GradientText(
-                          text: 'Welcome back,'), // Chào mừng trở lại
+                      GradientText(
+                          text: S.of(context).welcomeBack),
                       Text(
                         state.username,
                         style: Theme.of(context)
@@ -74,7 +75,7 @@ class _HomeScreen extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Overview', // Tổng quan
+                        S.of(context).overview,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -91,28 +92,28 @@ class _HomeScreen extends State<HomeScreen> {
                           _buildStatsCard(
                             context,
                             icon: Icons.inventory_2_rounded,
-                            title: 'Products', // Sản phẩm
+                            title: S.of(context).products,
                             value: state.totalProducts.toString(),
                             color: Colors.blue,
                           ),
                           _buildStatsCard(
                             context,
                             icon: Icons.people_alt_rounded,
-                            title: 'Customers', // Khách hàng
+                            title: S.of(context).customers,
                             value: state.totalCustomers.toString(),
                             color: Colors.green,
                           ),
                           _buildStatsCard(
                             context,
                             icon: Icons.payments_rounded,
-                            title: 'Revenue', // Doanh thu
+                            title: S.of(context).revenue,
                             value: currencyFormat.format(state.totalRevenue),
                             color: Colors.orange,
                           ),
                           _buildStatsCard(
                             context,
                             icon: Icons.trending_up_rounded,
-                            title: 'Avg. Income', // Thu nhập trung bình
+                            title: S.of(context).avgIncome,
                             value: currencyFormat.format(state.totalOrders > 0
                                 ? state.totalRevenue / state.totalOrders
                                 : 0),
@@ -147,7 +148,7 @@ class _HomeScreen extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Monthly Sales', // Doanh số hàng tháng
+                                S.of(context).monthlySales,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium
@@ -158,14 +159,13 @@ class _HomeScreen extends State<HomeScreen> {
                               PopupMenuButton<String>(
                                 icon: const Icon(Icons.more_vert),
                                 itemBuilder: (context) => [
-                                  const PopupMenuItem(
-                                    value: 'year', // năm
-                                    child:
-                                        Text('Last 12 months'), // 12 tháng qua
+                                  PopupMenuItem(
+                                    value: 'year',
+                                    child: Text(S.of(context).last12Months),
                                   ),
-                                  const PopupMenuItem(
+                                  PopupMenuItem(
                                     value: 'quarter',
-                                    child: Text('Last 3 months'), // 3 tháng qua
+                                    child: Text(S.of(context).last3Months),
                                   ),
                                 ],
                               ),

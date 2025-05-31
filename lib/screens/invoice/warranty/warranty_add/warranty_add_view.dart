@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'warranty_add_cubit.dart';
 import 'warranty_add_state.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class WarrantyAddView extends StatefulWidget {
   const WarrantyAddView({super.key});
@@ -37,7 +38,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
               onPressed: () => Navigator.pop(context),
               fillColor: Colors.transparent,
             ),
-            title: const GradientText(text: 'Create Warranty Invoice'), // Tạo hóa đơn bảo hành
+            title: GradientText(text: S.of(context).createInvoice), // TODO: Add a more specific key if needed
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
@@ -75,9 +76,9 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Customer Information', // Thông tin khách hàng
-                            style: TextStyle(
+                          Text(
+                            S.of(context).customerInformation,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -87,7 +88,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                           DropdownButtonFormField<String>(
                             value: state.selectedCustomerId,
                             decoration: InputDecoration(
-                              labelText: 'Select Customer', // Chọn khách hàng
+                              labelText: S.of(context).selectCustomer,
                               labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)), 
                               prefixIcon: Icon(Icons.person_outline, color: Colors.white.withValues(alpha: 0.7)),
                               border: OutlineInputBorder(
@@ -115,7 +116,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please select a customer'; // Vui lòng chọn khách hàng
+                                return S.of(context).pleaseSelectCustomer;
                               }
                               return null;
                             },
@@ -145,7 +146,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                               ),
                               const SizedBox(height: 16),
                               const Text(
-                                'No sales invoices available', // Không có hóa đơn bán hàng
+                                'No sales invoices available', // TODO: Add to ARB
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -154,7 +155,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'This customer has no eligible sales invoices for warranty claims.', // Khách hàng này không có hóa đơn bán hàng nào hợp lệ để yêu cầu bảo hành.
+                                'This customer has no eligible sales invoices for warranty claims.', // TODO: Add to ARB
                                 style: TextStyle(
                                   color: Colors.grey[400],
                                   fontSize: 16,
@@ -177,9 +178,9 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'Invoice Details', // Chi tiết hóa đơn
-                                style: TextStyle(
+                              Text(
+                                S.of(context).invoiceDetails,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -226,7 +227,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                 },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please select a sales invoice'; // Vui lòng chọn hóa đơn bán hàng
+                                    return 'Please select a sales invoice'; // TODO: Add to ARB
                                   }
                                   return null;
                                 },
@@ -276,7 +277,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'Select Products for Warranty', // Chọn sản phẩm để bảo hành
+                                  'Select Products for Warranty', // TODO: Add to ARB
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -363,7 +364,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Available: ${detail.quantity}', // Số lượng
+                                                    '${S.of(context).availableStock}: ${detail.quantity}',
                                                     style: const TextStyle(
                                                       color: Colors.blue,
                                                       fontWeight: FontWeight.bold,
@@ -441,7 +442,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                               )
                                             else
                                               Text(
-                                                'Available: ${detail.quantity}', // Số lượng
+                                                '${S.of(context).availableStock}: ${detail.quantity}',
                                                 style: const TextStyle(
                                                   color: Colors.blue,
                                                   fontWeight: FontWeight.bold,
@@ -527,7 +528,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
         // Show success message using root context
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Warranty invoice created successfully'), // Tạo hóa đơn bảo hành thành công
+            content: Text('Warranty invoice created successfully'), // TODO: Add to ARB
             backgroundColor: Colors.green,
           ),
         );
@@ -563,7 +564,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
       // Show error message
       ScaffoldMessenger.of(dialogContext).showSnackBar(
         SnackBar(
-          content: Text('Error creating warranty invoice: $e'),
+          content: Text('Error creating warranty invoice: $e'), // TODO: Add to ARB
           backgroundColor: Colors.red,
         ),
       );

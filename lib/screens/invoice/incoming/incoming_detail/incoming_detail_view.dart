@@ -10,6 +10,7 @@ import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import '../permissions/incoming_invoice_permissions.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class IncomingDetailScreen extends StatefulWidget {
   final IncomingInvoice invoice;
@@ -126,7 +127,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  'Invoice #${state.invoice.incomingInvoiceID}', // Hóa đơn #${state.invoice.incomingInvoiceID}
+                                  '${S.of(context).invoiceDetails} #${state.invoice.incomingInvoiceID}',
                                   style: const TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
@@ -136,24 +137,24 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                 ),
                               ),
                               const SizedBox(height: 32),
-                              const Text(
-                                'Invoice Information',
-                                style: TextStyle(
+                              Text(
+                                S.of(context).invoiceDetails,
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue,
                                 ),
                               ),
                               const SizedBox(height: 24),
-                              _buildInfoRow('Manufacturer', state.manufacturer?.manufacturerName ?? 'Unknown'), // Nhà sản xuất
-                              _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)), // Ngày
+                              _buildInfoRow(S.of(context).selectManufacturer, state.manufacturer?.manufacturerName ?? 'Unknown'),
+                              _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Payment Status', // Trạng thái thanh toán
+                                      S.of(context).paymentStatus,
                                       style: TextStyle(
                                         color: Colors.grey[400],
                                         fontSize: 15,
@@ -165,13 +166,13 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                 ),
                               ),
                               _buildTotalPriceRow(
-                                'Total Price', // Tổng giá
+                                S.of(context).totalPrice,
                                 '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
                               ),
                               const SizedBox(height: 32),
-                              const Text(
-                                'Products', // Sản phẩm
-                                style: TextStyle(
+                              Text(
+                                S.of(context).products,
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue,
@@ -205,13 +206,13 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                         }
                                       },
                                       title: Text(
-                                        product?.productName ?? 'Product #${detail.productID}', // Sản phẩm #${detail.productID}
+                                        product?.productName ?? '${S.of(context).products} #${detail.productID}',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                       subtitle: Text(
-                                        'Import Price: \$${detail.importPrice.toStringAsFixed(2)}', // Giá nhập: \$${detail.importPrice.toStringAsFixed(2)}
+                                        '${S.of(context).importPrice}: \$${detail.importPrice.toStringAsFixed(2)}',
                                         style: TextStyle(
                                           color: Theme
                                               .of(context)
@@ -221,7 +222,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                         ),
                                       ),
                                       trailing: Text(
-                                        'Quantity: ${detail.quantity}', // Số lượng: ${detail.quantity}
+                                        '${S.of(context).quantity}: ${detail.quantity}',
                                         style: TextStyle(
                                           color: Theme
                                               .of(context)
@@ -261,12 +262,12 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text('Confirm Payment'), // Xác nhận thanh toán
-                                        content: const Text('Mark this invoice as paid?'), // Đánh dấu hóa đơn này đã thanh toán?
+                                        title: Text(S.of(context).paymentStatus),
+                                        content: Text(S.of(context).markAsPaidQuestion),
                                         actions: [
                                           TextButton(
                                             onPressed: () => Navigator.pop(context),
-                                            child: const Text('Cancel'), // Hủy
+                                            child: Text(S.of(context).cancel),
                                           ),
                                           TextButton(
                                             onPressed: () async {
@@ -275,7 +276,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                                   PaymentStatus.paid);
                                               Navigator.pop(context);
                                             },
-                                            child: const Text('Confirm'), // Xác nhận
+                                            child: Text(S.of(context).confirm),
                                           ),
                                         ],
                                       );
@@ -283,7 +284,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                   );
                                 },
                                 icon: const Icon(Icons.check_circle_outline, color: Colors.white),
-                                label: const Text('Mark as Paid', style: TextStyle(color: Colors.white)), // Đánh dấu đã thanh toán
+                                label: Text(S.of(context).markAsPaidQuestion, style: TextStyle(color: Colors.white)),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
                                   padding: const EdgeInsets.symmetric(vertical: 12),

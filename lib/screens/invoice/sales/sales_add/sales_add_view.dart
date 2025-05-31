@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 import '../../../../objects/customer.dart';
 import '../../../../objects/product_related/product.dart';
@@ -42,9 +43,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
     final invoice = await cubit.createInvoice();
     if (invoice != null && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content:
-              Text('Invoice created successfully.'), // Tạo hóa đơn thành công
+        SnackBar(
+          content: Text(S.of(context).createInvoice), // TODO: Add a more specific key if needed
           backgroundColor: Colors.green,
         ),
       );
@@ -52,7 +52,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(state.error ?? 'Error occurred'), // Có lỗi xảy ra
+          content: Text(state.error ?? S.of(context).errorOccurred), // TODO: Add errorOccurred to ARB
           backgroundColor: Colors.red,
         ),
       );
@@ -69,7 +69,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
         child: BlocBuilder<SalesAddCubit, SalesAddState>(
           builder: (context, state) {
             return AlertDialog(
-              title: const Text('Add Product'), // Thêm sản phẩm
+              title: Text(S.of(context).addProduct),
               content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
@@ -182,7 +182,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         .updateSelectedModalProduct(null);
                     Navigator.pop(context);
                   },
-                  child: const Text('Cancel'), // Hủy
+                  child: Text(S.of(context).cancel),
                 ),
                 TextButton(
                   onPressed: () {
@@ -223,7 +223,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         .updateSelectedModalProduct(null);
                     Navigator.pop(context);
                   },
-                  child: const Text('Add'), // Thêm
+                  child: Text(S.of(context).add),
                 ),
               ],
             );
@@ -290,7 +290,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
               if (addresses.isEmpty)
                 const Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Text('No address found'), // Không tìm thấy địa chỉ
+                  child: Text('No address found'), // TODO: Add to ARB
                 )
               else
                 ListView.builder(
@@ -374,7 +374,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
               onPressed: () => Navigator.pop(context),
               fillColor: Colors.transparent,
             ),
-            title: const GradientText(text: 'New Invoice'), // Hóa đơn mới
+            title: GradientText(text: S.of(context).newInvoice), // TODO: Add to ARB
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
@@ -412,8 +412,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Customer Information', // Thông tin khách hàng
+                            Text(
+                              S.of(context).customerInformation, // TODO: Add to ARB
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -423,12 +423,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
                             DropdownButtonFormField<Customer>(
                               value: state.selectedCustomer,
                               hint: Text(
-                                'Select customer', // Chọn khách hàng
+                                S.of(context).selectCustomer, // TODO: Add to ARB
                                 style: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.7)),
                               ),
                               decoration: InputDecoration(
-                                labelText: 'Customer', // Khách hàng
+                                labelText: S.of(context).customer, // TODO: Add to ARB
                                 labelStyle: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.8)),
                                 prefixIcon: Icon(Icons.person_outline,
@@ -481,7 +481,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               },
                               validator: (value) {
                                 if (value == null) {
-                                  return 'Please select a customer'; // Vui lòng chọn khách hàng
+                                  return S.of(context).pleaseSelectCustomer; // TODO: Add to ARB
                                 }
                                 return null;
                               },
@@ -493,7 +493,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               onTap: () =>
                                   _showAddressBottomSheet(context, state),
                               decoration: InputDecoration(
-                                labelText: 'Address', // Địa chỉ
+                                labelText: S.of(context).address, // TODO: Add to ARB
                                 labelStyle: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.8)),
                                 prefixIcon: Icon(
@@ -529,7 +529,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               maxLines: 3,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please select an address'; // Vui lòng chọn địa chỉ
+                                  return S.of(context).pleaseSelectAddress; // TODO: Add to ARB
                                 }
                                 return null;
                               },
@@ -549,8 +549,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Invoice Details', // Chi tiết hóa đơn
+                            Text(
+                              S.of(context).invoiceDetails,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -565,7 +565,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Payment Status', // Trạng thái thanh toán
+                                        S.of(context).paymentStatus,
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.white
@@ -592,7 +592,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Sales Status', // Trạng thái bán hàng
+                                        S.of(context).salesStatus,
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.white
@@ -657,9 +657,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                           ),
                                         ),
                                         const SizedBox(width: 12),
-                                        const Text(
-                                          'Total Amount', // Tổng số tiền
-                                          style: TextStyle(
+                                        Text(
+                                          S.of(context).totalAmount,
+                                          style: const TextStyle(
                                             fontSize: 16,
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
@@ -699,8 +699,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'Products', // Sản phẩm
+                                Text(
+                                  S.of(context).products,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -713,8 +713,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                     Icons.add,
                                     color: Colors.white,
                                   ),
-                                  label: const Text(
-                                      'Add Product'), // Thêm sản phẩm
+                                  label: Text(S.of(context).addProduct),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Theme.of(context).primaryColor,
@@ -732,7 +731,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Text(
-                                    'No products added yet', // Chưa thêm sản phẩm nào
+                                    S.of(context).noProductsAddedYet, // TODO: Add to ARB
                                     style: TextStyle(
                                         color: Colors.white.withValues(alpha: 0.7)),
                                   ),
@@ -789,7 +788,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                                 WrapCrossAlignment.center,
                                             children: [
                                               Text(
-                                                'Price: \$${detail.sellingPrice.toStringAsFixed(2)}', // Giá:
+                                                '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
                                                 style: TextStyle(
                                                   color: Colors.white
                                                       .withValues(alpha: 0.8),
@@ -877,7 +876,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                           ...[
                                             const SizedBox(height: 4),
                                             Text(
-                                              'Available stock: ${product.stock}', // Hàng tồn kho:
+                                              '${S.of(context).availableStock}: \\${product.stock}',
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white
@@ -900,7 +899,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(
-                                        'Total Amount', // Tổng số tiền
+                                        S.of(context).totalAmount,
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.white.withValues(alpha: 0.8),

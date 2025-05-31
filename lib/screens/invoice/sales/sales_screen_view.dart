@@ -10,6 +10,7 @@ import '../../../objects/invoice_related/sales_invoice.dart';
 import 'sales_screen_cubit.dart';
 import 'sales_screen_state.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class SalesScreen extends StatefulWidget {
   const SalesScreen({super.key});
@@ -47,7 +48,7 @@ class _SalesScreenState extends State<SalesScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find sales invoices...', // Tìm hóa đơn bán hàng
+                        hintText: S.of(context).searchSalesInvoices, // TODO: Add to ARB if not present
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
@@ -90,7 +91,7 @@ class _SalesScreenState extends State<SalesScreen> {
                       : state.invoices.isEmpty
                           ? Center(
                               child: Text(
-                                'No sales invoices found', // Không tìm thấy hóa đơn bán hàng
+                                S.of(context).noSalesInvoicesFound, // TODO: Add to ARB if not present
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -142,7 +143,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                     size: 20,
                                                     color: Colors.white,
                                                   ),
-                                                  title: const Text('View'), // Xem
+                                                  title: Text(S.of(context).view),
                                                   onTap: () => _handleViewInvoice(context, invoice),
                                                 ),
                                                 // if (SalesInvoicePermissions.canEditInvoice(state.userRole, invoice))
@@ -206,7 +207,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Invoice #${invoice.salesInvoiceID}', // Hóa đơn #
+                                                    '${S.of(context).invoiceDetails} #${invoice.salesInvoiceID}',
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.bold,
                                                       fontSize: 16,
@@ -307,7 +308,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Sort Options', // Tùy chọn sắp xếp
+                          S.of(context).sortBy, // TODO: Add to ARB if not present
                           style: TextStyle(
                             color: Theme.of(dialogContext).colorScheme.onSurface,
                             fontSize: 18,
@@ -324,7 +325,7 @@ class _SalesScreenState extends State<SalesScreen> {
                       children: [
                         _buildSortOption(
                           dialogContext,
-                          'Date (Newest First)', // Ngày (Mới nhất trước)
+                          S.of(context).dateNewestFirst,
                           Icons.calendar_today,
                           () {
                             cubit.sortInvoices('date', true);
@@ -334,7 +335,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         const SizedBox(height: 8),
                         _buildSortOption(
                           dialogContext,
-                          'Date (Oldest First)', // Ngày (Cũ nhất trước)
+                          S.of(context).dateOldestFirst,
                           Icons.calendar_today_outlined,
                           () {
                             cubit.sortInvoices('date', false);
@@ -344,7 +345,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         const SizedBox(height: 8),
                         _buildSortOption(
                           dialogContext,
-                          'Price (Highest First)', // Giá (Cao nhất trước)
+                          S.of(context).priceHighestFirst,
                           Icons.attach_money,
                           () {
                             cubit.sortInvoices('price', true);
@@ -354,7 +355,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         const SizedBox(height: 8),
                         _buildSortOption(
                           dialogContext,
-                          'Price (Lowest First)', // Giá (Thấp nhất trước)
+                          S.of(context).priceLowestFirst,
                           Icons.money_off,
                           () {
                             cubit.sortInvoices('price', false);
