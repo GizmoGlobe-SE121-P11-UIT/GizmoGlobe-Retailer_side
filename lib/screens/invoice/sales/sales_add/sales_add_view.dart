@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
 
 import '../../../../objects/customer.dart';
 import '../../../../objects/product_related/product.dart';
@@ -44,7 +44,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
     if (invoice != null && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(S.of(context).createInvoice), // TODO: Add a more specific key if needed
+          content: Text(S.of(context).createInvoice),
           backgroundColor: Colors.green,
         ),
       );
@@ -52,7 +52,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(state.error ?? S.of(context).errorOccurred), // TODO: Add errorOccurred to ARB
+          content: Text(state.error ?? S.of(context).errorOccurred),
           backgroundColor: Colors.red,
         ),
       );
@@ -83,11 +83,11 @@ class _SalesAddViewState extends State<_SalesAddView> {
                             .updateSelectedModalProduct(product);
                       },
                       decoration: InputDecoration(
-                        labelText: 'Product', // Sản phẩm
-                        hintText: 'Select product', // Chọn sản phẩm
+                        labelText: S.of(context).product, // Localized
+                        hintText: S.of(context).selectProduct, // Localized
                         labelStyle: const TextStyle(color: Colors.white),
-                        hintStyle: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7)),
+                        hintStyle:
+                            TextStyle(color: Colors.white.withAlpha(179)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -102,9 +102,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         ),
                       ),
                       hint: Text(
-                        'Select product', // Chọn sản phẩm
-                        style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7)),
+                        S.of(context).selectProduct, // Localized
+                        style: TextStyle(color: Colors.white.withAlpha(179)),
                       ),
                       items: state.products
                           .where((product) => product.stock > 0)
@@ -188,9 +187,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                   onPressed: () {
                     if (state.selectedModalProduct == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(
-                                'Please select a product')), // Vui lòng chọn sản phẩm
+                        SnackBar(
+                            content: Text(S.of(context).pleaseSelectProduct)),
                       );
                       return;
                     }
@@ -198,18 +196,16 @@ class _SalesAddViewState extends State<_SalesAddView> {
                     final quantity = int.tryParse(quantityController.text) ?? 0;
                     if (quantity <= 0) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(
-                                'Quantity must be greater than 0')), // Số lượng phải lớn hơn 0
+                        SnackBar(
+                            content:
+                                Text(S.of(context).quantityGreaterThanZero)),
                       );
                       return;
                     }
 
                     if (quantity > state.selectedModalProduct!.stock) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content:
-                                Text('Not enough stock')), // Không đủ hàng tồn
+                        SnackBar(content: Text(S.of(context).notEnoughStock)),
                       );
                       return;
                     }
@@ -238,9 +234,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
     try {
       if (state.selectedCustomer == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-                'Please select a customer first'), // Vui lòng chọn khách hàng trước
+          SnackBar(
+            content: Text(S.of(context).pleaseSelectCustomerFirst),
             backgroundColor: Colors.red,
           ),
         );
@@ -273,9 +268,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Enter Address', // Nhập địa chỉ
-                    style: TextStyle(
+                  Text(
+                    S.of(context).enterAddress,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -288,9 +283,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
               ),
               const SizedBox(height: 16),
               if (addresses.isEmpty)
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('No address found'), // TODO: Add to ARB
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(S.of(context).noAddressFound),
                 )
               else
                 ListView.builder(
@@ -374,7 +369,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
               onPressed: () => Navigator.pop(context),
               fillColor: Colors.transparent,
             ),
-            title: GradientText(text: S.of(context).newInvoice), // TODO: Add to ARB
+            title: GradientText(text: S.of(context).newInvoice),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
@@ -413,7 +408,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              S.of(context).customerInformation, // TODO: Add to ARB
+                              S.of(context).customerInformation,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -423,12 +418,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
                             DropdownButtonFormField<Customer>(
                               value: state.selectedCustomer,
                               hint: Text(
-                                S.of(context).selectCustomer, // TODO: Add to ARB
+                                S.of(context).selectCustomer,
                                 style: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.7)),
                               ),
                               decoration: InputDecoration(
-                                labelText: S.of(context).customer, // TODO: Add to ARB
+                                labelText: S.of(context).customer,
                                 labelStyle: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.8)),
                                 prefixIcon: Icon(Icons.person_outline,
@@ -456,7 +451,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               icon: Icon(Icons.arrow_drop_down,
                                   color: Colors.white.withValues(alpha: 0.7)),
                               iconEnabledColor: Colors.white,
-                              iconDisabledColor: Colors.white.withValues(alpha: 0.5),
+                              iconDisabledColor:
+                                  Colors.white.withValues(alpha: 0.5),
                               items: state.customers.map((customer) {
                                 return DropdownMenuItem(
                                   value: customer,
@@ -481,7 +477,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               },
                               validator: (value) {
                                 if (value == null) {
-                                  return S.of(context).pleaseSelectCustomer; // TODO: Add to ARB
+                                  return S.of(context).pleaseSelectCustomer;
                                 }
                                 return null;
                               },
@@ -493,7 +489,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               onTap: () =>
                                   _showAddressBottomSheet(context, state),
                               decoration: InputDecoration(
-                                labelText: S.of(context).address, // TODO: Add to ARB
+                                labelText: S.of(context).address,
                                 labelStyle: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.8)),
                                 prefixIcon: Icon(
@@ -529,7 +525,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               maxLines: 3,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return S.of(context).pleaseSelectAddress; // TODO: Add to ARB
+                                  return S.of(context).pleaseSelectAddress;
                                 }
                                 return null;
                               },
@@ -731,9 +727,10 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Text(
-                                    S.of(context).noProductsAddedYet, // TODO: Add to ARB
+                                    S.of(context).noProductsAddedYet,
                                     style: TextStyle(
-                                        color: Colors.white.withValues(alpha: 0.7)),
+                                        color: Colors.white
+                                            .withValues(alpha: 0.7)),
                                   ),
                                 ),
                               )
@@ -808,7 +805,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                                           : Theme.of(context)
                                                               .colorScheme
                                                               .onSurface
-                                                              .withValues(alpha: 0.3),
+                                                              .withValues(
+                                                                  alpha: 0.3),
                                                     ),
                                                     onPressed: detail.quantity >
                                                             1
@@ -848,7 +846,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                                           : Theme.of(context)
                                                               .colorScheme
                                                               .onSurface
-                                                              .withValues(alpha: 0.3),
+                                                              .withValues(
+                                                                  alpha: 0.3),
                                                     ),
                                                     onPressed: detail.quantity <
                                                             product.stock
@@ -902,7 +901,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                         S.of(context).totalAmount,
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: Colors.white.withValues(alpha: 0.8),
+                                          color: Colors.white
+                                              .withValues(alpha: 0.8),
                                         ),
                                       ),
                                       const SizedBox(height: 4),

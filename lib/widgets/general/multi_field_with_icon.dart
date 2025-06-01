@@ -37,6 +37,8 @@ class MultiFieldWithIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return IntrinsicHeight(
       child: Row(
         children: [
@@ -55,10 +57,15 @@ class MultiFieldWithIcon extends StatelessWidget {
                 top: fontSize,
                 left: 16,
               ),
-              child: prefixIcon,
+              child: prefixIcon != null
+                  ? Icon(
+                      prefixIcon!.icon,
+                      color: theme.colorScheme.primary,
+                      size: prefixIcon!.size,
+                    )
+                  : null,
             ),
           ),
-
           Expanded(
             child: TextFormField(
               maxLines: maxLines,
@@ -72,8 +79,8 @@ class MultiFieldWithIcon extends StatelessWidget {
                 isDense: true,
                 fillColor: fillColor,
                 hintText: hintText,
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
+                hintStyle: TextStyle(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.only(
@@ -88,6 +95,7 @@ class MultiFieldWithIcon extends StatelessWidget {
               style: TextStyle(
                 fontSize: fontSize,
                 fontWeight: fontWeight,
+                color: theme.colorScheme.onSurface,
               ),
             ),
           ),

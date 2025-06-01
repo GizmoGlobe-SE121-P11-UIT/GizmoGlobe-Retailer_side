@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 import '../../../widgets/general/gradient_icon_button.dart';
 import '../../../widgets/general/gradient_text.dart';
@@ -12,7 +13,7 @@ class SupportScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const GradientText(text: 'Support'), // Hỗ trợ
+        title: GradientText(text: S.of(context).supportTitle),
         leading: GradientIconButton(
           icon: Icons.chevron_left,
           onPressed: () {
@@ -26,9 +27,9 @@ class SupportScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Members of teams', // Thành viên nhóm
-              style: TextStyle(
+            Text(
+              S.of(context).supportMembers,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -42,7 +43,7 @@ class SupportScreen extends StatelessWidget {
                 context,
                 name: 'Tô Vĩnh Tiến',
                 studentId: '22521474',
-                role: 'Developer', // Lập trình viên
+                role: S.of(context).supportRoleDeveloper,
                 email: '22521474@gm.uit.edu.vn',
               ),
             ),
@@ -54,7 +55,7 @@ class SupportScreen extends StatelessWidget {
                 context,
                 name: 'Đỗ Hồng Quân',
                 studentId: '22521175',
-                role: 'Developer', // Lập trình viên
+                role: S.of(context).supportRoleDeveloper,
                 email: '22521175@gm.uit.edu.vn',
               ),
             ),
@@ -78,7 +79,7 @@ class SupportScreen extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
         leading: Icon(
-          icon, 
+          icon,
           size: 32,
           color: Colors.blue,
         ),
@@ -127,9 +128,12 @@ class SupportScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            _buildDetailRow(Icons.badge_outlined, 'Student ID: $studentId'), // Mã số sinh viên
-            _buildDetailRow(Icons.work_outline, 'Role: $role'), // Vai trò
-            _buildDetailRow(Icons.email_outlined, 'Email: $email'), // Email
+            _buildDetailRow(Icons.badge_outlined,
+                S.of(context).supportStudentId(studentId)),
+            _buildDetailRow(
+                Icons.work_outline, S.of(context).supportRole(role)),
+            _buildDetailRow(
+                Icons.email_outlined, S.of(context).supportEmail(email)),
             const SizedBox(height: 16),
           ],
         ),
@@ -152,4 +156,4 @@ class SupportScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

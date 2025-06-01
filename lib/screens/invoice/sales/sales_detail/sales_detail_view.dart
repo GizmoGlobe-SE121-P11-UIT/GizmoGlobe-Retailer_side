@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
+import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../enums/product_related/category_enum.dart';
 import '../permissions/sales_invoice_permissions.dart';
 import '../sales_edit/sales_edit_view.dart';
 import 'sales_detail_cubit.dart';
 import 'sales_detail_state.dart';
-import '../../../../enums/product_related/category_enum.dart';
-import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
-
 
 class SalesDetailScreen extends StatefulWidget {
   final SalesInvoice invoice;
@@ -29,13 +29,12 @@ class SalesDetailScreen extends StatefulWidget {
 class _SalesDetailScreenState extends State<SalesDetailScreen> {
   IconData _getCategoryIcon(String? category) {
     if (category == null) return Icons.device_unknown;
-    
+
     // Convert string to CategoryEnum
     CategoryEnum? categoryEnum;
     try {
       categoryEnum = CategoryEnum.values.firstWhere(
-        (e) => e.getName().toLowerCase() == category.toLowerCase()
-      );
+          (e) => e.getName().toLowerCase() == category.toLowerCase());
     } catch (e) {
       return Icons.device_unknown;
     }
@@ -58,13 +57,15 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
     }
   }
 
-
   Widget _buildTotalPriceRow(String label, String value) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+        color: Theme.of(context)
+            .colorScheme
+            .primaryContainer
+            .withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
@@ -123,7 +124,8 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                 fillColor: Colors.transparent,
               ),
               actions: [
-                if (SalesInvoicePermissions.canEditInvoice(state.userRole, state.invoice))
+                if (SalesInvoicePermissions.canEditInvoice(
+                    state.userRole, state.invoice))
                   IconButton(
                     icon: const Icon(Icons.edit),
                     onPressed: () async {
@@ -136,7 +138,9 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                         ),
                       );
                       if (result != null) {
-                        context.read<SalesDetailCubit>().updateSalesInvoice(result);
+                        context
+                            .read<SalesDetailCubit>()
+                            .updateSalesInvoice(result);
                       }
                     },
                   ),
@@ -155,7 +159,9 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                           Center(
                             child: CircleAvatar(
                               radius: 50,
-                              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                              backgroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
                               child: Icon(
                                 Icons.receipt,
                                 size: 50,
@@ -186,8 +192,12 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                             ),
                           ),
                           const SizedBox(height: 24),
-                          _buildInfoRow(S.of(context).customer, state.invoice.customerName),
-                          _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)),
+                          _buildInfoRow(S.of(context).customer,
+                              state.invoice.customerName),
+                          _buildInfoRow(
+                              S.of(context).date,
+                              DateFormat('dd/MM/yyyy')
+                                  .format(state.invoice.date)),
                           _buildInfoRow(
                             S.of(context).address,
                             state.invoice.address.toString(),
@@ -208,7 +218,8 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                StatusBadge(status: state.invoice.paymentStatus),
+                                StatusBadge(
+                                    status: state.invoice.paymentStatus),
                               ],
                             ),
                           ),
@@ -235,7 +246,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                             S.of(context).totalPrice,
                             '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
                           ),
-                          
+
                           const SizedBox(height: 32),
                           Text(
                             S.of(context).products,
@@ -255,13 +266,16 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                               return InkWell(
                                 onTap: () async {
                                   // Get product details and navigate
-                                  final product = await context.read<SalesDetailCubit>().getProduct(detail.productID);
+                                  final product = await context
+                                      .read<SalesDetailCubit>()
+                                      .getProduct(detail.productID);
                                   if (product != null && context.mounted) {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => BlocProvider(
-                                          create: (context) => ProductDetailCubit(product),
+                                          create: (context) =>
+                                              ProductDetailCubit(product),
                                           child: ProductDetailScreen(
                                             product: product,
                                           ),
@@ -281,32 +295,41 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                       Padding(
                                         padding: const EdgeInsets.all(12),
                                         child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             // Product Image/Icon
                                             Container(
                                               width: 60,
                                               height: 60,
                                               decoration: BoxDecoration(
-                                                color: Theme.of(context).colorScheme.primaryContainer,
-                                                borderRadius: BorderRadius.circular(8),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primaryContainer,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
                                               ),
                                               child: Icon(
-                                                _getCategoryIcon(detail.category),
+                                                _getCategoryIcon(
+                                                    detail.category),
                                                 size: 30,
-                                                color: Theme.of(context).colorScheme.primary,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                               ),
                                             ),
                                             const SizedBox(width: 12),
                                             // Product Details
                                             Expanded(
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     '${S.of(context).products} #${detail.productID}',
                                                     style: const TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontSize: 16,
                                                     ),
                                                   ),
@@ -314,14 +337,19 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                                   Text(
                                                     '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
                                                     style: TextStyle(
-                                                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface
+                                                          .withValues(
+                                                              alpha: 0.6),
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
-                                                    'Subtotal: \$${detail.subtotal.toStringAsFixed(2)}',
+                                                    '${S.of(context).subtotal}: \$${detail.subtotal.toStringAsFixed(2)}',
                                                     style: const TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 16,
                                                     ),
                                                   ),
@@ -336,10 +364,14 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                         top: 8,
                                         right: 8,
                                         child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).colorScheme.primary,
-                                            borderRadius: BorderRadius.circular(12),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                           ),
                                           child: Text(
                                             'x${detail.quantity}',
@@ -367,7 +399,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                     color: Theme.of(context).colorScheme.surface,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2), 
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
@@ -375,7 +407,8 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                   ),
                   child: Row(
                     children: [
-                      if (SalesInvoicePermissions.canEditInvoice(state.userRole, state.invoice))
+                      if (SalesInvoicePermissions.canEditInvoice(
+                          state.userRole, state.invoice))
                         Expanded(
                           child: ElevatedButton.icon(
                             onPressed: () async {
@@ -398,11 +431,12 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                               color: Colors.white,
                             ),
                             label: Text(
-                              'Edit Invoice',
+                              S.of(context).editInvoice,
                               style: TextStyle(color: Colors.white),
                             ),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context).colorScheme.primary,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
                               padding: const EdgeInsets.symmetric(vertical: 12),
                             ),
                           ),
@@ -418,11 +452,13 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {Color? valueColor, bool wrap = false, double? maxWidth}) {
+  Widget _buildInfoRow(String label, String value,
+      {Color? valueColor, bool wrap = false, double? maxWidth}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-        crossAxisAlignment: wrap ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+        crossAxisAlignment:
+            wrap ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(

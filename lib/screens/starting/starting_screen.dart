@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,11 +40,12 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 80,
-                backgroundColor: Color(0xFFC15BFF), // Purple color for avatar background
+                backgroundColor:
+                    Color(0xFFC15BFF), // Purple color for avatar background
                 child: Text(
-                  'App Avatar',
+                  S.of(context).appAvatar,
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -51,11 +53,11 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'GizmoGlobe', // Change the text here
+              Text(
+                S.of(context).appTitle,
                 style: TextStyle(
-                  fontSize: 30, // Increase the font size here
-                  color: Colors.white, // You can change the color if needed
+                  fontSize: 30,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 40),
@@ -68,7 +70,7 @@ class WelcomeScreen extends StatelessWidget {
                   backgroundColor: WidgetStateProperty.all<Color>(
                       const Color(0xFFC15BFF)), // Purple color for button
                 ),
-                child: const Text('Create new account'), // Tạo tài khoản mới
+                child: Text(S.of(context).createNewAccount), // Localized
               ),
               const SizedBox(height: 10), // Add spacing between buttons
               ElevatedButton(
@@ -79,7 +81,7 @@ class WelcomeScreen extends StatelessWidget {
                   backgroundColor: WidgetStateProperty.all<Color>(
                       const Color(0xFF0A98FF)), // Blue color for button
                 ),
-                child: const Text('Already have an account?'), // Đã có tài khoản
+                child: Text(S.of(context).alreadyHaveAccount), // Localized
               ),
             ],
           ),

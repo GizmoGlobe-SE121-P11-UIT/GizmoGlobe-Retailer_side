@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_add/sales_add_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_detail/sales_detail_view.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
+import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
+
 import '../../../data/firebase/firebase.dart';
 import '../../../objects/invoice_related/sales_invoice.dart';
 import 'sales_screen_cubit.dart';
 import 'sales_screen_state.dart';
-import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class SalesScreen extends StatefulWidget {
   const SalesScreen({super.key});
@@ -48,12 +49,15 @@ class _SalesScreenState extends State<SalesScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: S.of(context).searchSalesInvoices, // TODO: Add to ARB if not present
+                        hintText: S
+                            .of(context)
+                            .searchSalesInvoices, // TODO: Add to ARB if not present
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
                         },
-                        prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+                        prefixIcon: Icon(Icons.search,
+                            color: Theme.of(context).primaryColor),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -75,7 +79,7 @@ class _SalesScreenState extends State<SalesScreen> {
                             builder: (context) => const SalesAddScreen(),
                           ),
                         );
-                    
+
                         // Refresh list if new invoice was created
                         if (result != null && mounted) {
                           context.read<SalesScreenCubit>().loadInvoices();
@@ -91,12 +95,14 @@ class _SalesScreenState extends State<SalesScreen> {
                       : state.invoices.isEmpty
                           ? Center(
                               child: Text(
-                                S.of(context).noSalesInvoicesFound, // TODO: Add to ARB if not present
+                                S
+                                    .of(context)
+                                    .noSalesInvoicesFound, // TODO: Add to ARB if not present
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onSurface
-                                      .withValues(alpha: 0.6), 
+                                      .withValues(alpha: 0.6),
                                 ),
                               ),
                             )
@@ -130,8 +136,10 @@ class _SalesScreenState extends State<SalesScreen> {
                                           content: Container(
                                             width: 120,
                                             decoration: BoxDecoration(
-                                              color: Theme.of(context).cardColor,
-                                              borderRadius: BorderRadius.circular(8),
+                                              color:
+                                                  Theme.of(context).cardColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
@@ -143,8 +151,11 @@ class _SalesScreenState extends State<SalesScreen> {
                                                     size: 20,
                                                     color: Colors.white,
                                                   ),
-                                                  title: Text(S.of(context).view),
-                                                  onTap: () => _handleViewInvoice(context, invoice),
+                                                  title:
+                                                      Text(S.of(context).view),
+                                                  onTap: () =>
+                                                      _handleViewInvoice(
+                                                          context, invoice),
                                                 ),
                                                 // if (SalesInvoicePermissions.canEditInvoice(state.userRole, invoice))
                                                 //   ListTile(
@@ -178,7 +189,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                         color: state.selectedIndex == index
                                             ? Theme.of(context)
                                                 .primaryColor
-                                                .withValues(alpha: 0.1) 
+                                                .withValues(alpha: 0.1)
                                             : Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -209,28 +220,41 @@ class _SalesScreenState extends State<SalesScreen> {
                                                   Text(
                                                     '${S.of(context).invoiceDetails} #${invoice.salesInvoiceID}',
                                                     style: const TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 16,
                                                     ),
                                                     maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                   const SizedBox(height: 8),
                                                   Wrap(
                                                     spacing: 8,
                                                     runSpacing: 4,
-                                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                                    crossAxisAlignment:
+                                                        WrapCrossAlignment
+                                                            .center,
                                                     children: [
-                                                      StatusBadge(status: invoice.paymentStatus),
-                                                      StatusBadge(status: invoice.salesStatus),
+                                                      StatusBadge(
+                                                          status: invoice
+                                                              .paymentStatus),
+                                                      StatusBadge(
+                                                          status: invoice
+                                                              .salesStatus),
                                                       Text(
-                                                        DateFormat('dd/MM/yyyy').format(invoice.date), // Ngày
+                                                        DateFormat('dd/MM/yyyy')
+                                                            .format(invoice
+                                                                .date), // Ngày
                                                         style: TextStyle(
                                                           fontSize: 12,
-                                                          color: Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurface
-                                                              .withValues(alpha: 0.6), 
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onSurface
+                                                                  .withValues(
+                                                                      alpha:
+                                                                          0.6),
                                                         ),
                                                       ),
                                                     ],
@@ -308,9 +332,12 @@ class _SalesScreenState extends State<SalesScreen> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          S.of(context).sortBy, // TODO: Add to ARB if not present
+                          S
+                              .of(context)
+                              .sortBy, // TODO: Add to ARB if not present
                           style: TextStyle(
-                            color: Theme.of(dialogContext).colorScheme.onSurface,
+                            color:
+                                Theme.of(dialogContext).colorScheme.onSurface,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -412,7 +439,8 @@ class _SalesScreenState extends State<SalesScreen> {
     );
   }
 
-  Future<void> _handleViewInvoice(BuildContext contextDialog, SalesInvoice invoice) async {
+  Future<void> _handleViewInvoice(
+      BuildContext contextDialog, SalesInvoice invoice) async {
     // Close menu dialog first
     Navigator.pop(contextDialog);
     cubit.setSelectedIndex(null);
@@ -432,7 +460,8 @@ class _SalesScreenState extends State<SalesScreen> {
 
     try {
       // Get invoice details
-      final details = await firebase.getSalesInvoiceDetails(invoice.salesInvoiceID);
+      final details =
+          await firebase.getSalesInvoiceDetails(invoice.salesInvoiceID);
       invoice.details = details;
 
       if (!mounted) return;
@@ -452,10 +481,13 @@ class _SalesScreenState extends State<SalesScreen> {
       if (!mounted) return;
       // Close loading dialog
       Navigator.pop(context);
-      
+
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading invoice details: $e')), // Lỗi tải chi tiết hóa đơn
+        SnackBar(
+            content: Text(S
+                .of(context)
+                .errorLoadingInvoiceDetails(e.toString()))), // Localized
       );
     }
   }

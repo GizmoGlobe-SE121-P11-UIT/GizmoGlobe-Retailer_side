@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/general/app_logo.dart';
+
 import '../../../widgets/general/invisible_gradient_button.dart';
 import '../main_screen/main_screen_cubit.dart';
 import 'drawer_cubit.dart';
@@ -34,9 +36,10 @@ class DrawerView extends StatelessWidget {
                           child: BlocBuilder<MainScreenCubit, MainScreenState>(
                             builder: (context, state) {
                               return Text(
-                                'Hello! ${state.username}', // Xin chào
+                                '${S.of(context).hello} ${state.username}',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   fontSize: 16,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -62,7 +65,8 @@ class DrawerView extends StatelessWidget {
                               // Handle category tap
                             },
                             visualDensity: VisualDensity.compact,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                           );
                         }).toList(),
                       ),
@@ -71,7 +75,7 @@ class DrawerView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Contact Us:', // Liên hệ
+                          S.of(context).contactUs,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 16,
@@ -101,7 +105,7 @@ class DrawerView extends StatelessWidget {
                         cubit.logOut(context);
                       },
                       suffixIcon: Icons.logout,
-                      text: 'Log out', // Đăng xuất
+                      text: S.of(context).logOut,
                     ),
                     const SizedBox(height: 16),
                   ],

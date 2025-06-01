@@ -62,11 +62,7 @@ class FieldWithIcon extends StatelessWidget {
         Container(
           height: height,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: borderRadius,
           ),
           padding: padding,
@@ -95,24 +91,28 @@ class FieldWithIcon extends StatelessWidget {
                   fontSize: fontSize,
                   fontWeight: fontWeight,
                 ),
-                prefixIcon: prefixIcon != null ? InkWell(
-                  onTap: onPrefixIconPressed,
-                  child: prefixIcon,
-                ) : null,
-                suffixIcon: suffixIcon != null ? InkWell(
-                  onTap: onSuffixIconPressed,
-                  child: suffixIcon,
-                ) : null,
+                prefixIcon: prefixIcon != null
+                    ? InkWell(
+                        onTap: onPrefixIconPressed,
+                        child: prefixIcon,
+                      )
+                    : null,
+                suffixIcon: suffixIcon != null
+                    ? InkWell(
+                        onTap: onSuffixIconPressed,
+                        child: suffixIcon,
+                      )
+                    : null,
                 border: OutlineInputBorder(
                   borderRadius: borderRadius,
                   borderSide: BorderSide.none,
                 ),
-                contentPadding: EdgeInsets.symmetric(vertical: (height - fontSize) / 2 - 6, horizontal: 16),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: (height - fontSize) / 2 - 6, horizontal: 16),
               ),
               keyboardType: keyboardType,
-              inputFormatters: inputFormatters ?? [
-                FilteringTextInputFormatter.allow(RegExp(r'.*'))
-              ],
+              inputFormatters: inputFormatters ??
+                  [FilteringTextInputFormatter.allow(RegExp(r'.*'))],
               style: TextStyle(
                 fontSize: fontSize,
                 fontWeight: fontWeight,

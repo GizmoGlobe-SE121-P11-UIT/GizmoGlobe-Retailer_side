@@ -6,7 +6,7 @@ class VerticalIconButton extends StatelessWidget {
   final String text;
   final double iconSize;
   final double fontSize;
-  final Color? color;
+  final bool isSelected;
 
   const VerticalIconButton({
     super.key,
@@ -15,11 +15,15 @@ class VerticalIconButton extends StatelessWidget {
     required this.text,
     this.iconSize = 32.0,
     this.fontSize = 16.0,
-    this.color = Colors.white,
+    this.isSelected = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color =
+        isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface;
+
     return GestureDetector(
       onTap: onPress,
       child: Column(

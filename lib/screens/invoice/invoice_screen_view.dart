@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/screens/invoice/incoming/incoming_screen_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_state.dart';
-import 'package:gizmoglobe_client/screens/invoice/incoming/incoming_screen_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_screen_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/warranty/warranty_screen_view.dart';
 
@@ -42,10 +43,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   unselectedLabelColor: Colors.white,
                   indicatorColor: Theme.of(context).primaryColor,
                   dividerColor: Colors.transparent,
-                  tabs: const [
-                    Tab(text: 'Sales'), // Bán hàng
-                    Tab(text: 'Incoming'), // Nhập hàng
-                    Tab(text: 'Warranty'), // Bảo hành
+                  tabs: [
+                    Tab(text: S.of(context).sales),
+                    Tab(text: S.of(context).incoming),
+                    Tab(text: S.of(context).warranty),
                   ],
                 ),
               ),

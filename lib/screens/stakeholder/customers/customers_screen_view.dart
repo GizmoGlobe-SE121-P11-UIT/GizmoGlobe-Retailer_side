@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
-import 'customers_screen_cubit.dart';
-import 'customers_screen_state.dart';
+
 import 'customer_detail/customer_detail_view.dart';
 import 'customer_edit/customer_edit_view.dart';
+import 'customers_screen_cubit.dart';
+import 'customers_screen_state.dart';
 import 'permissions/customer_permissions.dart';
 
 class CustomersScreen extends StatefulWidget {
@@ -25,7 +27,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  
+
   CustomersScreenCubit get cubit => context.read<CustomersScreenCubit>();
 
   void _showAddCustomerModal(BuildContext context) {
@@ -59,9 +61,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
                       size: 28,
                     ),
                     const SizedBox(width: 12),
-                    const Text(
-                      'Add New Customer', //Thêm khách hàng mới
-                      style: TextStyle(
+                    Text(
+                      S.of(context).addNewCustomer,
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -72,7 +74,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 TextFormField(
                   controller: nameController,
                   decoration: InputDecoration(
-                    labelText: 'Full Name', //Họ và tên
+                    labelText: S.of(context).fullName,
                     prefixIcon: Icon(
                       Icons.person_outline,
                       color: Theme.of(context).primaryColor,
@@ -107,7 +109,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 TextFormField(
                   controller: emailController,
                   decoration: InputDecoration(
-                    labelText: 'Email', //Email
+                    labelText: S.of(context).email,
                     prefixIcon: Icon(
                       Icons.email_outlined,
                       color: Theme.of(context).primaryColor,
@@ -142,7 +144,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 TextFormField(
                   controller: phoneController,
                   decoration: InputDecoration(
-                    labelText: 'Phone Number', //Số điện thoại
+                    labelText: S.of(context).phoneNumber,
                     prefixIcon: Icon(
                       Icons.phone_outlined,
                       color: Theme.of(context).primaryColor,
@@ -186,7 +188,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         ),
                       ),
                       child: Text(
-                        'Cancel', //Hủy
+                        S.of(context).cancel,
                         style: TextStyle(
                           color: Colors.grey.shade400,
                           fontSize: 16,
@@ -200,8 +202,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
                             emailController.text.isEmpty ||
                             phoneController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill in all fields'), //Vui lòng điền tất cả các trường
+                            SnackBar(
+                              content:
+                                  Text(S.of(context).pleaseFillInAllFields),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -227,8 +230,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
                           if (mounted) {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Customer added successfully'), //Khách hàng đã được thêm thành công
+                              SnackBar(
+                                content: Text(
+                                    S.of(context).customerAddedSuccessfully),
                                 backgroundColor: Colors.green,
                               ),
                             );
@@ -245,9 +249,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
-                        'Add Customer', //Thêm khách hàng
-                        style: TextStyle(
+                      child: Text(
+                        S.of(context).addCustomer,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -291,15 +295,17 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find customers...', //Tìm kiếm khách hàng
+                        hintText: S.of(context).findCustomers,
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchCustomers(value);
                         },
-                        prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+                        prefixIcon: Icon(Icons.search,
+                            color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    if (CustomerPermissions.canAddCustomers(state.userRole)) ...[
+                    if (CustomerPermissions.canAddCustomers(
+                        state.userRole)) ...[
                       const SizedBox(width: 8),
                       GradientIconButton(
                         icon: Icons.person_add,
@@ -313,15 +319,16 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 ),
                 const SizedBox(height: 16),
                 Expanded(
-                  child: BlocBuilder<CustomersScreenCubit, CustomersScreenState>(
+                  child:
+                      BlocBuilder<CustomersScreenCubit, CustomersScreenState>(
                     builder: (context, state) {
                       if (state.isLoading) {
                         return const Center(child: CircularProgressIndicator());
                       }
 
                       if (state.customers.isEmpty) {
-                        return const Center(
-                          child: Text('No matching customers found'), //Không tìm thấy khách hàng nào phù hợp
+                        return Center(
+                          child: Text(S.of(context).noMatchingCustomersFound),
                         );
                       }
 
@@ -336,9 +343,12 @@ class _CustomersScreenState extends State<CustomersScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CustomerDetailScreen.newInstance(
+                                  builder: (context) =>
+                                      CustomerDetailScreen.newInstance(
                                     customer: customer,
-                                    readOnly: !CustomerPermissions.canEditCustomers(state.userRole),
+                                    readOnly:
+                                        !CustomerPermissions.canEditCustomers(
+                                            state.userRole),
                                   ),
                                 ),
                               );
@@ -368,22 +378,29 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                               size: 20,
                                               color: Colors.white,
                                             ),
-                                            title: const Text('View'), //Xem
+                                            title: Text(S.of(context).view),
                                             onTap: () {
                                               Navigator.pop(context);
                                               cubit.setSelectedIndex(null);
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                  builder: (context) => CustomerDetailScreen.newInstance(
+                                                  builder: (context) =>
+                                                      CustomerDetailScreen
+                                                          .newInstance(
                                                     customer: customer,
-                                                    readOnly: !CustomerPermissions.canEditCustomers(state.userRole),
+                                                    readOnly:
+                                                        !CustomerPermissions
+                                                            .canEditCustomers(
+                                                                state.userRole),
                                                   ),
                                                 ),
                                               );
                                             },
                                           ),
-                                          if (CustomerPermissions.canEditCustomers(state.userRole)) ...[
+                                          if (CustomerPermissions
+                                              .canEditCustomers(
+                                                  state.userRole)) ...[
                                             ListTile(
                                               dense: true,
                                               leading: const Icon(
@@ -391,21 +408,24 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                                 size: 20,
                                                 color: Colors.white,
                                               ),
-                                              title: const Text('Edit'), //Chỉnh sửa
+                                              title: Text(S.of(context).edit),
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedIndex(null);
-                                                final updatedCustomer = await Navigator.push(
+                                                final updatedCustomer =
+                                                    await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) => CustomerEditScreen(
+                                                    builder: (context) =>
+                                                        CustomerEditScreen(
                                                       customer: customer,
                                                     ),
                                                   ),
                                                 );
-                                                
+
                                                 if (updatedCustomer != null) {
-                                                  await cubit.updateCustomer(updatedCustomer);
+                                                  await cubit.updateCustomer(
+                                                      updatedCustomer);
                                                 }
                                               },
                                             )
@@ -421,12 +441,17 @@ class _CustomersScreenState extends State<CustomersScreen> {
                             },
                             child: AnimatedOpacity(
                               duration: const Duration(milliseconds: 200),
-                              opacity: state.selectedIndex == null || state.selectedIndex == index ? 1.0 : 0.3,
+                              opacity: state.selectedIndex == null ||
+                                      state.selectedIndex == index
+                                  ? 1.0
+                                  : 0.3,
                               child: Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 decoration: BoxDecoration(
-                                  color: state.selectedIndex == index 
-                                      ? Theme.of(context).primaryColor.withValues(alpha: 0.1) 
+                                  color: state.selectedIndex == index
+                                      ? Theme.of(context)
+                                          .primaryColor
+                                          .withValues(alpha: 0.1)
                                       : Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -438,10 +463,14 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                   child: Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer,
                                         child: Icon(
                                           Icons.person,
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
                                       ),
                                       const SizedBox(width: 16),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 import '../../../widgets/general/gradient_icon_button.dart';
 import '../../../widgets/general/gradient_text.dart';
@@ -26,30 +27,29 @@ class InformationScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'About GizmoGlobe', //Về GizmoGlobe
-              style: TextStyle(
+            Text(
+              S.of(context).aboutGizmoGlobe,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 24),
             _buildInfoSection(
-              title: 'About Us', //Về chúng tôi
-              content: 'GizmoGlobe is your trusted provider for computer hardware solutions.', //Giải pháp phần cứng máy tính đáng tin cậy của bạn
+              title: S.of(context).aboutUsTitle,
+              content: S.of(context).aboutUsContent,
             ),
             _buildInfoSection(
-              title: 'Our Mission', //Sứ mệnh của chúng tôi
-              content: 'To provide excellent service and quality products to you, our beloved customers.', //Cung cấp dịch vụ xuất sắc và sản phẩm chất lượng cho bạn, khách hàng thân yêu của chúng tôi
+              title: S.of(context).ourMissionTitle,
+              content: S.of(context).ourMissionContent,
             ),
             _buildInfoSection(
-              title: 'Contact Information', //Thông tin liên hệ
-              content: 'Address: UIT', //Địa chỉ: UIT
+              title: S.of(context).contactInformationTitle,
+              content: S.of(context).contactInformationContent,
             ),
             _buildInfoSection(
-              title: 'Business Hours', //Giờ làm việc
-              content: 'Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed',
-              //Thứ Hai - Thứ Sáu: 9:00 sáng - 6:00 chiều\nThứ Bảy: 10:00 sáng - 4:00 chiều\nChủ Nhật: Đóng cửa
+              title: S.of(context).businessHoursTitle,
+              content: S.of(context).businessHoursContent,
             ),
           ],
         ),
@@ -91,4 +91,4 @@ class InformationScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
+import 'package:gizmoglobe_client/screens/stakeholder/vendors/permissions/vendor_permissions.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+
 import '../../../../enums/stakeholders/manufacturer_status.dart';
+import '../vendor_edit/vendor_edit_view.dart';
 import 'vendor_detail_cubit.dart';
 import 'vendor_detail_state.dart';
-import '../vendor_edit/vendor_edit_view.dart';
-import 'package:gizmoglobe_client/screens/stakeholder/vendors/permissions/vendor_permissions.dart';
 
 class VendorDetailScreen extends StatefulWidget {
   final Manufacturer manufacturer;
@@ -42,7 +44,8 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                 },
                 fillColor: Theme.of(context).colorScheme.surface,
               ),
-              title: const GradientText(text: 'Manufacturer Detail'), // Chi tiết nhà cung cấp
+              title: GradientText(
+                  text: S.of(context).manufacturerDetail), // Localized
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,107 +70,130 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                     color: Theme.of(context).colorScheme.surface,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2), 
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
                     ],
                   ),
-                  child: (widget.readOnly || !VendorPermissions.canManageVendors(state.userRole)) 
-                    ? null 
-                    : Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () async {
-                              final updatedManufacturer = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => VendorEditScreen(
-                                    manufacturer: state.manufacturer,
-                                  ),
-                                ),
-                              );
-
-                              if (updatedManufacturer != null) {
-                                final cubit = context.read<VendorDetailCubit>();
-                                cubit.updateManufacturer(updatedManufacturer);
-                              }
-                            },
-                            icon: const Icon(Icons.edit, color: Colors.white),
-                            label: const Text('Edit', style: TextStyle(color: Colors.white)), // Chỉnh sửa
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              final cubit = context.read<VendorDetailCubit>();
-                              showDialog(
-                                context: context,
-                                builder: (dialogContext) => AlertDialog(
-                                  title: Text(
-                                    state.manufacturer.status == ManufacturerStatus.active 
-                                      ? 'Deactivate Manufacturer'
-                                      : 'Activate Manufacturer'
-                                  ),
-                                  content: Text(
-                                    'Are you sure you want to ${state.manufacturer.status == ManufacturerStatus.active ? "deactivate" : "activate"} this manufacturer?', // Bạn có chắc chắn muốn ${state.manufacturer.status == ManufacturerStatus.active ? "vô hiệu hóa" : "kích hoạt"} nhà cung cấp này?
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(dialogContext),
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        Navigator.pop(dialogContext);
-                                        await cubit.toggleManufacturerStatus();
-                                        if (mounted) {
-                                          Navigator.pop(context);
-                                        }
-                                      },
-                                      child: Text(
-                                        state.manufacturer.status == ManufacturerStatus.active 
-                                          ? 'Inactive'
-                                          : 'Activate',
-                                        style: TextStyle(
-                                          color: state.manufacturer.status == ManufacturerStatus.active
-                                            ? Colors.red
-                                            : Colors.green,
-                                        ),
+                  child: (widget.readOnly ||
+                          !VendorPermissions.canManageVendors(state.userRole))
+                      ? null
+                      : Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  final updatedManufacturer =
+                                      await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VendorEditScreen(
+                                        manufacturer: state.manufacturer,
                                       ),
                                     ),
-                                  ],
+                                  );
+
+                                  if (updatedManufacturer != null) {
+                                    final cubit =
+                                        context.read<VendorDetailCubit>();
+                                    cubit.updateManufacturer(
+                                        updatedManufacturer);
+                                  }
+                                },
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.white),
+                                label: Text(S.of(context).edit,
+                                    style: const TextStyle(
+                                        color: Colors.white)), // Localized
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                 ),
-                              );
-                            },
-                            icon: Icon(
-                              state.manufacturer.status == ManufacturerStatus.active 
-                                ? Icons.block 
-                                : Icons.check_circle,
-                              color: Colors.white
+                              ),
                             ),
-                            label: Text(
-                              state.manufacturer.status == ManufacturerStatus.active 
-                                ? 'Deactivate' 
-                                : 'Activate',
-                              style: const TextStyle(color: Colors.white)
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  final cubit =
+                                      context.read<VendorDetailCubit>();
+                                  showDialog(
+                                    context: context,
+                                    builder: (dialogContext) => AlertDialog(
+                                      title: Text(state.manufacturer.status ==
+                                              ManufacturerStatus.active
+                                          ? S.of(context).deactivateManufacturer
+                                          : S.of(context).activateManufacturer),
+                                      content: Text(
+                                        state.manufacturer.status ==
+                                                ManufacturerStatus.active
+                                            ? S
+                                                .of(context)
+                                                .deactivateManufacturerConfirm
+                                            : S
+                                                .of(context)
+                                                .activateManufacturerConfirm,
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(dialogContext),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            Navigator.pop(dialogContext);
+                                            await cubit
+                                                .toggleManufacturerStatus();
+                                            if (mounted) {
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                          child: Text(
+                                            state.manufacturer.status ==
+                                                    ManufacturerStatus.active
+                                                ? S.of(context).inactive
+                                                : S.of(context).activate,
+                                            style: TextStyle(
+                                              color: state.manufacturer
+                                                          .status ==
+                                                      ManufacturerStatus.active
+                                                  ? Colors.red
+                                                  : Colors.green,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                icon: Icon(
+                                    state.manufacturer.status ==
+                                            ManufacturerStatus.active
+                                        ? Icons.block
+                                        : Icons.check_circle,
+                                    color: Colors.white),
+                                label: Text(
+                                    state.manufacturer.status ==
+                                            ManufacturerStatus.active
+                                        ? S.of(context).deactivate
+                                        : S.of(context).activate,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: state.manufacturer.status ==
+                                          ManufacturerStatus.active
+                                      ? Colors.red
+                                      : Colors.green,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
+                                ),
+                              ),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: state.manufacturer.status == ManufacturerStatus.active 
-                                ? Colors.red 
-                                : Colors.green,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
                 ),
               ],
             ),
@@ -185,7 +211,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8), 
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
             Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
           ],
           begin: Alignment.topLeft,
@@ -288,7 +314,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Manufacturer Information', //Thông tin nhà cung cấp
+                    S.of(context).manufacturerInformation, // Localized
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -298,16 +324,18 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              _buildInfoRow('Name', //Tên nhà cung cấp
-                  state.manufacturer.manufacturerName,
+              _buildInfoRow(
+                S.of(context).manufacturerName, // Localized
+                state.manufacturer.manufacturerName,
                 valueColor: Colors.white,
               ),
               _buildInfoRow(
-                'Status', // Trạng thái
+                S.of(context).status, // Localized
                 state.manufacturer.status.getName(),
-                valueColor: state.manufacturer.status == ManufacturerStatus.active 
-                    ? Colors.green.shade400 
-                    : Colors.red.shade400,
+                valueColor:
+                    state.manufacturer.status == ManufacturerStatus.active
+                        ? Colors.green.shade400
+                        : Colors.red.shade400,
                 icon: state.manufacturer.status == ManufacturerStatus.active
                     ? Icons.check_circle
                     : Icons.cancel,
@@ -319,7 +347,8 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {Color? valueColor, IconData? icon}) {
+  Widget _buildInfoRow(String label, String value,
+      {Color? valueColor, IconData? icon}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -356,4 +385,4 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
       ),
     );
   }
-} 
+}

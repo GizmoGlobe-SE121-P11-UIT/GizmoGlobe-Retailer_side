@@ -31,11 +31,9 @@ class GradientButton extends StatelessWidget {
       height: height,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: gradient ?? LinearGradient(
-            colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
+          color:
+              gradient != null ? null : Theme.of(context).colorScheme.primary,
+          gradient: gradient,
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: TextButton(

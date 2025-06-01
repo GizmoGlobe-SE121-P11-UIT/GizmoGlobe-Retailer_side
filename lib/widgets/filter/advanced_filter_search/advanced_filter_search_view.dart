@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/widgets/filter/advanced_filter_search/advanced_filter_search_state.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
+
 import '../manufacturer_filter/manufacturer_filter.dart';
 import '../option_filter/option_filter.dart';
 import '../range_filter/range_filter.dart';
@@ -28,11 +30,14 @@ class AdvancedFilterSearchScreen extends StatefulWidget {
       );
 
   @override
-  State<AdvancedFilterSearchScreen> createState() => _AdvancedFilterSearchScreenState();
+  State<AdvancedFilterSearchScreen> createState() =>
+      _AdvancedFilterSearchScreenState();
 }
 
-class _AdvancedFilterSearchScreenState extends State<AdvancedFilterSearchScreen> {
-  AdvancedFilterSearchCubit get cubit => context.read<AdvancedFilterSearchCubit>();
+class _AdvancedFilterSearchScreenState
+    extends State<AdvancedFilterSearchScreen> {
+  AdvancedFilterSearchCubit get cubit =>
+      context.read<AdvancedFilterSearchCubit>();
   final TextEditingController fromController = TextEditingController();
   final TextEditingController toController = TextEditingController();
 
@@ -61,7 +66,8 @@ class _AdvancedFilterSearchScreenState extends State<AdvancedFilterSearchScreen>
                 Navigator.of(context).pop();
               },
             ),
-            title: const Text('Filter', style: AppTextStyle.bigText), //Lọc
+            title:
+                Text(S.of(context).filter, style: AppTextStyle.bigText), //Lọc
             actions: [
               TextButton(
                 onPressed: () {
@@ -74,7 +80,8 @@ class _AdvancedFilterSearchScreenState extends State<AdvancedFilterSearchScreen>
                     ),
                   );
                 },
-                child: const Text('OK', style: TextStyle(color: Colors.white)),
+                child: Text(S.of(context).confirm,
+                    style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
@@ -84,21 +91,19 @@ class _AdvancedFilterSearchScreenState extends State<AdvancedFilterSearchScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 OptionFilterView<CategoryEnum>(
-                  name: 'Category', //Danh mục
+                  name: S.of(context).category, //Danh mục
                   enumValues: CategoryEnum.values,
                   selectedValues: state.selectedCategories,
                   onToggleSelection: cubit.toggleCategory,
                 ),
                 const SizedBox(height: 16.0),
-
                 ManufacturerFilter(
                   selectedManufacturers: state.selectedManufacturers,
                   onToggleSelection: cubit.toggleManufacturer,
                 ),
                 const SizedBox(height: 16.0),
-
                 RangeFilter(
-                  name: 'Price', //Giá
+                  name: S.of(context).price, //Giá
                   fromController: fromController,
                   toController: toController,
                   onFromValueChanged: (value) {

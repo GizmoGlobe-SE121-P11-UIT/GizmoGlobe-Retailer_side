@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import '../../general/app_text_style.dart';
 
@@ -41,7 +42,7 @@ class RangeFilter extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'From', // Từ
+                    S.of(context).from,
                     style: AppTextStyle.subtitleText.copyWith(
                       color: Theme.of(context).primaryColor,
                     ),
@@ -49,7 +50,7 @@ class RangeFilter extends StatelessWidget {
                   FieldWithIcon(
                     controller: fromController,
                     fillColor: Theme.of(context).colorScheme.surface,
-                    hintText: 'Min', // Tối thiểu
+                    hintText: S.of(context).min,
                     onChanged: onFromValueChanged,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
@@ -65,7 +66,7 @@ class RangeFilter extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'To', // Đến
+                    S.of(context).to,
                     style: AppTextStyle.subtitleText.copyWith(
                       color: Theme.of(context).primaryColor,
                     ),
@@ -73,7 +74,7 @@ class RangeFilter extends StatelessWidget {
                   FieldWithIcon(
                     controller: toController,
                     fillColor: Theme.of(context).colorScheme.surface,
-                    hintText: 'Max', // Tối đa
+                    hintText: S.of(context).max,
                     onChanged: onToValueChanged,
                     keyboardType: TextInputType.number,
                     inputFormatters: [

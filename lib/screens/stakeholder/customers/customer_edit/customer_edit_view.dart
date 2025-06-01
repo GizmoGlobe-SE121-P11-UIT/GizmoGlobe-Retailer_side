@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
 
 import '../../../../widgets/general/gradient_icon_button.dart';
@@ -45,22 +46,23 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
     if (!_isFormDirty) return true;
 
     return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Discard Changes?'), //Hủy bỏ thay đổi?
-        content: const Text('You have unsaved changes. Do you want to discard them?'), //Bạn có muốn hủy bỏ chúng?
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('CANCEL'), //HỦY
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(S.of(context).discardChanges),
+            content: Text(S.of(context).unsavedChangesDiscard),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(S.of(context).cancel),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(S.of(context).discard),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('DISCARD'), //BỎ QUA
-          ),
-        ],
-      ),
-    ) ?? false;
+        ) ??
+        false;
   }
 
   @override
@@ -69,7 +71,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: const GradientText(text: 'Edit Customer'), //Chỉnh sửa khách hàng
+          title: GradientText(text: S.of(context).editCustomer),
           backgroundColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: false,
@@ -116,8 +118,8 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Customer Information', //Thông tin khách hàng
+                          Text(
+                            S.of(context).customerInformation,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -128,26 +130,30 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             focusNode: _nameFocusNode,
                             initialValue: customerName,
                             decoration: InputDecoration(
-                              labelText: 'Full Name', //Họ và tên
+                              labelText: S.of(context).fullName,
                               labelStyle: const TextStyle(color: Colors.white),
-                              floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+                              floatingLabelStyle:
+                                  WidgetStateTextStyle.resolveWith(
                                 (states) => TextStyle(
                                   color: states.contains(WidgetState.focused)
                                       ? Theme.of(context).primaryColor
                                       : Colors.white,
                                 ),
                               ),
-                              prefixIcon: const Icon(Icons.person, color: Colors.white),
+                              prefixIcon:
+                                  const Icon(Icons.person, color: Colors.white),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: Colors.white),
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
                               ),
                             ),
                             textInputAction: TextInputAction.next,
@@ -157,10 +163,10 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             }),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Name is required'; //Tên là bắt buộc
+                                return S.of(context).nameIsRequired;
                               }
                               if (value.length < 2) {
-                                return 'Name must be at least 2 characters'; //Tên phải có ít nhất 2 ký tự
+                                return S.of(context).nameMin2Chars;
                               }
                               return null;
                             },
@@ -170,32 +176,37 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             focusNode: _phoneFocusNode,
                             initialValue: phoneNumber,
                             decoration: InputDecoration(
-                              labelText: 'Phone Number', //Số điện thoại
+                              labelText: S.of(context).phoneNumber,
                               labelStyle: const TextStyle(color: Colors.white),
-                              floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+                              floatingLabelStyle:
+                                  WidgetStateTextStyle.resolveWith(
                                 (states) => TextStyle(
                                   color: states.contains(WidgetState.focused)
                                       ? Theme.of(context).primaryColor
                                       : Colors.white,
                                 ),
                               ),
-                              prefixIcon: const Icon(Icons.phone, color: Colors.white),
+                              prefixIcon:
+                                  const Icon(Icons.phone, color: Colors.white),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: Colors.white),
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
                               ),
                               hintText: '+84 xxx xxx xxx',
                             ),
                             keyboardType: TextInputType.phone,
                             inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp(r'[\d\s+-]')),
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[\d\s+-]')),
                             ],
                             onChanged: (value) => setState(() {
                               phoneNumber = value;
@@ -203,10 +214,12 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             }),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Phone number is required'; //Số điện thoại là bắt buộc
+                                return S.of(context).phoneNumberIsRequired;
                               }
                               if (!isValidPhone(value)) {
-                                return 'Please enter a valid phone number'; //Vui lòng nhập số điện thoại hợp lệ
+                                return S
+                                    .of(context)
+                                    .pleaseEnterValidPhoneNumber;
                               }
                               return null;
                             },

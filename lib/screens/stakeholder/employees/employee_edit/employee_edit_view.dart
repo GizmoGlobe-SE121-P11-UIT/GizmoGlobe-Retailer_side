@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
 
+import '../../../../screens/stakeholder/employees/permissions/employee_permissions.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import '../../../../widgets/general/gradient_text.dart';
-import '../../../../screens/stakeholder/employees/permissions/employee_permissions.dart';
 
 class EmployeeEditScreen extends StatefulWidget {
   final Employee employee;
   final String? userRole;
 
   const EmployeeEditScreen({
-    super.key, 
+    super.key,
     required this.employee,
     required this.userRole,
   });
@@ -38,7 +39,7 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const GradientText(text: 'Edit Employee'), //Chỉnh sửa nhân viên
+        title: GradientText(text: S.of(context).editEmployee),
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -85,8 +86,8 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Employee Information', //Thông tin nhân viên
+                        Text(
+                          S.of(context).employeeInformation,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -96,16 +97,18 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                         TextFormField(
                           initialValue: employeeName,
                           decoration: InputDecoration(
-                            labelText: 'Full Name', //Họ và tên
+                            labelText: S.of(context).fullName,
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+                            floatingLabelStyle:
+                                WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),
                             ),
-                            prefixIcon: const Icon(Icons.person, color: Colors.white),
+                            prefixIcon:
+                                const Icon(Icons.person, color: Colors.white),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -115,13 +118,14 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                           onChanged: (value) => employeeName = value,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a name'; //Vui lòng nhập tên
+                              return S.of(context).pleaseEnterName;
                             }
                             return null;
                           },
@@ -130,16 +134,18 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                         TextFormField(
                           initialValue: phoneNumber,
                           decoration: InputDecoration(
-                            labelText: 'Phone Number', //Số điện thoại
+                            labelText: S.of(context).phoneNumber,
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+                            floatingLabelStyle:
+                                WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),
                             ),
-                            prefixIcon: const Icon(Icons.phone, color: Colors.white),
+                            prefixIcon:
+                                const Icon(Icons.phone, color: Colors.white),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -149,14 +155,15 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
                             ),
                             hintText: '+84 xxx xxx xxx',
                           ),
                           onChanged: (value) => phoneNumber = value,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a phone number'; //Vui lòng nhập số điện thoại
+                              return S.of(context).pleaseEnterPhoneNumber;
                             }
                             return null;
                           },
@@ -165,16 +172,18 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                         DropdownButtonFormField<RoleEnum>(
                           value: role,
                           decoration: InputDecoration(
-                            labelText: 'Role', //Vai trò
+                            labelText: S.of(context).role,
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+                            floatingLabelStyle:
+                                WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),
                             ),
-                            prefixIcon: const Icon(Icons.work, color: Colors.white),
+                            prefixIcon:
+                                const Icon(Icons.work, color: Colors.white),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -184,26 +193,33 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
                             ),
-                            enabled: EmployeePermissions.canEditEmployeeRole(widget.userRole, widget.employee),
+                            enabled: EmployeePermissions.canEditEmployeeRole(
+                                widget.userRole, widget.employee),
                           ),
                           dropdownColor: Theme.of(context).cardColor,
-                          items: RoleEnum.values.where((role) => role != RoleEnum.owner).map((role) {
+                          items: RoleEnum.values
+                              .where((role) => role != RoleEnum.owner)
+                              .map((role) {
                             return DropdownMenuItem(
                               value: role,
                               child: Text(
                                 role.toString().split('.').last,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontStyle: EmployeePermissions.canEditEmployeeRole(widget.userRole, widget.employee)
-                                      ? FontStyle.normal
-                                      : FontStyle.italic,
+                                  fontStyle:
+                                      EmployeePermissions.canEditEmployeeRole(
+                                              widget.userRole, widget.employee)
+                                          ? FontStyle.normal
+                                          : FontStyle.italic,
                                 ),
                               ),
                             );
                           }).toList(),
-                          onChanged: EmployeePermissions.canEditEmployeeRole(widget.userRole, widget.employee)
+                          onChanged: EmployeePermissions.canEditEmployeeRole(
+                                  widget.userRole, widget.employee)
                               ? (RoleEnum? value) {
                                   if (value != null) {
                                     setState(() => role = value);
@@ -212,7 +228,7 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                               : null,
                           validator: (value) {
                             if (value == null) {
-                              return 'Please select a role'; //Vui lòng chọn vai trò
+                              return S.of(context).pleaseSelectRole;
                             }
                             return null;
                           },
@@ -228,4 +244,4 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
       ),
     );
   }
-} 
+}

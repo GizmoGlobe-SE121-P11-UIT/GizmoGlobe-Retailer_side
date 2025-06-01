@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_view.dart';
 import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_state.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_view.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+
 import '../../../../enums/processing/process_state_enum.dart';
 import '../../../../widgets/dialog/information_dialog.dart';
 import '../../../../widgets/general/app_text_style.dart';
@@ -61,7 +63,7 @@ class _VoucherScreenState extends State<VoucherScreen>
         appBar: AppBar(
           elevation: 0,
           //title: GradientText(text: S.of(context).orders),
-          title: const GradientText(text: "Voucher"),
+          title: GradientText(text: S.of(context).voucher),
           actions: [
             FutureBuilder<bool>(
               future: Database().isUserAdmin(),
@@ -101,11 +103,11 @@ class _VoucherScreenState extends State<VoucherScreen>
             indicatorColor: Theme.of(context).colorScheme.primary,
             tabAlignment: TabAlignment.fill,
             indicator: const BoxDecoration(),
-            tabs: const [
-              Tab(text: 'All'),
-              Tab(text: 'Ongoing'),
-              Tab(text: 'Upcoming'),
-              Tab(text: 'Inactive'),
+            tabs: [
+              Tab(text: S.of(context).all),
+              Tab(text: S.of(context).ongoing),
+              Tab(text: S.of(context).upcoming),
+              Tab(text: S.of(context).inactive),
             ],
           ),
         ),
@@ -139,9 +141,9 @@ class _VoucherScreenState extends State<VoucherScreen>
                   children: [
                     // Tab 1: All voucher list
                     state.voucherList.isEmpty
-                        ? const Center(
+                        ? Center(
                             child: Text(
-                              'No vouchers available',
+                              S.of(context).noVouchersAvailable,
                               style: AppTextStyle.regularText,
                             ),
                           )
@@ -166,9 +168,9 @@ class _VoucherScreenState extends State<VoucherScreen>
                           ),
                     // Tab 2: Ongoing voucher list
                     state.ongoingList.isEmpty
-                        ? const Center(
+                        ? Center(
                             child: Text(
-                              'No vouchers available',
+                              S.of(context).noVouchersAvailable,
                               style: AppTextStyle.regularText,
                             ),
                           )
@@ -193,9 +195,9 @@ class _VoucherScreenState extends State<VoucherScreen>
                           ),
                     // Tab 3: Upcoming voucher list
                     state.upcomingList.isEmpty
-                        ? const Center(
+                        ? Center(
                             child: Text(
-                              'No vouchers available',
+                              S.of(context).noVouchersAvailable,
                               style: AppTextStyle.regularText,
                             ),
                           )
@@ -220,9 +222,9 @@ class _VoucherScreenState extends State<VoucherScreen>
                           ),
                     // Tab 4: Inactive voucher list
                     state.inactiveList.isEmpty
-                        ? const Center(
+                        ? Center(
                             child: Text(
-                              'No vouchers available',
+                              S.of(context).noVouchersAvailable,
                               style: AppTextStyle.regularText,
                             ),
                           )

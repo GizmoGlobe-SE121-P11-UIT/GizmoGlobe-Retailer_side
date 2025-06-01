@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_button.dart';
 import 'package:intl/intl.dart';
-
 
 class MonthPicker extends StatefulWidget {
   final DateTime selectedDate;
@@ -51,7 +49,10 @@ class _MonthPickerState extends State<MonthPicker> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-              icon: const Icon(Icons.arrow_left, size: 30,),
+              icon: const Icon(
+                Icons.arrow_left,
+                size: 30,
+              ),
               onPressed: onPrevious,
             ),
             Column(
@@ -77,7 +78,10 @@ class _MonthPickerState extends State<MonthPicker> {
               }),
             ),
             IconButton(
-              icon: const Icon(Icons.arrow_right, size: 30,),
+              icon: const Icon(
+                Icons.arrow_right,
+                size: 30,
+              ),
               onPressed: onNext,
             ),
           ],
@@ -87,8 +91,8 @@ class _MonthPickerState extends State<MonthPicker> {
   }
 
   Future<DateTime?> _pickMonthYear() async {
-    int selectedMonthIndex = selectedDate.month; // Initialize with current month
-    int selectedYearIndex = selectedDate.year - 2000; // Initialize with current year
+    int selectedMonthIndex = selectedDate.month;
+    int selectedYearIndex = selectedDate.year - 2000;
 
     final DateTime? picked = await showDialog<DateTime>(
       context: context,
@@ -98,22 +102,19 @@ class _MonthPickerState extends State<MonthPicker> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text(
-                  'Choose month and year', // Chọn tháng và năm
+              title: const Text('Choose month and year',
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
-                  )
-              ),
+                  )),
               content: SizedBox(
                 height: 150,
                 child: Row(
                   children: <Widget>[
-                    // Month picker (đặt ở vị trí bên trái)
                     Expanded(
                       child: ListWheelScrollView(
                         itemExtent: 50,
-                        physics: const FixedExtentScrollPhysics(), // Giữ mục đã chọn ở giữa
+                        physics: const FixedExtentScrollPhysics(),
                         onSelectedItemChanged: (index) {
                           setState(() {
                             selectedMonthIndex = index;
@@ -123,26 +124,28 @@ class _MonthPickerState extends State<MonthPicker> {
                             );
                           });
                         },
-                        controller: FixedExtentScrollController(initialItem: selectedMonthIndex),
+                        controller: FixedExtentScrollController(
+                            initialItem: selectedMonthIndex),
                         children: List<Widget>.generate(12, (index) {
-                          bool isBold = index == selectedMonthIndex; // In đậm nếu đang scroll tới
+                          bool isBold = index == selectedMonthIndex;
                           return Center(
                             child: Text(
                               DateFormat.MMMM().format(DateTime(0, index + 1)),
                               style: TextStyle(
                                 fontSize: 18.0,
-                                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                                fontWeight: isBold
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                               ),
                             ),
                           );
                         }),
                       ),
                     ),
-                    // Year picker (đặt ở vị trí bên phải)
                     Expanded(
                       child: ListWheelScrollView(
                         itemExtent: 50,
-                        physics: const FixedExtentScrollPhysics(), // Giữ mục đã chọn ở giữa
+                        physics: const FixedExtentScrollPhysics(),
                         onSelectedItemChanged: (index) {
                           setState(() {
                             selectedYearIndex = index;
@@ -152,15 +155,18 @@ class _MonthPickerState extends State<MonthPicker> {
                             );
                           });
                         },
-                        controller: FixedExtentScrollController(initialItem: selectedYearIndex),
+                        controller: FixedExtentScrollController(
+                            initialItem: selectedYearIndex),
                         children: List<Widget>.generate(101, (index) {
-                          bool isBold = index == selectedYearIndex; // In đậm nếu đang scroll tới
+                          bool isBold = index == selectedYearIndex;
                           return Center(
                             child: Text(
                               '${index + 2000}',
                               style: TextStyle(
                                 fontSize: 18.0,
-                                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                                fontWeight: isBold
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                               ),
                             ),
                           );
@@ -171,11 +177,17 @@ class _MonthPickerState extends State<MonthPicker> {
                 ),
               ),
               actions: <Widget>[
-                GradientButton(
-                  text: 'OK',
-                  onPress: () {
+                TextButton(
+                  onPressed: () {
                     Navigator.of(context).pop(tempPickedDate);
                   },
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             );

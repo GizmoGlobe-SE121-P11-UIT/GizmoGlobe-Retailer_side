@@ -1,11 +1,13 @@
 // lib/screens/main/main_screen/main_screen_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_view.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_view.dart';
 import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_view.dart';
+
 import '../../../widgets/general/selectable_gradient_icon.dart';
 import '../../home/home_screen/home_screen_view.dart';
 import '../../user/user_screen/user_screen_view.dart';
@@ -22,12 +24,12 @@ class _MainScreenState extends State<MainScreen> {
   MainScreenCubit get cubit => context.read<MainScreenCubit>();
 
   final List<Widget Function()> widgetList = [
-        () => HomeScreen.newInstance(),
-        () => ProductScreen.newInstance(),
-        () => InvoiceScreen.newInstance(),
-        () => StakeholderScreen.newInstance(),
-        () => VoucherScreen.newInstance(),
-        () => UserScreen.newInstance(),
+    () => HomeScreen.newInstance(),
+    () => ProductScreen.newInstance(),
+    () => InvoiceScreen.newInstance(),
+    () => StakeholderScreen.newInstance(),
+    () => VoucherScreen.newInstance(),
+    () => UserScreen.newInstance(),
   ];
 
   @override
@@ -66,49 +68,49 @@ class _MainScreenState extends State<MainScreen> {
                   icon: SelectableGradientIcon(
                     icon: Icons.home,
                     isSelected: index == 0,
-                    label: 'Home', // Trang chủ
+                    label: S.of(context).home, // Trang chủ
                   ),
-                  label: "Home", // Trang chủ
+                  label: S.of(context).home, // Trang chủ
                 ),
                 BottomNavigationBarItem(
                   icon: SelectableGradientIcon(
                     icon: Icons.inventory,
                     isSelected: index == 1,
-                    label: 'Product', // Sản phẩm
+                    label: S.of(context).product, // Sản phẩm
                   ),
-                  label: "Product", // Sản phẩm
+                  label: S.of(context).product, // Sản phẩm
                 ),
                 BottomNavigationBarItem(
                   icon: SelectableGradientIcon(
                     icon: Icons.receipt,
                     isSelected: index == 2,
-                    label: 'Invoice', // Hóa đơn
+                    label: S.of(context).invoice, // Hóa đơn
                   ),
-                  label: "Invoice", // Hóa đơn
+                  label: S.of(context).invoice, // Hóa đơn
                 ),
                 BottomNavigationBarItem(
                   icon: SelectableGradientIcon(
                     icon: Icons.groups,
                     isSelected: index == 3,
-                    label: 'Stakeholder',
+                    label: S.of(context).stakeholder,
                   ),
-                  label: "Home",
+                  label: S.of(context).stakeholder,
                 ),
                 BottomNavigationBarItem(
                   icon: SelectableGradientIcon(
                     icon: Icons.discount,
                     isSelected: index == 4,
-                    label: 'Voucher',
+                    label: S.of(context).voucher,
                   ),
-                  label: "Home",
+                  label: S.of(context).voucher,
                 ),
                 BottomNavigationBarItem(
                   icon: SelectableGradientIcon(
                     icon: Icons.account_circle,
                     isSelected: index == 5,
-                    label: 'Profile',
+                    label: S.of(context).profile,
                   ),
-                  label: "Profile",
+                  label: S.of(context).profile,
                 ),
               ],
             ),

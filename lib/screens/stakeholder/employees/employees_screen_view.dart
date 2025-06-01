@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
-import 'employees_screen_cubit.dart';
-import 'employees_screen_state.dart';
+
 import 'employee_detail/employee_detail_view.dart';
 import 'employee_edit/employee_edit_view.dart';
-import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
+import 'employees_screen_cubit.dart';
+import 'employees_screen_state.dart';
 import 'permissions/employee_permissions.dart';
 
 class EmployeesScreen extends StatefulWidget {
@@ -46,7 +48,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2), 
+                  color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -69,8 +71,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             size: 28,
                           ),
                           const SizedBox(width: 12),
-                          const Text(
-                            'Add New Employee', //Thêm nhân viên mới
+                          Text(
+                            S.of(context).addNewEmployee,
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -84,13 +86,13 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                         controller: nameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter employee name'; //Vui lòng nhập tên nhân viên
+                            return S.of(context).pleaseEnterName;
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          labelText: 'Name', //Tên
-                          hintText: 'Enter employee name', //Nhập tên nhân viên
+                          labelText: S.of(context).name,
+                          hintText: S.of(context).fullName,
                           prefixIcon: Icon(
                             Icons.person_outline,
                             color: Theme.of(context).primaryColor,
@@ -110,7 +112,10 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
+                          fillColor: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withValues(alpha: 0.8),
                           labelStyle: const TextStyle(
                             color: Colors.white,
                           ),
@@ -124,7 +129,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           hintStyle: const TextStyle(
                             color: Colors.white70,
                           ),
-                          errorStyle: TextStyle(color: Theme.of(context).colorScheme.error),
+                          errorStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -132,13 +138,13 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                         controller: emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter email address'; //Vui lòng nhập địa chỉ email
+                            return S.of(context).pleaseEnterEmail;
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          labelText: 'Email', //Email
-                          hintText: 'Enter email address', //Nhập địa chỉ email
+                          labelText: S.of(context).email,
+                          hintText: S.of(context).email,
                           prefixIcon: Icon(
                             Icons.email_outlined,
                             color: Theme.of(context).primaryColor,
@@ -158,7 +164,10 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8), 
+                          fillColor: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withValues(alpha: 0.8),
                           labelStyle: const TextStyle(
                             color: Colors.white,
                           ),
@@ -172,7 +181,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           hintStyle: const TextStyle(
                             color: Colors.white70,
                           ),
-                          errorStyle: TextStyle(color: Theme.of(context).colorScheme.error),
+                          errorStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
                         ),
                         keyboardType: TextInputType.emailAddress,
                       ),
@@ -180,8 +190,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       TextFormField(
                         controller: phoneController,
                         decoration: InputDecoration(
-                          labelText: 'Phone Number', //Số điện thoại
-                          hintText: 'Enter phone number', //Nhập số điện thoại
+                          labelText: S.of(context).phoneNumber,
+                          hintText: S.of(context).enterPhoneNumber,
                           prefixIcon: Icon(
                             Icons.phone_outlined,
                             color: Theme.of(context).primaryColor,
@@ -201,7 +211,10 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             ),
                           ),
                           filled: true,
-                          fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8), 
+                          fillColor: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withValues(alpha: 0.8),
                           labelStyle: const TextStyle(
                             color: Colors.white,
                           ),
@@ -215,7 +228,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           hintStyle: const TextStyle(
                             color: Colors.white70,
                           ),
-                          errorStyle: TextStyle(color: Theme.of(context).colorScheme.error),
+                          errorStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
                         ),
                         keyboardType: TextInputType.phone,
                       ),
@@ -225,18 +239,20 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           return DropdownButtonFormField<RoleEnum>(
                             value: selectedRole,
                             decoration: InputDecoration(
-                              labelText: 'Role', //Vai trò
+                              labelText: S.of(context).role,
                               prefixIcon: Icon(
                                 Icons.work_outline,
                                 color: Theme.of(context).primaryColor,
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey.shade600),
+                                borderSide:
+                                    BorderSide(color: Colors.grey.shade600),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey.shade600),
+                                borderSide:
+                                    BorderSide(color: Colors.grey.shade600),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -245,11 +261,15 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                 ),
                               ),
                               filled: true,
-                              fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8), 
+                              fillColor: Theme.of(context)
+                                  .colorScheme
+                                  .surface
+                                  .withValues(alpha: 0.8),
                               labelStyle: const TextStyle(
                                 color: Colors.white,
                               ),
-                              floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+                              floatingLabelStyle:
+                                  WidgetStateTextStyle.resolveWith(
                                 (states) => TextStyle(
                                   color: states.contains(WidgetState.focused)
                                       ? Theme.of(context).colorScheme.primary
@@ -257,7 +277,9 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                 ),
                               ),
                             ),
-                            items: RoleEnum.values.where((role) => role != RoleEnum.owner).map((role) {
+                            items: RoleEnum.values
+                                .where((role) => role != RoleEnum.owner)
+                                .map((role) {
                               return DropdownMenuItem(
                                 value: role,
                                 child: Text(
@@ -273,8 +295,10 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                 setState(() => selectedRole = value);
                               }
                             },
-                            dropdownColor: Theme.of(context).colorScheme.surface,
-                            icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                            dropdownColor:
+                                Theme.of(context).colorScheme.surface,
+                            icon: const Icon(Icons.arrow_drop_down,
+                                color: Colors.white),
                             style: const TextStyle(color: Colors.white),
                           );
                         },
@@ -286,7 +310,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           TextButton(
                             onPressed: () => Navigator.pop(context),
                             child: Text(
-                              'Cancel', //Hủy
+                              S.of(context).cancel,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -316,8 +340,10 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                   if (mounted) {
                                     Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Employee added successfully.'), //Nhân viên đã được thêm thành công
+                                      SnackBar(
+                                        content: Text(S
+                                            .of(context)
+                                            .employeeAddedSuccessfully),
                                         backgroundColor: Colors.green,
                                       ),
                                     );
@@ -326,7 +352,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context).colorScheme.primary,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
                                 vertical: 12,
@@ -336,7 +363,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                               ),
                             ),
                             child: const Text(
-                              'Add Employee', //Thêm nhân viên
+                              'Add Employee',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -381,8 +408,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'Filter by Role', //Lọc theo vai trò
+                      Text(
+                        S.of(context).filterByRole,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -393,23 +420,23 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   ),
                   const SizedBox(height: 16),
                   ...RoleEnum.values.map((role) => ListTile(
-                    title: Text(
-                      role.toString().split('.').last,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    leading: Icon(
-                      Icons.work_outline,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onTap: () {
-                      cubit.filterByRole(role);
-                      Navigator.pop(context);
-                    },
-                  )),
+                        title: Text(
+                          role.toString().split('.').last,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        leading: Icon(
+                          Icons.work_outline,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        onTap: () {
+                          cubit.filterByRole(role);
+                          Navigator.pop(context);
+                        },
+                      )),
                   ListTile(
-                    title: const Text(
-                      'Clear Filter', //Xóa bộ lọc
-                      style: TextStyle(color: Colors.white),
+                    title: Text(
+                      S.of(context).clearFilter,
+                      style: const TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
                       Icons.clear,
@@ -448,12 +475,13 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find employees...', //Tìm kiếm nhân viên
+                        hintText: S.of(context).findEmployees,
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchEmployees(value);
                         },
-                        prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+                        prefixIcon: Icon(Icons.search,
+                            color: Theme.of(context).primaryColor),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -462,7 +490,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       iconSize: 32,
                       onPressed: _showFilterDialog,
                     ),
-                    if (EmployeePermissions.canAddEmployees(state.userRole)) ...[
+                    if (EmployeePermissions.canAddEmployees(
+                        state.userRole)) ...[
                       const SizedBox(width: 8),
                       GradientIconButton(
                         icon: Icons.person_add,
@@ -474,17 +503,18 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                 ),
                 const SizedBox(height: 16),
                 Expanded(
-                  child: BlocBuilder<EmployeesScreenCubit, EmployeesScreenState>(
+                  child:
+                      BlocBuilder<EmployeesScreenCubit, EmployeesScreenState>(
                     builder: (context, state) {
                       if (state.isLoading) {
                         return const Center(child: CircularProgressIndicator());
                       }
 
                       if (state.employees.isEmpty) {
-                        return const Center(
+                        return Center(
                           child: Text(
-                            'No employees found', //Không tìm thấy nhân viên nào
-                            style: TextStyle(color: Colors.white),
+                            S.of(context).noEmployeesFound,
+                            style: const TextStyle(color: Colors.white),
                           ),
                         );
                       }
@@ -530,22 +560,34 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                               size: 20,
                                               color: Colors.white,
                                             ),
-                                            title: const Text('View'), //Xem
+                                            title: Text(
+                                              S.of(context).view,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                             onTap: () {
                                               Navigator.pop(context);
                                               cubit.setSelectedIndex(null);
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                  builder: (context) => EmployeeDetailScreen(
+                                                  builder: (context) =>
+                                                      EmployeeDetailScreen(
                                                     employee: employee,
-                                                    readOnly: !EmployeePermissions.canEditEmployee(state.userRole, employee),
+                                                    readOnly:
+                                                        !EmployeePermissions
+                                                            .canEditEmployee(
+                                                                state.userRole,
+                                                                employee),
                                                   ),
                                                 ),
                                               );
                                             },
                                           ),
-                                          if (EmployeePermissions.canEditEmployee(state.userRole, employee)) ...[
+                                          if (EmployeePermissions
+                                              .canEditEmployee(state.userRole,
+                                                  employee)) ...[
                                             ListTile(
                                               dense: true,
                                               leading: const Icon(
@@ -553,38 +595,52 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                 size: 20,
                                                 color: Colors.white,
                                               ),
-                                              title: const Text('Edit'), //Chỉnh sửa
+                                              title: Text(
+                                                S.of(context).edit,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedIndex(null);
-                                                final updatedEmployee = await Navigator.push(
+                                                final updatedEmployee =
+                                                    await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) => EmployeeEditScreen(
+                                                    builder: (context) =>
+                                                        EmployeeEditScreen(
                                                       employee: employee,
                                                       userRole: state.userRole,
                                                     ),
                                                   ),
                                                 );
-                                                
+
                                                 if (updatedEmployee != null) {
-                                                  await cubit.updateEmployee(updatedEmployee);
+                                                  await cubit.updateEmployee(
+                                                      updatedEmployee);
                                                 }
                                               },
                                             ),
                                           ],
-                                          if (EmployeePermissions.canDeleteEmployee(state.userRole, employee)) ...[
+                                          if (EmployeePermissions
+                                              .canDeleteEmployee(state.userRole,
+                                                  employee)) ...[
                                             ListTile(
                                               dense: true,
                                               leading: Icon(
                                                 Icons.delete_outlined,
                                                 size: 20,
-                                                color: Theme.of(context).colorScheme.error,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .error,
                                               ),
                                               title: Text(
-                                                'Delete', //Xóa
+                                                S.of(context).delete,
                                                 style: TextStyle(
-                                                  color: Theme.of(context).colorScheme.error,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .error,
                                                 ),
                                               ),
                                               onTap: () {
@@ -592,24 +648,48 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                 cubit.setSelectedIndex(null);
                                                 showDialog(
                                                   context: context,
-                                                  builder: (BuildContext context) {
+                                                  builder:
+                                                      (BuildContext context) {
                                                     return AlertDialog(
-                                                      title: const Text('Delete Employee'), //Xóa nhân viên
-                                                      content: Text('Are you sure you want to delete ${employee.employeeName}?'), //Bạn có chắc chắn muốn xóa ${employee.employeeName}?
+                                                      title: Text(
+                                                        S
+                                                            .of(context)
+                                                            .deleteEmployee,
+                                                      ),
+                                                      content: Text(
+                                                        S
+                                                            .of(context)
+                                                            .areYouSureDeleteEmployee,
+                                                      ),
                                                       actions: [
                                                         TextButton(
-                                                          onPressed: () => Navigator.pop(context),
-                                                          child: const Text('Cancel'), //Hủy
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: Text(
+                                                            S
+                                                                .of(context)
+                                                                .cancel,
+                                                          ),
                                                         ),
                                                         TextButton(
                                                           onPressed: () async {
-                                                            Navigator.pop(context);
-                                                            await cubit.deleteEmployee(employee.employeeID!);
+                                                            Navigator.pop(
+                                                                context);
+                                                            await cubit
+                                                                .deleteEmployee(
+                                                                    employee
+                                                                        .employeeID!);
                                                           },
                                                           child: Text(
-                                                            'Delete', //Xóa
+                                                            S
+                                                                .of(context)
+                                                                .delete,
                                                             style: TextStyle(
-                                                              color: Theme.of(context).colorScheme.error,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .error,
                                                             ),
                                                           ),
                                                         ),
@@ -631,12 +711,17 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             },
                             child: AnimatedOpacity(
                               duration: const Duration(milliseconds: 200),
-                              opacity: state.selectedIndex == null || state.selectedIndex == index ? 1.0 : 0.3,
+                              opacity: state.selectedIndex == null ||
+                                      state.selectedIndex == index
+                                  ? 1.0
+                                  : 0.3,
                               child: Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 decoration: BoxDecoration(
-                                  color: state.selectedIndex == index 
-                                      ? Theme.of(context).primaryColor.withValues(alpha: 0.1) 
+                                  color: state.selectedIndex == index
+                                      ? Theme.of(context)
+                                          .primaryColor
+                                          .withValues(alpha: 0.1)
                                       : Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -648,10 +733,14 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                   child: Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer,
                                         child: Icon(
                                           Icons.person,
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
                                       ),
                                       const SizedBox(width: 16),

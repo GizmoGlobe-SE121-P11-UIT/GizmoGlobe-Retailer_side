@@ -1,12 +1,12 @@
 // lib/screens/main/main_screen/main_screen_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_cubit.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/customers/customers_screen_view.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/employees/employees_screen_view.dart';
+import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_state.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendors_screen_view.dart';
-
 
 class StakeholderScreen extends StatefulWidget {
   const StakeholderScreen({super.key});
@@ -44,10 +44,10 @@ class _StakeholderScreenState extends State<StakeholderScreen> {
                     unselectedLabelColor: Colors.white,
                     indicatorColor: Theme.of(context).primaryColor,
                     dividerColor: Colors.transparent,
-                    tabs: const [
-                      Tab(text: 'Customers'), //Khách hàng
-                      Tab(text: 'Employees'), //Nhân viên
-                      Tab(text: 'Vendors'),  //Nhà cung cấp
+                    tabs: [
+                      Tab(text: S.of(context).customers),
+                      Tab(text: S.of(context).employees),
+                      Tab(text: S.of(context).vendors),
                     ],
                   ),
                 ),

@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'warranty_add_cubit.dart';
 import 'warranty_add_state.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class WarrantyAddView extends StatefulWidget {
   const WarrantyAddView({super.key});
@@ -38,7 +39,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
               onPressed: () => Navigator.pop(context),
               fillColor: Colors.transparent,
             ),
-            title: GradientText(text: S.of(context).createInvoice), // TODO: Add a more specific key if needed
+            title: GradientText(text: S.of(context).createInvoice),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
@@ -89,18 +90,22 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                             value: state.selectedCustomerId,
                             decoration: InputDecoration(
                               labelText: S.of(context).selectCustomer,
-                              labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)), 
-                              prefixIcon: Icon(Icons.person_outline, color: Colors.white.withValues(alpha: 0.7)),
+                              labelStyle: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.8)),
+                              prefixIcon: Icon(Icons.person_outline,
+                                  color: Colors.white.withValues(alpha: 0.7)),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: Colors.white),
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
                               ),
                             ),
                             items: state.availableCustomers.map((customer) {
@@ -145,9 +150,9 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                 color: Colors.grey[400],
                               ),
                               const SizedBox(height: 16),
-                              const Text(
-                                'No sales invoices available', // TODO: Add to ARB
-                                style: TextStyle(
+                              Text(
+                                S.of(context).noSalesInvoicesAvailable,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -155,7 +160,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'This customer has no eligible sales invoices for warranty claims.', // TODO: Add to ARB
+                                S.of(context).noEligibleSalesInvoices,
                                 style: TextStyle(
                                   color: Colors.grey[400],
                                   fontSize: 16,
@@ -189,70 +194,91 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                               // Sales Invoice Selection
                               DropdownButtonFormField<String>(
                                 decoration: InputDecoration(
-                                  labelText: 'Sales Invoice', // Hóa đơn bán hàng
-                                  labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)), 
+                                  labelText: S.of(context).salesInvoice,
+                                  labelStyle: TextStyle(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.8)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: Colors.white),
+                                    borderSide:
+                                        const BorderSide(color: Colors.white),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor),
                                   ),
                                   filled: true,
-                                  fillColor: Theme.of(context).colorScheme.surface,
+                                  fillColor:
+                                      Theme.of(context).colorScheme.surface,
                                 ),
                                 style: const TextStyle(color: Colors.white),
-                                dropdownColor: Theme.of(context).colorScheme.surface,
+                                dropdownColor:
+                                    Theme.of(context).colorScheme.surface,
                                 items: state.customerInvoices.map((invoice) {
                                   return DropdownMenuItem<String>(
                                     value: invoice.salesInvoiceID,
                                     child: Text(
                                       '${invoice.salesInvoiceID} - ${invoice.customerName}',
-                                      style: const TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   );
                                 }).toList(),
                                 onChanged: (String? invoiceId) {
                                   if (invoiceId != null) {
-                                    final selectedInvoice = state.customerInvoices.firstWhere(
-                                      (invoice) => invoice.salesInvoiceID == invoiceId,
-                                      orElse: () => state.customerInvoices.first,
+                                    final selectedInvoice =
+                                        state.customerInvoices.firstWhere(
+                                      (invoice) =>
+                                          invoice.salesInvoiceID == invoiceId,
+                                      orElse: () =>
+                                          state.customerInvoices.first,
                                     );
                                     cubit.selectSalesInvoice(selectedInvoice);
                                   }
                                 },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please select a sales invoice'; // TODO: Add to ARB
+                                    return S
+                                        .of(context)
+                                        .pleaseSelectSalesInvoice;
                                   }
                                   return null;
                                 },
-                                value: state.customerInvoices.any(
-                                  (invoice) => invoice.salesInvoiceID == state.selectedSalesInvoiceId
-                                ) ? state.selectedSalesInvoiceId : null,
+                                value: state.customerInvoices.any((invoice) =>
+                                        invoice.salesInvoiceID ==
+                                        state.selectedSalesInvoiceId)
+                                    ? state.selectedSalesInvoiceId
+                                    : null,
                               ),
                               const SizedBox(height: 16),
                               // Reason Input
                               TextFormField(
                                 controller: _reasonController,
                                 decoration: InputDecoration(
-                                  labelText: 'Reason for Warranty', // Lý do bảo hành
-                                  labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)), 
-                                  prefixIcon: Icon(Icons.description_outlined, color: Colors.white.withValues(alpha: 0.7)),
+                                  labelText:
+                                      S.of(context).reasonForWarrantyLabel,
+                                  labelStyle: TextStyle(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.8)),
+                                  prefixIcon: Icon(Icons.description_outlined,
+                                      color:
+                                          Colors.white.withValues(alpha: 0.7)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: Colors.white),
+                                    borderSide:
+                                        const BorderSide(color: Colors.white),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor),
                                   ),
                                 ),
                                 maxLines: 3,
@@ -276,9 +302,9 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Select Products for Warranty', // TODO: Add to ARB
-                                  style: TextStyle(
+                                Text(
+                                  S.of(context).selectProductsForWarranty,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -287,12 +313,16 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                 ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: state.selectedSalesInvoice!.details.length,
+                                  itemCount: state
+                                      .selectedSalesInvoice!.details.length,
                                   itemBuilder: (context, index) {
-                                    final detail = state.selectedSalesInvoice!.details[index];
-                                    final product = state.products[detail.productID];
-                                    final isSelected = state.selectedProducts.contains(detail.productID);
-                                    
+                                    final detail = state
+                                        .selectedSalesInvoice!.details[index];
+                                    final product =
+                                        state.products[detail.productID];
+                                    final isSelected = state.selectedProducts
+                                        .contains(detail.productID);
+
                                     return Card(
                                       margin: const EdgeInsets.only(bottom: 8),
                                       child: ListTile(
@@ -300,58 +330,81 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                           value: isSelected,
                                           onChanged: (bool? value) {
                                             if (value == true) {
-                                              cubit.selectProduct(detail.productID);
+                                              cubit.selectProduct(
+                                                  detail.productID);
                                             } else {
-                                              cubit.deselectProduct(detail.productID);
+                                              cubit.deselectProduct(
+                                                  detail.productID);
                                             }
                                           },
-                                          activeColor: Theme.of(context).primaryColor,
+                                          activeColor:
+                                              Theme.of(context).primaryColor,
                                           checkColor: Colors.white,
                                           side: BorderSide(
-                                            color: Colors.white.withValues(alpha: 0.8),
+                                            color: Colors.white
+                                                .withValues(alpha: 0.8),
                                             width: 2,
                                           ),
                                         ),
                                         title: Text(
-                                          product?.productName ?? 'Loading...', // Đang tải...
+                                          product?.productName ??
+                                              S.of(context).loading,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                         subtitle: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Wrap(
                                               spacing: 8,
                                               runSpacing: 8,
                                               children: [
                                                 Container(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 4),
                                                   decoration: BoxDecoration(
-                                                    color: Theme.of(context).primaryColor.withValues(alpha: 0.1), 
-                                                    borderRadius: BorderRadius.circular(12),
+                                                    color: Theme.of(context)
+                                                        .primaryColor
+                                                        .withValues(alpha: 0.1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
                                                   ),
                                                   child: Text(
-                                                    'Category: ${product?.category.toString() ?? 'Unknown'}', // Không xác định
+                                                    '${S.of(context).category}: ${product?.category.toString() ?? S.of(context).unknownCategory}',
                                                     style: TextStyle(
-                                                      color: Theme.of(context).primaryColor,
-                                                      fontWeight: FontWeight.w500,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       fontSize: 13,
                                                     ),
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                 ),
                                                 Container(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 4),
                                                   decoration: BoxDecoration(
-                                                    color: Colors.green.withValues(alpha: 0.1), 
-                                                    borderRadius: BorderRadius.circular(12),
+                                                    color: Colors.green
+                                                        .withValues(alpha: 0.1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
                                                   ),
                                                   child: Text(
-                                                    'Price: \$${detail.sellingPrice.toStringAsFixed(2)}', // Giá
+                                                    '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
                                                     style: const TextStyle(
                                                       color: Colors.green,
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       fontSize: 13,
                                                     ),
                                                   ),
@@ -361,78 +414,128 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                             const SizedBox(height: 8),
                                             if (isSelected)
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Text(
                                                     '${S.of(context).availableStock}: ${detail.quantity}',
                                                     style: const TextStyle(
                                                       color: Colors.blue,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 14,
                                                     ),
                                                   ),
                                                   GestureDetector(
-                                                    onTap: () {}, // Prevent tap propagation
+                                                    onTap:
+                                                        () {}, // Prevent tap propagation
                                                     child: Row(
-                                                      mainAxisSize: MainAxisSize.min,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
                                                       children: [
                                                         Material(
-                                                          color: Colors.transparent,
+                                                          color: Colors
+                                                              .transparent,
                                                           child: IconButton(
                                                             icon: Icon(
-                                                              Icons.remove_circle_outline,
-                                                              color: state.productQuantities[detail.productID] == 1
+                                                              Icons
+                                                                  .remove_circle_outline,
+                                                              color: state.productQuantities[
+                                                                          detail
+                                                                              .productID] ==
+                                                                      1
                                                                   ? Colors.grey
-                                                                  : Theme.of(context).primaryColor,
+                                                                  : Theme.of(
+                                                                          context)
+                                                                      .primaryColor,
                                                             ),
-                                                            onPressed: state.productQuantities[detail.productID] == 1
-                                                                ? null
-                                                                : () {
-                                                                    cubit.decrementProductQuantity(detail.productID);
-                                                                  },
-                                                            constraints: const BoxConstraints(
+                                                            onPressed:
+                                                                state.productQuantities[
+                                                                            detail.productID] ==
+                                                                        1
+                                                                    ? null
+                                                                    : () {
+                                                                        cubit.decrementProductQuantity(
+                                                                            detail.productID);
+                                                                      },
+                                                            constraints:
+                                                                const BoxConstraints(
                                                               minWidth: 40,
                                                               minHeight: 40,
                                                             ),
-                                                            padding: EdgeInsets.zero,
+                                                            padding:
+                                                                EdgeInsets.zero,
                                                           ),
                                                         ),
                                                         Container(
                                                           width: 40,
-                                                          decoration: BoxDecoration(
-                                                            color: Theme.of(context).primaryColor.withValues(alpha: 0.1), 
-                                                            borderRadius: BorderRadius.circular(8),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor
+                                                                .withValues(
+                                                                    alpha: 0.1),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
                                                           ),
-                                                          padding: const EdgeInsets.symmetric(vertical: 4),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 4),
                                                           child: Text(
                                                             '${state.productQuantities[detail.productID] ?? 1}',
                                                             style: TextStyle(
-                                                              fontWeight: FontWeight.bold,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
                                                               fontSize: 16,
-                                                              color: Theme.of(context).primaryColor,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
                                                             ),
-                                                            textAlign: TextAlign.center,
+                                                            textAlign: TextAlign
+                                                                .center,
                                                           ),
                                                         ),
                                                         Material(
-                                                          color: Colors.transparent,
+                                                          color: Colors
+                                                              .transparent,
                                                           child: IconButton(
                                                             icon: Icon(
-                                                              Icons.add_circle_outline,
-                                                              color: (state.productQuantities[detail.productID] ?? 1) >= detail.quantity
+                                                              Icons
+                                                                  .add_circle_outline,
+                                                              color: (state.productQuantities[detail
+                                                                              .productID] ??
+                                                                          1) >=
+                                                                      detail
+                                                                          .quantity
                                                                   ? Colors.grey
-                                                                  : Theme.of(context).primaryColor,
+                                                                  : Theme.of(
+                                                                          context)
+                                                                      .primaryColor,
                                                             ),
-                                                            onPressed: (state.productQuantities[detail.productID] ?? 1) >= detail.quantity
+                                                            onPressed: (state.productQuantities[detail
+                                                                            .productID] ??
+                                                                        1) >=
+                                                                    detail
+                                                                        .quantity
                                                                 ? null
                                                                 : () {
-                                                                    cubit.incrementProductQuantity(detail.productID);
+                                                                    cubit.incrementProductQuantity(
+                                                                        detail
+                                                                            .productID);
                                                                   },
-                                                            constraints: const BoxConstraints(
+                                                            constraints:
+                                                                const BoxConstraints(
                                                               minWidth: 40,
                                                               minHeight: 40,
                                                             ),
-                                                            padding: EdgeInsets.zero,
+                                                            padding:
+                                                                EdgeInsets.zero,
                                                           ),
                                                         ),
                                                       ],
@@ -453,9 +556,11 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                         ),
                                         onTap: () {
                                           if (isSelected) {
-                                            cubit.deselectProduct(detail.productID);
+                                            cubit.deselectProduct(
+                                                detail.productID);
                                           } else {
-                                            cubit.selectProduct(detail.productID);
+                                            cubit.selectProduct(
+                                                detail.productID);
                                           }
                                         },
                                       ),
@@ -492,10 +597,10 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
     if (kDebugMode) {
       print('Starting save process');
     } // Bắt đầu quá trình lưu
-    
+
     // Store context before async operation
     final BuildContext dialogContext = context;
-    
+
     // Show loading indicator
     showDialog(
       context: dialogContext,
@@ -512,7 +617,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
 
     try {
       final invoice = await cubit.submit();
-      
+
       if (!mounted) return;
 
       // Hide loading indicator
@@ -522,13 +627,14 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
 
       if (invoice != null) {
         if (kDebugMode) {
-          print('Invoice created successfully, force navigating back to warranty screen');
+          print(
+              'Invoice created successfully, force navigating back to warranty screen');
         } // Tạo hóa đơn thành công
-        
+
         // Show success message using root context
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Warranty invoice created successfully'), // TODO: Add to ARB
+          SnackBar(
+            content: Text(S.of(context).warrantyInvoiceCreated),
             backgroundColor: Colors.green,
           ),
         );
@@ -538,7 +644,6 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
           // Pop until we reach the warranty screen
           Navigator.of(context).popUntil((route) => route.isFirst);
         }
-        
       } else if (state.errorMessage != null) {
         if (kDebugMode) {
           print('Error creating invoice: ${state.errorMessage}');
@@ -555,16 +660,17 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
         print('Error during save process: $e');
       }
       if (!mounted) return;
-      
+
       // Hide loading indicator if still showing
       if (Navigator.canPop(dialogContext)) {
         Navigator.pop(dialogContext);
       }
-      
+
       // Show error message
       ScaffoldMessenger.of(dialogContext).showSnackBar(
         SnackBar(
-          content: Text('Error creating warranty invoice: $e'), // TODO: Add to ARB
+          content:
+              Text(S.of(context).errorCreatingWarrantyInvoice(e.toString())),
           backgroundColor: Colors.red,
         ),
       );

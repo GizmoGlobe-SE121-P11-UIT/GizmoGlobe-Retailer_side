@@ -23,23 +23,13 @@ class GradientIconButton extends StatelessWidget {
         color: fillColor,
         borderRadius: borderRadius,
       ),
-      child: ShaderMask(
-        shaderCallback: (bounds) => LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary,
-            Theme.of(context).colorScheme.secondary,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ).createShader(bounds),
-        child: IconButton(
-          icon: Icon(
-            icon,
-            color: Colors.white,
-            size: iconSize,
-          ),
-          onPressed: onPressed,
+      child: IconButton(
+        icon: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.primary,
+          size: iconSize,
         ),
+        onPressed: onPressed,
       ),
     );
   }

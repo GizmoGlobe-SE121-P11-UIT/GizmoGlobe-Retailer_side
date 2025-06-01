@@ -29,12 +29,7 @@ class GradientDropdown<T> extends StatelessWidget {
         border: Border.all(
           width: 2,
           style: BorderStyle.solid,
-          color: Colors.transparent,
-        ),
-        gradient: LinearGradient(
-          colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
       child: Container(
@@ -46,7 +41,8 @@ class GradientDropdown<T> extends StatelessWidget {
           items: items,
           compareFn: compareFn,
           itemAsString: itemAsString,
-          dropdownBuilder: (context, selectedItem) => _customDropdownBuilder(context, selectedItem?.toString() ?? ''),
+          dropdownBuilder: (context, selectedItem) =>
+              _customDropdownBuilder(context, selectedItem?.toString() ?? ''),
           suffixProps: DropdownSuffixProps(
             dropdownButtonProps: DropdownButtonProps(
               iconClosed: const Icon(Icons.keyboard_arrow_down),
@@ -65,7 +61,7 @@ class GradientDropdown<T> extends StatelessWidget {
                   ),
                 ),
                 filled: false,
-                hintText: 'Search', // Tìm kiếm
+                hintText: 'Search',
                 hintStyle: const TextStyle(color: Colors.grey),
               ),
             ),

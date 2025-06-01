@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
+import 'package:gizmoglobe_client/screens/stakeholder/customers/permissions/customer_permissions.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 import '../../../../widgets/general/address_picker.dart';
 import '../../../../widgets/general/field_with_icon.dart';
+import '../customer_edit/customer_edit_view.dart';
 import 'customer_detail_cubit.dart';
 import 'customer_detail_state.dart';
-import '../customer_edit/customer_edit_view.dart';
-import 'package:gizmoglobe_client/screens/stakeholder/customers/permissions/customer_permissions.dart';
 
 class CustomerDetailScreen extends StatefulWidget {
   final Customer customer;
@@ -19,7 +20,8 @@ class CustomerDetailScreen extends StatefulWidget {
   static Widget newInstance({
     required Customer customer,
     bool readOnly = false,
-  }) => BlocProvider(
+  }) =>
+      BlocProvider(
         create: (context) => CustomerDetailCubit(customer),
         child: CustomerDetailScreen(
           customer: customer,
@@ -78,7 +80,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       ),
                       const SizedBox(width: 12),
                       Text(
-                        'Add New Address', //Thêm địa chỉ mới
+                        S.of(context).addNewAddress,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -91,7 +93,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
                   // Receiver Name Field
                   Text(
-                    'Receiver Name', //Tên người nhận
+                    S.of(context).receiverName,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -101,8 +103,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   const SizedBox(height: 8),
                   FieldWithIcon(
                     controller: receiverNameController,
-                    hintText: 'Enter receiver name', //Nhập tên người nhận
-                    prefixIcon: const Icon(Icons.person_outline, color: Colors.white70,),
+                    hintText: S.of(context).enterReceiverName,
+                    prefixIcon: const Icon(
+                      Icons.person_outline,
+                      color: Colors.white70,
+                    ),
                     onChanged: (value) {
                       cubit.updateNewAddress(
                         receiverName: value,
@@ -114,7 +119,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
                   // Receiver Phone Field
                   Text(
-                    'Receiver Phone', //Số điện thoại người nhận
+                    S.of(context).receiverPhone,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -124,8 +129,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   const SizedBox(height: 8),
                   FieldWithIcon(
                     controller: receiverPhoneController,
-                    hintText: 'Enter phone number', //Nhập số điện thoại
-                    prefixIcon: const Icon(Icons.phone_outlined, color: Colors.white70,),
+                    hintText: S.of(context).enterPhoneNumber,
+                    prefixIcon: const Icon(
+                      Icons.phone_outlined,
+                      color: Colors.white70,
+                    ),
                     onChanged: (value) {
                       cubit.updateNewAddress(
                         receiverPhone: value,
@@ -139,7 +147,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
                   // Address Picker
                   Text(
-                    'Location', //Địa chỉ
+                    S.of(context).location,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -160,7 +168,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
                   // Street Field
                   Text(
-                    'Street Address', //Địa chỉ cụ thể
+                    S.of(context).streetAddress,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -170,8 +178,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   const SizedBox(height: 8),
                   FieldWithIcon(
                     controller: streetController,
-                    hintText: 'Street name, building, house no.', //Địa chỉ cụ thể
-                    prefixIcon: const Icon(Icons.home_outlined, color: Colors.white70,),
+                    hintText: S.of(context).streetNameBuildingHouseNo,
+                    prefixIcon: const Icon(
+                      Icons.home_outlined,
+                      color: Colors.white70,
+                    ),
                     onChanged: (value) {
                       cubit.updateNewAddress(
                         street: value,
@@ -194,7 +205,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           ),
                         ),
                         child: Text(
-                          'Cancel', //Hủy
+                          S.of(context).cancel,
                           style: TextStyle(
                             color: Colors.grey.shade400,
                             fontSize: 16,
@@ -209,7 +220,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                               receiverPhoneController.text.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Please fill in all required fields'), //Vui lòng điền tất cả các trường bắt buộc
+                                content: Text(
+                                    'Please fill in all required fields'), //Vui lòng điền tất cả các trường bắt buộc
                                 backgroundColor: Colors.red,
                               ),
                             );
@@ -221,7 +233,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 24,
                             vertical: 12,
@@ -230,13 +243,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.add_location, color: Colors.white),
                             SizedBox(width: 8),
                             Text(
-                              'Add Address', //Thêm địa chỉ
+                              S.of(context).addAddress,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -284,7 +297,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 },
                 fillColor: Theme.of(context).colorScheme.surface,
               ),
-              title: const GradientText(text: 'Customer Detail'), //Chi tiết khách hàng
+              title: GradientText(
+                  text: S.of(context).customerDetail), //Chi tiết khách hàng
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -312,49 +326,47 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     color: Theme.of(context).colorScheme.surface,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2), 
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
                     ],
                   ),
                   child: CustomerPermissions.canEditCustomers(state.userRole)
-                    ? Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () async {
-                                final updatedCustomer = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CustomerEditScreen(
-                                      customer: state.customer,
+                      ? Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  final updatedCustomer = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CustomerEditScreen(
+                                        customer: state.customer,
+                                      ),
                                     ),
-                                  ),
-                                );
+                                  );
 
-                                if (updatedCustomer != null) {
-                                  // Update the customer in Firebase
-                                  cubit.updateCustomer(updatedCustomer);
-                                }
-                              },
-                              icon: const Icon(
+                                  if (updatedCustomer != null) {
+                                    // Update the customer in Firebase
+                                    cubit.updateCustomer(updatedCustomer);
+                                  }
+                                },
+                                icon: const Icon(
                                   Icons.edit,
                                   color: Colors.white,
-                              ),
-                              label: const Text(
-                                  'Edit', //Chỉnh sửa
-                                  style: TextStyle(color: Colors.white),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                ),
+                                label: Text(S.of(context).edit),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    : null,
+                          ],
+                        )
+                      : null,
                 ),
               ],
             ),
@@ -372,7 +384,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8), 
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
             Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
           ],
           begin: Alignment.topLeft,
@@ -439,7 +451,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Customer Information', //Thông tin khách hàng
+                    S.of(context).customerInformation,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -449,9 +461,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              _buildInfoRow('Name', state.customer.customerName), //Tên khách hàng
-              _buildInfoRow('Email', state.customer.email), //Email
-              _buildInfoRow('Phone', state.customer.phoneNumber), //Số điện thoại
+              _buildInfoRow(S.of(context).name, state.customer.customerName),
+              _buildInfoRow(S.of(context).email, state.customer.email),
+              _buildInfoRow(S.of(context).phone, state.customer.phoneNumber),
             ],
           ),
         ),
@@ -459,7 +471,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     );
   }
 
-  Widget _buildAddressesSection(BuildContext context, CustomerDetailState state) {
+  Widget _buildAddressesSection(
+      BuildContext context, CustomerDetailState state) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Card(
@@ -482,7 +495,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Addresses', //Địa chỉ
+                        S.of(context).addresses,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -506,7 +519,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   },
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(8),
@@ -529,7 +543,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                             color: Colors.white,
                           ),
                         ),
-
                       ],
                     ),
                   ),

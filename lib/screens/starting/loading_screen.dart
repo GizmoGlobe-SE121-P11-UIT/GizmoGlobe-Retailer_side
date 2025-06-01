@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +36,7 @@ class WelcomeScreen extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -43,7 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                 radius: 80,
                 backgroundColor: Color(0xFFC15BFF),
                 child: Text(
-                  'App Avatar',
+                  S.of(context).appAvatar,
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -52,10 +53,10 @@ class WelcomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                'GizmoGlobe', // Change the text here
+                S.of(context).appTitle,
                 style: TextStyle(
-                  fontSize: 30, // Increase the font size here
-                  color: Colors.white, // You can change the color if needed
+                  fontSize: 30,
+                  color: Colors.white,
                 ),
               ),
             ],

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../enums/invoice_related/warranty_status.dart';
+import '../permissions/warranty_invoice_permissions.dart';
 import 'warranty_detail_cubit.dart';
 import 'warranty_detail_state.dart';
-import '../permissions/warranty_invoice_permissions.dart';
-import '../../../../enums/invoice_related/warranty_status.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class WarrantyDetailView extends StatelessWidget {
   final WarrantyInvoice invoice;
@@ -37,7 +38,7 @@ class _WarrantyDetailView extends StatelessWidget {
     return BlocBuilder<WarrantyDetailCubit, WarrantyDetailState>(
       builder: (context, state) {
         final cubit = context.read<WarrantyDetailCubit>();
-        
+
         return Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
@@ -62,7 +63,9 @@ class _WarrantyDetailView extends StatelessWidget {
                             Center(
                               child: CircleAvatar(
                                 radius: 50,
-                                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
                                 child: Icon(
                                   Icons.build_circle,
                                   size: 50,
@@ -74,7 +77,8 @@ class _WarrantyDetailView extends StatelessWidget {
                             SizedBox(
                               width: double.infinity,
                               child: Text(
-                                'Warranty #${state.invoice.warrantyInvoiceID}', // TODO: Add to ARB
+                                S.of(context).warrantyReceipt(
+                                    state.invoice.warrantyInvoiceID.toString()),
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
@@ -84,25 +88,34 @@ class _WarrantyDetailView extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 32),
-                            const Text(
-                              'Warranty Information', // TODO: Add to ARB
-                              style: TextStyle(
+                            Text(
+                              S.of(context).warrantyInformation,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue,
                               ),
                             ),
                             const SizedBox(height: 24),
-                            _buildInfoRow(S.of(context).customer, state.invoice.customerName ?? 'Unknown Customer'),
-                            _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)), // TODO: Add to ARB
-                            _buildInfoRow('Sales Invoice', '#${state.invoice.salesInvoiceID}'), // TODO: Add to ARB
+                            _buildInfoRow(
+                                S.of(context).customer,
+                                state.invoice.customerName ??
+                                    S.of(context).unknownProduct),
+                            _buildInfoRow(
+                                S.of(context).date,
+                                DateFormat('dd/MM/yyyy')
+                                    .format(state.invoice.date)),
+                            _buildInfoRow(S.of(context).salesInvoice,
+                                '#${state.invoice.salesInvoiceID}'),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Status', // TODO: Add to ARB
+                                    S.of(context).status,
                                     style: TextStyle(
                                       color: Colors.grey[400],
                                       fontSize: 15,
@@ -118,10 +131,16 @@ class _WarrantyDetailView extends StatelessWidget {
                               width: double.infinity,
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3), 
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer
+                                    .withValues(alpha: 0.3),
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withValues(alpha: 0.5),
                                   width: 1,
                                 ),
                               ),
@@ -129,9 +148,10 @@ class _WarrantyDetailView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Reason for Warranty', // TODO: Add to ARB
+                                    S.of(context).reasonForWarranty,
                                     style: TextStyle(
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -148,9 +168,9 @@ class _WarrantyDetailView extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 32),
-                            const Text(
-                              'Products Under Warranty', // TODO: Add to ARB
-                              style: TextStyle(
+                            Text(
+                              S.of(context).productsUnderWarranty,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.blue,
@@ -163,17 +183,21 @@ class _WarrantyDetailView extends StatelessWidget {
                               itemCount: state.invoice.details.length,
                               itemBuilder: (context, index) {
                                 final detail = state.invoice.details[index];
-                                final product = state.products[detail.productID];
+                                final product =
+                                    state.products[detail.productID];
                                 return Card(
                                   child: ListTile(
                                     onTap: () async {
-                                      final product = await context.read<WarrantyDetailCubit>().getProduct(detail.productID);
+                                      final product = await context
+                                          .read<WarrantyDetailCubit>()
+                                          .getProduct(detail.productID);
                                       if (product != null && context.mounted) {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => BlocProvider(
-                                              create: (context) => ProductDetailCubit(product),
+                                              create: (context) =>
+                                                  ProductDetailCubit(product),
                                               child: ProductDetailScreen(
                                                 product: product,
                                               ),
@@ -183,15 +207,20 @@ class _WarrantyDetailView extends StatelessWidget {
                                       }
                                     },
                                     title: Text(
-                                      product?.productName ?? '${S.of(context).products} #${detail.productID}',
+                                      product?.productName ??
+                                          '${S.of(context).products} #${detail.productID}',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                     subtitle: Text(
-                                      product?.category.toString() ?? 'Unknown Category', // TODO: Add to ARB
+                                      product?.category.toString() ??
+                                          S.of(context).unknownCategory,
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.6),
                                       ),
                                     ),
                                     trailing: Container(
@@ -200,7 +229,9 @@ class _WarrantyDetailView extends StatelessWidget {
                                         vertical: 6,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Text(
@@ -215,13 +246,15 @@ class _WarrantyDetailView extends StatelessWidget {
                                 );
                               },
                             ),
-                            if (WarrantyInvoicePermissions.canEditStatus(state.userRole, state.invoice)) ...[
+                            if (WarrantyInvoicePermissions.canEditStatus(
+                                state.userRole, state.invoice)) ...[
                               const SizedBox(height: 32),
                               SizedBox(
                                 width: double.infinity,
                                 child: TextButton.icon(
                                   style: TextButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
                                     textStyle: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -231,34 +264,50 @@ class _WarrantyDetailView extends StatelessWidget {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext dialogContext) {
-                                        WarrantyStatus? selectedStatus = state.invoice.status;
+                                        WarrantyStatus? selectedStatus =
+                                            state.invoice.status;
 
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title: const Text('Update Warranty Status'), // Cập nhật trạng thái bảo hành
+                                              title: Text(S
+                                                  .of(context)
+                                                  .updateWarrantyStatus),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  DropdownButton<WarrantyStatus>(
+                                                  DropdownButton<
+                                                      WarrantyStatus>(
                                                     value: selectedStatus,
                                                     isExpanded: true,
-                                                    items: WarrantyStatus.values.map((status) {
+                                                    items: WarrantyStatus.values
+                                                        .map((status) {
                                                       return DropdownMenuItem(
                                                         value: status,
                                                         child: Text(
-                                                          status.toString().split('.').last,
+                                                          status
+                                                              .toString()
+                                                              .split('.')
+                                                              .last,
                                                           style: TextStyle(
-                                                            fontWeight: status == state.invoice.status ? 
-                                                              FontWeight.bold : FontWeight.normal,
+                                                            fontWeight: status ==
+                                                                    state
+                                                                        .invoice
+                                                                        .status
+                                                                ? FontWeight
+                                                                    .bold
+                                                                : FontWeight
+                                                                    .normal,
                                                           ),
                                                         ),
                                                       );
                                                     }).toList(),
-                                                    onChanged: (WarrantyStatus? newStatus) {
+                                                    onChanged: (WarrantyStatus?
+                                                        newStatus) {
                                                       if (newStatus != null) {
                                                         setState(() {
-                                                          selectedStatus = newStatus;
+                                                          selectedStatus =
+                                                              newStatus;
                                                         });
                                                       }
                                                     },
@@ -267,39 +316,70 @@ class _WarrantyDetailView extends StatelessWidget {
                                               ),
                                               actions: [
                                                 TextButton(
-                                                  onPressed: () => Navigator.pop(dialogContext),
-                                                  child: const Text('Cancel'), // Hủy
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          dialogContext),
+                                                  child: Text(
+                                                      S.of(context).cancel),
                                                 ),
                                                 TextButton(
-                                                  onPressed: selectedStatus == state.invoice.status ? null : () async {
-                                                    final confirmed = await showDialog<bool>(
-                                                      context: dialogContext,
-                                                      builder: (BuildContext confirmContext) {
-                                                        return AlertDialog(
-                                                          title: const Text('Confirm Status Update'), // Xác nhận cập nhật trạng thái
-                                                          content: Text(
-                                                            'Are you sure you want to change the status to ${selectedStatus.toString().split('.').last}?' // Bạn có chắc chắn muốn thay đổi trạng thái thành
-                                                          ),
-                                                          actions: [
-                                                            TextButton(
-                                                              onPressed: () => Navigator.pop(confirmContext, false),
-                                                              child: const Text('Cancel'), // Hủy
-                                                            ),
-                                                            TextButton(
-                                                              onPressed: () => Navigator.pop(confirmContext, true),
-                                                              child: const Text('Confirm'), // Xác nhận
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
+                                                  onPressed: selectedStatus ==
+                                                          state.invoice.status
+                                                      ? null
+                                                      : () async {
+                                                          final confirmed =
+                                                              await showDialog<
+                                                                  bool>(
+                                                            context:
+                                                                dialogContext,
+                                                            builder: (BuildContext
+                                                                confirmContext) {
+                                                              return AlertDialog(
+                                                                title: Text(S
+                                                                    .of(context)
+                                                                    .confirmStatusUpdate),
+                                                                content: Text(
+                                                                  S.of(context).areYouSureChangeStatus(
+                                                                      selectedStatus
+                                                                          .toString()
+                                                                          .split(
+                                                                              '.')
+                                                                          .last),
+                                                                ),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    onPressed: () =>
+                                                                        Navigator.pop(
+                                                                            confirmContext,
+                                                                            false),
+                                                                    child: Text(S
+                                                                        .of(context)
+                                                                        .cancel),
+                                                                  ),
+                                                                  TextButton(
+                                                                    onPressed: () =>
+                                                                        Navigator.pop(
+                                                                            confirmContext,
+                                                                            true),
+                                                                    child: Text(S
+                                                                        .of(context)
+                                                                        .confirm),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
 
-                                                    if (confirmed == true) {
-                                                      Navigator.pop(dialogContext);
-                                                      cubit.updateWarrantyStatus(selectedStatus!);
-                                                    }
-                                                  },
-                                                  child: const Text('Save'), // Lưu
+                                                          if (confirmed ==
+                                                              true) {
+                                                            Navigator.pop(
+                                                                dialogContext);
+                                                            cubit.updateWarrantyStatus(
+                                                                selectedStatus!);
+                                                          }
+                                                        },
+                                                  child:
+                                                      Text(S.of(context).save),
                                                 ),
                                               ],
                                             );
@@ -309,7 +389,7 @@ class _WarrantyDetailView extends StatelessWidget {
                                     );
                                   },
                                   icon: const Icon(Icons.edit),
-                                  label: const Text('Update Status'), // Cập nhật trạng thái
+                                  label: Text(S.of(context).updateStatus),
                                 ),
                               ),
                               const SizedBox(height: 16),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 
@@ -20,8 +21,8 @@ class ManufacturerFilter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Manufacturer', // Nhà sản xuất
+        Text(
+          S.of(context).manufacturerName,
           style: AppTextStyle.buttonTextBold,
         ),
         Wrap(

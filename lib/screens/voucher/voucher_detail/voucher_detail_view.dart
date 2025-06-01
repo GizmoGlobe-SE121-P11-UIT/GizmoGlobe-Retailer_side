@@ -9,19 +9,18 @@ import 'package:intl/intl.dart';
 
 import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
+import '../../../generated/l10n.dart';
 import '../../../objects/voucher_related/end_time_interface.dart';
 import '../../../objects/voucher_related/percentage_interface.dart';
 import '../../../objects/voucher_related/voucher.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../widgets/general/gradient_text.dart';
 
-
 class VoucherDetailScreen extends StatefulWidget {
   final Voucher voucher;
   const VoucherDetailScreen({super.key, required this.voucher});
 
-  static Widget newInstance(Voucher voucher) =>
-      BlocProvider(
+  static Widget newInstance(Voucher voucher) => BlocProvider(
         create: (context) => VoucherDetailCubit(voucher),
         child: VoucherDetailScreen(voucher: voucher),
       );
@@ -39,26 +38,21 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
       appBar: AppBar(
         elevation: 0,
         leading: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
-          builder: (context, state) =>
-              GradientIconButton(
-                icon: Icons.chevron_left,
-                onPressed: () =>
-                {
-                  if (widget.voucher != state.voucher) {
-                    Navigator.pop(context, ProcessState.success)
-                  } else
-                    {
-                      Navigator.pop(context, state.processState)
-                    }
-                },
-                fillColor: Colors.transparent,
-              ),
+          builder: (context, state) => GradientIconButton(
+            icon: Icons.chevron_left,
+            onPressed: () => {
+              if (widget.voucher != state.voucher)
+                {Navigator.pop(context, ProcessState.success)}
+              else
+                {Navigator.pop(context, state.processState)}
+            },
+            fillColor: Colors.transparent,
+          ),
         ),
         title: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
-          builder: (context, state) =>
-              GradientText(
-                text: state.voucher.voucherName,
-              ),
+          builder: (context, state) => GradientText(
+            text: state.voucher.voucherName,
+          ),
         ),
       ),
       body: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
@@ -76,70 +70,62 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _buildInfoRow(
-                              title: 'Voucher',
+                              title: S.of(context).voucher,
                               value: state.voucher.voucherName,
                             ),
-
                             _buildInfoRow(
-                              title: 'Discount',
+                              title: S.of(context).discountValue,
                               value: state.voucher.isPercentage
-                                  ? '${Converter.formatDouble(state.voucher
-                                  .discountValue)}% maximum \$${Converter
-                                  .formatDouble(
-                                  (state.voucher as PercentageInterface)
-                                      .maximumDiscountValue)}'
-                                  : '\$${Converter.formatDouble(
-                                  state.voucher.discountValue)}',
+                                  ? '${Converter.formatDouble(state.voucher.discountValue)}% ${S.of(context).maximumDiscountValue}: \$${Converter.formatDouble((state.voucher as PercentageInterface).maximumDiscountValue)}'
+                                  : '\$${Converter.formatDouble(state.voucher.discountValue)}',
                             ),
-
                             _buildInfoRow(
-                              title: 'Minimum purchase',
-                              value: '\$${Converter.formatDouble(
-                                  state.voucher.minimumPurchase)}',
+                              title: S.of(context).minimumPurchase,
+                              value:
+                                  '\$${Converter.formatDouble(state.voucher.minimumPurchase)}',
                             ),
-
                             if (state.voucher.isLimited)
                               _buildInfoRow(
-                                title: 'Usage',
-                                value: '${(state.voucher as LimitedInterface).usageLeft} / ${(state.voucher as LimitedInterface).maximumUsage}',
+                                title: S.of(context).usageLeft,
+                                value:
+                                    '${(state.voucher as LimitedInterface).usageLeft} / ${(state.voucher as LimitedInterface).maximumUsage}',
                               ),
-
                             _buildInfoRow(
-                              title: 'Maximum usage per person',
+                              title: S.of(context).maxUsagePerPerson,
                               value: '${state.voucher.maxUsagePerPerson}',
                             ),
-
                             _buildInfoRow(
-                              title: 'Start time',
-                              value: DateFormat('hh:mm:ss dd/MM/yyyy').format(
-                                  state.voucher.startTime),
+                              title: S.of(context).startTime,
+                              value: DateFormat('hh:mm:ss dd/MM/yyyy')
+                                  .format(state.voucher.startTime),
                             ),
-
                             if (state.voucher.hasEndTime)
                               _buildInfoRow(
-                                title: 'End time',
+                                title: S.of(context).endTime,
                                 value: DateFormat('hh:mm:ss dd/MM/yyyy').format(
-                                    (state.voucher as EndTimeInterface).endTime),
+                                    (state.voucher as EndTimeInterface)
+                                        .endTime),
                               )
                             else
                               _buildInfoRow(
-                                title: 'End time',
-                                value: 'No end time',
+                                title: S.of(context).endTime,
+                                value: S.of(context).noEndTime,
                               ),
-
                             _buildInfoRow(
-                                title: 'Visibility',
-                                value: state.voucher.isVisible ? 'Visible' : 'Hidden'
+                              title: S.of(context).visibility,
+                              value: state.voucher.isVisible
+                                  ? S.of(context).visible
+                                  : S.of(context).hidden,
                             ),
-
                             _buildInfoRow(
-                                title: 'Status',
-                                value: state.voucher.isEnabled ? 'Enabled' : 'Disabled'
+                              title: S.of(context).status,
+                              value: state.voucher.isEnabled
+                                  ? S.of(context).enabled
+                                  : S.of(context).disabled,
                             ),
-
                             if (state.voucher.description != null)
                               _buildInfoRow(
-                                title: 'Description',
+                                title: S.of(context).description,
                                 value: state.voucher.description!,
                               ),
                           ],
@@ -149,7 +135,6 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                   ),
                 ),
               ),
-
               Positioned(
                 left: 0,
                 right: 0,
@@ -160,7 +145,7 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                     color: Theme.of(context).scaffoldBackgroundColor,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1), 
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
@@ -171,25 +156,21 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                       if (state.processState == ProcessState.success) {
                         showDialog(
                             context: context,
-                            builder:  (context) =>
-                                InformationDialog(
+                            builder: (context) => InformationDialog(
                                   title: state.dialogName.toString(),
                                   content: state.notifyMessage.toString(),
                                   onPressed: () {},
-                                )
-                        );
+                                ));
                       } else if (state.processState == ProcessState.failure) {
                         showDialog(
                             context: context,
-                            builder:  (context) =>
-                                InformationDialog(
+                            builder: (context) => InformationDialog(
                                   title: state.dialogName.toString(),
                                   content: state.notifyMessage.toString(),
                                   onPressed: () {
                                     cubit.toIdle();
                                   },
-                                )
-                        );
+                                ));
                       }
                     },
                     builder: (context, state) => FutureBuilder<bool>(
@@ -212,11 +193,15 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                     //   cubit.updateProduct();
                                     // }
                                   },
-                                  icon: const Icon(Icons.edit, color: Colors.white),
-                                  label: const Text('Edit', style: TextStyle(color: Colors.white)), //Chỉnh sửa
+                                  icon: const Icon(Icons.edit,
+                                      color: Colors.white),
+                                  label: Text(S.of(context).edit,
+                                      style:
+                                          const TextStyle(color: Colors.white)),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.blue,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
                                   ),
                                 ),
                               ),
@@ -235,15 +220,16 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                   ),
                                   label: Text(
                                     state.voucher.isEnabled
-                                        ? 'Disable'
-                                        : 'Enable',
+                                        ? S.of(context).disabled
+                                        : S.of(context).enabled,
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: state.voucher.isEnabled
                                         ? Colors.red
                                         : Colors.green,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
                                   ),
                                 ),
                               ),

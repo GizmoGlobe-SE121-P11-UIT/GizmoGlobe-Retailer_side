@@ -9,6 +9,8 @@ import 'package:gizmoglobe_client/screens/invoice/warranty/warranty_detail/warra
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
+
+import '../../../generated/l10n.dart';
 import '../../../objects/invoice_related/warranty_invoice.dart';
 import '../../../widgets/general/status_badge.dart';
 import 'warranty_screen_cubit.dart';
@@ -46,12 +48,13 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: 'Find warranty invoices...', // Tìm hóa đơn bảo hành
+                        hintText: S.of(context).findWarrantyInvoices,
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
                         },
-                        prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+                        prefixIcon: Icon(Icons.search,
+                            color: Theme.of(context).primaryColor),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -71,7 +74,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                             builder: (context) => WarrantyAddView.newInstance(),
                           ),
                         );
-                        
+
                         if (result == true) {
                           if (kDebugMode) {
                             print('Warranty invoice created, refreshing list');
@@ -89,12 +92,12 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                       : state.invoices.isEmpty
                           ? Center(
                               child: Text(
-                                'No warranty invoices found', // Không tìm thấy hóa đơn bảo hành
+                                S.of(context).noWarrantyInvoicesFound,
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onSurface
-                                      .withValues(alpha: 0.6), 
+                                      .withValues(alpha: 0.6),
                                 ),
                               ),
                             )
@@ -119,8 +122,10 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                           child: Container(
                                             width: 120,
                                             decoration: BoxDecoration(
-                                              color: Theme.of(context).cardColor,
-                                              borderRadius: BorderRadius.circular(8),
+                                              color:
+                                                  Theme.of(context).cardColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
@@ -132,24 +137,37 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                     size: 20,
                                                     color: Colors.white,
                                                   ),
-                                                  title: const Text('View'), // Xem
-                                                  onTap: () => _handleViewFromMenu(context, invoice),
+                                                  title:
+                                                      Text(S.of(context).view),
+                                                  onTap: () =>
+                                                      _handleViewFromMenu(
+                                                          context, invoice),
                                                 ),
-                                                if (WarrantyInvoicePermissions.canEditStatus(state.userRole, invoice))
+                                                if (WarrantyInvoicePermissions
+                                                    .canEditStatus(
+                                                        state.userRole,
+                                                        invoice))
                                                   ListTile(
                                                     dense: true,
                                                     leading: const Icon(
-                                                      Icons.check_circle_outline,
+                                                      Icons
+                                                          .check_circle_outline,
                                                       size: 20,
                                                       color: Colors.white,
                                                     ),
-                                                    title: const Text('Mark as Completed'), // Đánh dấu là đã hoàn thành
+                                                    title: Text(S
+                                                        .of(context)
+                                                        .markAsCompleted),
                                                     onTap: () {
                                                       Navigator.pop(context);
-                                                      cubit.setSelectedIndex(null);
-                                                      cubit.updateWarrantyStatus(
-                                                        invoice.warrantyInvoiceID!,
-                                                        WarrantyStatus.completed,
+                                                      cubit.setSelectedIndex(
+                                                          null);
+                                                      cubit
+                                                          .updateWarrantyStatus(
+                                                        invoice
+                                                            .warrantyInvoiceID!,
+                                                        WarrantyStatus
+                                                            .completed,
                                                       );
                                                     },
                                                   ),
@@ -174,7 +192,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                         color: state.selectedIndex == index
                                             ? Theme.of(context)
                                                 .primaryColor
-                                                .withValues(alpha: 0.1) 
+                                                .withValues(alpha: 0.1)
                                             : Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -205,39 +223,53 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                   Text(
                                                     'Warranty #${invoice.warrantyInvoiceID}', // Bảo hành #
                                                     style: const TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 16,
                                                     ),
                                                     maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
-                                                    invoice.customerName ?? 'Unknown Customer', // Khách hàng không xác định
+                                                    invoice.customerName ??
+                                                        'Unknown Customer', // Khách hàng không xác định
                                                     style: TextStyle(
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .onSurface
-                                                          .withValues(alpha: 0.6),
+                                                          .withValues(
+                                                              alpha: 0.6),
                                                     ),
                                                     maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                   const SizedBox(height: 8),
                                                   Wrap(
                                                     spacing: 8,
                                                     runSpacing: 4,
-                                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                                    crossAxisAlignment:
+                                                        WrapCrossAlignment
+                                                            .center,
                                                     children: [
-                                                      StatusBadge(status: invoice.status),
+                                                      StatusBadge(
+                                                          status:
+                                                              invoice.status),
                                                       Text(
-                                                        DateFormat('dd/MM/yyyy').format(invoice.date), // dd/MM/yyyy
+                                                        DateFormat('dd/MM/yyyy')
+                                                            .format(invoice
+                                                                .date), // dd/MM/yyyy
                                                         style: TextStyle(
                                                           fontSize: 12,
-                                                          color: Theme.of(context)
-                                                              .colorScheme
-                                                              .onSurface
-                                                              .withValues(alpha: 0.6), 
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onSurface
+                                                                  .withValues(
+                                                                      alpha:
+                                                                          0.6),
                                                         ),
                                                       ),
                                                     ],
@@ -275,11 +307,12 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
     );
 
     try {
-      final detailedInvoice = await firebase.getWarrantyInvoiceWithDetails(invoice.warrantyInvoiceID!);
-      
+      final detailedInvoice = await firebase
+          .getWarrantyInvoiceWithDetails(invoice.warrantyInvoiceID!);
+
       if (!mounted) return;
       Navigator.of(dialogContext).pop();
-      
+
       if (!mounted) return;
       await Navigator.push(
         dialogContext,
@@ -290,16 +323,20 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
     } catch (e) {
       if (!mounted) return;
       Navigator.of(dialogContext).pop();
-      
+
       if (!mounted) return;
       ScaffoldMessenger.of(dialogContext).showSnackBar(
-        SnackBar(content: Text('Error loading invoice details: $e')), // Lỗi khi load chi tiết hóa đơn
+        SnackBar(
+            content: Text(S
+                .of(context)
+                .errorLoadingWarrantyInvoiceDetails(e.toString()))),
       );
     }
   }
 
-  Future<void> _handleViewFromMenu(BuildContext contextDialog, WarrantyInvoice invoice) async {
-    Navigator.pop(contextDialog);  // Close menu first
+  Future<void> _handleViewFromMenu(
+      BuildContext contextDialog, WarrantyInvoice invoice) async {
+    Navigator.pop(contextDialog); // Close menu first
     cubit.setSelectedIndex(null);
     await _navigateToDetail(invoice);
   }
@@ -328,8 +365,8 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'Sort By', // Sắp xếp theo
+                      Text(
+                        S.of(context).sortBy,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -340,34 +377,40 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                   ),
                   const SizedBox(height: 16),
                   ListTile(
-                    title: const Text(
-                      'Date (Newest First)', // Ngày (Mới nhất trước)
+                    title: Text(
+                      S.of(context).dateNewestFirst,
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
                       Icons.calendar_today,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    selected: cubit.state.sortField == SortField.date && 
-                             cubit.state.sortOrder == SortOrder.descending,
-                    selectedTileColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), 
+                    selected: cubit.state.sortField == SortField.date &&
+                        cubit.state.sortOrder == SortOrder.descending,
+                    selectedTileColor: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.1),
                     onTap: () {
                       cubit.sortInvoices(SortField.date, SortOrder.descending);
                       Navigator.pop(context);
                     },
                   ),
                   ListTile(
-                    title: const Text(
-                      'Date (Oldest First)', // Ngày (Cũ nhất trước)
+                    title: Text(
+                      S.of(context).dateOldestFirst,
                       style: TextStyle(color: Colors.white),
                     ),
                     leading: Icon(
                       Icons.calendar_today,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    selected: cubit.state.sortField == SortField.date && 
-                             cubit.state.sortOrder == SortOrder.ascending,
-                    selectedTileColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), 
+                    selected: cubit.state.sortField == SortField.date &&
+                        cubit.state.sortOrder == SortOrder.ascending,
+                    selectedTileColor: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.1),
                     onTap: () {
                       cubit.sortInvoices(SortField.date, SortOrder.ascending);
                       Navigator.pop(context);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
@@ -30,7 +31,8 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const GradientText(text: 'Edit Manufacturer'), //Chỉnh sửa nhà sản xuất
+        title: const GradientText(
+            text: 'Edit Manufacturer'), //Chỉnh sửa nhà sản xuất
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -77,8 +79,8 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Manufacturer Information', //Thông tin nhà sản xuất
+                        Text(
+                          S.of(context).manufacturerInformation, // Localized
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -88,16 +90,19 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                         TextFormField(
                           initialValue: manufacturerName,
                           decoration: InputDecoration(
-                            labelText: 'Name', //Tên nhà sản xuất
+                            labelText:
+                                S.of(context).manufacturerName, // Localized
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+                            floatingLabelStyle:
+                                WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),
                             ),
-                            prefixIcon: const Icon(Icons.business, color: Colors.white),
+                            prefixIcon:
+                                const Icon(Icons.business, color: Colors.white),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -107,13 +112,14 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                           onChanged: (value) => manufacturerName = value,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a name'; //Vui lòng nhập tên
+                              return S.of(context).pleaseEnterName; // Localized
                             }
                             return null;
                           },
@@ -122,16 +128,18 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                         DropdownButtonFormField<ManufacturerStatus>(
                           value: status,
                           decoration: InputDecoration(
-                            labelText: 'Status', //Trạng thái
+                            labelText: S.of(context).status, // Localized
                             labelStyle: const TextStyle(color: Colors.white),
-                            floatingLabelStyle: WidgetStateTextStyle.resolveWith(
+                            floatingLabelStyle:
+                                WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).primaryColor
                                     : Colors.white,
                               ),
                             ),
-                            prefixIcon: const Icon(Icons.info_outline, color: Colors.white),
+                            prefixIcon: const Icon(Icons.info_outline,
+                                color: Colors.white),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -141,7 +149,8 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
                           dropdownColor: Theme.of(context).cardColor,
@@ -173,4 +182,4 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
       ),
     );
   }
-} 
+}

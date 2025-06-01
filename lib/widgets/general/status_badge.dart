@@ -10,6 +10,7 @@ class StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     Color color;
     IconData icon;
     String text = status.toString();
@@ -19,30 +20,30 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('denied') ||
         text.toLowerCase().contains('inactive') ||
         text.toLowerCase().contains('discontinued')) {
-      color = Colors.red;
+      color = theme.colorScheme.error;
       icon = Icons.cancel;
     } else if (text.toLowerCase().contains('pending') ||
         text.toLowerCase().contains('preparing') ||
         text.toLowerCase().contains('shipping') ||
         text.toLowerCase().contains('processing') ||
         text.toLowerCase().contains('out of stock')) {
-      color = Colors.orange;
+      color = theme.colorScheme.tertiary;
       icon = Icons.pending;
     } else if (text.toLowerCase().contains('paid') ||
         text.toLowerCase().contains('completed') ||
         text.toLowerCase().contains('active') ||
         text.toLowerCase().contains('shipped')) {
-      color = Colors.green;
+      color = theme.colorScheme.primary;
       icon = Icons.check_circle;
     } else {
-      color = Colors.grey;
+      color = theme.colorScheme.outline;
       icon = Icons.help;
     }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         border: Border.all(color: color),
         borderRadius: BorderRadius.circular(8),
       ),

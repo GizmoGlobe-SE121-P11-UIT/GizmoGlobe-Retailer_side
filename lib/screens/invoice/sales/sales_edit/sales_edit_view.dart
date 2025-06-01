@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/data/firebase/firebase.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
+
 import '../../../../enums/invoice_related/payment_status.dart';
 import '../../../../enums/invoice_related/sales_status.dart';
 import '../../../../enums/product_related/category_enum.dart';
 import '../permissions/sales_invoice_permissions.dart';
 import 'sales_edit_cubit.dart';
 import 'sales_edit_state.dart';
-import 'package:gizmoglobe_client/data/firebase/firebase.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class SalesEditScreen extends StatefulWidget {
   final SalesInvoice invoice;
@@ -43,9 +44,10 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
       salesStatus: widget.invoice.salesStatus,
       totalPrice: widget.invoice.totalPrice,
       loyaltyPoints: widget.invoice.loyaltyPoints,
-      details: List.from(widget.invoice.details), // Create a copy of the details list
+      details: List.from(
+          widget.invoice.details), // Create a copy of the details list
     );
-    
+
     cubit = SalesEditCubit(invoiceCopy);
   }
 
@@ -111,7 +113,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),   
+                          color: Theme.of(context)
+                              .dividerColor
+                              .withValues(alpha: 0.1),
                         ),
                       ),
                       padding: const EdgeInsets.all(16),
@@ -121,27 +125,36 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                           Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
                                   '#${state.invoice.salesInvoiceID}',
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                               const Spacer(),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerHighest,
                                   borderRadius: BorderRadius.circular(6),
                                   border: Border.all(
-                                    color: Theme.of(context).dividerColor.withValues(alpha: 0.1), 
+                                    color: Theme.of(context)
+                                        .dividerColor
+                                        .withValues(alpha: 0.1),
                                   ),
                                 ),
                                 child: Row(
@@ -149,13 +162,17 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                     Icon(
                                       Icons.calendar_today_outlined,
                                       size: 16,
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
-                                      DateFormat('dd/MM/yyyy').format(state.invoice.date),
+                                      DateFormat('dd/MM/yyyy')
+                                          .format(state.invoice.date),
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onSurface,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -177,7 +194,10 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                               Text(
                                 S.of(context).customer,
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.6),
                                   fontSize: 14,
                                 ),
                               ),
@@ -208,7 +228,10 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                     Text(
                                       S.of(context).address,
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.6),
                                         fontSize: 14,
                                       ),
                                     ),
@@ -220,15 +243,18 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    if(SalesInvoicePermissions.canEditAddress(state.userRole, state.invoice))
+                                    if (SalesInvoicePermissions.canEditAddress(
+                                        state.userRole, state.invoice))
                                       TextButton.icon(
                                         onPressed: _showAddressBottomSheet,
                                         icon: const Icon(Icons.edit, size: 16),
-                                        label: Text('Change Address'),
+                                        label:
+                                            Text(S.of(context).changeAddress),
                                         style: TextButton.styleFrom(
                                           padding: EdgeInsets.zero,
                                           minimumSize: const Size(0, 32),
-                                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
                                         ),
                                       ),
                                   ],
@@ -321,7 +347,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                 width: 48,
                                 height: 48,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Icon(
@@ -335,7 +363,8 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      detail.productName ?? 'Unknown Product',
+                                      detail.productName ??
+                                          S.of(context).unknownProduct,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -344,7 +373,10 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                     Text(
                                       '${S.of(context).quantity}: ${detail.quantity}',
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.6),
                                       ),
                                     ),
                                   ],
@@ -366,7 +398,10 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), 
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -402,12 +437,11 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
 
   IconData _getCategoryIcon(String? category) {
     if (category == null) return Icons.device_unknown;
-    
+
     CategoryEnum? categoryEnum;
     try {
       categoryEnum = CategoryEnum.values.firstWhere(
-        (e) => e.getName().toLowerCase() == category.toLowerCase()
-      );
+          (e) => e.getName().toLowerCase() == category.toLowerCase());
     } catch (e) {
       return Icons.device_unknown;
     }
@@ -459,9 +493,10 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
 
   void _showAddressBottomSheet() async {
     try {
-      final addresses = await Firebase().getCustomerAddresses(widget.invoice.customerID);
+      final addresses =
+          await Firebase().getCustomerAddresses(widget.invoice.customerID);
       final cubit = context.read<SalesEditCubit>();
-      
+
       if (!mounted) return;
 
       showModalBottomSheet(
@@ -487,9 +522,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Enter Address',
-                      style: TextStyle(
+                    Text(
+                      S.of(context).enterAddress,
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -502,9 +537,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                 ),
                 const SizedBox(height: 16),
                 if (addresses.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text('No address found'),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(S.of(context).noAddressFound),
                   )
                 else
                   SizedBox(
@@ -516,7 +551,10 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                         final address = addresses[index];
                         return Card(
                           margin: const EdgeInsets.symmetric(vertical: 4),
-                          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5), 
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withValues(alpha: 0.5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                             side: BorderSide(
@@ -541,12 +579,15 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                 color: Colors.white.withValues(alpha: 0.7),
                               ),
                             ),
-                            trailing: BlocBuilder<SalesEditCubit, SalesEditState>(
-                              builder: (context, state) => 
-                                state.invoice.address.addressID == address.addressID
+                            trailing:
+                                BlocBuilder<SalesEditCubit, SalesEditState>(
+                              builder: (context, state) => state
+                                          .invoice.address.addressID ==
+                                      address.addressID
                                   ? Icon(
                                       Icons.check_circle,
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     )
                                   : const SizedBox.shrink(),
                             ),
@@ -569,11 +610,11 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e'),
+            content: Text(S.of(context).errorWithMessage(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
       }
     }
   }
-} 
+}
