@@ -64,8 +64,8 @@ class SalesInvoice {
       'customerName': customerName,
       'address': address.addressID,
       'date': Timestamp.fromDate(date),
-      'paymentStatus': paymentStatus.toString().split('.').last,
-      'salesStatus': salesStatus.toString().split('.').last,
+      'paymentStatus': paymentStatus.getName(),
+      'salesStatus': salesStatus.getName(),
       'totalPrice': totalPrice,
       'loyaltyPoints': loyaltyPoints,
     };
@@ -74,9 +74,9 @@ class SalesInvoice {
   factory SalesInvoice.fromMap(String id, Map<String, dynamic> map) {
     final addressID = map['address'] as String;
     final address = Database().addressList.firstWhere(
-      (addr) => addr.addressID == addressID,
-      orElse: () => Address.nullAddress,
-    );
+          (addr) => addr.addressID == addressID,
+          orElse: () => Address.nullAddress,
+        );
 
     return SalesInvoice(
       salesInvoiceID: id,
@@ -85,19 +85,19 @@ class SalesInvoice {
       address: address,
       date: (map['date'] as Timestamp).toDate(),
       paymentStatus: PaymentStatus.values.firstWhere(
-        (e) => e.getName().split('.').last == map['paymentStatus'],
+        (e) => e.getName() == map['paymentStatus'],
         orElse: () => PaymentStatus.unpaid,
       ),
       salesStatus: SalesStatus.values.firstWhere(
-        (e) => e.getName().split('.').last == map['salesStatus'],
+        (e) => e.getName() == map['salesStatus'],
         orElse: () => SalesStatus.pending,
       ),
-      totalPrice: (map['totalPrice'] as num).toDouble(),
-      loyaltyPoints: (map['loyaltyPoints'] as num).toDouble(),
+      totalPrice: (map['totalPrice'] as num?)?.toDouble() ?? 0.0,
+      loyaltyPoints: (map['loyaltyPoints'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
   Map<String, dynamic> toMap() {
     return toJson();
   }
-} 
+}

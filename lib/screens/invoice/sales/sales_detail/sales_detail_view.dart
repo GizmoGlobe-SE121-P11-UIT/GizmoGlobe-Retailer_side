@@ -83,23 +83,15 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          ShaderMask(
-            shaderCallback: (bounds) => LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.primary,
-                Theme.of(context).colorScheme.secondary,
-              ],
-            ).createShader(bounds),
-            child: Text(
-              value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.5,
-              ),
+          Text(
+            value,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.5,
             ),
-          ),
+          )
         ],
       ),
     );
@@ -174,10 +166,10 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                             width: double.infinity,
                             child: Text(
                               '${S.of(context).invoiceDetails} #${state.invoice.salesInvoiceID}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -185,10 +177,10 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                           const SizedBox(height: 32),
                           Text(
                             S.of(context).invoiceDetails,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -202,7 +194,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                             S.of(context).address,
                             state.invoice.address.toString(),
                             wrap: true,
-                            maxWidth: MediaQuery.of(context).size.width * 0.6,
+                            // maxWidth: MediaQuery.of(context).size.width * 0.6,
                           ),
                           // Payment Status Row
                           Padding(
@@ -250,10 +242,10 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                           const SizedBox(height: 32),
                           Text(
                             S.of(context).products,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -327,10 +319,13 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                                 children: [
                                                   Text(
                                                     '${S.of(context).products} #${detail.productID}',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       fontSize: 16,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 4),
@@ -347,10 +342,13 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                                   const SizedBox(height: 4),
                                                   Text(
                                                     '${S.of(context).subtotal}: \$${detail.subtotal.toStringAsFixed(2)}',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 16,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
                                                     ),
                                                   ),
                                                 ],
@@ -375,8 +373,10 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                           ),
                                           child: Text(
                                             'x${detail.quantity}',
-                                            style: const TextStyle(
-                                              color: Colors.white,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -432,7 +432,9 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                             ),
                             label: Text(
                               S.of(context).editInvoice,
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
@@ -475,7 +477,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
             child: Text(
               value,
               style: TextStyle(
-                color: valueColor ?? Colors.white,
+                color: valueColor ?? Theme.of(context).colorScheme.onSurface,
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),

@@ -93,9 +93,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "businessHoursTitle": MessageLookupByLibrary.simpleMessage("Giờ làm việc"),
     "cancel": MessageLookupByLibrary.simpleMessage("Hủy"),
+    "cancelled": MessageLookupByLibrary.simpleMessage("Đã hủy"),
     "category": MessageLookupByLibrary.simpleMessage("Danh mục"),
     "changeAddress": MessageLookupByLibrary.simpleMessage("Thay đổi địa chỉ"),
     "clearFilter": MessageLookupByLibrary.simpleMessage("Xóa bộ lọc"),
+    "completed": MessageLookupByLibrary.simpleMessage("Đã hoàn thành"),
     "confirm": MessageLookupByLibrary.simpleMessage("Xác nhận"),
     "confirmStatusUpdate": MessageLookupByLibrary.simpleMessage(
       "Xác nhận cập nhật trạng thái",
@@ -209,7 +211,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "manufacturerInformation": MessageLookupByLibrary.simpleMessage(
       "Thông tin nhà cung cấp",
     ),
-    "manufacturerName": MessageLookupByLibrary.simpleMessage("Tên"),
+    "manufacturerName": MessageLookupByLibrary.simpleMessage(
+      "Tên nhà cung cấp",
+    ),
     "markAsCompleted": MessageLookupByLibrary.simpleMessage(
       "Đánh dấu là đã hoàn thành",
     ),
@@ -267,9 +271,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sứ mệnh của chúng tôi",
     ),
     "overview": MessageLookupByLibrary.simpleMessage("Tổng quan"),
+    "paid": MessageLookupByLibrary.simpleMessage("Đã thanh toán"),
     "paymentStatus": MessageLookupByLibrary.simpleMessage(
       "Trạng thái thanh toán",
     ),
+    "pending": MessageLookupByLibrary.simpleMessage("Chờ xử lý"),
     "phone": MessageLookupByLibrary.simpleMessage("Số điện thoại"),
     "phoneNumber": MessageLookupByLibrary.simpleMessage("Số điện thoại"),
     "phoneNumberIsRequired": MessageLookupByLibrary.simpleMessage(
@@ -311,6 +317,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pleaseSelectSalesInvoice": MessageLookupByLibrary.simpleMessage(
       "Vui lòng chọn hóa đơn bán hàng",
     ),
+    "preparing": MessageLookupByLibrary.simpleMessage("Đang chuẩn bị"),
     "price": MessageLookupByLibrary.simpleMessage("Giá"),
     "priceHighestFirst": MessageLookupByLibrary.simpleMessage(
       "Giá (Cao nhất trước)",
@@ -356,6 +363,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectProductsForWarranty": MessageLookupByLibrary.simpleMessage(
       "Chọn sản phẩm để bảo hành",
     ),
+    "shipped": MessageLookupByLibrary.simpleMessage("Đã giao"),
+    "shipping": MessageLookupByLibrary.simpleMessage("Đang giao"),
     "sortBy": MessageLookupByLibrary.simpleMessage("Sắp xếp theo..."),
     "stakeholder": MessageLookupByLibrary.simpleMessage("Đối tác"),
     "status": MessageLookupByLibrary.simpleMessage("Trạng thái"),
@@ -378,6 +387,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unknownProduct": MessageLookupByLibrary.simpleMessage(
       "Sản phẩm không xác định",
     ),
+    "unpaid": MessageLookupByLibrary.simpleMessage("Chưa thanh toán"),
     "unsavedChangesDiscard": MessageLookupByLibrary.simpleMessage(
       "Bạn có thay đổi chưa lưu. Bạn có muốn hủy bỏ chúng?",
     ),

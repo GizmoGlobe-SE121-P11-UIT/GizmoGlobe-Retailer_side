@@ -35,13 +35,13 @@ class SalesInvoiceDetail {
       productID: map['productID'] as String,
       productName: map['productName'] as String?,
       category: map['category'] as String?,
-      quantity: map['quantity'] as int,
-      sellingPrice: (map['sellingPrice'] as num).toDouble(),
-      subtotal: (map['subtotal'] as num).toDouble(),
+      quantity: (map['quantity'] as num?)?.toInt() ?? 0,
+      sellingPrice: (map['sellingPrice'] as num?)?.toDouble() ?? 0.0,
+      subtotal: (map['subtotal'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
   Map<String, dynamic> toMap() {
     return toJson(); // For backward compatibility
   }
-} 
+}

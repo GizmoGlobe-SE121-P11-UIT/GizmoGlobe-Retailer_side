@@ -66,7 +66,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
       // Emit new state with loaded data
       emit(state.copyWith(
-        username: db.username ?? 'User',
+        username: db.getUsername().toString(),
         totalProducts: db.productList.length,
         totalCustomers: db.customerList.length,
         totalRevenue: totalRevenue,

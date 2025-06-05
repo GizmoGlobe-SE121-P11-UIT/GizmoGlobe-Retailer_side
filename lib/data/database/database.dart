@@ -178,6 +178,11 @@ class Database {
       if (kDebugMode) {
         print('Initializing connection to Firebase'); //Bắt đầu lấy dữ liệu từ Firestore
       }
+      await getUser();
+      await getUsername();
+      if (kDebugMode) {
+        print('User: $username, Email: $email'); //Thông tin người dùng
+      }
       final manufacturerSnapshot = await FirebaseFirestore.instance
           .collection('manufacturers')
           .get();

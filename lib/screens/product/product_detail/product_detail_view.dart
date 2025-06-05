@@ -14,13 +14,11 @@ import '../../../data/database/database.dart';
 import '../../../widgets/general/status_badge.dart';
 import '../../../widgets/general/gradient_text.dart';
 
-
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
   const ProductDetailScreen({super.key, required this.product});
 
-  static Widget newInstance(Product product) =>
-      BlocProvider(
+  static Widget newInstance(Product product) => BlocProvider(
         create: (context) => ProductDetailCubit(product),
         child: ProductDetailScreen(product: product),
       );
@@ -41,11 +39,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           builder: (context, state) => GradientIconButton(
             icon: Icons.chevron_left,
             onPressed: () => {
-              if (widget.product != state.product) {
-                Navigator.pop(context, ProcessState.success)
-              } else {
-                Navigator.pop(context, state.processState)
-              }
+              if (widget.product != state.product)
+                {Navigator.pop(context, ProcessState.success)}
+              else
+                {Navigator.pop(context, state.processState)}
             },
             fillColor: Colors.transparent,
           ),
@@ -91,7 +88,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         fit: BoxFit.contain,
                       ),
                     ),
-                    
+
                     // Product Info Section
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -101,35 +98,58 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           // Basic Information Section
                           Text(
                             'Basic Information', //Thông tin cơ bản
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue[300],
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue[300],
+                                ),
                           ),
                           const SizedBox(height: 16),
-                          _buildInfoRow(
-                            icon: Icons.inventory_2,
-                            title: 'Product', //Sản phẩm
-                            value: state.product.productName,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        state.product.productName,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      StatusBadge(status: state.product.status),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          
+
                           _buildInfoRow(
                             icon: Icons.category,
                             title: 'Category', //Danh mục
-                            value: state.product.category.toString().split('.').last,
+                            value: state.product.category
+                                .toString()
+                                .split('.')
+                                .last,
                           ),
-                          
+
                           _buildInfoRow(
                             icon: Icons.business,
                             title: 'Manufacturer', //Nhà sản xuất
                             value: state.product.manufacturer.manufacturerName,
                           ),
-                          
+
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Row(
                               children: [
-                                Icon(Icons.circle, size: 20, color: Colors.grey[500]),
+                                Icon(Icons.circle,
+                                    size: 20, color: Colors.grey[500]),
                                 const SizedBox(width: 8),
                                 const Text(
                                   'Status: ', //Trạng thái
@@ -142,7 +162,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ],
                             ),
                           ),
-                          
+
                           // Thêm thông tin về giá và discount
                           _buildPriceSection(
                             sellingPrice: state.product.sellingPrice,
@@ -152,10 +172,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           // Status Information Section
                           Text(
                             'Status Information', //Thông tin trạng thái
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue[300],
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue[300],
+                                ),
                           ),
                           const SizedBox(height: 16),
                           Row(
@@ -163,15 +186,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               StatusBadge(status: state.product.status),
                               const SizedBox(width: 16),
                               Icon(
-                                state.product.stock > 0 ? Icons.check_circle : Icons.error,
-                                color: state.product.stock > 0 ? Colors.green : Colors.red,
+                                state.product.stock > 0
+                                    ? Icons.check_circle
+                                    : Icons.error,
+                                color: state.product.stock > 0
+                                    ? Colors.green
+                                    : Colors.red,
                                 size: 16,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 'Stock: ${state.product.stock}', //Tồn kho
                                 style: TextStyle(
-                                  color: state.product.stock > 0 ? Colors.green : Colors.red,
+                                  color: state.product.stock > 0
+                                      ? Colors.green
+                                      : Colors.red,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -182,25 +211,31 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           _buildInfoRow(
                             icon: Icons.calendar_today,
                             title: 'Release Date', //Ngày phát hành
-                            value: DateFormat('dd/MM/yyyy').format(state.product.release),
+                            value: DateFormat('dd/MM/yyyy')
+                                .format(state.product.release),
                           ),
                           const SizedBox(height: 24),
-                          
+
                           // Technical Specifications Section
                           Text(
                             'Technical Specifications', //Thông số kỹ thuật
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue[300],
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue[300],
+                                ),
                           ),
                           const SizedBox(height: 16),
-                          
-                          ..._buildProductSpecificDetails(context, state.product, state.technicalSpecs),
+
+                          ..._buildProductSpecificDetails(
+                              context, state.product, state.technicalSpecs),
 
                           const SizedBox(height: 16),
                           // Add padding at bottom to prevent content from being hidden behind buttons
-                          const SizedBox(height: 80), // Height for the bottom buttons
+                          const SizedBox(
+                              height: 80), // Height for the bottom buttons
                         ],
                       ),
                     ),
@@ -219,7 +254,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     color: Theme.of(context).scaffoldBackgroundColor,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1), 
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
@@ -230,25 +265,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       if (state.processState == ProcessState.success) {
                         showDialog(
                             context: context,
-                            builder:  (context) =>
-                                InformationDialog(
+                            builder: (context) => InformationDialog(
                                   title: state.dialogName.toString(),
                                   content: state.notifyMessage.toString(),
                                   onPressed: () {},
-                                )
-                        );
+                                ));
                       } else if (state.processState == ProcessState.failure) {
                         showDialog(
                             context: context,
-                            builder:  (context) =>
-                                InformationDialog(
+                            builder: (context) => InformationDialog(
                                   title: state.dialogName.toString(),
                                   content: state.notifyMessage.toString(),
                                   onPressed: () {
                                     cubit.toIdle();
                                   },
-                                )
-                        );
+                                ));
                       }
                     },
                     builder: (context, state) => FutureBuilder<bool>(
@@ -260,10 +291,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    ProcessState processState = await Navigator.push(
+                                    ProcessState processState =
+                                        await Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => EditProductScreen.newInstance(state.product),
+                                        builder: (context) =>
+                                            EditProductScreen.newInstance(
+                                                state.product),
                                       ),
                                     );
 
@@ -271,11 +305,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       cubit.updateProduct();
                                     }
                                   },
-                                  icon: const Icon(Icons.edit, color: Colors.white),
-                                  label: const Text('Edit', style: TextStyle(color: Colors.white)), //Chỉnh sửa
+                                  icon: const Icon(Icons.edit,
+                                      color: Colors.white),
+                                  label: const Text('Edit',
+                                      style: TextStyle(
+                                          color: Colors.white)), //Chỉnh sửa
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.blue,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
                                   ),
                                 ),
                               ),
@@ -287,22 +325,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     cubit.changeProductStatus();
                                   },
                                   icon: Icon(
-                                    state.product.status == ProductStatusEnum.discontinued
+                                    state.product.status ==
+                                            ProductStatusEnum.discontinued
                                         ? Icons.refresh
                                         : Icons.cancel,
                                     color: Colors.white,
                                   ),
                                   label: Text(
-                                    state.product.status == ProductStatusEnum.discontinued
+                                    state.product.status ==
+                                            ProductStatusEnum.discontinued
                                         ? 'Re-activate' //Kích hoạt lại
                                         : 'Discontinue', //Ngừng sản xuất
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: state.product.status == ProductStatusEnum.discontinued
+                                    backgroundColor: state.product.status ==
+                                            ProductStatusEnum.discontinued
                                         ? Colors.green
                                         : Colors.red,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
                                   ),
                                 ),
                               ),
@@ -395,13 +437,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   List<Widget> _buildProductSpecificDetails(
-    BuildContext context, 
-    Product product,
-    Map<String, String> specs
-  ) {
-    return specs.entries.map((entry) => 
-      _buildSpecificationRow(entry.key, entry.value)
-    ).toList();
+      BuildContext context, Product product, Map<String, String> specs) {
+    return specs.entries
+        .map((entry) => _buildSpecificationRow(entry.key, entry.value))
+        .toList();
   }
 
   Widget _buildSpecificationRow(String label, String value) {
@@ -439,7 +478,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     required double discount,
   }) {
     final discountedPrice = sellingPrice * (1 - discount);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -476,7 +515,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.1), 
+                color: Colors.red.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(

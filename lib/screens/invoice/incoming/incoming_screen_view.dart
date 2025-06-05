@@ -51,14 +51,15 @@ class _IncomingScreenState extends State<IncomingScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText:
-                            S.of(context).searchIncomingInvoices,
+                        hintText: S.of(context).searchIncomingInvoices,
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
                         },
-                        prefixIcon: Icon(Icons.search,
-                            color: Theme.of(context).primaryColor),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -91,7 +92,11 @@ class _IncomingScreenState extends State<IncomingScreen> {
                 const SizedBox(height: 16),
                 Expanded(
                   child: state.isLoading
-                      ? const Center(child: CircularProgressIndicator())
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        )
                       : state.invoices.isEmpty
                           ? Center(
                               child: Text(
@@ -116,8 +121,12 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (BuildContext context) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
                                         );
                                       },
                                     );
@@ -161,8 +170,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                           content: Container(
                                             width: 120,
                                             decoration: BoxDecoration(
-                                              color:
-                                                  Theme.of(context).cardColor,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .surface,
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                             ),
@@ -171,13 +181,21 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                               children: [
                                                 ListTile(
                                                   dense: true,
-                                                  leading: const Icon(
+                                                  leading: Icon(
                                                     Icons.visibility_outlined,
                                                     size: 20,
-                                                    color: Colors.white,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface,
                                                   ),
-                                                  title:
-                                                      Text(S.of(context).view),
+                                                  title: Text(
+                                                    S.of(context).view,
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                  ),
                                                   onTap: () =>
                                                       _handleViewInvoice(
                                                           context, invoice),
@@ -188,13 +206,21 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                         invoice))
                                                   ListTile(
                                                     dense: true,
-                                                    leading: const Icon(
+                                                    leading: Icon(
                                                       Icons.edit_outlined,
                                                       size: 20,
-                                                      color: Colors.white,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
                                                     ),
                                                     title: Text(
-                                                        S.of(context).editPayment),
+                                                      S.of(context).editPayment,
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface,
+                                                      ),
+                                                    ),
                                                     onTap: () =>
                                                         _handleEditInvoice(
                                                             context, invoice),
@@ -219,9 +245,12 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                       decoration: BoxDecoration(
                                         color: state.selectedIndex == index
                                             ? Theme.of(context)
-                                                .primaryColor
+                                                .colorScheme
+                                                .primary
                                                 .withValues(alpha: 0.1)
-                                            : Theme.of(context).cardColor,
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .surface,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Padding(
@@ -250,10 +279,13 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                 children: [
                                                   Text(
                                                     '${S.of(context).invoiceDetails} #${invoice.incomingInvoiceID}',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 16,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
                                                     ),
                                                     maxLines: 1,
                                                     overflow:
@@ -307,9 +339,12 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                             const SizedBox(width: 8),
                                             Text(
                                               '\$${invoice.totalPrice.toStringAsFixed(2)}',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
                                               ),
                                             ),
                                           ],
@@ -342,8 +377,10 @@ class _IncomingScreenState extends State<IncomingScreen> {
       context: dialogContext,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const Center(
-          child: CircularProgressIndicator(),
+        return Center(
+          child: CircularProgressIndicator(
+            color: Theme.of(context).colorScheme.primary,
+          ),
         );
       },
     );
@@ -384,8 +421,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
     // Chỉ cho phép chỉnh sửa từ unpaid sang paid
     if (invoice.status != PaymentStatus.unpaid) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(S.of(context).onlyUnpaidCanBeMarkedPaid)),
+        SnackBar(content: Text(S.of(context).onlyUnpaidCanBeMarkedPaid)),
       );
       Navigator.pop(contextDialog);
       return;
@@ -400,16 +436,36 @@ class _IncomingScreenState extends State<IncomingScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(S.of(context).paymentStatus),
-          content: Text(S.of(context).markAsPaidQuestion),
+          title: Text(
+            S.of(context).paymentStatus,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          content: Text(
+            S.of(context).markAsPaidQuestion,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: Text(S.of(context).cancel),
+              child: Text(
+                S.of(context).cancel,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: Text(S.of(context).confirm),
+              child: Text(
+                S.of(context).confirm,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
             ),
           ],
         );
@@ -448,10 +504,10 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       const SizedBox(width: 8),
                       Text(
                         S.of(context).sortBy,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ],
@@ -460,7 +516,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                   ListTile(
                     title: Text(
                       S.of(context).dateNewestFirst,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                     leading: Icon(
                       Icons.calendar_today,
@@ -480,7 +538,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                   ListTile(
                     title: Text(
                       S.of(context).dateOldestFirst,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                     leading: Icon(
                       Icons.calendar_today,
@@ -500,7 +560,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                   ListTile(
                     title: Text(
                       S.of(context).priceHighestFirst,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                     leading: Icon(
                       Icons.attach_money,
@@ -521,7 +583,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                   ListTile(
                     title: Text(
                       S.of(context).priceLowestFirst,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                     leading: Icon(
                       Icons.attach_money,

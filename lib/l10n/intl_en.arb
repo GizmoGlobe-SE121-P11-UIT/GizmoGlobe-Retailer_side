@@ -1,498 +1,1313 @@
 {
-  "@@locale": "en",
-  "appTitle": "GizmoGlobe",
-  "@appTitle": {"description": "The title of the application.", "type": "text"},
-  "welcomeBack": "Welcome back,",
-  "@welcomeBack": {"description": "Welcome message for returning users.", "type": "text"},
-  "overview": "Overview",
-  "@overview": {"description": "Overview section title.", "type": "text"},
-  "products": "Products",
-  "@products": {"description": "Products section title.", "type": "text"},
-  "customers": "Customers",
-  "@customers": {"description": "Customers section title.", "type": "text"},
-  "revenue": "Revenue",
-  "@revenue": {"description": "Revenue section title.", "type": "text"},
-  "avgIncome": "Avg. Income",
-  "@avgIncome": {"description": "Average income label.", "type": "text"},
-  "monthlySales": "Monthly Sales",
-  "@monthlySales": {"description": "Monthly sales label.", "type": "text"},
-  "last12Months": "Last 12 months",
-  "@last12Months": {"description": "Label for last 12 months.", "type": "text"},
-  "last3Months": "Last 3 months",
-  "@last3Months": {"description": "Label for last 3 months.", "type": "text"},
-  "newIncomingInvoice": "New Incoming Invoice",
-  "@newIncomingInvoice": {"description": "Button or title for creating a new incoming invoice.", "type": "text"},
-  "selectManufacturer": "Select Manufacturer",
-  "@selectManufacturer": {"description": "Prompt to select a manufacturer.", "type": "text"},
-  "addProduct": "Add Product",
-  "@addProduct": {"description": "Button or label to add a product.", "type": "text"},
-  "invoiceDetails": "Invoice Details",
-  "@invoiceDetails": {"description": "Section title for invoice details.", "type": "text"},
-  "importPrice": "Import Price",
-  "@importPrice": {"description": "Label for import price.", "type": "text"},
-  "quantity": "Quantity",
-  "@quantity": {"description": "Label for quantity.", "type": "text"},
-  "totalPrice": "Total Price: ",
-  "@totalPrice": {"description": "Label for total price.", "type": "text"},
-  "paymentStatus": "Payment Status",
-  "@paymentStatus": {"description": "Label for payment status.", "type": "text"},
-  "createInvoice": "Create Invoice",
-  "@createInvoice": {"description": "Button or title for creating an invoice.", "type": "text"},
-  "cancel": "Cancel",
-  "@cancel": {"description": "Cancel button label.", "type": "text"},
-  "add": "Add",
-  "@add": {"description": "Add button label.", "type": "text"},
-  "editProductDetail": "Edit Product Detail",
-  "@editProductDetail": {"description": "Button or title for editing product details.", "type": "text"},
-  "update": "Update",
-  "@update": {"description": "Update button label.", "type": "text"},
-  "searchIncomingInvoices": "Find incoming invoices...",
-  "@searchIncomingInvoices": {"description": "Search field placeholder for incoming invoices.", "type": "text"},
-  "noIncomingInvoicesFound": "No incoming invoices found",
-  "@noIncomingInvoicesFound": {"description": "Message when no incoming invoices are found.", "type": "text"},
-  "view": "View",
-  "@view": {"description": "View button label.", "type": "text"},
-  "editPayment": "Edit Payment",
-  "@editPayment": {"description": "Button or title for editing payment.", "type": "text"},
-  "onlyUnpaidCanBeMarkedPaid": "Only unpaid invoices can be marked as paid",
-  "@onlyUnpaidCanBeMarkedPaid": {"description": "Message explaining only unpaid invoices can be marked as paid.", "type": "text"},
-  "markAsPaidQuestion": "Mark this invoice as paid?",
-  "@markAsPaidQuestion": {"description": "Prompt to mark invoice as paid.", "type": "text"},
-  "confirm": "OK",
-  "@confirm": {"description": "Confirm button label.", "type": "text"},
-  "sortBy": "Sort By",
-  "@sortBy": {"description": "Label for sort by options.", "type": "text"},
-  "dateNewestFirst": "Date (Newest First)",
-  "@dateNewestFirst": {"description": "Sort option for newest date first.", "type": "text"},
-  "dateOldestFirst": "Date (Oldest First)",
-  "@dateOldestFirst": {"description": "Sort option for oldest date first.", "type": "text"},
-  "priceHighestFirst": "Price (Highest First)",
-  "@priceHighestFirst": {"description": "Sort option for highest price first.", "type": "text"},
-  "priceLowestFirst": "Price (Lowest First)",
-  "@priceLowestFirst": {"description": "Sort option for lowest price first.", "type": "text"},
-  "errorOccurred": "Error occurred",
-  "@errorOccurred": {"description": "Generic error message.", "type": "text"},
-  "newInvoice": "New Invoice",
-  "@newInvoice": {"description": "Button or title for new invoice.", "type": "text"},
-  "customerInformation": "Customer Information",
-  "@customerInformation": {"description": "Section title for customer information.", "type": "text"},
-  "selectCustomer": "Select customer",
-  "@selectCustomer": {"description": "Prompt to select a customer.", "type": "text"},
-  "customer": "Customer",
-  "@customer": {"description": "Label for customer.", "type": "text"},
-  "pleaseSelectCustomer": "Please select a customer",
-  "@pleaseSelectCustomer": {"description": "Validation message to select a customer.", "type": "text"},
-  "address": "Address",
-  "@address": {"description": "Label for address.", "type": "text"},
-  "pleaseSelectAddress": "Please select an address",
-  "@pleaseSelectAddress": {"description": "Validation message to select an address.", "type": "text"},
-  "salesStatus": "Sales Status",
-  "@salesStatus": {"description": "Label for sales status.", "type": "text"},
-  "totalAmount": "Total Amount",
-  "@totalAmount": {"description": "Label for total amount.", "type": "text"},
-  "noProductsAddedYet": "No products added yet",
-  "@noProductsAddedYet": {"description": "Message when no products have been added yet.", "type": "text"},
-  "price": "Price",
-  "@price": {"description": "Label for price field.", "type": "text"},
-  "availableStock": "Available stock",
-  "@availableStock": {"description": "Label for available stock.", "type": "text"},
-  "pleaseSelectCustomerFirst": "Please select a customer first",
-  "@pleaseSelectCustomerFirst": {"description": "Validation message to select a customer first.", "type": "text"},
-  "searchSalesInvoices": "Find sales invoices...",
-  "@searchSalesInvoices": {"description": "Search field placeholder for sales invoices.", "type": "text"},
-  "noSalesInvoicesFound": "No sales invoices found",
-  "@noSalesInvoicesFound": {"description": "Message when no sales invoices are found.", "type": "text"},
-  "warrantyReceipt": "Warranty #{id}",
-  "@warrantyReceipt": {
-    "description": "Label for warranty receipt with id placeholder.",
-    "placeholders": {"id": {"type": "String", "example": "123"}}
-  },
-  "warrantyInformation": "Warranty Information",
-  "@warrantyInformation": {"description": "Section title for warranty information.", "type": "text"},
-  "status": "Status",
-  "@status": {"description": "Label for status toggle.", "type": "text"},
-  "reasonForWarranty": "Reason for Warranty",
-  "@reasonForWarranty": {"description": "Label for reason for warranty.", "type": "text"},
-  "productsUnderWarranty": "Products Under Warranty",
-  "@productsUnderWarranty": {"description": "Label for products under warranty.", "type": "text"},
-  "unknownCategory": "Unknown Category",
-  "@unknownCategory": {"description": "Label for unknown category.", "type": "text"},
-  "updateWarrantyStatus": "Update Warranty Status",
-  "@updateWarrantyStatus": {"description": "Button or title for updating warranty status.", "type": "text"},
-  "confirmStatusUpdate": "Confirm Status Update",
-  "@confirmStatusUpdate": {"description": "Prompt to confirm status update.", "type": "text"},
-  "areYouSureChangeStatus": "Are you sure you want to change the status to {status}?",
-  "@areYouSureChangeStatus": {
-    "description": "Prompt to confirm changing status with status placeholder.",
-    "placeholders": {"status": {"type": "String", "example": "Completed"}}
-  },
-  "save": "Save",
-  "@save": {"description": "Save button label.", "type": "text"},
-  "updateStatus": "Update Status",
-  "@updateStatus": {"description": "Button or title for updating status.", "type": "text"},
-  "noSalesInvoicesAvailable": "No sales invoices available",
-  "@noSalesInvoicesAvailable": {"description": "Message when no sales invoices are available.", "type": "text"},
-  "noEligibleSalesInvoices": "This customer has no eligible sales invoices for warranty claims.",
-  "@noEligibleSalesInvoices": {"description": "Message when customer has no eligible sales invoices for warranty claims.", "type": "text"},
-  "pleaseSelectSalesInvoice": "Please select a sales invoice",
-  "@pleaseSelectSalesInvoice": {"description": "Validation message to select a sales invoice.", "type": "text"},
-  "reasonForWarrantyLabel": "Reason for Warranty",
-  "@reasonForWarrantyLabel": {"description": "Label for reason for warranty field.", "type": "text"},
-  "selectProductsForWarranty": "Select Products for Warranty",
-  "@selectProductsForWarranty": {"description": "Label for selecting products for warranty.", "type": "text"},
-  "warrantyInvoiceCreated": "Warranty invoice created successfully",
-  "@warrantyInvoiceCreated": {"description": "Message when warranty invoice is created successfully.", "type": "text"},
-  "errorCreatingWarrantyInvoice": "Error creating warranty invoice: {error}",
-  "@errorCreatingWarrantyInvoice": {
-    "description": "Error message when creating warranty invoice fails.",
-    "placeholders": {"error": {"type": "String", "example": "Network error"}}
-  },
-  "product": "Product",
-  "@product": {"description": "Label for product.", "type": "text"},
-  "selectProduct": "Select product",
-  "@selectProduct": {"description": "Prompt to select a product.", "type": "text"},
-  "pleaseSelectProduct": "Please select a product",
-  "@pleaseSelectProduct": {"description": "Validation message to select a product.", "type": "text"},
-  "quantityGreaterThanZero": "Quantity must be greater than 0",
-  "@quantityGreaterThanZero": {"description": "Validation message for quantity greater than zero.", "type": "text"},
-  "notEnoughStock": "Not enough stock",
-  "@notEnoughStock": {"description": "Message when there is not enough stock.", "type": "text"},
-  "noAddressFound": "No address found",
-  "@noAddressFound": {"description": "Message when no address is found.", "type": "text"},
-  "date": "Date",
-  "@date": {"description": "Label for date.", "type": "text"},
-  "subtotal": "Subtotal",
-  "@subtotal": {"description": "Label for subtotal.", "type": "text"},
-  "editInvoice": "Edit Invoice",
-  "@editInvoice": {"description": "Button or title for editing invoice.", "type": "text"},
-  "changeAddress": "Change Address",
-  "@changeAddress": {"description": "Button or label for changing address.", "type": "text"},
-  "unknownProduct": "Unknown Product",
-  "@unknownProduct": {"description": "Label for unknown product.", "type": "text"},
-  "errorWithMessage": "Error: {error}",
-  "@errorWithMessage": {
-    "description": "Generic error message with error placeholder.",
-    "placeholders": {"error": {"type": "String", "example": "Something went wrong"}}
-  },
-  "errorLoadingInvoiceDetails": "Error loading invoice details: {error}",
-  "@errorLoadingInvoiceDetails": {
-    "description": "Error message when loading invoice details fails.",
-    "placeholders": {"error": {"type": "String", "example": "Timeout"}}
-  },
-  "salesInvoice": "Sales Invoice",
-  "@salesInvoice": {"description": "Label for sales invoice.", "type": "text"},
-  "loading": "Loading...",
-  "@loading": {"description": "Label for loading state.", "type": "text"},
-  "category": "Category",
-  "@category": {"description": "Label for category field.", "type": "text"},
-  "enterAddress": "Enter Address",
-  "@enterAddress": {"description": "Label for the field or button to enter an address.", "type": "text"},
-  "findWarrantyInvoices": "Find warranty invoices...",
-  "@findWarrantyInvoices": {"description": "Search field placeholder for warranty invoices.", "type": "text"},
-  "noWarrantyInvoicesFound": "No warranty invoices found",
-  "@noWarrantyInvoicesFound": {"description": "Message when no warranty invoices are found.", "type": "text"},
-  "markAsCompleted": "Mark as Completed",
-  "@markAsCompleted": {"description": "Button or label to mark as completed.", "type": "text"},
-  "errorLoadingWarrantyInvoiceDetails": "Error loading warranty invoice details: {error}",
-  "@errorLoadingWarrantyInvoiceDetails": {"description": "Error message when loading warranty invoice details fails.", "placeholders": {"error": {"type": "String", "example": "Timeout"}}},
-  "sales": "Sales",
-  "@sales": {"description": "Tab label for sales invoices.", "type": "text"},
-  "incoming": "Incoming",
-  "@incoming": {"description": "Tab label for incoming invoices.", "type": "text"},
-  "warranty": "Warranty",
-  "@warranty": {"description": "Tab label for warranty invoices.", "type": "text"},
-  "hello": "Hello!",
-  "@hello": {"description": "Greeting for the user in the drawer.", "type": "text"},
-  "contactUs": "Contact Us:",
-  "@contactUs": {"description": "Label for contact information section in the drawer.", "type": "text"},
-  "logOut": "Log out",
-  "@logOut": {"description": "Button label for logging out.", "type": "text"},
-  "home": "Home",
-  "@home": {"description": "Bottom navigation label for home screen.", "type": "text"},
-  "invoice": "Invoice",
-  "@invoice": {"description": "Bottom navigation label for invoice screen.", "type": "text"},
-  "stakeholder": "Stakeholder",
-  "@stakeholder": {"description": "Bottom navigation label for stakeholder screen.", "type": "text"},
-  "voucher": "Voucher",
-  "@voucher": {"description": "Bottom navigation label for voucher screen.", "type": "text"},
-  "profile": "Profile",
-  "@profile": {"description": "Bottom navigation label for profile screen.", "type": "text"},
-  "addNewAddress": "Add New Address",
-  "@addNewAddress": {"description": "Dialog title for adding a new address.", "type": "text"},
-  "receiverName": "Receiver Name",
-  "@receiverName": {"description": "Label for receiver name field.", "type": "text"},
-  "enterReceiverName": "Enter receiver name",
-  "@enterReceiverName": {"description": "Hint for entering receiver name.", "type": "text"},
-  "receiverPhone": "Receiver Phone",
-  "@receiverPhone": {"description": "Label for receiver phone field.", "type": "text"},
-  "enterPhoneNumber": "Enter phone number",
-  "@enterPhoneNumber": {"description": "Hint for entering phone number.", "type": "text"},
-  "location": "Location",
-  "@location": {"description": "Label for location/address picker.", "type": "text"},
-  "streetAddress": "Street Address",
-  "@streetAddress": {"description": "Label for street address field.", "type": "text"},
-  "streetNameBuildingHouseNo": "Street name, building, house no.",
-  "@streetNameBuildingHouseNo": {"description": "Hint for street address field.", "type": "text"},
-  "addAddress": "Add Address",
-  "@addAddress": {"description": "Button label for adding address.", "type": "text"},
-  "customerDetail": "Customer Detail",
-  "@customerDetail": {"description": "Title for customer detail screen.", "type": "text"},
-  "edit": "Edit",
-  "@edit": {"description": "Button label for editing.", "type": "text"},
-  "name": "Name",
-  "@name": {"description": "Label for name field.", "type": "text"},
-  "email": "Email",
-  "@email": {"description": "Label for email field.", "type": "text"},
-  "phone": "Phone",
-  "@phone": {"description": "Label for phone field.", "type": "text"},
-  "addresses": "Addresses",
-  "@addresses": {"description": "Label for addresses section.", "type": "text"},
-  "pleaseFillInAllRequiredFields": "Please fill in all required fields",
-  "@pleaseFillInAllRequiredFields": {"description": "Validation message for required fields.", "type": "text"},
-  "discardChanges": "Discard Changes?",
-  "@discardChanges": {"description": "Dialog title for discarding changes.", "type": "text"},
-  "unsavedChangesDiscard": "You have unsaved changes. Do you want to discard them?",
-  "@unsavedChangesDiscard": {"description": "Dialog content for unsaved changes.", "type": "text"},
-  "discard": "DISCARD",
-  "@discard": {"description": "Button label for discarding changes.", "type": "text"},
-  "editCustomer": "Edit Customer",
-  "@editCustomer": {"description": "Title for edit customer screen.", "type": "text"},
-  "fullName": "Full Name",
-  "@fullName": {"description": "Label for full name field.", "type": "text"},
-  "nameIsRequired": "Name is required",
-  "@nameIsRequired": {"description": "Validation message for required name.", "type": "text"},
-  "nameMin2Chars": "Name must be at least 2 characters",
-  "@nameMin2Chars": {"description": "Validation message for name minimum length.", "type": "text"},
-  "phoneNumber": "Phone Number",
-  "@phoneNumber": {"description": "Label for phone number field.", "type": "text"},
-  "phoneNumberIsRequired": "Phone number is required",
-  "@phoneNumberIsRequired": {"description": "Validation message for required phone number.", "type": "text"},
-  "pleaseEnterValidPhoneNumber": "Please enter a valid phone number",
-  "@pleaseEnterValidPhoneNumber": {"description": "Validation message for valid phone number.", "type": "text"},
-  "addNewCustomer": "Add New Customer",
-  "@addNewCustomer": {"description": "Dialog title for adding a new customer.", "type": "text"},
-  "addCustomer": "Add Customer",
-  "@addCustomer": {"description": "Button label for adding a customer.", "type": "text"},
-  "pleaseFillInAllFields": "Please fill in all fields",
-  "@pleaseFillInAllFields": {"description": "Validation message for required fields.", "type": "text"},
-  "customerAddedSuccessfully": "Customer added successfully",
-  "@customerAddedSuccessfully": {"description": "Message when a customer is added successfully.", "type": "text"},
-  "findCustomers": "Find customers...",
-  "@findCustomers": {"description": "Search field placeholder for customers.", "type": "text"},
-  "noMatchingCustomersFound": "No matching customers found",
-  "@noMatchingCustomersFound": {"description": "Message when no matching customers are found.", "type": "text"},
-  "employeeDetail": "Employee Detail",
-  "@employeeDetail": {"description": "Title for employee detail screen.", "type": "text"},
-  "employeeInformation": "Employee Information",
-  "@employeeInformation": {"description": "Section title for employee information.", "type": "text"},
-  "role": "Role",
-  "@role": {"description": "Label for role field.", "type": "text"},
-  "delete": "Delete",
-  "@delete": {"description": "Button label for deleting.", "type": "text"},
-  "deleteEmployee": "Delete Employee",
-  "@deleteEmployee": {"description": "Dialog title for deleting an employee.", "type": "text"},
-  "areYouSureDeleteEmployee": "Are you sure you want to delete this employee?",
-  "@areYouSureDeleteEmployee": {"description": "Confirmation message for deleting an employee.", "type": "text"},
-  "editEmployee": "Edit Employee",
-  "@editEmployee": {"description": "Title for edit employee screen.", "type": "text"},
-  "pleaseEnterName": "Please enter a name",
-  "@pleaseEnterName": {"description": "Validation message for required employee name.", "type": "text"},
-  "pleaseEnterPhoneNumber": "Please enter a phone number",
-  "@pleaseEnterPhoneNumber": {"description": "Validation message for required employee phone number.", "type": "text"},
-  "pleaseSelectRole": "Please select a role",
-  "@pleaseSelectRole": {"description": "Validation message for required employee role.", "type": "text"},
-  "addNewEmployee": "Add New Employee",
-  "@addNewEmployee": {"description": "Dialog title for adding a new employee.", "type": "text"},
-  "pleaseEnterEmail": "Please enter email address",
-  "@pleaseEnterEmail": {"description": "Validation message for required employee email.", "type": "text"},
-  "filterByRole": "Filter by Role",
-  "@filterByRole": {"description": "Dialog title for filtering employees by role.", "type": "text"},
-  "clearFilter": "Clear Filter",
-  "@clearFilter": {"description": "Button label to clear the role filter.", "type": "text"},
-  "findEmployees": "Find employees...",
-  "@findEmployees": {"description": "Search field placeholder for employees.", "type": "text"},
-  "noEmployeesFound": "No employees found",
-  "@noEmployeesFound": {"description": "Message when no employees are found.", "type": "text"},
-  "employeeAddedSuccessfully": "Employee added successfully.",
-  "@employeeAddedSuccessfully": {"description": "Message when an employee is added successfully.", "type": "text"},
-  "manufacturerDetail": "Manufacturer Detail",
-  "@manufacturerDetail": {"description": "Title for manufacturer detail screen.", "type": "text"},
-  "deactivate": "Deactivate",
-  "@deactivate": {"description": "Button label to deactivate manufacturer.", "type": "text"},
-  "activate": "Activate",
-  "@activate": {"description": "Button label to activate manufacturer.", "type": "text"},
-  "deactivateManufacturer": "Deactivate Manufacturer",
-  "@deactivateManufacturer": {"description": "Dialog title for deactivating manufacturer.", "type": "text"},
-  "activateManufacturer": "Activate Manufacturer",
-  "@activateManufacturer": {"description": "Dialog title for activating manufacturer.", "type": "text"},
-  "deactivateManufacturerConfirm": "Are you sure you want to deactivate this manufacturer?",
-  "@deactivateManufacturerConfirm": {"description": "Confirmation message for deactivating manufacturer.", "type": "text"},
-  "activateManufacturerConfirm": "Are you sure you want to activate this manufacturer?",
-  "@activateManufacturerConfirm": {"description": "Confirmation message for activating manufacturer.", "type": "text"},
-  "inactive": "Inactive",
-  "@inactive": {"description": "Tab label for inactive vouchers.", "type": "text"},
-  "manufacturerInformation": "Manufacturer Information",
-  "@manufacturerInformation": {"description": "Section title for manufacturer information.", "type": "text"},
-  "manufacturerName": "Name",
-  "@manufacturerName": {"description": "Label for manufacturer name field.", "type": "text"},
-  "editManufacturer": "Edit Manufacturer",
-  "@editManufacturer": {"description": "Title for edit manufacturer screen.", "type": "text"},
-  "addNewManufacturer": "Add New Manufacturer",
-  "@addNewManufacturer": {"description": "Dialog title for adding a new manufacturer.", "type": "text"},
-  "addManufacturer": "Add Manufacturer",
-  "@addManufacturer": {"description": "Button label for adding a manufacturer.", "type": "text"},
-  "findManufacturers": "Find manufacturers...",
-  "@findManufacturers": {"description": "Search field placeholder for manufacturers.", "type": "text"},
-  "noMatchingManufacturersFound": "No matching manufacturers found",
-  "@noMatchingManufacturersFound": {"description": "Message when no matching manufacturers are found.", "type": "text"},
-  "deactivateManufacturerConfirmName": "Are you sure you want to deactivate {name}?",
-  "@deactivateManufacturerConfirmName": {"description": "Confirmation message for deactivating a manufacturer with name.", "placeholders": {"name": {"type": "String", "example": "Acme Corp"}}},
-  "activateManufacturerConfirmName": "Are you sure you want to activate {name}?",
-  "@activateManufacturerConfirmName": {"description": "Confirmation message for activating a manufacturer with name.", "placeholders": {"name": {"type": "String", "example": "Acme Corp"}}},
-  "employees": "Employees",
-  "@employees": {"description": "Tab label for employees.", "type": "text"},
-  "vendors": "Vendors",
-  "@vendors": {"description": "Tab label for vendors.", "type": "text"},
-  "appAvatar": "App Avatar",
-  "@appAvatar": {"description": "Label for the app avatar in the loading screen.", "type": "text"},
-  "createNewAccount": "Create new account",
-  "@createNewAccount": {"description": "Button label for creating a new account.", "type": "text"},
-  "alreadyHaveAccount": "Already have an account?",
-  "@alreadyHaveAccount": {"description": "Button label for users who already have an account.", "type": "text"},
-  "informationTitle": "Information",
-  "@informationTitle": {"description": "Title for the information screen.", "type": "text"},
-  "aboutGizmoGlobe": "About GizmoGlobe",
-  "@aboutGizmoGlobe": {"description": "Section title: About GizmoGlobe.", "type": "text"},
-  "aboutUsTitle": "About Us",
-  "@aboutUsTitle": {"description": "Section title: About Us.", "type": "text"},
-  "aboutUsContent": "GizmoGlobe is your trusted provider for computer hardware solutions.",
-  "@aboutUsContent": {"description": "Content for About Us section.", "type": "text"},
-  "ourMissionTitle": "Our Mission",
-  "@ourMissionTitle": {"description": "Section title: Our Mission.", "type": "text"},
-  "ourMissionContent": "To provide excellent service and quality products to you, our beloved customers.",
-  "@ourMissionContent": {"description": "Content for Our Mission section.", "type": "text"},
-  "contactInformationTitle": "Contact Information",
-  "@contactInformationTitle": {"description": "Section title: Contact Information.", "type": "text"},
-  "contactInformationContent": "Address: UIT",
-  "@contactInformationContent": {"description": "Content for Contact Information section.", "type": "text"},
-  "businessHoursTitle": "Business Hours",
-  "@businessHoursTitle": {"description": "Section title: Business Hours.", "type": "text"},
-  "businessHoursContent": "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed",
-  "@businessHoursContent": {"description": "Content for Business Hours section.", "type": "text"},
-  "supportTitle": "Support",
-  "@supportTitle": {"description": "Title for the support screen.", "type": "text"},
-  "supportMembers": "Members of teams",
-  "@supportMembers": {"description": "Section title for team members.", "type": "text"},
-  "supportRoleDeveloper": "Developer",
-  "@supportRoleDeveloper": {"description": "Role: Developer.", "type": "text"},
-  "supportStudentId": "Student ID: {id}",
-  "@supportStudentId": {"description": "Label for student ID with placeholder.", "placeholders": {"id": {"type": "String", "example": "22521474"}}},
-  "supportRole": "Role: {role}",
-  "@supportRole": {"description": "Label for role with placeholder.", "placeholders": {"role": {"type": "String", "example": "Developer"}}},
-  "supportEmail": "Email: {email}",
-  "@supportEmail": {"description": "Label for email with placeholder.", "placeholders": {"email": {"type": "String", "example": "22521474@gm.uit.edu.vn"}}},
-  "accountSettings": "Account Settings",
-  "@accountSettings": {"description": "Title for account settings section.", "type": "text"},
-  "editProfile": "Edit Profile",
-  "@editProfile": {"description": "Button or title for editing profile.", "type": "text"},
-  "updatePersonalInfo": "Update your personal information",
-  "@updatePersonalInfo": {"description": "Subtitle for updating personal information.", "type": "text"},
-  "changePassword": "Change Password",
-  "@changePassword": {"description": "Button or title for changing password.", "type": "text"},
-  "manageAccountSecurity": "Manage your account security",
-  "@manageAccountSecurity": {"description": "Subtitle for managing account security.", "type": "text"},
-  "signOut": "Sign Out",
-  "@signOut": {"description": "Button label for signing out.", "type": "text"},
-  "username": "Username",
-  "@username": {"description": "Label for username field.", "type": "text"},
-  "saveChanges": "Save changes",
-  "@saveChanges": {"description": "Button label for saving changes.", "type": "text"},
-  "updateProfileSuccess": "Update profile successfully",
-  "@updateProfileSuccess": {"description": "Message when profile is updated successfully.", "type": "text"},
-  "passwordResetEmailWillBeSent": "A password reset email will be sent to {email}",
-  "@passwordResetEmailWillBeSent": {"description": "Message for password reset email with placeholder.", "placeholders": {"email": {"type": "String", "example": "user@email.com"}}},
-  "passwordResetEmailSentSuccess": "Password reset email sent successfully",
-  "@passwordResetEmailSentSuccess": {"description": "Message when password reset email is sent successfully.", "type": "text"},
-  "sendPasswordResetEmail": "Send Password Reset Email",
-  "@sendPasswordResetEmail": {"description": "Button label for sending password reset email.", "type": "text"},
-  "noUserSignedIn": "No user is currently signed in",
-  "@noUserSignedIn": {"description": "Message when no user is signed in.", "type": "text"},
-  "addVoucher": "Add Voucher",
-  "@addVoucher": {"description": "Title for add voucher screen.", "type": "text"},
-  "basicInformation": "Basic Information",
-  "@basicInformation": {"description": "Section title for basic information.", "type": "text"},
-  "voucherName": "Voucher Name",
-  "@voucherName": {"description": "Label for voucher name field.", "type": "text"},
-  "discountValue": "Discount Value",
-  "@discountValue": {"description": "Label for discount value field.", "type": "text"},
-  "minimumPurchase": "Minimum Purchase",
-  "@minimumPurchase": {"description": "Label for minimum purchase field.", "type": "text"},
-  "startTime": "Start Time",
-  "@startTime": {"description": "Label for start time field.", "type": "text"},
-  "maxUsagePerPerson": "Max Usage Per Person",
-  "@maxUsagePerPerson": {"description": "Label for max usage per person field.", "type": "text"},
-  "description": "Description",
-  "@description": {"description": "Label for description field.", "type": "text"},
-  "voucherSettings": "Voucher Settings",
-  "@voucherSettings": {"description": "Section title for voucher settings.", "type": "text"},
-  "discountType": "Discount Type",
-  "@discountType": {"description": "Label for discount type toggle.", "type": "text"},
-  "fixedAmount": "Fixed Amount",
-  "@fixedAmount": {"description": "Label for fixed amount option.", "type": "text"},
-  "percentage": "Percentage",
-  "@percentage": {"description": "Label for percentage option.", "type": "text"},
-  "maximumDiscountValue": "Maximum Discount Value",
-  "@maximumDiscountValue": {"description": "Label for maximum discount value field.", "type": "text"},
-  "usageLimit": "Usage Limit",
-  "@usageLimit": {"description": "Label for usage limit toggle.", "type": "text"},
-  "unlimited": "Unlimited",
-  "@unlimited": {"description": "Label for unlimited option.", "type": "text"},
-  "limited": "Limited",
-  "@limited": {"description": "Label for limited option.", "type": "text"},
-  "maximumUsage": "Maximum Usage",
-  "@maximumUsage": {"description": "Label for maximum usage field.", "type": "text"},
-  "usageLeft": "Usage Left",
-  "@usageLeft": {"description": "Label for usage left field.", "type": "text"},
-  "timeLimit": "Time Limit",
-  "@timeLimit": {"description": "Label for time limit toggle.", "type": "text"},
-  "noEndTime": "No End Time",
-  "@noEndTime": {"description": "Label for no end time option.", "type": "text"},
-  "hasEndTime": "Has End Time",
-  "@hasEndTime": {"description": "Label for has end time option.", "type": "text"},
-  "endTime": "End Time",
-  "@endTime": {"description": "Label for end time field.", "type": "text"},
-  "voucherWillNotExpire": "This voucher will not expire",
-  "@voucherWillNotExpire": {"description": "Message for voucher with no expiration.", "type": "text"},
-  "visibility": "Visibility",
-  "@visibility": {"description": "Label for visibility toggle.", "type": "text"},
-  "hidden": "Hidden",
-  "@hidden": {"description": "Label for hidden option.", "type": "text"},
-  "visible": "Visible",
-  "@visible": {"description": "Label for visible option.", "type": "text"},
-  "disabled": "Disabled",
-  "@disabled": {"description": "Label for disabled option.", "type": "text"},
-  "enabled": "Enabled",
-  "@enabled": {"description": "Label for enabled option.", "type": "text"},
-  "selectField": "Select {field}",
-  "@selectField": {"description": "Hint for selecting a field.", "placeholders": {"field": {"type": "String", "example": "Voucher Name"}}},
-  "enterField": "Enter {field}",
-  "@enterField": {"description": "Hint for entering a field.", "placeholders": {"field": {"type": "String", "example": "Voucher Name"}}},
-  "all": "All",
-  "@all": {"description": "Tab label for all vouchers.", "type": "text"},
-  "ongoing": "Ongoing",
-  "@ongoing": {"description": "Tab label for ongoing vouchers.", "type": "text"},
-  "upcoming": "Upcoming",
-  "@upcoming": {"description": "Tab label for upcoming vouchers.", "type": "text"},
-  "noVouchersAvailable": "No vouchers available",
-  "@noVouchersAvailable": {"description": "Message when no vouchers are available.", "type": "text"},
-  "filter": "Filter",
-  "@filter": {"description": "Title for filter screen.", "type": "text"},
-  "from": "From",
-  "@from": {"description": "Label for minimum value in range filter.", "type": "text"},
-  "to": "To",
-  "@to": {"description": "Label for maximum value in range filter.", "type": "text"},
-  "min": "Min",
-  "@min": {"description": "Hint for minimum value in range filter.", "type": "text"},
-  "max": "Max",
-  "@max": {"description": "Hint for maximum value in range filter.", "type": "text"}
+	"@@locale": "en",
+	"appTitle": "GizmoGlobe",
+	"@appTitle": {
+		"description": "The title of the application.",
+		"type": "text"
+	},
+	"welcomeBack": "Welcome back,",
+	"@welcomeBack": {
+		"description": "Welcome message for returning users.",
+		"type": "text"
+	},
+	"overview": "Overview",
+	"@overview": {
+		"description": "Overview section title.",
+		"type": "text"
+	},
+	"products": "Products",
+	"@products": {
+		"description": "Products section title.",
+		"type": "text"
+	},
+	"customers": "Customers",
+	"@customers": {
+		"description": "Customers section title.",
+		"type": "text"
+	},
+	"revenue": "Revenue",
+	"@revenue": {
+		"description": "Revenue section title.",
+		"type": "text"
+	},
+	"avgIncome": "Avg. Income",
+	"@avgIncome": {
+		"description": "Average income label.",
+		"type": "text"
+	},
+	"monthlySales": "Monthly Sales",
+	"@monthlySales": {
+		"description": "Monthly sales label.",
+		"type": "text"
+	},
+	"last12Months": "Last 12 months",
+	"@last12Months": {
+		"description": "Label for last 12 months.",
+		"type": "text"
+	},
+	"last3Months": "Last 3 months",
+	"@last3Months": {
+		"description": "Label for last 3 months.",
+		"type": "text"
+	},
+	"newIncomingInvoice": "New Incoming Invoice",
+	"@newIncomingInvoice": {
+		"description": "Button or title for creating a new incoming invoice.",
+		"type": "text"
+	},
+	"selectManufacturer": "Select Manufacturer",
+	"@selectManufacturer": {
+		"description": "Prompt to select a manufacturer.",
+		"type": "text"
+	},
+	"addProduct": "Add Product",
+	"@addProduct": {
+		"description": "Button or label to add a product.",
+		"type": "text"
+	},
+	"invoiceDetails": "Invoice Details",
+	"@invoiceDetails": {
+		"description": "Section title for invoice details.",
+		"type": "text"
+	},
+	"importPrice": "Import Price",
+	"@importPrice": {
+		"description": "Label for import price.",
+		"type": "text"
+	},
+	"quantity": "Quantity",
+	"@quantity": {
+		"description": "Label for quantity.",
+		"type": "text"
+	},
+	"totalPrice": "Total Price: ",
+	"@totalPrice": {
+		"description": "Label for total price.",
+		"type": "text"
+	},
+	"paymentStatus": "Payment Status",
+	"@paymentStatus": {
+		"description": "Label for payment status.",
+		"type": "text"
+	},
+	"createInvoice": "Create Invoice",
+	"@createInvoice": {
+		"description": "Button or title for creating an invoice.",
+		"type": "text"
+	},
+	"cancel": "Cancel",
+	"@cancel": {
+		"description": "Cancel button label.",
+		"type": "text"
+	},
+	"add": "Add",
+	"@add": {
+		"description": "Add button label.",
+		"type": "text"
+	},
+	"editProductDetail": "Edit Product Detail",
+	"@editProductDetail": {
+		"description": "Button or title for editing product details.",
+		"type": "text"
+	},
+	"update": "Update",
+	"@update": {
+		"description": "Update button label.",
+		"type": "text"
+	},
+	"searchIncomingInvoices": "Find incoming invoices...",
+	"@searchIncomingInvoices": {
+		"description": "Search field placeholder for incoming invoices.",
+		"type": "text"
+	},
+	"noIncomingInvoicesFound": "No incoming invoices found",
+	"@noIncomingInvoicesFound": {
+		"description": "Message when no incoming invoices are found.",
+		"type": "text"
+	},
+	"view": "View",
+	"@view": {
+		"description": "View button label.",
+		"type": "text"
+	},
+	"editPayment": "Edit Payment",
+	"@editPayment": {
+		"description": "Button or title for editing payment.",
+		"type": "text"
+	},
+	"onlyUnpaidCanBeMarkedPaid": "Only unpaid invoices can be marked as paid",
+	"@onlyUnpaidCanBeMarkedPaid": {
+		"description": "Message explaining only unpaid invoices can be marked as paid.",
+		"type": "text"
+	},
+	"markAsPaidQuestion": "Mark this invoice as paid?",
+	"@markAsPaidQuestion": {
+		"description": "Prompt to mark invoice as paid.",
+		"type": "text"
+	},
+	"confirm": "OK",
+	"@confirm": {
+		"description": "Confirm button label.",
+		"type": "text"
+	},
+	"sortBy": "Sort By",
+	"@sortBy": {
+		"description": "Label for sort by options.",
+		"type": "text"
+	},
+	"dateNewestFirst": "Date (Newest First)",
+	"@dateNewestFirst": {
+		"description": "Sort option for newest date first.",
+		"type": "text"
+	},
+	"dateOldestFirst": "Date (Oldest First)",
+	"@dateOldestFirst": {
+		"description": "Sort option for oldest date first.",
+		"type": "text"
+	},
+	"priceHighestFirst": "Price (Highest First)",
+	"@priceHighestFirst": {
+		"description": "Sort option for highest price first.",
+		"type": "text"
+	},
+	"priceLowestFirst": "Price (Lowest First)",
+	"@priceLowestFirst": {
+		"description": "Sort option for lowest price first.",
+		"type": "text"
+	},
+	"errorOccurred": "Error occurred",
+	"@errorOccurred": {
+		"description": "Generic error message.",
+		"type": "text"
+	},
+	"newInvoice": "New Invoice",
+	"@newInvoice": {
+		"description": "Button or title for new invoice.",
+		"type": "text"
+	},
+	"customerInformation": "Customer Information",
+	"@customerInformation": {
+		"description": "Section title for customer information.",
+		"type": "text"
+	},
+	"selectCustomer": "Select customer",
+	"@selectCustomer": {
+		"description": "Prompt to select a customer.",
+		"type": "text"
+	},
+	"customer": "Customer",
+	"@customer": {
+		"description": "Label for customer.",
+		"type": "text"
+	},
+	"pleaseSelectCustomer": "Please select a customer",
+	"@pleaseSelectCustomer": {
+		"description": "Validation message to select a customer.",
+		"type": "text"
+	},
+	"address": "Address",
+	"@address": {
+		"description": "Label for address.",
+		"type": "text"
+	},
+	"pleaseSelectAddress": "Please select an address",
+	"@pleaseSelectAddress": {
+		"description": "Validation message to select an address.",
+		"type": "text"
+	},
+	"salesStatus": "Sales Status",
+	"@salesStatus": {
+		"description": "Label for sales status.",
+		"type": "text"
+	},
+	"totalAmount": "Total Amount",
+	"@totalAmount": {
+		"description": "Label for total amount.",
+		"type": "text"
+	},
+	"noProductsAddedYet": "No products added yet",
+	"@noProductsAddedYet": {
+		"description": "Message when no products have been added yet.",
+		"type": "text"
+	},
+	"price": "Price",
+	"@price": {
+		"description": "Label for price field.",
+		"type": "text"
+	},
+	"availableStock": "Available stock",
+	"@availableStock": {
+		"description": "Label for available stock.",
+		"type": "text"
+	},
+	"pleaseSelectCustomerFirst": "Please select a customer first",
+	"@pleaseSelectCustomerFirst": {
+		"description": "Validation message to select a customer first.",
+		"type": "text"
+	},
+	"searchSalesInvoices": "Find sales invoices...",
+	"@searchSalesInvoices": {
+		"description": "Search field placeholder for sales invoices.",
+		"type": "text"
+	},
+	"noSalesInvoicesFound": "No sales invoices found",
+	"@noSalesInvoicesFound": {
+		"description": "Message when no sales invoices are found.",
+		"type": "text"
+	},
+	"warrantyReceipt": "Warranty #{id}",
+	"@warrantyReceipt": {
+		"description": "Label for warranty receipt with id placeholder.",
+		"placeholders": {
+			"id": {
+				"type": "String",
+				"example": "123"
+			}
+		}
+	},
+	"warrantyInformation": "Warranty Information",
+	"@warrantyInformation": {
+		"description": "Section title for warranty information.",
+		"type": "text"
+	},
+	"status": "Status",
+	"@status": {
+		"description": "Label for status toggle.",
+		"type": "text"
+	},
+	"reasonForWarranty": "Reason for Warranty",
+	"@reasonForWarranty": {
+		"description": "Label for reason for warranty.",
+		"type": "text"
+	},
+	"productsUnderWarranty": "Products Under Warranty",
+	"@productsUnderWarranty": {
+		"description": "Label for products under warranty.",
+		"type": "text"
+	},
+	"unknownCategory": "Unknown Category",
+	"@unknownCategory": {
+		"description": "Label for unknown category.",
+		"type": "text"
+	},
+	"updateWarrantyStatus": "Update Warranty Status",
+	"@updateWarrantyStatus": {
+		"description": "Button or title for updating warranty status.",
+		"type": "text"
+	},
+	"confirmStatusUpdate": "Confirm Status Update",
+	"@confirmStatusUpdate": {
+		"description": "Prompt to confirm status update.",
+		"type": "text"
+	},
+	"areYouSureChangeStatus": "Are you sure you want to change the status to {status}?",
+	"@areYouSureChangeStatus": {
+		"description": "Prompt to confirm changing status with status placeholder.",
+		"placeholders": {
+			"status": {
+				"type": "String",
+				"example": "Completed"
+			}
+		}
+	},
+	"save": "Save",
+	"@save": {
+		"description": "Save button label.",
+		"type": "text"
+	},
+	"updateStatus": "Update Status",
+	"@updateStatus": {
+		"description": "Button or title for updating status.",
+		"type": "text"
+	},
+	"noSalesInvoicesAvailable": "No sales invoices available",
+	"@noSalesInvoicesAvailable": {
+		"description": "Message when no sales invoices are available.",
+		"type": "text"
+	},
+	"noEligibleSalesInvoices": "This customer has no eligible sales invoices for warranty claims.",
+	"@noEligibleSalesInvoices": {
+		"description": "Message when customer has no eligible sales invoices for warranty claims.",
+		"type": "text"
+	},
+	"pleaseSelectSalesInvoice": "Please select a sales invoice",
+	"@pleaseSelectSalesInvoice": {
+		"description": "Validation message to select a sales invoice.",
+		"type": "text"
+	},
+	"reasonForWarrantyLabel": "Reason for Warranty",
+	"@reasonForWarrantyLabel": {
+		"description": "Label for reason for warranty field.",
+		"type": "text"
+	},
+	"selectProductsForWarranty": "Select Products for Warranty",
+	"@selectProductsForWarranty": {
+		"description": "Label for selecting products for warranty.",
+		"type": "text"
+	},
+	"warrantyInvoiceCreated": "Warranty invoice created successfully",
+	"@warrantyInvoiceCreated": {
+		"description": "Message when warranty invoice is created successfully.",
+		"type": "text"
+	},
+	"errorCreatingWarrantyInvoice": "Error creating warranty invoice: {error}",
+	"@errorCreatingWarrantyInvoice": {
+		"description": "Error message when creating warranty invoice fails.",
+		"placeholders": {
+			"error": {
+				"type": "String",
+				"example": "Network error"
+			}
+		}
+	},
+	"product": "Product",
+	"@product": {
+		"description": "Label for product.",
+		"type": "text"
+	},
+	"selectProduct": "Select product",
+	"@selectProduct": {
+		"description": "Prompt to select a product.",
+		"type": "text"
+	},
+	"pleaseSelectProduct": "Please select a product",
+	"@pleaseSelectProduct": {
+		"description": "Validation message to select a product.",
+		"type": "text"
+	},
+	"quantityGreaterThanZero": "Quantity must be greater than 0",
+	"@quantityGreaterThanZero": {
+		"description": "Validation message for quantity greater than zero.",
+		"type": "text"
+	},
+	"notEnoughStock": "Not enough stock",
+	"@notEnoughStock": {
+		"description": "Message when there is not enough stock.",
+		"type": "text"
+	},
+	"noAddressFound": "No address found",
+	"@noAddressFound": {
+		"description": "Message when no address is found.",
+		"type": "text"
+	},
+	"date": "Date",
+	"@date": {
+		"description": "Label for date.",
+		"type": "text"
+	},
+	"subtotal": "Subtotal",
+	"@subtotal": {
+		"description": "Label for subtotal.",
+		"type": "text"
+	},
+	"editInvoice": "Edit Invoice",
+	"@editInvoice": {
+		"description": "Button or title for editing invoice.",
+		"type": "text"
+	},
+	"changeAddress": "Change Address",
+	"@changeAddress": {
+		"description": "Button or label for changing address.",
+		"type": "text"
+	},
+	"unknownProduct": "Unknown Product",
+	"@unknownProduct": {
+		"description": "Label for unknown product.",
+		"type": "text"
+	},
+	"errorWithMessage": "Error: {error}",
+	"@errorWithMessage": {
+		"description": "Generic error message with error placeholder.",
+		"placeholders": {
+			"error": {
+				"type": "String",
+				"example": "Something went wrong"
+			}
+		}
+	},
+	"errorLoadingInvoiceDetails": "Error loading invoice details: {error}",
+	"@errorLoadingInvoiceDetails": {
+		"description": "Error message when loading invoice details fails.",
+		"placeholders": {
+			"error": {
+				"type": "String",
+				"example": "Timeout"
+			}
+		}
+	},
+	"salesInvoice": "Sales Invoice",
+	"@salesInvoice": {
+		"description": "Label for sales invoice.",
+		"type": "text"
+	},
+	"loading": "Loading...",
+	"@loading": {
+		"description": "Label for loading state.",
+		"type": "text"
+	},
+	"category": "Category",
+	"@category": {
+		"description": "Label for category field.",
+		"type": "text"
+	},
+	"enterAddress": "Enter Address",
+	"@enterAddress": {
+		"description": "Label for the field or button to enter an address.",
+		"type": "text"
+	},
+	"findWarrantyInvoices": "Find warranty invoices...",
+	"@findWarrantyInvoices": {
+		"description": "Search field placeholder for warranty invoices.",
+		"type": "text"
+	},
+	"noWarrantyInvoicesFound": "No warranty invoices found",
+	"@noWarrantyInvoicesFound": {
+		"description": "Message when no warranty invoices are found.",
+		"type": "text"
+	},
+	"markAsCompleted": "Mark as Completed",
+	"@markAsCompleted": {
+		"description": "Button or label to mark as completed.",
+		"type": "text"
+	},
+	"errorLoadingWarrantyInvoiceDetails": "Error loading warranty invoice details: {error}",
+	"@errorLoadingWarrantyInvoiceDetails": {
+		"description": "Error message when loading warranty invoice details fails.",
+		"placeholders": {
+			"error": {
+				"type": "String",
+				"example": "Timeout"
+			}
+		}
+	},
+	"sales": "Sales",
+	"@sales": {
+		"description": "Tab label for sales invoices.",
+		"type": "text"
+	},
+	"incoming": "Incoming",
+	"@incoming": {
+		"description": "Tab label for incoming invoices.",
+		"type": "text"
+	},
+	"warranty": "Warranty",
+	"@warranty": {
+		"description": "Tab label for warranty invoices.",
+		"type": "text"
+	},
+	"hello": "Hello!",
+	"@hello": {
+		"description": "Greeting for the user in the drawer.",
+		"type": "text"
+	},
+	"contactUs": "Contact Us:",
+	"@contactUs": {
+		"description": "Label for contact information section in the drawer.",
+		"type": "text"
+	},
+	"logOut": "Log out",
+	"@logOut": {
+		"description": "Button label for logging out.",
+		"type": "text"
+	},
+	"home": "Home",
+	"@home": {
+		"description": "Bottom navigation label for home screen.",
+		"type": "text"
+	},
+	"invoice": "Invoice",
+	"@invoice": {
+		"description": "Bottom navigation label for invoice screen.",
+		"type": "text"
+	},
+	"stakeholder": "Stakeholder",
+	"@stakeholder": {
+		"description": "Bottom navigation label for stakeholder screen.",
+		"type": "text"
+	},
+	"voucher": "Voucher",
+	"@voucher": {
+		"description": "Bottom navigation label for voucher screen.",
+		"type": "text"
+	},
+	"profile": "Profile",
+	"@profile": {
+		"description": "Bottom navigation label for profile screen.",
+		"type": "text"
+	},
+	"addNewAddress": "Add New Address",
+	"@addNewAddress": {
+		"description": "Dialog title for adding a new address.",
+		"type": "text"
+	},
+	"receiverName": "Receiver Name",
+	"@receiverName": {
+		"description": "Label for receiver name field.",
+		"type": "text"
+	},
+	"enterReceiverName": "Enter receiver name",
+	"@enterReceiverName": {
+		"description": "Hint for entering receiver name.",
+		"type": "text"
+	},
+	"receiverPhone": "Receiver Phone",
+	"@receiverPhone": {
+		"description": "Label for receiver phone field.",
+		"type": "text"
+	},
+	"enterPhoneNumber": "Enter phone number",
+	"@enterPhoneNumber": {
+		"description": "Hint for entering phone number.",
+		"type": "text"
+	},
+	"location": "Location",
+	"@location": {
+		"description": "Label for location/address picker.",
+		"type": "text"
+	},
+	"streetAddress": "Street Address",
+	"@streetAddress": {
+		"description": "Label for street address field.",
+		"type": "text"
+	},
+	"streetNameBuildingHouseNo": "Street name, building, house no.",
+	"@streetNameBuildingHouseNo": {
+		"description": "Hint for street address field.",
+		"type": "text"
+	},
+	"addAddress": "Add Address",
+	"@addAddress": {
+		"description": "Button label for adding address.",
+		"type": "text"
+	},
+	"customerDetail": "Customer Detail",
+	"@customerDetail": {
+		"description": "Title for customer detail screen.",
+		"type": "text"
+	},
+	"edit": "Edit",
+	"@edit": {
+		"description": "Button label for editing.",
+		"type": "text"
+	},
+	"name": "Name",
+	"@name": {
+		"description": "Label for name field.",
+		"type": "text"
+	},
+	"email": "Email",
+	"@email": {
+		"description": "Label for email field.",
+		"type": "text"
+	},
+	"phone": "Phone",
+	"@phone": {
+		"description": "Label for phone field.",
+		"type": "text"
+	},
+	"addresses": "Addresses",
+	"@addresses": {
+		"description": "Label for addresses section.",
+		"type": "text"
+	},
+	"pleaseFillInAllRequiredFields": "Please fill in all required fields",
+	"@pleaseFillInAllRequiredFields": {
+		"description": "Validation message for required fields.",
+		"type": "text"
+	},
+	"discardChanges": "Discard Changes?",
+	"@discardChanges": {
+		"description": "Dialog title for discarding changes.",
+		"type": "text"
+	},
+	"unsavedChangesDiscard": "You have unsaved changes. Do you want to discard them?",
+	"@unsavedChangesDiscard": {
+		"description": "Dialog content for unsaved changes.",
+		"type": "text"
+	},
+	"discard": "DISCARD",
+	"@discard": {
+		"description": "Button label for discarding changes.",
+		"type": "text"
+	},
+	"editCustomer": "Edit Customer",
+	"@editCustomer": {
+		"description": "Title for edit customer screen.",
+		"type": "text"
+	},
+	"fullName": "Full Name",
+	"@fullName": {
+		"description": "Label for full name field.",
+		"type": "text"
+	},
+	"nameIsRequired": "Name is required",
+	"@nameIsRequired": {
+		"description": "Validation message for required name.",
+		"type": "text"
+	},
+	"nameMin2Chars": "Name must be at least 2 characters",
+	"@nameMin2Chars": {
+		"description": "Validation message for name minimum length.",
+		"type": "text"
+	},
+	"phoneNumber": "Phone Number",
+	"@phoneNumber": {
+		"description": "Label for phone number field.",
+		"type": "text"
+	},
+	"phoneNumberIsRequired": "Phone number is required",
+	"@phoneNumberIsRequired": {
+		"description": "Validation message for required phone number.",
+		"type": "text"
+	},
+	"pleaseEnterValidPhoneNumber": "Please enter a valid phone number",
+	"@pleaseEnterValidPhoneNumber": {
+		"description": "Validation message for valid phone number.",
+		"type": "text"
+	},
+	"addNewCustomer": "Add New Customer",
+	"@addNewCustomer": {
+		"description": "Dialog title for adding a new customer.",
+		"type": "text"
+	},
+	"addCustomer": "Add Customer",
+	"@addCustomer": {
+		"description": "Button label for adding a customer.",
+		"type": "text"
+	},
+	"pleaseFillInAllFields": "Please fill in all fields",
+	"@pleaseFillInAllFields": {
+		"description": "Validation message for required fields.",
+		"type": "text"
+	},
+	"customerAddedSuccessfully": "Customer added successfully",
+	"@customerAddedSuccessfully": {
+		"description": "Message when a customer is added successfully.",
+		"type": "text"
+	},
+	"findCustomers": "Find customers...",
+	"@findCustomers": {
+		"description": "Search field placeholder for customers.",
+		"type": "text"
+	},
+	"noMatchingCustomersFound": "No matching customers found",
+	"@noMatchingCustomersFound": {
+		"description": "Message when no matching customers are found.",
+		"type": "text"
+	},
+	"employeeDetail": "Employee Detail",
+	"@employeeDetail": {
+		"description": "Title for employee detail screen.",
+		"type": "text"
+	},
+	"employeeInformation": "Employee Information",
+	"@employeeInformation": {
+		"description": "Section title for employee information.",
+		"type": "text"
+	},
+	"role": "Role",
+	"@role": {
+		"description": "Label for role field.",
+		"type": "text"
+	},
+	"delete": "Delete",
+	"@delete": {
+		"description": "Button label for deleting.",
+		"type": "text"
+	},
+	"deleteEmployee": "Delete Employee",
+	"@deleteEmployee": {
+		"description": "Dialog title for deleting an employee.",
+		"type": "text"
+	},
+	"areYouSureDeleteEmployee": "Are you sure you want to delete this employee?",
+	"@areYouSureDeleteEmployee": {
+		"description": "Confirmation message for deleting an employee.",
+		"type": "text"
+	},
+	"editEmployee": "Edit Employee",
+	"@editEmployee": {
+		"description": "Title for edit employee screen.",
+		"type": "text"
+	},
+	"pleaseEnterName": "Please enter a name",
+	"@pleaseEnterName": {
+		"description": "Validation message for required employee name.",
+		"type": "text"
+	},
+	"pleaseEnterPhoneNumber": "Please enter a phone number",
+	"@pleaseEnterPhoneNumber": {
+		"description": "Validation message for required employee phone number.",
+		"type": "text"
+	},
+	"pleaseSelectRole": "Please select a role",
+	"@pleaseSelectRole": {
+		"description": "Validation message for required employee role.",
+		"type": "text"
+	},
+	"addNewEmployee": "Add New Employee",
+	"@addNewEmployee": {
+		"description": "Dialog title for adding a new employee.",
+		"type": "text"
+	},
+	"pleaseEnterEmail": "Please enter email address",
+	"@pleaseEnterEmail": {
+		"description": "Validation message for required employee email.",
+		"type": "text"
+	},
+	"filterByRole": "Filter by Role",
+	"@filterByRole": {
+		"description": "Dialog title for filtering employees by role.",
+		"type": "text"
+	},
+	"clearFilter": "Clear Filter",
+	"@clearFilter": {
+		"description": "Button label to clear the role filter.",
+		"type": "text"
+	},
+	"findEmployees": "Find employees...",
+	"@findEmployees": {
+		"description": "Search field placeholder for employees.",
+		"type": "text"
+	},
+	"noEmployeesFound": "No employees found",
+	"@noEmployeesFound": {
+		"description": "Message when no employees are found.",
+		"type": "text"
+	},
+	"employeeAddedSuccessfully": "Employee added successfully.",
+	"@employeeAddedSuccessfully": {
+		"description": "Message when an employee is added successfully.",
+		"type": "text"
+	},
+	"manufacturerDetail": "Manufacturer Detail",
+	"@manufacturerDetail": {
+		"description": "Title for manufacturer detail screen.",
+		"type": "text"
+	},
+	"deactivate": "Deactivate",
+	"@deactivate": {
+		"description": "Button label to deactivate manufacturer.",
+		"type": "text"
+	},
+	"activate": "Activate",
+	"@activate": {
+		"description": "Button label to activate manufacturer.",
+		"type": "text"
+	},
+	"deactivateManufacturer": "Deactivate Manufacturer",
+	"@deactivateManufacturer": {
+		"description": "Dialog title for deactivating manufacturer.",
+		"type": "text"
+	},
+	"activateManufacturer": "Activate Manufacturer",
+	"@activateManufacturer": {
+		"description": "Dialog title for activating manufacturer.",
+		"type": "text"
+	},
+	"deactivateManufacturerConfirm": "Are you sure you want to deactivate this manufacturer?",
+	"@deactivateManufacturerConfirm": {
+		"description": "Confirmation message for deactivating manufacturer.",
+		"type": "text"
+	},
+	"activateManufacturerConfirm": "Are you sure you want to activate this manufacturer?",
+	"@activateManufacturerConfirm": {
+		"description": "Confirmation message for activating manufacturer.",
+		"type": "text"
+	},
+	"inactive": "Inactive",
+	"@inactive": {
+		"description": "Tab label for inactive vouchers.",
+		"type": "text"
+	},
+	"manufacturerInformation": "Manufacturer Information",
+	"@manufacturerInformation": {
+		"description": "Section title for manufacturer information.",
+		"type": "text"
+	},
+	"manufacturerName": "Name",
+	"@manufacturerName": {
+		"description": "Label for manufacturer name field.",
+		"type": "text"
+	},
+	"editManufacturer": "Edit Manufacturer",
+	"@editManufacturer": {
+		"description": "Title for edit manufacturer screen.",
+		"type": "text"
+	},
+	"addNewManufacturer": "Add New Manufacturer",
+	"@addNewManufacturer": {
+		"description": "Dialog title for adding a new manufacturer.",
+		"type": "text"
+	},
+	"addManufacturer": "Add Manufacturer",
+	"@addManufacturer": {
+		"description": "Button label for adding a manufacturer.",
+		"type": "text"
+	},
+	"findManufacturers": "Find manufacturers...",
+	"@findManufacturers": {
+		"description": "Search field placeholder for manufacturers.",
+		"type": "text"
+	},
+	"noMatchingManufacturersFound": "No matching manufacturers found",
+	"@noMatchingManufacturersFound": {
+		"description": "Message when no matching manufacturers are found.",
+		"type": "text"
+	},
+	"deactivateManufacturerConfirmName": "Are you sure you want to deactivate {name}?",
+	"@deactivateManufacturerConfirmName": {
+		"description": "Confirmation message for deactivating a manufacturer with name.",
+		"placeholders": {
+			"name": {
+				"type": "String",
+				"example": "Acme Corp"
+			}
+		}
+	},
+	"activateManufacturerConfirmName": "Are you sure you want to activate {name}?",
+	"@activateManufacturerConfirmName": {
+		"description": "Confirmation message for activating a manufacturer with name.",
+		"placeholders": {
+			"name": {
+				"type": "String",
+				"example": "Acme Corp"
+			}
+		}
+	},
+	"employees": "Employees",
+	"@employees": {
+		"description": "Tab label for employees.",
+		"type": "text"
+	},
+	"vendors": "Vendors",
+	"@vendors": {
+		"description": "Tab label for vendors.",
+		"type": "text"
+	},
+	"appAvatar": "App Avatar",
+	"@appAvatar": {
+		"description": "Label for the app avatar in the loading screen.",
+		"type": "text"
+	},
+	"createNewAccount": "Create new account",
+	"@createNewAccount": {
+		"description": "Button label for creating a new account.",
+		"type": "text"
+	},
+	"alreadyHaveAccount": "Already have an account?",
+	"@alreadyHaveAccount": {
+		"description": "Button label for users who already have an account.",
+		"type": "text"
+	},
+	"informationTitle": "Information",
+	"@informationTitle": {
+		"description": "Title for the information screen.",
+		"type": "text"
+	},
+	"aboutGizmoGlobe": "About GizmoGlobe",
+	"@aboutGizmoGlobe": {
+		"description": "Section title: About GizmoGlobe.",
+		"type": "text"
+	},
+	"aboutUsTitle": "About Us",
+	"@aboutUsTitle": {
+		"description": "Section title: About Us.",
+		"type": "text"
+	},
+	"aboutUsContent": "GizmoGlobe is your trusted provider for computer hardware solutions.",
+	"@aboutUsContent": {
+		"description": "Content for About Us section.",
+		"type": "text"
+	},
+	"ourMissionTitle": "Our Mission",
+	"@ourMissionTitle": {
+		"description": "Section title: Our Mission.",
+		"type": "text"
+	},
+	"ourMissionContent": "To provide excellent service and quality products to you, our beloved customers.",
+	"@ourMissionContent": {
+		"description": "Content for Our Mission section.",
+		"type": "text"
+	},
+	"contactInformationTitle": "Contact Information",
+	"@contactInformationTitle": {
+		"description": "Section title: Contact Information.",
+		"type": "text"
+	},
+	"contactInformationContent": "Address: UIT",
+	"@contactInformationContent": {
+		"description": "Content for Contact Information section.",
+		"type": "text"
+	},
+	"businessHoursTitle": "Business Hours",
+	"@businessHoursTitle": {
+		"description": "Section title: Business Hours.",
+		"type": "text"
+	},
+	"businessHoursContent": "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed",
+	"@businessHoursContent": {
+		"description": "Content for Business Hours section.",
+		"type": "text"
+	},
+	"supportTitle": "Support",
+	"@supportTitle": {
+		"description": "Title for the support screen.",
+		"type": "text"
+	},
+	"supportMembers": "Members of teams",
+	"@supportMembers": {
+		"description": "Section title for team members.",
+		"type": "text"
+	},
+	"supportRoleDeveloper": "Developer",
+	"@supportRoleDeveloper": {
+		"description": "Role: Developer.",
+		"type": "text"
+	},
+	"supportStudentId": "Student ID: {id}",
+	"@supportStudentId": {
+		"description": "Label for student ID with placeholder.",
+		"placeholders": {
+			"id": {
+				"type": "String",
+				"example": "22521474"
+			}
+		}
+	},
+	"supportRole": "Role: {role}",
+	"@supportRole": {
+		"description": "Label for role with placeholder.",
+		"placeholders": {
+			"role": {
+				"type": "String",
+				"example": "Developer"
+			}
+		}
+	},
+	"supportEmail": "Email: {email}",
+	"@supportEmail": {
+		"description": "Label for email with placeholder.",
+		"placeholders": {
+			"email": {
+				"type": "String",
+				"example": "22521474@gm.uit.edu.vn"
+			}
+		}
+	},
+	"accountSettings": "Account Settings",
+	"@accountSettings": {
+		"description": "Title for account settings section.",
+		"type": "text"
+	},
+	"editProfile": "Edit Profile",
+	"@editProfile": {
+		"description": "Button or title for editing profile.",
+		"type": "text"
+	},
+	"updatePersonalInfo": "Update your personal information",
+	"@updatePersonalInfo": {
+		"description": "Subtitle for updating personal information.",
+		"type": "text"
+	},
+	"changePassword": "Change Password",
+	"@changePassword": {
+		"description": "Button or title for changing password.",
+		"type": "text"
+	},
+	"manageAccountSecurity": "Manage your account security",
+	"@manageAccountSecurity": {
+		"description": "Subtitle for managing account security.",
+		"type": "text"
+	},
+	"signOut": "Sign Out",
+	"@signOut": {
+		"description": "Button label for signing out.",
+		"type": "text"
+	},
+	"username": "Username",
+	"@username": {
+		"description": "Label for username field.",
+		"type": "text"
+	},
+	"saveChanges": "Save changes",
+	"@saveChanges": {
+		"description": "Button label for saving changes.",
+		"type": "text"
+	},
+	"updateProfileSuccess": "Update profile successfully",
+	"@updateProfileSuccess": {
+		"description": "Message when profile is updated successfully.",
+		"type": "text"
+	},
+	"passwordResetEmailWillBeSent": "A password reset email will be sent to {email}",
+	"@passwordResetEmailWillBeSent": {
+		"description": "Message for password reset email with placeholder.",
+		"placeholders": {
+			"email": {
+				"type": "String",
+				"example": "user@email.com"
+			}
+		}
+	},
+	"passwordResetEmailSentSuccess": "Password reset email sent successfully",
+	"@passwordResetEmailSentSuccess": {
+		"description": "Message when password reset email is sent successfully.",
+		"type": "text"
+	},
+	"sendPasswordResetEmail": "Send Password Reset Email",
+	"@sendPasswordResetEmail": {
+		"description": "Button label for sending password reset email.",
+		"type": "text"
+	},
+	"noUserSignedIn": "No user is currently signed in",
+	"@noUserSignedIn": {
+		"description": "Message when no user is signed in.",
+		"type": "text"
+	},
+	"addVoucher": "Add Voucher",
+	"@addVoucher": {
+		"description": "Title for add voucher screen.",
+		"type": "text"
+	},
+	"basicInformation": "Basic Information",
+	"@basicInformation": {
+		"description": "Section title for basic information.",
+		"type": "text"
+	},
+	"voucherName": "Voucher Name",
+	"@voucherName": {
+		"description": "Label for voucher name field.",
+		"type": "text"
+	},
+	"discountValue": "Discount Value",
+	"@discountValue": {
+		"description": "Label for discount value field.",
+		"type": "text"
+	},
+	"minimumPurchase": "Minimum Purchase",
+	"@minimumPurchase": {
+		"description": "Label for minimum purchase field.",
+		"type": "text"
+	},
+	"startTime": "Start Time",
+	"@startTime": {
+		"description": "Label for start time field.",
+		"type": "text"
+	},
+	"maxUsagePerPerson": "Max Usage Per Person",
+	"@maxUsagePerPerson": {
+		"description": "Label for max usage per person field.",
+		"type": "text"
+	},
+	"description": "Description",
+	"@description": {
+		"description": "Label for description field.",
+		"type": "text"
+	},
+	"voucherSettings": "Voucher Settings",
+	"@voucherSettings": {
+		"description": "Section title for voucher settings.",
+		"type": "text"
+	},
+	"discountType": "Discount Type",
+	"@discountType": {
+		"description": "Label for discount type toggle.",
+		"type": "text"
+	},
+	"fixedAmount": "Fixed Amount",
+	"@fixedAmount": {
+		"description": "Label for fixed amount option.",
+		"type": "text"
+	},
+	"percentage": "Percentage",
+	"@percentage": {
+		"description": "Label for percentage option.",
+		"type": "text"
+	},
+	"maximumDiscountValue": "Maximum Discount Value",
+	"@maximumDiscountValue": {
+		"description": "Label for maximum discount value field.",
+		"type": "text"
+	},
+	"usageLimit": "Usage Limit",
+	"@usageLimit": {
+		"description": "Label for usage limit toggle.",
+		"type": "text"
+	},
+	"unlimited": "Unlimited",
+	"@unlimited": {
+		"description": "Label for unlimited option.",
+		"type": "text"
+	},
+	"limited": "Limited",
+	"@limited": {
+		"description": "Label for limited option.",
+		"type": "text"
+	},
+	"maximumUsage": "Maximum Usage",
+	"@maximumUsage": {
+		"description": "Label for maximum usage field.",
+		"type": "text"
+	},
+	"usageLeft": "Usage Left",
+	"@usageLeft": {
+		"description": "Label for usage left field.",
+		"type": "text"
+	},
+	"timeLimit": "Time Limit",
+	"@timeLimit": {
+		"description": "Label for time limit toggle.",
+		"type": "text"
+	},
+	"noEndTime": "No End Time",
+	"@noEndTime": {
+		"description": "Label for no end time option.",
+		"type": "text"
+	},
+	"hasEndTime": "Has End Time",
+	"@hasEndTime": {
+		"description": "Label for has end time option.",
+		"type": "text"
+	},
+	"endTime": "End Time",
+	"@endTime": {
+		"description": "Label for end time field.",
+		"type": "text"
+	},
+	"voucherWillNotExpire": "This voucher will not expire",
+	"@voucherWillNotExpire": {
+		"description": "Message for voucher with no expiration.",
+		"type": "text"
+	},
+	"visibility": "Visibility",
+	"@visibility": {
+		"description": "Label for visibility toggle.",
+		"type": "text"
+	},
+	"hidden": "Hidden",
+	"@hidden": {
+		"description": "Label for hidden option.",
+		"type": "text"
+	},
+	"visible": "Visible",
+	"@visible": {
+		"description": "Label for visible option.",
+		"type": "text"
+	},
+	"disabled": "Disabled",
+	"@disabled": {
+		"description": "Label for disabled option.",
+		"type": "text"
+	},
+	"enabled": "Enabled",
+	"@enabled": {
+		"description": "Label for enabled option.",
+		"type": "text"
+	},
+	"selectField": "Select {field}",
+	"@selectField": {
+		"description": "Hint for selecting a field.",
+		"placeholders": {
+			"field": {
+				"type": "String",
+				"example": "Voucher Name"
+			}
+		}
+	},
+	"enterField": "Enter {field}",
+	"@enterField": {
+		"description": "Hint for entering a field.",
+		"placeholders": {
+			"field": {
+				"type": "String",
+				"example": "Voucher Name"
+			}
+		}
+	},
+	"all": "All",
+	"@all": {
+		"description": "Tab label for all vouchers.",
+		"type": "text"
+	},
+	"ongoing": "Ongoing",
+	"@ongoing": {
+		"description": "Tab label for ongoing vouchers.",
+		"type": "text"
+	},
+	"upcoming": "Upcoming",
+	"@upcoming": {
+		"description": "Tab label for upcoming vouchers.",
+		"type": "text"
+	},
+	"noVouchersAvailable": "No vouchers available",
+	"@noVouchersAvailable": {
+		"description": "Message when no vouchers are available.",
+		"type": "text"
+	},
+	"filter": "Filter",
+	"@filter": {
+		"description": "Title for filter screen.",
+		"type": "text"
+	},
+	"from": "From",
+	"@from": {
+		"description": "Label for minimum value in range filter.",
+		"type": "text"
+	},
+	"to": "To",
+	"@to": {
+		"description": "Label for maximum value in range filter.",
+		"type": "text"
+	},
+	"min": "Min",
+	"@min": {
+		"description": "Hint for minimum value in range filter.",
+		"type": "text"
+	},
+	"max": "Max",
+	"@max": {
+		"description": "Hint for maximum value in range filter.",
+		"type": "text"
+	},
+	"paid": "Paid",
+	"@paid": {
+		"description": "Label for paid status.",
+		"type": "text"
+	},
+	"unpaid": "Unpaid",
+	"@unpaid": {
+		"description": "Label for unpaid status.",
+		"type": "text"
+	},
+	"pending": "Pending",
+	"@pending": {
+		"description": "Label for pending status.",
+		"type": "text"
+	},
+	"preparing": "Preparing",
+	"@preparing": {
+		"description": "Label for preparing status.",
+		"type": "text"
+	},
+	"shipping": "Shipping",
+	"@shipping": {
+		"description": "Label for shipping status.",
+		"type": "text"
+	},
+	"shipped": "Shipped",
+	"@shipped": {
+		"description": "Label for shipped status.",
+		"type": "text"
+	},
+	"completed": "Completed",
+	"@completed": {
+		"description": "Label for completed status.",
+		"type": "text"
+	},
+	"cancelled": "Cancelled",
+	"@cancelled": {
+		"description": "Label for cancelled status.",
+		"type": "text"
+	}
 }

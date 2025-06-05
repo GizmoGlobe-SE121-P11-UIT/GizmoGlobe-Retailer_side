@@ -101,10 +101,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Business Hours",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "cancelled": MessageLookupByLibrary.simpleMessage("Cancelled"),
     "category": MessageLookupByLibrary.simpleMessage("Category"),
     "changeAddress": MessageLookupByLibrary.simpleMessage("Change Address"),
     "changePassword": MessageLookupByLibrary.simpleMessage("Change Password"),
     "clearFilter": MessageLookupByLibrary.simpleMessage("Clear Filter"),
+    "completed": MessageLookupByLibrary.simpleMessage("Completed"),
     "confirm": MessageLookupByLibrary.simpleMessage("OK"),
     "confirmStatusUpdate": MessageLookupByLibrary.simpleMessage(
       "Confirm Status Update",
@@ -298,11 +300,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "ourMissionTitle": MessageLookupByLibrary.simpleMessage("Our Mission"),
     "overview": MessageLookupByLibrary.simpleMessage("Overview"),
+    "paid": MessageLookupByLibrary.simpleMessage("Paid"),
     "passwordResetEmailSentSuccess": MessageLookupByLibrary.simpleMessage(
       "Password reset email sent successfully",
     ),
     "passwordResetEmailWillBeSent": m8,
     "paymentStatus": MessageLookupByLibrary.simpleMessage("Payment Status"),
+    "pending": MessageLookupByLibrary.simpleMessage("Pending"),
     "percentage": MessageLookupByLibrary.simpleMessage("Percentage"),
     "phone": MessageLookupByLibrary.simpleMessage("Phone"),
     "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
@@ -345,6 +349,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pleaseSelectSalesInvoice": MessageLookupByLibrary.simpleMessage(
       "Please select a sales invoice",
     ),
+    "preparing": MessageLookupByLibrary.simpleMessage("Preparing"),
     "price": MessageLookupByLibrary.simpleMessage("Price"),
     "priceHighestFirst": MessageLookupByLibrary.simpleMessage(
       "Price (Highest First)",
@@ -395,6 +400,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "sendPasswordResetEmail": MessageLookupByLibrary.simpleMessage(
       "Send Password Reset Email",
     ),
+    "shipped": MessageLookupByLibrary.simpleMessage("Shipped"),
+    "shipping": MessageLookupByLibrary.simpleMessage("Shipping"),
     "signOut": MessageLookupByLibrary.simpleMessage("Sign Out"),
     "sortBy": MessageLookupByLibrary.simpleMessage("Sort By"),
     "stakeholder": MessageLookupByLibrary.simpleMessage("Stakeholder"),
@@ -418,6 +425,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unknownCategory": MessageLookupByLibrary.simpleMessage("Unknown Category"),
     "unknownProduct": MessageLookupByLibrary.simpleMessage("Unknown Product"),
     "unlimited": MessageLookupByLibrary.simpleMessage("Unlimited"),
+    "unpaid": MessageLookupByLibrary.simpleMessage("Unpaid"),
     "unsavedChangesDiscard": MessageLookupByLibrary.simpleMessage(
       "You have unsaved changes. Do you want to discard them?",
     ),

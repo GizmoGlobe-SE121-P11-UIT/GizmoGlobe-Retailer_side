@@ -45,7 +45,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(S.of(context).createInvoice),
-          backgroundColor: Colors.green,
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
       );
       Navigator.pop(context, invoice);
@@ -53,7 +53,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(state.error ?? S.of(context).errorOccurred),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     }
@@ -69,7 +69,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
         child: BlocBuilder<SalesAddCubit, SalesAddState>(
           builder: (context, state) {
             return AlertDialog(
-              title: Text(S.of(context).addProduct),
+              title: Text(
+                S.of(context).addProduct,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
               content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
@@ -83,27 +88,44 @@ class _SalesAddViewState extends State<_SalesAddView> {
                             .updateSelectedModalProduct(product);
                       },
                       decoration: InputDecoration(
-                        labelText: S.of(context).product, // Localized
-                        hintText: S.of(context).selectProduct, // Localized
-                        labelStyle: const TextStyle(color: Colors.white),
-                        hintStyle:
-                            TextStyle(color: Colors.white.withAlpha(179)),
+                        labelText: S.of(context).product,
+                        hintText: S.of(context).selectProduct,
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.7),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Colors.white),
+                          borderSide: BorderSide(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.5),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       ),
                       hint: Text(
-                        S.of(context).selectProduct, // Localized
-                        style: TextStyle(color: Colors.white.withAlpha(179)),
+                        S.of(context).selectProduct,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.7),
+                        ),
                       ),
                       items: state.products
                           .where((product) => product.stock > 0)
@@ -120,19 +142,29 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                   child: Text(
                                     product.productName,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
                                   '(\$${product.sellingPrice.toStringAsFixed(2)})',
-                                  style: const TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                  ),
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   '[${product.stock}]',
                                   style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.7),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.7),
                                     fontSize: 12,
                                   ),
                                 ),
@@ -142,33 +174,49 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         );
                       }).toList(),
                       dropdownColor: Theme.of(context).colorScheme.surface,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                       isExpanded: true,
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: quantityController,
                       decoration: InputDecoration(
-                        labelText: 'Quantity', // Số lượng
-                        hintText: 'Enter quantity', // Nhập số lượng
-                        labelStyle: const TextStyle(color: Colors.white),
+                        labelText: 'Quantity',
+                        hintText: 'Enter quantity',
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         hintStyle: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7)),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.7),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Colors.white),
+                          borderSide: BorderSide(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.5),
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       ),
                       keyboardType: TextInputType.number,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ],
                 ),
@@ -181,14 +229,21 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         .updateSelectedModalProduct(null);
                     Navigator.pop(context);
                   },
-                  child: Text(S.of(context).cancel),
+                  child: Text(
+                    S.of(context).cancel,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
                     if (state.selectedModalProduct == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                            content: Text(S.of(context).pleaseSelectProduct)),
+                          content: Text(S.of(context).pleaseSelectProduct),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        ),
                       );
                       return;
                     }
@@ -197,15 +252,19 @@ class _SalesAddViewState extends State<_SalesAddView> {
                     if (quantity <= 0) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                            content:
-                                Text(S.of(context).quantityGreaterThanZero)),
+                          content: Text(S.of(context).quantityGreaterThanZero),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        ),
                       );
                       return;
                     }
 
                     if (quantity > state.selectedModalProduct!.stock) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(S.of(context).notEnoughStock)),
+                        SnackBar(
+                          content: Text(S.of(context).notEnoughStock),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        ),
                       );
                       return;
                     }
@@ -219,7 +278,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         .updateSelectedModalProduct(null);
                     Navigator.pop(context);
                   },
-                  child: Text(S.of(context).add),
+                  child: Text(
+                    S.of(context).add,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ),
               ],
             );
@@ -236,7 +300,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).pleaseSelectCustomerFirst),
-            backgroundColor: Colors.red,
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
         return;
@@ -270,13 +334,17 @@ class _SalesAddViewState extends State<_SalesAddView> {
                 children: [
                   Text(
                     S.of(context).enterAddress,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close),
+                    icon: Icon(
+                      Icons.close,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -285,7 +353,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
               if (addresses.isEmpty)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(S.of(context).noAddressFound),
+                  child: Text(
+                    S.of(context).noAddressFound,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
                 )
               else
                 ListView.builder(
@@ -302,7 +375,10 @@ class _SalesAddViewState extends State<_SalesAddView> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide(
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.1),
                         ),
                       ),
                       child: ListTile(
@@ -312,15 +388,18 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         ),
                         title: Text(
                           address.receiverName,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         subtitle: Text(
                           address.toString(),
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.7),
                           ),
                         ),
                         trailing: address.hidden
@@ -347,8 +426,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e'), // Lỗi
-            backgroundColor: Colors.red,
+            content: Text('Error: $e'),
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
       }
@@ -374,11 +453,14 @@ class _SalesAddViewState extends State<_SalesAddView> {
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: state.isLoading
-                    ? const Center(
+                    ? Center(
                         child: SizedBox(
                           width: 24,
                           height: 24,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       )
                     : GradientIconButton(
@@ -412,6 +494,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -420,51 +503,89 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               hint: Text(
                                 S.of(context).selectCustomer,
                                 style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.7)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.7),
+                                ),
                               ),
                               decoration: InputDecoration(
                                 labelText: S.of(context).customer,
                                 labelStyle: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.8)),
-                                prefixIcon: Icon(Icons.person_outline,
-                                    color: Colors.white.withValues(alpha: 0.7)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.8),
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.person_outline,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.7),
+                                ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.5),
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                   borderSide: BorderSide(
-                                      color: Theme.of(context).primaryColor),
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
                                 ),
                                 filled: true,
                                 fillColor:
                                     Theme.of(context).colorScheme.surface,
                               ),
-                              style: const TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
                               dropdownColor:
                                   Theme.of(context).colorScheme.surface,
-                              icon: Icon(Icons.arrow_drop_down,
-                                  color: Colors.white.withValues(alpha: 0.7)),
-                              iconEnabledColor: Colors.white,
-                              iconDisabledColor:
-                                  Colors.white.withValues(alpha: 0.5),
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.7),
+                              ),
+                              iconEnabledColor:
+                                  Theme.of(context).colorScheme.onSurface,
+                              iconDisabledColor: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.5),
                               items: state.customers.map((customer) {
                                 return DropdownMenuItem(
                                   value: customer,
                                   child: Row(
                                     children: [
-                                      const Icon(
+                                      Icon(
                                         Icons.account_circle,
                                         size: 20,
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
                                       ),
                                       const SizedBox(width: 8),
-                                      Text(customer.customerName),
+                                      Text(
+                                        customer.customerName,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 );
@@ -491,23 +612,36 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               decoration: InputDecoration(
                                 labelText: S.of(context).address,
                                 labelStyle: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.8)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.8),
+                                ),
                                 prefixIcon: Icon(
                                   Icons.location_on_outlined,
-                                  color: Colors.white.withValues(alpha: 0.7),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.7),
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide:
-                                      const BorderSide(color: Colors.white),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.5),
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                   borderSide: BorderSide(
-                                      color: Theme.of(context).primaryColor),
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
                                 ),
                                 filled: true,
                                 fillColor:
@@ -515,13 +649,18 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     Icons.arrow_drop_down_circle_outlined,
-                                    color: Colors.white.withValues(alpha: 0.7),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.7),
                                   ),
                                   onPressed: () =>
                                       _showAddressBottomSheet(context, state),
                                 ),
                               ),
-                              style: const TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
                               maxLines: 3,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -534,7 +673,6 @@ class _SalesAddViewState extends State<_SalesAddView> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
                     Card(
                       elevation: 2,
                       shape: RoundedRectangleBorder(
@@ -550,6 +688,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -564,7 +703,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                         S.of(context).paymentStatus,
                                         style: TextStyle(
                                           fontSize: 14,
-                                          color: Colors.white
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
                                               .withValues(alpha: 0.8),
                                         ),
                                       ),
@@ -591,7 +732,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                         S.of(context).salesStatus,
                                         style: TextStyle(
                                           fontSize: 14,
-                                          color: Colors.white
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
                                               .withValues(alpha: 0.8),
                                         ),
                                       ),
@@ -618,16 +761,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               ),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Theme.of(context)
-                                          .primaryColor
-                                          .withValues(alpha: 0.8),
-                                      Theme.of(context).primaryColor,
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
+                                  color: Theme.of(context).colorScheme.primary,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -641,23 +775,29 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                         Container(
                                           padding: const EdgeInsets.all(8),
                                           decoration: BoxDecoration(
-                                            color: Colors.white
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary
                                                 .withValues(alpha: 0.2),
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                           ),
-                                          child: const Icon(
+                                          child: Icon(
                                             Icons.attach_money,
-                                            color: Colors.white,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
                                             size: 24,
                                           ),
                                         ),
                                         const SizedBox(width: 12),
                                         Text(
                                           S.of(context).totalAmount,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 16,
-                                            color: Colors.white,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
@@ -665,10 +805,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                     ),
                                     Text(
                                       '\$${state.totalPrice.toStringAsFixed(2)}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
                                         letterSpacing: 0.5,
                                       ),
                                     ),
@@ -676,12 +818,10 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 24),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
                     Card(
                       elevation: 2,
                       shape: RoundedRectangleBorder(
@@ -700,20 +840,31 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
                                 ElevatedButton.icon(
                                   onPressed: () =>
                                       _showAddProductDialog(context),
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.add,
-                                    color: Colors.white,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                   ),
-                                  label: Text(S.of(context).addProduct),
+                                  label: Text(
+                                    S.of(context).addProduct,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ),
+                                  ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                    foregroundColor: Colors.white,
+                                        Theme.of(context).colorScheme.primary,
+                                    foregroundColor:
+                                        Theme.of(context).colorScheme.onPrimary,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -729,8 +880,11 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                   child: Text(
                                     S.of(context).noProductsAddedYet,
                                     style: TextStyle(
-                                        color: Colors.white
-                                            .withValues(alpha: 0.7)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.7),
+                                    ),
                                   ),
                                 ),
                               )
@@ -758,19 +912,26 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                               Expanded(
                                                 child: Text(
                                                   detail.productName ?? '',
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface,
                                                   ),
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                 ),
                                               ),
                                               IconButton(
-                                                icon: const Icon(Icons.delete),
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .error,
+                                                ),
                                                 onPressed: () =>
                                                     cubit.removeDetail(index),
-                                                color: Colors.red,
                                                 padding: EdgeInsets.zero,
                                                 constraints:
                                                     const BoxConstraints(),
@@ -787,7 +948,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                               Text(
                                                 '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
                                                 style: TextStyle(
-                                                  color: Colors.white
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface
                                                       .withValues(alpha: 0.8),
                                                 ),
                                               ),
@@ -826,10 +989,13 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                                             minWidth: 40),
                                                     child: Text(
                                                       '${detail.quantity}',
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         fontSize: 16,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface,
                                                       ),
                                                       textAlign:
                                                           TextAlign.center,
@@ -865,9 +1031,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                               ),
                                               Text(
                                                 '\$${detail.subtotal.toStringAsFixed(2)}',
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
                                                 ),
                                               ),
                                             ],
@@ -875,10 +1044,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                           ...[
                                             const SizedBox(height: 4),
                                             Text(
-                                              '${S.of(context).availableStock}: \\${product.stock}',
+                                              '${S.of(context).availableStock}: ${product.stock}',
                                               style: TextStyle(
                                                 fontSize: 12,
-                                                color: Colors.white
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface
                                                     .withValues(alpha: 0.6),
                                               ),
                                             ),
@@ -889,35 +1060,40 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                   );
                                 },
                               ),
-                            if (state.invoiceDetails.isNotEmpty) ...[
-                              const Divider(height: 32),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        S.of(context).totalAmount,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white
-                                              .withValues(alpha: 0.8),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '\$${state.totalPrice.toStringAsFixed(2)}',
-                                        style: const TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                            // if (state.invoiceDetails.isNotEmpty) ...[
+                            //   const Divider(height: 32),
+                            //   Row(
+                            //     mainAxisAlignment: MainAxisAlignment.end,
+                            //     children: [
+                            //       Column(
+                            //         crossAxisAlignment: CrossAxisAlignment.end,
+                            //         children: [
+                            //           Text(
+                            //             S.of(context).totalAmount,
+                            //             style: TextStyle(
+                            //               fontSize: 16,
+                            //               color: Theme.of(context)
+                            //                   .colorScheme
+                            //                   .onSurface
+                            //                   .withValues(alpha: 0.8),
+                            //             ),
+                            //           ),
+                            //           const SizedBox(height: 4),
+                            //           Text(
+                            //             '\$${state.totalPrice.toStringAsFixed(2)}',
+                            //             style: TextStyle(
+                            //               fontSize: 24,
+                            //               fontWeight: FontWeight.bold,
+                            //               color: Theme.of(context)
+                            //                   .colorScheme
+                            //                   .onSurface,
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ],
                           ],
                         ),
                       ),
@@ -939,7 +1115,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
       child: DropdownButton<T>(
@@ -949,16 +1127,28 @@ class _SalesAddViewState extends State<_SalesAddView> {
         underline: const SizedBox(),
         padding: const EdgeInsets.symmetric(horizontal: 12),
         items: items.map((T item) {
+          String displayText;
+          if (item is PaymentStatus) {
+            displayText = item.getLocalizedName(context);
+          } else if (item is SalesStatus) {
+            displayText = item.getLocalizedName(context);
+          } else {
+            displayText = item.toString().split('.').last;
+          }
           return DropdownMenuItem<T>(
             value: item,
             child: Text(
-              item.toString().split('.').last,
-              style: const TextStyle(color: Colors.white),
+              displayText,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           );
         }).toList(),
         onChanged: onChanged,
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
       ),
     );
   }

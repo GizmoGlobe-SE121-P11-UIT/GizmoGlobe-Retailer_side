@@ -37,7 +37,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
       margin: const EdgeInsets.symmetric(vertical: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
@@ -55,21 +55,12 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          ShaderMask(
-            shaderCallback: (bounds) => LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.primary,
-                Theme.of(context).colorScheme.secondary,
-              ],
-            ).createShader(bounds),
-            child: Text(
-              value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.5,
-              ),
+          Text(
+            value,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],
@@ -101,7 +92,10 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
             ),
           ),
           body: state.isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? Center(
+                  child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ))
               : Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -115,11 +109,14 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                               Center(
                                 child: CircleAvatar(
                                   radius: 50,
-                                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
                                   child: Icon(
                                     Icons.inventory,
                                     size: 50,
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
@@ -128,10 +125,11 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                 width: double.infinity,
                                 child: Text(
                                   '${S.of(context).invoiceDetails} #${state.invoice.incomingInvoiceID}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
@@ -139,25 +137,35 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                               const SizedBox(height: 32),
                               Text(
                                 S.of(context).invoiceDetails,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                               const SizedBox(height: 24),
-                              _buildInfoRow(S.of(context).selectManufacturer, state.manufacturer?.manufacturerName ?? 'Unknown'),
-                              _buildInfoRow('Date', DateFormat('dd/MM/yyyy').format(state.invoice.date)),
+                              _buildInfoRow(
+                                  S.of(context).manufacturerName,
+                                  state.manufacturer?.manufacturerName ??
+                                      'Unknown'),
+                              _buildInfoRow(
+                                  S.of(context).date,
+                                  DateFormat('dd/MM/yyyy')
+                                      .format(state.invoice.date)),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       S.of(context).paymentStatus,
                                       style: TextStyle(
-                                        color: Colors.grey[400],
-                                        fontSize: 15,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -172,10 +180,10 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                               const SizedBox(height: 32),
                               Text(
                                 S.of(context).products,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -185,18 +193,24 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                 itemCount: state.invoice.details.length,
                                 itemBuilder: (context, index) {
                                   final detail = state.invoice.details[index];
-                                  final product = state.products[detail.productID];
+                                  final product =
+                                      state.products[detail.productID];
 
                                   return Card(
                                     child: ListTile(
                                       onTap: () async {
-                                        final product = await context.read<IncomingDetailCubit>().getProduct(detail.productID);
-                                        if (product != null && context.mounted) {
+                                        final product = await context
+                                            .read<IncomingDetailCubit>()
+                                            .getProduct(detail.productID);
+                                        if (product != null &&
+                                            context.mounted) {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => BlocProvider(
-                                                create: (context) => ProductDetailCubit(product),
+                                              builder: (context) =>
+                                                  BlocProvider(
+                                                create: (context) =>
+                                                    ProductDetailCubit(product),
                                                 child: ProductDetailScreen(
                                                   product: product,
                                                 ),
@@ -206,16 +220,19 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                         }
                                       },
                                       title: Text(
-                                        product?.productName ?? '${S.of(context).products} #${detail.productID}',
-                                        style: const TextStyle(
+                                        product?.productName ??
+                                            '${S.of(context).products} #${detail.productID}',
+                                        style: TextStyle(
                                           fontWeight: FontWeight.w600,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
                                         ),
                                       ),
                                       subtitle: Text(
                                         '${S.of(context).importPrice}: \$${detail.importPrice.toStringAsFixed(2)}',
                                         style: TextStyle(
-                                          color: Theme
-                                              .of(context)
+                                          color: Theme.of(context)
                                               .colorScheme
                                               .onSurface
                                               .withValues(alpha: 0.6),
@@ -224,8 +241,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                       trailing: Text(
                                         '${S.of(context).quantity}: ${detail.quantity}',
                                         style: TextStyle(
-                                          color: Theme
-                                              .of(context)
+                                          color: Theme.of(context)
                                               .colorScheme
                                               .onSurface
                                               .withValues(alpha: 0.6),
@@ -240,14 +256,18 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                         ),
                       ),
                     ),
-                    if (IncomingInvoicePermissions.canEditPaymentStatus(state.userRole, state.invoice))
+                    if (IncomingInvoicePermissions.canEditPaymentStatus(
+                        state.userRole, state.invoice))
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.surface,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .shadow
+                                  .withValues(alpha: 0.2),
                               blurRadius: 8,
                               offset: const Offset(0, -4),
                             ),
@@ -262,12 +282,22 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Text(S.of(context).paymentStatus),
-                                        content: Text(S.of(context).markAsPaidQuestion),
+                                        title:
+                                            Text(S.of(context).paymentStatus),
+                                        content: Text(
+                                            S.of(context).markAsPaidQuestion),
                                         actions: [
                                           TextButton(
-                                            onPressed: () => Navigator.pop(context),
-                                            child: Text(S.of(context).cancel),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: Text(
+                                              S.of(context).cancel,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .error,
+                                              ),
+                                            ),
                                           ),
                                           TextButton(
                                             onPressed: () async {
@@ -276,18 +306,37 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                                   PaymentStatus.paid);
                                               Navigator.pop(context);
                                             },
-                                            child: Text(S.of(context).confirm),
+                                            child: Text(
+                                              S.of(context).confirm,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       );
                                     },
                                   );
                                 },
-                                icon: const Icon(Icons.check_circle_outline, color: Colors.white),
-                                label: Text(S.of(context).markAsPaidQuestion, style: TextStyle(color: Colors.white)),
+                                icon: Icon(
+                                  Icons.check_circle_outline,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
+                                label: Text(
+                                  S.of(context).markAsPaidQuestion,
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                ),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                 ),
                               ),
                             ),
@@ -310,17 +359,20 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
           Text(
             label,
             style: TextStyle(
-              color: Colors.grey[400],
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.onSurface,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
             ),
           ),
           Text(
             value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
+            style: TextStyle(
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ],

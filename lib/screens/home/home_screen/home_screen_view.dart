@@ -30,7 +30,6 @@ class _HomeScreen extends State<HomeScreen> {
       builder: (context, state) {
         final currencyFormat =
             NumberFormat.currency(locale: 'en_US', symbol: '\$');
-
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
@@ -57,17 +56,18 @@ class _HomeScreen extends State<HomeScreen> {
                           text: S.of(context).welcomeBack),
                       Text(
                         state.username,
+                        // 'Test User', // Placeholder for username
                         style: Theme.of(context)
                             .textTheme
                             .headlineMedium
                             ?.copyWith(
                               fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                       ),
                     ],
                   ),
                 ),
-
                 // Stats Cards
                 Padding(
                   padding: const EdgeInsets.all(16),
@@ -151,7 +151,7 @@ class _HomeScreen extends State<HomeScreen> {
                                 S.of(context).monthlySales,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleMedium
+                                    .titleLarge
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -267,7 +267,7 @@ class _HomeScreen extends State<HomeScreen> {
             horizontalInterval: 1,
             getDrawingHorizontalLine: (value) {
               return FlLine(
-                color: Theme.of(context).colorScheme.surface,
+                color: Theme.of(context).colorScheme.onSurface,
                 strokeWidth: 1,
               );
             },
@@ -308,8 +308,8 @@ class _HomeScreen extends State<HomeScreen> {
               isCurved: true,
               gradient: LinearGradient(
                 colors: [
-                  Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColor.withValues(alpha: 0.5),
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
                 ],
               ),
               barWidth: 3,
@@ -319,8 +319,8 @@ class _HomeScreen extends State<HomeScreen> {
                 show: true,
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context).primaryColor.withValues(alpha: 0.2),
-                    Theme.of(context).primaryColor.withValues(alpha: 0.0),
+                    Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+                    Theme.of(context).colorScheme.primary.withValues(alpha: 0.0),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
