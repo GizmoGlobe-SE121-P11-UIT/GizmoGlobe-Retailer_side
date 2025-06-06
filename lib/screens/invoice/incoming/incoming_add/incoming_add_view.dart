@@ -9,6 +9,7 @@ import '../../../../widgets/general/gradient_icon_button.dart';
 import 'incoming_add_cubit.dart';
 import 'incoming_add_state.dart';
 import '../../../../generated/l10n.dart';
+import '../../../../widgets/dialog/information_dialog.dart';
 
 class IncomingAddScreen extends StatefulWidget {
   const IncomingAddScreen({super.key});
@@ -30,10 +31,17 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
     return BlocConsumer<IncomingAddCubit, IncomingAddState>(
       listener: (context, state) {
         if (state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage!)),
+          showDialog(
+            context: context,
+            builder: (context) => InformationDialog(
+              title: S.of(context).errorOccurred,
+              content: state.errorMessage!,
+              buttonText: 'OK',
+              onPressed: () {
+                cubit.clearError();
+              },
+            ),
           );
-          cubit.clearError();
         }
       },
       builder: (context, state) {

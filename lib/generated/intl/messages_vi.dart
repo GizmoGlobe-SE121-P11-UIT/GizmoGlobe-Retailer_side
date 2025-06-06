@@ -373,6 +373,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tên đường, tòa nhà, số nhà",
     ),
     "subtotal": MessageLookupByLibrary.simpleMessage("Tổng phụ"),
+    "success": MessageLookupByLibrary.simpleMessage("Thành công"),
     "supportEmail": m10,
     "supportMembers": MessageLookupByLibrary.simpleMessage("Thành viên nhóm"),
     "supportRole": m11,
@@ -406,6 +407,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tạo hóa đơn bảo hành thành công",
     ),
     "warrantyReceipt": m13,
+    "warrantyStatus_completed": MessageLookupByLibrary.simpleMessage(
+      "Đã hoàn thành",
+    ),
+    "warrantyStatus_denied": MessageLookupByLibrary.simpleMessage("Từ chối"),
+    "warrantyStatus_pending": MessageLookupByLibrary.simpleMessage("Chờ xử lý"),
+    "warrantyStatus_processing": MessageLookupByLibrary.simpleMessage(
+      "Đang xử lý",
+    ),
     "welcomeBack": MessageLookupByLibrary.simpleMessage("Chào mừng trở lại,"),
   };
 }

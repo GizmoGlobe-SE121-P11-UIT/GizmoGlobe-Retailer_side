@@ -39,9 +39,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   onTap: (index) {
                     context.read<InvoiceScreenCubit>().changeTab(index);
                   },
-                  labelColor: Theme.of(context).primaryColor,
-                  unselectedLabelColor: Colors.white,
-                  indicatorColor: Theme.of(context).primaryColor,
+                  labelColor: Theme.of(context).colorScheme.primary,
+                  unselectedLabelColor:
+                      Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                  indicatorColor: Theme.of(context).colorScheme.primary,
                   dividerColor: Colors.transparent,
                   tabs: [
                     Tab(text: S.of(context).sales),

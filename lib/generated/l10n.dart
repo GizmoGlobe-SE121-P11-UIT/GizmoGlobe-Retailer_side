@@ -2534,6 +2534,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Pending`
+  String get warrantyStatus_pending {
+    return Intl.message(
+      'Pending',
+      name: 'warrantyStatus_pending',
+      desc: 'Label for pending warranty status.',
+      args: [],
+    );
+  }
+
+  /// `Processing`
+  String get warrantyStatus_processing {
+    return Intl.message(
+      'Processing',
+      name: 'warrantyStatus_processing',
+      desc: 'Label for processing warranty status.',
+      args: [],
+    );
+  }
+
+  /// `Completed`
+  String get warrantyStatus_completed {
+    return Intl.message(
+      'Completed',
+      name: 'warrantyStatus_completed',
+      desc: 'Label for completed warranty status.',
+      args: [],
+    );
+  }
+
+  /// `Denied`
+  String get warrantyStatus_denied {
+    return Intl.message(
+      'Denied',
+      name: 'warrantyStatus_denied',
+      desc: 'Label for denied warranty status.',
+      args: [],
+    );
+  }
+
+  /// `Success`
+  String get success {
+    return Intl.message(
+      'Success',
+      name: 'success',
+      desc: 'Label for success status.',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

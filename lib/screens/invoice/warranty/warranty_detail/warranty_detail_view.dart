@@ -79,10 +79,11 @@ class _WarrantyDetailView extends StatelessWidget {
                               child: Text(
                                 S.of(context).warrantyReceipt(
                                     state.invoice.warrantyInvoiceID.toString()),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -90,10 +91,10 @@ class _WarrantyDetailView extends StatelessWidget {
                             const SizedBox(height: 32),
                             Text(
                               S.of(context).warrantyInformation,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blue,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                             const SizedBox(height: 24),
@@ -117,12 +118,17 @@ class _WarrantyDetailView extends StatelessWidget {
                                   Text(
                                     S.of(context).status,
                                     style: TextStyle(
-                                      color: Colors.grey[400],
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.6),
                                       fontSize: 15,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  StatusBadge(status: state.invoice.status),
+                                  StatusBadge(
+                                      status: state.invoice.status
+                                          .localized(context)),
                                 ],
                               ),
                             ),
@@ -159,9 +165,11 @@ class _WarrantyDetailView extends StatelessWidget {
                                   const SizedBox(height: 8),
                                   Text(
                                     state.invoice.reason,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 15,
-                                      color: Colors.white,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
                                     ),
                                   ),
                                 ],
@@ -170,10 +178,10 @@ class _WarrantyDetailView extends StatelessWidget {
                             const SizedBox(height: 32),
                             Text(
                               S.of(context).productsUnderWarranty,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blue,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -236,8 +244,10 @@ class _WarrantyDetailView extends StatelessWidget {
                                       ),
                                       child: Text(
                                         'x${detail.quantity}',
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -270,9 +280,19 @@ class _WarrantyDetailView extends StatelessWidget {
                                         return StatefulBuilder(
                                           builder: (context, setState) {
                                             return AlertDialog(
-                                              title: Text(S
-                                                  .of(context)
-                                                  .updateWarrantyStatus),
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .surface,
+                                              title: Text(
+                                                S
+                                                    .of(context)
+                                                    .updateWarrantyStatus,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                              ),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
@@ -280,16 +300,27 @@ class _WarrantyDetailView extends StatelessWidget {
                                                       WarrantyStatus>(
                                                     value: selectedStatus,
                                                     isExpanded: true,
+                                                    dropdownColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .surface,
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
                                                     items: WarrantyStatus.values
                                                         .map((status) {
                                                       return DropdownMenuItem(
                                                         value: status,
                                                         child: Text(
-                                                          status
-                                                              .toString()
-                                                              .split('.')
-                                                              .last,
+                                                          status.localized(
+                                                              context),
                                                           style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onSurface,
                                                             fontWeight: status ==
                                                                     state
                                                                         .invoice
@@ -320,66 +351,107 @@ class _WarrantyDetailView extends StatelessWidget {
                                                       Navigator.pop(
                                                           dialogContext),
                                                   child: Text(
-                                                      S.of(context).cancel),
+                                                    S.of(context).cancel,
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                    ),
+                                                  ),
                                                 ),
                                                 TextButton(
-                                                  onPressed: selectedStatus ==
-                                                          state.invoice.status
-                                                      ? null
-                                                      : () async {
-                                                          final confirmed =
-                                                              await showDialog<
-                                                                  bool>(
-                                                            context:
-                                                                dialogContext,
-                                                            builder: (BuildContext
-                                                                confirmContext) {
-                                                              return AlertDialog(
-                                                                title: Text(S
-                                                                    .of(context)
-                                                                    .confirmStatusUpdate),
-                                                                content: Text(
-                                                                  S.of(context).areYouSureChangeStatus(
-                                                                      selectedStatus
-                                                                          .toString()
-                                                                          .split(
-                                                                              '.')
-                                                                          .last),
-                                                                ),
-                                                                actions: [
-                                                                  TextButton(
-                                                                    onPressed: () =>
-                                                                        Navigator.pop(
+                                                  onPressed:
+                                                      selectedStatus ==
+                                                              state.invoice
+                                                                  .status
+                                                          ? null
+                                                          : () async {
+                                                              final confirmed =
+                                                                  await showDialog<
+                                                                      bool>(
+                                                                context:
+                                                                    dialogContext,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        confirmContext) {
+                                                                  return AlertDialog(
+                                                                    backgroundColor: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .surface,
+                                                                    title: Text(
+                                                                      S
+                                                                          .of(context)
+                                                                          .confirmStatusUpdate,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .onSurface,
+                                                                      ),
+                                                                    ),
+                                                                    content:
+                                                                        Text(
+                                                                      S.of(context).areYouSureChangeStatus(
+                                                                          selectedStatus!
+                                                                              .localized(context)),
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .onSurface,
+                                                                      ),
+                                                                    ),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed: () => Navigator.pop(
                                                                             confirmContext,
                                                                             false),
-                                                                    child: Text(S
-                                                                        .of(context)
-                                                                        .cancel),
-                                                                  ),
-                                                                  TextButton(
-                                                                    onPressed: () =>
-                                                                        Navigator.pop(
+                                                                        child:
+                                                                            Text(
+                                                                          S.of(context).cancel,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).colorScheme.primary,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      TextButton(
+                                                                        onPressed: () => Navigator.pop(
                                                                             confirmContext,
                                                                             true),
-                                                                    child: Text(S
-                                                                        .of(context)
-                                                                        .confirm),
-                                                                  ),
-                                                                ],
+                                                                        child:
+                                                                            Text(
+                                                                          S.of(context).confirm,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Theme.of(context).colorScheme.primary,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
                                                               );
-                                                            },
-                                                          );
 
-                                                          if (confirmed ==
-                                                              true) {
-                                                            Navigator.pop(
-                                                                dialogContext);
-                                                            cubit.updateWarrantyStatus(
-                                                                selectedStatus!);
-                                                          }
-                                                        },
-                                                  child:
-                                                      Text(S.of(context).save),
+                                                              if (confirmed ==
+                                                                  true) {
+                                                                Navigator.pop(
+                                                                    dialogContext);
+                                                                cubit.updateWarrantyStatus(
+                                                                    selectedStatus!);
+                                                              }
+                                                            },
+                                                  child: Text(
+                                                    S.of(context).save,
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                    ),
+                                                  ),
                                                 ),
                                               ],
                                             );
@@ -388,8 +460,18 @@ class _WarrantyDetailView extends StatelessWidget {
                                       },
                                     );
                                   },
-                                  icon: const Icon(Icons.edit),
-                                  label: Text(S.of(context).updateStatus),
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                  label: Text(
+                                    S.of(context).updateStatus,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -406,28 +488,33 @@ class _WarrantyDetailView extends StatelessWidget {
   }
 
   Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.grey[400],
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
+    return Builder(
+      builder: (context) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
+            Text(
+              value,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

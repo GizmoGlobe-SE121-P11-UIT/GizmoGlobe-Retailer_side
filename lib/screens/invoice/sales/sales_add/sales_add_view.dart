@@ -6,6 +6,7 @@ import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../../objects/customer.dart';
 import '../../../../objects/product_related/product.dart';
@@ -42,18 +43,25 @@ class _SalesAddViewState extends State<_SalesAddView> {
 
     final invoice = await cubit.createInvoice();
     if (invoice != null && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context).createInvoice),
-          backgroundColor: Theme.of(context).colorScheme.primary,
+      showDialog(
+        context: context,
+        builder: (context) => InformationDialog(
+          title: S.of(context).success,
+          content: S.of(context).createInvoice,
+          buttonText: 'OK',
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pop(context, invoice);
+          },
         ),
       );
-      Navigator.pop(context, invoice);
     } else if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.error ?? S.of(context).errorOccurred),
-          backgroundColor: Theme.of(context).colorScheme.error,
+      showDialog(
+        context: context,
+        builder: (context) => InformationDialog(
+          title: S.of(context).errorOccurred,
+          content: state.error ?? S.of(context).errorOccurred,
+          buttonText: 'OK',
         ),
       );
     }
@@ -239,10 +247,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
                 TextButton(
                   onPressed: () {
                     if (state.selectedModalProduct == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(S.of(context).pleaseSelectProduct),
-                          backgroundColor: Theme.of(context).colorScheme.error,
+                      showDialog(
+                        context: context,
+                        builder: (context) => InformationDialog(
+                          title: S.of(context).errorOccurred,
+                          content: S.of(context).pleaseSelectProduct,
+                          buttonText: 'OK',
                         ),
                       );
                       return;
@@ -250,20 +260,24 @@ class _SalesAddViewState extends State<_SalesAddView> {
 
                     final quantity = int.tryParse(quantityController.text) ?? 0;
                     if (quantity <= 0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(S.of(context).quantityGreaterThanZero),
-                          backgroundColor: Theme.of(context).colorScheme.error,
+                      showDialog(
+                        context: context,
+                        builder: (context) => InformationDialog(
+                          title: S.of(context).errorOccurred,
+                          content: S.of(context).quantityGreaterThanZero,
+                          buttonText: 'OK',
                         ),
                       );
                       return;
                     }
 
                     if (quantity > state.selectedModalProduct!.stock) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(S.of(context).notEnoughStock),
-                          backgroundColor: Theme.of(context).colorScheme.error,
+                      showDialog(
+                        context: context,
+                        builder: (context) => InformationDialog(
+                          title: S.of(context).errorOccurred,
+                          content: S.of(context).notEnoughStock,
+                          buttonText: 'OK',
                         ),
                       );
                       return;
@@ -297,10 +311,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
       BuildContext context, SalesAddState state) async {
     try {
       if (state.selectedCustomer == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(S.of(context).pleaseSelectCustomerFirst),
-            backgroundColor: Theme.of(context).colorScheme.error,
+        showDialog(
+          context: context,
+          builder: (context) => InformationDialog(
+            title: S.of(context).errorOccurred,
+            content: S.of(context).pleaseSelectCustomerFirst,
+            buttonText: 'OK',
           ),
         );
         return;
@@ -424,10 +440,12 @@ class _SalesAddViewState extends State<_SalesAddView> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Theme.of(context).colorScheme.error,
+        showDialog(
+          context: context,
+          builder: (context) => InformationDialog(
+            title: S.of(context).errorOccurred,
+            content: 'Error: $e',
+            buttonText: 'OK',
           ),
         );
       }

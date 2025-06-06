@@ -14,6 +14,7 @@ import '../../../../enums/product_related/category_enum.dart';
 import '../permissions/sales_invoice_permissions.dart';
 import 'sales_edit_cubit.dart';
 import 'sales_edit_state.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 class SalesEditScreen extends StatefulWidget {
   final SalesInvoice invoice;
@@ -631,10 +632,12 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(S.of(context).errorWithMessage(e.toString())),
-            backgroundColor: Colors.red,
+        showDialog(
+          context: context,
+          builder: (context) => InformationDialog(
+            title: S.of(context).errorOccurred,
+            content: S.of(context).errorWithMessage(e.toString()),
+            buttonText: 'OK',
           ),
         );
       }

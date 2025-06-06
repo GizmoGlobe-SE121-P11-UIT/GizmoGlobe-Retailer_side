@@ -7,6 +7,7 @@ import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../data/firebase/firebase.dart';
 import '../../../objects/invoice_related/sales_invoice.dart';
@@ -498,11 +499,13 @@ class _SalesScreenState extends State<SalesScreen> {
       Navigator.pop(context);
 
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(S
-                .of(context)
-                .errorLoadingInvoiceDetails(e.toString()))), // Localized
+      showDialog(
+        context: context,
+        builder: (context) => InformationDialog(
+          title: S.of(context).errorOccurred,
+          content: S.of(context).errorLoadingInvoiceDetails(e.toString()),
+          buttonText: 'OK',
+        ),
       );
     }
   }

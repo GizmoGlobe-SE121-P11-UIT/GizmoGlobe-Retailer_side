@@ -1309,5 +1309,30 @@
 	"@cancelled": {
 		"description": "Label for cancelled status.",
 		"type": "text"
+	},
+	"warrantyStatus_pending": "Pending",
+	"@warrantyStatus_pending": {
+		"description": "Label for pending warranty status.",
+		"type": "text"
+	},
+	"warrantyStatus_processing": "Processing",
+	"@warrantyStatus_processing": {
+		"description": "Label for processing warranty status.",
+		"type": "text"
+	},
+	"warrantyStatus_completed": "Completed",
+	"@warrantyStatus_completed": {
+		"description": "Label for completed warranty status.",
+		"type": "text"
+	},
+	"warrantyStatus_denied": "Denied",
+	"@warrantyStatus_denied": {
+		"description": "Label for denied warranty status.",
+		"type": "text"
+	},
+	"success": "Success",
+	"@success": {
+		"description": "Label for success status.",
+		"type": "text"
 	}
 }

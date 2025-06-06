@@ -11,6 +11,7 @@ import '../permissions/incoming_invoice_permissions.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 class IncomingDetailScreen extends StatefulWidget {
   final IncomingInvoice invoice;
@@ -73,10 +74,17 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
     return BlocConsumer<IncomingDetailCubit, IncomingDetailState>(
       listener: (context, state) {
         if (state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage!)),
+          showDialog(
+            context: context,
+            builder: (context) => InformationDialog(
+              title: S.of(context).errorOccurred,
+              content: state.errorMessage!,
+              buttonText: 'OK',
+              onPressed: () {
+                cubit.clearError();
+              },
+            ),
           );
-          cubit.clearError();
         }
       },
       builder: (context, state) {

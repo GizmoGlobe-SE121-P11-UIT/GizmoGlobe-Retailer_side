@@ -1020,5 +1020,30 @@
 	"@cancelled": {
 		"description": "Label for cancelled status.",
 		"type": "text"
+	},
+	"warrantyStatus_pending": "Chờ xử lý",
+	"@warrantyStatus_pending": {
+		"description": "Label for pending warranty status.",
+		"type": "text"
+	},
+	"warrantyStatus_processing": "Đang xử lý",
+	"@warrantyStatus_processing": {
+		"description": "Label for processing warranty status.",
+		"type": "text"
+	},
+	"warrantyStatus_completed": "Đã hoàn thành",
+	"@warrantyStatus_completed": {
+		"description": "Label for completed warranty status.",
+		"type": "text"
+	},
+	"warrantyStatus_denied": "Từ chối",
+	"@warrantyStatus_denied": {
+		"description": "Label for denied warranty status.",
+		"type": "text"
+	},
+	"success": "Thành công",
+	"@success": {
+		"description": "Label for success status.",
+		"type": "text"
 	}
 }

@@ -412,6 +412,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Street name, building, house no.",
     ),
     "subtotal": MessageLookupByLibrary.simpleMessage("Subtotal"),
+    "success": MessageLookupByLibrary.simpleMessage("Success"),
     "supportEmail": m10,
     "supportMembers": MessageLookupByLibrary.simpleMessage("Members of teams"),
     "supportRole": m11,
@@ -462,6 +463,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Warranty invoice created successfully",
     ),
     "warrantyReceipt": m13,
+    "warrantyStatus_completed": MessageLookupByLibrary.simpleMessage(
+      "Completed",
+    ),
+    "warrantyStatus_denied": MessageLookupByLibrary.simpleMessage("Denied"),
+    "warrantyStatus_pending": MessageLookupByLibrary.simpleMessage("Pending"),
+    "warrantyStatus_processing": MessageLookupByLibrary.simpleMessage(
+      "Processing",
+    ),
     "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome back,"),
   };
 }

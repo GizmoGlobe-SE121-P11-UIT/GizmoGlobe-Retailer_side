@@ -7,6 +7,7 @@ import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../enums/invoice_related/payment_status.dart';
 import '../../../objects/invoice_related/incoming_invoice.dart';
@@ -149,11 +150,14 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                       );
                                     } catch (e) {
                                       Navigator.pop(context);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Error loading invoice details: $e')), // Lỗi khi tải chi tiết hóa đơn
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => InformationDialog(
+                                          title: S.of(context).errorOccurred,
+                                          content:
+                                              '${S.of(context).errorLoadingInvoiceDetails('')}$e',
+                                          buttonText: 'OK',
+                                        ),
                                       );
                                     }
                                   },
@@ -408,10 +412,13 @@ class _IncomingScreenState extends State<IncomingScreen> {
       Navigator.of(dialogContext).pop();
 
       if (!mounted) return;
-      ScaffoldMessenger.of(dialogContext).showSnackBar(
-        SnackBar(
-            content: Text(
-                'Error loading invoice details: $e')), // Lỗi khi tải chi tiết hóa đơn.
+      showDialog(
+        context: context,
+        builder: (context) => InformationDialog(
+          title: S.of(context).errorOccurred,
+          content: '${S.of(context).errorLoadingInvoiceDetails('')}$e',
+          buttonText: 'OK',
+        ),
       );
     }
   }
@@ -420,8 +427,13 @@ class _IncomingScreenState extends State<IncomingScreen> {
       BuildContext contextDialog, IncomingInvoice invoice) async {
     // Chỉ cho phép chỉnh sửa từ unpaid sang paid
     if (invoice.status != PaymentStatus.unpaid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).onlyUnpaidCanBeMarkedPaid)),
+      showDialog(
+        context: context,
+        builder: (context) => InformationDialog(
+          title: S.of(context).errorOccurred,
+          content: S.of(context).onlyUnpaidCanBeMarkedPaid,
+          buttonText: 'OK',
+        ),
       );
       Navigator.pop(contextDialog);
       return;
