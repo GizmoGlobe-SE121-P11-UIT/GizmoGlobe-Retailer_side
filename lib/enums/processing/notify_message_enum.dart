@@ -19,8 +19,12 @@ enum NotifyMessage {
   msg14('productAddFailed'),
   msg15('productUpdatedSuccess'),
   msg16('productUpdateFailed'),
+  msg17('Voucher added successfully.'), // Voucher đã được thêm thành công
+  msg18('Failed to add voucher. Please try again.'), // Không thể thêm voucher. Vui lòng thử lại
+  msg19('Voucher deleted successfully.'), // Voucher đã được xóa thành công
+  msg20('Failed to delete voucher. Please try again.'), // Không thể xóa voucher. Vui lòng thử lại
   error('unexpectedError');
-
+  
   final String message;
   const NotifyMessage(this.message);
 
