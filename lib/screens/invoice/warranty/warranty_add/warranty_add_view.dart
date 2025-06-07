@@ -7,6 +7,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'warranty_add_cubit.dart';
 import 'warranty_add_state.dart';
+import '../../../../widgets/dialog/information_dialog.dart';
 
 class WarrantyAddView extends StatefulWidget {
   const WarrantyAddView({super.key});
@@ -91,21 +92,30 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                             decoration: InputDecoration(
                               labelText: S.of(context).selectCustomer,
                               labelStyle: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.8)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.8)),
                               prefixIcon: Icon(Icons.person_outline,
-                                  color: Colors.white.withValues(alpha: 0.7)),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.7)),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide(
-                                    color: Theme.of(context).primaryColor),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
                             ),
                             items: state.availableCustomers.map((customer) {
@@ -130,7 +140,6 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
 
                   if (state.selectedCustomerId != null) ...[
                     if (state.customerInvoices.isEmpty)
@@ -147,7 +156,10 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                               Icon(
                                 Icons.info_outline,
                                 size: 48,
-                                color: Colors.grey[400],
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.4),
                               ),
                               const SizedBox(height: 16),
                               Text(
@@ -162,7 +174,10 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                               Text(
                                 S.of(context).noEligibleSalesInvoices,
                                 style: TextStyle(
-                                  color: Colors.grey[400],
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.4),
                                   fontSize: 16,
                                 ),
                                 textAlign: TextAlign.center,
@@ -196,26 +211,35 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                 decoration: InputDecoration(
                                   labelText: S.of(context).salesInvoice,
                                   labelStyle: TextStyle(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.8)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.8)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                     borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
                                   ),
                                   filled: true,
                                   fillColor:
                                       Theme.of(context).colorScheme.surface,
                                 ),
-                                style: const TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
                                 dropdownColor:
                                     Theme.of(context).colorScheme.surface,
                                 items: state.customerInvoices.map((invoice) {
@@ -223,8 +247,10 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                     value: invoice.salesInvoiceID,
                                     child: Text(
                                       '${invoice.salesInvoiceID} - ${invoice.customerName}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface),
                                     ),
                                   );
                                 }).toList(),
@@ -262,23 +288,31 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                   labelText:
                                       S.of(context).reasonForWarrantyLabel,
                                   labelStyle: TextStyle(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.8)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.8)),
                                   prefixIcon: Icon(Icons.description_outlined,
-                                      color:
-                                          Colors.white.withValues(alpha: 0.7)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.7)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide:
-                                        const BorderSide(color: Colors.white),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                     borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
                                   ),
                                 ),
                                 maxLines: 3,
@@ -337,11 +371,16 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                   detail.productID);
                                             }
                                           },
-                                          activeColor:
-                                              Theme.of(context).primaryColor,
-                                          checkColor: Colors.white,
+                                          activeColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          checkColor: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
                                           side: BorderSide(
-                                            color: Colors.white
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
                                                 .withValues(alpha: 0.8),
                                             width: 2,
                                           ),
@@ -368,7 +407,8 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                       vertical: 4),
                                                   decoration: BoxDecoration(
                                                     color: Theme.of(context)
-                                                        .primaryColor
+                                                        .colorScheme
+                                                        .primary
                                                         .withValues(alpha: 0.1),
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -378,7 +418,8 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                     '${S.of(context).category}: ${product?.category.toString() ?? S.of(context).unknownCategory}',
                                                     style: TextStyle(
                                                       color: Theme.of(context)
-                                                          .primaryColor,
+                                                          .colorScheme
+                                                          .primary,
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontSize: 13,
@@ -418,15 +459,22 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Text(
-                                                    '${S.of(context).availableStock}: ${detail.quantity}',
-                                                    style: const TextStyle(
-                                                      color: Colors.blue,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 14,
+                                                  Flexible(
+                                                    child: Text(
+                                                      '${S.of(context).availableStock}: ${detail.quantity}',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
                                                   ),
+                                                  const SizedBox(width: 8),
                                                   GestureDetector(
                                                     onTap:
                                                         () {}, // Prevent tap propagation
@@ -445,10 +493,17 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                                           detail
                                                                               .productID] ==
                                                                       1
-                                                                  ? Colors.grey
+                                                                  ? Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onSurface
+                                                                      .withValues(
+                                                                          alpha:
+                                                                              0.4)
                                                                   : Theme.of(
                                                                           context)
-                                                                      .primaryColor,
+                                                                      .colorScheme
+                                                                      .primary,
                                                             ),
                                                             onPressed:
                                                                 state.productQuantities[
@@ -474,7 +529,8 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                               BoxDecoration(
                                                             color: Theme.of(
                                                                     context)
-                                                                .primaryColor
+                                                                .colorScheme
+                                                                .primary
                                                                 .withValues(
                                                                     alpha: 0.1),
                                                             borderRadius:
@@ -495,7 +551,8 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                               fontSize: 16,
                                                               color: Theme.of(
                                                                       context)
-                                                                  .primaryColor,
+                                                                  .colorScheme
+                                                                  .primary,
                                                             ),
                                                             textAlign: TextAlign
                                                                 .center,
@@ -513,10 +570,17 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                                           1) >=
                                                                       detail
                                                                           .quantity
-                                                                  ? Colors.grey
+                                                                  ? Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onSurface
+                                                                      .withValues(
+                                                                          alpha:
+                                                                              0.4)
                                                                   : Theme.of(
                                                                           context)
-                                                                      .primaryColor,
+                                                                      .colorScheme
+                                                                      .primary,
                                                             ),
                                                             onPressed: (state.productQuantities[detail
                                                                             .productID] ??
@@ -546,8 +610,10 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                             else
                                               Text(
                                                 '${S.of(context).availableStock}: ${detail.quantity}',
-                                                style: const TextStyle(
-                                                  color: Colors.blue,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 14,
                                                 ),
@@ -590,13 +656,13 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
     if (!_formKey.currentState!.validate()) {
       if (kDebugMode) {
         print('Form validation failed');
-      } // Lỗi xác thực biểu mẫu
+      }
       return;
     }
 
     if (kDebugMode) {
       print('Starting save process');
-    } // Bắt đầu quá trình lưu
+    }
 
     // Store context before async operation
     final BuildContext dialogContext = context;
@@ -629,29 +695,32 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
         if (kDebugMode) {
           print(
               'Invoice created successfully, force navigating back to warranty screen');
-        } // Tạo hóa đơn thành công
+        }
 
         // Show success message using root context
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(S.of(context).warrantyInvoiceCreated),
-            backgroundColor: Colors.green,
+        showDialog(
+          context: context,
+          builder: (context) => InformationDialog(
+            title: S.of(context).success,
+            content: S.of(context).warrantyInvoiceCreated,
+            buttonText: 'OK',
+            onPressed: () {
+              if (mounted) {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              }
+            },
           ),
         );
-
-        // Force navigation back to warranty screen
-        if (mounted) {
-          // Pop until we reach the warranty screen
-          Navigator.of(context).popUntil((route) => route.isFirst);
-        }
       } else if (state.errorMessage != null) {
         if (kDebugMode) {
           print('Error creating invoice: ${state.errorMessage}');
-        } //
-        ScaffoldMessenger.of(dialogContext).showSnackBar(
-          SnackBar(
-            content: Text(state.errorMessage!),
-            backgroundColor: Colors.red,
+        }
+        showDialog(
+          context: dialogContext,
+          builder: (context) => InformationDialog(
+            title: S.of(context).errorOccurred,
+            content: state.errorMessage!,
+            buttonText: 'OK',
           ),
         );
       }
@@ -667,11 +736,12 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
       }
 
       // Show error message
-      ScaffoldMessenger.of(dialogContext).showSnackBar(
-        SnackBar(
-          content:
-              Text(S.of(context).errorCreatingWarrantyInvoice(e.toString())),
-          backgroundColor: Colors.red,
+      showDialog(
+        context: dialogContext,
+        builder: (context) => InformationDialog(
+          title: S.of(context).errorOccurred,
+          content: S.of(context).errorCreatingWarrantyInvoice(e.toString()),
+          buttonText: 'OK',
         ),
       );
     }

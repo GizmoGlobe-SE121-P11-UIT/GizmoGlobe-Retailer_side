@@ -65,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Are you sure you want to activate this manufacturer?",
     ),
     "activateManufacturerConfirmName": m0,
+    "active": MessageLookupByLibrary.simpleMessage("Active"),
     "add": MessageLookupByLibrary.simpleMessage("Add"),
     "addAddress": MessageLookupByLibrary.simpleMessage("Add Address"),
     "addCustomer": MessageLookupByLibrary.simpleMessage("Add Customer"),
@@ -76,7 +77,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Add New Manufacturer",
     ),
     "addProduct": MessageLookupByLibrary.simpleMessage("Add Product"),
+    "addProductImage": MessageLookupByLibrary.simpleMessage(
+      "Add Product Image",
+    ),
     "addVoucher": MessageLookupByLibrary.simpleMessage("Add Voucher"),
+    "additionalInformation": MessageLookupByLibrary.simpleMessage(
+      "Additional Information",
+    ),
     "address": MessageLookupByLibrary.simpleMessage("Address"),
     "addresses": MessageLookupByLibrary.simpleMessage("Addresses"),
     "all": MessageLookupByLibrary.simpleMessage("All"),
@@ -101,10 +108,22 @@ class MessageLookup extends MessageLookupByLibrary {
       "Business Hours",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "cancelled": MessageLookupByLibrary.simpleMessage("Cancelled"),
     "category": MessageLookupByLibrary.simpleMessage("Category"),
+    "categorySpecifications": MessageLookupByLibrary.simpleMessage(
+      "Specifications for",
+    ),
     "changeAddress": MessageLookupByLibrary.simpleMessage("Change Address"),
     "changePassword": MessageLookupByLibrary.simpleMessage("Change Password"),
+    "changePasswordFailed": MessageLookupByLibrary.simpleMessage(
+      "Error changing password. Please try again.",
+    ),
+    "chooseFromGallery": MessageLookupByLibrary.simpleMessage(
+      "Choose from Gallery",
+    ),
     "clearFilter": MessageLookupByLibrary.simpleMessage("Clear Filter"),
+    "compatibility": MessageLookupByLibrary.simpleMessage("Compatibility"),
+    "completed": MessageLookupByLibrary.simpleMessage("Completed"),
     "confirm": MessageLookupByLibrary.simpleMessage("OK"),
     "confirmStatusUpdate": MessageLookupByLibrary.simpleMessage(
       "Confirm Status Update",
@@ -116,6 +135,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Contact Information",
     ),
     "contactUs": MessageLookupByLibrary.simpleMessage("Contact Us:"),
+    "cpuClockSpeed": MessageLookupByLibrary.simpleMessage("CPU Clock Speed"),
+    "cpuCore": MessageLookupByLibrary.simpleMessage("CPU Core"),
+    "cpuFamily": MessageLookupByLibrary.simpleMessage("CPU Family"),
+    "cpuThread": MessageLookupByLibrary.simpleMessage("CPU Thread"),
     "createInvoice": MessageLookupByLibrary.simpleMessage("Create Invoice"),
     "createNewAccount": MessageLookupByLibrary.simpleMessage(
       "Create new account",
@@ -150,8 +173,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "disabled": MessageLookupByLibrary.simpleMessage("Disabled"),
     "discard": MessageLookupByLibrary.simpleMessage("DISCARD"),
     "discardChanges": MessageLookupByLibrary.simpleMessage("Discard Changes?"),
+    "discount": MessageLookupByLibrary.simpleMessage("Discount"),
     "discountType": MessageLookupByLibrary.simpleMessage("Discount Type"),
     "discountValue": MessageLookupByLibrary.simpleMessage("Discount Value"),
+    "drive": MessageLookupByLibrary.simpleMessage("Drive"),
+    "driveCapacity": MessageLookupByLibrary.simpleMessage("Drive Capacity"),
+    "driveType": MessageLookupByLibrary.simpleMessage("Drive Type"),
     "edit": MessageLookupByLibrary.simpleMessage("Edit"),
     "editCustomer": MessageLookupByLibrary.simpleMessage("Edit Customer"),
     "editEmployee": MessageLookupByLibrary.simpleMessage("Edit Employee"),
@@ -165,6 +192,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
+    "emailNotRegistered": MessageLookupByLibrary.simpleMessage(
+      "This email is not registered in the system",
+    ),
+    "emailNotVerified": MessageLookupByLibrary.simpleMessage(
+      "Email not verified. Please verify your email.",
+    ),
     "employeeAddedSuccessfully": MessageLookupByLibrary.simpleMessage(
       "Employee added successfully.",
     ),
@@ -177,17 +210,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "endTime": MessageLookupByLibrary.simpleMessage("End Time"),
     "enterAddress": MessageLookupByLibrary.simpleMessage("Enter Address"),
     "enterField": m3,
+    "enterImageUrl": MessageLookupByLibrary.simpleMessage("Enter Image URL"),
     "enterPhoneNumber": MessageLookupByLibrary.simpleMessage(
       "Enter phone number",
     ),
     "enterReceiverName": MessageLookupByLibrary.simpleMessage(
       "Enter receiver name",
     ),
+    "enterUrl": MessageLookupByLibrary.simpleMessage("Enter URL"),
     "errorCreatingWarrantyInvoice": m4,
     "errorLoadingInvoiceDetails": m5,
     "errorLoadingWarrantyInvoiceDetails": m6,
     "errorOccurred": MessageLookupByLibrary.simpleMessage("Error occurred"),
     "errorWithMessage": m7,
+    "failure": MessageLookupByLibrary.simpleMessage("Failure"),
     "filter": MessageLookupByLibrary.simpleMessage("Filter"),
     "filterByRole": MessageLookupByLibrary.simpleMessage("Filter by Role"),
     "findCustomers": MessageLookupByLibrary.simpleMessage("Find customers..."),
@@ -199,8 +235,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Find warranty invoices...",
     ),
     "fixedAmount": MessageLookupByLibrary.simpleMessage("Fixed Amount"),
+    "formFactor": MessageLookupByLibrary.simpleMessage("Form Factor"),
     "from": MessageLookupByLibrary.simpleMessage("From"),
     "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
+    "gpuBus": MessageLookupByLibrary.simpleMessage("GPU Bus"),
+    "gpuCapacity": MessageLookupByLibrary.simpleMessage("GPU Capacity"),
+    "gpuClockSpeed": MessageLookupByLibrary.simpleMessage("GPU Clock Speed"),
+    "gpuSeries": MessageLookupByLibrary.simpleMessage("GPU Series"),
     "hasEndTime": MessageLookupByLibrary.simpleMessage("Has End Time"),
     "hello": MessageLookupByLibrary.simpleMessage("Hello!"),
     "hidden": MessageLookupByLibrary.simpleMessage("Hidden"),
@@ -209,6 +250,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "inactive": MessageLookupByLibrary.simpleMessage("Inactive"),
     "incoming": MessageLookupByLibrary.simpleMessage("Incoming"),
     "informationTitle": MessageLookupByLibrary.simpleMessage("Information"),
+    "invalidEmailOrPassword": MessageLookupByLibrary.simpleMessage(
+      "Invalid email or password",
+    ),
     "invoice": MessageLookupByLibrary.simpleMessage("Invoice"),
     "invoiceDetails": MessageLookupByLibrary.simpleMessage("Invoice Details"),
     "last12Months": MessageLookupByLibrary.simpleMessage("Last 12 months"),
@@ -217,9 +261,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
     "location": MessageLookupByLibrary.simpleMessage("Location"),
     "logOut": MessageLookupByLibrary.simpleMessage("Log out"),
+    "mainboard": MessageLookupByLibrary.simpleMessage("Mainboard"),
     "manageAccountSecurity": MessageLookupByLibrary.simpleMessage(
       "Manage your account security",
     ),
+    "manufacturer": MessageLookupByLibrary.simpleMessage("Manufacturer"),
     "manufacturerDetail": MessageLookupByLibrary.simpleMessage(
       "Manufacturer Detail",
     ),
@@ -297,12 +343,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "To provide excellent service and quality products to you, our beloved customers.",
     ),
     "ourMissionTitle": MessageLookupByLibrary.simpleMessage("Our Mission"),
+    "outOfStock": MessageLookupByLibrary.simpleMessage("Out of Stock"),
     "overview": MessageLookupByLibrary.simpleMessage("Overview"),
+    "paid": MessageLookupByLibrary.simpleMessage("Paid"),
     "passwordResetEmailSentSuccess": MessageLookupByLibrary.simpleMessage(
       "Password reset email sent successfully",
     ),
     "passwordResetEmailWillBeSent": m8,
+    "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
+      "Passwords do not match.",
+    ),
     "paymentStatus": MessageLookupByLibrary.simpleMessage("Payment Status"),
+    "pending": MessageLookupByLibrary.simpleMessage("Pending"),
     "percentage": MessageLookupByLibrary.simpleMessage("Percentage"),
     "phone": MessageLookupByLibrary.simpleMessage("Phone"),
     "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
@@ -345,6 +397,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "pleaseSelectSalesInvoice": MessageLookupByLibrary.simpleMessage(
       "Please select a sales invoice",
     ),
+    "preparing": MessageLookupByLibrary.simpleMessage("Preparing"),
     "price": MessageLookupByLibrary.simpleMessage("Price"),
     "priceHighestFirst": MessageLookupByLibrary.simpleMessage(
       "Price (Highest First)",
@@ -353,15 +406,34 @@ class MessageLookup extends MessageLookupByLibrary {
       "Price (Lowest First)",
     ),
     "product": MessageLookupByLibrary.simpleMessage("Product"),
+    "productAddFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to add product. Please try again.",
+    ),
+    "productAddedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Product added successfully.",
+    ),
+    "productName": MessageLookupByLibrary.simpleMessage("Product Name"),
+    "productUpdateFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to update product. Please try again.",
+    ),
+    "productUpdatedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Product updated successfully.",
+    ),
     "products": MessageLookupByLibrary.simpleMessage("Products"),
     "productsUnderWarranty": MessageLookupByLibrary.simpleMessage(
       "Products Under Warranty",
     ),
     "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+    "psuEfficiency": MessageLookupByLibrary.simpleMessage("PSU Efficiency"),
+    "psuModular": MessageLookupByLibrary.simpleMessage("PSU Modular"),
+    "psuWattage": MessageLookupByLibrary.simpleMessage("PSU Wattage"),
     "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
     "quantityGreaterThanZero": MessageLookupByLibrary.simpleMessage(
       "Quantity must be greater than 0",
     ),
+    "ramBus": MessageLookupByLibrary.simpleMessage("RAM Bus"),
+    "ramCapacity": MessageLookupByLibrary.simpleMessage("RAM Capacity"),
+    "ramType": MessageLookupByLibrary.simpleMessage("RAM Type"),
     "reasonForWarranty": MessageLookupByLibrary.simpleMessage(
       "Reason for Warranty",
     ),
@@ -370,6 +442,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "receiverName": MessageLookupByLibrary.simpleMessage("Receiver Name"),
     "receiverPhone": MessageLookupByLibrary.simpleMessage("Receiver Phone"),
+    "releaseDate": MessageLookupByLibrary.simpleMessage("Release Date"),
+    "resetPasswordLinkSent": MessageLookupByLibrary.simpleMessage(
+      "A verification link has been sent to your email address. Please verify your email to reset your password.",
+    ),
     "revenue": MessageLookupByLibrary.simpleMessage("Revenue"),
     "role": MessageLookupByLibrary.simpleMessage("Role"),
     "sales": MessageLookupByLibrary.simpleMessage("Sales"),
@@ -379,6 +455,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "saveChanges": MessageLookupByLibrary.simpleMessage("Save changes"),
     "searchIncomingInvoices": MessageLookupByLibrary.simpleMessage(
       "Find incoming invoices...",
+    ),
+    "searchManufacturer": MessageLookupByLibrary.simpleMessage(
+      "Search manufacturer...",
     ),
     "searchSalesInvoices": MessageLookupByLibrary.simpleMessage(
       "Find sales invoices...",
@@ -392,32 +471,55 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectProductsForWarranty": MessageLookupByLibrary.simpleMessage(
       "Select Products for Warranty",
     ),
+    "sellingPrice": MessageLookupByLibrary.simpleMessage("Selling Price"),
     "sendPasswordResetEmail": MessageLookupByLibrary.simpleMessage(
       "Send Password Reset Email",
     ),
+    "series": MessageLookupByLibrary.simpleMessage("Series"),
+    "shipped": MessageLookupByLibrary.simpleMessage("Shipped"),
+    "shipping": MessageLookupByLibrary.simpleMessage("Shipping"),
+    "signInFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to sign in. Please try again.",
+    ),
+    "signInSuccess": MessageLookupByLibrary.simpleMessage(
+      "Signed in successfully.",
+    ),
     "signOut": MessageLookupByLibrary.simpleMessage("Sign Out"),
+    "signOutFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to sign out. Please try again.",
+    ),
+    "signUpFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to sign up. Please try again.",
+    ),
     "sortBy": MessageLookupByLibrary.simpleMessage("Sort By"),
     "stakeholder": MessageLookupByLibrary.simpleMessage("Stakeholder"),
     "startTime": MessageLookupByLibrary.simpleMessage("Start Time"),
     "status": MessageLookupByLibrary.simpleMessage("Status"),
+    "stock": MessageLookupByLibrary.simpleMessage("Stock"),
     "streetAddress": MessageLookupByLibrary.simpleMessage("Street Address"),
     "streetNameBuildingHouseNo": MessageLookupByLibrary.simpleMessage(
       "Street name, building, house no.",
     ),
     "subtotal": MessageLookupByLibrary.simpleMessage("Subtotal"),
+    "success": MessageLookupByLibrary.simpleMessage("Success"),
     "supportEmail": m10,
     "supportMembers": MessageLookupByLibrary.simpleMessage("Members of teams"),
     "supportRole": m11,
     "supportRoleDeveloper": MessageLookupByLibrary.simpleMessage("Developer"),
     "supportStudentId": m12,
     "supportTitle": MessageLookupByLibrary.simpleMessage("Support"),
+    "takePhoto": MessageLookupByLibrary.simpleMessage("Take a Photo"),
     "timeLimit": MessageLookupByLibrary.simpleMessage("Time Limit"),
     "to": MessageLookupByLibrary.simpleMessage("To"),
     "totalAmount": MessageLookupByLibrary.simpleMessage("Total Amount"),
     "totalPrice": MessageLookupByLibrary.simpleMessage("Total Price: "),
+    "unexpectedError": MessageLookupByLibrary.simpleMessage(
+      "An unexpected error occurred. Please try again.",
+    ),
     "unknownCategory": MessageLookupByLibrary.simpleMessage("Unknown Category"),
     "unknownProduct": MessageLookupByLibrary.simpleMessage("Unknown Product"),
     "unlimited": MessageLookupByLibrary.simpleMessage("Unlimited"),
+    "unpaid": MessageLookupByLibrary.simpleMessage("Unpaid"),
     "unsavedChangesDiscard": MessageLookupByLibrary.simpleMessage(
       "You have unsaved changes. Do you want to discard them?",
     ),
@@ -437,6 +539,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "usageLimit": MessageLookupByLibrary.simpleMessage("Usage Limit"),
     "username": MessageLookupByLibrary.simpleMessage("Username"),
     "vendors": MessageLookupByLibrary.simpleMessage("Vendors"),
+    "verificationEmailSent": MessageLookupByLibrary.simpleMessage(
+      "A verification email has been sent to your email address. Please verify your email to complete signing up.",
+    ),
+    "verificationLinkFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to send verification link. Please try again.",
+    ),
     "view": MessageLookupByLibrary.simpleMessage("View"),
     "visibility": MessageLookupByLibrary.simpleMessage("Visibility"),
     "visible": MessageLookupByLibrary.simpleMessage("Visible"),
@@ -454,6 +562,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Warranty invoice created successfully",
     ),
     "warrantyReceipt": m13,
+    "warrantyStatus_completed": MessageLookupByLibrary.simpleMessage(
+      "Completed",
+    ),
+    "warrantyStatus_denied": MessageLookupByLibrary.simpleMessage("Denied"),
+    "warrantyStatus_pending": MessageLookupByLibrary.simpleMessage("Pending"),
+    "warrantyStatus_processing": MessageLookupByLibrary.simpleMessage(
+      "Processing",
+    ),
     "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome back,"),
   };
 }

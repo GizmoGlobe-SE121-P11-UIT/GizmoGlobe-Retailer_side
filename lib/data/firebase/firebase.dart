@@ -63,9 +63,8 @@ class Firebase {
 
   Future<List<Customer>> getCustomers() async {
     try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('customers')
-          .get();
+      final QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('customers').get();
 
       return snapshot.docs.map((doc) {
         return Customer.fromMap(doc.id, doc.data() as Map<String, dynamic>);
@@ -92,7 +91,8 @@ class Firebase {
   Future<void> updateCustomer(Customer customer) async {
     try {
       if (customer.customerID == null) {
-        throw Exception('Customer ID cannot be null'); // ID khách hàng không thể trống
+        throw Exception(
+            'Customer ID cannot be null'); // ID khách hàng không thể trống
       }
 
       // Update customer information
@@ -164,7 +164,6 @@ class Firebase {
 
       // Có thể thêm logic để xóa các dữ liệu liên quan khác
       // như orders, cart items, etc.
-
     } catch (e) {
       if (kDebugMode) {
         print('Error deleting customers data: $e');
@@ -179,17 +178,17 @@ class Firebase {
       DocumentReference customerRef = await FirebaseFirestore.instance
           .collection('customers')
           .add(customer.toMap());
-      
+
       String customerId = customerRef.id;
       customer.customerID = customerId;
-      
+
       // Cập nhật customerID trong document customer
       await customerRef.update({'customerID': customerId});
 
       // Tạo user với cùng ID như customer
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(customerId)  // Sử dụng customerId làm document ID
+          .doc(customerId) // Sử dụng customerId làm document ID
           .set({
         'email': customer.email,
         'username': customer.customerName,
@@ -265,9 +264,8 @@ class Firebase {
   // Employee-related functions
   Future<List<Employee>> getEmployees() async {
     try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('employees')
-          .get();
+      final QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('employees').get();
 
       return snapshot.docs.map((doc) {
         return Employee.fromMap(doc.id, doc.data() as Map<String, dynamic>);
@@ -294,7 +292,8 @@ class Firebase {
   Future<void> updateEmployee(Employee employee) async {
     try {
       if (employee.employeeID == null) {
-        throw Exception('Employee ID cannot be null'); // ID nhân viên không thể trống
+        throw Exception(
+            'Employee ID cannot be null'); // ID nhân viên không thể trống
       }
 
       // Lấy thông tin employee cũ trước khi cập nhật
@@ -307,7 +306,8 @@ class Firebase {
         throw Exception('Employee not found'); // Không tìm thấy nhân viên
       }
 
-      Map<String, dynamic> oldEmployeeData = oldEmployeeDoc.data() as Map<String, dynamic>;
+      Map<String, dynamic> oldEmployeeData =
+          oldEmployeeDoc.data() as Map<String, dynamic>;
       String oldEmail = oldEmployeeData['email'];
 
       // Tạo map chứa thông tin cần cập nhật, không bao gồm email
@@ -322,7 +322,7 @@ class Firebase {
           .collection('employees')
           .doc(employee.employeeID)
           .update(updateData);
-      
+
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('email', isEqualTo: oldEmail)
@@ -331,7 +331,9 @@ class Firebase {
       if (userSnapshot.docs.isNotEmpty) {
         await updateUserInformation(userSnapshot.docs.first.id, {
           'username': employee.employeeName,
-          'role': employee.role == RoleEnum.owner ? 'admin' : employee.role.getName(),
+          'role': employee.role == RoleEnum.owner
+              ? 'admin'
+              : employee.role.getName(),
         });
       }
     } catch (e) {
@@ -351,7 +353,8 @@ class Firebase {
           .get();
 
       if (employeeDoc.exists) {
-        String employeeEmail = (employeeDoc.data() as Map<String, dynamic>)['email'];
+        String employeeEmail =
+            (employeeDoc.data() as Map<String, dynamic>)['email'];
 
         // Xóa nhân viên
         await FirebaseFirestore.instance
@@ -389,7 +392,8 @@ class Firebase {
           .get();
 
       if (existingEmployees.docs.isNotEmpty) {
-        throw Exception('Email has already been registered'); // Email đã được đăng ký
+        throw Exception(
+            'Email has already been registered'); // Email đã được đăng ký
       }
 
       // Thêm nhân viên mới vào collection employees
@@ -405,9 +409,9 @@ class Firebase {
         'email': employee.email,
         'username': employee.employeeName,
         'userID': docRef.id,
-        'role': employee.role == RoleEnum.owner ? 'admin' : employee.role.getName(),
+        'role':
+            employee.role == RoleEnum.owner ? 'admin' : employee.role.getName(),
       });
-
     } catch (e) {
       if (kDebugMode) {
         print('Error adding employee: $e');
@@ -448,7 +452,9 @@ class Firebase {
 
   Future<void> updateManufacturer(Manufacturer manufacturer) async {
     try {
-      final doc = _firestore.collection('manufacturers').doc(manufacturer.manufacturerID);
+      final doc = _firestore
+          .collection('manufacturers')
+          .doc(manufacturer.manufacturerID);
       await doc.update(_mapManufacturerToJson(manufacturer));
     } catch (e) {
       if (kDebugMode) {
@@ -467,7 +473,8 @@ class Firebase {
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        throw Exception('Manufacturer not found'); // Không tìm thấy nhà sản xuất
+        throw Exception(
+            'Manufacturer not found'); // Không tìm thấy nhà sản xuất
       }
 
       await FirebaseFirestore.instance
@@ -497,7 +504,9 @@ class Firebase {
 
   Future<void> createManufacturer(Manufacturer manufacturer) async {
     try {
-      final doc = _firestore.collection('manufacturers').doc(manufacturer.manufacturerID);
+      final doc = _firestore
+          .collection('manufacturers')
+          .doc(manufacturer.manufacturerID);
       await doc.set(_mapManufacturerToJson(manufacturer));
     } catch (e) {
       if (kDebugMode) {
@@ -530,7 +539,8 @@ class Firebase {
     }
   }
 
-  Future<void> updateUserInformation(String userId, Map<String, dynamic> userData) async {
+  Future<void> updateUserInformation(
+      String userId, Map<String, dynamic> userData) async {
     try {
       await FirebaseFirestore.instance
           .collection('users')
@@ -563,14 +573,13 @@ class Firebase {
   // Product-related functions
   Future<List<Product>> getProducts() async {
     try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('products')
-          .get();
+      final QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('products').get();
 
       List<Product> products = [];
       for (var doc in snapshot.docs) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        
+
         // Lấy manufacturer từ manufacturerID
         String manufacturerId = data['manufacturerID'];
         Manufacturer? manufacturer = await getManufacturerById(manufacturerId);
@@ -715,9 +724,10 @@ class Firebase {
       for (var doc in snapshot.docs) {
         try {
           Map<String, dynamic> data = doc.data();
-          
+
           String manufacturerId = data['manufacturerID'];
-          Manufacturer? manufacturer = await getManufacturerById(manufacturerId);
+          Manufacturer? manufacturer =
+              await getManufacturerById(manufacturerId);
           if (manufacturer == null) continue;
 
           CategoryEnum category = CategoryEnum.nonEmptyValues.firstWhere(
@@ -839,7 +849,8 @@ class Firebase {
               } // Loại sản phẩm không xác định
           }
 
-          Product product = ProductFactory.createProduct(category, productProps);
+          Product product =
+              ProductFactory.createProduct(category, productProps);
           products.add(product);
         } catch (e) {
           if (kDebugMode) {
@@ -876,21 +887,21 @@ class Firebase {
         .orderBy('date', descending: true)
         .snapshots()
         .asyncMap((snapshot) async {
-        List<SalesInvoice> invoices = [];
-        
-        for (var doc in snapshot.docs) {
-          // Create the invoice
-          final invoice = SalesInvoice.fromMap(doc.id, doc.data());
-          
-          // Get details for this invoice
-          final details = await getSalesInvoiceDetails(invoice.salesInvoiceID);
-          invoice.details = details;
-          
-          invoices.add(invoice);
-        }
-        
-        return invoices;
-      });
+      List<SalesInvoice> invoices = [];
+
+      for (var doc in snapshot.docs) {
+        // Create the invoice
+        final invoice = SalesInvoice.fromMap(doc.id, doc.data());
+
+        // Get details for this invoice
+        final details = await getSalesInvoiceDetails(invoice.salesInvoiceID);
+        invoice.details = details;
+
+        invoices.add(invoice);
+      }
+
+      return invoices;
+    });
   }
 
   Future<SalesInvoice?> createSalesInvoice(SalesInvoice invoice) async {
@@ -918,7 +929,7 @@ class Firebase {
         final detailRef = FirebaseFirestore.instance
             .collection('sales_invoice_details')
             .doc();
-            
+
         batch.set(detailRef, {
           'salesInvoiceDetailID': detailRef.id,
           'salesInvoiceID': invoice.salesInvoiceID,
@@ -941,7 +952,8 @@ class Firebase {
   }
 
   // Add a method to fetch invoice details
-  Future<List<SalesInvoiceDetail>> getSalesInvoiceDetails(String invoiceId) async {
+  Future<List<SalesInvoiceDetail>> getSalesInvoiceDetails(
+      String invoiceId) async {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('sales_invoice_details')
@@ -989,10 +1001,8 @@ class Firebase {
 
   Future<Map<String, dynamic>> getCustomerDetails(String customerID) async {
     try {
-      final doc = await _firestore
-          .collection('customers')
-          .doc(customerID)
-          .get();
+      final doc =
+          await _firestore.collection('customers').doc(customerID).get();
 
       if (doc.exists) {
         final data = doc.data() as Map<String, dynamic>;
@@ -1022,10 +1032,7 @@ class Firebase {
 
   Future<Map<String, dynamic>> getProductDetails(String productID) async {
     try {
-      final doc = await _firestore
-          .collection('products')
-          .doc(productID)
-          .get();
+      final doc = await _firestore.collection('products').doc(productID).get();
 
       if (doc.exists) {
         final data = doc.data() as Map<String, dynamic>;
@@ -1065,19 +1072,18 @@ class Firebase {
   Future<SalesInvoice> getSalesInvoiceWithDetails(String invoiceID) async {
     try {
       // Get the invoice document
-      final invoiceDoc = await _firestore
-          .collection('sales_invoices')
-          .doc(invoiceID)
-          .get();
+      final invoiceDoc =
+          await _firestore.collection('sales_invoices').doc(invoiceID).get();
 
       if (!invoiceDoc.exists) {
         throw Exception('Invoice not found'); // Không tìm thấy hóa đơn
       }
 
       final data = invoiceDoc.data()!;
-      
+
       // Get customer details
-      final customerDetails = await getCustomerDetails(data['customerID'] as String);
+      final customerDetails =
+          await getCustomerDetails(data['customerID'] as String);
       data['customerName'] = customerDetails['customerName'];
 
       // Create the invoice
@@ -1093,8 +1099,9 @@ class Firebase {
       List<SalesInvoiceDetail> details = [];
       for (var detailDoc in detailsSnapshot.docs) {
         final detailData = detailDoc.data();
-        final productDetails = await getProductDetails(detailData['productID'] as String);
-        
+        final productDetails =
+            await getProductDetails(detailData['productID'] as String);
+
         details.add(SalesInvoiceDetail(
           salesInvoiceID: detailData['salesInvoiceID'] as String,
           productID: detailData['productID'] as String,
@@ -1119,18 +1126,14 @@ class Firebase {
   Future<void> updateSalesInvoiceDetail(SalesInvoiceDetail detail) async {
     try {
       // Create a new document reference if needed
-      final detailRef = _firestore
-          .collection('sales_invoice_details')
-          .doc();
+      final detailRef = _firestore.collection('sales_invoice_details').doc();
 
       // Update the detail document
       await detailRef.set(detail.toJson());
 
       // Update product stock
-      final productDoc = await _firestore
-          .collection('products')
-          .doc(detail.productID)
-          .get();
+      final productDoc =
+          await _firestore.collection('products').doc(detail.productID).get();
 
       if (!productDoc.exists) {
         throw Exception('Product not found'); // Không tìm thấy sản phẩm
@@ -1157,7 +1160,8 @@ class Firebase {
     }
   }
 
-  Future<void> deleteSalesInvoiceDetail(String salesInvoiceID, String productID) async {
+  Future<void> deleteSalesInvoiceDetail(
+      String salesInvoiceID, String productID) async {
     try {
       // Find the detail document
       final detailQuery = await _firestore
@@ -1167,7 +1171,8 @@ class Firebase {
           .get();
 
       if (detailQuery.docs.isEmpty) {
-        throw Exception('Invoice detail not found'); // Không tìm thấy chi tiết hóa đơn
+        throw Exception(
+            'Invoice detail not found'); // Không tìm thấy chi tiết hóa đơn
       }
 
       final detailDoc = detailQuery.docs.first;
@@ -1199,10 +1204,8 @@ class Firebase {
 
       // Đảm bảo currentStock không null
       final currentStock = doc.data()?['stock'] as int? ?? 0;
-      
-      await doc.reference.update({
-        'stock': currentStock + stockChange
-      });
+
+      await doc.reference.update({'stock': currentStock + stockChange});
     } catch (e) {
       if (kDebugMode) {
         print('Error updating product stock: $e');
@@ -1228,7 +1231,8 @@ class Firebase {
     }
   }
 
-  Future<void> changeProductStatus(String productId, ProductStatusEnum status) async {
+  Future<void> changeProductStatus(
+      String productId, ProductStatusEnum status) async {
     try {
       await FirebaseFirestore.instance
           .collection('products')
@@ -1258,6 +1262,7 @@ class Firebase {
         'status': product.status.getName(),
         'manufacturerID': product.manufacturer.manufacturerID,
         'category': product.category.getName(),
+        'imageUrl': product.imageUrl,
       };
 
       switch (product.runtimeType) {
@@ -1345,6 +1350,7 @@ class Firebase {
         'status': product.status.getName(),
         'manufacturerID': product.manufacturer.manufacturerID,
         'category': product.category.getName(),
+        'imageUrl': product.imageUrl,
       };
 
       switch (product.runtimeType) {
@@ -1415,7 +1421,8 @@ class Firebase {
     }
   }
 
-  Future<void> updateProductStockAndSales(String productID, int stockChange, int salesChange) async {
+  Future<void> updateProductStockAndSales(
+      String productID, int stockChange, int salesChange) async {
     try {
       final doc = await FirebaseFirestore.instance
           .collection('products')
@@ -1429,7 +1436,7 @@ class Firebase {
       // Đảm bảo các giá trị không null
       final currentStock = doc.data()?['stock'] as int? ?? 0;
       final currentSales = doc.data()?['sales'] as int? ?? 0;
-      
+
       // Cập nhật cả stock và sales
       await doc.reference.update({
         'stock': currentStock + stockChange,
@@ -1449,8 +1456,10 @@ class Firebase {
 
   Future<void> changeSalesInvoiceStatus(SalesInvoice salesInvoice) async {
     try {
-      await _firestore.collection('sales_invoices')
-          .doc(salesInvoice.salesInvoiceID).update({
+      await _firestore
+          .collection('sales_invoices')
+          .doc(salesInvoice.salesInvoiceID)
+          .update({
         'salesStatus': SalesStatus.completed.getName(),
       });
 
@@ -1478,34 +1487,36 @@ class Firebase {
           receiverName: data['receiverName'],
           receiverPhone: data['receiverPhone'],
           province: Database().provinceList.firstWhere(
-            (p) => p.code == data['provinceCode'],
-            orElse: () => Province.nullProvince,
-          ),
-          district: Database().provinceList
-            .firstWhere(
-              (p) => p.code == data['provinceCode'],
-              orElse: () => Province.nullProvince,
-            )
-            .districts
-            ?.firstWhere(
-              (d) => d.code == data['districtCode'],
-              orElse: () => District.nullDistrict,
-            ),
-          ward: Database().provinceList
-            .firstWhere(
-              (p) => p.code == data['provinceCode'],
-              orElse: () => Province.nullProvince,
-            )
-            .districts
-            ?.firstWhere(
-              (d) => d.code == data['districtCode'],
-              orElse: () => District.nullDistrict,
-            )
-            .wards
-            ?.firstWhere(
-              (w) => w.code == data['wardCode'],
-              orElse: () => Ward.nullWard,
-            ),
+                (p) => p.code == data['provinceCode'],
+                orElse: () => Province.nullProvince,
+              ),
+          district: Database()
+              .provinceList
+              .firstWhere(
+                (p) => p.code == data['provinceCode'],
+                orElse: () => Province.nullProvince,
+              )
+              .districts
+              ?.firstWhere(
+                (d) => d.code == data['districtCode'],
+                orElse: () => District.nullDistrict,
+              ),
+          ward: Database()
+              .provinceList
+              .firstWhere(
+                (p) => p.code == data['provinceCode'],
+                orElse: () => Province.nullProvince,
+              )
+              .districts
+              ?.firstWhere(
+                (d) => d.code == data['districtCode'],
+                orElse: () => District.nullDistrict,
+              )
+              .wards
+              ?.firstWhere(
+                (w) => w.code == data['wardCode'],
+                orElse: () => Ward.nullWard,
+              ),
           street: data['street'],
           hidden: data['hidden'],
         );
@@ -1539,7 +1550,8 @@ class Firebase {
           .get();
 
       return snapshot.docs.map((doc) {
-        return IncomingInvoice.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+        return IncomingInvoice.fromMap(
+            doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
       if (kDebugMode) {
@@ -1549,13 +1561,12 @@ class Firebase {
     }
   }
 
-  Future<IncomingInvoice> getIncomingInvoiceWithDetails(String invoiceId) async {
+  Future<IncomingInvoice> getIncomingInvoiceWithDetails(
+      String invoiceId) async {
     try {
       // Get the invoice
-      final DocumentSnapshot invoiceDoc = await _firestore
-          .collection('incoming_invoices')
-          .doc(invoiceId)
-          .get();
+      final DocumentSnapshot invoiceDoc =
+          await _firestore.collection('incoming_invoices').doc(invoiceId).get();
 
       if (!invoiceDoc.exists) {
         throw Exception('Invoice not found'); // Không tìm thấy hóa đơn
@@ -1593,7 +1604,8 @@ class Firebase {
   Future<void> updateIncomingInvoice(IncomingInvoice invoice) async {
     try {
       if (invoice.incomingInvoiceID == null) {
-        throw Exception('Invoice ID cannot be null'); // ID hóa đơn không thể null
+        throw Exception(
+            'Invoice ID cannot be null'); // ID hóa đơn không thể null
       }
 
       // Update invoice
@@ -1631,9 +1643,8 @@ class Firebase {
   Future<String> createIncomingInvoice(IncomingInvoice invoice) async {
     try {
       // Create invoice
-      final docRef = await _firestore
-          .collection('incoming_invoices')
-          .add(invoice.toMap());
+      final docRef =
+          await _firestore.collection('incoming_invoices').add(invoice.toMap());
 
       // Update invoice with ID
       await docRef.update({
@@ -1677,10 +1688,7 @@ class Firebase {
       }
 
       // Delete invoice
-      await _firestore
-          .collection('incoming_invoices')
-          .doc(invoiceId)
-          .delete();
+      await _firestore.collection('incoming_invoices').doc(invoiceId).delete();
     } catch (e) {
       if (kDebugMode) {
         print('Error deleting incoming invoice: $e');
@@ -1709,10 +1717,8 @@ class Firebase {
 
   Future<Customer> getCustomer(String customerId) async {
     try {
-      final doc = await _firestore
-          .collection('customers')
-          .doc(customerId)
-          .get();
+      final doc =
+          await _firestore.collection('customers').doc(customerId).get();
 
       if (!doc.exists) {
         throw Exception('Customer not found');
@@ -1733,10 +1739,7 @@ class Firebase {
         print('Getting product: $productId');
       }
 
-      final doc = await _firestore
-          .collection('products')
-          .doc(productId)
-          .get();
+      final doc = await _firestore.collection('products').doc(productId).get();
 
       if (!doc.exists) {
         if (kDebugMode) {
@@ -1753,6 +1756,13 @@ class Firebase {
         data['release'] = (data['release'] as Timestamp).toDate();
       }
 
+      // Convert numeric values to double
+      data['importPrice'] = (data['importPrice'] as num).toDouble();
+      data['sellingPrice'] = (data['sellingPrice'] as num).toDouble();
+      data['discount'] = (data['discount'] as num).toDouble();
+      data['sales'] = (data['sales'] as num).toInt();
+      data['stock'] = (data['stock'] as num).toInt();
+
       // Get manufacturer data
       final manufacturerDoc = await _firestore
           .collection('manufacturers')
@@ -1762,7 +1772,7 @@ class Firebase {
       if (!manufacturerDoc.exists) {
         if (kDebugMode) {
           print('Manufacturer not found for product $productId');
-        } // Không tìm thấy nhà sản xuất cho sản phẩm
+        }
         return null;
       }
 
@@ -1775,113 +1785,132 @@ class Firebase {
       final categoryStr = (data['category'] as String).toLowerCase();
       if (kDebugMode) {
         print('Product category: $categoryStr');
-      } // Loại sản phẩm
+      }
 
-      CategoryEnum? category;
+      final category = CategoryEnum.nonEmptyValues.firstWhere(
+        (e) => e.getName().toLowerCase() == categoryStr,
+        orElse: () => CategoryEnum.ram,
+      );
+
       try {
-        category = CategoryEnum.values.firstWhere(
-          (e) => e.getName().toLowerCase() == categoryStr,
-        );
-
-        // Convert enums based on category
-        if (category == CategoryEnum.drive) {
-          // Convert drive-specific enums
-          data['type'] = DriveType.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['type'] as String).toLowerCase(),
-            orElse: () => DriveType.hdd,
-          );
-
-          data['capacity'] = DriveCapacity.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['capacity'] as String).toLowerCase(),
-            orElse: () => DriveCapacity.gb256,
-          );
-        }
-
-        if (category == CategoryEnum.ram) {
-          // Convert RAM-specific enums
-          data['bus'] = RAMBus.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['bus'] as String).toLowerCase(),
-            orElse: () => RAMBus.mhz3200,
-          );
-
-          data['capacity'] = RAMCapacity.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['capacity'] as String).toLowerCase(),
-            orElse: () => RAMCapacity.gb8,
-          );
-
-          data['ramType'] = RAMType.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['ramType'] as String).toLowerCase(),
-            orElse: () => RAMType.ddr4,
-          );
-        }
-
-        if (category == CategoryEnum.cpu) {
-          // Convert CPU-specific enums
-          data['family'] = CPUFamily.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['family'] as String).toLowerCase(),
-            orElse: () => CPUFamily.corei3Ultra3,
-          );
-        }
-
-        if (category == CategoryEnum.gpu) {
-          // Convert GPU-specific enums
-          data['series'] = GPUSeries.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['series'] as String).toLowerCase(),
-            orElse: () => GPUSeries.rtx,
-          );
-
-          data['capacity'] = GPUCapacity.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['capacity'] as String).toLowerCase(),
-            orElse: () => GPUCapacity.gb4,
-          );
-
-          data['busWidth'] = GPUBus.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['busWidth'] as String).toLowerCase(),
-            orElse: () => GPUBus.bit128,
-          );
-        }
-
-        if (category == CategoryEnum.mainboard) {
-          // Convert mainboard-specific enums
-          data['formFactor'] = MainboardFormFactor.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['formFactor'] as String).toLowerCase(),
-            orElse: () => MainboardFormFactor.atx,
-          );
-
-          data['series'] = MainboardSeries.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['series'] as String).toLowerCase(),
-            orElse: () => MainboardSeries.h,
-          );
-
-          data['compatibility'] = MainboardCompatibility.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['compatibility'] as String).toLowerCase(),
-            orElse: () => MainboardCompatibility.intel,
-          );
-        }
-
-        if (category == CategoryEnum.psu) {
-          // Convert PSU-specific enums
-          data['efficiency'] = PSUEfficiency.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['efficiency'] as String).toLowerCase(),
-            orElse: () => PSUEfficiency.bronze,
-          );
-
-          data['modular'] = PSUModular.values.firstWhere(
-            (e) => e.getName().toLowerCase() == (data['modular'] as String).toLowerCase(),
-            orElse: () => PSUModular.nonModular,
-          );
+        // Convert category-specific numeric values and enums
+        switch (category) {
+          case CategoryEnum.cpu:
+            data['core'] = (data['core'] as num).toInt();
+            data['thread'] = (data['thread'] as num).toInt();
+            data['clockSpeed'] = (data['clockSpeed'] as num).toDouble();
+            data['family'] = CPUFamily.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['family'] as String).toLowerCase(),
+              orElse: () => CPUFamily.corei3Ultra3,
+            );
+            break;
+          case CategoryEnum.gpu:
+            data['clockSpeed'] = (data['clockSpeed'] as num).toDouble();
+            data['series'] = GPUSeries.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['series'] as String).toLowerCase(),
+              orElse: () => GPUSeries.rtx,
+            );
+            data['capacity'] = GPUCapacity.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['capacity'] as String).toLowerCase(),
+              orElse: () => GPUCapacity.gb4,
+            );
+            data['busWidth'] = GPUBus.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['busWidth'] as String).toLowerCase(),
+              orElse: () => GPUBus.bit128,
+            );
+            break;
+          case CategoryEnum.psu:
+            data['wattage'] = (data['wattage'] as num).toInt();
+            data['efficiency'] = PSUEfficiency.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['efficiency'] as String).toLowerCase(),
+              orElse: () => PSUEfficiency.bronze,
+            );
+            data['modular'] = PSUModular.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['modular'] as String).toLowerCase(),
+              orElse: () => PSUModular.nonModular,
+            );
+            break;
+          case CategoryEnum.ram:
+            data['bus'] = RAMBus.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['bus'] as String).toLowerCase(),
+              orElse: () => RAMBus.mhz3200,
+            );
+            data['capacity'] = RAMCapacity.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['capacity'] as String).toLowerCase(),
+              orElse: () => RAMCapacity.gb8,
+            );
+            data['ramType'] = RAMType.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['ramType'] as String).toLowerCase(),
+              orElse: () => RAMType.ddr4,
+            );
+            break;
+          case CategoryEnum.drive:
+            data['type'] = DriveType.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['type'] as String).toLowerCase(),
+              orElse: () => DriveType.hdd,
+            );
+            data['capacity'] = DriveCapacity.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['capacity'] as String).toLowerCase(),
+              orElse: () => DriveCapacity.gb256,
+            );
+            break;
+          case CategoryEnum.mainboard:
+            data['formFactor'] = MainboardFormFactor.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['formFactor'] as String).toLowerCase(),
+              orElse: () => MainboardFormFactor.atx,
+            );
+            data['series'] = MainboardSeries.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['series'] as String).toLowerCase(),
+              orElse: () => MainboardSeries.h,
+            );
+            data['compatibility'] = MainboardCompatibility.values.firstWhere(
+              (e) =>
+                  e.getName().toLowerCase() ==
+                  (data['compatibility'] as String).toLowerCase(),
+              orElse: () => MainboardCompatibility.intel,
+            );
+            break;
+          default:
+            break;
         }
 
         // Convert common enums
         data['status'] = ProductStatusEnum.values.firstWhere(
-          (e) => e.getName().toLowerCase() == (data['status'] as String).toLowerCase(),
+          (e) =>
+              e.getName().toLowerCase() ==
+              (data['status'] as String).toLowerCase(),
           orElse: () => ProductStatusEnum.active,
         );
-
       } catch (e) {
         if (kDebugMode) {
           print('Invalid category for product $productId: $categoryStr');
-        } // Loại sản phẩm không hợp lệ
+        }
         return null;
       }
 
@@ -1893,7 +1922,7 @@ class Firebase {
     } catch (e) {
       if (kDebugMode) {
         print('Error getting product $productId: $e');
-      } // Lỗi khi lấy thông tin sản phẩm
+      }
       return null;
     }
   }
@@ -1938,7 +1967,8 @@ class Firebase {
           .get();
 
       return snapshot.docs.map((doc) {
-        return WarrantyInvoice.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+        return WarrantyInvoice.fromMap(
+            doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
     } catch (e) {
       if (kDebugMode) {
@@ -1948,16 +1978,16 @@ class Firebase {
     }
   }
 
-  Future<WarrantyInvoice> getWarrantyInvoiceWithDetails(String invoiceId) async {
+  Future<WarrantyInvoice> getWarrantyInvoiceWithDetails(
+      String invoiceId) async {
     try {
       // Get the invoice
-      final DocumentSnapshot invoiceDoc = await _firestore
-          .collection('warranty_invoices')
-          .doc(invoiceId)
-          .get();
+      final DocumentSnapshot invoiceDoc =
+          await _firestore.collection('warranty_invoices').doc(invoiceId).get();
 
       if (!invoiceDoc.exists) {
-        throw Exception('Warranty invoice not found'); // Không tìm thấy hóa đơn bảo hành
+        throw Exception(
+            'Warranty invoice not found'); // Không tìm thấy hóa đơn bảo hành
       }
 
       // Create invoice object
@@ -2022,7 +2052,7 @@ class Firebase {
 
       // Create warranty invoice document
       final docRef = await _firestore.collection('warranty_invoices').add({
-        'warrantyInvoiceID': '',  // Temporary placeholder
+        'warrantyInvoiceID': '', // Temporary placeholder
         'salesInvoiceID': invoice.salesInvoiceID,
         'customerName': invoice.customerName,
         'customerID': invoice.customerID,
@@ -2048,7 +2078,8 @@ class Firebase {
           print('Processing detail: ${detail.toJson()}');
         }
 
-        final detailRef = _firestore.collection('warranty_invoice_details').doc();
+        final detailRef =
+            _firestore.collection('warranty_invoice_details').doc();
         batch.set(detailRef, {
           'warrantyInvoiceID': docRef.id,
           'warrantyInvoiceDetailID': detailRef.id,
@@ -2059,7 +2090,8 @@ class Firebase {
 
       await batch.commit();
       if (kDebugMode) {
-        print('Successfully created warranty invoice and ${invoice.details.length} details');
+        print(
+            'Successfully created warranty invoice and ${invoice.details.length} details');
       } // Đã tạo hóa đơn bảo hành và chi tiết
 
       return docRef.id;
@@ -2094,7 +2126,9 @@ class Firebase {
       final batch = _firestore.batch();
 
       // Update manufacturer
-      final manufacturerDoc = _firestore.collection('manufacturers').doc(manufacturer.manufacturerID);
+      final manufacturerDoc = _firestore
+          .collection('manufacturers')
+          .doc(manufacturer.manufacturerID);
       batch.update(manufacturerDoc, _mapManufacturerToJson(manufacturer));
 
       // Get all products from this manufacturer
@@ -2128,7 +2162,8 @@ class Firebase {
   Future<void> updateUsername(String newUsername) async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) throw Exception('No user logged in'); // Không có người dùng đăng nhập
+      if (user == null)
+        throw Exception('No user logged in'); // Không có người dùng đăng nhập
 
       // Update username in users collection
       await _firestore.collection('users').doc(user.uid).update({
@@ -2185,10 +2220,7 @@ class Firebase {
   Future<void> updateUserProfile(String userID, String newUsername) async {
     try {
       // Cập nhật thông tin trong collection users
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userID)
-          .update({
+      await FirebaseFirestore.instance.collection('users').doc(userID).update({
         'username': newUsername,
       });
 
@@ -2230,13 +2262,10 @@ class Firebase {
       final user = _auth.currentUser;
       if (user == null) return 'employee';
 
-      final userDoc = await _firestore
-          .collection('users')
-          .doc(user.uid)
-          .get();
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
 
       if (!userDoc.exists) return 'employee';
-      
+
       return userDoc.data()?['role'] ?? 'employee';
     } catch (e) {
       if (kDebugMode) {
@@ -2285,7 +2314,7 @@ class Firebase {
         final detailRef = FirebaseFirestore.instance
             .collection('sales_invoice_details')
             .doc();
-            
+
         batch.set(detailRef, {
           'salesInvoiceDetailID': detailRef.id,
           'salesInvoiceID': invoice.salesInvoiceID,

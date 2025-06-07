@@ -149,7 +149,7 @@ class AppTheme {
       onSurfaceVariant: Color(0xFFE0E0E0),
       error: Color(0xFFEF5350),
       onError: charcoal,
-      outline: Color(0xFF757575),
+      outline: mediumGray,
       shadow: Color(0x33000000),
       surfaceContainerHighest: Color(0xFF2A2A2A),
       onPrimaryContainer: Colors.white,

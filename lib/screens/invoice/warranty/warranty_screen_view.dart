@@ -9,6 +9,7 @@ import 'package:gizmoglobe_client/screens/invoice/warranty/warranty_detail/warra
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../generated/l10n.dart';
 import '../../../objects/invoice_related/warranty_invoice.dart';
@@ -191,9 +192,12 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                       decoration: BoxDecoration(
                                         color: state.selectedIndex == index
                                             ? Theme.of(context)
-                                                .primaryColor
+                                                .colorScheme
+                                                .primary
                                                 .withValues(alpha: 0.1)
-                                            : Theme.of(context).cardColor,
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .surface,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Padding(
@@ -255,8 +259,9 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                             .center,
                                                     children: [
                                                       StatusBadge(
-                                                          status:
-                                                              invoice.status),
+                                                          status: invoice.status
+                                                              .localized(
+                                                                  context)),
                                                       Text(
                                                         DateFormat('dd/MM/yyyy')
                                                             .format(invoice
@@ -325,11 +330,14 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
       Navigator.of(dialogContext).pop();
 
       if (!mounted) return;
-      ScaffoldMessenger.of(dialogContext).showSnackBar(
-        SnackBar(
-            content: Text(S
-                .of(context)
-                .errorLoadingWarrantyInvoiceDetails(e.toString()))),
+      showDialog(
+        context: dialogContext,
+        builder: (context) => InformationDialog(
+          title: S.of(context).errorOccurred,
+          content:
+              S.of(context).errorLoadingWarrantyInvoiceDetails(e.toString()),
+          buttonText: 'OK',
+        ),
       );
     }
   }
@@ -370,7 +378,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ],
@@ -379,7 +387,8 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                   ListTile(
                     title: Text(
                       S.of(context).dateNewestFirst,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
                     ),
                     leading: Icon(
                       Icons.calendar_today,
@@ -399,7 +408,8 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                   ListTile(
                     title: Text(
                       S.of(context).dateOldestFirst,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
                     ),
                     leading: Icon(
                       Icons.calendar_today,

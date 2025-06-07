@@ -36,6 +36,7 @@ class ProductArgument {
   int? stock;
   Manufacturer? manufacturer;
   ProductStatusEnum? status;
+  String? imageUrl;
 
   // RAM specific properties
   RAMBus? ramBus;
@@ -99,10 +100,11 @@ class ProductArgument {
     this.compatibility,
     this.driveType,
     this.driveCapacity,
+    this.imageUrl,
   });
 
-  ProductArgument copyWith({
-      String? productID,
+  ProductArgument copyWith(
+      {String? productID,
       String? productName,
       Manufacturer? manufacturer,
       CategoryEnum? category,
@@ -131,7 +133,8 @@ class ProductArgument {
       MainboardSeries? mainboardSeries,
       MainboardCompatibility? compatibility,
       DriveType? driveType,
-      DriveCapacity? driveCapacity}) {
+      DriveCapacity? driveCapacity,
+      String? imageUrl}) {
     return ProductArgument(
       productID: productID ?? this.productID,
       productName: productName ?? this.productName,
@@ -163,6 +166,7 @@ class ProductArgument {
       compatibility: compatibility ?? this.compatibility,
       driveType: driveType ?? this.driveType,
       driveCapacity: driveCapacity ?? this.driveCapacity,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 
@@ -183,6 +187,7 @@ class ProductArgument {
           bus: ramBus!,
           capacity: ramCapacity!,
           ramType: ramType!,
+          imageUrl: imageUrl,
         )..productID = productID;
       case CategoryEnum.cpu:
         return CPU(
@@ -200,6 +205,7 @@ class ProductArgument {
           stock: stock!,
           sales: sales!,
           status: status!,
+          imageUrl: imageUrl,
         )..productID = productID;
       case CategoryEnum.psu:
         return PSU(
@@ -216,6 +222,7 @@ class ProductArgument {
           stock: stock!,
           sales: sales!,
           status: status!,
+          imageUrl: imageUrl,
         )..productID = productID;
       case CategoryEnum.gpu:
         return GPU(
@@ -233,6 +240,7 @@ class ProductArgument {
           stock: stock!,
           sales: sales!,
           status: status!,
+          imageUrl: imageUrl,
         )..productID = productID;
       case CategoryEnum.mainboard:
         return Mainboard(
@@ -249,6 +257,7 @@ class ProductArgument {
           stock: stock!,
           sales: sales!,
           status: status!,
+          imageUrl: imageUrl,
         )..productID = productID;
       case CategoryEnum.drive:
         return Drive(
@@ -264,13 +273,14 @@ class ProductArgument {
           stock: stock!,
           sales: sales!,
           status: status!,
+          imageUrl: imageUrl,
         )..productID = productID;
       default:
         throw Exception('Invalid product category');
     }
   }
 
-  ProductArgument fromProduct(Product product) {
+  static ProductArgument fromProduct(Product product) {
     ProductArgument result = ProductArgument(
       productID: product.productID,
       productName: product.productName,
@@ -283,6 +293,7 @@ class ProductArgument {
       sales: product.sales,
       stock: product.stock,
       status: product.status,
+      imageUrl: product.imageUrl,
     );
     switch (product.category) {
       case CategoryEnum.ram:

@@ -30,7 +30,6 @@ class _HomeScreen extends State<HomeScreen> {
       builder: (context, state) {
         final currencyFormat =
             NumberFormat.currency(locale: 'en_US', symbol: '\$');
-
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
@@ -53,21 +52,21 @@ class _HomeScreen extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GradientText(
-                          text: S.of(context).welcomeBack),
+                      GradientText(text: S.of(context).welcomeBack),
                       Text(
                         state.username,
+                        // 'Test User', // Placeholder for username
                         style: Theme.of(context)
                             .textTheme
                             .headlineMedium
                             ?.copyWith(
                               fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                       ),
                     ],
                   ),
                 ),
-
                 // Stats Cards
                 Padding(
                   padding: const EdgeInsets.all(16),
@@ -151,24 +150,24 @@ class _HomeScreen extends State<HomeScreen> {
                                 S.of(context).monthlySales,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleMedium
+                                    .titleLarge
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
-                              PopupMenuButton<String>(
-                                icon: const Icon(Icons.more_vert),
-                                itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    value: 'year',
-                                    child: Text(S.of(context).last12Months),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 'quarter',
-                                    child: Text(S.of(context).last3Months),
-                                  ),
-                                ],
-                              ),
+                              // PopupMenuButton<String>(
+                              //   icon: const Icon(Icons.more_vert),
+                              //   itemBuilder: (context) => [
+                              //     PopupMenuItem(
+                              //       value: 'year',
+                              //       child: Text(S.of(context).last12Months),
+                              //     ),
+                              //     PopupMenuItem(
+                              //       value: 'quarter',
+                              //       child: Text(S.of(context).last3Months),
+                              //     ),
+                              //   ],
+                              // ),
                             ],
                           ),
                           const SizedBox(height: 16),
@@ -283,10 +282,19 @@ class _HomeScreen extends State<HomeScreen> {
                 interval: 1,
                 getTitlesWidget: (value, meta) {
                   if (value.toInt() >= 0 && value.toInt() < sales.length) {
+                    String monthLabel;
+                    final locale = Localizations.localeOf(context).languageCode;
+                    final month = sales[value.toInt()].date.month;
+                    if (locale == 'vi') {
+                      monthLabel = 'T$month';
+                    } else {
+                      monthLabel =
+                          DateFormat('MMM').format(sales[value.toInt()].date);
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(top: 8),
                       child: Text(
-                        DateFormat('MMM').format(sales[value.toInt()].date),
+                        monthLabel,
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.grey,
@@ -308,8 +316,8 @@ class _HomeScreen extends State<HomeScreen> {
               isCurved: true,
               gradient: LinearGradient(
                 colors: [
-                  Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColor.withValues(alpha: 0.5),
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
                 ],
               ),
               barWidth: 3,
@@ -319,8 +327,14 @@ class _HomeScreen extends State<HomeScreen> {
                 show: true,
                 gradient: LinearGradient(
                   colors: [
-                    Theme.of(context).primaryColor.withValues(alpha: 0.2),
-                    Theme.of(context).primaryColor.withValues(alpha: 0.0),
+                    Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.2),
+                    Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.0),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,

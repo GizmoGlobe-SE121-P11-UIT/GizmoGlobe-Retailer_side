@@ -62,14 +62,11 @@ class Database {
       'isVisible': true,
       'isEnabled': true,
       'description': '',
-
       'hasEndTime': true,
       'endTime': DateTime(2025, 5, 31),
-
       'isLimited': true,
       'maximumUsage': 100,
       'usageLeft': 0,
-
       'isPercentage': true,
       'maximumDiscountValue': 100.0,
     },
@@ -83,12 +80,9 @@ class Database {
       'isVisible': false,
       'isEnabled': false,
       'description': '\$20 off orders over \$50',
-
       'hasEndTime': true,
       'endTime': DateTime(2025, 6, 30),
-
       'isLimited': false,
-
       'isPercentage': false,
     },
     {
@@ -101,13 +95,10 @@ class Database {
       'isVisible': true,
       'isEnabled': true,
       'description': '30% off, up to \$100',
-
       'hasEndTime': false,
-
       'isLimited': true,
       'maximumUsage': 50,
       'usageLeft': 10,
-
       'isPercentage': true,
       'maximumDiscountValue': 100.0,
     },
@@ -121,13 +112,10 @@ class Database {
       'isVisible': false,
       'isEnabled': true,
       'description': '\$50 off orders over \$100',
-
       'hasEndTime': false,
-
       'isLimited': true,
       'maximumUsage': 5,
       'usageLeft': 5,
-
       'isPercentage': false,
     },
     {
@@ -140,14 +128,11 @@ class Database {
       'isVisible': true,
       'isEnabled': true,
       'description': '15% off, up to \$100',
-
       'hasEndTime': true,
       'endTime': DateTime(2025, 4, 30),
-
       'isLimited': true,
       'maximumUsage': 5,
       'usageLeft': 5,
-
       'isPercentage': true,
       'maximumDiscountValue': 100.0,
     },
@@ -166,7 +151,8 @@ class Database {
       await fetchDataFromFirestore();
     } catch (e) {
       if (kDebugMode) {
-        print('Error when initializing database: $e'); // Lỗi khi khởi tạo database
+        print(
+            'Error when initializing database: $e'); // Lỗi khi khởi tạo database
       }
       // Nếu không lấy được dữ liệu từ Firestore, sử dụng dữ liệu mẫu
       // _initializeSampleData();
@@ -176,11 +162,16 @@ class Database {
   Future<void> fetchDataFromFirestore() async {
     try {
       if (kDebugMode) {
-        print('Initializing connection to Firebase'); //Bắt đầu lấy dữ liệu từ Firestore
+        print(
+            'Initializing connection to Firebase'); //Bắt đầu lấy dữ liệu từ Firestore
       }
-      final manufacturerSnapshot = await FirebaseFirestore.instance
-          .collection('manufacturers')
-          .get();
+      await getUser();
+      await getUsername();
+      if (kDebugMode) {
+        print('User: $username, Email: $email'); //Thông tin người dùng
+      }
+      final manufacturerSnapshot =
+          await FirebaseFirestore.instance.collection('manufacturers').get();
 
       manufacturerList = manufacturerSnapshot.docs.map((doc) {
         return Manufacturer(
@@ -194,9 +185,8 @@ class Database {
       }
 
       // Lấy danh sách products từ Firestore
-      final productSnapshot = await FirebaseFirestore.instance
-          .collection('products')
-          .get();
+      final productSnapshot =
+          await FirebaseFirestore.instance.collection('products').get();
 
       if (kDebugMode) {
         print('Products: ${productSnapshot.docs.length}'); //Sản phẩm
@@ -208,7 +198,7 @@ class Database {
 
           // Tìm manufacturer tương ứng
           final manufacturer = manufacturerList.firstWhere(
-                (m) => m.manufacturerID == data['manufacturerID'],
+            (m) => m.manufacturerID == data['manufacturerID'],
             orElse: () {
               if (kDebugMode) {
                 print('Manufacturer not found for product ${doc.id}');
@@ -219,7 +209,7 @@ class Database {
 
           // Chuyển đổi dữ liệu từ Firestore sang enum
           final category = CategoryEnum.nonEmptyValues.firstWhere(
-                (c) => c.getName() == data['category'],
+            (c) => c.getName() == data['category'],
             orElse: () {
               if (kDebugMode) {
                 print('Invalid category for product ${doc.id}');
@@ -248,7 +238,7 @@ class Database {
               'sales': data['sales'],
               'stock': data['stock'],
               'status': ProductStatusEnum.values.firstWhere(
-                    (s) => s.getName() == data['status'],
+                (s) => s.getName() == data['status'],
                 orElse: () {
                   if (kDebugMode) {
                     print('Invalid status for product ${doc.id}');
@@ -257,6 +247,7 @@ class Database {
                 },
               ),
               'manufacturer': manufacturer,
+              'imageUrl': data['imageUrl'],
               ...specificData,
             },
           );
@@ -283,45 +274,59 @@ class Database {
     }
   }
 
-  Map<String, dynamic> _getSpecificProductData(Map<String, dynamic> data, CategoryEnum category) {
+  Map<String, dynamic> _getSpecificProductData(
+      Map<String, dynamic> data, CategoryEnum category) {
     switch (category) {
       case CategoryEnum.ram:
         return {
           'bus': RAMBus.values.firstWhere((b) => b.getName() == data['bus']),
-          'capacity': RAMCapacity.values.firstWhere((c) => c.getName() == data['capacity']),
-          'ramType': RAMType.values.firstWhere((t) => t.getName() == data['ramType']),
+          'capacity': RAMCapacity.values
+              .firstWhere((c) => c.getName() == data['capacity']),
+          'ramType':
+              RAMType.values.firstWhere((t) => t.getName() == data['ramType']),
         };
 
       case CategoryEnum.cpu:
         return {
-          'family': CPUFamily.values.firstWhere((f) => f.getName() == data['family']),
+          'family':
+              CPUFamily.values.firstWhere((f) => f.getName() == data['family']),
           'core': data['core'],
           'thread': data['thread'],
           'clockSpeed': data['clockSpeed'].toDouble(),
         };
       case CategoryEnum.gpu:
         return {
-          'series': GPUSeries.values.firstWhere((s) => s.getName() == data['series']),
-          'capacity': GPUCapacity.values.firstWhere((c) => c.getName() == data['capacity']),
-          'busWidth': GPUBus.values.firstWhere((b) => b.getName() == data['busWidth']),
+          'series':
+              GPUSeries.values.firstWhere((s) => s.getName() == data['series']),
+          'capacity': GPUCapacity.values
+              .firstWhere((c) => c.getName() == data['capacity']),
+          'busWidth':
+              GPUBus.values.firstWhere((b) => b.getName() == data['busWidth']),
           'clockSpeed': data['clockSpeed'].toDouble(),
         };
       case CategoryEnum.mainboard:
         return {
-          'formFactor': MainboardFormFactor.values.firstWhere((f) => f.getName() == data['formFactor']),
-          'series': MainboardSeries.values.firstWhere((s) => s.getName() == data['series']),
-          'compatibility': MainboardCompatibility.values.firstWhere((c) => c.getName() == data['compatibility']),
+          'formFactor': MainboardFormFactor.values
+              .firstWhere((f) => f.getName() == data['formFactor']),
+          'series': MainboardSeries.values
+              .firstWhere((s) => s.getName() == data['series']),
+          'compatibility': MainboardCompatibility.values
+              .firstWhere((c) => c.getName() == data['compatibility']),
         };
       case CategoryEnum.drive:
         return {
-          'type': DriveType.values.firstWhere((t) => t.getName() == data['type']),
-          'capacity': DriveCapacity.values.firstWhere((c) => c.getName() == data['capacity']),
+          'type':
+              DriveType.values.firstWhere((t) => t.getName() == data['type']),
+          'capacity': DriveCapacity.values
+              .firstWhere((c) => c.getName() == data['capacity']),
         };
       case CategoryEnum.psu:
         return {
           'wattage': data['wattage'],
-          'efficiency': PSUEfficiency.values.firstWhere((e) => e.getName() == data['efficiency']),
-          'modular': PSUModular.values.firstWhere((m) => m.getName() == data['modular']),
+          'efficiency': PSUEfficiency.values
+              .firstWhere((e) => e.getName() == data['efficiency']),
+          'modular': PSUModular.values
+              .firstWhere((m) => m.getName() == data['modular']),
         };
       default:
         return {};
@@ -331,7 +336,10 @@ class Database {
   Future<void> getUsername() async {
     final User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
       username = userDoc['username'];
     }
   }
@@ -339,7 +347,10 @@ class Database {
   Future<void> getUser() async {
     final User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
       username = userDoc['username'];
       email = userDoc['email'];
     }
@@ -359,19 +370,20 @@ class Database {
         throw Exception('Error parsing JSON data'); // Lỗi khi parse JSON
       }
 
-      List<Province> provinceList = jsonList.map((province) => Province.fromJson(province)).toList();
+      List<Province> provinceList =
+          jsonList.map((province) => Province.fromJson(province)).toList();
       return provinceList;
     } catch (e) {
-      throw Exception('Error loading provinces from file: $e'); // Lỗi khi load dữ liệu từ file
+      throw Exception(
+          'Error loading provinces from file: $e'); // Lỗi khi load dữ liệu từ file
     }
   }
 
   Future<void> fetchAddress() async {
     final User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final addressSnapshot = await FirebaseFirestore.instance
-          .collection('addresses')
-          .get();
+      final addressSnapshot =
+          await FirebaseFirestore.instance.collection('addresses').get();
 
       addressList = addressSnapshot.docs.map((doc) {
         return Address.fromMap(doc.data());
@@ -379,7 +391,7 @@ class Database {
     }
   }
 
-  void updateProductList (List<Product> productList) {
+  void updateProductList(List<Product> productList) {
     this.productList = productList;
   }
 

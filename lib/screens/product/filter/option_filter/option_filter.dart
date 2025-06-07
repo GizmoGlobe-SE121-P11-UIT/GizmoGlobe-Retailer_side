@@ -24,7 +24,9 @@ class OptionFilter<T> extends StatelessWidget {
       children: [
         Text(
           name,
-          style: AppTextStyle.buttonTextBold,
+          style: AppTextStyle.bigText.copyWith(
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         Wrap(
           spacing: 16.0,

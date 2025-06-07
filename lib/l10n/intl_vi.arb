@@ -1,389 +1,1354 @@
 {
-  "@@locale": "vi",
-  "appTitle": "GizmoGlobe",
-  "@appTitle": {"description": "The title of the application.", "type": "text"},
-  "welcomeBack": "Chào mừng trở lại,",
-  "@welcomeBack": {"description": "Welcome message for returning users.", "type": "text"},
-  "overview": "Tổng quan",
-  "@overview": {"description": "Overview section title.", "type": "text"},
-  "products": "Sản phẩm",
-  "@products": {"description": "Products section title.", "type": "text"},
-  "customers": "Khách hàng",
-  "@customers": {"description": "Customers section title.", "type": "text"},
-  "revenue": "Doanh thu",
-  "@revenue": {"description": "Revenue section title.", "type": "text"},
-  "avgIncome": "Thu nhập trung bình",
-  "@avgIncome": {"description": "Average income label.", "type": "text"},
-  "monthlySales": "Doanh số hàng tháng",
-  "@monthlySales": {"description": "Monthly sales label.", "type": "text"},
-  "last12Months": "12 tháng qua",
-  "@last12Months": {"description": "Label for last 12 months.", "type": "text"},
-  "last3Months": "3 tháng qua",
-  "@last3Months": {"description": "Label for last 3 months.", "type": "text"},
-  "newIncomingInvoice": "Tạo hóa đơn nhập mới",
-  "@newIncomingInvoice": {"description": "Button or title for creating a new incoming invoice.", "type": "text"},
-  "selectManufacturer": "Chọn nhà sản xuất",
-  "@selectManufacturer": {"description": "Prompt to select a manufacturer.", "type": "text"},
-  "addProduct": "Thêm sản phẩm",
-  "@addProduct": {"description": "Button or label to add a product.", "type": "text"},
-  "invoiceDetails": "Chi tiết hóa đơn",
-  "@invoiceDetails": {"description": "Section title for invoice details.", "type": "text"},
-  "importPrice": "Giá nhập",
-  "@importPrice": {"description": "Label for import price.", "type": "text"},
-  "quantity": "Số lượng",
-  "@quantity": {"description": "Label for quantity.", "type": "text"},
-  "totalPrice": "Tổng giá: ",
-  "@totalPrice": {"description": "Label for total price.", "type": "text"},
-  "paymentStatus": "Trạng thái thanh toán",
-  "@paymentStatus": {"description": "Label for payment status.", "type": "text"},
-  "createInvoice": "Tạo hóa đơn",
-  "@createInvoice": {"description": "Button or title for creating an invoice.", "type": "text"},
-  "cancel": "Hủy",
-  "@cancel": {"description": "Cancel button label.", "type": "text"},
-  "add": "Thêm",
-  "@add": {"description": "Add button label.", "type": "text"},
-  "editProductDetail": "Chỉnh sửa chi tiết sản phẩm",
-  "@editProductDetail": {"description": "Button or title for editing product details.", "type": "text"},
-  "update": "Cập nhật",
-  "@update": {"description": "Update button label.", "type": "text"},
-  "searchIncomingInvoices": "Tìm hóa đơn nhập...",
-  "@searchIncomingInvoices": {"description": "Search field placeholder for incoming invoices.", "type": "text"},
-  "noIncomingInvoicesFound": "Không tìm thấy hóa đơn nhập",
-  "@noIncomingInvoicesFound": {"description": "Message when no incoming invoices are found.", "type": "text"},
-  "view": "Xem",
-  "@view": {"description": "View button label.", "type": "text"},
-  "editPayment": "Chỉnh sửa thanh toán",
-  "@editPayment": {"description": "Button or title for editing payment.", "type": "text"},
-  "onlyUnpaidCanBeMarkedPaid": "Chỉ hóa đơn chưa thanh toán mới có thể đánh dấu là đã thanh toán",
-  "@onlyUnpaidCanBeMarkedPaid": {"description": "Message explaining only unpaid invoices can be marked as paid.", "type": "text"},
-  "markAsPaidQuestion": "Đánh dấu hóa đơn này là đã thanh toán?",
-  "@markAsPaidQuestion": {"description": "Prompt to mark invoice as paid.", "type": "text"},
-  "confirm": "Xác nhận",
-  "@confirm": {"description": "Confirm button label.", "type": "text"},
-  "sortBy": "Sắp xếp theo...",
-  "@sortBy": {"description": "Label for sort by options.", "type": "text"},
-  "dateNewestFirst": "Ngày (Mới nhất trước)",
-  "@dateNewestFirst": {"description": "Sort option for newest date first.", "type": "text"},
-  "dateOldestFirst": "Ngày (Cũ nhất trước)",
-  "@dateOldestFirst": {"description": "Sort option for oldest date first.", "type": "text"},
-  "priceHighestFirst": "Giá (Cao nhất trước)",
-  "@priceHighestFirst": {"description": "Sort option for highest price first.", "type": "text"},
-  "priceLowestFirst": "Giá (Thấp nhất trước)",
-  "@priceLowestFirst": {"description": "Sort option for lowest price first.", "type": "text"},
-  "errorOccurred": "Có lỗi xảy ra",
-  "@errorOccurred": {"description": "Generic error message.", "type": "text"},
-  "newInvoice": "Hóa đơn mới",
-  "@newInvoice": {"description": "Button or title for new invoice.", "type": "text"},
-  "customerInformation": "Thông tin khách hàng",
-  "@customerInformation": {"description": "Section title for customer information.", "type": "text"},
-  "selectCustomer": "Chọn khách hàng",
-  "@selectCustomer": {"description": "Prompt to select a customer.", "type": "text"},
-  "customer": "Khách hàng",
-  "@customer": {"description": "Label for customer.", "type": "text"},
-  "pleaseSelectCustomer": "Vui lòng chọn khách hàng",
-  "@pleaseSelectCustomer": {"description": "Validation message to select a customer.", "type": "text"},
-  "address": "Địa chỉ",
-  "@address": {"description": "Label for address.", "type": "text"},
-  "pleaseSelectAddress": "Vui lòng chọn địa chỉ",
-  "@pleaseSelectAddress": {"description": "Validation message to select an address.", "type": "text"},
-  "salesStatus": "Trạng thái bán hàng",
-  "@salesStatus": {"description": "Label for sales status.", "type": "text"},
-  "totalAmount": "Tổng số tiền",
-  "@totalAmount": {"description": "Label for total amount.", "type": "text"},
-  "noProductsAddedYet": "Chưa thêm sản phẩm nào",
-  "@noProductsAddedYet": {"description": "Message when no products have been added yet.", "type": "text"},
-  "price": "Giá",
-  "@price": {"description": "Label for price.", "type": "text"},
-  "availableStock": "Hàng tồn kho",
-  "@availableStock": {"description": "Label for available stock.", "type": "text"},
-  "pleaseSelectCustomerFirst": "Vui lòng chọn khách hàng trước",
-  "@pleaseSelectCustomerFirst": {"description": "Validation message to select a customer first.", "type": "text"},
-  "searchSalesInvoices": "Tìm hóa đơn bán hàng...",
-  "@searchSalesInvoices": {"description": "Search field placeholder for sales invoices.", "type": "text"},
-  "noSalesInvoicesFound": "Không tìm thấy hóa đơn bán hàng",
-  "@noSalesInvoicesFound": {"description": "Message when no sales invoices are found.", "type": "text"},
-  "warrantyReceipt": "Biên lai bảo hành #{id}",
-  "@warrantyReceipt": {
-    "description": "Label for warranty receipt with id placeholder.",
-    "placeholders": {"id": {"type": "String", "example": "123"}}
-  },
-  "warrantyInformation": "Thông tin bảo hành",
-  "@warrantyInformation": {"description": "Section title for warranty information.", "type": "text"},
-  "status": "Trạng thái",
-  "@status": {"description": "Label for status.", "type": "text"},
-  "reasonForWarranty": "Lý do bảo hành",
-  "@reasonForWarranty": {"description": "Label for reason for warranty.", "type": "text"},
-  "productsUnderWarranty": "Sản phẩm được bảo hành",
-  "@productsUnderWarranty": {"description": "Label for products under warranty.", "type": "text"},
-  "unknownCategory": "Không xác định",
-  "@unknownCategory": {"description": "Label for unknown category.", "type": "text"},
-  "updateWarrantyStatus": "Cập nhật trạng thái bảo hành",
-  "@updateWarrantyStatus": {"description": "Button or title for updating warranty status.", "type": "text"},
-  "confirmStatusUpdate": "Xác nhận cập nhật trạng thái",
-  "@confirmStatusUpdate": {"description": "Prompt to confirm status update.", "type": "text"},
-  "areYouSureChangeStatus": "Bạn có chắc chắn muốn thay đổi trạng thái thành {status}?",
-  "@areYouSureChangeStatus": {
-    "description": "Prompt to confirm changing status with status placeholder.",
-    "placeholders": {"status": {"type": "String", "example": "Hoàn thành"}}
-  },
-  "save": "Lưu",
-  "@save": {"description": "Save button label.", "type": "text"},
-  "updateStatus": "Cập nhật trạng thái",
-  "@updateStatus": {"description": "Button or title for updating status.", "type": "text"},
-  "noSalesInvoicesAvailable": "Không có hóa đơn bán hàng",
-  "@noSalesInvoicesAvailable": {"description": "Message when no sales invoices are available.", "type": "text"},
-  "noEligibleSalesInvoices": "Khách hàng này không có hóa đơn bán hàng nào hợp lệ để yêu cầu bảo hành.",
-  "@noEligibleSalesInvoices": {"description": "Message when customer has no eligible sales invoices for warranty claims.", "type": "text"},
-  "pleaseSelectSalesInvoice": "Vui lòng chọn hóa đơn bán hàng",
-  "@pleaseSelectSalesInvoice": {"description": "Validation message to select a sales invoice.", "type": "text"},
-  "reasonForWarrantyLabel": "Lý do bảo hành",
-  "@reasonForWarrantyLabel": {"description": "Label for reason for warranty field.", "type": "text"},
-  "selectProductsForWarranty": "Chọn sản phẩm để bảo hành",
-  "@selectProductsForWarranty": {"description": "Label for selecting products for warranty.", "type": "text"},
-  "warrantyInvoiceCreated": "Tạo hóa đơn bảo hành thành công",
-  "@warrantyInvoiceCreated": {"description": "Message when warranty invoice is created successfully.", "type": "text"},
-  "errorCreatingWarrantyInvoice": "Lỗi tạo hóa đơn bảo hành: {error}",
-  "@errorCreatingWarrantyInvoice": {
-    "description": "Error message when creating warranty invoice fails.",
-    "placeholders": {"error": {"type": "String", "example": "Lỗi mạng"}}
-  },
-  "product": "Sản phẩm",
-  "@product": {"description": "Label for product.", "type": "text"},
-  "selectProduct": "Chọn sản phẩm",
-  "@selectProduct": {"description": "Prompt to select a product.", "type": "text"},
-  "pleaseSelectProduct": "Vui lòng chọn sản phẩm",
-  "@pleaseSelectProduct": {"description": "Validation message to select a product.", "type": "text"},
-  "quantityGreaterThanZero": "Số lượng phải lớn hơn 0",
-  "@quantityGreaterThanZero": {"description": "Validation message for quantity greater than zero.", "type": "text"},
-  "notEnoughStock": "Không đủ hàng tồn",
-  "@notEnoughStock": {"description": "Message when there is not enough stock.", "type": "text"},
-  "enterAddress": "Nhập địa chỉ",
-  "@enterAddress": {"description": "Label for the field or button to enter an address.", "type": "text"},
-  "noAddressFound": "Không tìm thấy địa chỉ nào",
-  "@noAddressFound": {"description": "Message when no address is found.", "type": "text"},
-  "date": "Ngày",
-  "@date": {"description": "Label for date.", "type": "text"},
-  "subtotal": "Tổng phụ",
-  "@subtotal": {"description": "Label for subtotal.", "type": "text"},
-  "editInvoice": "Chỉnh sửa hóa đơn",
-  "@editInvoice": {"description": "Button or title for editing invoice.", "type": "text"},
-  "changeAddress": "Thay đổi địa chỉ",
-  "@changeAddress": {"description": "Button or label for changing address.", "type": "text"},
-  "unknownProduct": "Sản phẩm không xác định",
-  "@unknownProduct": {"description": "Label for unknown product.", "type": "text"},
-  "errorWithMessage": "Lỗi: {error}",
-  "@errorWithMessage": {
-    "description": "Generic error message with error placeholder.",
-    "placeholders": {"error": {"type": "String", "example": "Có lỗi xảy ra"}}
-  },
-  "errorLoadingInvoiceDetails": "Lỗi tải chi tiết hóa đơn: {error}",
-  "@errorLoadingInvoiceDetails": {
-    "description": "Error message when loading invoice details fails.",
-    "placeholders": {"error": {"type": "String", "example": "Hết thời gian chờ"}}
-  },
-  "salesInvoice": "Hóa đơn bán hàng",
-  "@salesInvoice": {"description": "Label for sales invoice.", "type": "text"},
-  "loading": "Đang tải...",
-  "@loading": {"description": "Label for loading state.", "type": "text"},
-  "category": "Danh mục",
-  "@category": {"description": "Label for category.", "type": "text"},
-  "findWarrantyInvoices": "Tìm hóa đơn bảo hành...",
-  "@findWarrantyInvoices": {"description": "Search field placeholder for warranty invoices.", "type": "text"},
-  "noWarrantyInvoicesFound": "Không tìm thấy hóa đơn bảo hành",
-  "@noWarrantyInvoicesFound": {"description": "Message when no warranty invoices are found.", "type": "text"},
-  "markAsCompleted": "Đánh dấu là đã hoàn thành",
-  "@markAsCompleted": {"description": "Button or label to mark as completed.", "type": "text"},
-  "errorLoadingWarrantyInvoiceDetails": "Lỗi khi tải chi tiết hóa đơn bảo hành: {error}",
-  "@errorLoadingWarrantyInvoiceDetails": {"description": "Error message when loading warranty invoice details fails.", "placeholders": {"error": {"type": "String", "example": "Hết thời gian chờ"}}},
-  "sales": "Bán hàng",
-  "@sales": {"description": "Tab label for sales invoices.", "type": "text"},
-  "incoming": "Nhập hàng",
-  "@incoming": {"description": "Tab label for incoming invoices.", "type": "text"},
-  "warranty": "Bảo hành",
-  "@warranty": {"description": "Tab label for warranty invoices.", "type": "text"},
-  "hello": "Xin chào!",
-  "@hello": {"description": "Greeting for the user in the drawer.", "type": "text"},
-  "contactUs": "Liên hệ:",
-  "@contactUs": {"description": "Label for contact information section in the drawer.", "type": "text"},
-  "logOut": "Đăng xuất",
-  "@logOut": {"description": "Button label for logging out.", "type": "text"},
-  "home": "Trang chủ",
-  "@home": {"description": "Bottom navigation label for home screen.", "type": "text"},
-  "invoice": "Hóa đơn",
-  "@invoice": {"description": "Bottom navigation label for invoice screen.", "type": "text"},
-  "stakeholder": "Đối tác",
-  "@stakeholder": {"description": "Bottom navigation label for stakeholder screen.", "type": "text"},
-  "voucher": "Phiếu giảm giá",
-  "@voucher": {"description": "Bottom navigation label for voucher screen.", "type": "text"},
-  "profile": "Hồ sơ",
-  "@profile": {"description": "Bottom navigation label for profile screen.", "type": "text"},
-  "addNewAddress": "Thêm địa chỉ mới",
-  "@addNewAddress": {"description": "Dialog title for adding a new address.", "type": "text"},
-  "receiverName": "Tên người nhận",
-  "@receiverName": {"description": "Label for receiver name field.", "type": "text"},
-  "enterReceiverName": "Nhập tên người nhận",
-  "@enterReceiverName": {"description": "Hint for entering receiver name.", "type": "text"},
-  "receiverPhone": "Số điện thoại người nhận",
-  "@receiverPhone": {"description": "Label for receiver phone field.", "type": "text"},
-  "enterPhoneNumber": "Nhập số điện thoại",
-  "@enterPhoneNumber": {"description": "Hint for entering phone number.", "type": "text"},
-  "location": "Địa chỉ",
-  "@location": {"description": "Label for location/address picker.", "type": "text"},
-  "streetAddress": "Địa chỉ cụ thể",
-  "@streetAddress": {"description": "Label for street address field.", "type": "text"},
-  "streetNameBuildingHouseNo": "Tên đường, tòa nhà, số nhà",
-  "@streetNameBuildingHouseNo": {"description": "Hint for street address field.", "type": "text"},
-  "addAddress": "Thêm địa chỉ",
-  "@addAddress": {"description": "Button label for adding address.", "type": "text"},
-  "customerDetail": "Chi tiết khách hàng",
-  "@customerDetail": {"description": "Title for customer detail screen.", "type": "text"},
-  "edit": "Chỉnh sửa",
-  "@edit": {"description": "Button label for editing.", "type": "text"},
-  "name": "Tên",
-  "@name": {"description": "Label for name field.", "type": "text"},
-  "email": "Email",
-  "@email": {"description": "Label for email field.", "type": "text"},
-  "phone": "Số điện thoại",
-  "@phone": {"description": "Label for phone field.", "type": "text"},
-  "addresses": "Địa chỉ",
-  "@addresses": {"description": "Label for addresses section.", "type": "text"},
-  "pleaseFillInAllRequiredFields": "Vui lòng điền tất cả các trường bắt buộc",
-  "@pleaseFillInAllRequiredFields": {"description": "Validation message for required fields.", "type": "text"},
-  "discardChanges": "Hủy bỏ thay đổi?",
-  "@discardChanges": {"description": "Dialog title for discarding changes.", "type": "text"},
-  "unsavedChangesDiscard": "Bạn có thay đổi chưa lưu. Bạn có muốn hủy bỏ chúng?",
-  "@unsavedChangesDiscard": {"description": "Dialog content for unsaved changes.", "type": "text"},
-  "discard": "BỎ QUA",
-  "@discard": {"description": "Button label for discarding changes.", "type": "text"},
-  "editCustomer": "Chỉnh sửa khách hàng",
-  "@editCustomer": {"description": "Title for edit customer screen.", "type": "text"},
-  "fullName": "Họ và tên",
-  "@fullName": {"description": "Label for full name field.", "type": "text"},
-  "nameIsRequired": "Tên là bắt buộc",
-  "@nameIsRequired": {"description": "Validation message for required name.", "type": "text"},
-  "nameMin2Chars": "Tên phải có ít nhất 2 ký tự",
-  "@nameMin2Chars": {"description": "Validation message for name minimum length.", "type": "text"},
-  "phoneNumber": "Số điện thoại",
-  "@phoneNumber": {"description": "Label for phone number field.", "type": "text"},
-  "phoneNumberIsRequired": "Số điện thoại là bắt buộc",
-  "@phoneNumberIsRequired": {"description": "Validation message for required phone number.", "type": "text"},
-  "pleaseEnterValidPhoneNumber": "Vui lòng nhập số điện thoại hợp lệ",
-  "@pleaseEnterValidPhoneNumber": {"description": "Validation message for valid phone number.", "type": "text"},
-  "addNewCustomer": "Thêm khách hàng mới",
-  "@addNewCustomer": {"description": "Dialog title for adding a new customer.", "type": "text"},
-  "addCustomer": "Thêm khách hàng",
-  "@addCustomer": {"description": "Button label for adding a customer.", "type": "text"},
-  "pleaseFillInAllFields": "Vui lòng điền tất cả các trường",
-  "@pleaseFillInAllFields": {"description": "Validation message for required fields.", "type": "text"},
-  "customerAddedSuccessfully": "Khách hàng đã được thêm thành công",
-  "@customerAddedSuccessfully": {"description": "Message when a customer is added successfully.", "type": "text"},
-  "findCustomers": "Tìm kiếm khách hàng...",
-  "@findCustomers": {"description": "Search field placeholder for customers.", "type": "text"},
-  "noMatchingCustomersFound": "Không tìm thấy khách hàng nào phù hợp",
-  "@noMatchingCustomersFound": {"description": "Message when no matching customers are found.", "type": "text"},
-  "employeeDetail": "Chi tiết nhân viên",
-  "@employeeDetail": {"description": "Title for employee detail screen.", "type": "text"},
-  "employeeInformation": "Thông tin nhân viên",
-  "@employeeInformation": {"description": "Section title for employee information.", "type": "text"},
-  "role": "Chức vụ",
-  "@role": {"description": "Label for role field.", "type": "text"},
-  "delete": "Xóa",
-  "@delete": {"description": "Button label for deleting.", "type": "text"},
-  "deleteEmployee": "Xóa nhân viên",
-  "@deleteEmployee": {"description": "Dialog title for deleting an employee.", "type": "text"},
-  "areYouSureDeleteEmployee": "Bạn có chắc chắn muốn xóa nhân viên này?",
-  "@areYouSureDeleteEmployee": {"description": "Confirmation message for deleting an employee.", "type": "text"},
-  "editEmployee": "Chỉnh sửa nhân viên",
-  "@editEmployee": {"description": "Title for edit employee screen.", "type": "text"},
-  "pleaseEnterName": "Vui lòng nhập tên",
-  "@pleaseEnterName": {"description": "Validation message for required employee name.", "type": "text"},
-  "pleaseEnterPhoneNumber": "Vui lòng nhập số điện thoại",
-  "@pleaseEnterPhoneNumber": {"description": "Validation message for required employee phone number.", "type": "text"},
-  "pleaseSelectRole": "Vui lòng chọn vai trò",
-  "@pleaseSelectRole": {"description": "Validation message for required employee role.", "type": "text"},
-  "addNewEmployee": "Thêm nhân viên mới",
-  "@addNewEmployee": {"description": "Dialog title for adding a new employee.", "type": "text"},
-  "pleaseEnterEmail": "Vui lòng nhập địa chỉ email",
-  "@pleaseEnterEmail": {"description": "Validation message for required employee email.", "type": "text"},
-  "filterByRole": "Lọc theo vai trò",
-  "@filterByRole": {"description": "Dialog title for filtering employees by role.", "type": "text"},
-  "clearFilter": "Xóa bộ lọc",
-  "@clearFilter": {"description": "Button label to clear the role filter.", "type": "text"},
-  "findEmployees": "Tìm kiếm nhân viên...",
-  "@findEmployees": {"description": "Search field placeholder for employees.", "type": "text"},
-  "noEmployeesFound": "Không tìm thấy nhân viên nào",
-  "@noEmployeesFound": {"description": "Message when no employees are found.", "type": "text"},
-  "employeeAddedSuccessfully": "Nhân viên đã được thêm thành công",
-  "@employeeAddedSuccessfully": {"description": "Message when an employee is added successfully.", "type": "text"},
-  "manufacturerDetail": "Chi tiết nhà cung cấp",
-  "@manufacturerDetail": {"description": "Title for manufacturer detail screen.", "type": "text"},
-  "deactivate": "Vô hiệu hóa",
-  "@deactivate": {"description": "Button label to deactivate manufacturer.", "type": "text"},
-  "activate": "Kích hoạt",
-  "@activate": {"description": "Button label to activate manufacturer.", "type": "text"},
-  "deactivateManufacturer": "Vô hiệu hóa nhà cung cấp",
-  "@deactivateManufacturer": {"description": "Dialog title for deactivating manufacturer.", "type": "text"},
-  "activateManufacturer": "Kích hoạt nhà cung cấp",
-  "@activateManufacturer": {"description": "Dialog title for activating manufacturer.", "type": "text"},
-  "deactivateManufacturerConfirm": "Bạn có chắc chắn muốn vô hiệu hóa nhà cung cấp này?",
-  "@deactivateManufacturerConfirm": {"description": "Confirmation message for deactivating manufacturer.", "type": "text"},
-  "activateManufacturerConfirm": "Bạn có chắc chắn muốn kích hoạt nhà cung cấp này?",
-  "@activateManufacturerConfirm": {"description": "Confirmation message for activating manufacturer.", "type": "text"},
-  "inactive": "Vô hiệu hóa",
-  "@inactive": {"description": "Label for inactive status.", "type": "text"},
-  "manufacturerInformation": "Thông tin nhà cung cấp",
-  "@manufacturerInformation": {"description": "Section title for manufacturer information.", "type": "text"},
-  "manufacturerName": "Tên",
-  "@manufacturerName": {"description": "Label for manufacturer name field.", "type": "text"},
-  "editManufacturer": "Chỉnh sửa nhà sản xuất",
-  "@editManufacturer": {"description": "Title for edit manufacturer screen.", "type": "text"},
-  "addNewManufacturer": "Thêm nhà sản xuất mới",
-  "@addNewManufacturer": {"description": "Dialog title for adding a new manufacturer.", "type": "text"},
-  "addManufacturer": "Thêm nhà sản xuất",
-  "@addManufacturer": {"description": "Button label for adding a manufacturer.", "type": "text"},
-  "findManufacturers": "Tìm kiếm nhà sản xuất...",
-  "@findManufacturers": {"description": "Search field placeholder for manufacturers.", "type": "text"},
-  "noMatchingManufacturersFound": "Không tìm thấy nhà sản xuất nào phù hợp",
-  "@noMatchingManufacturersFound": {"description": "Message when no matching manufacturers are found.", "type": "text"},
-  "deactivateManufacturerConfirmName": "Bạn có chắc chắn muốn vô hiệu hóa {name}?",
-  "@deactivateManufacturerConfirmName": {"description": "Confirmation message for deactivating a manufacturer with name.", "placeholders": {"name": {"type": "String", "example": "Công ty ABC"}}},
-  "activateManufacturerConfirmName": "Bạn có chắc chắn muốn kích hoạt {name}?",
-  "@activateManufacturerConfirmName": {"description": "Confirmation message for activating a manufacturer with name.", "placeholders": {"name": {"type": "String", "example": "Công ty ABC"}}},
-  "appAvatar": "Biểu tượng ứng dụng",
-  "@appAvatar": {"description": "Label for the app avatar in the loading screen.", "type": "text"},
-  "createNewAccount": "Tạo tài khoản mới",
-  "@createNewAccount": {"description": "Button label for creating a new account.", "type": "text"},
-  "alreadyHaveAccount": "Đã có tài khoản?",
-  "informationTitle": "Thông tin",
-  "@informationTitle": {"description": "Tiêu đề cho màn hình thông tin.", "type": "text"},
-  "aboutGizmoGlobe": "Về GizmoGlobe",
-  "@aboutGizmoGlobe": {"description": "Tiêu đề phần: Về GizmoGlobe.", "type": "text"},
-  "aboutUsTitle": "Về chúng tôi",
-  "@aboutUsTitle": {"description": "Tiêu đề phần: Về chúng tôi.", "type": "text"},
-  "aboutUsContent": "GizmoGlobe là giải pháp phần cứng máy tính đáng tin cậy của bạn.",
-  "@aboutUsContent": {"description": "Nội dung cho phần Về chúng tôi.", "type": "text"},
-  "ourMissionTitle": "Sứ mệnh của chúng tôi",
-  "@ourMissionTitle": {"description": "Tiêu đề phần: Sứ mệnh của chúng tôi.", "type": "text"},
-  "ourMissionContent": "Cung cấp dịch vụ xuất sắc và sản phẩm chất lượng cho bạn, khách hàng thân yêu của chúng tôi.",
-  "@ourMissionContent": {"description": "Nội dung cho phần Sứ mệnh của chúng tôi.", "type": "text"},
-  "contactInformationTitle": "Thông tin liên hệ",
-  "@contactInformationTitle": {"description": "Tiêu đề phần: Thông tin liên hệ.", "type": "text"},
-  "contactInformationContent": "Địa chỉ: UIT",
-  "@contactInformationContent": {"description": "Nội dung cho phần Thông tin liên hệ.", "type": "text"},
-  "businessHoursTitle": "Giờ làm việc",
-  "@businessHoursTitle": {"description": "Tiêu đề phần: Giờ làm việc.", "type": "text"},
-  "businessHoursContent": "Thứ Hai - Thứ Sáu: 9:00 sáng - 6:00 chiều\nThứ Bảy: 10:00 sáng - 4:00 chiều\nChủ Nhật: Đóng cửa",
-  "@businessHoursContent": {"description": "Nội dung cho phần Giờ làm việc.", "type": "text"},
-  "supportTitle": "Hỗ trợ",
-  "@supportTitle": {"description": "Tiêu đề cho màn hình hỗ trợ.", "type": "text"},
-  "supportMembers": "Thành viên nhóm",
-  "@supportMembers": {"description": "Tiêu đề phần thành viên nhóm.", "type": "text"},
-  "supportRoleDeveloper": "Lập trình viên",
-  "@supportRoleDeveloper": {"description": "Vai trò: Lập trình viên.", "type": "text"},
-  "supportStudentId": "Mã số sinh viên: {id}",
-  "@supportStudentId": {"description": "Nhãn cho mã số sinh viên với placeholder.", "placeholders": {"id": {"type": "String", "example": "22521474"}}},
-  "supportRole": "Vai trò: {role}",
-  "@supportRole": {"description": "Nhãn cho vai trò với placeholder.", "placeholders": {"role": {"type": "String", "example": "Lập trình viên"}}},
-  "supportEmail": "Email: {email}",
-  "@supportEmail": {"description": "Nhãn cho email với placeholder.", "placeholders": {"email": {"type": "String", "example": "22521474@gm.uit.edu.vn"}}}
-} 
+	"@@locale": "vi",
+	"appTitle": "GizmoGlobe",
+	"@appTitle": {
+		"description": "The title of the application.",
+		"type": "text"
+	},
+	"welcomeBack": "Chào mừng trở lại,",
+	"@welcomeBack": {
+		"description": "Welcome message for returning users.",
+		"type": "text"
+	},
+	"overview": "Tổng quan",
+	"@overview": {
+		"description": "Overview section title.",
+		"type": "text"
+	},
+	"products": "Sản phẩm",
+	"@products": {
+		"description": "Products section title.",
+		"type": "text"
+	},
+	"customers": "Khách hàng",
+	"@customers": {
+		"description": "Customers section title.",
+		"type": "text"
+	},
+	"revenue": "Doanh thu",
+	"@revenue": {
+		"description": "Revenue section title.",
+		"type": "text"
+	},
+	"avgIncome": "Thu nhập trung bình",
+	"@avgIncome": {
+		"description": "Average income label.",
+		"type": "text"
+	},
+	"monthlySales": "Doanh số hàng tháng",
+	"@monthlySales": {
+		"description": "Monthly sales label.",
+		"type": "text"
+	},
+	"last12Months": "12 tháng qua",
+	"@last12Months": {
+		"description": "Label for last 12 months.",
+		"type": "text"
+	},
+	"last3Months": "3 tháng qua",
+	"@last3Months": {
+		"description": "Label for last 3 months.",
+		"type": "text"
+	},
+	"newIncomingInvoice": "Tạo hóa đơn nhập mới",
+	"@newIncomingInvoice": {
+		"description": "Button or title for creating a new incoming invoice.",
+		"type": "text"
+	},
+	"selectManufacturer": "Chọn nhà sản xuất",
+	"@selectManufacturer": {
+		"description": "Prompt to select a manufacturer.",
+		"type": "text"
+	},
+	"addProduct": "Thêm sản phẩm",
+	"@addProduct": {
+		"description": "Button or label to add a product.",
+		"type": "text"
+	},
+	"invoiceDetails": "Chi tiết hóa đơn",
+	"@invoiceDetails": {
+		"description": "Section title for invoice details.",
+		"type": "text"
+	},
+	"importPrice": "Giá nhập",
+	"@importPrice": {
+		"description": "Label for import price.",
+		"type": "text"
+	},
+	"quantity": "Số lượng",
+	"@quantity": {
+		"description": "Label for quantity.",
+		"type": "text"
+	},
+	"totalPrice": "Tổng giá: ",
+	"@totalPrice": {
+		"description": "Label for total price.",
+		"type": "text"
+	},
+	"paymentStatus": "Trạng thái thanh toán",
+	"@paymentStatus": {
+		"description": "Label for payment status.",
+		"type": "text"
+	},
+	"createInvoice": "Tạo hóa đơn",
+	"@createInvoice": {
+		"description": "Button or title for creating an invoice.",
+		"type": "text"
+	},
+	"cancel": "Hủy",
+	"@cancel": {
+		"description": "Cancel button label.",
+		"type": "text"
+	},
+	"add": "Thêm",
+	"@add": {
+		"description": "Add button label.",
+		"type": "text"
+	},
+	"editProductDetail": "Chỉnh sửa chi tiết sản phẩm",
+	"@editProductDetail": {
+		"description": "Button or title for editing product details.",
+		"type": "text"
+	},
+	"update": "Cập nhật",
+	"@update": {
+		"description": "Update button label.",
+		"type": "text"
+	},
+	"searchIncomingInvoices": "Tìm hóa đơn nhập...",
+	"@searchIncomingInvoices": {
+		"description": "Search field placeholder for incoming invoices.",
+		"type": "text"
+	},
+	"noIncomingInvoicesFound": "Không tìm thấy hóa đơn nhập",
+	"@noIncomingInvoicesFound": {
+		"description": "Message when no incoming invoices are found.",
+		"type": "text"
+	},
+	"view": "Xem",
+	"@view": {
+		"description": "View button label.",
+		"type": "text"
+	},
+	"editPayment": "Chỉnh sửa thanh toán",
+	"@editPayment": {
+		"description": "Button or title for editing payment.",
+		"type": "text"
+	},
+	"onlyUnpaidCanBeMarkedPaid": "Chỉ hóa đơn chưa thanh toán mới có thể đánh dấu là đã thanh toán",
+	"@onlyUnpaidCanBeMarkedPaid": {
+		"description": "Message explaining only unpaid invoices can be marked as paid.",
+		"type": "text"
+	},
+	"markAsPaidQuestion": "Đánh dấu hóa đơn này là đã thanh toán?",
+	"@markAsPaidQuestion": {
+		"description": "Prompt to mark invoice as paid.",
+		"type": "text"
+	},
+	"confirm": "Xác nhận",
+	"@confirm": {
+		"description": "Confirm button label.",
+		"type": "text"
+	},
+	"sortBy": "Sắp xếp theo...",
+	"@sortBy": {
+		"description": "Label for sort by options.",
+		"type": "text"
+	},
+	"dateNewestFirst": "Ngày (Mới nhất trước)",
+	"@dateNewestFirst": {
+		"description": "Sort option for newest date first.",
+		"type": "text"
+	},
+	"dateOldestFirst": "Ngày (Cũ nhất trước)",
+	"@dateOldestFirst": {
+		"description": "Sort option for oldest date first.",
+		"type": "text"
+	},
+	"priceHighestFirst": "Giá (Cao nhất trước)",
+	"@priceHighestFirst": {
+		"description": "Sort option for highest price first.",
+		"type": "text"
+	},
+	"priceLowestFirst": "Giá (Thấp nhất trước)",
+	"@priceLowestFirst": {
+		"description": "Sort option for lowest price first.",
+		"type": "text"
+	},
+	"errorOccurred": "Có lỗi xảy ra",
+	"@errorOccurred": {
+		"description": "Generic error message.",
+		"type": "text"
+	},
+	"newInvoice": "Hóa đơn mới",
+	"@newInvoice": {
+		"description": "Button or title for new invoice.",
+		"type": "text"
+	},
+	"customerInformation": "Thông tin khách hàng",
+	"@customerInformation": {
+		"description": "Section title for customer information.",
+		"type": "text"
+	},
+	"selectCustomer": "Chọn khách hàng",
+	"@selectCustomer": {
+		"description": "Prompt to select a customer.",
+		"type": "text"
+	},
+	"customer": "Khách hàng",
+	"@customer": {
+		"description": "Label for customer.",
+		"type": "text"
+	},
+	"pleaseSelectCustomer": "Vui lòng chọn khách hàng",
+	"@pleaseSelectCustomer": {
+		"description": "Validation message to select a customer.",
+		"type": "text"
+	},
+	"address": "Địa chỉ",
+	"@address": {
+		"description": "Label for address.",
+		"type": "text"
+	},
+	"pleaseSelectAddress": "Vui lòng chọn địa chỉ",
+	"@pleaseSelectAddress": {
+		"description": "Validation message to select an address.",
+		"type": "text"
+	},
+	"salesStatus": "Trạng thái bán hàng",
+	"@salesStatus": {
+		"description": "Label for sales status.",
+		"type": "text"
+	},
+	"totalAmount": "Tổng số tiền",
+	"@totalAmount": {
+		"description": "Label for total amount.",
+		"type": "text"
+	},
+	"noProductsAddedYet": "Chưa thêm sản phẩm nào",
+	"@noProductsAddedYet": {
+		"description": "Message when no products have been added yet.",
+		"type": "text"
+	},
+	"price": "Giá",
+	"@price": {
+		"description": "Label for price.",
+		"type": "text"
+	},
+	"availableStock": "Hàng tồn kho",
+	"@availableStock": {
+		"description": "Label for available stock.",
+		"type": "text"
+	},
+	"pleaseSelectCustomerFirst": "Vui lòng chọn khách hàng trước",
+	"@pleaseSelectCustomerFirst": {
+		"description": "Validation message to select a customer first.",
+		"type": "text"
+	},
+	"searchSalesInvoices": "Tìm hóa đơn bán hàng...",
+	"@searchSalesInvoices": {
+		"description": "Search field placeholder for sales invoices.",
+		"type": "text"
+	},
+	"noSalesInvoicesFound": "Không tìm thấy hóa đơn bán hàng",
+	"@noSalesInvoicesFound": {
+		"description": "Message when no sales invoices are found.",
+		"type": "text"
+	},
+	"warrantyReceipt": "Biên lai bảo hành #{id}",
+	"@warrantyReceipt": {
+		"description": "Label for warranty receipt with id placeholder.",
+		"placeholders": {
+			"id": {
+				"type": "String",
+				"example": "123"
+			}
+		}
+	},
+	"warrantyInformation": "Thông tin bảo hành",
+	"@warrantyInformation": {
+		"description": "Section title for warranty information.",
+		"type": "text"
+	},
+	"status": "Trạng thái",
+	"@status": {
+		"description": "Label for status.",
+		"type": "text"
+	},
+	"reasonForWarranty": "Lý do bảo hành",
+	"@reasonForWarranty": {
+		"description": "Label for reason for warranty.",
+		"type": "text"
+	},
+	"productsUnderWarranty": "Sản phẩm được bảo hành",
+	"@productsUnderWarranty": {
+		"description": "Label for products under warranty.",
+		"type": "text"
+	},
+	"unknownCategory": "Không xác định",
+	"@unknownCategory": {
+		"description": "Label for unknown category.",
+		"type": "text"
+	},
+	"updateWarrantyStatus": "Cập nhật trạng thái bảo hành",
+	"@updateWarrantyStatus": {
+		"description": "Button or title for updating warranty status.",
+		"type": "text"
+	},
+	"confirmStatusUpdate": "Xác nhận cập nhật trạng thái",
+	"@confirmStatusUpdate": {
+		"description": "Prompt to confirm status update.",
+		"type": "text"
+	},
+	"areYouSureChangeStatus": "Bạn có chắc chắn muốn thay đổi trạng thái thành {status}?",
+	"@areYouSureChangeStatus": {
+		"description": "Prompt to confirm changing status with status placeholder.",
+		"placeholders": {
+			"status": {
+				"type": "String",
+				"example": "Hoàn thành"
+			}
+		}
+	},
+	"save": "Lưu",
+	"@save": {
+		"description": "Save button label.",
+		"type": "text"
+	},
+	"updateStatus": "Cập nhật trạng thái",
+	"@updateStatus": {
+		"description": "Button or title for updating status.",
+		"type": "text"
+	},
+	"noSalesInvoicesAvailable": "Không có hóa đơn bán hàng",
+	"@noSalesInvoicesAvailable": {
+		"description": "Message when no sales invoices are available.",
+		"type": "text"
+	},
+	"noEligibleSalesInvoices": "Khách hàng này không có hóa đơn bán hàng nào hợp lệ để yêu cầu bảo hành.",
+	"@noEligibleSalesInvoices": {
+		"description": "Message when customer has no eligible sales invoices for warranty claims.",
+		"type": "text"
+	},
+	"pleaseSelectSalesInvoice": "Vui lòng chọn hóa đơn bán hàng",
+	"@pleaseSelectSalesInvoice": {
+		"description": "Validation message to select a sales invoice.",
+		"type": "text"
+	},
+	"reasonForWarrantyLabel": "Lý do bảo hành",
+	"@reasonForWarrantyLabel": {
+		"description": "Label for reason for warranty field.",
+		"type": "text"
+	},
+	"selectProductsForWarranty": "Chọn sản phẩm để bảo hành",
+	"@selectProductsForWarranty": {
+		"description": "Label for selecting products for warranty.",
+		"type": "text"
+	},
+	"warrantyInvoiceCreated": "Tạo hóa đơn bảo hành thành công",
+	"@warrantyInvoiceCreated": {
+		"description": "Message when warranty invoice is created successfully.",
+		"type": "text"
+	},
+	"errorCreatingWarrantyInvoice": "Lỗi tạo hóa đơn bảo hành: {error}",
+	"@errorCreatingWarrantyInvoice": {
+		"description": "Error message when creating warranty invoice fails.",
+		"placeholders": {
+			"error": {
+				"type": "String",
+				"example": "Lỗi mạng"
+			}
+		}
+	},
+	"product": "Sản phẩm",
+	"@product": {
+		"description": "Label for product.",
+		"type": "text"
+	},
+	"selectProduct": "Chọn sản phẩm",
+	"@selectProduct": {
+		"description": "Prompt to select a product.",
+		"type": "text"
+	},
+	"pleaseSelectProduct": "Vui lòng chọn sản phẩm",
+	"@pleaseSelectProduct": {
+		"description": "Validation message to select a product.",
+		"type": "text"
+	},
+	"quantityGreaterThanZero": "Số lượng phải lớn hơn 0",
+	"@quantityGreaterThanZero": {
+		"description": "Validation message for quantity greater than zero.",
+		"type": "text"
+	},
+	"notEnoughStock": "Không đủ hàng tồn",
+	"@notEnoughStock": {
+		"description": "Message when there is not enough stock.",
+		"type": "text"
+	},
+	"enterAddress": "Nhập địa chỉ",
+	"@enterAddress": {
+		"description": "Label for the field or button to enter an address.",
+		"type": "text"
+	},
+	"noAddressFound": "Không tìm thấy địa chỉ nào",
+	"@noAddressFound": {
+		"description": "Message when no address is found.",
+		"type": "text"
+	},
+	"date": "Ngày",
+	"@date": {
+		"description": "Label for date.",
+		"type": "text"
+	},
+	"subtotal": "Tổng phụ",
+	"@subtotal": {
+		"description": "Label for subtotal.",
+		"type": "text"
+	},
+	"editInvoice": "Chỉnh sửa hóa đơn",
+	"@editInvoice": {
+		"description": "Button or title for editing invoice.",
+		"type": "text"
+	},
+	"changeAddress": "Thay đổi địa chỉ",
+	"@changeAddress": {
+		"description": "Button or label for changing address.",
+		"type": "text"
+	},
+	"unknownProduct": "Sản phẩm không xác định",
+	"@unknownProduct": {
+		"description": "Label for unknown product.",
+		"type": "text"
+	},
+	"errorWithMessage": "Lỗi: {error}",
+	"@errorWithMessage": {
+		"description": "Generic error message with error placeholder.",
+		"placeholders": {
+			"error": {
+				"type": "String",
+				"example": "Có lỗi xảy ra"
+			}
+		}
+	},
+	"errorLoadingInvoiceDetails": "Lỗi tải chi tiết hóa đơn: {error}",
+	"@errorLoadingInvoiceDetails": {
+		"description": "Error message when loading invoice details fails.",
+		"placeholders": {
+			"error": {
+				"type": "String",
+				"example": "Hết thời gian chờ"
+			}
+		}
+	},
+	"salesInvoice": "Hóa đơn bán hàng",
+	"@salesInvoice": {
+		"description": "Label for sales invoice.",
+		"type": "text"
+	},
+	"loading": "Đang tải...",
+	"@loading": {
+		"description": "Label for loading state.",
+		"type": "text"
+	},
+	"category": "Danh mục",
+	"@category": {
+		"description": "Label for category.",
+		"type": "text"
+	},
+	"findWarrantyInvoices": "Tìm hóa đơn bảo hành...",
+	"@findWarrantyInvoices": {
+		"description": "Search field placeholder for warranty invoices.",
+		"type": "text"
+	},
+	"noWarrantyInvoicesFound": "Không tìm thấy hóa đơn bảo hành",
+	"@noWarrantyInvoicesFound": {
+		"description": "Message when no warranty invoices are found.",
+		"type": "text"
+	},
+	"markAsCompleted": "Đánh dấu là đã hoàn thành",
+	"@markAsCompleted": {
+		"description": "Button or label to mark as completed.",
+		"type": "text"
+	},
+	"errorLoadingWarrantyInvoiceDetails": "Lỗi khi tải chi tiết hóa đơn bảo hành: {error}",
+	"@errorLoadingWarrantyInvoiceDetails": {
+		"description": "Error message when loading warranty invoice details fails.",
+		"placeholders": {
+			"error": {
+				"type": "String",
+				"example": "Hết thời gian chờ"
+			}
+		}
+	},
+	"sales": "Bán hàng",
+	"@sales": {
+		"description": "Tab label for sales invoices.",
+		"type": "text"
+	},
+	"incoming": "Nhập hàng",
+	"@incoming": {
+		"description": "Tab label for incoming invoices.",
+		"type": "text"
+	},
+	"warranty": "Bảo hành",
+	"@warranty": {
+		"description": "Tab label for warranty invoices.",
+		"type": "text"
+	},
+	"hello": "Xin chào!",
+	"@hello": {
+		"description": "Greeting for the user in the drawer.",
+		"type": "text"
+	},
+	"contactUs": "Liên hệ:",
+	"@contactUs": {
+		"description": "Label for contact information section in the drawer.",
+		"type": "text"
+	},
+	"logOut": "Đăng xuất",
+	"@logOut": {
+		"description": "Button label for logging out.",
+		"type": "text"
+	},
+	"home": "Trang chủ",
+	"@home": {
+		"description": "Bottom navigation label for home screen.",
+		"type": "text"
+	},
+	"invoice": "Hóa đơn",
+	"@invoice": {
+		"description": "Bottom navigation label for invoice screen.",
+		"type": "text"
+	},
+	"stakeholder": "Đối tác",
+	"@stakeholder": {
+		"description": "Bottom navigation label for stakeholder screen.",
+		"type": "text"
+	},
+	"voucher": "Phiếu giảm giá",
+	"@voucher": {
+		"description": "Bottom navigation label for voucher screen.",
+		"type": "text"
+	},
+	"profile": "Hồ sơ",
+	"@profile": {
+		"description": "Bottom navigation label for profile screen.",
+		"type": "text"
+	},
+	"addNewAddress": "Thêm địa chỉ mới",
+	"@addNewAddress": {
+		"description": "Dialog title for adding a new address.",
+		"type": "text"
+	},
+	"receiverName": "Tên người nhận",
+	"@receiverName": {
+		"description": "Label for receiver name field.",
+		"type": "text"
+	},
+	"enterReceiverName": "Nhập tên người nhận",
+	"@enterReceiverName": {
+		"description": "Hint for entering receiver name.",
+		"type": "text"
+	},
+	"receiverPhone": "Số điện thoại người nhận",
+	"@receiverPhone": {
+		"description": "Label for receiver phone field.",
+		"type": "text"
+	},
+	"enterPhoneNumber": "Nhập số điện thoại",
+	"@enterPhoneNumber": {
+		"description": "Hint for entering phone number.",
+		"type": "text"
+	},
+	"location": "Địa chỉ",
+	"@location": {
+		"description": "Label for location/address picker.",
+		"type": "text"
+	},
+	"streetAddress": "Địa chỉ cụ thể",
+	"@streetAddress": {
+		"description": "Label for street address field.",
+		"type": "text"
+	},
+	"streetNameBuildingHouseNo": "Tên đường, tòa nhà, số nhà",
+	"@streetNameBuildingHouseNo": {
+		"description": "Hint for street address field.",
+		"type": "text"
+	},
+	"addAddress": "Thêm địa chỉ",
+	"@addAddress": {
+		"description": "Button label for adding address.",
+		"type": "text"
+	},
+	"customerDetail": "Chi tiết khách hàng",
+	"@customerDetail": {
+		"description": "Title for customer detail screen.",
+		"type": "text"
+	},
+	"edit": "Chỉnh sửa",
+	"@edit": {
+		"description": "Button label for editing.",
+		"type": "text"
+	},
+	"name": "Tên",
+	"@name": {
+		"description": "Label for name field.",
+		"type": "text"
+	},
+	"email": "Email",
+	"@email": {
+		"description": "Label for email field.",
+		"type": "text"
+	},
+	"phone": "Số điện thoại",
+	"@phone": {
+		"description": "Label for phone field.",
+		"type": "text"
+	},
+	"addresses": "Địa chỉ",
+	"@addresses": {
+		"description": "Label for addresses section.",
+		"type": "text"
+	},
+	"pleaseFillInAllRequiredFields": "Vui lòng điền tất cả các trường bắt buộc",
+	"@pleaseFillInAllRequiredFields": {
+		"description": "Validation message for required fields.",
+		"type": "text"
+	},
+	"discardChanges": "Hủy bỏ thay đổi?",
+	"@discardChanges": {
+		"description": "Dialog title for discarding changes.",
+		"type": "text"
+	},
+	"unsavedChangesDiscard": "Bạn có thay đổi chưa lưu. Bạn có muốn hủy bỏ chúng?",
+	"@unsavedChangesDiscard": {
+		"description": "Dialog content for unsaved changes.",
+		"type": "text"
+	},
+	"discard": "BỎ QUA",
+	"@discard": {
+		"description": "Button label for discarding changes.",
+		"type": "text"
+	},
+	"editCustomer": "Chỉnh sửa khách hàng",
+	"@editCustomer": {
+		"description": "Title for edit customer screen.",
+		"type": "text"
+	},
+	"fullName": "Họ và tên",
+	"@fullName": {
+		"description": "Label for full name field.",
+		"type": "text"
+	},
+	"nameIsRequired": "Tên là bắt buộc",
+	"@nameIsRequired": {
+		"description": "Validation message for required name.",
+		"type": "text"
+	},
+	"nameMin2Chars": "Tên phải có ít nhất 2 ký tự",
+	"@nameMin2Chars": {
+		"description": "Validation message for name minimum length.",
+		"type": "text"
+	},
+	"phoneNumber": "Số điện thoại",
+	"@phoneNumber": {
+		"description": "Label for phone number field.",
+		"type": "text"
+	},
+	"phoneNumberIsRequired": "Số điện thoại là bắt buộc",
+	"@phoneNumberIsRequired": {
+		"description": "Validation message for required phone number.",
+		"type": "text"
+	},
+	"pleaseEnterValidPhoneNumber": "Vui lòng nhập số điện thoại hợp lệ",
+	"@pleaseEnterValidPhoneNumber": {
+		"description": "Validation message for valid phone number.",
+		"type": "text"
+	},
+	"addNewCustomer": "Thêm khách hàng mới",
+	"@addNewCustomer": {
+		"description": "Dialog title for adding a new customer.",
+		"type": "text"
+	},
+	"addCustomer": "Thêm khách hàng",
+	"@addCustomer": {
+		"description": "Button label for adding a customer.",
+		"type": "text"
+	},
+	"pleaseFillInAllFields": "Vui lòng điền tất cả các trường",
+	"@pleaseFillInAllFields": {
+		"description": "Validation message for required fields.",
+		"type": "text"
+	},
+	"customerAddedSuccessfully": "Khách hàng đã được thêm thành công",
+	"@customerAddedSuccessfully": {
+		"description": "Message when a customer is added successfully.",
+		"type": "text"
+	},
+	"findCustomers": "Tìm kiếm khách hàng...",
+	"@findCustomers": {
+		"description": "Search field placeholder for customers.",
+		"type": "text"
+	},
+	"noMatchingCustomersFound": "Không tìm thấy khách hàng nào phù hợp",
+	"@noMatchingCustomersFound": {
+		"description": "Message when no matching customers are found.",
+		"type": "text"
+	},
+	"employeeDetail": "Chi tiết nhân viên",
+	"@employeeDetail": {
+		"description": "Title for employee detail screen.",
+		"type": "text"
+	},
+	"employeeInformation": "Thông tin nhân viên",
+	"@employeeInformation": {
+		"description": "Section title for employee information.",
+		"type": "text"
+	},
+	"role": "Chức vụ",
+	"@role": {
+		"description": "Label for role field.",
+		"type": "text"
+	},
+	"delete": "Xóa",
+	"@delete": {
+		"description": "Button label for deleting.",
+		"type": "text"
+	},
+	"deleteEmployee": "Xóa nhân viên",
+	"@deleteEmployee": {
+		"description": "Dialog title for deleting an employee.",
+		"type": "text"
+	},
+	"areYouSureDeleteEmployee": "Bạn có chắc chắn muốn xóa nhân viên này?",
+	"@areYouSureDeleteEmployee": {
+		"description": "Confirmation message for deleting an employee.",
+		"type": "text"
+	},
+	"editEmployee": "Chỉnh sửa nhân viên",
+	"@editEmployee": {
+		"description": "Title for edit employee screen.",
+		"type": "text"
+	},
+	"pleaseEnterName": "Vui lòng nhập tên",
+	"@pleaseEnterName": {
+		"description": "Validation message for required employee name.",
+		"type": "text"
+	},
+	"pleaseEnterPhoneNumber": "Vui lòng nhập số điện thoại",
+	"@pleaseEnterPhoneNumber": {
+		"description": "Validation message for required employee phone number.",
+		"type": "text"
+	},
+	"pleaseSelectRole": "Vui lòng chọn vai trò",
+	"@pleaseSelectRole": {
+		"description": "Validation message for required employee role.",
+		"type": "text"
+	},
+	"addNewEmployee": "Thêm nhân viên mới",
+	"@addNewEmployee": {
+		"description": "Dialog title for adding a new employee.",
+		"type": "text"
+	},
+	"pleaseEnterEmail": "Vui lòng nhập địa chỉ email",
+	"@pleaseEnterEmail": {
+		"description": "Validation message for required employee email.",
+		"type": "text"
+	},
+	"filterByRole": "Lọc theo vai trò",
+	"@filterByRole": {
+		"description": "Dialog title for filtering employees by role.",
+		"type": "text"
+	},
+	"clearFilter": "Xóa bộ lọc",
+	"@clearFilter": {
+		"description": "Button label to clear the role filter.",
+		"type": "text"
+	},
+	"findEmployees": "Tìm kiếm nhân viên...",
+	"@findEmployees": {
+		"description": "Search field placeholder for employees.",
+		"type": "text"
+	},
+	"noEmployeesFound": "Không tìm thấy nhân viên nào",
+	"@noEmployeesFound": {
+		"description": "Message when no employees are found.",
+		"type": "text"
+	},
+	"employeeAddedSuccessfully": "Nhân viên đã được thêm thành công",
+	"@employeeAddedSuccessfully": {
+		"description": "Message when an employee is added successfully.",
+		"type": "text"
+	},
+	"manufacturerDetail": "Chi tiết nhà cung cấp",
+	"@manufacturerDetail": {
+		"description": "Title for manufacturer detail screen.",
+		"type": "text"
+	},
+	"deactivate": "Vô hiệu hóa",
+	"@deactivate": {
+		"description": "Button label to deactivate manufacturer.",
+		"type": "text"
+	},
+	"activate": "Kích hoạt",
+	"@activate": {
+		"description": "Button label to activate manufacturer.",
+		"type": "text"
+	},
+	"deactivateManufacturer": "Vô hiệu hóa nhà cung cấp",
+	"@deactivateManufacturer": {
+		"description": "Dialog title for deactivating manufacturer.",
+		"type": "text"
+	},
+	"activateManufacturer": "Kích hoạt nhà cung cấp",
+	"@activateManufacturer": {
+		"description": "Dialog title for activating manufacturer.",
+		"type": "text"
+	},
+	"deactivateManufacturerConfirm": "Bạn có chắc chắn muốn vô hiệu hóa nhà cung cấp này?",
+	"@deactivateManufacturerConfirm": {
+		"description": "Confirmation message for deactivating manufacturer.",
+		"type": "text"
+	},
+	"activateManufacturerConfirm": "Bạn có chắc chắn muốn kích hoạt nhà cung cấp này?",
+	"@activateManufacturerConfirm": {
+		"description": "Confirmation message for activating manufacturer.",
+		"type": "text"
+	},
+	"inactive": "Vô hiệu hóa",
+	"@inactive": {
+		"description": "Label for inactive status.",
+		"type": "text"
+	},
+	"manufacturerInformation": "Thông tin nhà cung cấp",
+	"@manufacturerInformation": {
+		"description": "Section title for manufacturer information.",
+		"type": "text"
+	},
+	"manufacturerName": "Tên nhà cung cấp",
+	"@manufacturerName": {
+		"description": "Label for manufacturer name field.",
+		"type": "text"
+	},
+	"editManufacturer": "Chỉnh sửa nhà sản xuất",
+	"@editManufacturer": {
+		"description": "Title for edit manufacturer screen.",
+		"type": "text"
+	},
+	"addNewManufacturer": "Thêm nhà sản xuất mới",
+	"@addNewManufacturer": {
+		"description": "Dialog title for adding a new manufacturer.",
+		"type": "text"
+	},
+	"addManufacturer": "Thêm nhà sản xuất",
+	"@addManufacturer": {
+		"description": "Button label for adding a manufacturer.",
+		"type": "text"
+	},
+	"findManufacturers": "Tìm kiếm nhà sản xuất...",
+	"@findManufacturers": {
+		"description": "Search field placeholder for manufacturers.",
+		"type": "text"
+	},
+	"noMatchingManufacturersFound": "Không tìm thấy nhà sản xuất nào phù hợp",
+	"@noMatchingManufacturersFound": {
+		"description": "Message when no matching manufacturers are found.",
+		"type": "text"
+	},
+	"deactivateManufacturerConfirmName": "Bạn có chắc chắn muốn vô hiệu hóa {name}?",
+	"@deactivateManufacturerConfirmName": {
+		"description": "Confirmation message for deactivating a manufacturer with name.",
+		"placeholders": {
+			"name": {
+				"type": "String",
+				"example": "Công ty ABC"
+			}
+		}
+	},
+	"activateManufacturerConfirmName": "Bạn có chắc chắn muốn kích hoạt {name}?",
+	"@activateManufacturerConfirmName": {
+		"description": "Confirmation message for activating a manufacturer with name.",
+		"placeholders": {
+			"name": {
+				"type": "String",
+				"example": "Công ty ABC"
+			}
+		}
+	},
+	"appAvatar": "Biểu tượng ứng dụng",
+	"@appAvatar": {
+		"description": "Label for the app avatar in the loading screen.",
+		"type": "text"
+	},
+	"createNewAccount": "Tạo tài khoản mới",
+	"@createNewAccount": {
+		"description": "Button label for creating a new account.",
+		"type": "text"
+	},
+	"alreadyHaveAccount": "Đã có tài khoản?",
+	"informationTitle": "Thông tin",
+	"@informationTitle": {
+		"description": "Tiêu đề cho màn hình thông tin.",
+		"type": "text"
+	},
+	"aboutGizmoGlobe": "Về GizmoGlobe",
+	"@aboutGizmoGlobe": {
+		"description": "Tiêu đề phần: Về GizmoGlobe.",
+		"type": "text"
+	},
+	"aboutUsTitle": "Về chúng tôi",
+	"@aboutUsTitle": {
+		"description": "Tiêu đề phần: Về chúng tôi.",
+		"type": "text"
+	},
+	"aboutUsContent": "GizmoGlobe là giải pháp phần cứng máy tính đáng tin cậy của bạn.",
+	"@aboutUsContent": {
+		"description": "Nội dung cho phần Về chúng tôi.",
+		"type": "text"
+	},
+	"ourMissionTitle": "Sứ mệnh của chúng tôi",
+	"@ourMissionTitle": {
+		"description": "Tiêu đề phần: Sứ mệnh của chúng tôi.",
+		"type": "text"
+	},
+	"ourMissionContent": "Cung cấp dịch vụ xuất sắc và sản phẩm chất lượng cho bạn, khách hàng thân yêu của chúng tôi.",
+	"@ourMissionContent": {
+		"description": "Nội dung cho phần Sứ mệnh của chúng tôi.",
+		"type": "text"
+	},
+	"contactInformationTitle": "Thông tin liên hệ",
+	"@contactInformationTitle": {
+		"description": "Tiêu đề phần: Thông tin liên hệ.",
+		"type": "text"
+	},
+	"contactInformationContent": "Địa chỉ: UIT",
+	"@contactInformationContent": {
+		"description": "Nội dung cho phần Thông tin liên hệ.",
+		"type": "text"
+	},
+	"businessHoursTitle": "Giờ làm việc",
+	"@businessHoursTitle": {
+		"description": "Tiêu đề phần: Giờ làm việc.",
+		"type": "text"
+	},
+	"businessHoursContent": "Thứ Hai - Thứ Sáu: 9:00 sáng - 6:00 chiều\nThứ Bảy: 10:00 sáng - 4:00 chiều\nChủ Nhật: Đóng cửa",
+	"@businessHoursContent": {
+		"description": "Nội dung cho phần Giờ làm việc.",
+		"type": "text"
+	},
+	"supportTitle": "Hỗ trợ",
+	"@supportTitle": {
+		"description": "Tiêu đề cho màn hình hỗ trợ.",
+		"type": "text"
+	},
+	"supportMembers": "Thành viên nhóm",
+	"@supportMembers": {
+		"description": "Tiêu đề phần thành viên nhóm.",
+		"type": "text"
+	},
+	"supportRoleDeveloper": "Lập trình viên",
+	"@supportRoleDeveloper": {
+		"description": "Vai trò: Lập trình viên.",
+		"type": "text"
+	},
+	"supportStudentId": "Mã số sinh viên: {id}",
+	"@supportStudentId": {
+		"description": "Nhãn cho mã số sinh viên với placeholder.",
+		"placeholders": {
+			"id": {
+				"type": "String",
+				"example": "22521474"
+			}
+		}
+	},
+	"supportRole": "Vai trò: {role}",
+	"@supportRole": {
+		"description": "Nhãn cho vai trò với placeholder.",
+		"placeholders": {
+			"role": {
+				"type": "String",
+				"example": "Lập trình viên"
+			}
+		}
+	},
+	"supportEmail": "Email: {email}",
+	"@supportEmail": {
+		"description": "Nhãn cho email với placeholder.",
+		"placeholders": {
+			"email": {
+				"type": "String",
+				"example": "22521474@gm.uit.edu.vn"
+			}
+		}
+	},
+	"paid": "Đã thanh toán",
+	"@paid": {
+		"description": "Label for paid status.",
+		"type": "text"
+	},
+	"unpaid": "Chưa thanh toán",
+	"@unpaid": {
+		"description": "Label for unpaid status.",
+		"type": "text"
+	},
+	"pending": "Chờ xử lý",
+	"@pending": {
+		"description": "Label for pending status.",
+		"type": "text"
+	},
+	"preparing": "Đang chuẩn bị",
+	"@preparing": {
+		"description": "Label for preparing status.",
+		"type": "text"
+	},
+	"shipping": "Đang giao",
+	"@shipping": {
+		"description": "Label for shipping status.",
+		"type": "text"
+	},
+	"shipped": "Đã giao",
+	"@shipped": {
+		"description": "Label for shipped status.",
+		"type": "text"
+	},
+	"completed": "Đã hoàn thành",
+	"@completed": {
+		"description": "Label for completed status.",
+		"type": "text"
+	},
+	"cancelled": "Đã hủy",
+	"@cancelled": {
+		"description": "Label for cancelled status.",
+		"type": "text"
+	},
+	"warrantyStatus_pending": "Chờ xử lý",
+	"@warrantyStatus_pending": {
+		"description": "Label for pending warranty status.",
+		"type": "text"
+	},
+	"warrantyStatus_processing": "Đang xử lý",
+	"@warrantyStatus_processing": {
+		"description": "Label for processing warranty status.",
+		"type": "text"
+	},
+	"warrantyStatus_completed": "Đã hoàn thành",
+	"@warrantyStatus_completed": {
+		"description": "Label for completed warranty status.",
+		"type": "text"
+	},
+	"warrantyStatus_denied": "Từ chối",
+	"@warrantyStatus_denied": {
+		"description": "Label for denied warranty status.",
+		"type": "text"
+	},
+	"success": "Thành công",
+	"@success": {
+		"description": "Success dialog title.",
+		"type": "text"
+	},
+	"failure": "Thất bại",
+	"@failure": {
+		"description": "Failure dialog title.",
+		"type": "text"
+	},
+	"signInSuccess": "Đăng nhập thành công.",
+	"@signInSuccess": {
+		"description": "Message shown when sign in is successful.",
+		"type": "text"
+	},
+	"signInFailed": "Đăng nhập thất bại. Vui lòng thử lại.",
+	"@signInFailed": {
+		"description": "Message shown when sign in fails.",
+		"type": "text"
+	},
+	"verificationLinkFailed": "Gửi liên kết xác minh thất bại. Vui lòng thử lại.",
+	"@verificationLinkFailed": {
+		"description": "Message shown when sending verification link fails.",
+		"type": "text"
+	},
+	"changePasswordFailed": "Lỗi thay đổi mật khẩu. Vui lòng thử lại.",
+	"@changePasswordFailed": {
+		"description": "Message shown when changing password fails.",
+		"type": "text"
+	},
+	"passwordsDoNotMatch": "Mật khẩu không khớp.",
+	"@passwordsDoNotMatch": {
+		"description": "Message shown when passwords do not match.",
+		"type": "text"
+	},
+	"verificationEmailSent": "Một email xác minh đã được gửi đến địa chỉ email của bạn. Vui lòng xác minh email của bạn để hoàn tất việc đăng ký.",
+	"@verificationEmailSent": {
+		"description": "Message shown when verification email is sent.",
+		"type": "text"
+	},
+	"signUpFailed": "Đăng ký thất bại. Vui lòng thử lại.",
+	"@signUpFailed": {
+		"description": "Message shown when sign up fails.",
+		"type": "text"
+	},
+	"resetPasswordLinkSent": "Một liên kết xác minh đã được gửi đến địa chỉ email của bạn. Vui lòng xác minh email của bạn để đặt lại mật khẩu.",
+	"@resetPasswordLinkSent": {
+		"description": "Message shown when reset password link is sent.",
+		"type": "text"
+	},
+	"signOutFailed": "Đăng xuất thất bại. Vui lòng thử lại.",
+	"@signOutFailed": {
+		"description": "Message shown when sign out fails.",
+		"type": "text"
+	},
+	"emailNotVerified": "Email chưa được xác minh. Vui lòng xác minh email của bạn.",
+	"@emailNotVerified": {
+		"description": "Message shown when email is not verified.",
+		"type": "text"
+	},
+	"invalidEmailOrPassword": "Email hoặc mật khẩu không hợp lệ",
+	"@invalidEmailOrPassword": {
+		"description": "Message shown when email or password is invalid.",
+		"type": "text"
+	},
+	"emailNotRegistered": "Email này không được đăng ký trong hệ thống",
+	"@emailNotRegistered": {
+		"description": "Message shown when email is not registered.",
+		"type": "text"
+	},
+	"productAddedSuccess": "Sản phẩm đã được thêm thành công.",
+	"@productAddedSuccess": {
+		"description": "Message shown when product is added successfully.",
+		"type": "text"
+	},
+	"productAddFailed": "Không thể thêm sản phẩm. Vui lòng thử lại.",
+	"@productAddFailed": {
+		"description": "Message shown when adding product fails.",
+		"type": "text"
+	},
+	"productUpdatedSuccess": "Sản phẩm đã được cập nhật thành công.",
+	"@productUpdatedSuccess": {
+		"description": "Message shown when product is updated successfully.",
+		"type": "text"
+	},
+	"productUpdateFailed": "Không thể cập nhật sản phẩm. Vui lòng thử lại.",
+	"@productUpdateFailed": {
+		"description": "Message shown when updating product fails.",
+		"type": "text"
+	},
+	"unexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
+	"@unexpectedError": {
+		"description": "Message shown when an unexpected error occurs.",
+		"type": "text"
+	},
+	"chooseFromGallery": "Chọn từ thư viện",
+	"@chooseFromGallery": {
+		"description": "Option to choose image from gallery.",
+		"type": "text"
+	},
+	"takePhoto": "Chụp ảnh",
+	"@takePhoto": {
+		"description": "Option to take a photo with camera.",
+		"type": "text"
+	},
+	"enterUrl": "Nhập URL",
+	"@enterUrl": {
+		"description": "Option to enter image URL.",
+		"type": "text"
+	},
+	"enterImageUrl": "Nhập URL hình ảnh",
+	"@enterImageUrl": {
+		"description": "Prompt to enter image URL.",
+		"type": "text"
+	},
+	"addProductImage": "Thêm hình sản phẩm",
+	"@addProductImage": {
+		"description": "Title for adding product image section.",
+		"type": "text"
+	},
+	"searchManufacturer": "Tìm kiếm nhà sản xuất...",
+	"@searchManufacturer": {
+		"description": "Placeholder text for manufacturer search field.",
+		"type": "text"
+	},
+	"active": "Còn hàng",
+	"@active": {
+		"description": "Status indicating product is active.",
+		"type": "text"
+	},
+	"outOfStock": "Hết hàng",
+	"@outOfStock": {
+		"description": "Status indicating product is out of stock.",
+		"type": "text"
+	},
+	"categorySpecifications": "Thông số cho",
+	"@categorySpecifications": {
+		"description": "Title for category specifications section.",
+		"type": "text"
+	},
+	"ramBus": "Bus RAM",
+	"@ramBus": {
+		"description": "Label for RAM bus speed specification.",
+		"type": "text"
+	},
+	"ramCapacity": "Dung lượng RAM",
+	"@ramCapacity": {
+		"description": "Label for RAM capacity specification.",
+		"type": "text"
+	},
+	"ramType": "Loại RAM",
+	"@ramType": {
+		"description": "Label for RAM type specification.",
+		"type": "text"
+	},
+	"cpuFamily": "Dòng CPU",
+	"@cpuFamily": {
+		"description": "Label for CPU family specification.",
+		"type": "text"
+	},
+	"cpuCore": "Số nhân CPU",
+	"@cpuCore": {
+		"description": "Label for CPU core count specification.",
+		"type": "text"
+	},
+	"cpuThread": "Số luồng CPU",
+	"@cpuThread": {
+		"description": "Label for CPU thread count specification.",
+		"type": "text"
+	},
+	"cpuClockSpeed": "Tốc độ CPU",
+	"@cpuClockSpeed": {
+		"description": "Label for CPU clock speed specification.",
+		"type": "text"
+	},
+	"psuWattage": "Công suất PSU",
+	"@psuWattage": {
+		"description": "Label for PSU wattage specification.",
+		"type": "text"
+	},
+	"psuEfficiency": "Hiệu suất PSU",
+	"@psuEfficiency": {
+		"description": "Label for PSU efficiency specification.",
+		"type": "text"
+	},
+	"psuModular": "PSU Modular",
+	"@psuModular": {
+		"description": "Label for PSU modular specification.",
+		"type": "text"
+	},
+	"gpuSeries": "Dòng GPU",
+	"@gpuSeries": {
+		"description": "Label for GPU series specification.",
+		"type": "text"
+	},
+	"gpuCapacity": "Dung lượng GPU",
+	"@gpuCapacity": {
+		"description": "Label for GPU memory capacity specification.",
+		"type": "text"
+	},
+	"gpuBus": "Bus GPU",
+	"@gpuBus": {
+		"description": "Label for GPU bus interface specification.",
+		"type": "text"
+	},
+	"gpuClockSpeed": "Tốc độ GPU",
+	"@gpuClockSpeed": {
+		"description": "Label for GPU clock speed specification.",
+		"type": "text"
+	},
+	"formFactor": "Kiểu dáng",
+	"@formFactor": {
+		"description": "Label for motherboard form factor specification.",
+		"type": "text"
+	},
+	"series": "Dòng sản phẩm",
+	"@series": {
+		"description": "Label for product series specification.",
+		"type": "text"
+	},
+	"compatibility": "Tương thích",
+	"@compatibility": {
+		"description": "Label for compatibility specification.",
+		"type": "text"
+	},
+	"driveType": "Loại ổ đĩa",
+	"@driveType": {
+		"description": "Label for drive type specification.",
+		"type": "text"
+	},
+	"driveCapacity": "Dung lượng ổ đĩa",
+	"@driveCapacity": {
+		"description": "Label for drive capacity specification.",
+		"type": "text"
+	},
+	"productName": "Tên sản phẩm",
+	"@productName": {
+		"description": "Label for product name field.",
+		"type": "text"
+	},
+	"sellingPrice": "Giá bán",
+	"@sellingPrice": {
+		"description": "Label for selling price field.",
+		"type": "text"
+	},
+	"discount": "Giảm giá",
+	"@discount": {
+		"description": "Label for discount field.",
+		"type": "text"
+	},
+	"stock": "Tồn kho",
+	"@stock": {
+		"description": "Label for stock quantity field.",
+		"type": "text"
+	},
+	"additionalInformation": "Thông tin bổ sung",
+	"@additionalInformation": {
+		"description": "Label for additional product information field.",
+		"type": "text"
+	},
+	"releaseDate": "Ngày phát hành",
+	"@releaseDate": {
+		"description": "Label for product release date field.",
+		"type": "text"
+	},
+	"manufacturer": "Nhà sản xuất",
+	"@manufacturer": {
+		"description": "Label for product manufacturer field.",
+		"type": "text"
+	},
+	"from": "Từ",
+	"@from": {
+		"description": "Label for minimum value in range filter.",
+		"type": "text"
+	},
+	"to": "Đến",
+	"@to": {
+		"description": "Label for maximum value in range filter.",
+		"type": "text"
+	},
+	"min": "Tối thiểu",
+	"@min": {
+		"description": "Hint for minimum value in range filter.",
+		"type": "text"
+	},
+	"max": "Tối đa",
+	"@max": {
+		"description": "Hint for maximum value in range filter.",
+		"type": "text"
+	},
+	"filter": "Lọc",
+	"@filter": {
+		"description": "Label for filter button.",
+		"type": "text"
+	},
+	"basicInformation": "Thông tin cơ bản",
+	"@basicInformation": {
+		"description": "Section title for basic information.",
+		"type": "text"
+	},
+	"drive": "Ổ cứng",
+	"@drive": {
+		"description": "Label for drive category.",
+		"type": "text"
+	},
+	"mainboard": "Bo mạch chủ",
+	"@mainboard": {
+		"description": "Label for mainboard category.",
+		"type": "text"
+	}
+}

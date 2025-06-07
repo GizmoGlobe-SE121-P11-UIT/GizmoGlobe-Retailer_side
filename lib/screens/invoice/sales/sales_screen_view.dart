@@ -7,6 +7,7 @@ import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../data/firebase/firebase.dart';
 import '../../../objects/invoice_related/sales_invoice.dart';
@@ -57,7 +58,7 @@ class _SalesScreenState extends State<SalesScreen> {
                           cubit.searchInvoices(value);
                         },
                         prefixIcon: Icon(Icons.search,
-                            color: Theme.of(context).primaryColor),
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -146,13 +147,21 @@ class _SalesScreenState extends State<SalesScreen> {
                                               children: [
                                                 ListTile(
                                                   dense: true,
-                                                  leading: const Icon(
+                                                  leading: Icon(
                                                     Icons.visibility_outlined,
                                                     size: 20,
-                                                    color: Colors.white,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface,
                                                   ),
-                                                  title:
-                                                      Text(S.of(context).view),
+                                                  title: Text(
+                                                    S.of(context).view,
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                  ),
                                                   onTap: () =>
                                                       _handleViewInvoice(
                                                           context, invoice),
@@ -188,7 +197,8 @@ class _SalesScreenState extends State<SalesScreen> {
                                       decoration: BoxDecoration(
                                         color: state.selectedIndex == index
                                             ? Theme.of(context)
-                                                .primaryColor
+                                                .colorScheme
+                                                .primary
                                                 .withValues(alpha: 0.1)
                                             : Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(8),
@@ -219,10 +229,13 @@ class _SalesScreenState extends State<SalesScreen> {
                                                 children: [
                                                   Text(
                                                     '${S.of(context).invoiceDetails} #${invoice.salesInvoiceID}',
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 16,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
                                                     ),
                                                     maxLines: 1,
                                                     overflow:
@@ -265,9 +278,12 @@ class _SalesScreenState extends State<SalesScreen> {
                                             const SizedBox(width: 8),
                                             Text(
                                               '\$${invoice.totalPrice.toStringAsFixed(2)}',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                               ),
                                             ),
                                           ],
@@ -328,7 +344,7 @@ class _SalesScreenState extends State<SalesScreen> {
                       children: [
                         Icon(
                           Icons.filter_list,
-                          color: Theme.of(dialogContext).primaryColor,
+                          color: Theme.of(dialogContext).colorScheme.primary,
                         ),
                         const SizedBox(width: 8),
                         Text(
@@ -422,7 +438,7 @@ class _SalesScreenState extends State<SalesScreen> {
             children: [
               Icon(
                 icon,
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(width: 12),
               Text(
@@ -483,11 +499,13 @@ class _SalesScreenState extends State<SalesScreen> {
       Navigator.pop(context);
 
       // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(S
-                .of(context)
-                .errorLoadingInvoiceDetails(e.toString()))), // Localized
+      showDialog(
+        context: context,
+        builder: (context) => InformationDialog(
+          title: S.of(context).errorOccurred,
+          content: S.of(context).errorLoadingInvoiceDetails(e.toString()),
+          buttonText: 'OK',
+        ),
       );
     }
   }

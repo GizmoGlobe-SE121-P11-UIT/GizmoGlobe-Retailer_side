@@ -1,31 +1,84 @@
+import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
+
 enum NotifyMessage {
   empty(''),
-  msg1('Signed in successfully.'), // Đăng nhập thành công
-  msg2('Failed to sign in. Please try again.'), // Đăng nhập thất bại. Vui lòng thử lại
-  msg3('Failed to send verification link. Please try again.'), // Gửi liên kết xác minh thất bại. Vui lòng thử lại
-  msg4('Error changing password. Please try again.'), // Lỗi thay đổi mật khẩu. Vui lòng thử lại
-  msg5('Passwords do not match.'), // Mật khẩu không khớp
-  msg6('A verification email has been sent to your email address. Please verify your email to complete signing up.'), // Một email xác minh đã được gửi đến địa chỉ email của bạn. Vui lòng xác minh email của bạn để hoàn tất việc đăng ký
-  msg7('Failed to sign up. Please try again.'), // Đăng ký thất bại. Vui lòng thử lại
-  msg8('A verification link has been sent to your email address. Please verify your email to reset your password.'), // Một liên kết xác minh đã được gửi đến địa chỉ email của bạn. Vui lòng xác minh email của bạn để đặt lại mật khẩu\
-  msg9('Failed to sign out. Please try again.'), // Đăng xuất thất bại. Vui lòng thử lại
-  msg10('Email not verified. Please verify your email.'), // Email chưa được xác minh. Vui lòng xác minh email của bạn
-  msg11('Invalid email or password'), // Email hoặc mật khẩu không hợp lệ
-  msg12('This email is not registered in the system'), // Email này không được đăng ký trong hệ thống
-  msg13('Product added successfully.'), // Sản phẩm đã được thêm thành công
-  msg14('Failed to add product. Please try again.'), // Không thể thêm sản phẩm. Vui lòng thử lại
-  msg15('Product updated successfully.'), // Sản phẩm đã được cập nhật thành công
-  msg16('Failed to update product. Please try again.'), // Không thể cập nhật sản phẩm. Vui lòng thử lại
+  msg1('signInSuccess'),
+  msg2('signInFailed'),
+  msg3('verificationLinkFailed'),
+  msg4('changePasswordFailed'),
+  msg5('passwordsDoNotMatch'),
+  msg6('verificationEmailSent'),
+  msg7('signUpFailed'),
+  msg8('resetPasswordLinkSent'),
+  msg9('signOutFailed'),
+  msg10('emailNotVerified'),
+  msg11('invalidEmailOrPassword'),
+  msg12('emailNotRegistered'),
+  msg13('productAddedSuccess'),
+  msg14('productAddFailed'),
+  msg15('productUpdatedSuccess'),
+  msg16('productUpdateFailed'),
   msg17('Voucher added successfully.'), // Voucher đã được thêm thành công
   msg18('Failed to add voucher. Please try again.'), // Không thể thêm voucher. Vui lòng thử lại
   msg19('Voucher deleted successfully.'), // Voucher đã được xóa thành công
   msg20('Failed to delete voucher. Please try again.'), // Không thể xóa voucher. Vui lòng thử lại
-  error('An unexpected error occurred. Please try again.'), // Đã xảy ra lỗi không mong muốn. Vui lòng thử lại
-  ;
-
+  error('unexpectedError');
+  
   final String message;
   const NotifyMessage(this.message);
 
+  String getName() {
+    return name;
+  }
+
+  String getLocalizedMessage(BuildContext context) {
+    switch (this) {
+      case NotifyMessage.empty:
+        return '';
+      case NotifyMessage.msg1:
+        return S.of(context).signInSuccess;
+      case NotifyMessage.msg2:
+        return S.of(context).signInFailed;
+      case NotifyMessage.msg3:
+        return S.of(context).verificationLinkFailed;
+      case NotifyMessage.msg4:
+        return S.of(context).changePasswordFailed;
+      case NotifyMessage.msg5:
+        return S.of(context).passwordsDoNotMatch;
+      case NotifyMessage.msg6:
+        return S.of(context).verificationEmailSent;
+      case NotifyMessage.msg7:
+        return S.of(context).signUpFailed;
+      case NotifyMessage.msg8:
+        return S.of(context).resetPasswordLinkSent;
+      case NotifyMessage.msg9:
+        return S.of(context).signOutFailed;
+      case NotifyMessage.msg10:
+        return S.of(context).emailNotVerified;
+      case NotifyMessage.msg11:
+        return S.of(context).invalidEmailOrPassword;
+      case NotifyMessage.msg12:
+        return S.of(context).emailNotRegistered;
+      case NotifyMessage.msg13:
+        return S.of(context).productAddedSuccess;
+      case NotifyMessage.msg14:
+        return S.of(context).productAddFailed;
+      case NotifyMessage.msg15:
+        return S.of(context).productUpdatedSuccess;
+      case NotifyMessage.msg16:
+        return S.of(context).productUpdateFailed;
+      case NotifyMessage.error:
+        return S.of(context).unexpectedError;
+    }
+  }
+
   @override
   String toString() => message;
+}
+
+extension NotifyMessageExtension on NotifyMessage {
+  static NotifyMessage fromName(String name) {
+    return NotifyMessage.values.firstWhere((e) => e.getName() == name);
+  }
 }

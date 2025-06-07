@@ -23,7 +23,7 @@ class SelectableGradientIcon extends StatelessWidget {
         Icon(
           icon,
           size: size,
-          color: isSelected ? theme.colorScheme.primary : Colors.white,
+          color: isSelected ? Colors.amber : theme.colorScheme.onPrimary,
           fill: isSelected ? 1 : 0,
         ),
         if (label != null)
@@ -32,7 +32,7 @@ class SelectableGradientIcon extends StatelessWidget {
             child: Text(
               label!,
               style: TextStyle(
-                color: isSelected ? theme.colorScheme.primary : Colors.white,
+                color: isSelected ? Colors.amber : theme.colorScheme.onPrimary,
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),

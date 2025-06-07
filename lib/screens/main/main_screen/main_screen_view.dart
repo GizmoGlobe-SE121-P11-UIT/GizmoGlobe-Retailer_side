@@ -40,6 +40,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Stack(
       children: [
         Scaffold(
@@ -59,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
                 }
               },
               currentIndex: index,
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              backgroundColor: colorScheme.secondary,
               showSelectedLabels: false,
               showUnselectedLabels: false,
               elevation: 3,

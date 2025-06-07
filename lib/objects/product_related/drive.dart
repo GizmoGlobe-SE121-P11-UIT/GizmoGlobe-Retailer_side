@@ -23,7 +23,8 @@ class Drive extends Product {
     required super.sales,
     required super.stock,
     required super.status,
-  });
+    String? imageUrl,
+  }) : super(imageUrl: imageUrl);
 
   @override
   void updateProduct({
@@ -39,6 +40,7 @@ class Drive extends Product {
     DriveType? type,
     DriveCapacity? capacity,
     ProductStatusEnum? status,
+    String? imageUrl,
   }) {
     super.updateProduct(
       productID: productID,
@@ -51,6 +53,7 @@ class Drive extends Product {
       manufacturer: manufacturer,
       stock: stock,
       status: status,
+      imageUrl: imageUrl,
     );
 
     this.type = type ?? this.type;

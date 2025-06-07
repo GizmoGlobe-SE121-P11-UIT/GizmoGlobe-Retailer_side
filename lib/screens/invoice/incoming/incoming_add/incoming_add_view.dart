@@ -9,6 +9,7 @@ import '../../../../widgets/general/gradient_icon_button.dart';
 import 'incoming_add_cubit.dart';
 import 'incoming_add_state.dart';
 import '../../../../generated/l10n.dart';
+import '../../../../widgets/dialog/information_dialog.dart';
 
 class IncomingAddScreen extends StatefulWidget {
   const IncomingAddScreen({super.key});
@@ -30,10 +31,17 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
     return BlocConsumer<IncomingAddCubit, IncomingAddState>(
       listener: (context, state) {
         if (state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage!)),
+          showDialog(
+            context: context,
+            builder: (context) => InformationDialog(
+              title: S.of(context).errorOccurred,
+              content: state.errorMessage!,
+              buttonText: 'OK',
+              onPressed: () {
+                cubit.clearError();
+              },
+            ),
           );
-          cubit.clearError();
         }
       },
       builder: (context, state) {
@@ -46,8 +54,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
               onPressed: () => Navigator.pop(context),
               fillColor: Colors.transparent,
             ),
-            title: GradientText(
-                text: S.of(context).newIncomingInvoice),
+            title: GradientText(text: S.of(context).newIncomingInvoice),
           ),
           body: state.isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -82,7 +89,9 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
       decoration: InputDecoration(
         labelText: S.of(context).selectManufacturer,
         border: const OutlineInputBorder(),
-        labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
+        labelStyle: TextStyle(
+            color:
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.8)),
         floatingLabelStyle: TextStyle(color: Theme.of(context).primaryColor),
       ),
       value: state.selectedManufacturer,
@@ -113,14 +122,14 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
         ),
         ElevatedButton.icon(
           onPressed: () => _showAddProductDialog(context),
-          icon: const Icon(
+          icon: Icon(
             Icons.add,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
           label: Text(S.of(context).addProduct),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -170,7 +179,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.edit),
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
                           onPressed: () => _showEditDetailDialog(
                             context,
                             index,
@@ -184,7 +193,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
-                          color: Colors.red,
+                          color: Theme.of(context).colorScheme.error,
                           onPressed: () => cubit.removeDetail(index),
                           constraints: const BoxConstraints(
                             minWidth: 40,
@@ -330,7 +339,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
       items: PaymentStatus.values.map((status) {
         return DropdownMenuItem(
           value: status,
-          child: Text(status.toString()),
+          child: Text(status.getLocalizedName(context)),
         );
       }).toList(),
       onChanged: (status) {
@@ -367,18 +376,23 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
 
     final inputDecoration = InputDecoration(
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
+        borderSide: BorderSide(
+            color:
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.7)),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
+        borderSide: BorderSide(
+            color:
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.7)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Theme.of(context).primaryColor),
+        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
       ),
-      labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-      floatingLabelStyle: TextStyle(color: Theme.of(context).primaryColor),
+      labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+      floatingLabelStyle:
+          TextStyle(color: Theme.of(context).colorScheme.primary),
       hintStyle: TextStyle(color: Colors.grey[400]),
-      fillColor: Theme.of(context).cardColor,
+      fillColor: Theme.of(context).colorScheme.surface,
       filled: true,
     );
 
@@ -399,7 +413,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                       decoration: inputDecoration.copyWith(
                           labelText: S.of(context).selectManufacturer),
                       dropdownColor: Theme.of(context).cardColor,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
                       items: state.products.map((product) {
                         return DropdownMenuItem(
                           value: product,
@@ -423,7 +438,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                       controller: importPriceController,
                       decoration: inputDecoration.copyWith(
                           labelText: S.of(context).importPrice),
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                     ),
@@ -432,7 +448,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                       controller: quantityController,
                       decoration: inputDecoration.copyWith(
                           labelText: S.of(context).quantity),
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
                       keyboardType: TextInputType.number,
                     ),
                   ],
@@ -445,7 +462,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
               onPressed: () => Navigator.pop(dialogContext),
               child: Text(
                 S.of(context).cancel,
-                style: TextStyle(color: Theme.of(context).primaryColor),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
             TextButton(
@@ -463,7 +480,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
               },
               child: Text(
                 S.of(context).add,
-                style: TextStyle(color: Theme.of(context).primaryColor),
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
             ),
           ],
@@ -486,16 +503,21 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
 
     final inputDecoration = InputDecoration(
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
+        borderSide: BorderSide(
+            color:
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.7)),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.7)),
+        borderSide: BorderSide(
+            color:
+                Theme.of(context).colorScheme.primary.withValues(alpha: 0.7)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Theme.of(context).primaryColor),
+        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
       ),
-      labelStyle: TextStyle(color: Theme.of(context).primaryColor),
-      floatingLabelStyle: TextStyle(color: Theme.of(context).primaryColor),
+      labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+      floatingLabelStyle:
+          TextStyle(color: Theme.of(context).colorScheme.primary),
       hintStyle: TextStyle(color: Colors.grey[400]),
       fillColor: Theme.of(context).cardColor,
       filled: true,
@@ -506,8 +528,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
       builder: (dialogContext) => BlocProvider.value(
         value: cubit,
         child: AlertDialog(
-          title:
-              Text(S.of(context).editProductDetail),
+          title: Text(S.of(context).editProductDetail),
           content: BlocBuilder<IncomingAddCubit, IncomingAddState>(
             builder: (context, state) {
               return SingleChildScrollView(
@@ -519,7 +540,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                       decoration: inputDecoration.copyWith(
                           labelText: S.of(context).selectManufacturer),
                       dropdownColor: Theme.of(context).cardColor,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
                       items: state.products.map((product) {
                         return DropdownMenuItem(
                           value: product,
@@ -543,7 +565,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                       controller: importPriceController,
                       decoration: inputDecoration.copyWith(
                           labelText: S.of(context).importPrice),
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                     ),
@@ -552,7 +575,8 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                       controller: quantityController,
                       decoration: inputDecoration.copyWith(
                           labelText: S.of(context).quantity),
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
                       keyboardType: TextInputType.number,
                     ),
                   ],
@@ -565,7 +589,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
               onPressed: () => Navigator.pop(dialogContext),
               child: Text(
                 S.of(context).cancel,
-                style: TextStyle(color: Theme.of(context).primaryColor),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
             TextButton(
@@ -584,7 +608,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
               },
               child: Text(
                 S.of(context).update,
-                style: TextStyle(color: Theme.of(context).primaryColor),
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
             ),
           ],

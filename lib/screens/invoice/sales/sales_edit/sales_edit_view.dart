@@ -14,6 +14,7 @@ import '../../../../enums/product_related/category_enum.dart';
 import '../permissions/sales_invoice_permissions.dart';
 import 'sales_edit_cubit.dart';
 import 'sales_edit_state.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 class SalesEditScreen extends StatefulWidget {
   final SalesInvoice invoice;
@@ -321,10 +322,10 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                     const SizedBox(height: 16),
                     Text(
                       S.of(context).products,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -400,18 +401,26 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                       decoration: BoxDecoration(
                         color: Theme.of(context)
                             .colorScheme
-                            .primary
-                            .withValues(alpha: 0.1),
+                            .primaryContainer
+                            .withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withValues(alpha: 0.5),
+                          width: 1,
+                        ),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             S.of(context).totalAmount,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           Text(
@@ -472,7 +481,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5),
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
       child: DropdownButton<T>(
@@ -481,9 +492,22 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
         dropdownColor: Theme.of(context).cardColor,
         underline: const SizedBox(),
         items: items.map((T item) {
+          String displayText;
+          if (item is PaymentStatus) {
+            displayText = item.getLocalizedName(context);
+          } else if (item is SalesStatus) {
+            displayText = item.getLocalizedName(context);
+          } else {
+            displayText = item.toString().split('.').last;
+          }
           return DropdownMenuItem<T>(
             value: item,
-            child: Text(item.toString().split('.').last),
+            child: Text(
+              displayText,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
           );
         }).toList(),
         onChanged: onChanged,
@@ -608,10 +632,12 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(S.of(context).errorWithMessage(e.toString())),
-            backgroundColor: Colors.red,
+        showDialog(
+          context: context,
+          builder: (context) => InformationDialog(
+            title: S.of(context).errorOccurred,
+            content: S.of(context).errorWithMessage(e.toString()),
+            buttonText: 'OK',
           ),
         );
       }
