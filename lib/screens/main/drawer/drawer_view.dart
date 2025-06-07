@@ -14,6 +14,7 @@ class DrawerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<DrawerCubit>();
+    final colorScheme = Theme.of(context).colorScheme;
 
     return BlocBuilder<DrawerCubit, DrawerState>(
       builder: (context, state) {
@@ -23,7 +24,7 @@ class DrawerView extends StatelessWidget {
             child: Material(
               child: Container(
                 width: 240,
-                color: Theme.of(context).colorScheme.primaryContainer,
+                color: colorScheme.primaryContainer,
                 child: Column(
                   children: <Widget>[
                     const SizedBox(height: 32),
@@ -38,8 +39,7 @@ class DrawerView extends StatelessWidget {
                               return Text(
                                 '${S.of(context).hello} ${state.username}',
                                 style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: colorScheme.onSurface,
                                   fontSize: 16,
                                 ),
                                 overflow: TextOverflow.ellipsis,
@@ -57,7 +57,7 @@ class DrawerView extends StatelessWidget {
                             title: Text(
                               category.getName(),
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: colorScheme.onSurface,
                                 fontSize: 16,
                               ),
                             ),
@@ -77,7 +77,7 @@ class DrawerView extends StatelessWidget {
                         Text(
                           S.of(context).contactUs,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: colorScheme.onSurface,
                             fontSize: 16,
                           ),
                         ),
@@ -85,7 +85,7 @@ class DrawerView extends StatelessWidget {
                         Text(
                           'gizmoglobe@gg.com', // Email
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: colorScheme.onSurface,
                             fontSize: 16,
                           ),
                         ),
@@ -93,7 +93,7 @@ class DrawerView extends StatelessWidget {
                         Text(
                           '0XXX-XXX-XXX', // Phone number
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: colorScheme.onSurface,
                             fontSize: 16,
                           ),
                         ),

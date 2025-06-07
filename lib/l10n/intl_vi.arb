@@ -1043,7 +1043,312 @@
 	},
 	"success": "Thành công",
 	"@success": {
-		"description": "Label for success status.",
+		"description": "Success dialog title.",
+		"type": "text"
+	},
+	"failure": "Thất bại",
+	"@failure": {
+		"description": "Failure dialog title.",
+		"type": "text"
+	},
+	"signInSuccess": "Đăng nhập thành công.",
+	"@signInSuccess": {
+		"description": "Message shown when sign in is successful.",
+		"type": "text"
+	},
+	"signInFailed": "Đăng nhập thất bại. Vui lòng thử lại.",
+	"@signInFailed": {
+		"description": "Message shown when sign in fails.",
+		"type": "text"
+	},
+	"verificationLinkFailed": "Gửi liên kết xác minh thất bại. Vui lòng thử lại.",
+	"@verificationLinkFailed": {
+		"description": "Message shown when sending verification link fails.",
+		"type": "text"
+	},
+	"changePasswordFailed": "Lỗi thay đổi mật khẩu. Vui lòng thử lại.",
+	"@changePasswordFailed": {
+		"description": "Message shown when changing password fails.",
+		"type": "text"
+	},
+	"passwordsDoNotMatch": "Mật khẩu không khớp.",
+	"@passwordsDoNotMatch": {
+		"description": "Message shown when passwords do not match.",
+		"type": "text"
+	},
+	"verificationEmailSent": "Một email xác minh đã được gửi đến địa chỉ email của bạn. Vui lòng xác minh email của bạn để hoàn tất việc đăng ký.",
+	"@verificationEmailSent": {
+		"description": "Message shown when verification email is sent.",
+		"type": "text"
+	},
+	"signUpFailed": "Đăng ký thất bại. Vui lòng thử lại.",
+	"@signUpFailed": {
+		"description": "Message shown when sign up fails.",
+		"type": "text"
+	},
+	"resetPasswordLinkSent": "Một liên kết xác minh đã được gửi đến địa chỉ email của bạn. Vui lòng xác minh email của bạn để đặt lại mật khẩu.",
+	"@resetPasswordLinkSent": {
+		"description": "Message shown when reset password link is sent.",
+		"type": "text"
+	},
+	"signOutFailed": "Đăng xuất thất bại. Vui lòng thử lại.",
+	"@signOutFailed": {
+		"description": "Message shown when sign out fails.",
+		"type": "text"
+	},
+	"emailNotVerified": "Email chưa được xác minh. Vui lòng xác minh email của bạn.",
+	"@emailNotVerified": {
+		"description": "Message shown when email is not verified.",
+		"type": "text"
+	},
+	"invalidEmailOrPassword": "Email hoặc mật khẩu không hợp lệ",
+	"@invalidEmailOrPassword": {
+		"description": "Message shown when email or password is invalid.",
+		"type": "text"
+	},
+	"emailNotRegistered": "Email này không được đăng ký trong hệ thống",
+	"@emailNotRegistered": {
+		"description": "Message shown when email is not registered.",
+		"type": "text"
+	},
+	"productAddedSuccess": "Sản phẩm đã được thêm thành công.",
+	"@productAddedSuccess": {
+		"description": "Message shown when product is added successfully.",
+		"type": "text"
+	},
+	"productAddFailed": "Không thể thêm sản phẩm. Vui lòng thử lại.",
+	"@productAddFailed": {
+		"description": "Message shown when adding product fails.",
+		"type": "text"
+	},
+	"productUpdatedSuccess": "Sản phẩm đã được cập nhật thành công.",
+	"@productUpdatedSuccess": {
+		"description": "Message shown when product is updated successfully.",
+		"type": "text"
+	},
+	"productUpdateFailed": "Không thể cập nhật sản phẩm. Vui lòng thử lại.",
+	"@productUpdateFailed": {
+		"description": "Message shown when updating product fails.",
+		"type": "text"
+	},
+	"unexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
+	"@unexpectedError": {
+		"description": "Message shown when an unexpected error occurs.",
+		"type": "text"
+	},
+	"chooseFromGallery": "Chọn từ thư viện",
+	"@chooseFromGallery": {
+		"description": "Option to choose image from gallery.",
+		"type": "text"
+	},
+	"takePhoto": "Chụp ảnh",
+	"@takePhoto": {
+		"description": "Option to take a photo with camera.",
+		"type": "text"
+	},
+	"enterUrl": "Nhập URL",
+	"@enterUrl": {
+		"description": "Option to enter image URL.",
+		"type": "text"
+	},
+	"enterImageUrl": "Nhập URL hình ảnh",
+	"@enterImageUrl": {
+		"description": "Prompt to enter image URL.",
+		"type": "text"
+	},
+	"addProductImage": "Thêm hình sản phẩm",
+	"@addProductImage": {
+		"description": "Title for adding product image section.",
+		"type": "text"
+	},
+	"searchManufacturer": "Tìm kiếm nhà sản xuất...",
+	"@searchManufacturer": {
+		"description": "Placeholder text for manufacturer search field.",
+		"type": "text"
+	},
+	"active": "Còn hàng",
+	"@active": {
+		"description": "Status indicating product is active.",
+		"type": "text"
+	},
+	"outOfStock": "Hết hàng",
+	"@outOfStock": {
+		"description": "Status indicating product is out of stock.",
+		"type": "text"
+	},
+	"categorySpecifications": "Thông số cho",
+	"@categorySpecifications": {
+		"description": "Title for category specifications section.",
+		"type": "text"
+	},
+	"ramBus": "Bus RAM",
+	"@ramBus": {
+		"description": "Label for RAM bus speed specification.",
+		"type": "text"
+	},
+	"ramCapacity": "Dung lượng RAM",
+	"@ramCapacity": {
+		"description": "Label for RAM capacity specification.",
+		"type": "text"
+	},
+	"ramType": "Loại RAM",
+	"@ramType": {
+		"description": "Label for RAM type specification.",
+		"type": "text"
+	},
+	"cpuFamily": "Dòng CPU",
+	"@cpuFamily": {
+		"description": "Label for CPU family specification.",
+		"type": "text"
+	},
+	"cpuCore": "Số nhân CPU",
+	"@cpuCore": {
+		"description": "Label for CPU core count specification.",
+		"type": "text"
+	},
+	"cpuThread": "Số luồng CPU",
+	"@cpuThread": {
+		"description": "Label for CPU thread count specification.",
+		"type": "text"
+	},
+	"cpuClockSpeed": "Tốc độ CPU",
+	"@cpuClockSpeed": {
+		"description": "Label for CPU clock speed specification.",
+		"type": "text"
+	},
+	"psuWattage": "Công suất PSU",
+	"@psuWattage": {
+		"description": "Label for PSU wattage specification.",
+		"type": "text"
+	},
+	"psuEfficiency": "Hiệu suất PSU",
+	"@psuEfficiency": {
+		"description": "Label for PSU efficiency specification.",
+		"type": "text"
+	},
+	"psuModular": "PSU Modular",
+	"@psuModular": {
+		"description": "Label for PSU modular specification.",
+		"type": "text"
+	},
+	"gpuSeries": "Dòng GPU",
+	"@gpuSeries": {
+		"description": "Label for GPU series specification.",
+		"type": "text"
+	},
+	"gpuCapacity": "Dung lượng GPU",
+	"@gpuCapacity": {
+		"description": "Label for GPU memory capacity specification.",
+		"type": "text"
+	},
+	"gpuBus": "Bus GPU",
+	"@gpuBus": {
+		"description": "Label for GPU bus interface specification.",
+		"type": "text"
+	},
+	"gpuClockSpeed": "Tốc độ GPU",
+	"@gpuClockSpeed": {
+		"description": "Label for GPU clock speed specification.",
+		"type": "text"
+	},
+	"formFactor": "Kiểu dáng",
+	"@formFactor": {
+		"description": "Label for motherboard form factor specification.",
+		"type": "text"
+	},
+	"series": "Dòng sản phẩm",
+	"@series": {
+		"description": "Label for product series specification.",
+		"type": "text"
+	},
+	"compatibility": "Tương thích",
+	"@compatibility": {
+		"description": "Label for compatibility specification.",
+		"type": "text"
+	},
+	"driveType": "Loại ổ đĩa",
+	"@driveType": {
+		"description": "Label for drive type specification.",
+		"type": "text"
+	},
+	"driveCapacity": "Dung lượng ổ đĩa",
+	"@driveCapacity": {
+		"description": "Label for drive capacity specification.",
+		"type": "text"
+	},
+	"productName": "Tên sản phẩm",
+	"@productName": {
+		"description": "Label for product name field.",
+		"type": "text"
+	},
+	"sellingPrice": "Giá bán",
+	"@sellingPrice": {
+		"description": "Label for selling price field.",
+		"type": "text"
+	},
+	"discount": "Giảm giá",
+	"@discount": {
+		"description": "Label for discount field.",
+		"type": "text"
+	},
+	"stock": "Tồn kho",
+	"@stock": {
+		"description": "Label for stock quantity field.",
+		"type": "text"
+	},
+	"additionalInformation": "Thông tin bổ sung",
+	"@additionalInformation": {
+		"description": "Label for additional product information field.",
+		"type": "text"
+	},
+	"releaseDate": "Ngày phát hành",
+	"@releaseDate": {
+		"description": "Label for product release date field.",
+		"type": "text"
+	},
+	"manufacturer": "Nhà sản xuất",
+	"@manufacturer": {
+		"description": "Label for product manufacturer field.",
+		"type": "text"
+	},
+	"from": "Từ",
+	"@from": {
+		"description": "Label for minimum value in range filter.",
+		"type": "text"
+	},
+	"to": "Đến",
+	"@to": {
+		"description": "Label for maximum value in range filter.",
+		"type": "text"
+	},
+	"min": "Tối thiểu",
+	"@min": {
+		"description": "Hint for minimum value in range filter.",
+		"type": "text"
+	},
+	"max": "Tối đa",
+	"@max": {
+		"description": "Hint for maximum value in range filter.",
+		"type": "text"
+	},
+	"filter": "Lọc",
+	"@filter": {
+		"description": "Label for filter button.",
+		"type": "text"
+	},
+	"basicInformation": "Thông tin cơ bản",
+	"@basicInformation": {
+		"description": "Section title for basic information.",
+		"type": "text"
+	},
+	"drive": "Ổ cứng",
+	"@drive": {
+		"description": "Label for drive category.",
+		"type": "text"
+	},
+	"mainboard": "Bo mạch chủ",
+	"@mainboard": {
+		"description": "Label for mainboard category.",
 		"type": "text"
 	}
 }

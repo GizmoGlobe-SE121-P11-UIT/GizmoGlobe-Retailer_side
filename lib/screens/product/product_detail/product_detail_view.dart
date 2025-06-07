@@ -5,9 +5,12 @@ import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_state.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/product_status_enum.dart';
+import '../../../enums/product_related/category_enum.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../data/database/database.dart';
@@ -32,9 +35,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        backgroundColor: colorScheme.surface,
         leading: BlocBuilder<ProductDetailCubit, ProductDetailState>(
           builder: (context, state) => GradientIconButton(
             icon: Icons.chevron_left,
@@ -47,20 +52,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             fillColor: Colors.transparent,
           ),
         ),
-        actions: const [
-          // IconButton(
-          //   icon: Icon(Icons.share),
-          //   onPressed: () {
-          //     // Implement share functionality
-          //   },
-          // ),
-          // IconButton(
-          //   icon: Icon(Icons.favorite_border),
-          //   onPressed: () {
-          //     // Implement wishlist functionality
-          //   },
-          // ),
-        ],
+        actions: const [],
         title: BlocBuilder<ProductDetailCubit, ProductDetailState>(
           builder: (context, state) => GradientText(
             text: state.product.productName,
@@ -69,24 +61,73 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
       body: BlocBuilder<ProductDetailCubit, ProductDetailState>(
         builder: (context, state) {
+          if (kDebugMode) {
+            print('Product imageUrl: ${state.product.imageUrl}');
+          }
           return Stack(
             children: [
-              // Main content in SingleChildScrollView
               SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Product Image Section - smaller size
+                    // Product Image Section
                     Container(
                       height: MediaQuery.of(context).size.height * 0.25,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: colorScheme.surfaceVariant,
                       ),
-                      child: Image.network(
-                        'https://ramleather.vn/wp-content/uploads/2022/07/woocommerce-placeholder-200x200-1.jpg',
-                        fit: BoxFit.contain,
-                      ),
+                      child: (state.product.imageUrl != null &&
+                              state.product.imageUrl!.isNotEmpty)
+                          ? Image.network(
+                              state.product.imageUrl!,
+                              fit: BoxFit.contain,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return Stack(
+                                  children: [
+                                    Center(child: child),
+                                    Positioned.fill(
+                                      child: Container(
+                                        color: Colors.black.withOpacity(0.05),
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            color: colorScheme.primary,
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Icon(
+                                    _getCategoryIcon(state.product.category),
+                                    size: 64,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Icon(
+                                _getCategoryIcon(state.product.category),
+                                size: 64,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
                     ),
 
                     // Product Info Section
@@ -97,13 +138,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         children: [
                           // Basic Information Section
                           Text(
-                            'Basic Information', //Thông tin cơ bản
+                            S.of(context).basicInformation,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue[300],
+                                  color: colorScheme.primary,
                                 ),
                           ),
                           const SizedBox(height: 16),
@@ -120,8 +161,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             .textTheme
                                             .titleLarge,
                                       ),
-                                      const SizedBox(width: 8),
-                                      StatusBadge(status: state.product.status),
                                     ],
                                   ),
                                 ),
@@ -131,38 +170,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                           _buildInfoRow(
                             icon: Icons.category,
-                            title: 'Category', //Danh mục
-                            value: state.product.category
-                                .toString()
-                                .split('.')
-                                .last,
+                            title: S.of(context).category,
+                            value: _getLocalizedCategory(
+                                context, state.product.category),
                           ),
 
                           _buildInfoRow(
                             icon: Icons.business,
-                            title: 'Manufacturer', //Nhà sản xuất
+                            title: S.of(context).manufacturer,
                             value: state.product.manufacturer.manufacturerName,
                           ),
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Row(
-                              children: [
-                                Icon(Icons.circle,
-                                    size: 20, color: Colors.grey[500]),
-                                const SizedBox(width: 8),
-                                const Text(
-                                  'Status: ', //Trạng thái
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                StatusBadge(status: state.product.status),
-                              ],
-                            ),
-                          ),
-
                           // Thêm thông tin về giá và discount
                           _buildPriceSection(
                             sellingPrice: state.product.sellingPrice,
@@ -171,13 +188,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           const SizedBox(height: 24),
                           // Status Information Section
                           Text(
-                            'Status Information', //Thông tin trạng thái
+                            S.of(context).overview,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue[300],
+                                  color: colorScheme.primary,
                                 ),
                           ),
                           const SizedBox(height: 16),
@@ -190,17 +207,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     ? Icons.check_circle
                                     : Icons.error,
                                 color: state.product.stock > 0
-                                    ? Colors.green
-                                    : Colors.red,
+                                    ? colorScheme.tertiary
+                                    : colorScheme.error,
                                 size: 16,
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                'Stock: ${state.product.stock}', //Tồn kho
+                                '${S.of(context).stock}: ${state.product.stock}',
                                 style: TextStyle(
                                   color: state.product.stock > 0
-                                      ? Colors.green
-                                      : Colors.red,
+                                      ? colorScheme.tertiary
+                                      : colorScheme.error,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -210,7 +227,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                           _buildInfoRow(
                             icon: Icons.calendar_today,
-                            title: 'Release Date', //Ngày phát hành
+                            title: S.of(context).releaseDate,
                             value: DateFormat('dd/MM/yyyy')
                                 .format(state.product.release),
                           ),
@@ -218,13 +235,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                           // Technical Specifications Section
                           Text(
-                            'Technical Specifications', //Thông số kỹ thuật
+                            '${S.of(context).categorySpecifications} : ${_getLocalizedCategory(context, state.product.category)}',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue[300],
+                                  color: colorScheme.primary,
                                 ),
                           ),
                           const SizedBox(height: 16),
@@ -364,69 +381,49 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  // Widget _buildStatusChip(dynamic status) {
-  //   // Xác định màu sắc dựa trên status
-  //   Color chipColor;
-  //   Color textColor;
-  //
-  //   switch(status.toString().toLowerCase()) {
-  //     case 'active':
-  //       chipColor = Colors.green.withOpacity(0.1);
-  //       textColor = Colors.green;
-  //       break;
-  //     case 'discontinued':
-  //       chipColor = Colors.red.withOpacity(0.1);
-  //       textColor = Colors.red;
-  //       break;
-  //     case 'pending':
-  //       chipColor = Colors.orange.withOpacity(0.1);
-  //       textColor = Colors.orange;
-  //       break;
-  //     default:
-  //       chipColor = Colors.grey.withOpacity(0.1);
-  //       textColor = Colors.grey;
-  //   }
-  //
-  //   return Container(
-  //     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-  //     decoration: BoxDecoration(
-  //       color: chipColor,
-  //       borderRadius: BorderRadius.circular(16),
-  //     ),
-  //     child: Text(
-  //       status.toString(),
-  //       style: TextStyle(
-  //         color: textColor,
-  //         fontSize: 12,
-  //         fontWeight: FontWeight.w500,
-  //       ),
-  //     ),
-  //   );
-  // }
+  IconData _getCategoryIcon(category) {
+    switch (category) {
+      case CategoryEnum.ram:
+        return Icons.memory;
+      case CategoryEnum.cpu:
+        return Icons.computer;
+      case CategoryEnum.psu:
+        return Icons.power;
+      case CategoryEnum.gpu:
+        return Icons.videogame_asset;
+      case CategoryEnum.drive:
+        return Icons.storage;
+      case CategoryEnum.mainboard:
+        return Icons.developer_board;
+      default:
+        return Icons.device_unknown;
+    }
+  }
 
   Widget _buildInfoRow({
     required IconData icon,
     required String title,
     required String value,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: Colors.grey[500]),
+          Icon(icon, size: 20, color: colorScheme.onSurfaceVariant),
           const SizedBox(width: 8),
           Text(
             '$title: ',
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w900,
-              color: Colors.white,
+              color: colorScheme.onSurface,
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -439,7 +436,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   List<Widget> _buildProductSpecificDetails(
       BuildContext context, Product product, Map<String, String> specs) {
     return specs.entries
-        .map((entry) => _buildSpecificationRow(entry.key, entry.value))
+        .map((entry) => _buildSpecificationRow(
+            _getLocalizedSpecKey(context, entry.key), entry.value))
         .toList();
   }
 
@@ -477,26 +475,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     required double sellingPrice,
     required double discount,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     final discountedPrice = sellingPrice * (1 - discount);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(Icons.attach_money, size: 20, color: Colors.grey[500]),
+          Icon(Icons.attach_money,
+              size: 20, color: colorScheme.onSurfaceVariant),
           const SizedBox(width: 8),
-          const Text(
-            'Price: ', //Giá
+          Text(
+            S.of(context).price,
             style: TextStyle(
               fontWeight: FontWeight.w900,
-              color: Colors.white,
+              color: colorScheme.onSurface,
             ),
           ),
           if (discount > 0) ...[
             Text(
-              '\$${sellingPrice.toStringAsFixed(2)}',
+              ': \$${sellingPrice.toStringAsFixed(2)}',
               style: TextStyle(
-                color: Colors.grey[400],
+                color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w400,
                 decoration: TextDecoration.lineThrough,
                 fontSize: 14,
@@ -506,7 +506,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Text(
               '\$${discountedPrice.toStringAsFixed(2)}',
               style: TextStyle(
-                color: Colors.green[300],
+                color: colorScheme.tertiary,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
@@ -515,13 +515,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.1),
+                color: colorScheme.error.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
                 '-${(discount * 100).toStringAsFixed(0)}%',
                 style: TextStyle(
-                  color: Colors.red[300],
+                  color: colorScheme.error,
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
@@ -530,13 +530,77 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ] else
             Text(
               '\$${sellingPrice.toStringAsFixed(2)}',
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: colorScheme.onSurface,
                 fontWeight: FontWeight.w400,
               ),
             ),
         ],
       ),
     );
+  }
+
+  String _getLocalizedCategory(BuildContext context, CategoryEnum category) {
+    switch (category) {
+      case CategoryEnum.ram:
+        return 'RAM';
+      case CategoryEnum.cpu:
+        return 'CPU';
+      case CategoryEnum.psu:
+        return 'PSU';
+      case CategoryEnum.gpu:
+        return 'GPU';
+      case CategoryEnum.drive:
+        return S.of(context).drive;
+      case CategoryEnum.mainboard:
+        return S.of(context).mainboard;
+      default:
+        return S.of(context).unknownCategory;
+    }
+  }
+
+  String _getLocalizedSpecKey(BuildContext context, String key) {
+    switch (key.toLowerCase()) {
+      case 'type':
+        return S.of(context).driveType;
+      case 'capacity':
+        return S.of(context).driveCapacity;
+      case 'ram bus':
+        return S.of(context).ramBus;
+      case 'ram capacity':
+        return S.of(context).ramCapacity;
+      case 'ram type':
+        return S.of(context).ramType;
+      case 'cpu family':
+        return S.of(context).cpuFamily;
+      case 'cpu core':
+        return S.of(context).cpuCore;
+      case 'cpu thread':
+        return S.of(context).cpuThread;
+      case 'cpu clock speed':
+        return S.of(context).cpuClockSpeed;
+      case 'psu wattage':
+        return S.of(context).psuWattage;
+      case 'psu efficiency':
+        return S.of(context).psuEfficiency;
+      case 'psu modular':
+        return S.of(context).psuModular;
+      case 'gpu series':
+        return S.of(context).gpuSeries;
+      case 'gpu capacity':
+        return S.of(context).gpuCapacity;
+      case 'gpu bus':
+        return S.of(context).gpuBus;
+      case 'gpu clock speed':
+        return S.of(context).gpuClockSpeed;
+      case 'form factor':
+        return S.of(context).formFactor;
+      case 'series':
+        return S.of(context).series;
+      case 'compatibility':
+        return S.of(context).compatibility;
+      default:
+        return key;
+    }
   }
 }

@@ -1262,6 +1262,7 @@ class Firebase {
         'status': product.status.getName(),
         'manufacturerID': product.manufacturer.manufacturerID,
         'category': product.category.getName(),
+        'imageUrl': product.imageUrl,
       };
 
       switch (product.runtimeType) {
@@ -1349,6 +1350,7 @@ class Firebase {
         'status': product.status.getName(),
         'manufacturerID': product.manufacturer.manufacturerID,
         'category': product.category.getName(),
+        'imageUrl': product.imageUrl,
       };
 
       switch (product.runtimeType) {

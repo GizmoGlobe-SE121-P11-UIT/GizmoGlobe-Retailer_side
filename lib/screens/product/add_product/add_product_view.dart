@@ -6,6 +6,9 @@ import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:intl/intl.dart';
 
 import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
@@ -31,16 +34,13 @@ import '../../../widgets/general/gradient_dropdown.dart';
 import 'add_product_state.dart';
 import 'add_product_cubit.dart';
 
-
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
 
-  static Widget newInstance() =>
-      BlocProvider(
+  static Widget newInstance() => BlocProvider(
         create: (context) => AddProductCubit(),
         child: const AddProductScreen(),
       );
-
 
   @override
   State<AddProductScreen> createState() => _AddProductState();
@@ -74,8 +74,82 @@ class _AddProductState extends State<AddProductScreen> {
     gpuClockSpeedController = TextEditingController();
   }
 
+  void _showImagePickerMenu() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: Text(S.of(context).chooseFromGallery),
+                onTap: () {
+                  Navigator.pop(context);
+                  cubit.pickImageFromGallery();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: Text(S.of(context).takePhoto),
+                onTap: () {
+                  Navigator.pop(context);
+                  cubit.pickImageFromCamera();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.link),
+                title: Text(S.of(context).enterUrl),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showUrlInputDialog();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showUrlInputDialog() {
+    final TextEditingController urlController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(S.of(context).enterImageUrl),
+          content: TextField(
+            controller: urlController,
+            decoration: InputDecoration(
+              hintText: 'https://example.com/image.jpg',
+            ),
+            keyboardType: TextInputType.url,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(S.of(context).cancel),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: Text(S.of(context).confirm),
+              onPressed: () {
+                if (urlController.text.isNotEmpty) {
+                  cubit.pickImageFromUrl(urlController.text);
+                }
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -90,8 +164,8 @@ class _AddProductState extends State<AddProductScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: BlocBuilder<AddProductCubit, AddProductState>(
-              buildWhen: (previous, current) => 
-                previous.processState != current.processState,
+              buildWhen: (previous, current) =>
+                  previous.processState != current.processState,
               builder: (context, state) {
                 return state.processState == ProcessState.loading
                     ? const Center(
@@ -111,35 +185,30 @@ class _AddProductState extends State<AddProductScreen> {
           ),
         ],
       ),
-
       body: BlocConsumer<AddProductCubit, AddProductState>(
         listener: (context, state) {
           if (state.processState == ProcessState.success) {
             showDialog(
               context: context,
-              builder:  (context) =>
-                  InformationDialog(
-                    title: state.dialogName.toString(),
-                    content: state.notifyMessage.toString(),
-                    onPressed: () {
-                      Navigator.pop(context, state.processState);
-                    },
-                  ),
+              builder: (context) => InformationDialog(
+                title: state.dialogName.getLocalizedName(context),
+                content: state.notifyMessage.getLocalizedMessage(context),
+                onPressed: () {
+                  Navigator.pop(context, state.processState);
+                },
+              ),
             );
-          } else {
-            if (state.processState == ProcessState.failure) {
-              showDialog(
-                context: context,
-                builder:  (context) =>
-                    InformationDialog(
-                      title: state.dialogName.toString(),
-                      content: state.notifyMessage.toString(),
-                      onPressed: () {
-                        cubit.toIdle();
-                      },
-                    ),
-              );
-            }
+          } else if (state.processState == ProcessState.failure) {
+            showDialog(
+              context: context,
+              builder: (context) => InformationDialog(
+                title: state.dialogName.getLocalizedName(context),
+                content: state.notifyMessage.getLocalizedMessage(context),
+                onPressed: () {
+                  cubit.toIdle();
+                },
+              ),
+            );
           }
         },
         builder: (context, state) {
@@ -147,34 +216,86 @@ class _AddProductState extends State<AddProductScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Product Image Section - smaller size
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.25,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withValues(alpha: 0.2), 
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(0, 3),
+                GestureDetector(
+                  onTap: _showImagePickerMenu,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceVariant,
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Image.network(
-                      'https://ramleather.vn/wp-content/uploads/2022/07/woocommerce-placeholder-200x200-1.jpg',
-                      fit: BoxFit.contain,
+                      boxShadow: [
+                        BoxShadow(
+                          color: colorScheme.shadow.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        if (state.imageUrl != null)
+                          Center(
+                            child: Image.network(
+                              state.imageUrl!,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Icon(
+                                    Icons.error_outline,
+                                    color: colorScheme.error,
+                                    size: 48,
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        else
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add_photo_alternate,
+                                  size: 48,
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  S.of(context).addProductImage,
+                                  style: TextStyle(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        if (state.isUploadingImage)
+                          Positioned.fill(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Color.fromRGBO(0, 0, 0, 0.5),
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                              ),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ),
-
-                // Product Input Section
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Card(
@@ -187,21 +308,22 @@ class _AddProductState extends State<AddProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Basic Information', // Thông tin cơ bản
+                          Text(
+                            S.of(context).basicInformation,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF202046),
+                              color: colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 16),
                           buildInputWidget<String>(
-                            'Product Name', // Tên sản phẩm
+                            S.of(context).productName,
                             productNameController,
                             state.productArgument?.productName,
-                                (value) {
-                              cubit.updateProductArgument(state.productArgument!.copyWith(productName: value));
+                            (value) {
+                              cubit.updateProductArgument(state.productArgument!
+                                  .copyWith(productName: value));
                             },
                           ),
                           const SizedBox(height: 16),
@@ -209,22 +331,26 @@ class _AddProductState extends State<AddProductScreen> {
                             children: [
                               Expanded(
                                 child: buildInputWidget<double>(
-                                  'Import Price', // Giá nhập
+                                  S.of(context).importPrice,
                                   importPriceController,
                                   state.productArgument?.importPrice,
-                                      (value) {
-                                    cubit.updateProductArgument(state.productArgument!.copyWith(importPrice: value));
+                                  (value) {
+                                    cubit.updateProductArgument(state
+                                        .productArgument!
+                                        .copyWith(importPrice: value));
                                   },
                                 ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
                                 child: buildInputWidget<double>(
-                                  'Selling Price', // Giá bán
+                                  S.of(context).sellingPrice,
                                   sellingPriceController,
                                   state.productArgument?.sellingPrice,
-                                      (value) {
-                                    cubit.updateProductArgument(state.productArgument!.copyWith(sellingPrice: value));
+                                  (value) {
+                                    cubit.updateProductArgument(state
+                                        .productArgument!
+                                        .copyWith(sellingPrice: value));
                                   },
                                 ),
                               ),
@@ -235,23 +361,29 @@ class _AddProductState extends State<AddProductScreen> {
                             children: [
                               Expanded(
                                 child: buildInputWidget<double>(
-                                  'Discount', // Giảm giá
+                                  S.of(context).discount,
                                   discountController,
                                   state.productArgument?.discount,
-                                      (value) {
-                                    cubit.updateProductArgument(state.productArgument!.copyWith(discount: value));
+                                  (value) {
+                                    cubit.updateProductArgument(state
+                                        .productArgument!
+                                        .copyWith(discount: value));
                                   },
                                 ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
                                 child: buildInputWidget<int>(
-                                  'Stock', // Số lượng
+                                  S.of(context).stock,
                                   stockController,
                                   state.productArgument?.stock,
-                                      (value) {
-                                    final newStatus = value! > 0 ? ProductStatusEnum.active : ProductStatusEnum.outOfStock;
-                                    cubit.updateProductArgument(state.productArgument!.copyWith(stock: value, status: newStatus));
+                                  (value) {
+                                    final newStatus = value! > 0
+                                        ? ProductStatusEnum.active
+                                        : ProductStatusEnum.outOfStock;
+                                    cubit.updateProductArgument(
+                                        state.productArgument!.copyWith(
+                                            stock: value, status: newStatus));
                                   },
                                 ),
                               ),
@@ -262,8 +394,6 @@ class _AddProductState extends State<AddProductScreen> {
                     ),
                   ),
                 ),
-
-                // Additional Information Section
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Card(
@@ -276,30 +406,32 @@ class _AddProductState extends State<AddProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Additional Information', // Thông tin bổ sung
+                          Text(
+                            S.of(context).additionalInformation,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF202046),
+                              color: colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 16),
                           buildInputWidget<DateTime>(
-                            'Release Date', // Ngày phát hành
+                            S.of(context).releaseDate,
                             TextEditingController(),
                             state.productArgument?.release ?? DateTime.now(),
-                                (value) {
-                              cubit.updateProductArgument(state.productArgument!.copyWith(release: value));
+                            (value) {
+                              cubit.updateProductArgument(state.productArgument!
+                                  .copyWith(release: value));
                             },
                           ),
                           const SizedBox(height: 16),
                           buildInputWidget<CategoryEnum>(
-                            'Category', // Danh mục
+                            S.of(context).category,
                             TextEditingController(),
                             state.productArgument?.category,
-                                (value) {
-                              cubit.updateProductArgument(state.productArgument!.copyWith(category: value));
+                            (value) {
+                              cubit.updateProductArgument(state.productArgument!
+                                  .copyWith(category: value));
                             },
                             CategoryEnum.nonEmptyValues,
                           ),
@@ -307,50 +439,16 @@ class _AddProductState extends State<AddProductScreen> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Text('Manufacturer', style: AppTextStyle.smallText), // Nhà sản xuất
-                              const SizedBox(height: 8),
-                              DropdownSearch<Manufacturer>(
-                                items: (String filter, dynamic infiniteScrollProps) => Database().manufacturerList,
-                                compareFn: (Manufacturer? m1, Manufacturer? m2) => m1?.manufacturerID == m2?.manufacturerID,
-                                itemAsString: (Manufacturer m) => m.manufacturerName,
-                                onChanged: (value) {
-                                  cubit.updateProductArgument(state.productArgument!.copyWith(manufacturer: value));
+                              buildInputWidget<Manufacturer>(
+                                S.of(context).manufacturer,
+                                TextEditingController(),
+                                state.productArgument?.manufacturer,
+                                (value) {
+                                  cubit.updateProductArgument(state
+                                      .productArgument!
+                                      .copyWith(manufacturer: value));
                                 },
-                                selectedItem: state.productArgument?.manufacturer,
-                                decoratorProps: DropDownDecoratorProps(
-                                  decoration: InputDecoration(
-                                    hintText: 'Select Manufacturer', // Chọn nhà sản xuất
-                                    hintStyle: const TextStyle(color: Colors.grey),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(color: Colors.blue, width: 2),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(color: Colors.blue, width: 2),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(color: Colors.blue, width: 2),
-                                    ),
-                                    filled: true,
-                                    fillColor: const Color(0xFF202046),
-                                  ),
-                                ),
-                                popupProps: PopupProps.menu(
-                                  showSearchBox: true,
-                                  searchFieldProps: TextFieldProps(
-                                    decoration: InputDecoration(
-                                      hintText: 'Search manufacturer...', // Tìm kiếm nhà sản xuất...
-                                      hintStyle: const TextStyle(color: Colors.grey),
-                                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                Database().manufacturerList,
                               ),
                             ],
                           ),
@@ -358,22 +456,33 @@ class _AddProductState extends State<AddProductScreen> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Text('Status', style: AppTextStyle.smallText), // Trạng thái
+                              Text(S.of(context).status,
+                                  style: AppTextStyle.smallText),
                               const SizedBox(height: 8),
                               BlocBuilder<AddProductCubit, AddProductState>(
                                 builder: (context, state) {
-                                  final status = (state.productArgument?.stock ?? 0) > 0
-                                      ? ProductStatusEnum.active
-                                      : ProductStatusEnum.outOfStock;
+                                  final status =
+                                      (state.productArgument?.stock ?? 0) > 0
+                                          ? ProductStatusEnum.active
+                                          : ProductStatusEnum.outOfStock;
 
                                   return Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 8),
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 12),
                                     decoration: BoxDecoration(
-                                      color: status == ProductStatusEnum.active ? Colors.green.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
+                                      color: status == ProductStatusEnum.active
+                                          ? colorScheme.tertiary
+                                              .withValues(alpha: 0.1)
+                                          : colorScheme.error
+                                              .withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
-                                        color: status == ProductStatusEnum.active ? Colors.green : Colors.red,
+                                        color:
+                                            status == ProductStatusEnum.active
+                                                ? colorScheme.tertiary
+                                                : colorScheme.error,
                                         width: 2,
                                       ),
                                     ),
@@ -381,15 +490,25 @@ class _AddProductState extends State<AddProductScreen> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Icon(
-                                          status == ProductStatusEnum.active ? Icons.check_circle : Icons.error,
-                                          color: status == ProductStatusEnum.active ? Colors.green : Colors.red,
+                                          status == ProductStatusEnum.active
+                                              ? Icons.check_circle
+                                              : Icons.error,
+                                          color:
+                                              status == ProductStatusEnum.active
+                                                  ? Colors.green
+                                                  : Colors.red,
                                           size: 20,
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
-                                          status == ProductStatusEnum.active ? 'Active' : 'Out of Stock',
+                                          status == ProductStatusEnum.active
+                                              ? S.of(context).active
+                                              : S.of(context).outOfStock,
                                           style: TextStyle(
-                                            color: status == ProductStatusEnum.active ? Colors.green : Colors.red,
+                                            color: status ==
+                                                    ProductStatusEnum.active
+                                                ? Colors.green
+                                                : Colors.red,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -405,9 +524,8 @@ class _AddProductState extends State<AddProductScreen> {
                     ),
                   ),
                 ),
-
-                // Category Specific Section
-                if (state.productArgument?.category != null && state.productArgument?.category != CategoryEnum.empty)
+                if (state.productArgument?.category != null &&
+                    state.productArgument?.category != CategoryEnum.empty)
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Card(
@@ -421,16 +539,17 @@ class _AddProductState extends State<AddProductScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${state.productArgument?.category.toString()} Specifications', // Thông số kỹ thuật
-                              style: const TextStyle(
+                              '${S.of(context).categorySpecifications} ${state.productArgument?.category.toString()}',
+                              style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF202046),
+                                color: colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 16),
                             buildCategorySpecificInputs(
-                              state.productArgument?.category ?? CategoryEnum.empty,
+                              state.productArgument?.category ??
+                                  CategoryEnum.empty,
                               state,
                               cubit,
                             ),
@@ -439,7 +558,7 @@ class _AddProductState extends State<AddProductScreen> {
                       ),
                     ),
                   ),
-                const SizedBox(height: 32), // Bottom padding
+                const SizedBox(height: 32),
               ],
             ),
           );
@@ -448,35 +567,39 @@ class _AddProductState extends State<AddProductScreen> {
     );
   }
 
-  Widget buildCategorySpecificInputs(CategoryEnum category, AddProductState state, AddProductCubit cubit) {
+  Widget buildCategorySpecificInputs(
+      CategoryEnum category, AddProductState state, AddProductCubit cubit) {
     switch (category) {
       case CategoryEnum.ram:
         return Column(
           children: [
             buildInputWidget<RAMBus>(
-              'RAM Bus', // Bus RAM
+              S.of(context).ramBus,
               TextEditingController(),
               state.productArgument?.ramBus,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(ramBus: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(ramBus: value));
               },
               RAMBus.values,
             ),
             buildInputWidget<RAMCapacity>(
-              'RAM Capacity', // Dung lượng RAM
+              S.of(context).ramCapacity,
               TextEditingController(),
               state.productArgument?.ramCapacity,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(ramCapacity: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(ramCapacity: value));
               },
               RAMCapacity.values,
             ),
             buildInputWidget<RAMType>(
-              'RAM Type', // Loại RAM
+              S.of(context).ramType,
               TextEditingController(),
               state.productArgument?.ramType,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(ramType: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(ramType: value));
               },
               RAMType.values,
             ),
@@ -486,36 +609,40 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<CPUFamily>(
-              'CPU Family', // Dòng CPU
+              S.of(context).cpuFamily,
               TextEditingController(),
               state.productArgument?.family,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(family: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(family: value));
               },
               CPUFamily.values,
             ),
             buildInputWidget<int>(
-              'CPU Core', // Số nhân CPU
+              S.of(context).cpuCore,
               cpuCoreController,
               state.productArgument?.core,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(core: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(core: value));
               },
             ),
             buildInputWidget<int>(
-              'CPU Thread', // Số luồng CPU
+              S.of(context).cpuThread,
               cpuThreadController,
               state.productArgument?.thread,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(thread: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(thread: value));
               },
             ),
             buildInputWidget<double>(
-              'CPU Clock Speed', // Tốc độ xung nhịp CPU
+              S.of(context).cpuClockSpeed,
               cpuClockSpeedController,
               state.productArgument?.cpuClockSpeed,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(cpuClockSpeed: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(cpuClockSpeed: value));
               },
             ),
           ],
@@ -524,28 +651,31 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<int>(
-              'PSU Wattage', // Công suất PSU
+              S.of(context).psuWattage,
               psuWattageController,
               state.productArgument?.wattage,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(wattage: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(wattage: value));
               },
             ),
             buildInputWidget<PSUEfficiency>(
-              'PSU Efficiency', // Hiệu suất PSU
+              S.of(context).psuEfficiency,
               TextEditingController(),
               state.productArgument?.efficiency,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(efficiency: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(efficiency: value));
               },
               PSUEfficiency.values,
             ),
             buildInputWidget<PSUModular>(
-              'PSU Modular', // Mô-đun PSU
+              S.of(context).psuModular,
               TextEditingController(),
               state.productArgument?.modular,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(modular: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(modular: value));
               },
               PSUModular.values,
             ),
@@ -555,38 +685,42 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<GPUSeries>(
-              'GPU Series', // Dòng GPU
+              S.of(context).gpuSeries,
               TextEditingController(),
               state.productArgument?.gpuSeries,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(gpuSeries: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(gpuSeries: value));
               },
               GPUSeries.values,
             ),
             buildInputWidget<GPUCapacity>(
-              'GPU Capacity', // Dung lượng GPU
+              S.of(context).gpuCapacity,
               TextEditingController(),
               state.productArgument?.gpuCapacity,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(gpuCapacity: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(gpuCapacity: value));
               },
               GPUCapacity.values,
             ),
             buildInputWidget<GPUBus>(
-              'GPU Bus', // Bus GPU
+              S.of(context).gpuBus,
               TextEditingController(),
               state.productArgument?.gpuBus,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(gpuBus: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(gpuBus: value));
               },
               GPUBus.values,
             ),
             buildInputWidget<double>(
-              'GPU Clock Speed', // Tốc độ xung nhịp GPU
+              S.of(context).gpuClockSpeed,
               gpuClockSpeedController,
               state.productArgument?.gpuClockSpeed,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(gpuClockSpeed: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(gpuClockSpeed: value));
               },
             ),
           ],
@@ -595,29 +729,32 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<MainboardFormFactor>(
-              'Form Factor', // Kiểu dáng
+              S.of(context).formFactor,
               TextEditingController(),
               state.productArgument?.formFactor,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(formFactor: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(formFactor: value));
               },
               MainboardFormFactor.values,
             ),
             buildInputWidget<MainboardSeries>(
-              'Series', // Dòng sản phẩm
+              S.of(context).series,
               TextEditingController(),
               state.productArgument?.mainboardSeries,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(mainboardSeries: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(mainboardSeries: value));
               },
               MainboardSeries.values,
             ),
             buildInputWidget<MainboardCompatibility>(
-              'Compatibility', // Tương thích
+              S.of(context).compatibility,
               TextEditingController(),
               state.productArgument?.compatibility,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(compatibility: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(compatibility: value));
               },
               MainboardCompatibility.values,
             ),
@@ -627,20 +764,22 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(
           children: [
             buildInputWidget<DriveType>(
-              'Drive Type', // Loại ổ đĩa
+              S.of(context).driveType,
               TextEditingController(),
               state.productArgument?.driveType,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(driveType: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(driveType: value));
               },
               DriveType.values,
             ),
             buildInputWidget<DriveCapacity>(
-              'Drive Capacity', // Dung lượng ổ đĩa
+              S.of(context).driveCapacity,
               TextEditingController(),
               state.productArgument?.driveCapacity,
-                  (value) {
-                cubit.updateProductArgument(state.productArgument!.copyWith(driveCapacity: value));
+              (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(driveCapacity: value));
               },
               DriveCapacity.values,
             ),
@@ -697,138 +836,158 @@ Widget buildInputWidget<T>(
     TextEditingController controller,
     T? propertyValue,
     void Function(T?) onChanged,
-    [List<T>? enumValues]
-    ) {
-  return Builder(
-      builder: (BuildContext context) {
-        if (T == DateTime) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(propertyName, style: AppTextStyle.smallText),
-              GestureDetector(
-                onTap: () async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: propertyValue as DateTime? ?? DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                    builder: (context, child) {
-                      return Theme(
-                        data: Theme.of(context).copyWith(
-                          colorScheme: const ColorScheme.light(
-                            primary: Color(0xFF202046),    // header background color
-                            onPrimary: Colors.white,       // header text color
-                            onSurface: Colors.black,       // body text color
-                          ),
-                          textButtonTheme: TextButtonThemeData(
-                            style: TextButton.styleFrom(
-                              foregroundColor: const Color(0xFF202046), // button text color
-                            ),
-                          ),
-                        ),
-                        child: child!,
-                      );
-                    },
-                  );
-                  if (picked != null) {
-                    onChanged(picked as T?);
-                  }
-                },
-                child: AbsorbPointer(
-                  child: FieldWithIcon(
-                    controller: TextEditingController(
-                      text: (propertyValue as DateTime?)?.toString().split(' ')[0] ?? '',
-                    ),
-                    readOnly: true,
-                    hintText: 'Select $propertyName',
-                    fillColor: const Color(0xFF202046),
-                    suffixIcon: const Icon(Icons.calendar_today),
-                  ),
-                ),
-              ),
-            ],
-          );
-        } else if (enumValues != null) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(propertyName, style: AppTextStyle.smallText),
-              GradientDropdown<T>(
-                items: (String filter, dynamic infiniteScrollProps) => enumValues,
-                compareFn: (T? d1, T? d2) => d1 == d2,
-                itemAsString: (T d) => d.toString(),
-                onChanged: onChanged,
-                selectedItem: propertyValue,
-                hintText: 'Select $propertyName', // Chọn $propertyName
-              ),
-            ],
-          );
-        } else {
-          TextInputType keyboardType;
-          List<TextInputFormatter> inputFormatters;
+    [List<T>? enumValues]) {
+  return Builder(builder: (BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-          if (T == int) {
-            keyboardType = TextInputType.number;
-            inputFormatters = [FilteringTextInputFormatter.digitsOnly];
-          } else if (T == double) {
-            keyboardType = const TextInputType.numberWithOptions(decimal: true);
-            inputFormatters = [
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-              if (propertyName == "Discount")
-                TextInputFormatter.withFunction((oldValue, newValue) {
-                  if (newValue.text.isEmpty) return newValue;
-                  try {
-                    final double? value = double.tryParse(newValue.text);
-                    if (value != null && value > 1) {
-                      return oldValue;
-                    }
-                  } catch (_) {}
-                  return newValue;
-                }),
-            ];
-          } else {
-            keyboardType = TextInputType.text;
-            inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'.*'))];
-          }
-          
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(propertyName, style: AppTextStyle.smallText),
-              FieldWithIcon(
-                controller: controller,
-                hintText: 'Enter $propertyName',
-                onChanged: (value) {
-                  if (value.isEmpty) {
-                    onChanged(null);
-                  } else if (T == int) {
-                    final parsed = int.tryParse(value);
-                    if (parsed != null) {
-                      onChanged(parsed as T?);
-                    }
-                  } else if (T == double) {
-                    if (value == '.' || value.endsWith('.')) return; // Allow typing decimals
-                    final parsed = double.tryParse(value);
-                    if (parsed != null) {
-                      if (propertyName == "Discount" && parsed > 1) {
-                        controller.text = "0";
-                        onChanged(1.0 as T?);
-                      } else {
-                        onChanged(parsed as T?);
-                      }
-                    }
-                  } else {
-                    onChanged(value as T?);
-                  }
+    if (T == DateTime) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(propertyName, style: AppTextStyle.smallText),
+          GestureDetector(
+            onTap: () async {
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: propertyValue as DateTime? ?? DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: ColorScheme.light(
+                        primary: colorScheme.primary,
+                        onPrimary: colorScheme.onPrimary,
+                        onSurface: colorScheme.onSurface,
+                      ),
+                      textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(
+                          foregroundColor: colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    child: child!,
+                  );
                 },
-                fillColor: const Color(0xFF202046),
-                keyboardType: keyboardType,
-                inputFormatters: inputFormatters,
+              );
+              if (picked != null) {
+                onChanged(picked as T?);
+              }
+            },
+            child: AbsorbPointer(
+              child: FieldWithIcon(
+                controller: TextEditingController(
+                  text: (propertyValue as DateTime?) != null &&
+                          propertyValue != null
+                      ? DateFormat('dd/MM/yyyy')
+                          .format(propertyValue as DateTime)
+                      : '',
+                ),
+                readOnly: true,
+                hintText: propertyName,
+                fillColor: colorScheme.surface,
+                suffixIcon: Icon(Icons.calendar_today,
+                    color: colorScheme.onSurfaceVariant),
               ),
-            ],
-          );
-        }
+            ),
+          ),
+        ],
+      );
+    } else if (enumValues != null) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(propertyName, style: AppTextStyle.smallText),
+          GradientDropdown<T>(
+            items: (String filter, dynamic infiniteScrollProps) => enumValues,
+            compareFn: (T? d1, T? d2) {
+              if (d1 is Manufacturer && d2 is Manufacturer) {
+                return d1.manufacturerID == d2.manufacturerID;
+              }
+              return d1 == d2;
+            },
+            itemAsString: (T d) =>
+                d is Manufacturer ? d.manufacturerName : d.toString(),
+            onChanged: (value) {
+              if (value is Manufacturer) {
+                final selected = (enumValues as List<Manufacturer>).firstWhere(
+                  (m) => m.manufacturerID == value.manufacturerID,
+                  orElse: () => value as Manufacturer,
+                );
+                onChanged(selected as T?);
+              } else {
+                onChanged(value);
+              }
+            },
+            selectedItem: propertyValue,
+            hintText: propertyName,
+          ),
+        ],
+      );
+    } else {
+      TextInputType keyboardType;
+      List<TextInputFormatter> inputFormatters;
+
+      if (T == int) {
+        keyboardType = TextInputType.number;
+        inputFormatters = [FilteringTextInputFormatter.digitsOnly];
+      } else if (T == double) {
+        keyboardType = const TextInputType.numberWithOptions(decimal: true);
+        inputFormatters = [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+          if (propertyName == "Discount")
+            TextInputFormatter.withFunction((oldValue, newValue) {
+              if (newValue.text.isEmpty) return newValue;
+              try {
+                final double? value = double.tryParse(newValue.text);
+                if (value != null && value > 1) {
+                  return oldValue;
+                }
+              } catch (_) {}
+              return newValue;
+            }),
+        ];
+      } else {
+        keyboardType = TextInputType.text;
+        inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'.*'))];
       }
-  );
+
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(propertyName, style: AppTextStyle.smallText),
+          FieldWithIcon(
+            controller: controller,
+            hintText: propertyName,
+            onChanged: (value) {
+              if (value.isEmpty) {
+                onChanged(null);
+              } else if (T == int) {
+                final parsed = int.tryParse(value);
+                if (parsed != null) {
+                  onChanged(parsed as T?);
+                }
+              } else if (T == double) {
+                if (value == '.' || value.endsWith('.')) return;
+                final parsed = double.tryParse(value);
+                if (parsed != null) {
+                  if (propertyName == "Discount" && parsed > 1) {
+                    controller.text = "0";
+                    onChanged(1.0 as T?);
+                  } else {
+                    onChanged(parsed as T?);
+                  }
+                }
+              } else {
+                onChanged(value as T?);
+              }
+            },
+            fillColor: colorScheme.surfaceVariant,
+            keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
+          ),
+        ],
+      );
+    }
+  });
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 import 'package:gizmoglobe_client/widgets/general/checkbox_button.dart';
-
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class ManufacturerFilter extends StatelessWidget {
   final List<Manufacturer> selectedManufacturers;
@@ -21,9 +21,11 @@ class ManufacturerFilter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Manufacturer', //Nhà sản xuất
-          style: AppTextStyle.buttonTextBold,
+        Text(
+          S.of(context).manufacturer,
+          style: AppTextStyle.bigText.copyWith(
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         Wrap(
           spacing: 16.0,

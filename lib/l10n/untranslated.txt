@@ -16,7 +16,6 @@
     "sendPasswordResetEmail",
     "noUserSignedIn",
     "addVoucher",
-    "basicInformation",
     "voucherName",
     "discountValue",
     "minimumPurchase",
@@ -48,11 +47,6 @@
     "all",
     "ongoing",
     "upcoming",
-    "noVouchersAvailable",
-    "filter",
-    "from",
-    "to",
-    "min",
-    "max"
+    "noVouchersAvailable"
   ]
 }

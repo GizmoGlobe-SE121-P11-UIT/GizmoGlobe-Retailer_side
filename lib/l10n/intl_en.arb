@@ -1332,7 +1332,282 @@
 	},
 	"success": "Success",
 	"@success": {
-		"description": "Label for success status.",
+		"description": "Success dialog title.",
+		"type": "text"
+	},
+	"failure": "Failure",
+	"@failure": {
+		"description": "Failure dialog title.",
+		"type": "text"
+	},
+	"signInSuccess": "Signed in successfully.",
+	"@signInSuccess": {
+		"description": "Message shown when sign in is successful.",
+		"type": "text"
+	},
+	"signInFailed": "Failed to sign in. Please try again.",
+	"@signInFailed": {
+		"description": "Message shown when sign in fails.",
+		"type": "text"
+	},
+	"verificationLinkFailed": "Failed to send verification link. Please try again.",
+	"@verificationLinkFailed": {
+		"description": "Message shown when sending verification link fails.",
+		"type": "text"
+	},
+	"changePasswordFailed": "Error changing password. Please try again.",
+	"@changePasswordFailed": {
+		"description": "Message shown when changing password fails.",
+		"type": "text"
+	},
+	"passwordsDoNotMatch": "Passwords do not match.",
+	"@passwordsDoNotMatch": {
+		"description": "Message shown when passwords do not match.",
+		"type": "text"
+	},
+	"verificationEmailSent": "A verification email has been sent to your email address. Please verify your email to complete signing up.",
+	"@verificationEmailSent": {
+		"description": "Message shown when verification email is sent.",
+		"type": "text"
+	},
+	"signUpFailed": "Failed to sign up. Please try again.",
+	"@signUpFailed": {
+		"description": "Message shown when sign up fails.",
+		"type": "text"
+	},
+	"resetPasswordLinkSent": "A verification link has been sent to your email address. Please verify your email to reset your password.",
+	"@resetPasswordLinkSent": {
+		"description": "Message shown when reset password link is sent.",
+		"type": "text"
+	},
+	"signOutFailed": "Failed to sign out. Please try again.",
+	"@signOutFailed": {
+		"description": "Message shown when sign out fails.",
+		"type": "text"
+	},
+	"emailNotVerified": "Email not verified. Please verify your email.",
+	"@emailNotVerified": {
+		"description": "Message shown when email is not verified.",
+		"type": "text"
+	},
+	"invalidEmailOrPassword": "Invalid email or password",
+	"@invalidEmailOrPassword": {
+		"description": "Message shown when email or password is invalid.",
+		"type": "text"
+	},
+	"emailNotRegistered": "This email is not registered in the system",
+	"@emailNotRegistered": {
+		"description": "Message shown when email is not registered.",
+		"type": "text"
+	},
+	"productAddedSuccess": "Product added successfully.",
+	"@productAddedSuccess": {
+		"description": "Message shown when product is added successfully.",
+		"type": "text"
+	},
+	"productAddFailed": "Failed to add product. Please try again.",
+	"@productAddFailed": {
+		"description": "Message shown when adding product fails.",
+		"type": "text"
+	},
+	"productUpdatedSuccess": "Product updated successfully.",
+	"@productUpdatedSuccess": {
+		"description": "Message shown when product is updated successfully.",
+		"type": "text"
+	},
+	"productUpdateFailed": "Failed to update product. Please try again.",
+	"@productUpdateFailed": {
+		"description": "Message shown when updating product fails.",
+		"type": "text"
+	},
+	"unexpectedError": "An unexpected error occurred. Please try again.",
+	"@unexpectedError": {
+		"description": "Message shown when an unexpected error occurs.",
+		"type": "text"
+	},
+	"chooseFromGallery": "Choose from Gallery",
+	"@chooseFromGallery": {
+		"description": "Option to choose image from gallery.",
+		"type": "text"
+	},
+	"takePhoto": "Take a Photo",
+	"@takePhoto": {
+		"description": "Option to take a photo with camera.",
+		"type": "text"
+	},
+	"enterUrl": "Enter URL",
+	"@enterUrl": {
+		"description": "Option to enter image URL.",
+		"type": "text"
+	},
+	"enterImageUrl": "Enter Image URL",
+	"@enterImageUrl": {
+		"description": "Prompt to enter image URL.",
+		"type": "text"
+	},
+	"addProductImage": "Add Product Image",
+	"@addProductImage": {
+		"description": "Title for adding product image section.",
+		"type": "text"
+	},
+	"searchManufacturer": "Search manufacturer...",
+	"@searchManufacturer": {
+		"description": "Placeholder text for manufacturer search field.",
+		"type": "text"
+	},
+	"active": "Active",
+	"@active": {
+		"description": "Status indicating product is active.",
+		"type": "text"
+	},
+	"outOfStock": "Out of Stock",
+	"@outOfStock": {
+		"description": "Status indicating product is out of stock.",
+		"type": "text"
+	},
+	"categorySpecifications": "Specifications for",
+	"@categorySpecifications": {
+		"description": "Title for category specifications section.",
+		"type": "text"
+	},
+	"ramBus": "RAM Bus",
+	"@ramBus": {
+		"description": "Label for RAM bus speed specification.",
+		"type": "text"
+	},
+	"ramCapacity": "RAM Capacity",
+	"@ramCapacity": {
+		"description": "Label for RAM capacity specification.",
+		"type": "text"
+	},
+	"ramType": "RAM Type",
+	"@ramType": {
+		"description": "Label for RAM type specification.",
+		"type": "text"
+	},
+	"cpuFamily": "CPU Family",
+	"@cpuFamily": {
+		"description": "Label for CPU family specification.",
+		"type": "text"
+	},
+	"cpuCore": "CPU Core",
+	"@cpuCore": {
+		"description": "Label for CPU core count specification.",
+		"type": "text"
+	},
+	"cpuThread": "CPU Thread",
+	"@cpuThread": {
+		"description": "Label for CPU thread count specification.",
+		"type": "text"
+	},
+	"cpuClockSpeed": "CPU Clock Speed",
+	"@cpuClockSpeed": {
+		"description": "Label for CPU clock speed specification.",
+		"type": "text"
+	},
+	"psuWattage": "PSU Wattage",
+	"@psuWattage": {
+		"description": "Label for PSU wattage specification.",
+		"type": "text"
+	},
+	"psuEfficiency": "PSU Efficiency",
+	"@psuEfficiency": {
+		"description": "Label for PSU efficiency rating specification.",
+		"type": "text"
+	},
+	"psuModular": "PSU Modular",
+	"@psuModular": {
+		"description": "Label for PSU modular type specification.",
+		"type": "text"
+	},
+	"gpuSeries": "GPU Series",
+	"@gpuSeries": {
+		"description": "Label for GPU series specification.",
+		"type": "text"
+	},
+	"gpuCapacity": "GPU Capacity",
+	"@gpuCapacity": {
+		"description": "Label for GPU memory capacity specification.",
+		"type": "text"
+	},
+	"gpuBus": "GPU Bus",
+	"@gpuBus": {
+		"description": "Label for GPU bus interface specification.",
+		"type": "text"
+	},
+	"gpuClockSpeed": "GPU Clock Speed",
+	"@gpuClockSpeed": {
+		"description": "Label for GPU clock speed specification.",
+		"type": "text"
+	},
+	"formFactor": "Form Factor",
+	"@formFactor": {
+		"description": "Label for motherboard form factor specification.",
+		"type": "text"
+	},
+	"series": "Series",
+	"@series": {
+		"description": "Label for product series specification.",
+		"type": "text"
+	},
+	"compatibility": "Compatibility",
+	"@compatibility": {
+		"description": "Label for compatibility specification.",
+		"type": "text"
+	},
+	"driveType": "Drive Type",
+	"@driveType": {
+		"description": "Label for drive type specification.",
+		"type": "text"
+	},
+	"driveCapacity": "Drive Capacity",
+	"@driveCapacity": {
+		"description": "Label for drive capacity specification.",
+		"type": "text"
+	},
+	"productName": "Product Name",
+	"@productName": {
+		"description": "Label for product name field.",
+		"type": "text"
+	},
+	"sellingPrice": "Selling Price",
+	"@sellingPrice": {
+		"description": "Label for selling price field.",
+		"type": "text"
+	},
+	"discount": "Discount",
+	"@discount": {
+		"description": "Label for discount field.",
+		"type": "text"
+	},
+	"stock": "Stock",
+	"@stock": {
+		"description": "Label for stock quantity field.",
+		"type": "text"
+	},
+	"additionalInformation": "Additional Information",
+	"@additionalInformation": {
+		"description": "Label for additional product information field.",
+		"type": "text"
+	},
+	"releaseDate": "Release Date",
+	"@releaseDate": {
+		"description": "Label for product release date field.",
+		"type": "text"
+	},
+	"manufacturer": "Manufacturer",
+	"@manufacturer": {
+		"description": "Label for product manufacturer field.",
+		"type": "text"
+	},
+	"drive": "Drive",
+	"@drive": {
+		"description": "Label for drive category.",
+		"type": "text"
+	},
+	"mainboard": "Mainboard",
+	"@mainboard": {
+		"description": "Label for mainboard category.",
 		"type": "text"
 	}
 }

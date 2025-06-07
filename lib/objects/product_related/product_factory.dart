@@ -8,7 +8,8 @@ import 'gpu.dart';
 import 'mainboard.dart';
 
 class ProductFactory {
-  static Product createProduct(CategoryEnum category, Map<String, dynamic> properties) {
+  static Product createProduct(
+      CategoryEnum category, Map<String, dynamic> properties) {
     switch (category) {
       case CategoryEnum.ram:
         return RAM(
@@ -25,6 +26,7 @@ class ProductFactory {
           bus: properties['bus'],
           capacity: properties['capacity'],
           ramType: properties['ramType'],
+          imageUrl: properties['imageUrl'],
         )..productID = properties['productID'];
       case CategoryEnum.cpu:
         return CPU(
@@ -42,6 +44,7 @@ class ProductFactory {
           stock: properties['stock'],
           sales: properties['sales'],
           status: properties['status'],
+          imageUrl: properties['imageUrl'],
         )..productID = properties['productID'];
       case CategoryEnum.psu:
         return PSU(
@@ -58,6 +61,7 @@ class ProductFactory {
           stock: properties['stock'],
           sales: properties['sales'],
           status: properties['status'],
+          imageUrl: properties['imageUrl'],
         )..productID = properties['productID'];
       case CategoryEnum.gpu:
         return GPU(
@@ -75,6 +79,7 @@ class ProductFactory {
           stock: properties['stock'],
           sales: properties['sales'],
           status: properties['status'],
+          imageUrl: properties['imageUrl'],
         )..productID = properties['productID'];
       case CategoryEnum.mainboard:
         return Mainboard(
@@ -91,6 +96,7 @@ class ProductFactory {
           stock: properties['stock'],
           sales: properties['sales'],
           status: properties['status'],
+          imageUrl: properties['imageUrl'],
         )..productID = properties['productID'];
       case CategoryEnum.drive:
         return Drive(
@@ -106,8 +112,10 @@ class ProductFactory {
           stock: properties['stock'],
           sales: properties['sales'],
           status: properties['status'],
+          imageUrl: properties['imageUrl'],
         )..productID = properties['productID'];
       default:
         throw Exception('Invalid product category');
     }
-  }}
+  }
+}

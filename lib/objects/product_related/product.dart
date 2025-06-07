@@ -16,6 +16,7 @@ abstract class Product {
   int stock;
   Manufacturer manufacturer;
   ProductStatusEnum status;
+  String? imageUrl;
 
   Product({
     this.productID,
@@ -29,9 +30,11 @@ abstract class Product {
     required this.sales,
     required this.stock,
     required this.status,
+    this.imageUrl,
   });
 
-  Product changeCategory(CategoryEnum newCategory, Map<String, dynamic> properties) {
+  Product changeCategory(
+      CategoryEnum newCategory, Map<String, dynamic> properties) {
     properties['productID'] = productID;
     return ProductFactory.createProduct(newCategory, properties);
   }
@@ -51,6 +54,7 @@ abstract class Product {
     int? sales,
     int? stock,
     ProductStatusEnum? status,
+    String? imageUrl,
   }) {
     this.productID = productID ?? this.productID;
     this.productName = productName ?? this.productName;
@@ -62,5 +66,6 @@ abstract class Product {
     this.stock = stock ?? this.stock;
     this.manufacturer = manufacturer ?? this.manufacturer;
     this.status = status ?? this.status;
+    this.imageUrl = imageUrl ?? this.imageUrl;
   }
 }

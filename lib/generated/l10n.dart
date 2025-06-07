@@ -2580,7 +2580,557 @@ class S {
     return Intl.message(
       'Success',
       name: 'success',
-      desc: 'Label for success status.',
+      desc: 'Success dialog title.',
+      args: [],
+    );
+  }
+
+  /// `Failure`
+  String get failure {
+    return Intl.message(
+      'Failure',
+      name: 'failure',
+      desc: 'Failure dialog title.',
+      args: [],
+    );
+  }
+
+  /// `Signed in successfully.`
+  String get signInSuccess {
+    return Intl.message(
+      'Signed in successfully.',
+      name: 'signInSuccess',
+      desc: 'Message shown when sign in is successful.',
+      args: [],
+    );
+  }
+
+  /// `Failed to sign in. Please try again.`
+  String get signInFailed {
+    return Intl.message(
+      'Failed to sign in. Please try again.',
+      name: 'signInFailed',
+      desc: 'Message shown when sign in fails.',
+      args: [],
+    );
+  }
+
+  /// `Failed to send verification link. Please try again.`
+  String get verificationLinkFailed {
+    return Intl.message(
+      'Failed to send verification link. Please try again.',
+      name: 'verificationLinkFailed',
+      desc: 'Message shown when sending verification link fails.',
+      args: [],
+    );
+  }
+
+  /// `Error changing password. Please try again.`
+  String get changePasswordFailed {
+    return Intl.message(
+      'Error changing password. Please try again.',
+      name: 'changePasswordFailed',
+      desc: 'Message shown when changing password fails.',
+      args: [],
+    );
+  }
+
+  /// `Passwords do not match.`
+  String get passwordsDoNotMatch {
+    return Intl.message(
+      'Passwords do not match.',
+      name: 'passwordsDoNotMatch',
+      desc: 'Message shown when passwords do not match.',
+      args: [],
+    );
+  }
+
+  /// `A verification email has been sent to your email address. Please verify your email to complete signing up.`
+  String get verificationEmailSent {
+    return Intl.message(
+      'A verification email has been sent to your email address. Please verify your email to complete signing up.',
+      name: 'verificationEmailSent',
+      desc: 'Message shown when verification email is sent.',
+      args: [],
+    );
+  }
+
+  /// `Failed to sign up. Please try again.`
+  String get signUpFailed {
+    return Intl.message(
+      'Failed to sign up. Please try again.',
+      name: 'signUpFailed',
+      desc: 'Message shown when sign up fails.',
+      args: [],
+    );
+  }
+
+  /// `A verification link has been sent to your email address. Please verify your email to reset your password.`
+  String get resetPasswordLinkSent {
+    return Intl.message(
+      'A verification link has been sent to your email address. Please verify your email to reset your password.',
+      name: 'resetPasswordLinkSent',
+      desc: 'Message shown when reset password link is sent.',
+      args: [],
+    );
+  }
+
+  /// `Failed to sign out. Please try again.`
+  String get signOutFailed {
+    return Intl.message(
+      'Failed to sign out. Please try again.',
+      name: 'signOutFailed',
+      desc: 'Message shown when sign out fails.',
+      args: [],
+    );
+  }
+
+  /// `Email not verified. Please verify your email.`
+  String get emailNotVerified {
+    return Intl.message(
+      'Email not verified. Please verify your email.',
+      name: 'emailNotVerified',
+      desc: 'Message shown when email is not verified.',
+      args: [],
+    );
+  }
+
+  /// `Invalid email or password`
+  String get invalidEmailOrPassword {
+    return Intl.message(
+      'Invalid email or password',
+      name: 'invalidEmailOrPassword',
+      desc: 'Message shown when email or password is invalid.',
+      args: [],
+    );
+  }
+
+  /// `This email is not registered in the system`
+  String get emailNotRegistered {
+    return Intl.message(
+      'This email is not registered in the system',
+      name: 'emailNotRegistered',
+      desc: 'Message shown when email is not registered.',
+      args: [],
+    );
+  }
+
+  /// `Product added successfully.`
+  String get productAddedSuccess {
+    return Intl.message(
+      'Product added successfully.',
+      name: 'productAddedSuccess',
+      desc: 'Message shown when product is added successfully.',
+      args: [],
+    );
+  }
+
+  /// `Failed to add product. Please try again.`
+  String get productAddFailed {
+    return Intl.message(
+      'Failed to add product. Please try again.',
+      name: 'productAddFailed',
+      desc: 'Message shown when adding product fails.',
+      args: [],
+    );
+  }
+
+  /// `Product updated successfully.`
+  String get productUpdatedSuccess {
+    return Intl.message(
+      'Product updated successfully.',
+      name: 'productUpdatedSuccess',
+      desc: 'Message shown when product is updated successfully.',
+      args: [],
+    );
+  }
+
+  /// `Failed to update product. Please try again.`
+  String get productUpdateFailed {
+    return Intl.message(
+      'Failed to update product. Please try again.',
+      name: 'productUpdateFailed',
+      desc: 'Message shown when updating product fails.',
+      args: [],
+    );
+  }
+
+  /// `An unexpected error occurred. Please try again.`
+  String get unexpectedError {
+    return Intl.message(
+      'An unexpected error occurred. Please try again.',
+      name: 'unexpectedError',
+      desc: 'Message shown when an unexpected error occurs.',
+      args: [],
+    );
+  }
+
+  /// `Choose from Gallery`
+  String get chooseFromGallery {
+    return Intl.message(
+      'Choose from Gallery',
+      name: 'chooseFromGallery',
+      desc: 'Option to choose image from gallery.',
+      args: [],
+    );
+  }
+
+  /// `Take a Photo`
+  String get takePhoto {
+    return Intl.message(
+      'Take a Photo',
+      name: 'takePhoto',
+      desc: 'Option to take a photo with camera.',
+      args: [],
+    );
+  }
+
+  /// `Enter URL`
+  String get enterUrl {
+    return Intl.message(
+      'Enter URL',
+      name: 'enterUrl',
+      desc: 'Option to enter image URL.',
+      args: [],
+    );
+  }
+
+  /// `Enter Image URL`
+  String get enterImageUrl {
+    return Intl.message(
+      'Enter Image URL',
+      name: 'enterImageUrl',
+      desc: 'Prompt to enter image URL.',
+      args: [],
+    );
+  }
+
+  /// `Add Product Image`
+  String get addProductImage {
+    return Intl.message(
+      'Add Product Image',
+      name: 'addProductImage',
+      desc: 'Title for adding product image section.',
+      args: [],
+    );
+  }
+
+  /// `Search manufacturer...`
+  String get searchManufacturer {
+    return Intl.message(
+      'Search manufacturer...',
+      name: 'searchManufacturer',
+      desc: 'Placeholder text for manufacturer search field.',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get active {
+    return Intl.message(
+      'Active',
+      name: 'active',
+      desc: 'Status indicating product is active.',
+      args: [],
+    );
+  }
+
+  /// `Out of Stock`
+  String get outOfStock {
+    return Intl.message(
+      'Out of Stock',
+      name: 'outOfStock',
+      desc: 'Status indicating product is out of stock.',
+      args: [],
+    );
+  }
+
+  /// `Specifications for`
+  String get categorySpecifications {
+    return Intl.message(
+      'Specifications for',
+      name: 'categorySpecifications',
+      desc: 'Title for category specifications section.',
+      args: [],
+    );
+  }
+
+  /// `RAM Bus`
+  String get ramBus {
+    return Intl.message(
+      'RAM Bus',
+      name: 'ramBus',
+      desc: 'Label for RAM bus speed specification.',
+      args: [],
+    );
+  }
+
+  /// `RAM Capacity`
+  String get ramCapacity {
+    return Intl.message(
+      'RAM Capacity',
+      name: 'ramCapacity',
+      desc: 'Label for RAM capacity specification.',
+      args: [],
+    );
+  }
+
+  /// `RAM Type`
+  String get ramType {
+    return Intl.message(
+      'RAM Type',
+      name: 'ramType',
+      desc: 'Label for RAM type specification.',
+      args: [],
+    );
+  }
+
+  /// `CPU Family`
+  String get cpuFamily {
+    return Intl.message(
+      'CPU Family',
+      name: 'cpuFamily',
+      desc: 'Label for CPU family specification.',
+      args: [],
+    );
+  }
+
+  /// `CPU Core`
+  String get cpuCore {
+    return Intl.message(
+      'CPU Core',
+      name: 'cpuCore',
+      desc: 'Label for CPU core count specification.',
+      args: [],
+    );
+  }
+
+  /// `CPU Thread`
+  String get cpuThread {
+    return Intl.message(
+      'CPU Thread',
+      name: 'cpuThread',
+      desc: 'Label for CPU thread count specification.',
+      args: [],
+    );
+  }
+
+  /// `CPU Clock Speed`
+  String get cpuClockSpeed {
+    return Intl.message(
+      'CPU Clock Speed',
+      name: 'cpuClockSpeed',
+      desc: 'Label for CPU clock speed specification.',
+      args: [],
+    );
+  }
+
+  /// `PSU Wattage`
+  String get psuWattage {
+    return Intl.message(
+      'PSU Wattage',
+      name: 'psuWattage',
+      desc: 'Label for PSU wattage specification.',
+      args: [],
+    );
+  }
+
+  /// `PSU Efficiency`
+  String get psuEfficiency {
+    return Intl.message(
+      'PSU Efficiency',
+      name: 'psuEfficiency',
+      desc: 'Label for PSU efficiency rating specification.',
+      args: [],
+    );
+  }
+
+  /// `PSU Modular`
+  String get psuModular {
+    return Intl.message(
+      'PSU Modular',
+      name: 'psuModular',
+      desc: 'Label for PSU modular type specification.',
+      args: [],
+    );
+  }
+
+  /// `GPU Series`
+  String get gpuSeries {
+    return Intl.message(
+      'GPU Series',
+      name: 'gpuSeries',
+      desc: 'Label for GPU series specification.',
+      args: [],
+    );
+  }
+
+  /// `GPU Capacity`
+  String get gpuCapacity {
+    return Intl.message(
+      'GPU Capacity',
+      name: 'gpuCapacity',
+      desc: 'Label for GPU memory capacity specification.',
+      args: [],
+    );
+  }
+
+  /// `GPU Bus`
+  String get gpuBus {
+    return Intl.message(
+      'GPU Bus',
+      name: 'gpuBus',
+      desc: 'Label for GPU bus interface specification.',
+      args: [],
+    );
+  }
+
+  /// `GPU Clock Speed`
+  String get gpuClockSpeed {
+    return Intl.message(
+      'GPU Clock Speed',
+      name: 'gpuClockSpeed',
+      desc: 'Label for GPU clock speed specification.',
+      args: [],
+    );
+  }
+
+  /// `Form Factor`
+  String get formFactor {
+    return Intl.message(
+      'Form Factor',
+      name: 'formFactor',
+      desc: 'Label for motherboard form factor specification.',
+      args: [],
+    );
+  }
+
+  /// `Series`
+  String get series {
+    return Intl.message(
+      'Series',
+      name: 'series',
+      desc: 'Label for product series specification.',
+      args: [],
+    );
+  }
+
+  /// `Compatibility`
+  String get compatibility {
+    return Intl.message(
+      'Compatibility',
+      name: 'compatibility',
+      desc: 'Label for compatibility specification.',
+      args: [],
+    );
+  }
+
+  /// `Drive Type`
+  String get driveType {
+    return Intl.message(
+      'Drive Type',
+      name: 'driveType',
+      desc: 'Label for drive type specification.',
+      args: [],
+    );
+  }
+
+  /// `Drive Capacity`
+  String get driveCapacity {
+    return Intl.message(
+      'Drive Capacity',
+      name: 'driveCapacity',
+      desc: 'Label for drive capacity specification.',
+      args: [],
+    );
+  }
+
+  /// `Product Name`
+  String get productName {
+    return Intl.message(
+      'Product Name',
+      name: 'productName',
+      desc: 'Label for product name field.',
+      args: [],
+    );
+  }
+
+  /// `Selling Price`
+  String get sellingPrice {
+    return Intl.message(
+      'Selling Price',
+      name: 'sellingPrice',
+      desc: 'Label for selling price field.',
+      args: [],
+    );
+  }
+
+  /// `Discount`
+  String get discount {
+    return Intl.message(
+      'Discount',
+      name: 'discount',
+      desc: 'Label for discount field.',
+      args: [],
+    );
+  }
+
+  /// `Stock`
+  String get stock {
+    return Intl.message(
+      'Stock',
+      name: 'stock',
+      desc: 'Label for stock quantity field.',
+      args: [],
+    );
+  }
+
+  /// `Additional Information`
+  String get additionalInformation {
+    return Intl.message(
+      'Additional Information',
+      name: 'additionalInformation',
+      desc: 'Label for additional product information field.',
+      args: [],
+    );
+  }
+
+  /// `Release Date`
+  String get releaseDate {
+    return Intl.message(
+      'Release Date',
+      name: 'releaseDate',
+      desc: 'Label for product release date field.',
+      args: [],
+    );
+  }
+
+  /// `Manufacturer`
+  String get manufacturer {
+    return Intl.message(
+      'Manufacturer',
+      name: 'manufacturer',
+      desc: 'Label for product manufacturer field.',
+      args: [],
+    );
+  }
+
+  /// `Drive`
+  String get drive {
+    return Intl.message(
+      'Drive',
+      name: 'drive',
+      desc: 'Label for drive category.',
+      args: [],
+    );
+  }
+
+  /// `Mainboard`
+  String get mainboard {
+    return Intl.message(
+      'Mainboard',
+      name: 'mainboard',
+      desc: 'Label for mainboard category.',
       args: [],
     );
   }

@@ -23,71 +23,79 @@ class GradientDropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          width: 2,
-          style: BorderStyle.solid,
-          color: Theme.of(context).colorScheme.primary,
+    final colorScheme = Theme.of(context).colorScheme;
+    final borderSide =
+        BorderSide(color: colorScheme.outlineVariant, width: 1.2);
+    final focusBorderSide = BorderSide(color: colorScheme.primary, width: 1.8);
+    final fillColor = colorScheme.surface;
+    final textColor = colorScheme.onSurface;
+
+    return DropdownSearch<T>(
+      items: items,
+      compareFn: compareFn,
+      itemAsString: itemAsString,
+      dropdownBuilder: (context, selectedItem) => _customDropdownBuilder(
+        context,
+        selectedItem != null ? itemAsString(selectedItem) : '',
+        textColor,
+        fontSize,
+      ),
+      suffixProps: DropdownSuffixProps(
+        dropdownButtonProps: DropdownButtonProps(
+          iconClosed: const Icon(Icons.keyboard_arrow_down),
+          iconOpened: const Icon(Icons.keyboard_arrow_up),
+          color: colorScheme.primary,
         ),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).colorScheme.surface,
-        ),
-        child: DropdownSearch<T>(
-          items: items,
-          compareFn: compareFn,
-          itemAsString: itemAsString,
-          dropdownBuilder: (context, selectedItem) =>
-              _customDropdownBuilder(context, selectedItem?.toString() ?? ''),
-          suffixProps: DropdownSuffixProps(
-            dropdownButtonProps: DropdownButtonProps(
-              iconClosed: const Icon(Icons.keyboard_arrow_down),
-              iconOpened: const Icon(Icons.keyboard_arrow_up),
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          popupProps: PopupProps.menu(
-            showSearchBox: true,
-            searchFieldProps: TextFieldProps(
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                border: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                filled: false,
-                hintText: 'Search',
-                hintStyle: const TextStyle(color: Colors.grey),
+      popupProps: PopupProps.menu(
+        showSearchBox: true,
+        searchFieldProps: TextFieldProps(
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: colorScheme.primary,
               ),
             ),
+            filled: false,
+            hintText: 'Search',
+            hintStyle: const TextStyle(color: Colors.grey),
           ),
-          decoratorProps: DropDownDecoratorProps(
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: TextStyle(
-                color: Colors.grey,
-                fontFamily: 'Montserrat',
-                fontSize: fontSize,
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-              border: InputBorder.none,
-              fillColor: Colors.transparent,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-          ),
-          onChanged: onChanged,
-          selectedItem: selectedItem,
         ),
       ),
+      decoratorProps: DropDownDecoratorProps(
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(
+            color: Colors.grey,
+            fontFamily: 'Montserrat',
+            fontSize: fontSize,
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: borderSide,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: borderSide,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: focusBorderSide,
+          ),
+          fillColor: fillColor,
+          filled: true,
+        ),
+        textAlignVertical: TextAlignVertical.center,
+      ),
+      onChanged: onChanged,
+      selectedItem: selectedItem,
     );
   }
 
-  Widget _customDropdownBuilder(BuildContext context, String text) {
+  Widget _customDropdownBuilder(
+      BuildContext context, String text, Color textColor, double fontSize) {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.transparent,
@@ -95,7 +103,7 @@ class GradientDropdown<T> extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: Theme.of(context).colorScheme.onSurface,
+          color: textColor,
           fontFamily: 'Montserrat',
           fontSize: fontSize,
         ),
