@@ -16,6 +16,10 @@ enum NotifyMessage {
   msg14('Failed to add product. Please try again.'), // Không thể thêm sản phẩm. Vui lòng thử lại
   msg15('Product updated successfully.'), // Sản phẩm đã được cập nhật thành công
   msg16('Failed to update product. Please try again.'), // Không thể cập nhật sản phẩm. Vui lòng thử lại
+  msg17('Voucher added successfully.'), // Voucher đã được thêm thành công
+  msg18('Failed to add voucher. Please try again.'), // Không thể thêm voucher. Vui lòng thử lại
+  msg19('Voucher deleted successfully.'), // Voucher đã được xóa thành công
+  msg20('Failed to delete voucher. Please try again.'), // Không thể xóa voucher. Vui lòng thử lại
   error('An unexpected error occurred. Please try again.'), // Đã xảy ra lỗi không mong muốn. Vui lòng thử lại
   ;
 

@@ -36,7 +36,6 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
   late TextEditingController maxUsagePerPersonController;
   late TextEditingController descriptionController;
   late TextEditingController maximumUsageController;
-  late TextEditingController usageLeftController;
   late TextEditingController maximumDiscountValueController;
 
   @override
@@ -48,7 +47,6 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
     maxUsagePerPersonController = TextEditingController();
     descriptionController = TextEditingController();
     maximumUsageController = TextEditingController();
-    usageLeftController = TextEditingController();
     maximumDiscountValueController = TextEditingController();
   }
 
@@ -137,24 +135,21 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                               children: [
                                 Text(
                                   S.of(context).basicInformation,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF202046),
                                   ),
                                 ),
                                 const SizedBox(height: 16),
+
                                 buildInputWidget<String>(
                                   S.of(context).voucherName,
                                   voucherNameController,
                                   state.voucherArgument?.voucherName,
                                   (value) {
                                     cubit.updateVoucherArgument(
-                                      state.voucherArgument?.copyWith(
-                                            voucherName: value,
-                                          ) ??
-                                          VoucherArgument(voucherName: value),
-                                    );
+                                      state.voucherArgument!.copyWith(voucherName: value));
                                   },
                                 ),
                                 const SizedBox(height: 16),
@@ -167,12 +162,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                         state.voucherArgument?.discountValue,
                                         (value) {
                                           cubit.updateVoucherArgument(
-                                            state.voucherArgument?.copyWith(
-                                                  discountValue: value,
-                                                ) ??
-                                                VoucherArgument(
-                                                    discountValue: value),
-                                          );
+                                            state.voucherArgument!.copyWith(discountValue: value));
                                         },
                                       ),
                                     ),
@@ -184,12 +174,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                         state.voucherArgument?.minimumPurchase,
                                         (value) {
                                           cubit.updateVoucherArgument(
-                                            state.voucherArgument?.copyWith(
-                                                  minimumPurchase: value,
-                                                ) ??
-                                                VoucherArgument(
-                                                    minimumPurchase: value),
-                                          );
+                                            state.voucherArgument!.copyWith(minimumPurchase: value));
                                         },
                                       ),
                                     ),
@@ -199,15 +184,9 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                 buildInputWidget<DateTime>(
                                   S.of(context).startTime,
                                   TextEditingController(),
-                                  state.voucherArgument?.startTime ??
-                                      DateTime.now(),
-                                  (value) {
-                                    cubit.updateVoucherArgument(
-                                      state.voucherArgument?.copyWith(
-                                            startTime: value,
-                                          ) ??
-                                          VoucherArgument(startTime: value),
-                                    );
+                                  state.voucherArgument?.startTime ?? DateTime.now(),
+                                      (value) {
+                                    cubit.updateVoucherArgument(state.voucherArgument!.copyWith(startTime: value));
                                   },
                                 ),
                                 const SizedBox(height: 16),
@@ -217,12 +196,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                   state.voucherArgument?.maxUsagePerPerson,
                                   (value) {
                                     cubit.updateVoucherArgument(
-                                      state.voucherArgument?.copyWith(
-                                            maxUsagePerPerson: value,
-                                          ) ??
-                                          VoucherArgument(
-                                              maxUsagePerPerson: value),
-                                    );
+                                      state.voucherArgument!.copyWith(maxUsagePerPerson: value));
                                   },
                                 ),
                                 const SizedBox(height: 16),
@@ -232,11 +206,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                   state.voucherArgument?.description,
                                   (value) {
                                     cubit.updateVoucherArgument(
-                                      state.voucherArgument?.copyWith(
-                                            description: value,
-                                          ) ??
-                                          VoucherArgument(description: value),
-                                    );
+                                      state.voucherArgument!.copyWith(description: value));
                                   },
                                 ),
                               ],
@@ -260,7 +230,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                               children: [
                                 Text(
                                   S.of(context).voucherSettings,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xFF202046),
@@ -276,11 +246,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                   rightLabel: S.of(context).percentage,
                                   onChanged: (value) {
                                     cubit.updateVoucherArgument(
-                                      state.voucherArgument?.copyWith(
-                                            isPercentage: value,
-                                          ) ??
-                                          VoucherArgument(isPercentage: value),
-                                    );
+                                      state.voucherArgument!.copyWith(isPercentage: value));
                                   },
                                 ),
 
@@ -295,12 +261,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                           ?.maximumDiscountValue,
                                       (value) {
                                         cubit.updateVoucherArgument(
-                                          state.voucherArgument?.copyWith(
-                                                maximumDiscountValue: value,
-                                              ) ??
-                                              VoucherArgument(
-                                                  maximumDiscountValue: value),
-                                        );
+                                          state.voucherArgument!.copyWith(maximumDiscountValue: value));
                                       },
                                     ),
                                   ),
@@ -315,11 +276,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                   rightLabel: S.of(context).limited,
                                   onChanged: (value) {
                                     cubit.updateVoucherArgument(
-                                      state.voucherArgument?.copyWith(
-                                            isLimited: value,
-                                          ) ??
-                                          VoucherArgument(isLimited: value),
-                                    );
+                                      state.voucherArgument!.copyWith(isLimited: value));
                                   },
                                 ),
 
@@ -327,42 +284,13 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                 if (state.voucherArgument?.isLimited == true)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 16.0),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: buildInputWidget<int>(
-                                            S.of(context).maximumUsage,
-                                            maximumUsageController,
-                                            state.voucherArgument?.maximumUsage,
-                                            (value) {
-                                              cubit.updateVoucherArgument(
-                                                state.voucherArgument?.copyWith(
-                                                      maximumUsage: value,
-                                                    ) ??
-                                                    VoucherArgument(
-                                                        maximumUsage: value),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Expanded(
-                                          child: buildInputWidget<int>(
-                                            S.of(context).usageLeft,
-                                            usageLeftController,
-                                            state.voucherArgument?.usageLeft,
-                                            (value) {
-                                              cubit.updateVoucherArgument(
-                                                state.voucherArgument?.copyWith(
-                                                      usageLeft: value,
-                                                    ) ??
-                                                    VoucherArgument(
-                                                        usageLeft: value),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
+                                    child: buildInputWidget<int>(
+                                      S.of(context).maximumUsage,
+                                      maximumUsageController,
+                                      state.voucherArgument?.maximumUsage,
+                                          (value) {
+                                        cubit.updateVoucherArgument(state.voucherArgument!.copyWith(maximumUsage: value, usageLeft: value));
+                                      },
                                     ),
                                   ),
 
@@ -376,11 +304,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                   rightLabel: S.of(context).hasEndTime,
                                   onChanged: (value) {
                                     cubit.updateVoucherArgument(
-                                      state.voucherArgument?.copyWith(
-                                            hasEndTime: value,
-                                          ) ??
-                                          VoucherArgument(hasEndTime: value),
-                                    );
+                                      state.voucherArgument!.copyWith(hasEndTime: value));
                                   },
                                 ),
 
@@ -396,20 +320,16 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                               .add(const Duration(days: 7)),
                                       (value) {
                                         cubit.updateVoucherArgument(
-                                          state.voucherArgument?.copyWith(
-                                                endTime: value,
-                                              ) ??
-                                              VoucherArgument(endTime: value),
-                                        );
+                                          state.voucherArgument!.copyWith(endTime: value));
                                       },
                                     ),
                                   )
                                 else
                                   Padding(
-                                    padding: EdgeInsets.only(top: 16.0),
+                                    padding: const EdgeInsets.only(top: 16.0),
                                     child: Text(
                                       S.of(context).voucherWillNotExpire,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontStyle: FontStyle.italic,
                                         color: Colors.grey,
                                       ),
@@ -429,12 +349,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                         rightLabel: S.of(context).visible,
                                         onChanged: (value) {
                                           cubit.updateVoucherArgument(
-                                            state.voucherArgument?.copyWith(
-                                                  isVisible: value,
-                                                ) ??
-                                                VoucherArgument(
-                                                    isVisible: value),
-                                          );
+                                            state.voucherArgument!.copyWith(isVisible: value));
                                         },
                                       ),
                                     ),
@@ -449,12 +364,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                         rightLabel: S.of(context).enabled,
                                         onChanged: (value) {
                                           cubit.updateVoucherArgument(
-                                            state.voucherArgument?.copyWith(
-                                                  isEnabled: value,
-                                                ) ??
-                                                VoucherArgument(
-                                                    isEnabled: value),
-                                          );
+                                            state.voucherArgument!.copyWith(isEnabled: value));
                                         },
                                       ),
                                     ),
@@ -678,8 +588,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
             children: [
               Text(propertyName, style: AppTextStyle.smallText),
               GradientDropdown<T>(
-                items: (String filter, dynamic infiniteScrollProps) =>
-                    enumValues,
+                items: (String filter, dynamic infiniteScrollProps) => enumValues,
                 compareFn: (T? d1, T? d2) => d1 == d2,
                 itemAsString: (T d) => d.toString(),
                 onChanged: onChanged,
@@ -695,19 +604,25 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
           if (T == int) {
             keyboardType = TextInputType.number;
             inputFormatters = [FilteringTextInputFormatter.digitsOnly];
-            controller.text = propertyValue?.toString() ?? '';
           } else if (T == double) {
             keyboardType = const TextInputType.numberWithOptions(decimal: true);
             inputFormatters = [
               FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+              if (propertyName == "Discount")
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  if (newValue.text.isEmpty) return newValue;
+                  try {
+                    final double? value = double.tryParse(newValue.text);
+                    if (value != null && value > 100) {
+                      return oldValue;
+                    }
+                  } catch (_) {}
+                  return newValue;
+                }),
             ];
-            controller.text = propertyValue?.toString() ?? '';
           } else {
             keyboardType = TextInputType.text;
-            inputFormatters = [
-              FilteringTextInputFormatter.allow(RegExp(r'.*'))
-            ];
-            controller.text = propertyValue?.toString() ?? '';
+            inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'.*'))];
           }
 
           return Column(
@@ -722,11 +637,20 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                     onChanged(null);
                   } else if (T == int) {
                     final parsed = int.tryParse(value);
-                    onChanged(parsed as T?);
+                    if (parsed != null) {
+                      if (propertyName == "Discount" && parsed > 100) {
+                        controller.text = "0";
+                        onChanged(1.0 as T?);
+                      } else {
+                        onChanged(parsed as T?);
+                      }
+                    }
                   } else if (T == double) {
-                    if (value == '.' || value.endsWith('.')) return;
+                    if (value == '.' || value.endsWith('.')) return; // Allow typing decimals
                     final parsed = double.tryParse(value);
-                    onChanged(parsed as T?);
+                    if (parsed != null) {
+                      onChanged(parsed as T?);
+                    }
                   } else {
                     onChanged(value as T?);
                   }
