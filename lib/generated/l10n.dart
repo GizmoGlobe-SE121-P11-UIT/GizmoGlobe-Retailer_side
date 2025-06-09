@@ -2845,6 +2845,16 @@ class S {
     );
   }
 
+  /// `Discontinued`
+  String get discontinued {
+    return Intl.message(
+      'Discontinued',
+      name: 'discontinued',
+      desc: 'Status indicating product is discontinued.',
+      args: [],
+    );
+  }
+
   /// `Specifications for`
   String get categorySpecifications {
     return Intl.message(
@@ -3131,6 +3141,146 @@ class S {
       'Mainboard',
       name: 'mainboard',
       desc: 'Label for mainboard category.',
+      args: [],
+    );
+  }
+
+  /// `Find your item...`
+  String get findProducts {
+    return Intl.message(
+      'Find your item...',
+      name: 'findProducts',
+      desc: 'Search field placeholder for products.',
+      args: [],
+    );
+  }
+
+  /// `No products found`
+  String get noProductsFound {
+    return Intl.message(
+      'No products found',
+      name: 'noProductsFound',
+      desc: 'Message shown when no products are found.',
+      args: [],
+    );
+  }
+
+  /// `Release date: Latest`
+  String get releaseLatest {
+    return Intl.message(
+      'Release date: Latest',
+      name: 'releaseLatest',
+      desc: 'Label for sorting by latest release date.',
+      args: [],
+    );
+  }
+
+  /// `Release date: Oldest`
+  String get releaseOldest {
+    return Intl.message(
+      'Release date: Oldest',
+      name: 'releaseOldest',
+      desc: 'Label for sorting by oldest release date.',
+      args: [],
+    );
+  }
+
+  /// `Stock: Highest`
+  String get stockHighest {
+    return Intl.message(
+      'Stock: Highest',
+      name: 'stockHighest',
+      desc: 'Label for sorting by highest stock.',
+      args: [],
+    );
+  }
+
+  /// `Stock: Lowest`
+  String get stockLowest {
+    return Intl.message(
+      'Stock: Lowest',
+      name: 'stockLowest',
+      desc: 'Label for sorting by lowest stock.',
+      args: [],
+    );
+  }
+
+  /// `Sale: Highest`
+  String get salesHighest {
+    return Intl.message(
+      'Sale: Highest',
+      name: 'salesHighest',
+      desc: 'Label for sorting by highest sales.',
+      args: [],
+    );
+  }
+
+  /// `Sale: Lowest`
+  String get salesLowest {
+    return Intl.message(
+      'Sale: Lowest',
+      name: 'salesLowest',
+      desc: 'Label for sorting by lowest sales.',
+      args: [],
+    );
+  }
+
+  /// `Voucher added successfully.`
+  String get voucherAddedSuccess {
+    return Intl.message(
+      'Voucher added successfully.',
+      name: 'voucherAddedSuccess',
+      desc: 'Success message when a voucher is added.',
+      args: [],
+    );
+  }
+
+  /// `Failed to add voucher. Please try again.`
+  String get voucherAddFailed {
+    return Intl.message(
+      'Failed to add voucher. Please try again.',
+      name: 'voucherAddFailed',
+      desc: 'Error message when voucher addition fails.',
+      args: [],
+    );
+  }
+
+  /// `Voucher deleted successfully.`
+  String get voucherDeletedSuccess {
+    return Intl.message(
+      'Voucher deleted successfully.',
+      name: 'voucherDeletedSuccess',
+      desc: 'Success message when a voucher is deleted.',
+      args: [],
+    );
+  }
+
+  /// `Failed to delete voucher. Please try again.`
+  String get voucherDeleteFailed {
+    return Intl.message(
+      'Failed to delete voucher. Please try again.',
+      name: 'voucherDeleteFailed',
+      desc: 'Error message when voucher deletion fails.',
+      args: [],
+    );
+  }
+
+  /// `Failed to load vouchers. Please try again.`
+  String get errorLoadingVouchers {
+    return Intl.message(
+      'Failed to load vouchers. Please try again.',
+      name: 'errorLoadingVouchers',
+      desc: 'Error message when loading vouchers fails.',
+      args: [],
+    );
+  }
+
+  /// `Failed to update voucher. Please try again.`
+  String get errorUpdatingVoucher {
+    return Intl.message(
+      'Failed to update voucher. Please try again.',
+      name: 'errorUpdatingVoucher',
+      desc: 'Error message when updating voucher fails.',
       args: [],
     );
   }

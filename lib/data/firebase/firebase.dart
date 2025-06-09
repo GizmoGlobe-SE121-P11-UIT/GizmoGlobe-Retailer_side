@@ -16,6 +16,7 @@ import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_capacity_e
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_type.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher_factory.dart';
+import 'package:gizmoglobe_client/objects/voucher_related/end_time_interface.dart';
 import '../../data/database/database.dart';
 import 'package:gizmoglobe_client/objects/product_related/cpu.dart';
 import 'package:gizmoglobe_client/objects/product_related/drive.dart';
@@ -2335,19 +2336,130 @@ class Firebase {
     }
   }
 
-  List<Voucher> getVouchers() {
+  Future<List<Voucher>> getVouchers() async {
     try {
-      // final QuerySnapshot snapshot = await FirebaseFirestore.instance
-      //     .collection('vouchers')
-      //     .get();
+      final QuerySnapshot snapshot =
+          await _firestore.collection('vouchers').get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        data['voucherID'] = doc.id;
 
-      return Database().voucherDataList.map((map) {
-        return VoucherFactory.fromMap(map['voucherID'], map);
+        // Convert date strings to DateTime objects and ensure startTime is never null
+        if (data['startTime'] is String) {
+          data['startTime'] = DateTime.parse(data['startTime']);
+        } else if (data['startTime'] == null) {
+          data['startTime'] = DateTime.now();
+        }
+
+        // Handle endTime for vouchers with end time
+        if (data['hasEndTime'] == true) {
+          if (data['endTime'] is String) {
+            data['endTime'] = DateTime.parse(data['endTime']);
+          } else if (data['endTime'] == null) {
+            data['endTime'] = DateTime.now()
+                .add(const Duration(days: 30)); // Default to 30 days from now
+          }
+        }
+
+        // Handle required fields with default values
+        data['voucherName'] ??= '';
+        data['discountValue'] ??= 0.0;
+        data['minimumPurchase'] ??= 0.0;
+        data['maxUsagePerPerson'] ??= 1;
+        data['isVisible'] ??= true;
+        data['isEnabled'] ??= true;
+        data['description'] ??= '';
+        data['isPercentage'] ??= false;
+        data['hasEndTime'] ??= false;
+        data['isLimited'] ??= false;
+
+        // Handle fields for limited vouchers
+        if (data['isLimited'] == true) {
+          data['maximumUsage'] ??= 0;
+          data['usageLeft'] ??= 0;
+        }
+
+        // Handle fields for percentage vouchers
+        if (data['isPercentage'] == true) {
+          data['maximumDiscountValue'] ??= 0.0;
+        }
+
+        // Ensure all DateTime fields are properly set
+        if (data['startTime'] is! DateTime) {
+          data['startTime'] = DateTime.now();
+        }
+        if (data['hasEndTime'] == true && data['endTime'] is! DateTime) {
+          data['endTime'] = DateTime.now().add(const Duration(days: 30));
+        }
+
+        return VoucherFactory.fromMap(doc.id, data);
       }).toList();
     } catch (e) {
       if (kDebugMode) {
-        print('Error getting customers data : $e');
-      } // Lỗi khi lấy danh sách voucher
+        print('Error getting vouchers: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> addVoucher(Voucher voucher) async {
+    try {
+      final collectionRef = _firestore.collection('vouchers');
+      final docRef = await collectionRef.add(voucherToMap(voucher));
+      await docRef.update({'voucherID': docRef.id});
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding voucher: $e');
+      }
+      rethrow;
+    }
+  }
+
+  static Map<String, dynamic> voucherToMap(Voucher voucher) {
+    final map = {
+      'voucherID': voucher.voucherID,
+      'voucherName': voucher.voucherName,
+      'description': voucher.description,
+      'discountValue': voucher.discountValue,
+      'minimumPurchase': voucher.minimumPurchase,
+      'isPercentage': voucher.isPercentage,
+      'isLimited': voucher.isLimited,
+      'isVisible': voucher.isVisible,
+      'isEnabled': voucher.isEnabled,
+      'startTime': voucher.startTime.toIso8601String(),
+      'hasEndTime': voucher.hasEndTime,
+      'maxUsagePerPerson': voucher.maxUsagePerPerson,
+    };
+
+    if (voucher.isPercentage) {
+      final dyn = voucher as dynamic;
+      map['maximumDiscountValue'] =
+          dyn.maximumDiscountValue ?? voucher.discountValue;
+    }
+
+    if (voucher.isLimited) {
+      final dyn = voucher as dynamic;
+      map['maximumUsage'] = dyn.maximumUsage ?? 0;
+      map['usageLeft'] = dyn.usageLeft ?? 0;
+    }
+
+    if (voucher.hasEndTime && voucher is EndTimeInterface) {
+      map['endTime'] = (voucher as EndTimeInterface).endTime.toIso8601String();
+    }
+
+    return map;
+  }
+
+  Future<void> updateVoucher(Voucher voucher) async {
+    try {
+      if (voucher.voucherID == null)
+        throw Exception('voucherID is required for update');
+      final docRef = _firestore.collection('vouchers').doc(voucher.voucherID);
+      await docRef.update(voucherToMap(voucher));
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error updating voucher: $e');
+      }
       rethrow;
     }
   }

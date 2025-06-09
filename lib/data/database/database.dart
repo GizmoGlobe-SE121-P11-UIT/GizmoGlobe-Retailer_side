@@ -266,7 +266,7 @@ class Database {
       }
 
       customerList = await Firebase().getCustomers();
-      voucherList = Firebase().getVouchers();
+      voucherList = await Firebase().getVouchers();
     } catch (e) {
       if (kDebugMode) {
         print('Error fetching data: $e');

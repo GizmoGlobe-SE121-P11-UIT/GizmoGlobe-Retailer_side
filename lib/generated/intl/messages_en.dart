@@ -173,6 +173,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "disabled": MessageLookupByLibrary.simpleMessage("Disabled"),
     "discard": MessageLookupByLibrary.simpleMessage("DISCARD"),
     "discardChanges": MessageLookupByLibrary.simpleMessage("Discard Changes?"),
+    "discontinued": MessageLookupByLibrary.simpleMessage("Discontinued"),
     "discount": MessageLookupByLibrary.simpleMessage("Discount"),
     "discountType": MessageLookupByLibrary.simpleMessage("Discount Type"),
     "discountValue": MessageLookupByLibrary.simpleMessage("Discount Value"),
@@ -220,8 +221,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "enterUrl": MessageLookupByLibrary.simpleMessage("Enter URL"),
     "errorCreatingWarrantyInvoice": m4,
     "errorLoadingInvoiceDetails": m5,
+    "errorLoadingVouchers": MessageLookupByLibrary.simpleMessage(
+      "Failed to load vouchers. Please try again.",
+    ),
     "errorLoadingWarrantyInvoiceDetails": m6,
     "errorOccurred": MessageLookupByLibrary.simpleMessage("Error occurred"),
+    "errorUpdatingVoucher": MessageLookupByLibrary.simpleMessage(
+      "Failed to update voucher. Please try again.",
+    ),
     "errorWithMessage": m7,
     "failure": MessageLookupByLibrary.simpleMessage("Failure"),
     "filter": MessageLookupByLibrary.simpleMessage("Filter"),
@@ -231,6 +238,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "findManufacturers": MessageLookupByLibrary.simpleMessage(
       "Find manufacturers...",
     ),
+    "findProducts": MessageLookupByLibrary.simpleMessage("Find your item..."),
     "findWarrantyInvoices": MessageLookupByLibrary.simpleMessage(
       "Find warranty invoices...",
     ),
@@ -318,6 +326,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "noProductsAddedYet": MessageLookupByLibrary.simpleMessage(
       "No products added yet",
+    ),
+    "noProductsFound": MessageLookupByLibrary.simpleMessage(
+      "No products found",
     ),
     "noSalesInvoicesAvailable": MessageLookupByLibrary.simpleMessage(
       "No sales invoices available",
@@ -443,13 +454,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "receiverName": MessageLookupByLibrary.simpleMessage("Receiver Name"),
     "receiverPhone": MessageLookupByLibrary.simpleMessage("Receiver Phone"),
     "releaseDate": MessageLookupByLibrary.simpleMessage("Release Date"),
+    "releaseLatest": MessageLookupByLibrary.simpleMessage(
+      "Release date: Latest",
+    ),
+    "releaseOldest": MessageLookupByLibrary.simpleMessage(
+      "Release date: Oldest",
+    ),
     "resetPasswordLinkSent": MessageLookupByLibrary.simpleMessage(
       "A verification link has been sent to your email address. Please verify your email to reset your password.",
     ),
     "revenue": MessageLookupByLibrary.simpleMessage("Revenue"),
     "role": MessageLookupByLibrary.simpleMessage("Role"),
     "sales": MessageLookupByLibrary.simpleMessage("Sales"),
+    "salesHighest": MessageLookupByLibrary.simpleMessage("Sale: Highest"),
     "salesInvoice": MessageLookupByLibrary.simpleMessage("Sales Invoice"),
+    "salesLowest": MessageLookupByLibrary.simpleMessage("Sale: Lowest"),
     "salesStatus": MessageLookupByLibrary.simpleMessage("Sales Status"),
     "save": MessageLookupByLibrary.simpleMessage("Save"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("Save changes"),
@@ -496,6 +515,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "startTime": MessageLookupByLibrary.simpleMessage("Start Time"),
     "status": MessageLookupByLibrary.simpleMessage("Status"),
     "stock": MessageLookupByLibrary.simpleMessage("Stock"),
+    "stockHighest": MessageLookupByLibrary.simpleMessage("Stock: Highest"),
+    "stockLowest": MessageLookupByLibrary.simpleMessage("Stock: Lowest"),
     "streetAddress": MessageLookupByLibrary.simpleMessage("Street Address"),
     "streetNameBuildingHouseNo": MessageLookupByLibrary.simpleMessage(
       "Street name, building, house no.",
@@ -549,6 +570,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "visibility": MessageLookupByLibrary.simpleMessage("Visibility"),
     "visible": MessageLookupByLibrary.simpleMessage("Visible"),
     "voucher": MessageLookupByLibrary.simpleMessage("Voucher"),
+    "voucherAddFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to add voucher. Please try again.",
+    ),
+    "voucherAddedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Voucher added successfully.",
+    ),
+    "voucherDeleteFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to delete voucher. Please try again.",
+    ),
+    "voucherDeletedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Voucher deleted successfully.",
+    ),
     "voucherName": MessageLookupByLibrary.simpleMessage("Voucher Name"),
     "voucherSettings": MessageLookupByLibrary.simpleMessage("Voucher Settings"),
     "voucherWillNotExpire": MessageLookupByLibrary.simpleMessage(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/product/edit_product/edit_product_view.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 import '../../../../data/database/database.dart';
 import '../../../../enums/processing/process_state_enum.dart';
@@ -107,8 +108,8 @@ class _ProductTabState extends State<ProductTab>
                 builder: (context, state) {
                   return Row(
                     children: [
-                      const Text(
-                        'Sort by: ', //Sắp xếp theo
+                      Text(
+                        S.of(context).sortBy,
                         style: AppTextStyle.smallText,
                       ),
                       const SizedBox(width: 8),
@@ -127,7 +128,7 @@ class _ProductTabState extends State<ProductTab>
                             value: value,
                             child: Row(
                               children: [
-                                Text(value.toString()),
+                                Text(value.localized(context)),
                               ],
                             ),
                           );
@@ -171,9 +172,11 @@ class _ProductTabState extends State<ProductTab>
                 child: BlocBuilder<TabCubit, TabState>(
                   builder: (context, state) {
                     if (state.filteredProductList.isEmpty) {
-                      return const Center(
+                      return Center(
                         child: Text(
-                            'No products found'), //Không tìm thấy sản phẩm nào
+                          S.of(context).noProductsFound,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       );
                     }
                     return ListView.builder(
@@ -241,20 +244,24 @@ class _ProductTabState extends State<ProductTab>
                                               8, 16, 8, 8),
                                           child: Text(
                                             product.productName,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                           ),
                                         ),
                                         ListTile(
                                           dense: true,
-                                          leading: const Icon(
+                                          leading: Icon(
                                             Icons.visibility_outlined,
                                             size: 20,
-                                            color: Colors.white,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
                                           ),
-                                          title: const Text('View'), //Xem
+                                          title: Text(S.of(context).view),
                                           onTap: () {
                                             Navigator.pop(context);
                                             cubit.setSelectedProduct(null);
@@ -271,13 +278,14 @@ class _ProductTabState extends State<ProductTab>
                                         if (isAdmin) ...[
                                           ListTile(
                                             dense: true,
-                                            leading: const Icon(
+                                            leading: Icon(
                                               Icons.edit_outlined,
                                               size: 20,
-                                              color: Colors.white,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
                                             ),
-                                            title:
-                                                const Text('Edit'), //Chỉnh sửa
+                                            title: Text(S.of(context).edit),
                                             onTap: () async {
                                               Navigator.pop(context);
                                               cubit.setSelectedProduct(null);
@@ -306,17 +314,17 @@ class _ProductTabState extends State<ProductTab>
                                                   ? Icons.check_circle_outline
                                                   : Icons.cancel_outlined,
                                               size: 20,
-                                              color: Colors.white,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
                                             ),
-                                            title: product.status ==
-                                                    ProductStatusEnum
-                                                        .discontinued
-                                                ? const Text('Activate',
-                                                    style:
-                                                        TextStyle()) //Đang hoạt động
-                                                : const Text('Discontinue',
-                                                    style:
-                                                        TextStyle()), //Ngừng hoạt động
+                                            title: Text(
+                                              product.status ==
+                                                      ProductStatusEnum
+                                                          .discontinued
+                                                  ? S.of(context).activate
+                                                  : S.of(context).deactivate,
+                                            ),
                                             onTap: () async {
                                               Navigator.pop(context);
                                               cubit.toLoading();
@@ -345,8 +353,9 @@ class _ProductTabState extends State<ProductTab>
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? Theme.of(context)
-                                        .primaryColor
-                                        .withValues(alpha: 0.1)
+                                        .colorScheme
+                                        .primary
+                                        .withOpacity(0.1)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -362,23 +371,17 @@ class _ProductTabState extends State<ProductTab>
                                     ),
                                     const SizedBox(width: 16),
                                     Expanded(
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              product.productName,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium,
-                                            ),
-                                            const SizedBox(width: 8),
-                                            StatusBadge(
-                                              status: product.status,
-                                            ),
-                                          ],
-                                        ),
+                                      child: Text(
+                                        product.productName,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    StatusBadge(
+                                      status: product.status,
                                     ),
                                   ],
                                 ),
@@ -400,9 +403,12 @@ class _ProductTabState extends State<ProductTab>
               return Stack(
                 children: [
                   ModalBarrier(
-                      dismissible: false,
-                      color: Colors.black.withValues(alpha: 0.5)),
-                  const Center(child: CircularProgressIndicator()),
+                      dismissible: false, color: Colors.black.withOpacity(0.5)),
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ],
               );
             }

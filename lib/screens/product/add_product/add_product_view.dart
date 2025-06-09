@@ -360,15 +360,20 @@ class _AddProductState extends State<AddProductScreen> {
                           Row(
                             children: [
                               Expanded(
-                                child: buildInputWidget<double>(
+                                child: buildInputWidget<String>(
                                   S.of(context).discount,
                                   discountController,
-                                  state.productArgument?.discount,
+                                  state.productArgument?.discount?.toString(),
                                   (value) {
+                                    double? parsed;
+                                    if (value != null && value.isNotEmpty) {
+                                      parsed = double.tryParse(value);
+                                    }
                                     cubit.updateProductArgument(state
                                         .productArgument!
-                                        .copyWith(discount: value));
+                                        .copyWith(discount: parsed));
                                   },
+                                  null,
                                 ),
                               ),
                               const SizedBox(width: 16),

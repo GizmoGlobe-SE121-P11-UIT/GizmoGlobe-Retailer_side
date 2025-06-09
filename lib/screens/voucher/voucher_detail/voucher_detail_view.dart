@@ -15,6 +15,9 @@ import '../../../objects/voucher_related/percentage_interface.dart';
 import '../../../objects/voucher_related/voucher.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../widgets/general/gradient_text.dart';
+import '../../../screens/voucher/edit_voucher/edit_voucher_view.dart';
+import '../../../objects/voucher_related/voucher_argument.dart';
+import '../../../widgets/general/status_badge.dart';
 
 class VoucherDetailScreen extends StatefulWidget {
   final Voucher voucher;
@@ -34,9 +37,13 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        backgroundColor: theme.scaffoldBackgroundColor,
         leading: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
           builder: (context, state) => GradientIconButton(
             icon: Icons.chevron_left,
@@ -72,32 +79,45 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                             _buildInfoRow(
                               title: S.of(context).voucher,
                               value: state.voucher.voucherName,
+                              theme: theme,
                             ),
                             _buildInfoRow(
                               title: S.of(context).discountValue,
                               value: state.voucher.isPercentage
-                                  ? '${Converter.formatDouble(state.voucher.discountValue)}% ${S.of(context).maximumDiscountValue}: \$${Converter.formatDouble((state.voucher as PercentageInterface).maximumDiscountValue)}'
+                                  ? '${Converter.formatDouble(state.voucher.discountValue)}%'
                                   : '\$${Converter.formatDouble(state.voucher.discountValue)}',
+                              theme: theme,
                             ),
+                            if (state.voucher.isPercentage)
+                              _buildInfoRow(
+                                title: S.of(context).maximumDiscountValue,
+                                value:
+                                    '\$${Converter.formatDouble((state.voucher as PercentageInterface).maximumDiscountValue)}',
+                                theme: theme,
+                              ),
                             _buildInfoRow(
                               title: S.of(context).minimumPurchase,
                               value:
                                   '\$${Converter.formatDouble(state.voucher.minimumPurchase)}',
+                              theme: theme,
                             ),
                             if (state.voucher.isLimited)
                               _buildInfoRow(
                                 title: S.of(context).usageLeft,
                                 value:
                                     '${(state.voucher as LimitedInterface).usageLeft} / ${(state.voucher as LimitedInterface).maximumUsage}',
+                                theme: theme,
                               ),
                             _buildInfoRow(
                               title: S.of(context).maxUsagePerPerson,
                               value: '${state.voucher.maxUsagePerPerson}',
+                              theme: theme,
                             ),
                             _buildInfoRow(
                               title: S.of(context).startTime,
                               value: DateFormat('hh:mm:ss dd/MM/yyyy')
                                   .format(state.voucher.startTime),
+                              theme: theme,
                             ),
                             if (state.voucher.hasEndTime)
                               _buildInfoRow(
@@ -105,28 +125,49 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                 value: DateFormat('hh:mm:ss dd/MM/yyyy').format(
                                     (state.voucher as EndTimeInterface)
                                         .endTime),
+                                theme: theme,
                               )
                             else
                               _buildInfoRow(
                                 title: S.of(context).endTime,
                                 value: S.of(context).noEndTime,
+                                theme: theme,
                               ),
-                            _buildInfoRow(
-                              title: S.of(context).visibility,
-                              value: state.voucher.isVisible
-                                  ? S.of(context).visible
-                                  : S.of(context).hidden,
+                            Row(
+                              children: [
+                                Text(
+                                  S.of(context).visibility + ': ',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                StatusBadge(
+                                  status: state.voucher.isVisible
+                                      ? S.of(context).visible
+                                      : S.of(context).hidden,
+                                ),
+                              ],
                             ),
-                            _buildInfoRow(
-                              title: S.of(context).status,
-                              value: state.voucher.isEnabled
-                                  ? S.of(context).enabled
-                                  : S.of(context).disabled,
+                            Row(
+                              children: [
+                                Text(
+                                  S.of(context).status + ': ',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                                StatusBadge(
+                                  status: state.voucher.isEnabled
+                                      ? S.of(context).enabled
+                                      : S.of(context).disabled,
+                                ),
+                              ],
                             ),
                             if (state.voucher.description != null)
                               _buildInfoRow(
                                 title: S.of(context).description,
                                 value: state.voucher.description!,
+                                theme: theme,
                               ),
                           ],
                         ),
@@ -142,10 +183,10 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: theme.scaffoldBackgroundColor,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
+                        color: Colors.black.withOpacity(0.1),
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
@@ -182,24 +223,65 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    // ProcessState processState = await Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => EditProductScreen.newInstance(state.product),
-                                    //   ),
-                                    // );
-                                    //
-                                    // if (processState == ProcessState.success) {
-                                    //   cubit.updateProduct();
-                                    // }
+                                    final argument = VoucherArgument(
+                                      voucherID: state.voucher.voucherID,
+                                      voucherName: state.voucher.voucherName,
+                                      startTime: state.voucher.startTime,
+                                      discountValue:
+                                          state.voucher.discountValue,
+                                      minimumPurchase:
+                                          state.voucher.minimumPurchase,
+                                      maxUsagePerPerson:
+                                          state.voucher.maxUsagePerPerson,
+                                      isVisible: state.voucher.isVisible,
+                                      isEnabled: state.voucher.isEnabled,
+                                      description: state.voucher.description,
+                                      isPercentage: state.voucher.isPercentage,
+                                      hasEndTime: state.voucher.hasEndTime,
+                                      isLimited: state.voucher.isLimited,
+                                      maximumDiscountValue:
+                                          state.voucher is PercentageInterface
+                                              ? (state.voucher
+                                                      as PercentageInterface)
+                                                  .maximumDiscountValue
+                                              : null,
+                                      maximumUsage: state.voucher
+                                              is LimitedInterface
+                                          ? (state.voucher as LimitedInterface)
+                                              .maximumUsage
+                                          : null,
+                                      usageLeft: state.voucher
+                                              is LimitedInterface
+                                          ? (state.voucher as LimitedInterface)
+                                              .usageLeft
+                                          : null,
+                                      endTime: state.voucher is EndTimeInterface
+                                          ? (state.voucher as EndTimeInterface)
+                                              .endTime
+                                          : null,
+                                    );
+                                    ProcessState? processState =
+                                        await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            EditVoucherScreen.newInstance(
+                                                argument),
+                                      ),
+                                    );
+                                    if (processState == ProcessState.success) {
+                                      setState(() {});
+                                    }
                                   },
-                                  icon: const Icon(Icons.edit,
-                                      color: Colors.white),
-                                  label: Text(S.of(context).edit,
-                                      style:
-                                          const TextStyle(color: Colors.white)),
+                                  icon: Icon(Icons.edit,
+                                      color: theme.colorScheme.onPrimary),
+                                  label: Text(
+                                    S.of(context).edit,
+                                    style: TextStyle(
+                                        color: theme.colorScheme.onPrimary),
+                                  ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: theme.colorScheme.primary,
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 12),
                                   ),
@@ -216,18 +298,19 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                     state.voucher.isEnabled
                                         ? Icons.not_interested
                                         : Icons.check,
-                                    color: Colors.white,
+                                    color: theme.colorScheme.onPrimary,
                                   ),
                                   label: Text(
                                     state.voucher.isEnabled
                                         ? S.of(context).disabled
                                         : S.of(context).enabled,
-                                    style: const TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                        color: theme.colorScheme.onPrimary),
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: state.voucher.isEnabled
-                                        ? Colors.red
-                                        : Colors.green,
+                                        ? theme.colorScheme.error
+                                        : theme.colorScheme.secondary,
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 12),
                                   ),
@@ -252,6 +335,7 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
   Widget _buildInfoRow({
     required String title,
     required String value,
+    required ThemeData theme,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -259,16 +343,14 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
         children: [
           Text(
             '$title: ',
-            style: const TextStyle(
+            style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w900,
-              color: Colors.white,
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                color: Colors.white,
+              style: theme.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w400,
               ),
             ),

@@ -1338,7 +1338,7 @@
 	},
 	"basicInformation": "Thông tin cơ bản",
 	"@basicInformation": {
-		"description": "Section title for basic information.",
+		"description": "Tiêu đề phần thông tin cơ bản.",
 		"type": "text"
 	},
 	"drive": "Ổ cứng",
@@ -1349,6 +1349,241 @@
 	"mainboard": "Bo mạch chủ",
 	"@mainboard": {
 		"description": "Label for mainboard category.",
+		"type": "text"
+	},
+	"findProducts": "Tìm kiếm sản phẩm...",
+	"@findProducts": {
+		"description": "Search field placeholder for products.",
+		"type": "text"
+	},
+	"all": "Tất cả",
+	"@all": {
+		"description": "Tab label for all products.",
+		"type": "text"
+	},
+	"noProductsFound": "Không tìm thấy sản phẩm nào",
+	"@noProductsFound": {
+		"description": "Message shown when no products are found.",
+		"type": "text"
+	},
+	"discontinued": "Ngừng kinh doanh",
+	"@discontinued": {
+		"description": "Status indicating product is discontinued.",
+		"type": "text"
+	},
+	"releaseLatest": "Ngày phát hành: Mới nhất",
+	"@releaseLatest": {
+		"description": "Label for sorting by latest release date.",
+		"type": "text"
+	},
+	"releaseOldest": "Ngày phát hành: Cũ nhất",
+	"@releaseOldest": {
+		"description": "Label for sorting by oldest release date.",
+		"type": "text"
+	},
+	"stockHighest": "Hàng tồn kho: Cao nhất",
+	"@stockHighest": {
+		"description": "Label for sorting by highest stock.",
+		"type": "text"
+	},
+	"stockLowest": "Hàng tồn kho: Thấp nhất",
+	"@stockLowest": {
+		"description": "Label for sorting by lowest stock.",
+		"type": "text"
+	},
+	"salesHighest": "Số lượng bán: Cao nhất",
+	"@salesHighest": {
+		"description": "Label for sorting by highest sales.",
+		"type": "text"
+	},
+	"salesLowest": "Số lượng bán: Thấp nhất",
+	"@salesLowest": {
+		"description": "Label for sorting by lowest sales.",
+		"type": "text"
+	},
+	"addVoucher": "Thêm voucher",
+	"@addVoucher": {
+		"description": "Tiêu đề cho màn hình thêm voucher.",
+		"type": "text"
+	},
+	"voucherName": "Tên voucher",
+	"@voucherName": {
+		"description": "Nhãn cho trường tên voucher.",
+		"type": "text"
+	},
+	"discountValue": "Giá trị giảm giá",
+	"@discountValue": {
+		"description": "Nhãn cho trường giá trị giảm giá.",
+		"type": "text"
+	},
+	"minimumPurchase": "Mua tối thiểu",
+	"@minimumPurchase": {
+		"description": "Nhãn cho trường mua tối thiểu.",
+		"type": "text"
+	},
+	"startTime": "Thời gian bắt đầu",
+	"@startTime": {
+		"description": "Nhãn cho trường thời gian bắt đầu.",
+		"type": "text"
+	},
+	"maxUsagePerPerson": "Số lần sử dụng tối đa mỗi người",
+	"@maxUsagePerPerson": {
+		"description": "Nhãn cho trường số lần sử dụng tối đa mỗi người.",
+		"type": "text"
+	},
+	"description": "Mô tả",
+	"@description": {
+		"description": "Nhãn cho trường mô tả.",
+		"type": "text"
+	},
+	"voucherSettings": "Cài đặt voucher",
+	"@voucherSettings": {
+		"description": "Tiêu đề phần cài đặt voucher.",
+		"type": "text"
+	},
+	"discountType": "Loại giảm giá",
+	"@discountType": {
+		"description": "Nhãn cho chuyển đổi loại giảm giá.",
+		"type": "text"
+	},
+	"fixedAmount": "Số tiền cố định",
+	"@fixedAmount": {
+		"description": "Nhãn cho tùy chọn số tiền cố định.",
+		"type": "text"
+	},
+	"percentage": "Phần trăm",
+	"@percentage": {
+		"description": "Nhãn cho tùy chọn phần trăm.",
+		"type": "text"
+	},
+	"maximumDiscountValue": "Giá trị giảm giá tối đa",
+	"@maximumDiscountValue": {
+		"description": "Nhãn cho trường giá trị giảm giá tối đa.",
+		"type": "text"
+	},
+	"usageLimit": "Giới hạn sử dụng",
+	"@usageLimit": {
+		"description": "Nhãn cho chuyển đổi giới hạn sử dụng.",
+		"type": "text"
+	},
+	"unlimited": "Không giới hạn",
+	"@unlimited": {
+		"description": "Nhãn cho tùy chọn không giới hạn.",
+		"type": "text"
+	},
+	"limited": "Có giới hạn",
+	"@limited": {
+		"description": "Nhãn cho tùy chọn có giới hạn.",
+		"type": "text"
+	},
+	"maximumUsage": "Số lần sử dụng tối đa",
+	"@maximumUsage": {
+		"description": "Nhãn cho trường số lần sử dụng tối đa.",
+		"type": "text"
+	},
+	"usageLeft": "Số lần còn lại",
+	"@usageLeft": {
+		"description": "Nhãn cho trường số lần còn lại.",
+		"type": "text"
+	},
+	"timeLimit": "Giới hạn thời gian",
+	"@timeLimit": {
+		"description": "Nhãn cho chuyển đổi giới hạn thời gian.",
+		"type": "text"
+	},
+	"noEndTime": "Không có thời gian kết thúc",
+	"@noEndTime": {
+		"description": "Nhãn cho tùy chọn không có thời gian kết thúc.",
+		"type": "text"
+	},
+	"hasEndTime": "Có thời gian kết thúc",
+	"@hasEndTime": {
+		"description": "Nhãn cho tùy chọn có thời gian kết thúc.",
+		"type": "text"
+	},
+	"endTime": "Thời gian kết thúc",
+	"@endTime": {
+		"description": "Nhãn cho trường thời gian kết thúc.",
+		"type": "text"
+	},
+	"voucherWillNotExpire": "Voucher này sẽ không hết hạn",
+	"@voucherWillNotExpire": {
+		"description": "Thông báo cho voucher không có ngày hết hạn.",
+		"type": "text"
+	},
+	"visibility": "Hiển thị",
+	"@visibility": {
+		"description": "Nhãn cho chuyển đổi hiển thị.",
+		"type": "text"
+	},
+	"hidden": "Ẩn",
+	"@hidden": {
+		"description": "Nhãn cho tùy chọn ẩn.",
+		"type": "text"
+	},
+	"visible": "Hiển thị",
+	"@visible": {
+		"description": "Nhãn cho tùy chọn hiển thị.",
+		"type": "text"
+	},
+	"disabled": "Vô hiệu hóa",
+	"@disabled": {
+		"description": "Nhãn cho tùy chọn vô hiệu hóa.",
+		"type": "text"
+	},
+	"enabled": "Kích hoạt",
+	"@enabled": {
+		"description": "Nhãn cho tùy chọn kích hoạt.",
+		"type": "text"
+	},
+	"selectField": "Chọn {field}",
+	"@selectField": {
+		"description": "Gợi ý chọn trường.",
+		"placeholders": {
+			"field": {
+				"type": "String",
+				"example": "Tên voucher"
+			}
+		}
+	},
+	"enterField": "Nhập {field}",
+	"@enterField": {
+		"description": "Gợi ý nhập trường.",
+		"placeholders": {
+			"field": {
+				"type": "String",
+				"example": "Tên voucher"
+			}
+		}
+	},
+	"voucherAddedSuccess": "Thêm voucher thành công.",
+	"@voucherAddedSuccess": {
+		"description": "Thông báo thành công khi thêm voucher.",
+		"type": "text"
+	},
+	"voucherAddFailed": "Thêm voucher thất bại. Vui lòng thử lại.",
+	"@voucherAddFailed": {
+		"description": "Thông báo lỗi khi thêm voucher thất bại.",
+		"type": "text"
+	},
+	"voucherDeletedSuccess": "Xóa voucher thành công.",
+	"@voucherDeletedSuccess": {
+		"description": "Thông báo thành công khi xóa voucher.",
+		"type": "text"
+	},
+	"voucherDeleteFailed": "Xóa voucher thất bại. Vui lòng thử lại.",
+	"@voucherDeleteFailed": {
+		"description": "Thông báo lỗi khi xóa voucher thất bại.",
+		"type": "text"
+	},
+	"errorLoadingVouchers": "Không thể tải voucher. Vui lòng thử lại.",
+	"@errorLoadingVouchers": {
+		"description": "Thông báo lỗi khi tải voucher thất bại.",
+		"type": "text"
+	},
+	"errorUpdatingVoucher": "Cập nhật voucher thất bại. Vui lòng thử lại.",
+	"@errorUpdatingVoucher": {
+		"description": "Thông báo lỗi khi cập nhật voucher thất bại.",
 		"type": "text"
 	}
 }

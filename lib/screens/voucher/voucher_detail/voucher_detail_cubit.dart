@@ -3,9 +3,11 @@ import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_
 
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../objects/voucher_related/voucher.dart';
+import '../../../data/database/database.dart';
 
 class VoucherDetailCubit extends Cubit<VoucherDetailState> {
-  VoucherDetailCubit(Voucher voucher) : super(VoucherDetailState(voucher: voucher));
+  VoucherDetailCubit(Voucher voucher)
+      : super(VoucherDetailState(voucher: voucher));
 
   void toLoading() {
     emit(state.copyWith(processState: ProcessState.loading));
@@ -21,10 +23,21 @@ class VoucherDetailCubit extends Cubit<VoucherDetailState> {
     emit(state.copyWith(voucher: newVoucher));
   }
 
+  void updateVoucher() async {
+    // Fetch the latest voucher from the database by ID
+    final voucherID = state.voucher.voucherID;
+    if (voucherID == null) return;
+    final vouchers = Database().voucherList;
+    final updated = vouchers.firstWhere(
+      (v) => v.voucherID == voucherID,
+      orElse: () => state.voucher,
+    );
+    emit(state.copyWith(voucher: updated));
+  }
+
   // void updateProduct() {
   //   Product product = Database().productList.firstWhere((element) => element.productID == state.product.productID);
   //   emit(state.copyWith(product: product));
   //   _initializeTechnicalSpecs();
   // }
-
 }

@@ -19,12 +19,12 @@ enum NotifyMessage {
   msg14('productAddFailed'),
   msg15('productUpdatedSuccess'),
   msg16('productUpdateFailed'),
-  msg17('Voucher added successfully.'), // Voucher đã được thêm thành công
-  msg18('Failed to add voucher. Please try again.'), // Không thể thêm voucher. Vui lòng thử lại
-  msg19('Voucher deleted successfully.'), // Voucher đã được xóa thành công
-  msg20('Failed to delete voucher. Please try again.'), // Không thể xóa voucher. Vui lòng thử lại
+  msg17('voucherAddedSuccess'),
+  msg18('voucherAddFailed'),
+  msg19('voucherDeletedSuccess'),
+  msg20('voucherDeleteFailed'),
   error('unexpectedError');
-  
+
   final String message;
   const NotifyMessage(this.message);
 
@@ -68,6 +68,14 @@ enum NotifyMessage {
         return S.of(context).productUpdatedSuccess;
       case NotifyMessage.msg16:
         return S.of(context).productUpdateFailed;
+      case NotifyMessage.msg17:
+        return S.of(context).voucherAddedSuccess;
+      case NotifyMessage.msg18:
+        return S.of(context).voucherAddFailed;
+      case NotifyMessage.msg19:
+        return S.of(context).voucherDeletedSuccess;
+      case NotifyMessage.msg20:
+        return S.of(context).voucherDeleteFailed;
       case NotifyMessage.error:
         return S.of(context).unexpectedError;
     }

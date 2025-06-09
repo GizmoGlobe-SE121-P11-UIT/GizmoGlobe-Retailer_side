@@ -10,6 +10,7 @@ import '../../../enums/product_related/category_enum.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/general/gradient_icon_button.dart';
 import '../add_product/add_product_view.dart';
+import '../../../generated/l10n.dart';
 
 class ProductScreen extends StatefulWidget {
   final List<Product>? initialProducts;
@@ -17,15 +18,16 @@ class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key, this.initialProducts});
 
   static Widget newInstance({List<Product>? initialProducts}) => BlocProvider(
-    create: (context) => ProductScreenCubit(),
-    child: ProductScreen(initialProducts: initialProducts),
-  );
+        create: (context) => ProductScreenCubit(),
+        child: ProductScreen(initialProducts: initialProducts),
+      );
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> with SingleTickerProviderStateMixin {
+class _ProductScreenState extends State<ProductScreen>
+    with SingleTickerProviderStateMixin {
   late TextEditingController searchController;
   late FocusNode searchFocusNode;
   ProductScreenCubit get cubit => context.read<ProductScreenCubit>();
@@ -63,6 +65,8 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final s = S.of(context);
     return WillPopScope(
       onWillPop: _onWillPop,
       child: GestureDetector(
@@ -76,9 +80,9 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
               height: 40,
               controller: searchController,
               focusNode: searchFocusNode,
-              hintText: 'Find your item...', //Tìm kiếm sản phẩm
-              fillColor: Theme.of(context).colorScheme.surface,
-              prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+              hintText: s.findProducts,
+              fillColor: colorScheme.surface,
+              prefixIcon: Icon(Icons.search, color: colorScheme.primary),
               onChanged: (value) {
                 cubit.updateSearchText(value);
               },
@@ -97,7 +101,8 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                           ProcessState result = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AddProductScreen.newInstance(),
+                              builder: (context) =>
+                                  AddProductScreen.newInstance(),
                             ),
                           );
 
@@ -114,19 +119,18 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
             ],
             bottom: TabBar(
               controller: tabController,
-              labelColor: Theme.of(context).colorScheme.primary,
-              unselectedLabelColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3), 
+              labelColor: colorScheme.primary,
+              unselectedLabelColor: colorScheme.onSurface.withOpacity(0.3),
               labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-              indicatorColor: Theme.of(context).colorScheme.primary,
+              indicatorColor: colorScheme.primary,
               tabAlignment: TabAlignment.start,
               isScrollable: true,
               indicator: const BoxDecoration(),
               tabs: [
-                const Tab(text: 'All'), //Tất cả
-                ...CategoryEnum.nonEmptyValues
-                    .map((category) => Tab(
-                  text: category.toString(),
-                )),
+                Tab(text: s.all),
+                ...CategoryEnum.nonEmptyValues.map((category) => Tab(
+                      text: category.getLocalizedDescription(context),
+                    )),
               ],
             ),
           ),
@@ -136,13 +140,27 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                 return TabBarView(
                   controller: tabController,
                   children: [
-                    ProductTab.newInstance(searchText: state.searchText, initialProducts: state.initialProducts),
-                    ProductTab.newRam(searchText: state.searchText, initialProducts: state.initialProducts),
-                    ProductTab.newCpu(searchText: state.searchText, initialProducts: state.initialProducts),
-                    ProductTab.newPsu(searchText: state.searchText, initialProducts: state.initialProducts),
-                    ProductTab.newGpu(searchText: state.searchText, initialProducts: state.initialProducts),
-                    ProductTab.newDrive(searchText: state.searchText, initialProducts: state.initialProducts),
-                    ProductTab.newMainboard(searchText: state.searchText, initialProducts: state.initialProducts),
+                    ProductTab.newInstance(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newRam(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newCpu(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newPsu(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newGpu(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newDrive(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newMainboard(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
                   ],
                 );
               },

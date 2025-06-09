@@ -1465,6 +1465,11 @@
 		"description": "Status indicating product is out of stock.",
 		"type": "text"
 	},
+	"discontinued": "Discontinued",
+	"@discontinued": {
+		"description": "Status indicating product is discontinued.",
+		"type": "text"
+	},
 	"categorySpecifications": "Specifications for",
 	"@categorySpecifications": {
 		"description": "Title for category specifications section.",
@@ -1608,6 +1613,76 @@
 	"mainboard": "Mainboard",
 	"@mainboard": {
 		"description": "Label for mainboard category.",
+		"type": "text"
+	},
+	"findProducts": "Find your item...",
+	"@findProducts": {
+		"description": "Search field placeholder for products.",
+		"type": "text"
+	},
+	"noProductsFound": "No products found",
+	"@noProductsFound": {
+		"description": "Message shown when no products are found.",
+		"type": "text"
+	},
+	"releaseLatest": "Release date: Latest",
+	"@releaseLatest": {
+		"description": "Label for sorting by latest release date.",
+		"type": "text"
+	},
+	"releaseOldest": "Release date: Oldest",
+	"@releaseOldest": {
+		"description": "Label for sorting by oldest release date.",
+		"type": "text"
+	},
+	"stockHighest": "Stock: Highest",
+	"@stockHighest": {
+		"description": "Label for sorting by highest stock.",
+		"type": "text"
+	},
+	"stockLowest": "Stock: Lowest",
+	"@stockLowest": {
+		"description": "Label for sorting by lowest stock.",
+		"type": "text"
+	},
+	"salesHighest": "Sale: Highest",
+	"@salesHighest": {
+		"description": "Label for sorting by highest sales.",
+		"type": "text"
+	},
+	"salesLowest": "Sale: Lowest",
+	"@salesLowest": {
+		"description": "Label for sorting by lowest sales.",
+		"type": "text"
+	},
+	"voucherAddedSuccess": "Voucher added successfully.",
+	"@voucherAddedSuccess": {
+		"description": "Success message when a voucher is added.",
+		"type": "text"
+	},
+	"voucherAddFailed": "Failed to add voucher. Please try again.",
+	"@voucherAddFailed": {
+		"description": "Error message when voucher addition fails.",
+		"type": "text"
+	},
+	"voucherDeletedSuccess": "Voucher deleted successfully.",
+	"@voucherDeletedSuccess": {
+		"description": "Success message when a voucher is deleted.",
+		"type": "text"
+	},
+	"voucherDeleteFailed": "Failed to delete voucher. Please try again.",
+	"@voucherDeleteFailed": {
+		"description": "Error message when voucher deletion fails.",
+		"type": "text"
+	},
+	"errorLoadingVouchers": "Failed to load vouchers. Please try again.",
+	"@errorLoadingVouchers": {
+		"description": "Error message when loading vouchers fails.",
+		"type": "text"
+	},
+	"errorUpdatingVoucher": "Failed to update voucher. Please try again.",
+	"@errorUpdatingVoucher": {
+		"description": "Error message when updating voucher fails.",
 		"type": "text"
 	}
 }

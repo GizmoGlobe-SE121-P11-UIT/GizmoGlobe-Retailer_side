@@ -1,30 +1,30 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_state.dart';
+import 'package:gizmoglobe_client/screens/voucher/edit_voucher/edit_voucher_state.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 
-import '../../../data/database/database.dart';
 import '../../../enums/processing/dialog_name_enum.dart';
 import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../objects/voucher_related/voucher.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 
-class AddVoucherCubit extends Cubit<AddVoucherState> {
-  AddVoucherCubit()
-      : super(AddVoucherState(
-          voucherArgument: VoucherArgument(
-            isLimited: false,
-            isPercentage: false,
-            hasEndTime: false,
-            isVisible: true,
-            isEnabled: true,
-            startTime: DateTime.now(),
-            maxUsagePerPerson: 1,
-            maximumUsage: 0,
-            usageLeft: 0,
-            maximumDiscountValue: 0.0,
-          ),
+class EditVoucherCubit extends Cubit<EditVoucherState> {
+  EditVoucherCubit({VoucherArgument? initialArgument})
+      : super(EditVoucherState(
+          voucherArgument: initialArgument ??
+              VoucherArgument(
+                isLimited: false,
+                isPercentage: false,
+                hasEndTime: false,
+                isVisible: true,
+                isEnabled: true,
+                startTime: DateTime.now(),
+                maxUsagePerPerson: 1,
+                maximumUsage: 0,
+                usageLeft: 0,
+                maximumDiscountValue: 0.0,
+              ),
         ));
 
   void updateVoucherArgument(VoucherArgument voucherArgument) {
@@ -63,17 +63,17 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
     emit(state.copyWith(processState: ProcessState.idle));
   }
 
-  void addVoucher() async {
+  void editVoucher() async {
     emit(state.copyWith(processState: ProcessState.loading));
     try {
       Voucher voucher = state.voucherArgument!.createVoucher();
-      await Firebase().addVoucher(voucher);
+      await Firebase().updateVoucher(voucher);
       emit(state.copyWith(
           processState: ProcessState.success,
           dialogName: DialogName.success,
           notifyMessage: NotifyMessage.msg17));
     } catch (e, stack) {
-      print('Add voucher error: $e');
+      print('Edit voucher error: $e');
       print(stack);
       emit(state.copyWith(
           processState: ProcessState.failure,

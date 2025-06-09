@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/enums/product_related/product_status_enum.dart';
 
 class StatusBadge extends StatelessWidget {
   final dynamic status;
@@ -15,21 +16,26 @@ class StatusBadge extends StatelessWidget {
     IconData icon;
     String text;
 
-    // Try to get localized text if the status object has getLocalizedName method
-    try {
-      if (status.getLocalizedName != null) {
-        text = status.getLocalizedName(context);
-      } else if (status is Enum) {
-        text = status.toString().split('.').last;
-      } else {
-        text = status.toString();
-      }
-    } catch (e) {
-      // Fallback to toString if getLocalizedName is not available
-      if (status is Enum) {
-        text = status.toString().split('.').last;
-      } else {
-        text = status.toString();
+    // Always use localized text for ProductStatusEnum
+    if (status is ProductStatusEnum) {
+      text = (status as ProductStatusEnum).localized(context);
+    } else {
+      // Try to get localized text if the status object has getLocalizedName method
+      try {
+        if (status.getLocalizedName != null) {
+          text = status.getLocalizedName(context);
+        } else if (status is Enum) {
+          text = status.toString().split('.').last;
+        } else {
+          text = status.toString();
+        }
+      } catch (e) {
+        // Fallback to toString if getLocalizedName is not available
+        if (status is Enum) {
+          text = status.toString().split('.').last;
+        } else {
+          text = status.toString();
+        }
       }
     }
 
@@ -42,6 +48,7 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('chưa thanh toán') ||
         text.toLowerCase().contains('từ chối') ||
         text.toLowerCase().contains('không hoạt động') ||
+        text.toLowerCase().contains('ngừng kinh doanh') ||
         text.toLowerCase().contains('ngừng sản xuất')) {
       color = theme.colorScheme.error;
       icon = Icons.cancel;
@@ -63,7 +70,10 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('đã thanh toán') ||
         text.toLowerCase().contains('hoàn thành') ||
         text.toLowerCase().contains('đang hoạt động') ||
-        text.toLowerCase().contains('đã giao hàng')) {
+        text.toLowerCase().contains('đã giao hàng') ||
+        text.toLowerCase().contains('còn hàng') ||
+        text.toLowerCase().contains('đã sử dụng'))
+         {
       color = theme.colorScheme.tertiary;
       icon = Icons.check_circle;
     } else {
@@ -93,6 +103,7 @@ class StatusBadge extends StatelessWidget {
               color: color,
               fontWeight: FontWeight.bold,
             ),
+            // overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
