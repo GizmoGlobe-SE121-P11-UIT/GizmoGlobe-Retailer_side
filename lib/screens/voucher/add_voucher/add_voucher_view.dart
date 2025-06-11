@@ -243,7 +243,6 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                   suffixIcon: (state.voucherArgument!.isEnEmpty && state.voucherArgument!.isViEmpty)
                                       ? Icons.add_comment
                                       : Icons.g_translate,
-                                  isEnabled: state.voucherArgument!.isEnEmpty,
                                   onSuffixIconPressed: () {
                                     cubit.generateEnDescription();
                                   },
@@ -261,7 +260,6 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                   suffixIcon: (state.voucherArgument!.isEnEmpty && state.voucherArgument!.isViEmpty)
                                       ? Icons.add_comment
                                       : Icons.g_translate,
-                                  isEnabled: state.voucherArgument!.isViEmpty,
                                   onSuffixIconPressed: () {
                                     cubit.generateViDescription();
                                   },

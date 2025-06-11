@@ -20,6 +20,7 @@ import '../../../objects/voucher_related/voucher_argument.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
 import '../../../objects/voucher_related/voucher.dart';
+import '../../../widgets/general/multi_field_with_icon.dart';
 
 class EditVoucherScreen extends StatefulWidget {
   final Voucher voucher;
@@ -258,51 +259,38 @@ class _EditVoucherScreen extends State<EditVoucherScreen> {
                                 ),
 
                                 const SizedBox(height: 16),
-                                buildInputWidget<String>(
-                                  S.of(context).enDescription,
-                                  enDescriptionController,
-                                  state.voucherArgument?.enDescription,
-                                      (value) {
+                                MultiFieldWithIcon(
+                                  controller: enDescriptionController,
+                                  hintText: S.of(context).enterField(S.of(context).enDescription),
+                                  labelText: S.of(context).enDescription,
+                                  onChanged: (value) {
                                     cubit.updateVoucherArgument(state
                                         .voucherArgument!
                                         .copyWith(enDescription: value));
                                   },
+                                  suffixIcon: (state.voucherArgument!.isEnEmpty && state.voucherArgument!.isViEmpty)
+                                      ? Icons.add_comment
+                                      : Icons.g_translate,
+                                  onSuffixIconPressed: () {
+                                    cubit.generateEnDescription();
+                                  },
                                 ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: GradientButton(
-                                    onPress: () {
-                                      cubit.generateEnDescription();
-                                    },
-                                    text: state.voucherArgument!.isViEmpty?
-                                    S.of(context).generateDescriptionButton :
-                                    S.of(context).translateDescriptionButton,
-                                    isEnabled: state.voucherArgument!.isEnEmpty,
-                                  ),
-                                ),
-
                                 const SizedBox(height: 16),
-                                buildInputWidget<String>(
-                                  S.of(context).viDescription,
-                                  viDescriptionController,
-                                  state.voucherArgument?.viDescription,
-                                      (value) {
+                                MultiFieldWithIcon(
+                                  controller: viDescriptionController,
+                                  hintText: S.of(context).enterField(S.of(context).viDescription),
+                                  labelText: S.of(context).viDescription,
+                                  onChanged: (value) {
                                     cubit.updateVoucherArgument(state
                                         .voucherArgument!
                                         .copyWith(viDescription: value));
                                   },
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: GradientButton(
-                                    onPress: () {
-                                      cubit.generateViDescription();
-                                    },
-                                    text: state.voucherArgument!.isEnEmpty ?
-                                    S.of(context).generateDescriptionButton :
-                                    S.of(context).translateDescriptionButton,
-                                    isEnabled: state.voucherArgument!.isViEmpty,
-                                  ),
+                                  suffixIcon: (state.voucherArgument!.isEnEmpty && state.voucherArgument!.isViEmpty)
+                                      ? Icons.add_comment
+                                      : Icons.g_translate,
+                                  onSuffixIconPressed: () {
+                                    cubit.generateViDescription();
+                                  },
                                 ),
                               ],
                             ),

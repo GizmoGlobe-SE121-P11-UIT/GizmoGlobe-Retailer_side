@@ -595,7 +595,6 @@ class _AddProductState extends State<AddProductScreen> {
                               suffixIcon: (state.productArgument!.isEnEmpty && state.productArgument!.isViEmpty)
                                   ? Icons.add_comment
                                   : Icons.g_translate,
-                              isEnabled: state.productArgument!.isEnEmpty,
                               onSuffixIconPressed: () {
                                 cubit.generateEnDescription();
                               },
@@ -614,7 +613,6 @@ class _AddProductState extends State<AddProductScreen> {
                               suffixIcon: (state.productArgument!.isEnEmpty && state.productArgument!.isViEmpty)
                                   ? Icons.add_comment
                                   : Icons.g_translate,
-                              isEnabled: state.productArgument!.isViEmpty,
                               onSuffixIconPressed: () {
                                 cubit.generateViDescription();
                               },
