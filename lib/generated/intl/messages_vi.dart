@@ -172,6 +172,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "delete": MessageLookupByLibrary.simpleMessage("Xóa"),
     "deleteEmployee": MessageLookupByLibrary.simpleMessage("Xóa nhân viên"),
     "description": MessageLookupByLibrary.simpleMessage("Mô tả"),
+    "descriptionGenerated": MessageLookupByLibrary.simpleMessage(
+      "Mô tả được tạo thành công.",
+    ),
     "disabled": MessageLookupByLibrary.simpleMessage("Vô hiệu hóa"),
     "discard": MessageLookupByLibrary.simpleMessage("BỎ QUA"),
     "discardChanges": MessageLookupByLibrary.simpleMessage("Hủy bỏ thay đổi?"),
@@ -595,9 +598,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "voucherDeletedSuccess": MessageLookupByLibrary.simpleMessage(
       "Xóa voucher thành công.",
-    ),
-    "voucherDescriptionGenerated": MessageLookupByLibrary.simpleMessage(
-      "Mô tả voucher được tạo thành công.",
     ),
     "voucherEditSuccess": MessageLookupByLibrary.simpleMessage(
       "Sửa voucher thành công.",

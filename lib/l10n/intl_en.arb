@@ -1705,9 +1705,9 @@
 		"description": "Label for Vietnamese voucher description.",
 		"type": "text"
 	},
-	"voucherDescriptionGenerated": "Voucher description generated successfully.",
-	"@voucherDescriptionGenerated": {
-		"description": "Success message when a voucher message is generated successfully.",
+	"descriptionGenerated": "Description generated successfully.",
+	"@descriptionGenerated": {
+		"description": "Success message when a description is generated successfully.",
 		"type": "text"
 	},
 	"voucherEditSuccess": "Voucher edited successfully.",

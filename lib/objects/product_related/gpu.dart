@@ -29,6 +29,9 @@ class GPU extends Product {
     required super.stock,
     required super.status,
     String? imageUrl,
+
+    String? enDescription,
+    String? viDescription,
   }) : super(imageUrl: imageUrl);
 
   @override
@@ -48,6 +51,9 @@ class GPU extends Product {
     double? clockSpeed,
     ProductStatusEnum? status,
     String? imageUrl,
+
+    String? enDescription,
+    String? viDescription,
   }) {
     super.updateProduct(
       productID: productID,
@@ -61,6 +67,8 @@ class GPU extends Product {
       stock: stock,
       status: status,
       imageUrl: imageUrl,
+      enDescription: enDescription,
+      viDescription: viDescription,
     );
 
     this.series = series ?? this.series;

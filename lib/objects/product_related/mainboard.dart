@@ -27,6 +27,9 @@ class Mainboard extends Product {
     required super.stock,
     required super.status,
     String? imageUrl,
+
+    String? enDescription,
+    String? viDescription,
   }) : super(imageUrl: imageUrl);
 
   @override
@@ -45,6 +48,9 @@ class Mainboard extends Product {
     MainboardCompatibility? compatibility,
     ProductStatusEnum? status,
     String? imageUrl,
+
+    String? enDescription,
+    String? viDescription,
   }) {
     super.updateProduct(
       productID: productID,
@@ -58,6 +64,8 @@ class Mainboard extends Product {
       stock: stock,
       status: status,
       imageUrl: imageUrl,
+      enDescription: enDescription,
+      viDescription: viDescription,
     );
 
     this.formFactor = formFactor ?? this.formFactor;

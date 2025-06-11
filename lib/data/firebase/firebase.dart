@@ -603,6 +603,8 @@ class Firebase {
           'release': (data['release'] as Timestamp).toDate(),
           'sales': data['sales'] as int,
           'stock': data['stock'] as int,
+          'enDescription': data['enDescription'],
+          'viDescription': data['viDescription'],
           'status': ProductStatusEnum.values.firstWhere(
             (e) => e.getName() == data['status'],
             orElse: () => ProductStatusEnum.active,
@@ -746,6 +748,8 @@ class Firebase {
             'release': (data['release'] as Timestamp).toDate(),
             'sales': data['sales'] as int,
             'stock': data['stock'] as int,
+            'enDescription': data['enDescription'],
+            'viDescription': data['viDescription'],
             'status': ProductStatusEnum.values.firstWhere(
               (e) => e.getName() == data['status'],
               orElse: () => ProductStatusEnum.active,
@@ -850,8 +854,7 @@ class Firebase {
               } // Loại sản phẩm không xác định
           }
 
-          Product product =
-              ProductFactory.createProduct(category, productProps);
+          Product product = ProductFactory.createProduct(category, productProps);
           products.add(product);
         } catch (e) {
           if (kDebugMode) {
@@ -1043,6 +1046,8 @@ class Firebase {
           'manufacturer': data['manufacturer'],
           'importPrice': data['importPrice'],
           'sellingPrice': data['sellingPrice'],
+          'enDescription': data['enDescription'],
+          'viDescription': data['viDescription'],
         };
       }
 
@@ -1264,6 +1269,8 @@ class Firebase {
         'manufacturerID': product.manufacturer.manufacturerID,
         'category': product.category.getName(),
         'imageUrl': product.imageUrl,
+        'enDescription': product.enDescription,
+        'viDescription': product.viDescription,
       };
 
       switch (product.runtimeType) {
@@ -1352,6 +1359,8 @@ class Firebase {
         'manufacturerID': product.manufacturer.manufacturerID,
         'category': product.category.getName(),
         'imageUrl': product.imageUrl,
+        'enDescription': product.enDescription,
+        'viDescription': product.viDescription,
       };
 
       switch (product.runtimeType) {

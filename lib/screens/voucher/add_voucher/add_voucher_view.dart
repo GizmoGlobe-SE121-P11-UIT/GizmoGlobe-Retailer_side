@@ -10,6 +10,7 @@ import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+import 'package:gizmoglobe_client/widgets/general/multi_field_with_icon.dart';
 import 'package:intl/intl.dart';
 
 import '../../../enums/processing/process_state_enum.dart';
@@ -230,51 +231,40 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                 ),
 
                                 const SizedBox(height: 16),
-                                buildInputWidget<String>(
-                                  S.of(context).enDescription,
-                                  enDescriptionController,
-                                  state.voucherArgument?.enDescription,
-                                  (value) {
+                                MultiFieldWithIcon(
+                                  controller: enDescriptionController,
+                                  hintText: S.of(context).enterField(S.of(context).enDescription),
+                                  labelText: S.of(context).enDescription,
+                                  onChanged: (value) {
                                     cubit.updateVoucherArgument(state
                                         .voucherArgument!
                                         .copyWith(enDescription: value));
                                   },
+                                  suffixIcon: (state.voucherArgument!.isEnEmpty && state.voucherArgument!.isViEmpty)
+                                      ? Icons.add_comment
+                                      : Icons.g_translate,
+                                  isEnabled: state.voucherArgument!.isEnEmpty,
+                                  onSuffixIconPressed: () {
+                                    cubit.generateEnDescription();
+                                  },
                                 ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: GradientButton(
-                                    onPress: () {
-                                      cubit.generateEnDescription();
-                                    },
-                                    text: state.voucherArgument!.isViEmpty?
-                                        S.of(context).generateDescriptionButton :
-                                        S.of(context).translateDescriptionButton,
-                                    isEnabled: state.voucherArgument!.isEnEmpty,
-                                  ),
-                                ),
-
                                 const SizedBox(height: 16),
-                                buildInputWidget<String>(
-                                  S.of(context).viDescription,
-                                  viDescriptionController,
-                                  state.voucherArgument?.viDescription,
-                                  (value) {
+                                MultiFieldWithIcon(
+                                  controller: viDescriptionController,
+                                  hintText: S.of(context).enterField(S.of(context).viDescription),
+                                  labelText: S.of(context).viDescription,
+                                  onChanged: (value) {
                                     cubit.updateVoucherArgument(state
                                         .voucherArgument!
                                         .copyWith(viDescription: value));
                                   },
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: GradientButton(
-                                    onPress: () {
-                                      cubit.generateViDescription();
-                                    },
-                                    text: state.voucherArgument!.isEnEmpty ?
-                                      S.of(context).generateDescriptionButton :
-                                      S.of(context).translateDescriptionButton,
-                                    isEnabled: state.voucherArgument!.isViEmpty,
-                                  ),
+                                  suffixIcon: (state.voucherArgument!.isEnEmpty && state.voucherArgument!.isViEmpty)
+                                      ? Icons.add_comment
+                                      : Icons.g_translate,
+                                  isEnabled: state.voucherArgument!.isViEmpty,
+                                  onSuffixIconPressed: () {
+                                    cubit.generateViDescription();
+                                  },
                                 ),
                               ],
                             ),

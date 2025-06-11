@@ -1606,9 +1606,9 @@
 		"description": "Mô tả voucher bằng tiếng Việt.",
 		"type": "text"
 	},
-	"voucherDescriptionGenerated": "Mô tả voucher được tạo thành công.",
-	"@voucherDescriptionGenerated": {
-		"description": "Thông báo thành công khi tạo voucher.",
+	"descriptionGenerated": "Mô tả được tạo thành công.",
+	"@descriptionGenerated": {
+		"description": "Thông báo thành công khi tạo mô tả.",
 		"type": "text"
 	},
 	"voucherEditSuccess": "Sửa voucher thành công.",

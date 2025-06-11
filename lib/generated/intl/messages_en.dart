@@ -170,6 +170,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "delete": MessageLookupByLibrary.simpleMessage("Delete"),
     "deleteEmployee": MessageLookupByLibrary.simpleMessage("Delete Employee"),
     "description": MessageLookupByLibrary.simpleMessage("Description"),
+    "descriptionGenerated": MessageLookupByLibrary.simpleMessage(
+      "Description generated successfully.",
+    ),
     "disabled": MessageLookupByLibrary.simpleMessage("Disabled"),
     "discard": MessageLookupByLibrary.simpleMessage("DISCARD"),
     "discardChanges": MessageLookupByLibrary.simpleMessage("Discard Changes?"),
@@ -593,9 +596,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "voucherDeletedSuccess": MessageLookupByLibrary.simpleMessage(
       "Voucher deleted successfully.",
-    ),
-    "voucherDescriptionGenerated": MessageLookupByLibrary.simpleMessage(
-      "Voucher description generated successfully.",
     ),
     "voucherEditSuccess": MessageLookupByLibrary.simpleMessage(
       "Voucher edited successfully.",

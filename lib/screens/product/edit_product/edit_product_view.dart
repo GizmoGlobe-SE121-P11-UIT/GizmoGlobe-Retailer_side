@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 
 import '../../../data/database/database.dart';
+import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
 import '../../../enums/product_related/cpu_enums/cpu_family.dart';
@@ -34,6 +35,7 @@ import '../../../objects/product_related/product.dart';
 import '../../../objects/product_related/psu.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
+import '../../../widgets/general/multi_field_with_icon.dart';
 import 'edit_product_state.dart';
 import 'edit_product_cubit.dart';
 import '../../../objects/product_related/product_argument.dart';
@@ -65,6 +67,8 @@ class _EditProductState extends State<EditProductScreen> {
   late TextEditingController cpuClockSpeedController;
   late TextEditingController psuWattageController;
   late TextEditingController gpuClockSpeedController;
+  late TextEditingController enDescriptionController;
+  late TextEditingController viDescriptionController;
 
   @override
   void initState() {
@@ -80,6 +84,8 @@ class _EditProductState extends State<EditProductScreen> {
     cpuClockSpeedController = TextEditingController();
     psuWattageController = TextEditingController();
     gpuClockSpeedController = TextEditingController();
+    enDescriptionController = TextEditingController();
+    viDescriptionController = TextEditingController();
     initTextControllers();
   }
 
@@ -162,20 +168,34 @@ class _EditProductState extends State<EditProductScreen> {
       body: BlocConsumer<EditProductCubit, EditProductState>(
         listener: (context, state) {
           if (state.processState == ProcessState.success) {
-            showDialog(
-              context: context,
-              builder: (context) => InformationDialog(
-                title: state.dialogName.getLocalizedName(context),
-                content: state.notifyMessage.getLocalizedMessage(context),
-                onPressed: () {
-                  if (state.productArgument?.buildProduct() != widget.product) {
-                    Navigator.pop(context, ProcessState.success);
-                  } else {
-                    Navigator.pop(context, state.processState);
-                  }
-                },
-              ),
-            );
+            if (state.notifyMessage == NotifyMessage.msg21) {
+              enDescriptionController.text = state.productArgument?.enDescription ?? '';
+              viDescriptionController.text = state.productArgument?.viDescription ?? '';
+
+              showDialog(
+                context: context,
+                builder: (context) => InformationDialog(
+                  title: state.dialogName.getLocalizedName(context),
+                  content: state.notifyMessage.getLocalizedMessage(context),
+                  onPressed: () {
+                    cubit.toIdle();
+                    //Navigator.pop(context);
+                  },
+                ),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) =>
+                    InformationDialog(
+                      title: state.dialogName.getLocalizedName(context),
+                      content: state.notifyMessage.getLocalizedMessage(context),
+                      onPressed: () {
+                        Navigator.pop(context, state.processState);
+                      },
+                    ),
+              );
+            }
           } else {
             if (state.processState == ProcessState.failure) {
               showDialog(
@@ -596,12 +616,49 @@ class _EditProductState extends State<EditProductScreen> {
                               state,
                               cubit,
                             ),
+
+                            MultiFieldWithIcon(
+                              controller: enDescriptionController,
+                              hintText: S.of(context).enterField(S.of(context).enDescription),
+                              labelText: S.of(context).enDescription,
+                              onChanged: (value) {
+                                cubit.updateProductArgument(state
+                                    .productArgument!
+                                    .copyWith(enDescription: value));
+                              },
+                              suffixIcon: (state.productArgument!.isEnEmpty && state.productArgument!.isViEmpty)
+                                  ? Icons.add_comment
+                                  : Icons.g_translate,
+                              isEnabled: state.productArgument!.isEnEmpty,
+                              onSuffixIconPressed: () {
+                                cubit.generateEnDescription();
+                              },
+                            ),
+                            const SizedBox(height: 16),
+
+                            MultiFieldWithIcon(
+                              controller: viDescriptionController,
+                              hintText: S.of(context).enterField(S.of(context).viDescription),
+                              labelText: S.of(context).viDescription,
+                              onChanged: (value) {
+                                cubit.updateProductArgument(state
+                                    .productArgument!
+                                    .copyWith(viDescription: value));
+                              },
+                              suffixIcon: (state.productArgument!.isEnEmpty && state.productArgument!.isViEmpty)
+                                  ? Icons.add_comment
+                                  : Icons.g_translate,
+                              isEnabled: state.productArgument!.isViEmpty,
+                              onSuffixIconPressed: () {
+                                cubit.generateViDescription();
+                              },
+                            ),
+                            const SizedBox(height: 16),
                           ],
                         ),
                       ),
                     ),
                   ),
-                const SizedBox(height: 32),
               ],
             ),
           );

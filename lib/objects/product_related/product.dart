@@ -18,6 +18,9 @@ abstract class Product {
   ProductStatusEnum status;
   String? imageUrl;
 
+  String? enDescription;
+  String? viDescription;
+
   Product({
     this.productID,
     required this.productName,
@@ -31,6 +34,9 @@ abstract class Product {
     required this.stock,
     required this.status,
     this.imageUrl,
+
+    this.enDescription,
+    this.viDescription,
   });
 
   Product changeCategory(
@@ -55,6 +61,9 @@ abstract class Product {
     int? stock,
     ProductStatusEnum? status,
     String? imageUrl,
+
+    String? enDescription,
+    String? viDescription,
   }) {
     this.productID = productID ?? this.productID;
     this.productName = productName ?? this.productName;
@@ -67,5 +76,8 @@ abstract class Product {
     this.manufacturer = manufacturer ?? this.manufacturer;
     this.status = status ?? this.status;
     this.imageUrl = imageUrl ?? this.imageUrl;
+
+    this.enDescription = enDescription ?? this.enDescription;
+    this.viDescription = viDescription ?? this.viDescription;
   }
 }

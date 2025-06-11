@@ -27,6 +27,9 @@ class CPU extends Product {
     required super.stock,
     required super.status,
     String? imageUrl,
+
+    String? enDescription,
+    String? viDescription,
   }) : super(imageUrl: imageUrl);
 
   @override
@@ -46,6 +49,9 @@ class CPU extends Product {
     double? clockSpeed,
     ProductStatusEnum? status,
     String? imageUrl,
+
+    String? enDescription,
+    String? viDescription,
   }) {
     super.updateProduct(
       productID: productID,
@@ -59,6 +65,8 @@ class CPU extends Product {
       manufacturer: manufacturer,
       status: status,
       imageUrl: imageUrl,
+      enDescription: enDescription,
+      viDescription: viDescription
     );
 
     this.family = family ?? this.family;

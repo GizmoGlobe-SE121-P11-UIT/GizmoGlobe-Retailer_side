@@ -3325,12 +3325,12 @@ class S {
     );
   }
 
-  /// `Voucher description generated successfully.`
-  String get voucherDescriptionGenerated {
+  /// `Description generated successfully.`
+  String get descriptionGenerated {
     return Intl.message(
-      'Voucher description generated successfully.',
-      name: 'voucherDescriptionGenerated',
-      desc: 'Success message when a voucher message is generated successfully.',
+      'Description generated successfully.',
+      name: 'descriptionGenerated',
+      desc: 'Success message when a description is generated successfully.',
       args: [],
     );
   }

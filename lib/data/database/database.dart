@@ -237,6 +237,8 @@ class Database {
               'release': (data['release'] as Timestamp).toDate(),
               'sales': data['sales'],
               'stock': data['stock'],
+              'enDescription': data['enDescription'],
+              'viDescription': data['viDescription'],
               'status': ProductStatusEnum.values.firstWhere(
                 (s) => s.getName() == data['status'],
                 orElse: () {

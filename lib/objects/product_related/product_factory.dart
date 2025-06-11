@@ -27,6 +27,8 @@ class ProductFactory {
           capacity: properties['capacity'],
           ramType: properties['ramType'],
           imageUrl: properties['imageUrl'],
+          enDescription: properties['enDescription'],
+          viDescription: properties['viDescription'],
         )..productID = properties['productID'];
       case CategoryEnum.cpu:
         return CPU(
@@ -45,6 +47,8 @@ class ProductFactory {
           sales: properties['sales'],
           status: properties['status'],
           imageUrl: properties['imageUrl'],
+          enDescription: properties['enDescription'],
+          viDescription: properties['viDescription'],
         )..productID = properties['productID'];
       case CategoryEnum.psu:
         return PSU(
@@ -62,6 +66,8 @@ class ProductFactory {
           sales: properties['sales'],
           status: properties['status'],
           imageUrl: properties['imageUrl'],
+          enDescription: properties['enDescription'],
+          viDescription: properties['viDescription'],
         )..productID = properties['productID'];
       case CategoryEnum.gpu:
         return GPU(
@@ -80,6 +86,8 @@ class ProductFactory {
           sales: properties['sales'],
           status: properties['status'],
           imageUrl: properties['imageUrl'],
+          enDescription: properties['enDescription'],
+          viDescription: properties['viDescription'],
         )..productID = properties['productID'];
       case CategoryEnum.mainboard:
         return Mainboard(
@@ -97,6 +105,8 @@ class ProductFactory {
           sales: properties['sales'],
           status: properties['status'],
           imageUrl: properties['imageUrl'],
+          enDescription: properties['enDescription'],
+          viDescription: properties['viDescription'],
         )..productID = properties['productID'];
       case CategoryEnum.drive:
         return Drive(
@@ -113,6 +123,8 @@ class ProductFactory {
           sales: properties['sales'],
           status: properties['status'],
           imageUrl: properties['imageUrl'],
+          enDescription: properties['enDescription'],
+          viDescription: properties['viDescription'],
         )..productID = properties['productID'];
       default:
         throw Exception('Invalid product category');

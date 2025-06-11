@@ -37,6 +37,8 @@ class ProductArgument {
   Manufacturer? manufacturer;
   ProductStatusEnum? status;
   String? imageUrl;
+  String? enDescription;
+  String? viDescription;
 
   // RAM specific properties
   RAMBus? ramBus;
@@ -101,7 +103,17 @@ class ProductArgument {
     this.driveType,
     this.driveCapacity,
     this.imageUrl,
+    this.enDescription,
+    this.viDescription,
   });
+
+  bool get isEnEmpty {
+    return enDescription == null || enDescription!.isEmpty;
+  }
+
+  bool get isViEmpty {
+    return viDescription == null || viDescription!.isEmpty;
+  }
 
   ProductArgument copyWith(
       {String? productID,
@@ -134,7 +146,10 @@ class ProductArgument {
       MainboardCompatibility? compatibility,
       DriveType? driveType,
       DriveCapacity? driveCapacity,
-      String? imageUrl}) {
+      String? imageUrl,
+      String? enDescription,
+      String? viDescription
+      }) {
     return ProductArgument(
       productID: productID ?? this.productID,
       productName: productName ?? this.productName,
@@ -167,6 +182,8 @@ class ProductArgument {
       driveType: driveType ?? this.driveType,
       driveCapacity: driveCapacity ?? this.driveCapacity,
       imageUrl: imageUrl ?? this.imageUrl,
+      enDescription: enDescription ?? this.enDescription,
+      viDescription: viDescription ?? this.viDescription,
     );
   }
 
@@ -188,6 +205,8 @@ class ProductArgument {
           capacity: ramCapacity!,
           ramType: ramType!,
           imageUrl: imageUrl,
+          enDescription: enDescription,
+          viDescription: viDescription,
         )..productID = productID;
       case CategoryEnum.cpu:
         return CPU(
@@ -206,6 +225,8 @@ class ProductArgument {
           sales: sales!,
           status: status!,
           imageUrl: imageUrl,
+          enDescription: enDescription,
+          viDescription: viDescription,
         )..productID = productID;
       case CategoryEnum.psu:
         return PSU(
@@ -223,6 +244,8 @@ class ProductArgument {
           sales: sales!,
           status: status!,
           imageUrl: imageUrl,
+          enDescription: enDescription,
+          viDescription: viDescription,
         )..productID = productID;
       case CategoryEnum.gpu:
         return GPU(
@@ -241,6 +264,8 @@ class ProductArgument {
           sales: sales!,
           status: status!,
           imageUrl: imageUrl,
+          enDescription: enDescription,
+          viDescription: viDescription,
         )..productID = productID;
       case CategoryEnum.mainboard:
         return Mainboard(
@@ -258,6 +283,8 @@ class ProductArgument {
           sales: sales!,
           status: status!,
           imageUrl: imageUrl,
+          enDescription: enDescription,
+          viDescription: viDescription,
         )..productID = productID;
       case CategoryEnum.drive:
         return Drive(
@@ -274,6 +301,8 @@ class ProductArgument {
           sales: sales!,
           status: status!,
           imageUrl: imageUrl,
+          enDescription: enDescription,
+          viDescription: viDescription,
         )..productID = productID;
       default:
         throw Exception('Invalid product category');
@@ -294,6 +323,8 @@ class ProductArgument {
       stock: product.stock,
       status: product.status,
       imageUrl: product.imageUrl,
+      enDescription: product.enDescription,
+      viDescription: product.viDescription,
     );
     switch (product.category) {
       case CategoryEnum.ram:

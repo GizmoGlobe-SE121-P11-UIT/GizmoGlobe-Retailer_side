@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
@@ -10,6 +12,7 @@ import 'package:path/path.dart' as path;
 import '../../../enums/processing/dialog_name_enum.dart';
 import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
+import '../../../enums/product_related/category_enum.dart';
 import 'edit_product_state.dart';
 
 class EditProductCubit extends Cubit<EditProductState> {
@@ -116,5 +119,220 @@ class EditProductCubit extends Cubit<EditProductState> {
           dialogName: DialogName.failure,
           notifyMessage: NotifyMessage.msg16));
     }
+  }
+
+  Future<void> generateEnDescription() async {
+    String enDescription = '';
+    String viDescription = '';
+
+    if (!state.productArgument!.isViEmpty) {
+      enDescription = await translateIntoEnglish(
+        state.productArgument?.viDescription ?? '',
+      );
+
+      updateProductArgument(state.productArgument!.copyWith(enDescription: enDescription));
+    }
+    else {
+      enDescription = await generateDescription(state.productArgument!);
+      viDescription = await translateIntoVietnamese(enDescription);
+
+      updateProductArgument(state.productArgument!.copyWith(
+          enDescription: enDescription,
+          viDescription: viDescription
+      ));
+    }
+
+
+    emit(state.copyWith(
+        processState: ProcessState.success,
+        dialogName: DialogName.success,
+        notifyMessage: NotifyMessage.msg21));
+  }
+
+  Future<void> generateViDescription() async {
+    String enDescription = '';
+    String viDescription = '';
+
+    if (!state.productArgument!.isEnEmpty) {
+      viDescription = await translateIntoVietnamese(
+        state.productArgument?.enDescription ?? '',
+      );
+
+      updateProductArgument(state.productArgument!.copyWith(viDescription: viDescription));
+    }
+    else {
+      enDescription = await generateDescription(state.productArgument!);
+      viDescription = await translateIntoVietnamese(enDescription);
+
+      updateProductArgument(state.productArgument!.copyWith(
+          enDescription: enDescription,
+          viDescription: viDescription
+      ));
+    }
+
+    emit(state.copyWith(
+        processState: ProcessState.success,
+        dialogName: DialogName.success,
+        notifyMessage: NotifyMessage.msg21));
+  }
+}
+
+Future<String> translateIntoEnglish(String inputText) async {
+  try {
+    final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
+    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
+
+    final dio = Dio();
+    final response = await dio.post(
+      url,
+      options: Options(headers: {'Content-Type': 'application/json'}),
+      data: {
+        'contents': [{
+          'parts': [{
+            'text': 'Translate this Vietnamese text to English changing special character like \$ or %. Return only the translated text: $inputText'
+          }]
+        }],
+        'generationConfig': {
+          'temperature': 0.2,
+          'topP': 0.8,
+          'maxOutputTokens': 100
+        }
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = response.data;
+      final candidates = jsonResponse['candidates'] as List;
+      if (candidates.isNotEmpty) {
+        final content = candidates[0]['content'];
+        final parts = content['parts'] as List;
+        if (parts.isNotEmpty) {
+          final translatedText = parts[0]['text'] as String;
+          return translatedText.trim();
+        }
+      }
+    }
+
+    return inputText;
+  } catch (e) {
+    print('Error translating to English: $e');
+    return inputText;
+  }
+}
+
+Future<String> translateIntoVietnamese(String inputText) async {
+  try {
+    if (inputText.isEmpty) {
+      return '';
+    }
+
+    final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
+    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
+
+    final dio = Dio();
+    final response = await dio.post(
+      url,
+      options: Options(headers: {'Content-Type': 'application/json'}),
+      data: {
+        'contents': [{
+          'parts': [{
+            'text': 'INSTRUCTION: Translate the following English text to Vietnamese without changing special character like \$ or %.\n\nENGLISH TEXT: $inputText\n\nTRANSLATION (in Vietnamese only, no English explanation or notes):'
+          }]
+        }],
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = response.data;
+      final candidates = jsonResponse['candidates'] as List;
+      if (candidates.isNotEmpty) {
+        final content = candidates[0]['content'];
+        final parts = content['parts'] as List;
+        if (parts.isNotEmpty) {
+          final translatedText = parts[0]['text'] as String;
+          return translatedText.trim();
+        }
+      }
+    }
+
+    return inputText;
+  } catch (e) {
+    print('Error translating to Vietnamese: $e');
+    return inputText;
+  }
+}
+
+Future<String> generateDescription(ProductArgument inputProduct) async {
+  try {
+    final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
+    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
+
+    final dio = Dio();
+    final productInfo = inputProduct;
+    final promptDetails = [
+      'Product Name: ${productInfo.productName}',
+      'Category: ${productInfo.category}',
+      'Manufacturer: ${productInfo.manufacturer}',
+
+      if (productInfo.category == CategoryEnum.ram) {
+        'RAM bus: ${productInfo.ramBus} MHz',
+        'RAM capacity: ${productInfo.ramCapacity} GB',
+        'RAM type: ${productInfo.ramType}',
+      } else if (productInfo.category ==  CategoryEnum.cpu) {
+        'SSD family: ${productInfo.family}',
+        'Number of cores: ${productInfo.core}',
+        'Number of threads: ${productInfo.thread}',
+        'Clock speed: ${productInfo.cpuClockSpeed} GHz',
+      } else if (productInfo.category == CategoryEnum.psu) {
+        'Wattage: ${productInfo.wattage} W',
+        'Efficiency: ${productInfo.efficiency}',
+        'Modular: ${productInfo.modular}',
+      } else if (productInfo.category == CategoryEnum.gpu) {
+        'GPU capacity: ${productInfo.gpuCapacity} GB',
+        'GPU clock Speed: ${productInfo.gpuClockSpeed} MHz',
+        'GPU series: ${productInfo.gpuSeries}',
+        'GPU bus: ${productInfo.gpuBus} bit',
+      } else if (productInfo.category == CategoryEnum.mainboard) {
+        'Mainboard form factor: ${productInfo.formFactor}',
+        'Mainboard series: ${productInfo.mainboardSeries}',
+        'Mainboard compatibility: ${productInfo.compatibility}',
+      } else if (productInfo.category == CategoryEnum.drive) {
+        'Drive type: ${productInfo.driveType}',
+        'Drive capacity: ${productInfo.driveCapacity} GB',
+      }
+    ].join('\n');
+    final response = await dio.post(
+      url,
+      options: Options(headers: {'Content-Type': 'application/json'}),
+      data: {
+        'contents': [{
+          'parts': [{
+            'text': 'Create a detailed yet concise product description in English (3-5 sentences) based on these specifications:\n$promptDetails\n\nInclude: (1) what the product is, (2) its key technical specifications, (3) its main benefits or use cases, and (4) one standout feature. Balance technical details with consumer benefits. Use professional, marketing-oriented language that highlights value. Return ONLY the description, no additional text.'          }]
+        }],
+        'generationConfig': {
+          'temperature': 0.2,
+          'topP': 0.8,
+          'maxOutputTokens': 100
+        }
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = response.data;
+      final candidates = jsonResponse['candidates'] as List;
+      if (candidates.isNotEmpty) {
+        final content = candidates[0]['content'];
+        final parts = content['parts'] as List;
+        if (parts.isNotEmpty) {
+          final translatedText = parts[0]['text'] as String;
+          return translatedText.trim();
+        }
+      }
+    }
+
+    return '';
+  } catch (e) {
+    print('Error generating description: $e');
+    return '';
   }
 }

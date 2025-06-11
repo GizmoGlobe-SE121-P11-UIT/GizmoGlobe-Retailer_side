@@ -26,6 +26,9 @@ class PSU extends Product {
     required super.stock,
     required super.status,
     String? imageUrl,
+
+    String? enDescription,
+    String? viDescription,
   }) : super(imageUrl: imageUrl);
 
   @override
@@ -44,6 +47,9 @@ class PSU extends Product {
     PSUModular? modular,
     ProductStatusEnum? status,
     String? imageUrl,
+
+    String? enDescription,
+    String? viDescription,
   }) {
     super.updateProduct(
       productID: productID,
@@ -57,6 +63,8 @@ class PSU extends Product {
       stock: stock,
       status: status,
       imageUrl: imageUrl,
+      enDescription: enDescription,
+      viDescription: viDescription,
     );
 
     this.wattage = wattage ?? this.wattage;
