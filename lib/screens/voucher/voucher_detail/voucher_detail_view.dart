@@ -163,10 +163,17 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                 ),
                               ],
                             ),
-                            if (state.voucher.description != null)
+                            if (state.voucher.enDescription != null)
                               _buildInfoRow(
-                                title: S.of(context).description,
-                                value: state.voucher.description!,
+                                title: S.of(context).enDescription,
+                                value: state.voucher.enDescription!,
+                                theme: theme,
+                              ),
+
+                            if (state.voucher.viDescription != null)
+                              _buildInfoRow(
+                                title: S.of(context).viDescription,
+                                value: state.voucher.viDescription!,
                                 theme: theme,
                               ),
                           ],
@@ -223,50 +230,12 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    final argument = VoucherArgument(
-                                      voucherID: state.voucher.voucherID,
-                                      voucherName: state.voucher.voucherName,
-                                      startTime: state.voucher.startTime,
-                                      discountValue:
-                                          state.voucher.discountValue,
-                                      minimumPurchase:
-                                          state.voucher.minimumPurchase,
-                                      maxUsagePerPerson:
-                                          state.voucher.maxUsagePerPerson,
-                                      isVisible: state.voucher.isVisible,
-                                      isEnabled: state.voucher.isEnabled,
-                                      description: state.voucher.description,
-                                      isPercentage: state.voucher.isPercentage,
-                                      hasEndTime: state.voucher.hasEndTime,
-                                      isLimited: state.voucher.isLimited,
-                                      maximumDiscountValue:
-                                          state.voucher is PercentageInterface
-                                              ? (state.voucher
-                                                      as PercentageInterface)
-                                                  .maximumDiscountValue
-                                              : null,
-                                      maximumUsage: state.voucher
-                                              is LimitedInterface
-                                          ? (state.voucher as LimitedInterface)
-                                              .maximumUsage
-                                          : null,
-                                      usageLeft: state.voucher
-                                              is LimitedInterface
-                                          ? (state.voucher as LimitedInterface)
-                                              .usageLeft
-                                          : null,
-                                      endTime: state.voucher is EndTimeInterface
-                                          ? (state.voucher as EndTimeInterface)
-                                              .endTime
-                                          : null,
-                                    );
                                     ProcessState? processState =
                                         await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            EditVoucherScreen.newInstance(
-                                                argument),
+                                            EditVoucherScreen.newInstance(state.voucher),
                                       ),
                                     );
                                     if (processState == ProcessState.success) {

@@ -14,7 +14,9 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
     required super.maxUsagePerPerson,
     required super.isVisible,
     required super.isEnabled,
-    super.description,
+    super.enDescription,
+    super.viDescription,
+
     super.isPercentage = false,
     super.hasEndTime = false,
     super.isLimited = false,
@@ -30,7 +32,9 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
-    String? description,
+    String? enDescription,
+    String? viDescription,
+
     DateTime? endTime,
   }) {
     super.updateVoucher(
@@ -42,7 +46,8 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
       maxUsagePerPerson: maxUsagePerPerson,
       isVisible: isVisible,
       isEnabled: isEnabled,
-      description: description,
+      enDescription: enDescription,
+      viDescription: viDescription,
     );
   }
 
@@ -51,7 +56,7 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(voucherName, style: AppTextStyle.regularTitle),
+        Text(voucherName, style: AppTextStyle.smallTitle),
         const SizedBox(height: 4),
         Text(
           'Discount \$$discountValue',

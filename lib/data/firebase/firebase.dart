@@ -2368,7 +2368,8 @@ class Firebase {
         data['maxUsagePerPerson'] ??= 1;
         data['isVisible'] ??= true;
         data['isEnabled'] ??= true;
-        data['description'] ??= '';
+        data['enDescription'] ??= '';
+        data['viDescription'] ??= '';
         data['isPercentage'] ??= false;
         data['hasEndTime'] ??= false;
         data['isLimited'] ??= false;
@@ -2419,7 +2420,8 @@ class Firebase {
     final map = {
       'voucherID': voucher.voucherID,
       'voucherName': voucher.voucherName,
-      'description': voucher.description,
+      'enDescription': voucher.enDescription,
+      'viDescription': voucher.viDescription,
       'discountValue': voucher.discountValue,
       'minimumPurchase': voucher.minimumPurchase,
       'isPercentage': voucher.isPercentage,
@@ -2443,7 +2445,7 @@ class Firebase {
       map['usageLeft'] = dyn.usageLeft ?? 0;
     }
 
-    if (voucher.hasEndTime && voucher is EndTimeInterface) {
+    if (voucher.hasEndTime) {
       map['endTime'] = (voucher as EndTimeInterface).endTime.toIso8601String();
     }
 

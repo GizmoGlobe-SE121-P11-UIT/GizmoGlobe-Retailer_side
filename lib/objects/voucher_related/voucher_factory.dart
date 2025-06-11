@@ -13,6 +13,7 @@ typedef VoucherConstructor = Voucher Function(Map<String, dynamic>);
 class VoucherFactory {
   static final Map<String, VoucherConstructor> voucherConstructors = {
     'limited_percentage_end': (props) => LimitedPercentageVoucherWithEndTime(
+      voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
       discountValue: props['discountValue'],
@@ -20,15 +21,20 @@ class VoucherFactory {
       maxUsagePerPerson: props['maxUsagePerPerson'],
       isVisible: props['isVisible'],
       isEnabled: props['isEnabled'],
-      description: props['description'],
-
+      enDescription: props['enDescription'],
+      viDescription: props['viDescription'],
+      // Explicitly set the boolean flags
+      isPercentage: true,
+      isLimited: true,
+      hasEndTime: true,
       maximumUsage: props['maximumUsage'],
       usageLeft: props['usageLeft'],
       maximumDiscountValue: props['maximumDiscountValue'],
       endTime: props['endTime'],
-    )..voucherID = props['voucherID'],
+    ),
 
     'limited_percentage_noend': (props) => LimitedPercentageVoucherWithoutEndTime(
+      voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
       discountValue: props['discountValue'],
@@ -36,14 +42,19 @@ class VoucherFactory {
       maxUsagePerPerson: props['maxUsagePerPerson'],
       isVisible: props['isVisible'],
       isEnabled: props['isEnabled'],
-      description: props['description'],
-
+      enDescription: props['enDescription'],
+      viDescription: props['viDescription'],
+      // Explicitly set the boolean flags
+      isPercentage: true,
+      isLimited: true,
+      hasEndTime: false,
       maximumUsage: props['maximumUsage'],
       usageLeft: props['usageLeft'],
       maximumDiscountValue: props['maximumDiscountValue'],
-    )..voucherID = props['voucherID'],
+    ),
 
     'limited_amount_end': (props) => LimitedAmountVoucherWithEndTime(
+      voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
       discountValue: props['discountValue'],
@@ -51,14 +62,19 @@ class VoucherFactory {
       maxUsagePerPerson: props['maxUsagePerPerson'],
       isVisible: props['isVisible'],
       isEnabled: props['isEnabled'],
-      description: props['description'],
-
+      enDescription: props['enDescription'],
+      viDescription: props['viDescription'],
+      // Explicitly set the boolean flags
+      isPercentage: false,
+      isLimited: true,
+      hasEndTime: true,
       maximumUsage: props['maximumUsage'],
       usageLeft: props['usageLeft'],
       endTime: props['endTime'],
-    )..voucherID = props['voucherID'],
+    ),
 
     'limited_amount_noend': (props) => LimitedAmountVoucherWithoutEndTime(
+      voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
       discountValue: props['discountValue'],
@@ -66,13 +82,18 @@ class VoucherFactory {
       maxUsagePerPerson: props['maxUsagePerPerson'],
       isVisible: props['isVisible'],
       isEnabled: props['isEnabled'],
-      description: props['description'],
-
+      enDescription: props['enDescription'],
+      viDescription: props['viDescription'],
+      // Explicitly set the boolean flags
+      isPercentage: false,
+      isLimited: true,
+      hasEndTime: false,
       maximumUsage: props['maximumUsage'],
       usageLeft: props['usageLeft'],
-    )..voucherID = props['voucherID'],
+    ),
 
     'unlimited_percentage_end': (props) => UnlimitedPercentageVoucherWithEndTime(
+      voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
       discountValue: props['discountValue'],
@@ -80,13 +101,18 @@ class VoucherFactory {
       maxUsagePerPerson: props['maxUsagePerPerson'],
       isVisible: props['isVisible'],
       isEnabled: props['isEnabled'],
-      description: props['description'],
-
+      enDescription: props['enDescription'],
+      viDescription: props['viDescription'],
+      // Explicitly set the boolean flags
+      isPercentage: true,
+      isLimited: false,
+      hasEndTime: true,
       maximumDiscountValue: props['maximumDiscountValue'],
       endTime: props['endTime'],
-    )..voucherID = props['voucherID'],
+    ),
 
     'unlimited_percentage_noend': (props) => UnlimitedPercentageVoucherWithoutEndTime(
+      voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
       discountValue: props['discountValue'],
@@ -94,12 +120,17 @@ class VoucherFactory {
       maxUsagePerPerson: props['maxUsagePerPerson'],
       isVisible: props['isVisible'],
       isEnabled: props['isEnabled'],
-      description: props['description'],
-
+      enDescription: props['enDescription'],
+      viDescription: props['viDescription'],
+      // Explicitly set the boolean flags
+      isPercentage: true,
+      isLimited: false,
+      hasEndTime: false,
       maximumDiscountValue: props['maximumDiscountValue'],
-    )..voucherID = props['voucherID'],
+    ),
 
     'unlimited_amount_end': (props) => UnlimitedAmountVoucherWithEndTime(
+      voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
       discountValue: props['discountValue'],
@@ -107,12 +138,17 @@ class VoucherFactory {
       maxUsagePerPerson: props['maxUsagePerPerson'],
       isVisible: props['isVisible'],
       isEnabled: props['isEnabled'],
-      description: props['description'],
-
+      enDescription: props['enDescription'],
+      viDescription: props['viDescription'],
+      // Explicitly set the boolean flags
+      isPercentage: false,
+      isLimited: false,
+      hasEndTime: true,
       endTime: props['endTime'],
-    )..voucherID = props['voucherID'],
+    ),
 
     'unlimited_amount_noend': (props) => UnlimitedAmountVoucherWithoutEndTime(
+      voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
       discountValue: props['discountValue'],
@@ -120,8 +156,13 @@ class VoucherFactory {
       maxUsagePerPerson: props['maxUsagePerPerson'],
       isVisible: props['isVisible'],
       isEnabled: props['isEnabled'],
-      description: props['description'],
-    )..voucherID = props['voucherID'],
+      enDescription: props['enDescription'],
+      viDescription: props['viDescription'],
+      // Explicitly set the boolean flags
+      isPercentage: false,
+      isLimited: false,
+      hasEndTime: false,
+    ),
   };
 
   static String getKey({

@@ -23,6 +23,9 @@ enum NotifyMessage {
   msg18('voucherAddFailed'),
   msg19('voucherDeletedSuccess'),
   msg20('voucherDeleteFailed'),
+  msg21('voucherDescriptionGenerated'),
+  msg22('voucherEditSuccess'),
+  msg23('voucherEditFailed'),
   error('unexpectedError');
 
   final String message;
@@ -76,6 +79,12 @@ enum NotifyMessage {
         return S.of(context).voucherDeletedSuccess;
       case NotifyMessage.msg20:
         return S.of(context).voucherDeleteFailed;
+      case NotifyMessage.msg21:
+        return S.of(context).voucherDescriptionGenerated;
+      case NotifyMessage.msg22:
+        return S.of(context).voucherEditSuccess;
+      case NotifyMessage.msg23:
+        return S.of(context).errorUpdatingVoucher;
       case NotifyMessage.error:
         return S.of(context).unexpectedError;
     }

@@ -21,7 +21,8 @@ class UnlimitedPercentageVoucherWithEndTime
     required super.maxUsagePerPerson,
     required super.isVisible,
     required super.isEnabled,
-    super.description,
+    super.enDescription,
+    super.viDescription,
 
     super.isPercentage = false,
     super.hasEndTime = true,
@@ -53,7 +54,8 @@ class UnlimitedPercentageVoucherWithEndTime
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
-    String? description,
+    String? enDescription,
+    String? viDescription,
 
     DateTime? endTime,
     double? maximumDiscountValue,
@@ -67,7 +69,8 @@ class UnlimitedPercentageVoucherWithEndTime
       maxUsagePerPerson: maxUsagePerPerson,
       isVisible: isVisible,
       isEnabled: isEnabled,
-      description: description,
+      enDescription: enDescription,
+      viDescription: viDescription,
     );
 
     this.endTime = endTime ?? this.endTime;
@@ -83,7 +86,7 @@ class UnlimitedPercentageVoucherWithEndTime
       children: [
         Text(
             voucherName,
-            style: AppTextStyle.regularTitle
+            style: AppTextStyle.smallTitle
         ),
         const SizedBox(height: 4),
 

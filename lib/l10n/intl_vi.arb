@@ -1585,5 +1585,35 @@
 	"@errorUpdatingVoucher": {
 		"description": "Thông báo lỗi khi cập nhật voucher thất bại.",
 		"type": "text"
+	},
+	"generateDescriptionButton": "Tạo mô tả",
+	"@generateDescriptionButton": {
+        "description": "Nội dung nút tạo mô tả voucher.",
+        "type": "text"
+    },
+    "translateDescriptionButton": "Dịch mô tả",
+    "@translateDescriptionButton": {
+        "description": "Nội dung của nút dịch mô tả voucher.",
+        "type": "text"
+    },
+	"enDescription": "Mô tả tiếng Anh",
+	"@enDescription": {
+		"description": "Mô tả voucher bằng tiếng Anh.",
+		"type": "text"
+	},
+	"viDescription": "Mô tả tiếng Việt",
+	"@viDescription": {
+		"description": "Mô tả voucher bằng tiếng Việt.",
+		"type": "text"
+	},
+	"voucherDescriptionGenerated": "Mô tả voucher được tạo thành công.",
+	"@voucherDescriptionGenerated": {
+		"description": "Thông báo thành công khi tạo voucher.",
+		"type": "text"
+	},
+	"voucherEditSuccess": "Sửa voucher thành công.",
+	"@voucherEditSuccess": {
+		"description": "Thông báo thành công khi sửa voucher.",
+		"type": "text"
 	}
 }

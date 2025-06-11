@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_state.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
+import 'package:gizmoglobe_client/widgets/general/gradient_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:intl/intl.dart';
@@ -34,7 +36,8 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
   late TextEditingController discountValueController;
   late TextEditingController minimumPurchaseController;
   late TextEditingController maxUsagePerPersonController;
-  late TextEditingController descriptionController;
+  late TextEditingController enDescriptionController;
+  late TextEditingController viDescriptionController;
   late TextEditingController maximumUsageController;
   late TextEditingController maximumDiscountValueController;
   late TextEditingController usageLeftController;
@@ -46,7 +49,8 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
     discountValueController = TextEditingController();
     minimumPurchaseController = TextEditingController();
     maxUsagePerPersonController = TextEditingController();
-    descriptionController = TextEditingController();
+    enDescriptionController = TextEditingController();
+    viDescriptionController = TextEditingController();
     maximumUsageController = TextEditingController();
     maximumDiscountValueController = TextEditingController();
     usageLeftController = TextEditingController();
@@ -91,16 +95,33 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
       body: BlocConsumer<AddVoucherCubit, AddVoucherState>(
         listener: (context, state) {
           if (state.processState == ProcessState.success) {
-            showDialog(
-              context: context,
-              builder: (context) => InformationDialog(
-                title: state.dialogName.getLocalizedName(context),
-                content: state.notifyMessage.getLocalizedMessage(context),
-                onPressed: () {
-                  Navigator.pop(context, state.processState);
-                },
-              ),
-            );
+            if (state.notifyMessage == NotifyMessage.msg21) {
+              enDescriptionController.text = state.voucherArgument?.enDescription ?? '';
+              viDescriptionController.text = state.voucherArgument?.viDescription ?? '';
+
+              showDialog(
+                context: context,
+                builder: (context) => InformationDialog(
+                  title: state.dialogName.getLocalizedName(context),
+                  content: state.notifyMessage.getLocalizedMessage(context),
+                  onPressed: () {
+                    cubit.toIdle();
+                    //Navigator.pop(context);
+                  },
+                ),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => InformationDialog(
+                  title: state.dialogName.getLocalizedName(context),
+                  content: state.notifyMessage.getLocalizedMessage(context),
+                  onPressed: () {
+                    Navigator.pop(context, state.processState);
+                  },
+                ),
+              );
+            }
           } else if (state.processState == ProcessState.failure) {
             showDialog(
               context: context,
@@ -207,16 +228,53 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                         .copyWith(maxUsagePerPerson: value));
                                   },
                                 ),
+
                                 const SizedBox(height: 16),
                                 buildInputWidget<String>(
-                                  S.of(context).description,
-                                  descriptionController,
-                                  state.voucherArgument?.description,
+                                  S.of(context).enDescription,
+                                  enDescriptionController,
+                                  state.voucherArgument?.enDescription,
                                   (value) {
                                     cubit.updateVoucherArgument(state
                                         .voucherArgument!
-                                        .copyWith(description: value));
+                                        .copyWith(enDescription: value));
                                   },
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: GradientButton(
+                                    onPress: () {
+                                      cubit.generateEnDescription();
+                                    },
+                                    text: state.voucherArgument!.isViEmpty?
+                                        S.of(context).generateDescriptionButton :
+                                        S.of(context).translateDescriptionButton,
+                                    isEnabled: state.voucherArgument!.isEnEmpty,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 16),
+                                buildInputWidget<String>(
+                                  S.of(context).viDescription,
+                                  viDescriptionController,
+                                  state.voucherArgument?.viDescription,
+                                  (value) {
+                                    cubit.updateVoucherArgument(state
+                                        .voucherArgument!
+                                        .copyWith(viDescription: value));
+                                  },
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: GradientButton(
+                                    onPress: () {
+                                      cubit.generateViDescription();
+                                    },
+                                    text: state.voucherArgument!.isEnEmpty ?
+                                      S.of(context).generateDescriptionButton :
+                                      S.of(context).translateDescriptionButton,
+                                    isEnabled: state.voucherArgument!.isViEmpty,
+                                  ),
                                 ),
                               ],
                             ),
@@ -296,47 +354,19 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                 if (state.voucherArgument?.isLimited == true)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 16.0),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: buildInputWidget<double>(
-                                            S.of(context).maximumUsage,
-                                            maximumUsageController,
-                                            state.voucherArgument?.maximumUsage
-                                                ?.toDouble(),
-                                            (value) {
-                                              cubit.updateVoucherArgument(
-                                                state.voucherArgument?.copyWith(
-                                                      maximumUsage:
-                                                          value?.toInt(),
-                                                    ) ??
-                                                    VoucherArgument(
-                                                        maximumUsage:
-                                                            value?.toInt()),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Expanded(
-                                          child: buildInputWidget<double>(
-                                            S.of(context).usageLeft,
-                                            usageLeftController,
-                                            state.voucherArgument?.usageLeft
-                                                ?.toDouble(),
-                                            (value) {
-                                              cubit.updateVoucherArgument(
-                                                state.voucherArgument?.copyWith(
-                                                      usageLeft: value?.toInt(),
-                                                    ) ??
-                                                    VoucherArgument(
-                                                        usageLeft:
-                                                            value?.toInt()),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
+                                    child: buildInputWidget<double>(
+                                      S.of(context).maximumUsage,
+                                      maximumUsageController,
+                                      state.voucherArgument?.maximumUsage
+                                          ?.toDouble(),
+                                      (value) {
+                                        cubit.updateVoucherArgument(
+                                          state.voucherArgument!.copyWith(
+                                              maximumUsage: value?.toInt(),
+                                              usageLeft: value?.toInt()
+                                          )
+                                        );
+                                      },
                                     ),
                                   ),
 
@@ -523,18 +553,19 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
   }
 
   Widget buildInputWidget<T>(
-    String propertyName,
-    TextEditingController controller,
-    T? propertyValue,
-    void Function(T?) onChanged, [
-    List<T>? enumValues,
-    Map<T, String>? enumLabels,
-  ]) {
+      String propertyName,
+      TextEditingController controller,
+      T? propertyValue,
+      void Function(T?) onChanged, [
+        List<T>? enumValues,
+        Map<T, String>? enumLabels,
+      ]) {
     return Builder(
       builder: (BuildContext context) {
+        // Handle DateTime fields
         if (T == DateTime) {
           return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(propertyName, style: AppTextStyle.smallText),
               GestureDetector(
@@ -554,8 +585,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                           ),
                           textButtonTheme: TextButtonThemeData(
                             style: TextButton.styleFrom(
-                              foregroundColor:
-                                  Theme.of(context).colorScheme.primary,
+                              foregroundColor: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ),
@@ -574,15 +604,12 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                           data: Theme.of(context).copyWith(
                             colorScheme: ColorScheme.light(
                               primary: Theme.of(context).colorScheme.primary,
-                              onPrimary:
-                                  Theme.of(context).colorScheme.onPrimary,
-                              onSurface:
-                                  Theme.of(context).colorScheme.onSurface,
+                              onPrimary: Theme.of(context).colorScheme.onPrimary,
+                              onSurface: Theme.of(context).colorScheme.onSurface,
                             ),
                             textButtonTheme: TextButtonThemeData(
                               style: TextButton.styleFrom(
-                                foregroundColor:
-                                    Theme.of(context).colorScheme.primary,
+                                foregroundColor: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
@@ -608,7 +635,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                     controller: TextEditingController(
                       text: (propertyValue as DateTime?) != null
                           ? DateFormat('dd/MM/yyyy HH:mm')
-                              .format(propertyValue as DateTime)
+                          .format(propertyValue as DateTime)
                           : '',
                     ),
                     readOnly: true,
@@ -621,14 +648,15 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
               ),
             ],
           );
-        } else if (enumValues != null && T == bool) {
+        }
+        // Handle enum fields with boolean type
+        else if (enumValues != null && T == bool) {
           return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(propertyName, style: AppTextStyle.smallText),
               GradientDropdown<T>(
-                items: (String filter, dynamic infiniteScrollProps) =>
-                    enumValues,
+                items: (String filter, dynamic infiniteScrollProps) => enumValues,
                 compareFn: (T? d1, T? d2) => d1 == d2,
                 itemAsString: (T d) => enumLabels?[d] ?? d.toString(),
                 onChanged: onChanged,
@@ -637,14 +665,15 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
               ),
             ],
           );
-        } else if (enumValues != null) {
+        }
+        // Handle other enum fields
+        else if (enumValues != null) {
           return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(propertyName, style: AppTextStyle.smallText),
               GradientDropdown<T>(
-                items: (String filter, dynamic infiniteScrollProps) =>
-                    enumValues,
+                items: (String filter, dynamic infiniteScrollProps) => enumValues,
                 compareFn: (T? d1, T? d2) => d1 == d2,
                 itemAsString: (T d) => d.toString(),
                 onChanged: onChanged,
@@ -653,115 +682,27 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
               ),
             ],
           );
-        } else if (T == String) {
-          TextInputType keyboardType = TextInputType.text;
-          List<TextInputFormatter> inputFormatters = [
-            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]')),
-          ];
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(propertyName, style: AppTextStyle.smallText),
-              FieldWithIcon(
-                controller: controller,
-                hintText: S.of(context).enterField(propertyName),
-                onChanged: (value) {
-                  onChanged(value as T?);
-                },
-                fillColor: Theme.of(context).colorScheme.surface,
-                textColor: Theme.of(context).colorScheme.onSurface,
-                keyboardType: keyboardType,
-                inputFormatters: inputFormatters,
-              ),
-            ],
-          );
-        } else if (T == double) {
-          TextInputType keyboardType =
-              const TextInputType.numberWithOptions(decimal: true);
-          List<TextInputFormatter> inputFormatters = [
-            FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*\.?[0-9]*')),
-          ];
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(propertyName, style: AppTextStyle.smallText),
-              FieldWithIcon(
-                controller: controller,
-                hintText: S.of(context).enterField(propertyName),
-                onChanged: (value) {
-                  if (value.isEmpty) {
-                    onChanged(null);
-                  } else {
-                    final parsed = double.tryParse(value);
-                    onChanged(parsed as T?);
-                  }
-                },
-                fillColor: Theme.of(context).colorScheme.surface,
-                textColor: Theme.of(context).colorScheme.onSurface,
-                keyboardType: keyboardType,
-                inputFormatters: inputFormatters,
-              ),
-            ],
-          );
-        } else if (T == int) {
-          TextInputType keyboardType = TextInputType.number;
-          List<TextInputFormatter> inputFormatters = [
-            FilteringTextInputFormatter.digitsOnly
-          ];
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(propertyName, style: AppTextStyle.smallText),
-              FieldWithIcon(
-                controller: controller,
-                hintText: S.of(context).enterField(propertyName),
-                onChanged: (value) {
-                  if (value.isEmpty) {
-                    onChanged(null);
-                  } else {
-                    final parsed = int.tryParse(value);
-                    onChanged(parsed as T?);
-                  }
-                },
-                fillColor: Theme.of(context).colorScheme.surface,
-                textColor: Theme.of(context).colorScheme.onSurface,
-                keyboardType: keyboardType,
-                inputFormatters: inputFormatters,
-              ),
-            ],
-          );
         } else {
+          // Handle text fields based on type
           TextInputType keyboardType;
-          List<TextInputFormatter> inputFormatters;
+          List<TextInputFormatter> inputFormatters = [];
 
-          if (propertyName == S.of(context).voucherName ||
-              propertyName == S.of(context).description) {
-            keyboardType = TextInputType.text;
-            inputFormatters = [
-              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]')),
-            ];
-          } else if (propertyName == S.of(context).discountValue ||
-              propertyName == S.of(context).minimumPurchase ||
-              propertyName == S.of(context).maxUsagePerPerson ||
-              propertyName == S.of(context).maximumDiscountValue ||
-              propertyName == S.of(context).maximumUsage ||
-              propertyName == S.of(context).usageLeft) {
+          // Configure input type and formatters based on field type and name
+          if (T == double) {
             keyboardType = const TextInputType.numberWithOptions(decimal: true);
             inputFormatters = [
-              FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*\.?[0-9]*')),
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
             ];
           } else if (T == int) {
             keyboardType = TextInputType.number;
             inputFormatters = [FilteringTextInputFormatter.digitsOnly];
           } else {
             keyboardType = TextInputType.text;
-            inputFormatters = [
-              FilteringTextInputFormatter.allow(RegExp(r'.*'))
-            ];
+            inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'.*'))];
           }
 
           return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(propertyName, style: AppTextStyle.smallText),
               FieldWithIcon(
@@ -769,10 +710,28 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                 hintText: S.of(context).enterField(propertyName),
                 onChanged: (value) {
                   if (value.isEmpty) {
-                    onChanged(null);
-                  } else {
+                    if (T == String) {
+                      onChanged('' as T?);
+                    } else {
+                      onChanged(null);
+                    }
+                  } else if (T == int) {
+                    final parsed = int.tryParse(value);
+                    if (parsed != null) {
+                      onChanged(parsed as T?);
+                    }
+                  } else if (T == double) {
                     final parsed = double.tryParse(value);
-                    onChanged(parsed as T?);
+                    if (parsed != null) {
+                      onChanged(parsed as T?);
+                    } else if (value == '.' || value.endsWith('.')) {
+                      controller.text = value;
+                      controller.selection = TextSelection.fromPosition(
+                        TextPosition(offset: controller.text.length),
+                      );
+                    }
+                  } else {
+                    onChanged(value as T?);
                   }
                 },
                 fillColor: Theme.of(context).colorScheme.surface,

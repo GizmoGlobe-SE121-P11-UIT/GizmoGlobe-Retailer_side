@@ -1,5 +1,9 @@
+import 'package:gizmoglobe_client/objects/voucher_related/end_time_interface.dart';
+import 'package:gizmoglobe_client/objects/voucher_related/percentage_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher_factory.dart';
+
+import 'limited_interface.dart';
 
 class VoucherArgument {
   String? voucherID;
@@ -10,7 +14,8 @@ class VoucherArgument {
   int? maxUsagePerPerson;
   bool? isVisible;
   bool? isEnabled;
-  String? description;
+  String? enDescription;
+  String? viDescription;
 
   bool? isPercentage;
   bool? hasEndTime;
@@ -32,7 +37,8 @@ class VoucherArgument {
     this.maxUsagePerPerson,
     this.isVisible,
     this.isEnabled,
-    this.description,
+    this.enDescription,
+    this.viDescription,
 
     this.isPercentage,
     this.hasEndTime,
@@ -55,7 +61,8 @@ class VoucherArgument {
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
-    String? description,
+    String? enDescription,
+    String? viDescription,
 
     bool? isPercentage,
     bool? hasEndTime,
@@ -77,7 +84,8 @@ class VoucherArgument {
       maxUsagePerPerson: maxUsagePerPerson ?? this.maxUsagePerPerson,
       isVisible: isVisible ?? this.isVisible,
       isEnabled: isEnabled ?? this.isEnabled,
-      description: description ?? this.description,
+      enDescription: enDescription ?? this.enDescription,
+      viDescription: viDescription ?? this.viDescription,
 
       isPercentage: isPercentage ?? this.isPercentage,
       hasEndTime: hasEndTime ?? this.hasEndTime,
@@ -101,6 +109,7 @@ class VoucherArgument {
         isLimited: isLimited!,
         isPercentage: isPercentage!,
         hasEndTime: hasEndTime!,
+
         properties: {
           'voucherID': voucherID,
           'voucherName': voucherName,
@@ -110,7 +119,8 @@ class VoucherArgument {
           'maxUsagePerPerson': maxUsagePerPerson,
           'isVisible': isVisible,
           'isEnabled': isEnabled,
-          'description': description,
+          'enDescription': enDescription,
+          'viDescription': viDescription,
           'maximumDiscountValue': maximumDiscountValue,
           'maximumUsage': maximumUsage,
           'usageLeft': usageLeft,
@@ -123,5 +133,49 @@ class VoucherArgument {
     } catch (e) {
       throw Exception('Failed to create voucher: $e');
     }
+  }
+
+  bool get isEnEmpty {
+    return enDescription == null || enDescription!.isEmpty;
+  }
+
+  bool get isViEmpty {
+    return viDescription == null || viDescription!.isEmpty;
+  }
+
+  static VoucherArgument fromVoucher(Voucher voucher) {
+    VoucherArgument result = VoucherArgument(
+      voucherID: voucher.voucherID,
+      voucherName: voucher.voucherName,
+      startTime: voucher.startTime,
+      discountValue: voucher.discountValue,
+      minimumPurchase: voucher.minimumPurchase,
+      maxUsagePerPerson: voucher.maxUsagePerPerson,
+      isVisible: voucher.isVisible,
+      isEnabled: voucher.isEnabled,
+      enDescription: voucher.enDescription,
+      viDescription: voucher.viDescription,
+
+      isPercentage: voucher.isPercentage,
+      hasEndTime: voucher.hasEndTime,
+      isLimited: voucher.isLimited,
+    );
+
+    if (voucher is PercentageInterface) {
+      result.copyWith(maximumDiscountValue: (voucher as PercentageInterface).maximumDiscountValue);
+    }
+
+    if (voucher is LimitedInterface) {
+      result.copyWith(
+        maximumUsage: (voucher as LimitedInterface).maximumUsage,
+        usageLeft: (voucher as LimitedInterface).usageLeft,
+      );
+    }
+
+    if (voucher is EndTimeInterface) {
+      result.copyWith(endTime: (voucher as EndTimeInterface).endTime);
+    }
+
+    return result;
   }
 }

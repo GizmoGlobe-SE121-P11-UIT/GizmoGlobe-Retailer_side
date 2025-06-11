@@ -58,12 +58,16 @@ dependencies:
   dropdown_search: ^6.0.1
   fl_chart: ^0.65.0
   pie_chart: ^5.4.0
+  http: ^1.2.0
+  dio: ^5.7.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_gen: any
   intl_utils: any
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -3284,6 +3284,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Generate description`
+  String get generateDescriptionButton {
+    return Intl.message(
+      'Generate description',
+      name: 'generateDescriptionButton',
+      desc: 'Button label for generating product description.',
+      args: [],
+    );
+  }
+
+  /// `Translate description`
+  String get translateDescriptionButton {
+    return Intl.message(
+      'Translate description',
+      name: 'translateDescriptionButton',
+      desc: 'Button label for translating product description.',
+      args: [],
+    );
+  }
+
+  /// `English description`
+  String get enDescription {
+    return Intl.message(
+      'English description',
+      name: 'enDescription',
+      desc: 'Label for English voucher description.',
+      args: [],
+    );
+  }
+
+  /// `Vietnamese description`
+  String get viDescription {
+    return Intl.message(
+      'Vietnamese description',
+      name: 'viDescription',
+      desc: 'Label for Vietnamese voucher description.',
+      args: [],
+    );
+  }
+
+  /// `Voucher description generated successfully.`
+  String get voucherDescriptionGenerated {
+    return Intl.message(
+      'Voucher description generated successfully.',
+      name: 'voucherDescriptionGenerated',
+      desc: 'Success message when a voucher message is generated successfully.',
+      args: [],
+    );
+  }
+
+  /// `Voucher edited successfully.`
+  String get voucherEditSuccess {
+    return Intl.message(
+      'Voucher edited successfully.',
+      name: 'voucherEditSuccess',
+      desc: 'Success message when a voucher message is edited successfully.',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

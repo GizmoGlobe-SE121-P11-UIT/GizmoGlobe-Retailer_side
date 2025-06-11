@@ -11,7 +11,8 @@ abstract class Voucher {
   int maxUsagePerPerson;
   bool isVisible;
   bool isEnabled;
-  String? description;
+  String? enDescription;
+  String? viDescription;
 
   bool isPercentage;
   bool hasEndTime;
@@ -26,7 +27,8 @@ abstract class Voucher {
     required this.maxUsagePerPerson,
     required this.isVisible,
     required this.isEnabled,
-    this.description,
+    this.enDescription,
+    this.viDescription,
 
     required this.isPercentage,
     required this.hasEndTime,
@@ -41,7 +43,8 @@ abstract class Voucher {
     int? maxUsagePerPerson,
     DateTime? startTime,
 
-    String? description,
+    String? enDescription,
+    String? viDescription,
     bool? isVisible,
     bool? isEnabled,
   }) {
@@ -53,7 +56,8 @@ abstract class Voucher {
     this.maxUsagePerPerson = maxUsagePerPerson ?? this.maxUsagePerPerson;
     this.isVisible = isVisible ?? this.isVisible;
     this.isEnabled = isEnabled ?? this.isEnabled;
-    this.description = description ?? this.description;
+    this.enDescription = enDescription ?? this.enDescription;
+    this.viDescription = viDescription ?? this.viDescription;
   }
 
   VoucherTimeStatus get voucherTimeStatus;

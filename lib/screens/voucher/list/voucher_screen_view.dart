@@ -49,11 +49,6 @@ class _VoucherScreenState extends State<VoucherScreen>
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: GradientIconButton(
-          icon: Icons.chevron_left,
-          onPressed: () => Navigator.pop(context),
-          fillColor: Colors.transparent,
-        ),
         title: GradientText(text: S.of(context).voucher),
         actions: [
           Padding(
@@ -278,7 +273,6 @@ class _VoucherScreenState extends State<VoucherScreen>
           },
           child: VoucherCard(
             voucher: voucher,
-            onDelete: () => cubit.toggleVoucherStatus(voucher.voucherID!),
             isSelected: selectedVoucher == voucher,
           ),
         );

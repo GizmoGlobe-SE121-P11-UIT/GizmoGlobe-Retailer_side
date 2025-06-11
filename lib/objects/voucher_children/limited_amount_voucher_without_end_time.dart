@@ -20,7 +20,8 @@ class LimitedAmountVoucherWithoutEndTime
     required super.maxUsagePerPerson,
     required super.isVisible,
     required super.isEnabled,
-    super.description,
+    super.enDescription,
+    super.viDescription,
 
     super.isPercentage = false,
     super.hasEndTime = false,
@@ -52,7 +53,8 @@ class LimitedAmountVoucherWithoutEndTime
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
-    String? description,
+    String? enDescription,
+    String? viDescription,
 
     int? maximumUsage,
     int? usageLeft,
@@ -66,7 +68,8 @@ class LimitedAmountVoucherWithoutEndTime
       maxUsagePerPerson: maxUsagePerPerson,
       isVisible: isVisible,
       isEnabled: isEnabled,
-      description: description,
+      enDescription: enDescription,
+      viDescription: viDescription,
     );
 
     this.maximumUsage = maximumUsage ?? this.maximumUsage;
@@ -96,7 +99,7 @@ class LimitedAmountVoucherWithoutEndTime
       children: [
         Text(
             voucherName,
-            style: AppTextStyle.regularTitle
+            style: AppTextStyle.smallTitle
         ),
         const SizedBox(height: 4),
 

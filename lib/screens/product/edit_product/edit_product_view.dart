@@ -8,11 +8,6 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path;
 
 import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
@@ -59,6 +54,7 @@ class EditProductScreen extends StatefulWidget {
 
 class _EditProductState extends State<EditProductScreen> {
   EditProductCubit get cubit => context.read<EditProductCubit>();
+
   late TextEditingController productNameController;
   late TextEditingController importPriceController;
   late TextEditingController sellingPriceController;

@@ -211,6 +211,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "employeeInformation": MessageLookupByLibrary.simpleMessage(
       "Thông tin nhân viên",
     ),
+    "enDescription": MessageLookupByLibrary.simpleMessage("Mô tả tiếng Anh"),
     "enabled": MessageLookupByLibrary.simpleMessage("Kích hoạt"),
     "endTime": MessageLookupByLibrary.simpleMessage("Thời gian kết thúc"),
     "enterAddress": MessageLookupByLibrary.simpleMessage("Nhập địa chỉ"),
@@ -256,6 +257,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "formFactor": MessageLookupByLibrary.simpleMessage("Kiểu dáng"),
     "from": MessageLookupByLibrary.simpleMessage("Từ"),
     "fullName": MessageLookupByLibrary.simpleMessage("Họ và tên"),
+    "generateDescriptionButton": MessageLookupByLibrary.simpleMessage(
+      "Tạo mô tả",
+    ),
     "gpuBus": MessageLookupByLibrary.simpleMessage("Bus GPU"),
     "gpuCapacity": MessageLookupByLibrary.simpleMessage("Dung lượng GPU"),
     "gpuClockSpeed": MessageLookupByLibrary.simpleMessage("Tốc độ GPU"),
@@ -547,6 +551,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "to": MessageLookupByLibrary.simpleMessage("Đến"),
     "totalAmount": MessageLookupByLibrary.simpleMessage("Tổng số tiền"),
     "totalPrice": MessageLookupByLibrary.simpleMessage("Tổng giá: "),
+    "translateDescriptionButton": MessageLookupByLibrary.simpleMessage(
+      "Dịch mô tả",
+    ),
     "unexpectedError": MessageLookupByLibrary.simpleMessage(
       "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
     ),
@@ -572,6 +579,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "verificationLinkFailed": MessageLookupByLibrary.simpleMessage(
       "Gửi liên kết xác minh thất bại. Vui lòng thử lại.",
     ),
+    "viDescription": MessageLookupByLibrary.simpleMessage("Mô tả tiếng Việt"),
     "view": MessageLookupByLibrary.simpleMessage("Xem"),
     "visibility": MessageLookupByLibrary.simpleMessage("Hiển thị"),
     "visible": MessageLookupByLibrary.simpleMessage("Hiển thị"),
@@ -587,6 +595,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "voucherDeletedSuccess": MessageLookupByLibrary.simpleMessage(
       "Xóa voucher thành công.",
+    ),
+    "voucherDescriptionGenerated": MessageLookupByLibrary.simpleMessage(
+      "Mô tả voucher được tạo thành công.",
+    ),
+    "voucherEditSuccess": MessageLookupByLibrary.simpleMessage(
+      "Sửa voucher thành công.",
     ),
     "voucherName": MessageLookupByLibrary.simpleMessage("Tên voucher"),
     "voucherSettings": MessageLookupByLibrary.simpleMessage("Cài đặt voucher"),

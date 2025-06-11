@@ -1684,5 +1684,35 @@
 	"@errorUpdatingVoucher": {
 		"description": "Error message when updating voucher fails.",
 		"type": "text"
+	},
+	"generateDescriptionButton": "Generate description",
+	"@generateDescriptionButton": {
+        "description": "Button label for generating product description.",
+        "type": "text"
+    },
+    "translateDescriptionButton": "Translate description",
+    "@translateDescriptionButton": {
+        "description": "Button label for translating product description.",
+        "type": "text"
+    },
+	"enDescription": "English description",
+	"@enDescription": {
+		"description": "Label for English voucher description.",
+		"type": "text"
+	},
+	"viDescription": "Vietnamese description",
+	"@viDescription": {
+		"description": "Label for Vietnamese voucher description.",
+		"type": "text"
+	},
+	"voucherDescriptionGenerated": "Voucher description generated successfully.",
+	"@voucherDescriptionGenerated": {
+		"description": "Success message when a voucher message is generated successfully.",
+		"type": "text"
+	},
+	"voucherEditSuccess": "Voucher edited successfully.",
+	"@voucherEditSuccess": {
+		"description": "Success message when a voucher message is edited successfully.",
+		"type": "text"
 	}
 }

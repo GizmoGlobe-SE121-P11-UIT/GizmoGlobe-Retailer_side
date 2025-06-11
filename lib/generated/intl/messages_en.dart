@@ -207,6 +207,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Employee Information",
     ),
     "employees": MessageLookupByLibrary.simpleMessage("Employees"),
+    "enDescription": MessageLookupByLibrary.simpleMessage(
+      "English description",
+    ),
     "enabled": MessageLookupByLibrary.simpleMessage("Enabled"),
     "endTime": MessageLookupByLibrary.simpleMessage("End Time"),
     "enterAddress": MessageLookupByLibrary.simpleMessage("Enter Address"),
@@ -246,6 +249,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "formFactor": MessageLookupByLibrary.simpleMessage("Form Factor"),
     "from": MessageLookupByLibrary.simpleMessage("From"),
     "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
+    "generateDescriptionButton": MessageLookupByLibrary.simpleMessage(
+      "Generate description",
+    ),
     "gpuBus": MessageLookupByLibrary.simpleMessage("GPU Bus"),
     "gpuCapacity": MessageLookupByLibrary.simpleMessage("GPU Capacity"),
     "gpuClockSpeed": MessageLookupByLibrary.simpleMessage("GPU Clock Speed"),
@@ -534,6 +540,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "to": MessageLookupByLibrary.simpleMessage("To"),
     "totalAmount": MessageLookupByLibrary.simpleMessage("Total Amount"),
     "totalPrice": MessageLookupByLibrary.simpleMessage("Total Price: "),
+    "translateDescriptionButton": MessageLookupByLibrary.simpleMessage(
+      "Translate description",
+    ),
     "unexpectedError": MessageLookupByLibrary.simpleMessage(
       "An unexpected error occurred. Please try again.",
     ),
@@ -566,6 +575,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "verificationLinkFailed": MessageLookupByLibrary.simpleMessage(
       "Failed to send verification link. Please try again.",
     ),
+    "viDescription": MessageLookupByLibrary.simpleMessage(
+      "Vietnamese description",
+    ),
     "view": MessageLookupByLibrary.simpleMessage("View"),
     "visibility": MessageLookupByLibrary.simpleMessage("Visibility"),
     "visible": MessageLookupByLibrary.simpleMessage("Visible"),
@@ -581,6 +593,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "voucherDeletedSuccess": MessageLookupByLibrary.simpleMessage(
       "Voucher deleted successfully.",
+    ),
+    "voucherDescriptionGenerated": MessageLookupByLibrary.simpleMessage(
+      "Voucher description generated successfully.",
+    ),
+    "voucherEditSuccess": MessageLookupByLibrary.simpleMessage(
+      "Voucher edited successfully.",
     ),
     "voucherName": MessageLookupByLibrary.simpleMessage("Voucher Name"),
     "voucherSettings": MessageLookupByLibrary.simpleMessage("Voucher Settings"),
