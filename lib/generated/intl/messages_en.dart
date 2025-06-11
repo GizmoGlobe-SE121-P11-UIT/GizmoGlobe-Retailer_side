@@ -432,6 +432,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "productAddedSuccess": MessageLookupByLibrary.simpleMessage(
       "Product added successfully.",
     ),
+    "productDescription": MessageLookupByLibrary.simpleMessage(
+      "Product description",
+    ),
     "productName": MessageLookupByLibrary.simpleMessage("Product Name"),
     "productUpdateFailed": MessageLookupByLibrary.simpleMessage(
       "Failed to update product. Please try again.",

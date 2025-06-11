@@ -231,8 +231,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             value: DateFormat('dd/MM/yyyy')
                                 .format(state.product.release),
                           ),
-                          const SizedBox(height: 24),
 
+                          const SizedBox(height: 24),
                           // Technical Specifications Section
                           Text(
                             '${S.of(context).categorySpecifications} : ${_getLocalizedCategory(context, state.product.category)}',
@@ -244,15 +244,70 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   color: colorScheme.primary,
                                 ),
                           ),
-                          const SizedBox(height: 16),
 
                           ..._buildProductSpecificDetails(
                               context, state.product, state.technicalSpecs),
 
+                          const SizedBox(height: 24),
+                          Text(
+                            S.of(context).productDescription,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          if (state.product.enDescription != null && state.product.enDescription!.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    S.of(context).enDescription,
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    state.product.enDescription!,
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                          const SizedBox(height: 8),
+                          if (state.product.viDescription != null && state.product.viDescription!.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    S.of(context).viDescription,
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    state.product.viDescription!,
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
                           const SizedBox(height: 16),
+
                           // Add padding at bottom to prevent content from being hidden behind buttons
-                          const SizedBox(
-                              height: 80), // Height for the bottom buttons
+                          const SizedBox(height: 80), // Height for the bottom buttons
                         ],
                       ),
                     ),

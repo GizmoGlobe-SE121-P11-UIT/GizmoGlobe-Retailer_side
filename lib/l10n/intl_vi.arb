@@ -1598,12 +1598,12 @@
     },
 	"enDescription": "Mô tả tiếng Anh",
 	"@enDescription": {
-		"description": "Mô tả voucher bằng tiếng Anh.",
+		"description": "Mô tả bằng tiếng Anh.",
 		"type": "text"
 	},
 	"viDescription": "Mô tả tiếng Việt",
 	"@viDescription": {
-		"description": "Mô tả voucher bằng tiếng Việt.",
+		"description": "Mô tả bằng tiếng Việt.",
 		"type": "text"
 	},
 	"descriptionGenerated": "Mô tả được tạo thành công.",
@@ -1614,6 +1614,11 @@
 	"voucherEditSuccess": "Sửa voucher thành công.",
 	"@voucherEditSuccess": {
 		"description": "Thông báo thành công khi sửa voucher.",
+		"type": "text"
+	},
+	"productDescription": "Mô tả sản phẩm",
+	"@productDescription": {
+		"description": "Nhãn cho trường mô tả sản phẩm.",
 		"type": "text"
 	}
 }

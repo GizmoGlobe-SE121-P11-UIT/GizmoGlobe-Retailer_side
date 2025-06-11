@@ -3310,7 +3310,7 @@ class S {
     return Intl.message(
       'English description',
       name: 'enDescription',
-      desc: 'Label for English voucher description.',
+      desc: 'Label for English description.',
       args: [],
     );
   }
@@ -3320,7 +3320,7 @@ class S {
     return Intl.message(
       'Vietnamese description',
       name: 'viDescription',
-      desc: 'Label for Vietnamese voucher description.',
+      desc: 'Label for Vietnamese description.',
       args: [],
     );
   }
@@ -3341,6 +3341,16 @@ class S {
       'Voucher edited successfully.',
       name: 'voucherEditSuccess',
       desc: 'Success message when a voucher message is edited successfully.',
+      args: [],
+    );
+  }
+
+  /// `Product description`
+  String get productDescription {
+    return Intl.message(
+      'Product description',
+      name: 'productDescription',
+      desc: 'Label for product description field.',
       args: [],
     );
   }

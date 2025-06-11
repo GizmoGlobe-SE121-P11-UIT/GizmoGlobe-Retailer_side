@@ -80,59 +80,64 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
   }
 
   Future<void> generateEnDescription() async {
-    String enDescription = '';
-    String viDescription = '';
+    if (state.voucherArgument!.isEnEmpty) {
+      String enDescription = '';
+      String viDescription = '';
 
-    if (!state.voucherArgument!.isViEmpty) {
-      enDescription = await translateIntoEnglish(
-        state.voucherArgument?.viDescription ?? '',
-      );
+      if (!state.voucherArgument!.isViEmpty) {
+        enDescription = await translateIntoEnglish(
+          state.voucherArgument?.viDescription ?? '',
+        );
 
-      updateVoucherArgument(state.voucherArgument!.copyWith(enDescription: enDescription));
+        updateVoucherArgument(
+            state.voucherArgument!.copyWith(enDescription: enDescription));
+      }
+      else {
+        enDescription = await generateDescription(state.voucherArgument!);
+        viDescription = await translateIntoVietnamese(enDescription);
+
+        updateVoucherArgument(state.voucherArgument!.copyWith(
+            enDescription: enDescription,
+            viDescription: viDescription
+        ));
+      }
+
+      emit(state.copyWith(
+          processState: ProcessState.success,
+          dialogName: DialogName.success,
+          notifyMessage: NotifyMessage.msg21));
     }
-    else {
-      enDescription = await generateDescription(state.voucherArgument!);
-      viDescription = await translateIntoVietnamese(enDescription);
-
-      updateVoucherArgument(state.voucherArgument!.copyWith(
-        enDescription: enDescription,
-        viDescription: viDescription
-      ));
-    }
-
-
-    emit(state.copyWith(
-        processState: ProcessState.success,
-        dialogName: DialogName.success,
-        notifyMessage: NotifyMessage.msg21));
   }
 
   Future<void> generateViDescription() async {
-    String enDescription = '';
-    String viDescription = '';
+    if (state.voucherArgument!.isViEmpty) {
+      String enDescription = '';
+      String viDescription = '';
 
-    if (!state.voucherArgument!.isEnEmpty) {
-      viDescription = await translateIntoVietnamese(
-        state.voucherArgument?.enDescription ?? '',
-      );
+      if (!state.voucherArgument!.isEnEmpty) {
+        viDescription = await translateIntoVietnamese(
+          state.voucherArgument?.enDescription ?? '',
+        );
 
-      updateVoucherArgument(state.voucherArgument!.copyWith(viDescription: viDescription));
+        updateVoucherArgument(
+            state.voucherArgument!.copyWith(viDescription: viDescription));
+      }
+      else {
+        enDescription = await generateDescription(state.voucherArgument!);
+        viDescription = await translateIntoVietnamese(enDescription);
+
+        updateVoucherArgument(state.voucherArgument!.copyWith(
+            enDescription: enDescription,
+            viDescription: viDescription
+        ));
+      }
+
+      emit(state.copyWith(
+          processState: ProcessState.success,
+          dialogName: DialogName.success,
+          notifyMessage: NotifyMessage.msg21));
     }
-    else {
-      enDescription = await generateDescription(state.voucherArgument!);
-      viDescription = await translateIntoVietnamese(enDescription);
-
-      updateVoucherArgument(state.voucherArgument!.copyWith(
-          enDescription: enDescription,
-          viDescription: viDescription
-      ));
-    }
-
-    emit(state.copyWith(
-        processState: ProcessState.success,
-        dialogName: DialogName.success,
-        notifyMessage: NotifyMessage.msg21));
-    }
+  }
 }
 
 Future<String> translateIntoEnglish(String inputText) async {

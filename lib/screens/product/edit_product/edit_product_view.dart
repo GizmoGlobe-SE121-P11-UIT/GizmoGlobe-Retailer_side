@@ -92,6 +92,8 @@ class _EditProductState extends State<EditProductScreen> {
   void initTextControllers() {
     final product = widget.product;
     setProductName(product.productName);
+    setEnDescription(product.enDescription);
+    setViDescription(product.viDescription);
     setImportPrice(product.importPrice);
     setSellingPrice(product.sellingPrice);
     setDiscount(product.discount);
@@ -116,6 +118,8 @@ class _EditProductState extends State<EditProductScreen> {
   void updateControllersFromArgument(ProductArgument? arg) {
     if (arg == null) return;
     if (arg.productName != null) setProductName(arg.productName!);
+    if (arg.enDescription != null) enDescriptionController.text = arg.enDescription!;
+    if (arg.viDescription != null) viDescriptionController.text = arg.viDescription!;
     if (arg.importPrice != null) setImportPrice(arg.importPrice!);
     if (arg.sellingPrice != null) setSellingPrice(arg.sellingPrice!);
     if (arg.discount != null) setDiscount(arg.discount!);
@@ -890,6 +894,14 @@ class _EditProductState extends State<EditProductScreen> {
 
   void setProductName(String value) {
     productNameController.text = value;
+  }
+
+  void setEnDescription(String? value) {
+    enDescriptionController.text = value ?? '';
+  }
+
+  void setViDescription(String? value) {
+    viDescriptionController.text = value ?? '';
   }
 
   void setImportPrice(double value) {

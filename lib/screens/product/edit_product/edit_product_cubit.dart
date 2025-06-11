@@ -23,6 +23,7 @@ class EditProductCubit extends Cubit<EditProductState> {
 
   void initialize(Product product) {
     final productArgument = ProductArgument.fromProduct(product);
+
     emit(state.copyWith(
       productArgument: productArgument,
       imageUrl: product.imageUrl,
@@ -122,58 +123,63 @@ class EditProductCubit extends Cubit<EditProductState> {
   }
 
   Future<void> generateEnDescription() async {
-    String enDescription = '';
-    String viDescription = '';
+    if (state.productArgument!.isEnEmpty) {
+      String enDescription = '';
+      String viDescription = '';
 
-    if (!state.productArgument!.isViEmpty) {
-      enDescription = await translateIntoEnglish(
-        state.productArgument?.viDescription ?? '',
-      );
+      if (!state.productArgument!.isViEmpty) {
+        enDescription = await translateIntoEnglish(
+          state.productArgument?.viDescription ?? '',
+        );
 
-      updateProductArgument(state.productArgument!.copyWith(enDescription: enDescription));
+        updateProductArgument(
+            state.productArgument!.copyWith(enDescription: enDescription));
+      }
+      else {
+        enDescription = await generateDescription(state.productArgument!);
+        viDescription = await translateIntoVietnamese(enDescription);
+
+        updateProductArgument(state.productArgument!.copyWith(
+            enDescription: enDescription,
+            viDescription: viDescription
+        ));
+      }
+
+      emit(state.copyWith(
+          processState: ProcessState.success,
+          dialogName: DialogName.success,
+          notifyMessage: NotifyMessage.msg21));
     }
-    else {
-      enDescription = await generateDescription(state.productArgument!);
-      viDescription = await translateIntoVietnamese(enDescription);
-
-      updateProductArgument(state.productArgument!.copyWith(
-          enDescription: enDescription,
-          viDescription: viDescription
-      ));
-    }
-
-
-    emit(state.copyWith(
-        processState: ProcessState.success,
-        dialogName: DialogName.success,
-        notifyMessage: NotifyMessage.msg21));
   }
 
   Future<void> generateViDescription() async {
-    String enDescription = '';
-    String viDescription = '';
+    if (state.productArgument!.isViEmpty) {
+      String enDescription = '';
+      String viDescription = '';
 
-    if (!state.productArgument!.isEnEmpty) {
-      viDescription = await translateIntoVietnamese(
-        state.productArgument?.enDescription ?? '',
-      );
+      if (!state.productArgument!.isEnEmpty) {
+        viDescription = await translateIntoVietnamese(
+          state.productArgument?.enDescription ?? '',
+        );
 
-      updateProductArgument(state.productArgument!.copyWith(viDescription: viDescription));
+        updateProductArgument(
+            state.productArgument!.copyWith(viDescription: viDescription));
+      }
+      else {
+        enDescription = await generateDescription(state.productArgument!);
+        viDescription = await translateIntoVietnamese(enDescription);
+
+        updateProductArgument(state.productArgument!.copyWith(
+            enDescription: enDescription,
+            viDescription: viDescription
+        ));
+      }
+
+      emit(state.copyWith(
+          processState: ProcessState.success,
+          dialogName: DialogName.success,
+          notifyMessage: NotifyMessage.msg21));
     }
-    else {
-      enDescription = await generateDescription(state.productArgument!);
-      viDescription = await translateIntoVietnamese(enDescription);
-
-      updateProductArgument(state.productArgument!.copyWith(
-          enDescription: enDescription,
-          viDescription: viDescription
-      ));
-    }
-
-    emit(state.copyWith(
-        processState: ProcessState.success,
-        dialogName: DialogName.success,
-        notifyMessage: NotifyMessage.msg21));
   }
 }
 

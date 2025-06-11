@@ -1697,12 +1697,12 @@
     },
 	"enDescription": "English description",
 	"@enDescription": {
-		"description": "Label for English voucher description.",
+		"description": "Label for English description.",
 		"type": "text"
 	},
 	"viDescription": "Vietnamese description",
 	"@viDescription": {
-		"description": "Label for Vietnamese voucher description.",
+		"description": "Label for Vietnamese description.",
 		"type": "text"
 	},
 	"descriptionGenerated": "Description generated successfully.",
@@ -1713,6 +1713,11 @@
 	"voucherEditSuccess": "Voucher edited successfully.",
 	"@voucherEditSuccess": {
 		"description": "Success message when a voucher message is edited successfully.",
+		"type": "text"
+	},
+	"productDescription": "Product description",
+	"@productDescription": {
+		"description": "Label for product description field.",
 		"type": "text"
 	}
 }

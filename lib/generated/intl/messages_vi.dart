@@ -438,6 +438,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "productAddedSuccess": MessageLookupByLibrary.simpleMessage(
       "Sản phẩm đã được thêm thành công.",
     ),
+    "productDescription": MessageLookupByLibrary.simpleMessage(
+      "Mô tả sản phẩm",
+    ),
     "productName": MessageLookupByLibrary.simpleMessage("Tên sản phẩm"),
     "productUpdateFailed": MessageLookupByLibrary.simpleMessage(
       "Không thể cập nhật sản phẩm. Vui lòng thử lại.",
