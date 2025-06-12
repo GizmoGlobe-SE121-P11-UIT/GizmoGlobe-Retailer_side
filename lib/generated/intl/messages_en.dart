@@ -304,6 +304,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Maximum Discount Value",
     ),
     "maximumUsage": MessageLookupByLibrary.simpleMessage("Maximum Usage"),
+    "messages": MessageLookupByLibrary.simpleMessage("Messages"),
     "min": MessageLookupByLibrary.simpleMessage("Min"),
     "minimumPurchase": MessageLookupByLibrary.simpleMessage("Minimum Purchase"),
     "monthlySales": MessageLookupByLibrary.simpleMessage("Monthly Sales"),
@@ -333,6 +334,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noMatchingManufacturersFound": MessageLookupByLibrary.simpleMessage(
       "No matching manufacturers found",
     ),
+    "noMessages": MessageLookupByLibrary.simpleMessage("No messages yet"),
     "noProductsAddedYet": MessageLookupByLibrary.simpleMessage(
       "No products added yet",
     ),
@@ -493,6 +495,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchSalesInvoices": MessageLookupByLibrary.simpleMessage(
       "Find sales invoices...",
     ),
+    "selectConversation": MessageLookupByLibrary.simpleMessage(
+      "Select a conversation",
+    ),
     "selectCustomer": MessageLookupByLibrary.simpleMessage("Select customer"),
     "selectField": m9,
     "selectManufacturer": MessageLookupByLibrary.simpleMessage(
@@ -549,6 +554,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "translateDescriptionButton": MessageLookupByLibrary.simpleMessage(
       "Translate description",
     ),
+    "typeMessage": MessageLookupByLibrary.simpleMessage("Type a message..."),
     "unexpectedError": MessageLookupByLibrary.simpleMessage(
       "An unexpected error occurred. Please try again.",
     ),

@@ -1620,5 +1620,25 @@
 	"@productDescription": {
 		"description": "Nhãn cho trường mô tả sản phẩm.",
 		"type": "text"
+	},
+	"typeMessage": "Nhập tin nhắn...",
+	"@typeMessage": {
+		"description": "Nội dung nhãn cho trường nhập tin nhắn.",
+		"type": "text"
+	},
+	"selectConversation": "Chọn cuộc trò chuyện",
+	"@selectConversation": {
+		"description": "Nhãn cho việc chọn cuộc trò chuyện.",
+		"type": "text"
+	},
+	"messages": "Tin nhắn",
+	"@messages": {
+		"description": "Nhãn cho tin nhắn.",
+		"type": "text"
+	},
+	"noMessages": "Không có tin nhắn",
+	"@noMessages": {
+		"description": "Thông báo khi không có tin nhắn.",
+		"type": "text"
 	}
 }

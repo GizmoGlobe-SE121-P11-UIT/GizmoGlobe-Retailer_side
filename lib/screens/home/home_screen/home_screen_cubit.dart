@@ -66,6 +66,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         monthlySales.add(SalesData(month, salesInMonth));
       }
 
+      // Get unread chats count
+      final unreadChats = await Firebase().getUnreadChatsCount();
+
       await db.getUser();
       // Emit new state with loaded data
       emit(state.copyWith(
@@ -76,6 +79,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         totalOrders: totalPaidOrders,
         salesByCategory: salesByCategory,
         monthlySales: monthlySales,
+        unreadChats: unreadChats,
       ));
     } catch (e) {
       if (kDebugMode) {
@@ -83,5 +87,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       } // Lỗi khởi tạo dashboard
       // Optionally emit error state
     }
+  }
+
+  void navigateToChatList() {
+    // Navigation will be handled by the view
   }
 }

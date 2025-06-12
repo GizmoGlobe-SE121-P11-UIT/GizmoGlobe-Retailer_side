@@ -3354,6 +3354,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Type a message...`
+  String get typeMessage {
+    return Intl.message(
+      'Type a message...',
+      name: 'typeMessage',
+      desc: 'Placeholder text for message input field.',
+      args: [],
+    );
+  }
+
+  /// `Select a conversation`
+  String get selectConversation {
+    return Intl.message(
+      'Select a conversation',
+      name: 'selectConversation',
+      desc: 'Label for selecting a conversation.',
+      args: [],
+    );
+  }
+
+  /// `Messages`
+  String get messages {
+    return Intl.message(
+      'Messages',
+      name: 'messages',
+      desc: 'Label for messages.',
+      args: [],
+    );
+  }
+
+  /// `No messages yet`
+  String get noMessages {
+    return Intl.message(
+      'No messages yet',
+      name: 'noMessages',
+      desc: 'Message shown when there are no messages.',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

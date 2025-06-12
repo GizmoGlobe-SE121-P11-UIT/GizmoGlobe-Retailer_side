@@ -416,4 +416,6 @@ class Database {
       return false;
     }
   }
+
+  String? get userId => FirebaseAuth.instance.currentUser?.uid;
 }

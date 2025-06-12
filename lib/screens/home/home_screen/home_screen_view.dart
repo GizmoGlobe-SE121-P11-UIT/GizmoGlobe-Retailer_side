@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/screens/chat/list/chat_list_screen_view.dart';
 
 import 'home_screen_cubit.dart';
 
@@ -35,6 +36,44 @@ class _HomeScreen extends State<HomeScreen> {
             backgroundColor: Theme.of(context).colorScheme.surface,
             elevation: 0,
             title: const AppLogo(height: 60),
+            actions: [
+              Stack(
+                children: [
+                  IconButton(
+                    color: Theme.of(context).colorScheme.primary,
+                    icon: const Icon(Icons.chat_rounded),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChatListScreen.newInstance(),
+                        ),
+                      );
+                    },
+                  ),
+                  if (state.unreadChats > 0)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.error,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          state.unreadChats.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             child: Column(

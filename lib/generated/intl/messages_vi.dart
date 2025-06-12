@@ -313,6 +313,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "maximumUsage": MessageLookupByLibrary.simpleMessage(
       "Số lần sử dụng tối đa",
     ),
+    "messages": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
     "min": MessageLookupByLibrary.simpleMessage("Tối thiểu"),
     "minimumPurchase": MessageLookupByLibrary.simpleMessage("Mua tối thiểu"),
     "monthlySales": MessageLookupByLibrary.simpleMessage("Doanh số hàng tháng"),
@@ -346,6 +347,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noMatchingManufacturersFound": MessageLookupByLibrary.simpleMessage(
       "Không tìm thấy nhà sản xuất nào phù hợp",
     ),
+    "noMessages": MessageLookupByLibrary.simpleMessage("Không có tin nhắn"),
     "noProductsAddedYet": MessageLookupByLibrary.simpleMessage(
       "Chưa thêm sản phẩm nào",
     ),
@@ -502,6 +504,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchSalesInvoices": MessageLookupByLibrary.simpleMessage(
       "Tìm hóa đơn bán hàng...",
     ),
+    "selectConversation": MessageLookupByLibrary.simpleMessage(
+      "Chọn cuộc trò chuyện",
+    ),
     "selectCustomer": MessageLookupByLibrary.simpleMessage("Chọn khách hàng"),
     "selectField": m9,
     "selectManufacturer": MessageLookupByLibrary.simpleMessage(
@@ -560,6 +565,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "translateDescriptionButton": MessageLookupByLibrary.simpleMessage(
       "Dịch mô tả",
     ),
+    "typeMessage": MessageLookupByLibrary.simpleMessage("Nhập tin nhắn..."),
     "unexpectedError": MessageLookupByLibrary.simpleMessage(
       "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.",
     ),

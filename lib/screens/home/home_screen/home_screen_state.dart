@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-
 class HomeScreenState extends Equatable {
   final String username;
   final int totalProducts;
@@ -9,6 +8,7 @@ class HomeScreenState extends Equatable {
   final int totalOrders;
   final Map<String, double> salesByCategory;
   final List<SalesData> monthlySales;
+  final int unreadChats;
 
   const HomeScreenState({
     this.username = '',
@@ -18,18 +18,20 @@ class HomeScreenState extends Equatable {
     this.totalOrders = 0,
     this.salesByCategory = const {},
     this.monthlySales = const [],
+    this.unreadChats = 0,
   });
 
   @override
   List<Object?> get props => [
-    username, 
-    totalProducts, 
-    totalCustomers, 
-    totalRevenue,
-    totalOrders,
-    salesByCategory,
-    monthlySales,
-  ];
+        username,
+        totalProducts,
+        totalCustomers,
+        totalRevenue,
+        totalOrders,
+        salesByCategory,
+        monthlySales,
+        unreadChats,
+      ];
 
   HomeScreenState copyWith({
     String? username,
@@ -39,6 +41,7 @@ class HomeScreenState extends Equatable {
     int? totalOrders,
     Map<String, double>? salesByCategory,
     List<SalesData>? monthlySales,
+    int? unreadChats,
   }) {
     return HomeScreenState(
       username: username ?? this.username,
@@ -48,6 +51,7 @@ class HomeScreenState extends Equatable {
       totalOrders: totalOrders ?? this.totalOrders,
       salesByCategory: salesByCategory ?? this.salesByCategory,
       monthlySales: monthlySales ?? this.monthlySales,
+      unreadChats: unreadChats ?? this.unreadChats,
     );
   }
 }

@@ -47,6 +47,7 @@ import '../../objects/product_related/product_factory.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
+import 'package:gizmoglobe_client/objects/chat_related/chat.dart';
 
 class Firebase {
   static final Firebase _firebase = Firebase._internal();
@@ -854,7 +855,8 @@ class Firebase {
               } // Loại sản phẩm không xác định
           }
 
-          Product product = ProductFactory.createProduct(category, productProps);
+          Product product =
+              ProductFactory.createProduct(category, productProps);
           products.add(product);
         } catch (e) {
           if (kDebugMode) {
@@ -2472,6 +2474,200 @@ class Firebase {
         print('Error updating voucher: $e');
       }
       rethrow;
+    }
+  }
+
+  Future<List<Chat>> getAllUsersAdminMessages() async {
+    try {
+      final List<Chat> allAdminMessages = [];
+
+      // Get all users collection
+      final usersSnapshot = await _firestore.collection('chats').get();
+
+      for (var userDoc in usersSnapshot.docs) {
+        final userId = userDoc.id;
+        final data = userDoc.data();
+
+        // Get messages array from user document
+        final messages = (data['messages'] as List<dynamic>?) ?? [];
+
+        // Filter admin messages
+        final adminMessages = messages
+            .where((msg) =>
+                msg['receiverId'] == 'admin' && msg['isAIMode'] == false)
+            .map((msg) => Chat.fromMap(msg as Map<String, dynamic>))
+            .toList();
+
+        allAdminMessages.addAll(adminMessages);
+      }
+
+      // Sort all messages by timestamp
+      allAdminMessages.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+      return allAdminMessages;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting all users admin messages: $e');
+      }
+      return [];
+    }
+  }
+
+  Future<Map<String, List<Chat>>> getAllUserMessages(String userId) async {
+    try {
+      final Map<String, List<Chat>> userMessages = {};
+
+      // Get user's document
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+
+      if (userDoc.exists) {
+        final data = userDoc.data() as Map<String, dynamic>;
+        final messages = (data['messages'] as List<dynamic>?) ?? [];
+
+        // Group messages by conversation partner
+        for (var msg in messages) {
+          final message = Chat.fromMap(msg as Map<String, dynamic>);
+          final partnerId = message.senderId == userId
+              ? message.receiverId
+              : message.senderId;
+
+          if (!userMessages.containsKey(partnerId)) {
+            userMessages[partnerId] = [];
+          }
+          userMessages[partnerId]!.add(message);
+        }
+
+        // Sort messages in each conversation by timestamp
+        userMessages.forEach((key, value) {
+          value.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+        });
+      }
+
+      return userMessages;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting user messages: $e');
+      }
+      return {};
+    }
+  }
+
+  Future<void> sendAdminMessage(String userId, Chat chat) async {
+    try {
+      // Add message to user's messages array
+      await _firestore.collection('chats').doc(userId).update({
+        'messages': FieldValue.arrayUnion([chat.toMap()])
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error sending admin message: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> sendUserChat(
+      String senderId, String receiverId, Chat chat) async {
+    try {
+      // Update sender's messages array
+      await _firestore.collection('chats').doc(senderId).update({
+        'messages': FieldValue.arrayUnion([chat.toMap()])
+      });
+
+      // Update receiver's messages array
+      await _firestore.collection('chats').doc(receiverId).update({
+        'messages': FieldValue.arrayUnion([chat.toMap()])
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error sending user chat: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> markAdminMessageAsRead(String userId, String messageId) async {
+    try {
+      final userDoc = await _firestore.collection('chats').doc(userId).get();
+      if (userDoc.exists) {
+        final data = userDoc.data() as Map<String, dynamic>;
+        final messages =
+            List<Map<String, dynamic>>.from(data['messages'] ?? []);
+
+        // Find and update the specific message
+        for (var i = 0; i < messages.length; i++) {
+          if (messages[i]['messageId'] == messageId) {
+            messages[i]['isRead'] = true;
+            break;
+          }
+        }
+
+        // Update the document with modified messages
+        await _firestore
+            .collection('chats')
+            .doc(userId)
+            .update({'messages': messages});
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error marking admin message as read: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<void> markUserChatAsRead(
+      String userId, String senderId, String messageId) async {
+    try {
+      final userDoc = await _firestore.collection('chats').doc(userId).get();
+      if (userDoc.exists) {
+        final data = userDoc.data() as Map<String, dynamic>;
+        final messages =
+            List<Map<String, dynamic>>.from(data['messages'] ?? []);
+
+        // Find and update the specific message
+        for (var i = 0; i < messages.length; i++) {
+          if (messages[i]['messageId'] == messageId) {
+            messages[i]['isRead'] = true;
+            break;
+          }
+        }
+
+        // Update the document with modified messages
+        await _firestore
+            .collection('chats')
+            .doc(userId)
+            .update({'messages': messages});
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error marking user chat as read: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<int> getUnreadChatsCount() async {
+    try {
+      final userId = currentUserId;
+      if (userId == null) return 0;
+
+      final userDoc = await _firestore.collection('chats').doc(userId).get();
+      if (!userDoc.exists) return 0;
+
+      final data = userDoc.data() as Map<String, dynamic>;
+      final messages = List<Map<String, dynamic>>.from(data['messages'] ?? []);
+
+      // Count unread messages where user is the receiver
+      return messages
+          .where(
+              (msg) => msg['receiverId'] == 'admin' && msg['isRead'] == false)
+          .length;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting unread chats count: $e');
+      }
+      return 0;
     }
   }
 }

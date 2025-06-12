@@ -1719,5 +1719,25 @@
 	"@productDescription": {
 		"description": "Label for product description field.",
 		"type": "text"
+	},
+	"typeMessage": "Type a message...",
+	"@typeMessage": {
+		"description": "Placeholder text for message input field.",
+		"type": "text"
+	},
+	"selectConversation": "Select a conversation",
+	"@selectConversation": {
+		"description": "Label for selecting a conversation.",
+		"type": "text"
+	},
+	"messages": "Messages",
+	"@messages": {
+		"description": "Label for messages.",
+		"type": "text"
+	},
+	"noMessages": "No messages yet",
+	"@noMessages": {
+		"description": "Message shown when there are no messages.",
+		"type": "text"
 	}
 }
