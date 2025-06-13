@@ -7,7 +7,6 @@ import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_cubit.
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_state.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:gizmoglobe_client/widgets/general/multi_field_with_icon.dart';
@@ -479,7 +478,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), 
           ),
           child: Row(
             children: [

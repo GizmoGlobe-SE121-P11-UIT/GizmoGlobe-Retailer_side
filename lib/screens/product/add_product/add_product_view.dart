@@ -1,4 +1,3 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +5,6 @@ import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:intl/intl.dart';
 
@@ -246,14 +244,14 @@ class _AddProductState extends State<AddProductScreen> {
                     height: MediaQuery.of(context).size.height * 0.25,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: colorScheme.surfaceVariant,
+                      color: colorScheme.surface,
                       borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20),
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: colorScheme.shadow.withOpacity(0.2),
+                          color: colorScheme.shadow.withValues(alpha: 0.2), 
                           spreadRadius: 2,
                           blurRadius: 5,
                           offset: const Offset(0, 3),
@@ -1046,7 +1044,7 @@ Widget buildInputWidget<T>(
                 onChanged(value as T?);
               }
             },
-            fillColor: colorScheme.surfaceVariant,
+            fillColor: colorScheme.surface, 
             keyboardType: keyboardType,
             inputFormatters: inputFormatters,
           ),

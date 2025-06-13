@@ -1166,7 +1166,7 @@
 		"description": "Placeholder text for manufacturer search field.",
 		"type": "text"
 	},
-	"active": "Còn hàng",
+	"active": "Đang hoạt động",
 	"@active": {
 		"description": "Status indicating product is active.",
 		"type": "text"
@@ -1588,14 +1588,14 @@
 	},
 	"generateDescriptionButton": "Tạo mô tả",
 	"@generateDescriptionButton": {
-        "description": "Nội dung nút tạo mô tả voucher.",
-        "type": "text"
-    },
-    "translateDescriptionButton": "Dịch mô tả",
-    "@translateDescriptionButton": {
-        "description": "Nội dung của nút dịch mô tả voucher.",
-        "type": "text"
-    },
+		"description": "Nội dung nút tạo mô tả voucher.",
+		"type": "text"
+	},
+	"translateDescriptionButton": "Dịch mô tả",
+	"@translateDescriptionButton": {
+		"description": "Nội dung của nút dịch mô tả voucher.",
+		"type": "text"
+	},
 	"enDescription": "Mô tả tiếng Anh",
 	"@enDescription": {
 		"description": "Mô tả bằng tiếng Anh.",
@@ -1639,6 +1639,226 @@
 	"noMessages": "Không có tin nhắn",
 	"@noMessages": {
 		"description": "Thông báo khi không có tin nhắn.",
+		"type": "text"
+	},
+	"reactivate": "Kích hoạt lại",
+	"@reactivate": {
+		"description": "Nhãn cho nút kích hoạt lại.",
+		"type": "text"
+	},
+	"discontinue": "Ngừng kinh doanh",
+	"@discontinue": {
+		"description": "Nhãn cho nút ngừng kinh doanh.",
+		"type": "text"
+	},
+	"pleaseFillRequiredFields": "Vui lòng điền đầy đủ các trường bắt buộc",
+	"@pleaseFillRequiredFields": {
+		"description": "Thông báo lỗi khi không điền đầy đủ các trường bắt buộc.",
+		"type": "text"
+	},
+	"roleOwner": "Chủ sở hữu",
+	"@roleOwner": {
+		"description": "Nhãn cho vai trò chủ sở hữu.",
+		"type": "text"
+	},
+	"roleManager": "Quản lý",
+	"@roleManager": {
+		"description": "Nhãn cho vai trò quản lý.",
+		"type": "text"
+	},
+	"roleEmployee": "Nhân viên",
+	"@roleEmployee": {
+		"description": "Nhãn cho vai trò nhân viên.",
+		"type": "text"
+	},
+	"employees": "Nhân viên",
+	"@employees": {
+		"description": "Nhãn cho tab nhân viên.",
+		"type": "text"
+	},
+	"vendors": "Nhà cung cấp",
+	"@vendors": {
+		"description": "Nhãn cho tab nhà cung cấp.",
+		"type": "text"
+	},
+	"appSettings": "Cài đặt ứng dụng",
+	"@appSettings": {
+		"description": "Nhãn cho cài đặt ứng dụng.",
+		"type": "text"
+	},
+	"customizeAppPreferences": "Tùy chỉnh cài đặt ứng dụng của bạn",
+	"@customizeAppPreferences": {
+		"description": "Mô tả cho tùy chỉnh cài đặt ứng dụng.",
+		"type": "text"
+	},
+	"themeMode": "Chế độ giao diện",
+	"@themeMode": {
+		"description": "Nhãn cho chế độ giao diện.",
+		"type": "text"
+	},
+	"switchBetweenLightAndDark": "Chuyển đổi giữa chế độ sáng và tối",
+	"@switchBetweenLightAndDark": {
+		"description": "Mô tả cho chức năng chuyển đổi giao diện.",
+		"type": "text"
+	},
+	"language": "Ngôn ngữ",
+	"@language": {
+		"description": "Nhãn cho ngôn ngữ.",
+		"type": "text"
+	},
+	"changeAppLanguage": "Thay đổi ngôn ngữ ứng dụng",
+	"@changeAppLanguage": {
+		"description": "Mô tả cho chức năng thay đổi ngôn ngữ.",
+		"type": "text"
+	},
+	"english": "Tiếng Anh",
+	"@english": {
+		"description": "Nhãn cho ngôn ngữ tiếng Anh.",
+		"type": "text"
+	},
+	"vietnamese": "Tiếng Việt",
+	"@vietnamese": {
+		"description": "Nhãn cho ngôn ngữ tiếng Việt.",
+		"type": "text"
+	},
+	"editProfile": "Chỉnh sửa hồ sơ",
+	"@editProfile": {
+		"description": "Nhãn cho chức năng chỉnh sửa hồ sơ.",
+		"type": "text"
+	},
+	"changePassword": "Đổi mật khẩu",
+	"@changePassword": {
+		"description": "Nhãn cho chức năng đổi mật khẩu.",
+		"type": "text"
+	},
+	"manageAccountSecurity": "Quản lý bảo mật tài khoản của bạn",
+	"@manageAccountSecurity": {
+		"description": "Nhãn cho chức năng quản lý bảo mật tài khoản.",
+		"type": "text"
+	},
+	"signOut": "Đăng xuất",
+	"@signOut": {
+		"description": "Nhãn cho chức năng đăng xuất.",
+		"type": "text"
+	},
+	"username": "Tên người dùng",
+	"@username": {
+		"description": "Nhãn cho trường tên người dùng.",
+		"type": "text"
+	},
+	"updatePersonalInfo": "Cập nhật thông tin cá nhân",
+	"@updatePersonalInfo": {
+		"description": "Nhãn cho chức năng cập nhật thông tin cá nhân.",
+		"type": "text"
+	},
+	"signIn": "Đăng nhập",
+	"@signIn": {
+		"description": "Nhãn nút và tiêu đề cho màn hình đăng nhập.",
+		"type": "text"
+	},
+	"signUp": "Đăng ký",
+	"@signUp": {
+		"description": "Nhãn nút cho đăng ký.",
+		"type": "text"
+	},
+	"forgotPassword": "Quên mật khẩu?",
+	"@forgotPassword": {
+		"description": "Nhãn nút cho quên mật khẩu.",
+		"type": "text"
+	},
+	"yourEmail": "Email của bạn",
+	"@yourEmail": {
+		"description": "Gợi ý cho trường email.",
+		"type": "text"
+	},
+	"password": "Mật khẩu",
+	"@password": {
+		"description": "Gợi ý cho trường mật khẩu.",
+		"type": "text"
+	},
+	"authorizedByAdmin": "Được phê duyệt bởi admin?",
+	"@authorizedByAdmin": {
+		"description": "Nhãn cho trạng thái được phê duyệt bởi admin.",
+		"type": "text"
+	},
+	"passwordConfirmation": "Xác nhận mật khẩu",
+	"@passwordConfirmation": {
+		"description": "Gợi ý cho trường xác nhận mật khẩu.",
+		"type": "text"
+	},
+	"forgetPasswordTitle": "Quên mật khẩu",
+	"@forgetPasswordTitle": {
+		"description": "Tiêu đề cho màn hình quên mật khẩu.",
+		"type": "text"
+	},
+	"forgetPasswordDescription": "Đừng lo lắng! Điều này xảy ra. Vui lòng nhập email liên kết với tài khoản của bạn.",
+	"@forgetPasswordDescription": {
+		"description": "Mô tả cho màn hình quên mật khẩu.",
+		"type": "text"
+	},
+	"emailAddress": "Địa chỉ email",
+	"@emailAddress": {
+		"description": "Gợi ý cho trường địa chỉ email.",
+		"type": "text"
+	},
+	"enterYourEmailAddress": "Nhập địa chỉ email của bạn",
+	"@enterYourEmailAddress": {
+		"description": "Gợi ý cho trường nhập địa chỉ email.",
+		"type": "text"
+	},
+	"sendVerificationLink": "Gửi liên kết xác minh",
+	"@sendVerificationLink": {
+		"description": "Nhãn cho nút gửi liên kết xác minh.",
+		"type": "text"
+	},
+	"accountSettings": "Cài đặt tài khoản",
+	"@accountSettings": {
+		"description": "Tiêu đề cho cài đặt tài khoản.",
+		"type": "text"
+	},
+	"saveChanges": "Lưu thay đổi",
+	"@saveChanges": {
+		"description": "Nhãn cho nút lưu thay đổi.",
+		"type": "text"
+	},
+	"updateProfileSuccess": "Cập nhật hồ sơ thành công",
+	"@updateProfileSuccess": {
+		"description": "Thông báo khi cập nhật hồ sơ thành công.",
+		"type": "text"
+	},
+	"passwordResetEmailWillBeSent": "Email đặt lại mật khẩu sẽ được gửi đến địa chỉ email của bạn",
+	"@passwordResetEmailWillBeSent": {
+		"description": "Thông báo về việc gửi email đặt lại mật khẩu.",
+		"type": "text"
+	},
+	"passwordResetEmailSentSuccess": "Email đặt lại mật khẩu đã được gửi thành công",
+	"@passwordResetEmailSentSuccess": {
+		"description": "Thông báo khi gửi email đặt lại mật khẩu thành công.",
+		"type": "text"
+	},
+	"sendPasswordResetEmail": "Gửi email đặt lại mật khẩu",
+	"@sendPasswordResetEmail": {
+		"description": "Nhãn cho nút gửi email đặt lại mật khẩu.",
+		"type": "text"
+	},
+	"noUserSignedIn": "Không có người dùng đăng nhập",
+	"@noUserSignedIn": {
+		"description": "Thông báo khi không có người dùng đăng nhập.",
+		"type": "text"
+	},
+	"ongoing": "Đang diễn ra",
+	"@ongoing": {
+		"description": "Nhãn cho trạng thái đang diễn ra.",
+		"type": "text"
+	},
+	"upcoming": "Sắp tới",
+	"@upcoming": {
+		"description": "Nhãn cho trạng thái sắp tới.",
+		"type": "text"
+	},
+	"noVouchersAvailable": "Không có voucher nào khả dụng",
+	"@noVouchersAvailable": {
+		"description": "Thông báo khi không có voucher nào khả dụng.",
 		"type": "text"
 	}
 }

@@ -355,7 +355,7 @@ class _ProductTabState extends State<ProductTab>
                                     ? Theme.of(context)
                                         .colorScheme
                                         .primary
-                                        .withOpacity(0.1)
+                                        .withValues(alpha: 0.1) 
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -403,7 +403,7 @@ class _ProductTabState extends State<ProductTab>
               return Stack(
                 children: [
                   ModalBarrier(
-                      dismissible: false, color: Colors.black.withOpacity(0.5)),
+                      dismissible: false, color: Colors.black.withValues(alpha: 0.5)), 
                   Center(
                     child: CircularProgressIndicator(
                       color: Theme.of(context).colorScheme.primary,

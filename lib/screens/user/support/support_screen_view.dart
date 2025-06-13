@@ -36,6 +36,7 @@ class SupportScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             _buildContactItem(
+              context: context,
               icon: Icons.people_outlined,
               title: 'Tô Vĩnh Tiến',
               subtitle: '22521474',
@@ -48,6 +49,7 @@ class SupportScreen extends StatelessWidget {
               ),
             ),
             _buildContactItem(
+              context: context,
               icon: Icons.people_outlined,
               title: 'Đỗ Hồng Quân',
               subtitle: '22521175',
@@ -66,6 +68,7 @@ class SupportScreen extends StatelessWidget {
   }
 
   Widget _buildContactItem({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required String subtitle,
@@ -81,7 +84,7 @@ class SupportScreen extends StatelessWidget {
         leading: Icon(
           icon,
           size: 32,
-          color: Colors.blue,
+          color: Theme.of(context).colorScheme.primary,
         ),
         title: Text(
           title,
@@ -92,10 +95,8 @@ class SupportScreen extends StatelessWidget {
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.blue,
-          ),
+          style: TextStyle(
+              fontSize: 14, color: Theme.of(context).colorScheme.secondary),
         ),
         onTap: onTap,
       ),
@@ -128,12 +129,12 @@ class SupportScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            _buildDetailRow(Icons.badge_outlined,
+            _buildDetailRow(context, Icons.badge_outlined,
                 S.of(context).supportStudentId(studentId)),
             _buildDetailRow(
-                Icons.work_outline, S.of(context).supportRole(role)),
-            _buildDetailRow(
-                Icons.email_outlined, S.of(context).supportEmail(email)),
+                context, Icons.work_outline, S.of(context).supportRole(role)),
+            _buildDetailRow(context, Icons.email_outlined,
+                S.of(context).supportEmail(email)),
             const SizedBox(height: 16),
           ],
         ),
@@ -141,12 +142,12 @@ class SupportScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(IconData icon, String text) {
+  Widget _buildDetailRow(BuildContext context, IconData icon, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Icon(icon, color: Colors.blue, size: 24),
+          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
           const SizedBox(width: 12),
           Text(
             text,

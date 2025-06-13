@@ -1,14 +1,6 @@
 {
   "vi": [
-    "employees",
-    "vendors",
     "accountSettings",
-    "editProfile",
-    "updatePersonalInfo",
-    "changePassword",
-    "manageAccountSecurity",
-    "signOut",
-    "username",
     "saveChanges",
     "updateProfileSuccess",
     "passwordResetEmailWillBeSent",

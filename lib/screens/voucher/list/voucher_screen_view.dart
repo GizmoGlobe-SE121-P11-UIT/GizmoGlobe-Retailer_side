@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_view.dart';

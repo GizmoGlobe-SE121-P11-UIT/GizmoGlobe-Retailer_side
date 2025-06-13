@@ -43,7 +43,7 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
         .snapshots()
         .listen((doc) {
       try {
-        final data = doc.data() as Map<String, dynamic>?;
+        final data = doc.data();
         final messages = (data?['messages'] as List<dynamic>? ?? [])
             .map((msg) {
               final map = msg as Map<String, dynamic>;

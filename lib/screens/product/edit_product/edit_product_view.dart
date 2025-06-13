@@ -1,4 +1,3 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,8 +100,8 @@ class _EditProductState extends State<EditProductScreen> {
     switch (product.category) {
       case CategoryEnum.cpu:
         setCpuCore((product as CPU).core);
-        setCpuThread((product as CPU).thread);
-        setCpuClockSpeed((product as CPU).clockSpeed);
+        setCpuThread((product).thread);
+        setCpuClockSpeed((product).clockSpeed);
         break;
       case CategoryEnum.psu:
         setPsuWattage((product as PSU).wattage);
@@ -228,14 +227,14 @@ class _EditProductState extends State<EditProductScreen> {
                     height: MediaQuery.of(context).size.height * 0.25,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: colorScheme.surfaceVariant,
+                      color: colorScheme.surface, 
                       borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20),
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: colorScheme.shadow.withOpacity(0.2),
+                          color: colorScheme.shadow.withValues(alpha: 0.2), 
                           spreadRadius: 2,
                           blurRadius: 5,
                           offset: const Offset(0, 3),
@@ -987,7 +986,7 @@ class _EditProductState extends State<EditProductScreen> {
           title: Text(S.of(context).enterImageUrl),
           content: TextField(
             controller: urlController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'https://example.com/image.jpg',
             ),
             keyboardType: TextInputType.url,
@@ -1169,8 +1168,9 @@ Widget buildInputWidget<T>(
                   onChanged(parsed as T?);
                 }
               } else if (T == double) {
-                if (value == '.' || value.endsWith('.'))
+                if (value == '.' || value.endsWith('.')) {
                   return; // Allow typing decimals
+                }
                 final parsed = double.tryParse(value);
                 if (parsed != null) {
                   if (propertyName == S.of(context).discount) {
@@ -1189,7 +1189,7 @@ Widget buildInputWidget<T>(
                 onChanged(value as T?);
               }
             },
-            fillColor: colorScheme.surfaceVariant,
+            fillColor: colorScheme.surface, 
             keyboardType: keyboardType,
             inputFormatters: inputFormatters,
           ),

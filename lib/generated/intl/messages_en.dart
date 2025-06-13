@@ -91,10 +91,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Already have an account?",
     ),
     "appAvatar": MessageLookupByLibrary.simpleMessage("App Avatar"),
+    "appSettings": MessageLookupByLibrary.simpleMessage("App Settings"),
     "appTitle": MessageLookupByLibrary.simpleMessage("GizmoGlobe"),
     "areYouSureChangeStatus": m1,
     "areYouSureDeleteEmployee": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to delete this employee?",
+    ),
+    "authorizedByAdmin": MessageLookupByLibrary.simpleMessage(
+      "Authorized by admin?",
     ),
     "availableStock": MessageLookupByLibrary.simpleMessage("Available stock"),
     "avgIncome": MessageLookupByLibrary.simpleMessage("Avg. Income"),
@@ -114,6 +118,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Specifications for",
     ),
     "changeAddress": MessageLookupByLibrary.simpleMessage("Change Address"),
+    "changeAppLanguage": MessageLookupByLibrary.simpleMessage(
+      "Change the app language",
+    ),
     "changePassword": MessageLookupByLibrary.simpleMessage("Change Password"),
     "changePasswordFailed": MessageLookupByLibrary.simpleMessage(
       "Error changing password. Please try again.",
@@ -152,6 +159,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Customer Information",
     ),
     "customers": MessageLookupByLibrary.simpleMessage("Customers"),
+    "customizeAppPreferences": MessageLookupByLibrary.simpleMessage(
+      "Customize your app preferences",
+    ),
     "date": MessageLookupByLibrary.simpleMessage("Date"),
     "dateNewestFirst": MessageLookupByLibrary.simpleMessage(
       "Date (Newest First)",
@@ -176,6 +186,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "disabled": MessageLookupByLibrary.simpleMessage("Disabled"),
     "discard": MessageLookupByLibrary.simpleMessage("DISCARD"),
     "discardChanges": MessageLookupByLibrary.simpleMessage("Discard Changes?"),
+    "discontinue": MessageLookupByLibrary.simpleMessage("Discontinue"),
     "discontinued": MessageLookupByLibrary.simpleMessage("Discontinued"),
     "discount": MessageLookupByLibrary.simpleMessage("Discount"),
     "discountType": MessageLookupByLibrary.simpleMessage("Discount Type"),
@@ -196,6 +207,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
+    "emailAddress": MessageLookupByLibrary.simpleMessage("Email address"),
     "emailNotRegistered": MessageLookupByLibrary.simpleMessage(
       "This email is not registered in the system",
     ),
@@ -215,6 +227,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "enabled": MessageLookupByLibrary.simpleMessage("Enabled"),
     "endTime": MessageLookupByLibrary.simpleMessage("End Time"),
+    "english": MessageLookupByLibrary.simpleMessage("English"),
     "enterAddress": MessageLookupByLibrary.simpleMessage("Enter Address"),
     "enterField": m3,
     "enterImageUrl": MessageLookupByLibrary.simpleMessage("Enter Image URL"),
@@ -225,6 +238,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Enter receiver name",
     ),
     "enterUrl": MessageLookupByLibrary.simpleMessage("Enter URL"),
+    "enterYourEmailAddress": MessageLookupByLibrary.simpleMessage(
+      "Enter your email address",
+    ),
     "errorCreatingWarrantyInvoice": m4,
     "errorLoadingInvoiceDetails": m5,
     "errorLoadingVouchers": MessageLookupByLibrary.simpleMessage(
@@ -249,6 +265,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Find warranty invoices...",
     ),
     "fixedAmount": MessageLookupByLibrary.simpleMessage("Fixed Amount"),
+    "forgetPasswordDescription": MessageLookupByLibrary.simpleMessage(
+      "Don\'t worry! It happens. Please enter the email associated with your account.",
+    ),
+    "forgetPasswordTitle": MessageLookupByLibrary.simpleMessage(
+      "Forget Password",
+    ),
+    "forgotPassword": MessageLookupByLibrary.simpleMessage("Forgot password?"),
     "formFactor": MessageLookupByLibrary.simpleMessage("Form Factor"),
     "from": MessageLookupByLibrary.simpleMessage("From"),
     "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
@@ -272,6 +295,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "invoice": MessageLookupByLibrary.simpleMessage("Invoice"),
     "invoiceDetails": MessageLookupByLibrary.simpleMessage("Invoice Details"),
+    "language": MessageLookupByLibrary.simpleMessage("Language"),
     "last12Months": MessageLookupByLibrary.simpleMessage("Last 12 months"),
     "last3Months": MessageLookupByLibrary.simpleMessage("Last 3 months"),
     "limited": MessageLookupByLibrary.simpleMessage("Limited"),
@@ -368,6 +392,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "outOfStock": MessageLookupByLibrary.simpleMessage("Out of Stock"),
     "overview": MessageLookupByLibrary.simpleMessage("Overview"),
     "paid": MessageLookupByLibrary.simpleMessage("Paid"),
+    "password": MessageLookupByLibrary.simpleMessage("Password"),
+    "passwordConfirmation": MessageLookupByLibrary.simpleMessage(
+      "Password confirmation",
+    ),
     "passwordResetEmailSentSuccess": MessageLookupByLibrary.simpleMessage(
       "Password reset email sent successfully",
     ),
@@ -399,6 +427,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Please fill in all fields",
     ),
     "pleaseFillInAllRequiredFields": MessageLookupByLibrary.simpleMessage(
+      "Please fill in all required fields",
+    ),
+    "pleaseFillRequiredFields": MessageLookupByLibrary.simpleMessage(
       "Please fill in all required fields",
     ),
     "pleaseSelectAddress": MessageLookupByLibrary.simpleMessage(
@@ -459,6 +490,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ramBus": MessageLookupByLibrary.simpleMessage("RAM Bus"),
     "ramCapacity": MessageLookupByLibrary.simpleMessage("RAM Capacity"),
     "ramType": MessageLookupByLibrary.simpleMessage("RAM Type"),
+    "reactivate": MessageLookupByLibrary.simpleMessage("Re-activate"),
     "reasonForWarranty": MessageLookupByLibrary.simpleMessage(
       "Reason for Warranty",
     ),
@@ -479,6 +511,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "revenue": MessageLookupByLibrary.simpleMessage("Revenue"),
     "role": MessageLookupByLibrary.simpleMessage("Role"),
+    "roleEmployee": MessageLookupByLibrary.simpleMessage("Employee"),
+    "roleManager": MessageLookupByLibrary.simpleMessage("Manager"),
+    "roleOwner": MessageLookupByLibrary.simpleMessage("Owner"),
     "sales": MessageLookupByLibrary.simpleMessage("Sales"),
     "salesHighest": MessageLookupByLibrary.simpleMessage("Sale: Highest"),
     "salesInvoice": MessageLookupByLibrary.simpleMessage("Sales Invoice"),
@@ -511,9 +546,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "sendPasswordResetEmail": MessageLookupByLibrary.simpleMessage(
       "Send Password Reset Email",
     ),
+    "sendVerificationLink": MessageLookupByLibrary.simpleMessage(
+      "Send Verification Link",
+    ),
     "series": MessageLookupByLibrary.simpleMessage("Series"),
     "shipped": MessageLookupByLibrary.simpleMessage("Shipped"),
     "shipping": MessageLookupByLibrary.simpleMessage("Shipping"),
+    "signIn": MessageLookupByLibrary.simpleMessage("Sign in"),
     "signInFailed": MessageLookupByLibrary.simpleMessage(
       "Failed to sign in. Please try again.",
     ),
@@ -524,6 +563,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "signOutFailed": MessageLookupByLibrary.simpleMessage(
       "Failed to sign out. Please try again.",
     ),
+    "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
     "signUpFailed": MessageLookupByLibrary.simpleMessage(
       "Failed to sign up. Please try again.",
     ),
@@ -546,7 +586,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "supportRoleDeveloper": MessageLookupByLibrary.simpleMessage("Developer"),
     "supportStudentId": m12,
     "supportTitle": MessageLookupByLibrary.simpleMessage("Support"),
+    "switchBetweenLightAndDark": MessageLookupByLibrary.simpleMessage(
+      "Switch between light and dark mode",
+    ),
     "takePhoto": MessageLookupByLibrary.simpleMessage("Take a Photo"),
+    "themeMode": MessageLookupByLibrary.simpleMessage("Theme Mode"),
     "timeLimit": MessageLookupByLibrary.simpleMessage("Time Limit"),
     "to": MessageLookupByLibrary.simpleMessage("To"),
     "totalAmount": MessageLookupByLibrary.simpleMessage("Total Amount"),
@@ -590,6 +634,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "viDescription": MessageLookupByLibrary.simpleMessage(
       "Vietnamese description",
     ),
+    "vietnamese": MessageLookupByLibrary.simpleMessage("Vietnamese"),
     "view": MessageLookupByLibrary.simpleMessage("View"),
     "visibility": MessageLookupByLibrary.simpleMessage("Visibility"),
     "visible": MessageLookupByLibrary.simpleMessage("Visible"),
@@ -631,5 +676,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Processing",
     ),
     "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome back,"),
+    "yourEmail": MessageLookupByLibrary.simpleMessage("Your email"),
   };
 }

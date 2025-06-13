@@ -70,7 +70,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                     color: Theme.of(context).colorScheme.surface,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
+                        color: Theme.of(context).colorScheme.shadow,
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
@@ -140,7 +140,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.pop(dialogContext),
-                                          child: const Text('Cancel'),
+                                          child: Text(S.of(context).cancel),
                                         ),
                                         TextButton(
                                           onPressed: () async {
@@ -209,14 +209,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
       padding: const EdgeInsets.all(24),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: const BorderRadius.all(Radius.circular(30)),
         boxShadow: [
           BoxShadow(
@@ -245,10 +238,10 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
           const SizedBox(height: 16),
           Text(
             state.manufacturer.manufacturerName,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -264,10 +257,12 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isActive ? Colors.green.shade100 : Colors.red.shade100,
+        color: isActive ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.error,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isActive ? Colors.green : Colors.red,
+          color: isActive
+              ? Theme.of(context).colorScheme.tertiary
+              : Theme.of(context).colorScheme.error,
           width: 1.5,
         ),
       ),
@@ -277,13 +272,16 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
           Icon(
             isActive ? Icons.check_circle : Icons.cancel,
             size: 20,
-            color: isActive ? Colors.green : Colors.red,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
           const SizedBox(width: 8),
           Text(
-            status.getName().toUpperCase(),
+            (status == ManufacturerStatus.active
+                    ? S.of(context).active
+                    : S.of(context).inactive)
+                .toUpperCase(),
             style: TextStyle(
-              color: isActive ? Colors.green.shade800 : Colors.red.shade800,
+              color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
@@ -331,11 +329,13 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
               ),
               _buildInfoRow(
                 S.of(context).status, // Localized
-                state.manufacturer.status.getName(),
+                state.manufacturer.status == ManufacturerStatus.active
+                    ? S.of(context).active
+                    : S.of(context).inactive,
                 valueColor:
                     state.manufacturer.status == ManufacturerStatus.active
-                        ? Colors.green.shade400
-                        : Colors.red.shade400,
+                        ? Theme.of(context).colorScheme.tertiary
+                        : Theme.of(context).colorScheme.error,
                 icon: state.manufacturer.status == ManufacturerStatus.active
                     ? Icons.check_circle
                     : Icons.cancel,
@@ -374,7 +374,8 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                 Text(
                   value,
                   style: TextStyle(
-                    color: valueColor ?? Colors.black,
+                    color:
+                        valueColor ?? Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

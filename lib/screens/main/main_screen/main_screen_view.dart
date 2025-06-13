@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
                 }
               },
               currentIndex: index,
-              backgroundColor: colorScheme.secondary,
+              backgroundColor: colorScheme.primary,
               showSelectedLabels: false,
               showUnselectedLabels: false,
               elevation: 3,

@@ -55,20 +55,17 @@ class _ProductScreenState extends State<ProductScreen>
     cubit.updateSelectedTabIndex(index);
   }
 
-  Future<bool> _onWillPop() async {
-    if (searchFocusNode.hasFocus) {
-      searchFocusNode.unfocus();
-      return Future.value(false);
-    }
-    return Future.value(true);
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final s = S.of(context);
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop && searchFocusNode.hasFocus) {
+          searchFocusNode.unfocus();
+        }
+      },
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -120,7 +117,8 @@ class _ProductScreenState extends State<ProductScreen>
             bottom: TabBar(
               controller: tabController,
               labelColor: colorScheme.primary,
-              unselectedLabelColor: colorScheme.onSurface.withOpacity(0.3),
+              unselectedLabelColor:
+                  colorScheme.onSurface.withValues(alpha: 0.3),
               labelPadding: const EdgeInsets.symmetric(horizontal: 16),
               indicatorColor: colorScheme.primary,
               tabAlignment: TabAlignment.start,

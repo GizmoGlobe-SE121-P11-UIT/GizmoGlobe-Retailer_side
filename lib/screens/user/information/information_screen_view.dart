@@ -13,7 +13,7 @@ class InformationScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const GradientText(text: 'Information'), //Thông tin
+        title: GradientText(text: S.of(context).informationTitle), // Localized
         leading: GradientIconButton(
           icon: Icons.chevron_left,
           onPressed: () {
@@ -29,25 +29,30 @@ class InformationScreen extends StatelessWidget {
           children: [
             Text(
               S.of(context).aboutGizmoGlobe,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 24),
             _buildInfoSection(
+              context,
               title: S.of(context).aboutUsTitle,
               content: S.of(context).aboutUsContent,
             ),
             _buildInfoSection(
+              context,
               title: S.of(context).ourMissionTitle,
               content: S.of(context).ourMissionContent,
             ),
             _buildInfoSection(
+              context,
               title: S.of(context).contactInformationTitle,
               content: S.of(context).contactInformationContent,
             ),
             _buildInfoSection(
+              context,
               title: S.of(context).businessHoursTitle,
               content: S.of(context).businessHoursContent,
             ),
@@ -57,7 +62,8 @@ class InformationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoSection({
+  Widget _buildInfoSection(
+    BuildContext context, {
     required String title,
     required String content,
   }) {
@@ -73,17 +79,19 @@ class InformationScreen extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               content,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
                 height: 1.5,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ],

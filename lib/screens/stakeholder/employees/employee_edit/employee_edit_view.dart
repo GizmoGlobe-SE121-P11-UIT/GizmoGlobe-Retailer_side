@@ -91,6 +91,7 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -98,28 +99,31 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                           initialValue: employeeName,
                           decoration: InputDecoration(
                             labelText: S.of(context).fullName,
-                            labelStyle: const TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                             floatingLabelStyle:
                                 WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.white,
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
-                            prefixIcon:
-                                const Icon(Icons.person, color: Colors.white),
+                            prefixIcon: Icon(Icons.person,
+                                color: Theme.of(context).colorScheme.onSurface),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(color: Colors.white),
+                              borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                           ),
                           onChanged: (value) => employeeName = value,
@@ -135,28 +139,31 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                           initialValue: phoneNumber,
                           decoration: InputDecoration(
                             labelText: S.of(context).phoneNumber,
-                            labelStyle: const TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                             floatingLabelStyle:
                                 WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.white,
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
-                            prefixIcon:
-                                const Icon(Icons.phone, color: Colors.white),
+                            prefixIcon: Icon(Icons.phone,
+                                color: Theme.of(context).colorScheme.onSurface),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(color: Colors.white),
+                              borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                             hintText: '+84 xxx xxx xxx',
                           ),
@@ -173,28 +180,31 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                           value: role,
                           decoration: InputDecoration(
                             labelText: S.of(context).role,
-                            labelStyle: const TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                             floatingLabelStyle:
                                 WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.white,
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
-                            prefixIcon:
-                                const Icon(Icons.work, color: Colors.white),
+                            prefixIcon: Icon(Icons.work,
+                                color: Theme.of(context).colorScheme.onSurface),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(color: Colors.white),
+                              borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                             enabled: EmployeePermissions.canEditEmployeeRole(
                                 widget.userRole, widget.employee),
@@ -206,9 +216,10 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                             return DropdownMenuItem(
                               value: role,
                               child: Text(
-                                role.toString().split('.').last,
+                                role.localizedName(context),
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   fontStyle:
                                       EmployeePermissions.canEditEmployeeRole(
                                               widget.userRole, widget.employee)

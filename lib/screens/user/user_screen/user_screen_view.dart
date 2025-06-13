@@ -4,10 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/screens/user/information/information_screen_view.dart';
 import 'package:gizmoglobe_client/screens/user/support/support_screen_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../../data/firebase/firebase.dart';
+import '../../../providers/theme_provider.dart';
+import '../../../providers/locale_provider.dart';
 import 'user_screen_cubit.dart';
 import 'user_screen_state.dart';
+import '../../../widgets/dialog/information_dialog.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -200,7 +204,7 @@ class _UserScreen extends State<UserScreen> {
                 children: [
                   Text(
                     S.of(context).accountSettings, //Cài đặt tài khoản
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -217,14 +221,19 @@ class _UserScreen extends State<UserScreen> {
                   ),
                   _buildSettingsItem(
                     icon: Icons.lock_outline,
-                    title: S.of(context).changePassword, //Đổi mật khẩu
-                    subtitle: S
-                        .of(context)
-                        .manageAccountSecurity, //Quản lý bảo mật tài khoản của bạn
+                    title: S.of(context).changePassword,
+                    subtitle: S.of(context).manageAccountSecurity,
                     onTap: () => showChangePasswordBottomSheet(context),
                     iconColor: Colors.orange,
                   ),
-
+                  const SizedBox(height: 16),
+                  _buildSettingsItem(
+                    icon: Icons.settings_outlined,
+                    title: S.of(context).appSettings,
+                    subtitle: S.of(context).customizeAppPreferences,
+                    onTap: () => showAppSettingsBottomSheet(context),
+                    iconColor: Colors.purple,
+                  ),
                   const SizedBox(height: 32),
 
                   // Logout Button
@@ -264,15 +273,15 @@ class _UserScreen extends State<UserScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.logout_rounded,
                                 color: Colors.white,
                                 size: 24,
                               ),
-                              SizedBox(width: 12),
+                              const SizedBox(width: 12),
                               Text(
                                 S.of(context).signOut, //Đăng xuất
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -623,10 +632,11 @@ class _UserScreen extends State<UserScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                S.of(context).editProfile, //Chỉnh sửa hồ sơ
+                S.of(context).editProfile,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -635,18 +645,28 @@ class _UserScreen extends State<UserScreen> {
                 controller: usernameController,
                 decoration: InputDecoration(
                   label: Text(
-                    S.of(context).username, //Tên người dùng
+                    S.of(context).username,
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.6), 
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                        color: Colors.blue[200] ?? Colors.blue, width: 1.0),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.5),
+                      width: 1.0,
+                    ),
                   ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                        color: Colors.blue[200] ?? Colors.blue, width: 1.0),
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 1.0,
+                    ),
                   ),
                 ),
               ),
@@ -661,23 +681,27 @@ class _UserScreen extends State<UserScreen> {
                         usernameController.text,
                       );
                       Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(S.current
-                              .updateProfileSuccess), //Cập nhật hồ sơ thành công
+                      showDialog(
+                        context: context,
+                        builder: (context) => InformationDialog(
+                          title: S.of(context).updateProfileSuccess,
+                          content: S.of(context).updateProfileSuccess,
+                          buttonText: S.of(context).saveChanges,
                         ),
                       );
                     }
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                            S.current.errorWithMessage(e.toString())), //Lỗi: $e
+                    showDialog(
+                      context: context,
+                      builder: (context) => InformationDialog(
+                        title: S.of(context).errorWithMessage(e.toString()),
+                        content: S.of(context).errorWithMessage(e.toString()),
+                        buttonText: S.of(context).saveChanges,
                       ),
                     );
                   }
                 },
-                child: Text(S.of(context).saveChanges), //Lưu thay đổi
+                child: Text(S.of(context).saveChanges),
               ),
               const SizedBox(height: 20),
             ],
@@ -691,10 +715,12 @@ class _UserScreen extends State<UserScreen> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S
-              .current.noUserSignedIn), //Không có người dùng nào đang đăng nhập
+      showDialog(
+        context: context,
+        builder: (context) => InformationDialog(
+          title: S.of(context).noUserSignedIn,
+          content: S.of(context).noUserSignedIn,
+          buttonText: S.of(context).saveChanges,
         ),
       );
       return;
@@ -719,19 +745,19 @@ class _UserScreen extends State<UserScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                S.of(context).changePassword, //Đổi mật khẩu
+                S.of(context).changePassword,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               Text(
-                S.of(context).passwordResetEmailWillBeSent(user.email ??
-                    ''), //Một email đặt lại mật khẩu sẽ được gửi đến ${user.email}
-                style: const TextStyle(
-                  color: Colors.white,
+                S.of(context).passwordResetEmailWillBeSent(user.email ?? ''),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -744,30 +770,190 @@ class _UserScreen extends State<UserScreen> {
                     );
 
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(S.current
-                            .passwordResetEmailSentSuccess), //Email đặt lại mật khẩu đã được gửi thành công
+                    showDialog(
+                      context: context,
+                      builder: (context) => InformationDialog(
+                        title: S.of(context).passwordResetEmailSentSuccess,
+                        content: S.of(context).passwordResetEmailSentSuccess,
+                        buttonText: S.of(context).saveChanges,
                       ),
                     );
                   } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                            S.current.errorWithMessage(e.toString())), //Lỗi: $e
+                    showDialog(
+                      context: context,
+                      builder: (context) => InformationDialog(
+                        title: S.of(context).errorWithMessage(e.toString()),
+                        content: S.of(context).errorWithMessage(e.toString()),
+                        buttonText: S.of(context).saveChanges,
                       ),
                     );
                   }
                 },
-                child: Text(S
-                    .of(context)
-                    .sendPasswordResetEmail), //Gửi email đặt lại mật khẩu
+                child: Text(S.of(context).sendPasswordResetEmail),
               ),
               const SizedBox(height: 20),
             ],
           ),
         );
       },
+    );
+  }
+
+  void showAppSettingsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => const AppSettingsContent(),
+    );
+  }
+}
+
+class AppSettingsContent extends StatelessWidget {
+  const AppSettingsContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              S.of(context).appSettings,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Consumer<ThemeProvider>(
+              builder: (context, themeProvider, child) {
+                return _buildAppSettingItem(
+                  context: context,
+                  icon: Icons.dark_mode_outlined,
+                  title: S.of(context).themeMode,
+                  subtitle: S.of(context).switchBetweenLightAndDark,
+                  trailing: Switch(
+                    value: themeProvider.isDarkMode,
+                    onChanged: (value) {
+                      themeProvider.toggleTheme();
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            Consumer<LocaleProvider>(
+              builder: (context, localeProvider, child) {
+                return _buildAppSettingItem(
+                  context: context,
+                  icon: Icons.language_outlined,
+                  title: S.of(context).language,
+                  subtitle: S.of(context).changeAppLanguage,
+                  trailing: DropdownButton<String>(
+                    value: localeProvider.currentLanguage,
+                    items: [
+                      DropdownMenuItem(
+                        value: 'en',
+                        child: Text(S.of(context).english),
+                      ),
+                      DropdownMenuItem(
+                        value: 'vi',
+                        child: Text(S.of(context).vietnamese),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        localeProvider.setLocale(Locale(value));
+                      }
+                    },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppSettingItem({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Widget trailing,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.grey.withValues(alpha: 0.1),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                icon,
+                color: Theme.of(context).colorScheme.primary,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.6), 
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            trailing,
+          ],
+        ),
+      ),
     );
   }
 }

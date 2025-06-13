@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
-import 'package:gizmoglobe_client/objects/voucher_related/end_time_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/limited_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/percentage_interface.dart';
 import 'package:gizmoglobe_client/screens/voucher/edit_voucher/edit_voucher_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/edit_voucher/edit_voucher_state.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
@@ -94,7 +92,7 @@ class _EditVoucherScreen extends State<EditVoucherScreen> {
           onPressed: () => Navigator.pop(context, ProcessState.idle),
           fillColor: Colors.transparent,
         ),
-        title: GradientText(text: 'Edit Voucher'),
+        title: const GradientText(text: 'Edit Voucher'),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
@@ -535,7 +533,7 @@ class _EditVoucherScreen extends State<EditVoucherScreen> {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), 
           ),
           child: Row(
             children: [

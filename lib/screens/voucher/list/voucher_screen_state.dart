@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:gizmoglobe_client/data/database/database.dart';
 import 'package:gizmoglobe_client/enums/processing/dialog_name_enum.dart';
 import 'package:gizmoglobe_client/enums/processing/process_state_enum.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';

@@ -8,7 +8,6 @@ import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_modular.da
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_bus.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_capacity_enum.dart';
 import 'package:gizmoglobe_client/objects/product_related/filter_argument.dart';
-import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import '../../../../enums/product_related/drive_enums/drive_capacity.dart';
@@ -110,7 +109,6 @@ class _FilterScreenState extends State<FilterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return BlocBuilder<FilterScreenCubit, FilterScreenState>(
       builder: (context, state) {
         return Scaffold(

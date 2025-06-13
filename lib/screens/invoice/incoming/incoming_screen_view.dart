@@ -348,7 +348,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                 fontSize: 16,
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .onSurface,
+                                                    .error,
                                               ),
                                             ),
                                           ],

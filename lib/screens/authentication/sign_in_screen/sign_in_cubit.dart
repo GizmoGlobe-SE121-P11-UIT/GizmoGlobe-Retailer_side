@@ -4,6 +4,7 @@ import '../../../enums/processing/dialog_name_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import 'sign_in_state.dart';
 import '../../../enums/processing/notify_message_enum.dart';
+import 'package:flutter/material.dart';
 
 extension StringExtension on String {
   String capitalize() {
@@ -33,33 +34,32 @@ class SignInCubit extends Cubit<SignInState> {
     ));
   }
 
-  Future<void> signInWithEmailPassword() async {
+  Future<void> signInWithEmailPassword(BuildContext context) async {
     try {
       emit(state.copyWith(processState: ProcessState.loading));
 
-      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: state.email, password: state.password);
+      final UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
+              email: state.email, password: state.password);
 
       if (userCredential.user != null) {
         if (!userCredential.user!.emailVerified) {
           emit(state.copyWith(
               processState: ProcessState.failure,
               message: NotifyMessage.msg10,
-              dialogName: DialogName.failure
-          ));
+              dialogName: DialogName.failure));
         } else {
           emit(state.copyWith(
               processState: ProcessState.success,
               message: NotifyMessage.msg1,
-              dialogName: DialogName.success
-          ));
+              dialogName: DialogName.success));
         }
       }
     } catch (error) {
       emit(state.copyWith(
           processState: ProcessState.failure,
           message: NotifyMessage.msg2,
-          dialogName: DialogName.failure
-      ));
+          dialogName: DialogName.failure));
     }
   }
 }

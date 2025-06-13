@@ -6,6 +6,7 @@ import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_edit/vendor
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../enums/stakeholders/manufacturer_status.dart';
 import 'vendors_screen_cubit.dart';
@@ -58,14 +59,14 @@ class _VendorsScreenState extends State<VendorsScreen> {
                       children: [
                         Icon(
                           Icons.business_center,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).colorScheme.primary,
                           size: 28,
                         ),
                         const SizedBox(width: 12),
                         Flexible(
                           child: Text(
                             S.of(context).addNewManufacturer,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
@@ -81,14 +82,15 @@ class _VendorsScreenState extends State<VendorsScreen> {
                         labelText: S.of(context).manufacturerName,
                         prefixIcon: Icon(
                           Icons.business_center,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                        labelStyle: const TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
                         floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                           (states) => TextStyle(
                             color: states.contains(WidgetState.focused)
-                                ? Theme.of(context).primaryColor
-                                : Colors.white,
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         border: OutlineInputBorder(
@@ -97,13 +99,13 @@ class _VendorsScreenState extends State<VendorsScreen> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Colors.grey.shade600,
+                            color: Theme.of(context).colorScheme.outline,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                             width: 2,
                           ),
                         ),
@@ -116,14 +118,15 @@ class _VendorsScreenState extends State<VendorsScreen> {
                         labelText: S.of(context).status,
                         prefixIcon: Icon(
                           Icons.circle,
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                        labelStyle: const TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
                         floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                           (states) => TextStyle(
                             color: states.contains(WidgetState.focused)
-                                ? Theme.of(context).primaryColor
-                                : Colors.white,
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         border: OutlineInputBorder(
@@ -132,13 +135,13 @@ class _VendorsScreenState extends State<VendorsScreen> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Colors.grey.shade600,
+                            color: Theme.of(context).colorScheme.outline,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                             width: 2,
                           ),
                         ),
@@ -147,8 +150,11 @@ class _VendorsScreenState extends State<VendorsScreen> {
                         return DropdownMenuItem(
                           value: status,
                           child: Text(
-                            status.getName(),
-                            style: const TextStyle(color: Colors.white),
+                            status == ManufacturerStatus.active
+                                ? S.of(context).active
+                                : S.of(context).inactive,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                           ),
                         );
                       }).toList(),
@@ -175,7 +181,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                           child: Text(
                             S.of(context).cancel,
                             style: TextStyle(
-                              color: Colors.grey.shade400,
+                              color: Theme.of(context).colorScheme.error,
                               fontSize: 14,
                             ),
                           ),
@@ -185,11 +191,12 @@ class _VendorsScreenState extends State<VendorsScreen> {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (nameController.text.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Please enter manufacturer name'),
-                                    backgroundColor: Colors.red,
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => InformationDialog(
+                                    title: S.of(context).errorOccurred,
+                                    content: S.of(context).pleaseEnterName,
+                                    buttonText: S.of(context).confirm,
                                   ),
                                 );
                                 return;
@@ -202,28 +209,32 @@ class _VendorsScreenState extends State<VendorsScreen> {
 
                               if (error != null) {
                                 if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(error),
-                                      backgroundColor: Colors.red,
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => InformationDialog(
+                                      title: S.of(context).errorOccurred,
+                                      content: error,
+                                      buttonText: S.of(context).confirm,
                                     ),
                                   );
                                 }
                               } else {
                                 if (mounted) {
                                   Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'Manufacturer added successfully'),
-                                      backgroundColor: Colors.green,
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => InformationDialog(
+                                      title: S.of(context).success,
+                                      content: S.of(context).addManufacturer,
+                                      buttonText: S.of(context).confirm,
                                     ),
                                   );
                                 }
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context).primaryColor,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                                 vertical: 12,
@@ -236,7 +247,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                               S.of(context).addManufacturer,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -285,7 +296,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                           cubit.searchManufacturers(value);
                         },
                         prefixIcon: Icon(Icons.search,
-                            color: Theme.of(context).primaryColor),
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
                     if (state.userRole == 'admin') ...[
@@ -348,15 +359,19 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                         children: [
                                           ListTile(
                                             dense: true,
-                                            leading: const Icon(
+                                            leading: Icon(
                                               Icons.visibility_outlined,
                                               size: 20,
-                                              color: Colors.white,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
                                             ),
                                             title: Text(
                                               S.of(context).view,
-                                              style: const TextStyle(
-                                                color: Colors.white,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
                                               ),
                                             ),
                                             onTap: () {
@@ -378,15 +393,19 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                           if (state.userRole == 'admin') ...[
                                             ListTile(
                                               dense: true,
-                                              leading: const Icon(
+                                              leading: Icon(
                                                 Icons.edit_outlined,
                                                 size: 20,
-                                                color: Colors.white,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
                                               ),
                                               title: Text(
                                                 S.of(context).edit,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
                                                 ),
                                               ),
                                               onTap: () async {
@@ -582,7 +601,10 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                         ),
                                       ),
                                       StatusBadge(
-                                        status: manufacturer.status.getName(),
+                                        status: manufacturer.status ==
+                                                ManufacturerStatus.active
+                                            ? S.of(context).active
+                                            : S.of(context).inactive,
                                       ),
                                     ],
                                   ),

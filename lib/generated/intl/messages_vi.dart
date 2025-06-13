@@ -62,7 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Bạn có chắc chắn muốn kích hoạt nhà cung cấp này?",
     ),
     "activateManufacturerConfirmName": m0,
-    "active": MessageLookupByLibrary.simpleMessage("Còn hàng"),
+    "active": MessageLookupByLibrary.simpleMessage("Đang hoạt động"),
     "add": MessageLookupByLibrary.simpleMessage("Thêm"),
     "addAddress": MessageLookupByLibrary.simpleMessage("Thêm địa chỉ"),
     "addCustomer": MessageLookupByLibrary.simpleMessage("Thêm khách hàng"),
@@ -94,10 +94,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Đã có tài khoản?",
     ),
     "appAvatar": MessageLookupByLibrary.simpleMessage("Biểu tượng ứng dụng"),
+    "appSettings": MessageLookupByLibrary.simpleMessage("Cài đặt ứng dụng"),
     "appTitle": MessageLookupByLibrary.simpleMessage("GizmoGlobe"),
     "areYouSureChangeStatus": m1,
     "areYouSureDeleteEmployee": MessageLookupByLibrary.simpleMessage(
       "Bạn có chắc chắn muốn xóa nhân viên này?",
+    ),
+    "authorizedByAdmin": MessageLookupByLibrary.simpleMessage(
+      "Được phê duyệt bởi admin?",
     ),
     "availableStock": MessageLookupByLibrary.simpleMessage("Hàng tồn kho"),
     "avgIncome": MessageLookupByLibrary.simpleMessage("Thu nhập trung bình"),
@@ -115,6 +119,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Thông số cho",
     ),
     "changeAddress": MessageLookupByLibrary.simpleMessage("Thay đổi địa chỉ"),
+    "changeAppLanguage": MessageLookupByLibrary.simpleMessage(
+      "Thay đổi ngôn ngữ ứng dụng",
+    ),
+    "changePassword": MessageLookupByLibrary.simpleMessage("Đổi mật khẩu"),
     "changePasswordFailed": MessageLookupByLibrary.simpleMessage(
       "Lỗi thay đổi mật khẩu. Vui lòng thử lại.",
     ),
@@ -154,6 +162,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Thông tin khách hàng",
     ),
     "customers": MessageLookupByLibrary.simpleMessage("Khách hàng"),
+    "customizeAppPreferences": MessageLookupByLibrary.simpleMessage(
+      "Tùy chỉnh cài đặt ứng dụng của bạn",
+    ),
     "date": MessageLookupByLibrary.simpleMessage("Ngày"),
     "dateNewestFirst": MessageLookupByLibrary.simpleMessage(
       "Ngày (Mới nhất trước)",
@@ -178,6 +189,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "disabled": MessageLookupByLibrary.simpleMessage("Vô hiệu hóa"),
     "discard": MessageLookupByLibrary.simpleMessage("BỎ QUA"),
     "discardChanges": MessageLookupByLibrary.simpleMessage("Hủy bỏ thay đổi?"),
+    "discontinue": MessageLookupByLibrary.simpleMessage("Ngừng kinh doanh"),
     "discontinued": MessageLookupByLibrary.simpleMessage("Ngừng kinh doanh"),
     "discount": MessageLookupByLibrary.simpleMessage("Giảm giá"),
     "discountType": MessageLookupByLibrary.simpleMessage("Loại giảm giá"),
@@ -198,7 +210,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "editProductDetail": MessageLookupByLibrary.simpleMessage(
       "Chỉnh sửa chi tiết sản phẩm",
     ),
+    "editProfile": MessageLookupByLibrary.simpleMessage("Chỉnh sửa hồ sơ"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
+    "emailAddress": MessageLookupByLibrary.simpleMessage("Địa chỉ email"),
     "emailNotRegistered": MessageLookupByLibrary.simpleMessage(
       "Email này không được đăng ký trong hệ thống",
     ),
@@ -214,9 +228,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "employeeInformation": MessageLookupByLibrary.simpleMessage(
       "Thông tin nhân viên",
     ),
+    "employees": MessageLookupByLibrary.simpleMessage("Nhân viên"),
     "enDescription": MessageLookupByLibrary.simpleMessage("Mô tả tiếng Anh"),
     "enabled": MessageLookupByLibrary.simpleMessage("Kích hoạt"),
     "endTime": MessageLookupByLibrary.simpleMessage("Thời gian kết thúc"),
+    "english": MessageLookupByLibrary.simpleMessage("Tiếng Anh"),
     "enterAddress": MessageLookupByLibrary.simpleMessage("Nhập địa chỉ"),
     "enterField": m3,
     "enterImageUrl": MessageLookupByLibrary.simpleMessage("Nhập URL hình ảnh"),
@@ -227,6 +243,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nhập tên người nhận",
     ),
     "enterUrl": MessageLookupByLibrary.simpleMessage("Nhập URL"),
+    "enterYourEmailAddress": MessageLookupByLibrary.simpleMessage(
+      "Nhập địa chỉ email của bạn",
+    ),
     "errorCreatingWarrantyInvoice": m4,
     "errorLoadingInvoiceDetails": m5,
     "errorLoadingVouchers": MessageLookupByLibrary.simpleMessage(
@@ -257,6 +276,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tìm hóa đơn bảo hành...",
     ),
     "fixedAmount": MessageLookupByLibrary.simpleMessage("Số tiền cố định"),
+    "forgetPasswordDescription": MessageLookupByLibrary.simpleMessage(
+      "Đừng lo lắng! Điều này xảy ra. Vui lòng nhập email liên kết với tài khoản của bạn.",
+    ),
+    "forgetPasswordTitle": MessageLookupByLibrary.simpleMessage(
+      "Quên mật khẩu",
+    ),
+    "forgotPassword": MessageLookupByLibrary.simpleMessage("Quên mật khẩu?"),
     "formFactor": MessageLookupByLibrary.simpleMessage("Kiểu dáng"),
     "from": MessageLookupByLibrary.simpleMessage("Từ"),
     "fullName": MessageLookupByLibrary.simpleMessage("Họ và tên"),
@@ -280,6 +306,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "invoice": MessageLookupByLibrary.simpleMessage("Hóa đơn"),
     "invoiceDetails": MessageLookupByLibrary.simpleMessage("Chi tiết hóa đơn"),
+    "language": MessageLookupByLibrary.simpleMessage("Ngôn ngữ"),
     "last12Months": MessageLookupByLibrary.simpleMessage("12 tháng qua"),
     "last3Months": MessageLookupByLibrary.simpleMessage("3 tháng qua"),
     "limited": MessageLookupByLibrary.simpleMessage("Có giới hạn"),
@@ -287,6 +314,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "location": MessageLookupByLibrary.simpleMessage("Địa chỉ"),
     "logOut": MessageLookupByLibrary.simpleMessage("Đăng xuất"),
     "mainboard": MessageLookupByLibrary.simpleMessage("Bo mạch chủ"),
+    "manageAccountSecurity": MessageLookupByLibrary.simpleMessage(
+      "Quản lý bảo mật tài khoản của bạn",
+    ),
     "manufacturer": MessageLookupByLibrary.simpleMessage("Nhà sản xuất"),
     "manufacturerDetail": MessageLookupByLibrary.simpleMessage(
       "Chi tiết nhà cung cấp",
@@ -376,6 +406,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "outOfStock": MessageLookupByLibrary.simpleMessage("Hết hàng"),
     "overview": MessageLookupByLibrary.simpleMessage("Tổng quan"),
     "paid": MessageLookupByLibrary.simpleMessage("Đã thanh toán"),
+    "password": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
+    "passwordConfirmation": MessageLookupByLibrary.simpleMessage(
+      "Xác nhận mật khẩu",
+    ),
     "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
       "Mật khẩu không khớp.",
     ),
@@ -406,6 +440,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "pleaseFillInAllRequiredFields": MessageLookupByLibrary.simpleMessage(
       "Vui lòng điền tất cả các trường bắt buộc",
+    ),
+    "pleaseFillRequiredFields": MessageLookupByLibrary.simpleMessage(
+      "Vui lòng điền đầy đủ các trường bắt buộc",
     ),
     "pleaseSelectAddress": MessageLookupByLibrary.simpleMessage(
       "Vui lòng chọn địa chỉ",
@@ -465,6 +502,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ramBus": MessageLookupByLibrary.simpleMessage("Bus RAM"),
     "ramCapacity": MessageLookupByLibrary.simpleMessage("Dung lượng RAM"),
     "ramType": MessageLookupByLibrary.simpleMessage("Loại RAM"),
+    "reactivate": MessageLookupByLibrary.simpleMessage("Kích hoạt lại"),
     "reasonForWarranty": MessageLookupByLibrary.simpleMessage("Lý do bảo hành"),
     "reasonForWarrantyLabel": MessageLookupByLibrary.simpleMessage(
       "Lý do bảo hành",
@@ -485,6 +523,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "revenue": MessageLookupByLibrary.simpleMessage("Doanh thu"),
     "role": MessageLookupByLibrary.simpleMessage("Chức vụ"),
+    "roleEmployee": MessageLookupByLibrary.simpleMessage("Nhân viên"),
+    "roleManager": MessageLookupByLibrary.simpleMessage("Quản lý"),
+    "roleOwner": MessageLookupByLibrary.simpleMessage("Chủ sở hữu"),
     "sales": MessageLookupByLibrary.simpleMessage("Bán hàng"),
     "salesHighest": MessageLookupByLibrary.simpleMessage(
       "Số lượng bán: Cao nhất",
@@ -517,18 +558,24 @@ class MessageLookup extends MessageLookupByLibrary {
       "Chọn sản phẩm để bảo hành",
     ),
     "sellingPrice": MessageLookupByLibrary.simpleMessage("Giá bán"),
+    "sendVerificationLink": MessageLookupByLibrary.simpleMessage(
+      "Gửi liên kết xác minh",
+    ),
     "series": MessageLookupByLibrary.simpleMessage("Dòng sản phẩm"),
     "shipped": MessageLookupByLibrary.simpleMessage("Đã giao"),
     "shipping": MessageLookupByLibrary.simpleMessage("Đang giao"),
+    "signIn": MessageLookupByLibrary.simpleMessage("Đăng nhập"),
     "signInFailed": MessageLookupByLibrary.simpleMessage(
       "Đăng nhập thất bại. Vui lòng thử lại.",
     ),
     "signInSuccess": MessageLookupByLibrary.simpleMessage(
       "Đăng nhập thành công.",
     ),
+    "signOut": MessageLookupByLibrary.simpleMessage("Đăng xuất"),
     "signOutFailed": MessageLookupByLibrary.simpleMessage(
       "Đăng xuất thất bại. Vui lòng thử lại.",
     ),
+    "signUp": MessageLookupByLibrary.simpleMessage("Đăng ký"),
     "signUpFailed": MessageLookupByLibrary.simpleMessage(
       "Đăng ký thất bại. Vui lòng thử lại.",
     ),
@@ -557,7 +604,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "supportStudentId": m12,
     "supportTitle": MessageLookupByLibrary.simpleMessage("Hỗ trợ"),
+    "switchBetweenLightAndDark": MessageLookupByLibrary.simpleMessage(
+      "Chuyển đổi giữa chế độ sáng và tối",
+    ),
     "takePhoto": MessageLookupByLibrary.simpleMessage("Chụp ảnh"),
+    "themeMode": MessageLookupByLibrary.simpleMessage("Chế độ giao diện"),
     "timeLimit": MessageLookupByLibrary.simpleMessage("Giới hạn thời gian"),
     "to": MessageLookupByLibrary.simpleMessage("Đến"),
     "totalAmount": MessageLookupByLibrary.simpleMessage("Tổng số tiền"),
@@ -579,12 +630,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "Bạn có thay đổi chưa lưu. Bạn có muốn hủy bỏ chúng?",
     ),
     "update": MessageLookupByLibrary.simpleMessage("Cập nhật"),
+    "updatePersonalInfo": MessageLookupByLibrary.simpleMessage(
+      "Cập nhật thông tin cá nhân",
+    ),
     "updateStatus": MessageLookupByLibrary.simpleMessage("Cập nhật trạng thái"),
     "updateWarrantyStatus": MessageLookupByLibrary.simpleMessage(
       "Cập nhật trạng thái bảo hành",
     ),
     "usageLeft": MessageLookupByLibrary.simpleMessage("Số lần còn lại"),
     "usageLimit": MessageLookupByLibrary.simpleMessage("Giới hạn sử dụng"),
+    "username": MessageLookupByLibrary.simpleMessage("Tên người dùng"),
+    "vendors": MessageLookupByLibrary.simpleMessage("Nhà cung cấp"),
     "verificationEmailSent": MessageLookupByLibrary.simpleMessage(
       "Một email xác minh đã được gửi đến địa chỉ email của bạn. Vui lòng xác minh email của bạn để hoàn tất việc đăng ký.",
     ),
@@ -592,6 +648,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Gửi liên kết xác minh thất bại. Vui lòng thử lại.",
     ),
     "viDescription": MessageLookupByLibrary.simpleMessage("Mô tả tiếng Việt"),
+    "vietnamese": MessageLookupByLibrary.simpleMessage("Tiếng Việt"),
     "view": MessageLookupByLibrary.simpleMessage("Xem"),
     "visibility": MessageLookupByLibrary.simpleMessage("Hiển thị"),
     "visible": MessageLookupByLibrary.simpleMessage("Hiển thị"),
@@ -633,5 +690,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Đang xử lý",
     ),
     "welcomeBack": MessageLookupByLibrary.simpleMessage("Chào mừng trở lại,"),
+    "yourEmail": MessageLookupByLibrary.simpleMessage("Email của bạn"),
   };
 }

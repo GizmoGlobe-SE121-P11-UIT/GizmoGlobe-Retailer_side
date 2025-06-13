@@ -10,7 +10,7 @@ import 'package:gizmoglobe_client/data/database/database.dart';
 import 'package:gizmoglobe_client/firebase_options.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/presentation/resources/app_theme.dart';
-import 'package:gizmoglobe_client/providers/language_provider.dart';
+import 'package:gizmoglobe_client/providers/locale_provider.dart';
 import 'package:gizmoglobe_client/providers/theme_provider.dart';
 import 'package:gizmoglobe_client/screens/authentication/forget_password_screen/forget_password_view.dart';
 import 'package:gizmoglobe_client/screens/authentication/sign_in_screen/sign_in_view.dart';
@@ -64,13 +64,16 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ],
-      child: Consumer2<ThemeProvider, LanguageProvider>(
-        builder: (context, themeProvider, languageProvider, child) {
+      child: Consumer2<ThemeProvider, LocaleProvider>(
+        builder: (context, themeProvider, localeProvider, child) {
           if (kDebugMode) {
-            print('Current locale: \\${languageProvider.currentLocale}');
-            print('Supported locales: \\${[const Locale('en'), const Locale('vi')]}');
+            print('Current locale: \\${localeProvider.locale}');
+            print('Supported locales: \\${[
+              const Locale('en'),
+              const Locale('vi')
+            ]}');
           }
           return MultiBlocProvider(
             providers: [
@@ -80,7 +83,7 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
               title: 'GizmoGlobe',
               themeMode: themeProvider.themeMode,
-              locale: languageProvider.currentLocale,
+              locale: localeProvider.locale,
               supportedLocales: const [
                 Locale('en'),
                 Locale('vi'),
@@ -113,7 +116,7 @@ class MyApp extends StatelessWidget {
                 }
                 return Localizations.override(
                   context: context,
-                  locale: languageProvider.currentLocale,
+                  locale: localeProvider.locale,
                   child: child!,
                 );
               },

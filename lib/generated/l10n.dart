@@ -3394,6 +3394,266 @@ class S {
       args: [],
     );
   }
+
+  /// `Re-activate`
+  String get reactivate {
+    return Intl.message(
+      'Re-activate',
+      name: 'reactivate',
+      desc: 'Button label for reactivating a product.',
+      args: [],
+    );
+  }
+
+  /// `Discontinue`
+  String get discontinue {
+    return Intl.message(
+      'Discontinue',
+      name: 'discontinue',
+      desc: 'Button label for discontinuing a product.',
+      args: [],
+    );
+  }
+
+  /// `Please fill in all required fields`
+  String get pleaseFillRequiredFields {
+    return Intl.message(
+      'Please fill in all required fields',
+      name: 'pleaseFillRequiredFields',
+      desc: 'Error message when required fields are not filled.',
+      args: [],
+    );
+  }
+
+  /// `Owner`
+  String get roleOwner {
+    return Intl.message(
+      'Owner',
+      name: 'roleOwner',
+      desc: 'Label for owner role.',
+      args: [],
+    );
+  }
+
+  /// `Manager`
+  String get roleManager {
+    return Intl.message(
+      'Manager',
+      name: 'roleManager',
+      desc: 'Label for manager role.',
+      args: [],
+    );
+  }
+
+  /// `Employee`
+  String get roleEmployee {
+    return Intl.message(
+      'Employee',
+      name: 'roleEmployee',
+      desc: 'Label for employee role.',
+      args: [],
+    );
+  }
+
+  /// `App Settings`
+  String get appSettings {
+    return Intl.message(
+      'App Settings',
+      name: 'appSettings',
+      desc: 'Title for app settings section',
+      args: [],
+    );
+  }
+
+  /// `Customize your app preferences`
+  String get customizeAppPreferences {
+    return Intl.message(
+      'Customize your app preferences',
+      name: 'customizeAppPreferences',
+      desc: 'Description for app settings section',
+      args: [],
+    );
+  }
+
+  /// `Theme Mode`
+  String get themeMode {
+    return Intl.message(
+      'Theme Mode',
+      name: 'themeMode',
+      desc: 'Label for theme mode setting',
+      args: [],
+    );
+  }
+
+  /// `Switch between light and dark mode`
+  String get switchBetweenLightAndDark {
+    return Intl.message(
+      'Switch between light and dark mode',
+      name: 'switchBetweenLightAndDark',
+      desc: 'Description for theme mode setting',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get language {
+    return Intl.message(
+      'Language',
+      name: 'language',
+      desc: 'Label for language setting',
+      args: [],
+    );
+  }
+
+  /// `Change the app language`
+  String get changeAppLanguage {
+    return Intl.message(
+      'Change the app language',
+      name: 'changeAppLanguage',
+      desc: 'Description for language setting',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get english {
+    return Intl.message(
+      'English',
+      name: 'english',
+      desc: 'Label for English language option',
+      args: [],
+    );
+  }
+
+  /// `Vietnamese`
+  String get vietnamese {
+    return Intl.message(
+      'Vietnamese',
+      name: 'vietnamese',
+      desc: 'Label for Vietnamese language option',
+      args: [],
+    );
+  }
+
+  /// `Sign in`
+  String get signIn {
+    return Intl.message(
+      'Sign in',
+      name: 'signIn',
+      desc: 'Button label and title for sign in screen.',
+      args: [],
+    );
+  }
+
+  /// `Sign up`
+  String get signUp {
+    return Intl.message(
+      'Sign up',
+      name: 'signUp',
+      desc: 'Button label for sign up.',
+      args: [],
+    );
+  }
+
+  /// `Forgot password?`
+  String get forgotPassword {
+    return Intl.message(
+      'Forgot password?',
+      name: 'forgotPassword',
+      desc: 'Button label for forgot password.',
+      args: [],
+    );
+  }
+
+  /// `Your email`
+  String get yourEmail {
+    return Intl.message(
+      'Your email',
+      name: 'yourEmail',
+      desc: 'Hint text for email field.',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get password {
+    return Intl.message(
+      'Password',
+      name: 'password',
+      desc: 'Hint text for password field.',
+      args: [],
+    );
+  }
+
+  /// `Authorized by admin?`
+  String get authorizedByAdmin {
+    return Intl.message(
+      'Authorized by admin?',
+      name: 'authorizedByAdmin',
+      desc: 'Label for authorized by admin.',
+      args: [],
+    );
+  }
+
+  /// `Password confirmation`
+  String get passwordConfirmation {
+    return Intl.message(
+      'Password confirmation',
+      name: 'passwordConfirmation',
+      desc: 'Hint text for password confirmation field.',
+      args: [],
+    );
+  }
+
+  /// `Forget Password`
+  String get forgetPasswordTitle {
+    return Intl.message(
+      'Forget Password',
+      name: 'forgetPasswordTitle',
+      desc: 'Title for forget password screen.',
+      args: [],
+    );
+  }
+
+  /// `Don't worry! It happens. Please enter the email associated with your account.`
+  String get forgetPasswordDescription {
+    return Intl.message(
+      'Don\'t worry! It happens. Please enter the email associated with your account.',
+      name: 'forgetPasswordDescription',
+      desc: 'Description for forget password screen.',
+      args: [],
+    );
+  }
+
+  /// `Email address`
+  String get emailAddress {
+    return Intl.message(
+      'Email address',
+      name: 'emailAddress',
+      desc: 'Label for email address field.',
+      args: [],
+    );
+  }
+
+  /// `Enter your email address`
+  String get enterYourEmailAddress {
+    return Intl.message(
+      'Enter your email address',
+      name: 'enterYourEmailAddress',
+      desc: 'Hint for entering email address.',
+      args: [],
+    );
+  }
+
+  /// `Send Verification Link`
+  String get sendVerificationLink {
+    return Intl.message(
+      'Send Verification Link',
+      name: 'sendVerificationLink',
+      desc: 'Button label for sending verification link.',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

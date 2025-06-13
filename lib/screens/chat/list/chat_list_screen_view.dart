@@ -47,8 +47,9 @@ class ChatListScreen extends StatelessWidget {
                             final unreadCount =
                                 chats.where((chat) => !chat.isRead).length;
 
-                            if (lastChat == null)
+                            if (lastChat == null) {
                               return const SizedBox.shrink();
+                            } 
 
                             // Determine the userId for display (not admin)
                             String userId = lastChat.senderId == 'admin'

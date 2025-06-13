@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../widgets/general/gradient_text.dart';
-import '../../../widgets/general/gradient_button.dart';
 import 'sign_in_cubit.dart';
 import 'sign_in_state.dart';
 import '../../../widgets/general/app_logo.dart';
@@ -51,43 +51,45 @@ class _SignInScreen extends State<SignInScreen> {
                     alignment: Alignment.centerRight,
                   ),
                   const SizedBox(height: 32),
-
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: GradientText(
-                      text: 'Sign in', // Đăng nhập
-                      fontSize: 32),
+                        text: S.of(context).signIn, // Đăng nhập
+                        fontSize: 32),
                   ),
                   const SizedBox(height: 30),
-
                   FieldWithIcon(
                     controller: _emailController,
-                    hintText: 'Your email', // Email của bạn
+                    hintText: S.of(context).yourEmail, // Email của bạn
                     fillColor: Theme.of(context).colorScheme.surface,
                     fontSize: 16,
                     fontWeight: FontWeight.normal,
-                    textColor: Theme.of(context).colorScheme.primary,
-                    hintTextColor: Theme.of(context).colorScheme.onPrimary,
+                    textColor: Theme.of(context).colorScheme.onSurface,
+                    hintTextColor: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.6),  
                     onChanged: (value) {
                       cubit.emailChanged(value);
                     },
                   ),
                   const SizedBox(height: 16.0),
-
                   FieldWithIcon(
                     controller: _passwordController,
-                    hintText: 'Password', // Mật khẩu
+                    hintText: S.of(context).password, // Mật khẩu
                     fillColor: Theme.of(context).colorScheme.surface,
                     fontSize: 16,
                     fontWeight: FontWeight.normal,
                     obscureText: true,
-                    textColor: Theme.of(context).colorScheme.primary,
-                    hintTextColor: Theme.of(context).colorScheme.onPrimary,
+                    textColor: Theme.of(context).colorScheme.onSurface,
+                    hintTextColor: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.6), 
                     onChanged: (value) {
                       cubit.passwordChanged(value);
                     },
                   ),
-
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -95,7 +97,7 @@ class _SignInScreen extends State<SignInScreen> {
                         Navigator.pushNamed(context, '/forget-password');
                       },
                       child: Text(
-                        'Forgot password?', // Quên mật khẩu?
+                        S.of(context).forgotPassword, // Quên mật khẩu?
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w400,
@@ -105,7 +107,6 @@ class _SignInScreen extends State<SignInScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-
                   BlocConsumer<SignInCubit, SignInState>(
                     listener: (context, state) {
                       if (state.processState == ProcessState.failure) {
@@ -113,21 +114,19 @@ class _SignInScreen extends State<SignInScreen> {
                           context: context,
                           builder: (context) => InformationDialog(
                             title: state.dialogName.toString(),
-                            content: state.message.toString(),
+                            content: state.message.getLocalizedMessage(context),
                           ),
                         );
-                      }
-                      else
-                      if (state.processState == ProcessState.success) {
+                      } else if (state.processState == ProcessState.success) {
                         showDialog(
-                            context: context,
-                            builder: (context) => InformationDialog(
-                              title: state.dialogName.toString(),
-                              content: state.message.toString(),
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(context, '/main');
-                              },
-                            ),
+                          context: context,
+                          builder: (context) => InformationDialog(
+                            title: state.dialogName.toString(),
+                            content: state.message.getLocalizedMessage(context),
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(context, '/main');
+                            },
+                          ),
                         );
                       }
                     },
@@ -135,15 +134,19 @@ class _SignInScreen extends State<SignInScreen> {
                       if (state.processState == ProcessState.loading) {
                         return const CircularProgressIndicator();
                       }
-                      return GradientButton(
-                        onPress: () {
-                          cubit.signInWithEmailPassword();
-                        },
-                        text: 'Sign in', // Đăng nhập
-                        gradient: LinearGradient(
-                          colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            cubit.signInWithEmailPassword(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                          ),
+                          child: Text(S.of(context).signIn),
                         ),
                       );
                     },
@@ -154,7 +157,9 @@ class _SignInScreen extends State<SignInScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Authorized by admin?", // Được cấp quyền bởi admin?
+                    S
+                        .of(context)
+                        .authorizedByAdmin, // Được cấp quyền bởi admin?
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w400,
@@ -166,7 +171,7 @@ class _SignInScreen extends State<SignInScreen> {
                       Navigator.pushNamed(context, '/sign-up');
                     },
                     child: Text(
-                      'Sign up', // Đăng ký
+                      S.of(context).signUp, // Đăng ký
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 14,

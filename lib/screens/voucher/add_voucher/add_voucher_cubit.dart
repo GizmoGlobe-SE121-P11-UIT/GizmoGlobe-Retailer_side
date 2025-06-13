@@ -1,15 +1,13 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_state.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 
-import '../../../data/database/database.dart';
 import '../../../enums/processing/dialog_name_enum.dart';
 import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../objects/voucher_related/voucher.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
-import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio/dio.dart';
 
@@ -70,8 +68,12 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
           dialogName: DialogName.success,
           notifyMessage: NotifyMessage.msg17));
     } catch (e, stack) {
-      print('Add voucher error: $e');
-      print(stack);
+      if (kDebugMode) {
+        print('Add voucher error: $e');
+      }
+      if (kDebugMode) {
+        print(stack);
+      }
       emit(state.copyWith(
           processState: ProcessState.failure,
           dialogName: DialogName.failure,
@@ -178,7 +180,9 @@ Future<String> translateIntoEnglish(String inputText) async {
 
     return inputText;
   } catch (e) {
-    print('Error translating to English: $e');
+    if (kDebugMode) {
+      print('Error translating to English: $e');
+    }
     return inputText;
   }
 }
@@ -220,7 +224,9 @@ Future<String> translateIntoVietnamese(String inputText) async {
 
     return inputText;
   } catch (e) {
-    print('Error translating to Vietnamese: $e');
+    if (kDebugMode) {
+      print('Error translating to Vietnamese: $e');
+    }
     return inputText;
   }
 }
@@ -274,7 +280,9 @@ Future<String> generateDescription(VoucherArgument inputVoucher) async {
 
     return '';
   } catch (e) {
-    print('Error generating description: $e');
+    if (kDebugMode) {
+      print('Error generating description: $e');
+    }
     return '';
   }
 }

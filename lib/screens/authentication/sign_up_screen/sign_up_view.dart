@@ -5,10 +5,10 @@ import '../../../enums/processing/process_state_enum.dart';
 import '../../../widgets/general/app_logo.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_icon_button.dart';
-import '../../../widgets/general/gradient_button.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import 'sign_up_cubit.dart';
 import 'sign_up_state.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -28,7 +28,8 @@ class _SignUpScreen extends State<SignUpScreen> {
   // final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   SignUpCubit get cubit => context.read<SignUpCubit>();
 
   @override
@@ -78,10 +79,10 @@ class _SignUpScreen extends State<SignUpScreen> {
               ),
               const SizedBox(height: 32),
 
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
                 child: GradientText(
-                    text: 'Create an account', // Tạo tài khoản
+                    text: S.of(context).createNewAccount, // Tạo tài khoản
                     fontSize: 32),
               ),
 
@@ -102,12 +103,13 @@ class _SignUpScreen extends State<SignUpScreen> {
 
               FieldWithIcon(
                 controller: _emailController,
-                hintText: 'Email address', // Địa chỉ email
+                hintText: S.of(context).email, // Địa chỉ email
                 fillColor: Theme.of(context).colorScheme.surface,
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
-                textColor: Theme.of(context).colorScheme.primary,
-                hintTextColor: Theme.of(context).colorScheme.onPrimary,
+                textColor: Theme.of(context).colorScheme.onSurface,
+                hintTextColor:
+                    Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
                 onChanged: (value) {
                   cubit.updateEmail(value);
                 },
@@ -116,13 +118,14 @@ class _SignUpScreen extends State<SignUpScreen> {
 
               FieldWithIcon(
                 controller: _passwordController,
-                hintText: 'Password', // Mật khẩu
+                hintText: S.of(context).password, // Mật khẩu
                 fillColor: Theme.of(context).colorScheme.surface,
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
                 obscureText: true,
-                textColor: Theme.of(context).colorScheme.primary,
-                hintTextColor: Theme.of(context).colorScheme.onPrimary,
+                textColor: Theme.of(context).colorScheme.onSurface,
+                hintTextColor:
+                    Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
                 onChanged: (value) {
                   cubit.updatePassword(value);
                 },
@@ -131,13 +134,15 @@ class _SignUpScreen extends State<SignUpScreen> {
 
               FieldWithIcon(
                 controller: _confirmPasswordController,
-                hintText: 'Confirm password', // Xác nhận mật khẩu
+                hintText:
+                    S.of(context).passwordConfirmation, // Xác nhận mật khẩu
                 fillColor: Theme.of(context).colorScheme.surface,
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
                 obscureText: true,
-                textColor: Theme.of(context).colorScheme.primary,
-                hintTextColor: Theme.of(context).colorScheme.onPrimary,
+                textColor: Theme.of(context).colorScheme.onSurface,
+                hintTextColor:
+                    Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
                 onChanged: (value) {
                   cubit.updateConfirmPassword(value);
                 },
@@ -150,8 +155,8 @@ class _SignUpScreen extends State<SignUpScreen> {
                     showDialog(
                       context: context,
                       builder: (context) => InformationDialog(
-                        title: state.dialogName.toString(),
-                        content: state.message.toString(),
+                        title: state.dialogName.getLocalizedName(context),
+                        content: state.message.getLocalizedMessage(context),
                         onPressed: () {
                           Navigator.pushReplacementNamed(context, '/sign-in');
                         },
@@ -163,8 +168,8 @@ class _SignUpScreen extends State<SignUpScreen> {
                     showDialog(
                       context: context,
                       builder: (context) => InformationDialog(
-                        title: state.dialogName.toString(),
-                        content: state.message.toString(),
+                        title: state.dialogName.getLocalizedName(context),
+                        content: state.message.getLocalizedMessage(context),
                       ),
                     );
                   }
@@ -173,15 +178,18 @@ class _SignUpScreen extends State<SignUpScreen> {
                   if (state.processState == ProcessState.loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  return GradientButton(
-                    onPress: () {
-                      cubit.signUp();
-                    },
-                    text: 'Create account', // Tạo tài khoản
-                    gradient: LinearGradient(
-                      colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        cubit.signUp();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      child: Text(S.of(context).createNewAccount),
                     ),
                   );
                 },

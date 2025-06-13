@@ -4,6 +4,7 @@ import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import 'employee_detail/employee_detail_view.dart';
 import 'employee_edit/employee_edit_view.dart';
@@ -74,9 +75,9 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           Text(
                             S.of(context).addNewEmployee,
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -95,15 +96,17 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           hintText: S.of(context).fullName,
                           prefixIcon: Icon(
                             Icons.person_outline,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade600),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.outline),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade600),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.outline),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -115,19 +118,22 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           fillColor: Theme.of(context)
                               .colorScheme
                               .surface
-                              .withValues(alpha: 0.8),
-                          labelStyle: const TextStyle(
-                            color: Colors.white,
+                              .withValues(alpha: 0.8), 
+                          labelStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                             (states) => TextStyle(
                               color: states.contains(WidgetState.focused)
                                   ? Theme.of(context).colorScheme.primary
-                                  : Colors.white,
+                                  : Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
-                          hintStyle: const TextStyle(
-                            color: Colors.white70,
+                          hintStyle: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.7),
                           ),
                           errorStyle: TextStyle(
                               color: Theme.of(context).colorScheme.error),
@@ -147,15 +153,17 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           hintText: S.of(context).email,
                           prefixIcon: Icon(
                             Icons.email_outlined,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade600),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.outline),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade600),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.outline),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -167,19 +175,22 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           fillColor: Theme.of(context)
                               .colorScheme
                               .surface
-                              .withValues(alpha: 0.8),
-                          labelStyle: const TextStyle(
-                            color: Colors.white,
+                              .withValues(alpha: 0.8), 
+                          labelStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                             (states) => TextStyle(
                               color: states.contains(WidgetState.focused)
                                   ? Theme.of(context).colorScheme.primary
-                                  : Colors.white,
+                                  : Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
-                          hintStyle: const TextStyle(
-                            color: Colors.white70,
+                          hintStyle: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.7),
                           ),
                           errorStyle: TextStyle(
                               color: Theme.of(context).colorScheme.error),
@@ -194,15 +205,17 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           hintText: S.of(context).enterPhoneNumber,
                           prefixIcon: Icon(
                             Icons.phone_outlined,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade600),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.outline),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade600),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.outline),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -214,19 +227,25 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           fillColor: Theme.of(context)
                               .colorScheme
                               .surface
-                              .withValues(alpha: 0.8),
-                          labelStyle: const TextStyle(
-                            color: Colors.white,
+                              .withValues(alpha: 0.8), 
+                          labelStyle: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.7),
                           ),
                           floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                             (states) => TextStyle(
                               color: states.contains(WidgetState.focused)
                                   ? Theme.of(context).colorScheme.primary
-                                  : Colors.white,
+                                  : Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
-                          hintStyle: const TextStyle(
-                            color: Colors.white70,
+                          hintStyle: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.7),
                           ),
                           errorStyle: TextStyle(
                               color: Theme.of(context).colorScheme.error),
@@ -242,17 +261,19 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                               labelText: S.of(context).role,
                               prefixIcon: Icon(
                                 Icons.work_outline,
-                                color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide:
-                                    BorderSide(color: Colors.grey.shade600),
+                                borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide:
-                                    BorderSide(color: Colors.grey.shade600),
+                                borderSide: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -264,16 +285,16 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                               fillColor: Theme.of(context)
                                   .colorScheme
                                   .surface
-                                  .withValues(alpha: 0.8),
-                              labelStyle: const TextStyle(
-                                color: Colors.white,
+                                  .withValues(alpha: 0.8), 
+                              labelStyle: TextStyle( 
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                               floatingLabelStyle:
                                   WidgetStateTextStyle.resolveWith(
                                 (states) => TextStyle(
                                   color: states.contains(WidgetState.focused)
                                       ? Theme.of(context).colorScheme.primary
-                                      : Colors.white,
+                                      : Theme.of(context).colorScheme.onSurface,
                                 ),
                               ),
                             ),
@@ -283,9 +304,12 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                               return DropdownMenuItem(
                                 value: role,
                                 child: Text(
-                                  role.toString().split('.').last,
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                                  role.localizedName(context),
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.7),
                                   ),
                                 ),
                               );
@@ -297,9 +321,10 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             },
                             dropdownColor:
                                 Theme.of(context).colorScheme.surface,
-                            icon: const Icon(Icons.arrow_drop_down,
-                                color: Colors.white),
-                            style: const TextStyle(color: Colors.white),
+                            icon: Icon(Icons.arrow_drop_down,
+                                color: Theme.of(context).colorScheme.onSurface),
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                           );
                         },
                       ),
@@ -312,7 +337,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                             child: Text(
                               S.of(context).cancel,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).colorScheme.error,
                               ),
                             ),
                           ),
@@ -329,22 +354,26 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
 
                                 if (error != null) {
                                   if (mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(error),
-                                        backgroundColor: Colors.red,
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => InformationDialog(
+                                        title: S.of(context).errorOccurred,
+                                        content: error,
+                                        buttonText: S.of(context).confirm,
                                       ),
                                     );
                                   }
                                 } else {
                                   if (mounted) {
                                     Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(S
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => InformationDialog(
+                                        title: S.of(context).success,
+                                        content: S
                                             .of(context)
-                                            .employeeAddedSuccessfully),
-                                        backgroundColor: Colors.green,
+                                            .employeeAddedSuccessfully,
+                                        buttonText: S.of(context).confirm,
                                       ),
                                     );
                                   }
@@ -362,11 +391,11 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            child: const Text(
-                              'Add Employee',
+                            child: Text(
+                              S.of(context).addNewEmployee,
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -413,7 +442,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ],
@@ -421,8 +450,9 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   const SizedBox(height: 16),
                   ...RoleEnum.values.map((role) => ListTile(
                         title: Text(
-                          role.toString().split('.').last,
-                          style: const TextStyle(color: Colors.white),
+                          role.localizedName(context),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface),
                         ),
                         leading: Icon(
                           Icons.work_outline,
@@ -436,11 +466,12 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   ListTile(
                     title: Text(
                       S.of(context).clearFilter,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface),
                     ),
                     leading: Icon(
                       Icons.clear,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.error,
                     ),
                     onTap: () {
                       cubit.filterByRole(null);
@@ -514,7 +545,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                         return Center(
                           child: Text(
                             S.of(context).noEmployeesFound,
-                            style: const TextStyle(color: Colors.white),
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                           ),
                         );
                       }
@@ -555,15 +587,19 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                         children: [
                                           ListTile(
                                             dense: true,
-                                            leading: const Icon(
+                                            leading: Icon(
                                               Icons.visibility_outlined,
                                               size: 20,
-                                              color: Colors.white,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
                                             ),
                                             title: Text(
                                               S.of(context).view,
-                                              style: const TextStyle(
-                                                color: Colors.white,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
                                               ),
                                             ),
                                             onTap: () {
@@ -590,15 +626,19 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                   employee)) ...[
                                             ListTile(
                                               dense: true,
-                                              leading: const Icon(
+                                              leading: Icon(
                                                 Icons.edit_outlined,
                                                 size: 20,
-                                                color: Colors.white,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
                                               ),
                                               title: Text(
                                                 S.of(context).edit,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
                                                 ),
                                               ),
                                               onTap: () async {

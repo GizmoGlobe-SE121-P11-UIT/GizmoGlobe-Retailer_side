@@ -1687,14 +1687,14 @@
 	},
 	"generateDescriptionButton": "Generate description",
 	"@generateDescriptionButton": {
-        "description": "Button label for generating product description.",
-        "type": "text"
-    },
-    "translateDescriptionButton": "Translate description",
-    "@translateDescriptionButton": {
-        "description": "Button label for translating product description.",
-        "type": "text"
-    },
+		"description": "Button label for generating product description.",
+		"type": "text"
+	},
+	"translateDescriptionButton": "Translate description",
+	"@translateDescriptionButton": {
+		"description": "Button label for translating product description.",
+		"type": "text"
+	},
 	"enDescription": "English description",
 	"@enDescription": {
 		"description": "Label for English description.",
@@ -1738,6 +1738,136 @@
 	"noMessages": "No messages yet",
 	"@noMessages": {
 		"description": "Message shown when there are no messages.",
+		"type": "text"
+	},
+	"reactivate": "Re-activate",
+	"@reactivate": {
+		"description": "Button label for reactivating a product.",
+		"type": "text"
+	},
+	"discontinue": "Discontinue",
+	"@discontinue": {
+		"description": "Button label for discontinuing a product.",
+		"type": "text"
+	},
+	"pleaseFillRequiredFields": "Please fill in all required fields",
+	"@pleaseFillRequiredFields": {
+		"description": "Error message when required fields are not filled.",
+		"type": "text"
+	},
+	"roleOwner": "Owner",
+	"@roleOwner": {
+		"description": "Label for owner role.",
+		"type": "text"
+	},
+	"roleManager": "Manager",
+	"@roleManager": {
+		"description": "Label for manager role.",
+		"type": "text"
+	},
+	"roleEmployee": "Employee",
+	"@roleEmployee": {
+		"description": "Label for employee role.",
+		"type": "text"
+	},
+	"appSettings": "App Settings",
+	"@appSettings": {
+		"description": "Title for app settings section",
+		"type": "text"
+	},
+	"customizeAppPreferences": "Customize your app preferences",
+	"@customizeAppPreferences": {
+		"description": "Description for app settings section",
+		"type": "text"
+	},
+	"themeMode": "Theme Mode",
+	"@themeMode": {
+		"description": "Label for theme mode setting",
+		"type": "text"
+	},
+	"switchBetweenLightAndDark": "Switch between light and dark mode",
+	"@switchBetweenLightAndDark": {
+		"description": "Description for theme mode setting",
+		"type": "text"
+	},
+	"language": "Language",
+	"@language": {
+		"description": "Label for language setting",
+		"type": "text"
+	},
+	"changeAppLanguage": "Change the app language",
+	"@changeAppLanguage": {
+		"description": "Description for language setting",
+		"type": "text"
+	},
+	"english": "English",
+	"@english": {
+		"description": "Label for English language option",
+		"type": "text"
+	},
+	"vietnamese": "Vietnamese",
+	"@vietnamese": {
+		"description": "Label for Vietnamese language option",
+		"type": "text"
+	},
+	"signIn": "Sign in",
+	"@signIn": {
+		"description": "Button label and title for sign in screen.",
+		"type": "text"
+	},
+	"signUp": "Sign up",
+	"@signUp": {
+		"description": "Button label for sign up.",
+		"type": "text"
+	},
+	"forgotPassword": "Forgot password?",
+	"@forgotPassword": {
+		"description": "Button label for forgot password.",
+		"type": "text"
+	},
+	"yourEmail": "Your email",
+	"@yourEmail": {
+		"description": "Hint text for email field.",
+		"type": "text"
+	},
+	"password": "Password",
+	"@password": {
+		"description": "Hint text for password field.",
+		"type": "text"
+	},
+	"authorizedByAdmin": "Authorized by admin?",
+	"@authorizedByAdmin": {
+		"description": "Label for authorized by admin.",
+		"type": "text"
+	},
+	"passwordConfirmation": "Password confirmation",
+	"@passwordConfirmation": {
+		"description": "Hint text for password confirmation field.",
+		"type": "text"
+	},
+	"forgetPasswordTitle": "Forget Password",
+	"@forgetPasswordTitle": {
+		"description": "Title for forget password screen.",
+		"type": "text"
+	},
+	"forgetPasswordDescription": "Don't worry! It happens. Please enter the email associated with your account.",
+	"@forgetPasswordDescription": {
+		"description": "Description for forget password screen.",
+		"type": "text"
+	},
+	"emailAddress": "Email address",
+	"@emailAddress": {
+		"description": "Label for email address field.",
+		"type": "text"
+	},
+	"enterYourEmailAddress": "Enter your email address",
+	"@enterYourEmailAddress": {
+		"description": "Hint for entering email address.",
+		"type": "text"
+	},
+	"sendVerificationLink": "Send Verification Link",
+	"@sendVerificationLink": {
+		"description": "Button label for sending verification link.",
 		"type": "text"
 	}
 }

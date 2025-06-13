@@ -58,7 +58,7 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
       try {
         final List<Chat> allAdminMessages = [];
         for (var userDoc in snapshot.docs) {
-          final userId = userDoc.id;
+          // final userId = userDoc.id;
           final data = userDoc.data();
           final messages = (data['messages'] as List<dynamic>?) ?? [];
           final adminMessages = messages

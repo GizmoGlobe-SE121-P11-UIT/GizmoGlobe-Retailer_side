@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/voucher/edit_voucher/edit_voucher_state.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -63,8 +63,12 @@ class EditVoucherCubit extends Cubit<EditVoucherState> {
           dialogName: DialogName.success,
           notifyMessage: NotifyMessage.msg22));
     } catch (e, stack) {
-      print('Edit voucher error: $e');
-      print(stack);
+      if (kDebugMode) {
+        print('Edit voucher error: $e');
+      }
+      if (kDebugMode) {
+        print(stack);
+      }
       emit(state.copyWith(
           processState: ProcessState.failure,
           dialogName: DialogName.failure,
@@ -143,7 +147,9 @@ Future<String> translateIntoEnglish(String inputText) async {
 
     return inputText;
   } catch (e) {
-    print('Error translating to English: $e');
+    if (kDebugMode) {
+      print('Error translating to English: $e');
+    }
     return inputText;
   }
 }
@@ -197,7 +203,9 @@ Future<String> generateEnglishDescription(VoucherArgument inputVoucher) async {
 
     return '';
   } catch (e) {
-    print('Error generating English description: $e');
+    if (kDebugMode) {
+      print('Error generating English description: $e');
+    }
     return '';
   }
 }
@@ -239,7 +247,9 @@ Future<String> translateIntoVietnamese(String inputText) async {
 
     return inputText;
   } catch (e) {
-    print('Error translating to Vietnamese: $e');
+    if (kDebugMode) {
+      print('Error translating to Vietnamese: $e');
+    }
     return inputText;
   }
 }
@@ -293,7 +303,9 @@ Future<String> generateVietnameseDescription(VoucherArgument inputVoucher) async
 
     return '';
   } catch (e) {
-    print('Error generating Vietnamese description: $e');
+    if (kDebugMode) {
+      print('Error generating Vietnamese description: $e');
+    }
     return '';
   }
 }

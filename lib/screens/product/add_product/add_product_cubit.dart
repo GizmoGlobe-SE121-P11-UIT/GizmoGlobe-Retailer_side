@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
@@ -241,7 +241,9 @@ Future<String> translateIntoEnglish(String inputText) async {
 
     return inputText;
   } catch (e) {
-    print('Error translating to English: $e');
+    if (kDebugMode) {
+      print('Error translating to English: $e');
+    }
     return inputText;
   }
 }
@@ -283,7 +285,9 @@ Future<String> translateIntoVietnamese(String inputText) async {
 
     return inputText;
   } catch (e) {
-    print('Error translating to Vietnamese: $e');
+    if (kDebugMode) {
+      print('Error translating to Vietnamese: $e');
+    }
     return inputText;
   }
 }
@@ -358,7 +362,9 @@ Future<String> generateDescription(ProductArgument inputProduct) async {
 
     return '';
   } catch (e) {
-    print('Error generating description: $e');
+    if (kDebugMode) {
+      print('Error generating description: $e');
+    }
     return '';
   }
 }

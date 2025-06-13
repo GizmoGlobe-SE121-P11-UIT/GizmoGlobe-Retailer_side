@@ -52,7 +52,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         controller: searchController,
                         hintText: S
                             .of(context)
-                            .searchSalesInvoices, // TODO: Add to ARB if not present
+                            .searchSalesInvoices,
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
@@ -98,7 +98,7 @@ class _SalesScreenState extends State<SalesScreen> {
                               child: Text(
                                 S
                                     .of(context)
-                                    .noSalesInvoicesFound, // TODO: Add to ARB if not present
+                                    .noSalesInvoicesFound,
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -283,7 +283,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                                 fontSize: 16,
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .primary,
+                                                    .tertiary,
                                               ),
                                             ),
                                           ],
@@ -350,7 +350,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         Text(
                           S
                               .of(context)
-                              .sortBy, // TODO: Add to ARB if not present
+                              .sortBy,
                           style: TextStyle(
                             color:
                                 Theme.of(dialogContext).colorScheme.onSurface,

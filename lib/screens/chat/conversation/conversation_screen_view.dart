@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
-import 'package:gizmoglobe_client/widgets/general/app_logo.dart';
 import 'conversation_screen_cubit.dart';
 import 'conversation_screen_state.dart';
 
@@ -134,7 +133,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                             color: Theme.of(context).colorScheme.surface,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 4,
                                 offset: const Offset(0, -2),
                               ),
@@ -152,9 +151,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
                                       borderSide: BorderSide.none,
                                     ),
                                     filled: true,
-                                    fillColor: Theme.of(context)
-                                        .colorScheme
-                                        .surfaceVariant,
+                                    fillColor:
+                                        Theme.of(context).colorScheme.surface,
                                     contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 16,
                                       vertical: 8,
@@ -182,20 +180,5 @@ class _ConversationScreenState extends State<ConversationScreen> {
         );
       },
     );
-  }
-
-  String _formatTimestamp(DateTime timestamp) {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-
-    if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
-    } else {
-      return 'Just now';
-    }
   }
 }

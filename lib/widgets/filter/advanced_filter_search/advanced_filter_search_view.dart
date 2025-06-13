@@ -81,7 +81,7 @@ class _AdvancedFilterSearchScreenState
                   );
                 },
                 child: Text(S.of(context).confirm,
-                    style: TextStyle(color: Colors.white)),
+                    style: const TextStyle(color: Colors.white)),
               ),
             ],
           ),

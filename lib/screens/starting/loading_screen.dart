@@ -42,19 +42,19 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 80,
-                backgroundColor: Color(0xFFC15BFF),
+                backgroundColor: const Color(0xFFC15BFF),
                 child: Text(
                   S.of(context).appAvatar,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 S.of(context).appTitle,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 30,
                   color: Colors.white,
                 ),

@@ -75,7 +75,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       height: MediaQuery.of(context).size.height * 0.25,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: colorScheme.surfaceVariant,
+                        color: colorScheme.surface, 
                       ),
                       child: (state.product.imageUrl != null &&
                               state.product.imageUrl!.isNotEmpty)
@@ -92,7 +92,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     Center(child: child),
                                     Positioned.fill(
                                       child: Container(
-                                        color: Colors.black.withOpacity(0.05),
+                                        color: Colors.black.withValues(alpha: 0.05), 
                                         child: Center(
                                           child: CircularProgressIndicator(
                                             color: colorScheme.primary,
@@ -255,12 +255,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.primary,
-                            ),
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme.primary,
+                                ),
                           ),
                           const SizedBox(height: 8),
-                          if (state.product.enDescription != null && state.product.enDescription!.isNotEmpty)
+                          if (state.product.enDescription != null &&
+                              state.product.enDescription!.isNotEmpty)
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: Column(
@@ -268,22 +269,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 children: [
                                   Text(
                                     S.of(context).enDescription,
-                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: colorScheme.onSurfaceVariant,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: colorScheme.onSurfaceVariant,
+                                        ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     state.product.enDescription!,
-                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
                                   ),
                                 ],
                               ),
                             ),
 
                           const SizedBox(height: 8),
-                          if (state.product.viDescription != null && state.product.viDescription!.isNotEmpty)
+                          if (state.product.viDescription != null &&
+                              state.product.viDescription!.isNotEmpty)
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: Column(
@@ -291,15 +297,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 children: [
                                   Text(
                                     S.of(context).viDescription,
-                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: colorScheme.onSurfaceVariant,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: colorScheme.onSurfaceVariant,
+                                        ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     state.product.viDescription!,
-                                    style: Theme.of(context).textTheme.bodyMedium,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
                                   ),
                                 ],
                               ),
@@ -307,7 +317,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           const SizedBox(height: 16),
 
                           // Add padding at bottom to prevent content from being hidden behind buttons
-                          const SizedBox(height: 80), // Height for the bottom buttons
+                          const SizedBox(
+                              height: 80), // Height for the bottom buttons
                         ],
                       ),
                     ),
@@ -377,13 +388,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       cubit.updateProduct();
                                     }
                                   },
-                                  icon: const Icon(Icons.edit,
-                                      color: Colors.white),
-                                  label: const Text('Edit',
-                                      style: TextStyle(
-                                          color: Colors.white)), //Chỉnh sửa
+                                  icon: Icon(Icons.edit,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary),
+                                  label: Text(
+                                    S.of(context).edit,
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary),
+                                  ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.primary,
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 12),
                                   ),
@@ -406,15 +424,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   label: Text(
                                     state.product.status ==
                                             ProductStatusEnum.discontinued
-                                        ? 'Re-activate' //Kích hoạt lại
-                                        : 'Discontinue', //Ngừng sản xuất
+                                        ? S.of(context).reactivate
+                                        : S.of(context).discontinue,
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: state.product.status ==
                                             ProductStatusEnum.discontinued
-                                        ? Colors.green
-                                        : Colors.red,
+                                        ? Theme.of(context).colorScheme.tertiary
+                                        : Theme.of(context).colorScheme.error,
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 12),
                                   ),
@@ -570,7 +588,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: colorScheme.error.withOpacity(0.1),
+                color: colorScheme.error.withValues(alpha: 0.1), 
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(

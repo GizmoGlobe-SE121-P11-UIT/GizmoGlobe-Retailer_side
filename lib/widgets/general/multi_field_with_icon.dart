@@ -141,7 +141,7 @@ class MultiFieldWithIcon extends StatelessWidget {
               ),
               disabledBorder: OutlineInputBorder(
                 borderRadius: borderRadius,
-                borderSide: BorderSide(color: colorScheme.outline.withOpacity(0.5), width: 1.2),
+                borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.5), width: 1.2), 
               ),
             ),
             obscureText: obscureText,

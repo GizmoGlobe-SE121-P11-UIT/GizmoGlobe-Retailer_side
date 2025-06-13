@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import 'customer_detail/customer_detail_view.dart';
 import 'customer_edit/customer_edit_view.dart';
@@ -57,7 +58,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                   children: [
                     Icon(
                       Icons.person_add,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 28,
                     ),
                     const SizedBox(width: 12),
@@ -77,14 +78,15 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     labelText: S.of(context).fullName,
                     prefixIcon: Icon(
                       Icons.person_outline,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    labelStyle: const TextStyle(color: Colors.white),
+                    labelStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface),
                     floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                       (states) => TextStyle(
                         color: states.contains(WidgetState.focused)
-                            ? Theme.of(context).primaryColor
-                            : Colors.white,
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     border: OutlineInputBorder(
@@ -93,13 +95,13 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Colors.grey.shade600,
+                        color: Theme.of(context).colorScheme.outline,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).colorScheme.primary,
                         width: 2,
                       ),
                     ),
@@ -112,14 +114,15 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     labelText: S.of(context).email,
                     prefixIcon: Icon(
                       Icons.email_outlined,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    labelStyle: const TextStyle(color: Colors.white),
+                    labelStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface),
                     floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                       (states) => TextStyle(
                         color: states.contains(WidgetState.focused)
-                            ? Theme.of(context).primaryColor
-                            : Colors.white,
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     border: OutlineInputBorder(
@@ -128,13 +131,13 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Colors.grey.shade600,
+                        color: Theme.of(context).colorScheme.outline,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).colorScheme.primary,
                         width: 2,
                       ),
                     ),
@@ -147,14 +150,15 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     labelText: S.of(context).phoneNumber,
                     prefixIcon: Icon(
                       Icons.phone_outlined,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    labelStyle: const TextStyle(color: Colors.white),
+                    labelStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface),
                     floatingLabelStyle: WidgetStateTextStyle.resolveWith(
                       (states) => TextStyle(
                         color: states.contains(WidgetState.focused)
-                            ? Theme.of(context).primaryColor
-                            : Colors.white,
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     border: OutlineInputBorder(
@@ -163,13 +167,13 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Colors.grey.shade600,
+                        color: Theme.of(context).colorScheme.outline,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).colorScheme.primary,
                         width: 2,
                       ),
                     ),
@@ -190,7 +194,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                       child: Text(
                         S.of(context).cancel,
                         style: TextStyle(
-                          color: Colors.grey.shade400,
+                          color: Theme.of(context).colorScheme.error,
                           fontSize: 16,
                         ),
                       ),
@@ -201,11 +205,12 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         if (nameController.text.isEmpty ||
                             emailController.text.isEmpty ||
                             phoneController.text.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text(S.of(context).pleaseFillInAllFields),
-                              backgroundColor: Colors.red,
+                          showDialog(
+                            context: context,
+                            builder: (context) => InformationDialog(
+                              title: S.of(context).errorOccurred,
+                              content: S.of(context).pleaseFillInAllFields,
+                              buttonText: S.of(context).confirm,
                             ),
                           );
                           return;
@@ -219,28 +224,32 @@ class _CustomersScreenState extends State<CustomersScreen> {
 
                         if (error != null) {
                           if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(error),
-                                backgroundColor: Colors.red,
+                            showDialog(
+                              context: context,
+                              builder: (context) => InformationDialog(
+                                title: S.of(context).errorOccurred,
+                                content: error,
+                                buttonText: S.of(context).confirm,
                               ),
                             );
                           }
                         } else {
                           if (mounted) {
                             Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    S.of(context).customerAddedSuccessfully),
-                                backgroundColor: Colors.green,
+                            showDialog(
+                              context: context,
+                              builder: (context) => InformationDialog(
+                                title: S.of(context).success,
+                                content:
+                                    S.of(context).customerAddedSuccessfully,
+                                buttonText: S.of(context).confirm,
                               ),
                             );
                           }
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
                           vertical: 12,
@@ -251,9 +260,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
                       ),
                       child: Text(
                         S.of(context).addCustomer,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -301,7 +310,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                           cubit.searchCustomers(value);
                         },
                         prefixIcon: Icon(Icons.search,
-                            color: Theme.of(context).primaryColor),
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
                     if (CustomerPermissions.canAddCustomers(
@@ -450,9 +459,10 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                 decoration: BoxDecoration(
                                   color: state.selectedIndex == index
                                       ? Theme.of(context)
-                                          .primaryColor
-                                          .withValues(alpha: 0.1)
-                                      : Theme.of(context).cardColor,
+                                          .colorScheme
+                                          .primary
+                                          .withOpacity(0.1)
+                                      : Theme.of(context).colorScheme.surface,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Padding(

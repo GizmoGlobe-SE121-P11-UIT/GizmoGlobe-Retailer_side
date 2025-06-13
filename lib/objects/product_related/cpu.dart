@@ -26,15 +26,11 @@ class CPU extends Product {
     required super.sales,
     required super.stock,
     required super.status,
-    String? imageUrl,
+    super.imageUrl,
 
-    String? enDescription,
-    String? viDescription,
-  }) : super(
-    imageUrl: imageUrl,
-    enDescription: enDescription,
-    viDescription: viDescription,
-  );
+    super.enDescription,
+    super.viDescription,
+  });
 
   @override
   void updateProduct({

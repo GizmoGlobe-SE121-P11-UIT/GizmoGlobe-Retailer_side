@@ -16,7 +16,6 @@ import '../../../objects/voucher_related/voucher.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../widgets/general/gradient_text.dart';
 import '../../../screens/voucher/edit_voucher/edit_voucher_view.dart';
-import '../../../objects/voucher_related/voucher_argument.dart';
 import '../../../widgets/general/status_badge.dart';
 
 class VoucherDetailScreen extends StatefulWidget {
@@ -38,7 +37,6 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -136,7 +134,7 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                             Row(
                               children: [
                                 Text(
-                                  S.of(context).visibility + ': ',
+                                  '${S.of(context).visibility}: ',
                                   style: theme.textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w900,
                                   ),
@@ -151,7 +149,7 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                             Row(
                               children: [
                                 Text(
-                                  S.of(context).status + ': ',
+                                  '${S.of(context).status}: ',
                                   style: theme.textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w900,
                                   ),
@@ -193,7 +191,7 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                     color: theme.scaffoldBackgroundColor,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1), 
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),

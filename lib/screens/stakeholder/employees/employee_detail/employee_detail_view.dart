@@ -71,14 +71,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
       padding: const EdgeInsets.all(24),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -118,13 +111,13 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
+              color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              state.employee.role.toString(),
-              style: const TextStyle(
-                color: Colors.white,
+              '${S.of(context).role}: ${state.employee.role.localizedName(context)}',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -167,7 +160,8 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
               const SizedBox(height: 16),
               _buildInfoRow(S.of(context).email, state.employee.email),
               _buildInfoRow(S.of(context).phone, state.employee.phoneNumber),
-              _buildInfoRow(S.of(context).role, state.employee.role.toString()),
+              _buildInfoRow(S.of(context).role,
+                  state.employee.role.localizedName(context)),
             ],
           ),
         ),
@@ -186,8 +180,8 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
             child: Text(
               label,
               textAlign: TextAlign.end,
-              style: const TextStyle(
-                color: Colors.grey,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -199,9 +193,9 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
               value,
               textAlign: TextAlign.start,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                // fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -232,11 +226,13 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () => _handleEdit(context, state),
-                icon: const Icon(Icons.edit, color: Colors.white),
+                icon: Icon(Icons.edit,
+                    color: Theme.of(context).colorScheme.onPrimary),
                 label: Text(S.of(context).edit,
-                    style: TextStyle(color: Colors.white)),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
               ),
@@ -251,11 +247,13 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () => _handleDelete(context),
-                icon: const Icon(Icons.delete, color: Colors.white),
+                icon: Icon(Icons.delete,
+                    color: Theme.of(context).colorScheme.onPrimary),
                 label: Text(S.of(context).delete,
-                    style: TextStyle(color: Colors.white)),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: Theme.of(context).colorScheme.error,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
               ),
@@ -304,7 +302,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
             },
             child: Text(
               S.of(context).delete,
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         ],

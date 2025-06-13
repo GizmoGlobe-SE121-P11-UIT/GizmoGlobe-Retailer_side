@@ -43,10 +43,10 @@ class WelcomeScreen extends StatelessWidget {
               CircleAvatar(
                 radius: 80,
                 backgroundColor:
-                    Color(0xFFC15BFF), // Purple color for avatar background
+                    const Color(0xFFC15BFF), // Purple color for avatar background
                 child: Text(
                   S.of(context).appAvatar,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                   ),
@@ -55,7 +55,7 @@ class WelcomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Text(
                 S.of(context).appTitle,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 30,
                   color: Colors.white,
                 ),

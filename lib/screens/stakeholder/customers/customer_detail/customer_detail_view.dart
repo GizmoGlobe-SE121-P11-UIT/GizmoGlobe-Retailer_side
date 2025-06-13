@@ -12,6 +12,7 @@ import '../../../../widgets/general/field_with_icon.dart';
 import '../customer_edit/customer_edit_view.dart';
 import 'customer_detail_cubit.dart';
 import 'customer_detail_state.dart';
+import '../../../../widgets/dialog/information_dialog.dart';
 
 class CustomerDetailScreen extends StatefulWidget {
   final Customer customer;
@@ -207,7 +208,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         child: Text(
                           S.of(context).cancel,
                           style: TextStyle(
-                            color: Colors.grey.shade400,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -218,11 +220,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         onPressed: () async {
                           if (receiverNameController.text.isEmpty ||
                               receiverPhoneController.text.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'Please fill in all required fields'), //Vui lòng điền tất cả các trường bắt buộc
-                                backgroundColor: Colors.red,
+                            showDialog(
+                              context: context,
+                              builder: (context) => InformationDialog(
+                                title: S.of(context).errorOccurred,
+                                content:
+                                    S.of(context).pleaseFillInAllRequiredFields,
+                                buttonText: S.of(context).confirm,
                               ),
                             );
                             return;
@@ -246,13 +250,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.add_location, color: Colors.white),
-                            SizedBox(width: 8),
+                            const Icon(Icons.add_location, color: Colors.white),
+                            const SizedBox(width: 8),
                             Text(
                               S.of(context).addAddress,
                               style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.white,
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -352,13 +356,20 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                                     cubit.updateCustomer(updatedCustomer);
                                   }
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.edit,
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                 ),
-                                label: Text(S.of(context).edit),
+                                label: Text(S.of(context).edit,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    )),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green,
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.tertiary,
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 12),
                                 ),
@@ -382,14 +393,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       padding: const EdgeInsets.all(24),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
-            Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: const BorderRadius.all(Radius.circular(30)),
         boxShadow: [
           BoxShadow(
@@ -513,37 +517,22 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               ),
               const SizedBox(height: 16),
               ...state.customer.addresses!.map((address) {
-                return GestureDetector(
-                  onTap: () {
-                    // Address press logic here
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.3),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
+                return Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  child: Card(
+                    elevation: 10,
+                    shadowColor: Theme.of(context).colorScheme.shadow,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        address.toString(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          // fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          address.toString(),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 );
@@ -563,8 +552,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                color: Colors.grey,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -572,8 +561,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
             ),

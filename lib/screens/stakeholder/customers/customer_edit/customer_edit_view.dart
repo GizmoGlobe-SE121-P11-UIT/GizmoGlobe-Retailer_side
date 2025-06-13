@@ -42,33 +42,34 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
     return RegExp(r'^\+?[\d\s-]{10,}$').hasMatch(phone);
   }
 
-  Future<bool> _onWillPop() async {
-    if (!_isFormDirty) return true;
-
-    return await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(S.of(context).discardChanges),
-            content: Text(S.of(context).unsavedChangesDiscard),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(S.of(context).cancel),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(S.of(context).discard),
-              ),
-            ],
-          ),
-        ) ??
-        false;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (_isFormDirty && !didPop) {
+          final shouldPop = await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(S.of(context).discardChanges),
+              content: Text(S.of(context).unsavedChangesDiscard),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(S.of(context).cancel),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(S.of(context).discard),
+                ),
+              ],
+            ),
+          );
+          if (shouldPop == true) {
+            Navigator.of(context).maybePop();
+          }
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           title: GradientText(text: S.of(context).editCustomer),
@@ -123,6 +124,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -131,29 +133,35 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             initialValue: customerName,
                             decoration: InputDecoration(
                               labelText: S.of(context).fullName,
-                              labelStyle: const TextStyle(color: Colors.white),
+                              labelStyle: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
                               floatingLabelStyle:
                                   WidgetStateTextStyle.resolveWith(
                                 (states) => TextStyle(
                                   color: states.contains(WidgetState.focused)
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.white,
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
                                 ),
                               ),
-                              prefixIcon:
-                                  const Icon(Icons.person, color: Colors.white),
+                              prefixIcon: Icon(Icons.person,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide(
-                                    color: Theme.of(context).primaryColor),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
                             ),
                             textInputAction: TextInputAction.next,
@@ -177,29 +185,35 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                             initialValue: phoneNumber,
                             decoration: InputDecoration(
                               labelText: S.of(context).phoneNumber,
-                              labelStyle: const TextStyle(color: Colors.white),
+                              labelStyle: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
                               floatingLabelStyle:
                                   WidgetStateTextStyle.resolveWith(
                                 (states) => TextStyle(
                                   color: states.contains(WidgetState.focused)
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.white,
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
                                 ),
                               ),
-                              prefixIcon:
-                                  const Icon(Icons.phone, color: Colors.white),
+                              prefixIcon: Icon(Icons.phone,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide:
-                                    const BorderSide(color: Colors.white),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: BorderSide(
-                                    color: Theme.of(context).primaryColor),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
                               hintText: '+84 xxx xxx xxx',
                             ),

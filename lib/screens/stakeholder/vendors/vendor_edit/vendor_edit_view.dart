@@ -31,8 +31,7 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const GradientText(
-            text: 'Edit Manufacturer'), //Chỉnh sửa nhà sản xuất
+        title: GradientText(text: S.of(context).editManufacturer), // Localized
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -84,6 +83,7 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -92,28 +92,31 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                           decoration: InputDecoration(
                             labelText:
                                 S.of(context).manufacturerName, // Localized
-                            labelStyle: const TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                             floatingLabelStyle:
                                 WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.white,
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
-                            prefixIcon:
-                                const Icon(Icons.business, color: Colors.white),
+                            prefixIcon: Icon(Icons.business,
+                                color: Theme.of(context).colorScheme.onSurface),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(color: Colors.white),
+                              borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                           ),
                           onChanged: (value) => manufacturerName = value,
@@ -129,28 +132,31 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                           value: status,
                           decoration: InputDecoration(
                             labelText: S.of(context).status, // Localized
-                            labelStyle: const TextStyle(color: Colors.white),
+                            labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface),
                             floatingLabelStyle:
                                 WidgetStateTextStyle.resolveWith(
                               (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.white,
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
-                            prefixIcon: const Icon(Icons.info_outline,
-                                color: Colors.white),
+                            prefixIcon: Icon(Icons.info_outline,
+                                color: Theme.of(context).colorScheme.onSurface),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(color: Colors.white),
+                              borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                           ),
                           dropdownColor: Theme.of(context).cardColor,
@@ -158,8 +164,13 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                             return DropdownMenuItem(
                               value: status,
                               child: Text(
-                                status.getName(),
-                                style: const TextStyle(color: Colors.white),
+                                status == ManufacturerStatus.active
+                                    ? S.of(context).active
+                                    : S.of(context).inactive,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
                               ),
                             );
                           }).toList(),

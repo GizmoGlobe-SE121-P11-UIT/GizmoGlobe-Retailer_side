@@ -225,7 +225,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Warranty #${invoice.warrantyInvoiceID}', // Bảo hành #
+                                                    '${S.of(context).invoiceDetails} #${invoice.warrantyInvoiceID}',
                                                     style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -238,7 +238,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                   const SizedBox(height: 4),
                                                   Text(
                                                     invoice.customerName ??
-                                                        'Unknown Customer', // Khách hàng không xác định
+                                                        'Anonymous',
                                                     style: TextStyle(
                                                       color: Theme.of(context)
                                                           .colorScheme

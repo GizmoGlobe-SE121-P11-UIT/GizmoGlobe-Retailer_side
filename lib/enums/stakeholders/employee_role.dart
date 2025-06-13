@@ -1,3 +1,6 @@
+import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:flutter/widgets.dart';
+
 enum RoleEnum {
   owner('Owner'), // Chủ sở hữu
   manager('Manager'), // Quản lý
@@ -9,6 +12,17 @@ enum RoleEnum {
 
   String getName() {
     return name;
+  }
+
+  String localizedName(BuildContext context) {
+    switch (this) {
+      case RoleEnum.owner:
+        return S.of(context).roleOwner;
+      case RoleEnum.manager:
+        return S.of(context).roleManager;
+      case RoleEnum.employee:
+        return S.of(context).roleEmployee;
+    }
   }
 
   @override

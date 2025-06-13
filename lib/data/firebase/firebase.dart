@@ -2174,8 +2174,9 @@ class Firebase {
   Future<void> updateUsername(String newUsername) async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;
-      if (user == null)
+      if (user == null) {
         throw Exception('No user logged in'); // Không có người dùng đăng nhập
+      }
 
       // Update username in users collection
       await _firestore.collection('users').doc(user.uid).update({
@@ -2465,8 +2466,9 @@ class Firebase {
 
   Future<void> updateVoucher(Voucher voucher) async {
     try {
-      if (voucher.voucherID == null)
+      if (voucher.voucherID == null) {
         throw Exception('voucherID is required for update');
+      }
       final docRef = _firestore.collection('vouchers').doc(voucher.voucherID);
       await docRef.update(voucherToMap(voucher));
     } catch (e) {
@@ -2485,7 +2487,7 @@ class Firebase {
       final usersSnapshot = await _firestore.collection('chats').get();
 
       for (var userDoc in usersSnapshot.docs) {
-        final userId = userDoc.id;
+        // final userId = userDoc.id;
         final data = userDoc.data();
 
         // Get messages array from user document

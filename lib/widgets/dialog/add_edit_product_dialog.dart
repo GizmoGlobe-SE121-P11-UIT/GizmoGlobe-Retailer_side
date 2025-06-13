@@ -274,7 +274,6 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
                   productData['capacity'] = driveCapacityController?.text;
                   break;
                 case CategoryEnum.empty:
-                  // TODO: Handle this case.
                   throw UnimplementedError();
               }
               Product product = ProductFactory.createProduct(_selectedCategory, productData);
