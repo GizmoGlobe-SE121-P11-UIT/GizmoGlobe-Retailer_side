@@ -121,7 +121,7 @@ class _SignInScreen extends State<SignInScreen> {
                         showDialog(
                           context: context,
                           builder: (context) => InformationDialog(
-                            title: state.dialogName.toString(),
+                            title: state.dialogName.getLocalizedName(context),
                             content: state.message.getLocalizedMessage(context),
                             onPressed: () {
                               Navigator.pushReplacementNamed(context, '/main');

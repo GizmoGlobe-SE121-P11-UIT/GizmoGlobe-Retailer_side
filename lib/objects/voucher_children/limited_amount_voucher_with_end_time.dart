@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
-import '../../widgets/general/app_text_style.dart';
 import '../voucher_related/end_time_interface.dart';
 import '../voucher_related/limited_interface.dart';
+import '../../generated/l10n.dart';
 
-class LimitedAmountVoucherWithEndTime
-    extends Voucher
+class LimitedAmountVoucherWithEndTime extends Voucher
     implements LimitedInterface, EndTimeInterface {
   int _maximumUsage;
   int _usageLeft;
@@ -24,16 +23,13 @@ class LimitedAmountVoucherWithEndTime
     required super.isEnabled,
     super.enDescription,
     super.viDescription,
-
     super.isPercentage = false,
     super.hasEndTime = true,
     super.isLimited = true,
-
     required int maximumUsage,
     required int usageLeft,
     required DateTime endTime,
-  }) :
-        _maximumUsage = maximumUsage,
+  })  : _maximumUsage = maximumUsage,
         _usageLeft = usageLeft,
         _endTime = endTime;
 
@@ -64,7 +60,6 @@ class LimitedAmountVoucherWithEndTime
     bool? isEnabled,
     String? enDescription,
     String? viDescription,
-
     int? maximumUsage,
     int? usageLeft,
     DateTime? endTime,
@@ -108,6 +103,8 @@ class LimitedAmountVoucherWithEndTime
 
   @override
   Widget detailsWidget(BuildContext context) {
+    final theme = Theme.of(context);
+    final s = S.of(context);
     String time = Helper.getShortVoucherTimeWithEnd(startTime, endTime);
 
     return Column(
@@ -115,52 +112,64 @@ class LimitedAmountVoucherWithEndTime
       children: [
         Text(
           voucherName,
-          style: AppTextStyle.smallTitle
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: theme.colorScheme.onSurface,
+          ),
         ),
         const SizedBox(height: 4),
-
         Text(
-          'Discount \$$discountValue',
-          style: AppTextStyle.regularText,
+          '${s.discount} \$$discountValue',
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.tertiary,
+          ),
         ),
         const SizedBox(height: 4),
-
         Text(
-          'Minimum purchase: \$$minimumPurchase',
-          style: AppTextStyle.regularText,
+          '${s.minimumPurchase}: \$$minimumPurchase',
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurface,
+          ),
         ),
         const SizedBox(height: 4),
-
-        usageLeft > 0 ?
+        usageLeft > 0
+            ? Text(
+                '${s.usageLeft}: $usageLeft/$maximumUsage',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                ),
+              )
+            : Text(
+                s.ranOut,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
+              ),
+        const SizedBox(height: 4),
         Text(
-          'Usage left: $usageLeft/$maximumUsage',
-          style: AppTextStyle.regularText,
-        ) :
-        Text(
-          'Ran out',
-          style: AppTextStyle.regularText.copyWith(color: Colors.red),
+          time,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: time == 'Expired'
+                ? theme.colorScheme.error
+                : theme.colorScheme.onSurface,
+          ),
         ),
         const SizedBox(height: 4),
-
-        Text(
-          Helper.getShortVoucherTimeWithEnd(startTime, endTime),
-          style: time == 'Expired' ? AppTextStyle.regularText.copyWith(color: Colors.red) : AppTextStyle.regularText,
-        ),
-        const SizedBox(height: 4),
-
-        !isVisible ?
-        Text(
-          'Hidden',
-          style: AppTextStyle.regularText.copyWith(color: Colors.blue),
-        ) : Container(),
-        const SizedBox(height: 4),
-
-        !isEnabled ?
-        Text(
-          'Disabled',
-          style: AppTextStyle.regularText.copyWith(color: Colors.red),
-        ) : Container(),
-        const SizedBox(height: 4),
+        if (!isVisible)
+          Text(
+            s.hidden,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.primary,
+            ),
+          ),
+        if (!isVisible) const SizedBox(height: 4),
+        if (!isEnabled)
+          Text(
+            s.disabled,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.error,
+            ),
+          ),
+        if (!isEnabled) const SizedBox(height: 4),
       ],
     );
   }

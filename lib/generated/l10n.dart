@@ -2095,22 +2095,22 @@ class S {
     );
   }
 
-  /// `Discount Value`
-  String get discountValue {
+  /// `Discount`
+  String get discount {
     return Intl.message(
-      'Discount Value',
-      name: 'discountValue',
-      desc: 'Label for discount value field.',
+      'Discount',
+      name: 'discount',
+      desc: 'Label for discount field.',
       args: [],
     );
   }
 
-  /// `Minimum Purchase`
+  /// `Minimum purchase`
   String get minimumPurchase {
     return Intl.message(
-      'Minimum Purchase',
+      'Minimum purchase',
       name: 'minimumPurchase',
-      desc: 'Label for minimum purchase field.',
+      desc: 'Label for minimum purchase amount.',
       args: [],
     );
   }
@@ -2235,12 +2235,12 @@ class S {
     );
   }
 
-  /// `Usage Left`
+  /// `Usage left`
   String get usageLeft {
     return Intl.message(
-      'Usage Left',
+      'Usage left',
       name: 'usageLeft',
-      desc: 'Label for usage left field.',
+      desc: 'Label for remaining usage count.',
       args: [],
     );
   }
@@ -2310,7 +2310,7 @@ class S {
     return Intl.message(
       'Hidden',
       name: 'hidden',
-      desc: 'Label for hidden option.',
+      desc: 'Label for hidden voucher status.',
       args: [],
     );
   }
@@ -2330,7 +2330,7 @@ class S {
     return Intl.message(
       'Disabled',
       name: 'disabled',
-      desc: 'Label for disabled option.',
+      desc: 'Label for disabled voucher status.',
       args: [],
     );
   }
@@ -3075,16 +3075,6 @@ class S {
     );
   }
 
-  /// `Discount`
-  String get discount {
-    return Intl.message(
-      'Discount',
-      name: 'discount',
-      desc: 'Label for discount field.',
-      args: [],
-    );
-  }
-
   /// `Stock`
   String get stock {
     return Intl.message(
@@ -3651,6 +3641,36 @@ class S {
       'Send Verification Link',
       name: 'sendVerificationLink',
       desc: 'Button label for sending verification link.',
+      args: [],
+    );
+  }
+
+  /// `Ran out`
+  String get ranOut {
+    return Intl.message(
+      'Ran out',
+      name: 'ranOut',
+      desc: 'Label for when voucher has run out.',
+      args: [],
+    );
+  }
+
+  /// `Maximum discount`
+  String get maximumDiscount {
+    return Intl.message(
+      'Maximum discount',
+      name: 'maximumDiscount',
+      desc: 'Label for maximum discount amount.',
+      args: [],
+    );
+  }
+
+  /// `Discount value`
+  String get discountValue {
+    return Intl.message(
+      'Discount value',
+      name: 'discountValue',
+      desc: 'Label for discount value.',
       args: [],
     );
   }

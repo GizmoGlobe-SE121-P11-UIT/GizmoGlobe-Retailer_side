@@ -1288,7 +1288,7 @@
 	},
 	"discount": "Giảm giá",
 	"@discount": {
-		"description": "Label for discount field.",
+		"description": "Nhãn cho số tiền giảm giá.",
 		"type": "text"
 	},
 	"stock": "Tồn kho",
@@ -1416,9 +1416,9 @@
 		"description": "Nhãn cho trường giá trị giảm giá.",
 		"type": "text"
 	},
-	"minimumPurchase": "Mua tối thiểu",
+	"minimumPurchase": "Giá trị tối thiểu",
 	"@minimumPurchase": {
-		"description": "Nhãn cho trường mua tối thiểu.",
+		"description": "Nhãn cho giá trị mua tối thiểu.",
 		"type": "text"
 	},
 	"startTime": "Thời gian bắt đầu",
@@ -1483,7 +1483,7 @@
 	},
 	"usageLeft": "Số lần còn lại",
 	"@usageLeft": {
-		"description": "Nhãn cho trường số lần còn lại.",
+		"description": "Nhãn cho số lần sử dụng còn lại.",
 		"type": "text"
 	},
 	"timeLimit": "Giới hạn thời gian",
@@ -1846,12 +1846,12 @@
 		"description": "Thông báo khi không có người dùng đăng nhập.",
 		"type": "text"
 	},
-	"ongoing": "Đang diễn ra",
+	"ongoing": "Khả dụng",
 	"@ongoing": {
 		"description": "Nhãn cho trạng thái đang diễn ra.",
 		"type": "text"
 	},
-	"upcoming": "Sắp tới",
+	"upcoming": "Sắp đến",
 	"@upcoming": {
 		"description": "Nhãn cho trạng thái sắp tới.",
 		"type": "text"
@@ -1859,6 +1859,16 @@
 	"noVouchersAvailable": "Không có voucher nào khả dụng",
 	"@noVouchersAvailable": {
 		"description": "Thông báo khi không có voucher nào khả dụng.",
+		"type": "text"
+	},
+	"ranOut": "Đã hết",
+	"@ranOut": {
+		"description": "Nhãn cho khi voucher đã hết.",
+		"type": "text"
+	},
+	"maximumDiscount": "Giảm giá tối đa",
+	"@maximumDiscount": {
+		"description": "Nhãn cho số tiền giảm giá tối đa.",
 		"type": "text"
 	}
 }

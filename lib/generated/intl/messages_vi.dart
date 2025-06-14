@@ -37,6 +37,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m7(error) => "Lỗi: ${error}";
 
+  static String m8(email) =>
+      "Email đặt lại mật khẩu sẽ được gửi đến địa chỉ email của bạn";
+
   static String m9(field) => "Chọn ${field}";
 
   static String m10(email) => "Email: ${email}";
@@ -54,6 +57,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "GizmoGlobe là giải pháp phần cứng máy tính đáng tin cậy của bạn.",
     ),
     "aboutUsTitle": MessageLookupByLibrary.simpleMessage("Về chúng tôi"),
+    "accountSettings": MessageLookupByLibrary.simpleMessage(
+      "Cài đặt tài khoản",
+    ),
     "activate": MessageLookupByLibrary.simpleMessage("Kích hoạt"),
     "activateManufacturer": MessageLookupByLibrary.simpleMessage(
       "Kích hoạt nhà cung cấp",
@@ -337,6 +343,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "maxUsagePerPerson": MessageLookupByLibrary.simpleMessage(
       "Số lần sử dụng tối đa mỗi người",
     ),
+    "maximumDiscount": MessageLookupByLibrary.simpleMessage("Giảm giá tối đa"),
     "maximumDiscountValue": MessageLookupByLibrary.simpleMessage(
       "Giá trị giảm giá tối đa",
     ),
@@ -345,7 +352,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "messages": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
     "min": MessageLookupByLibrary.simpleMessage("Tối thiểu"),
-    "minimumPurchase": MessageLookupByLibrary.simpleMessage("Mua tối thiểu"),
+    "minimumPurchase": MessageLookupByLibrary.simpleMessage(
+      "Giá trị tối thiểu",
+    ),
     "monthlySales": MessageLookupByLibrary.simpleMessage("Doanh số hàng tháng"),
     "name": MessageLookupByLibrary.simpleMessage("Tên"),
     "nameIsRequired": MessageLookupByLibrary.simpleMessage("Tên là bắt buộc"),
@@ -390,10 +399,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "noSalesInvoicesFound": MessageLookupByLibrary.simpleMessage(
       "Không tìm thấy hóa đơn bán hàng",
     ),
+    "noUserSignedIn": MessageLookupByLibrary.simpleMessage(
+      "Không có người dùng đăng nhập",
+    ),
+    "noVouchersAvailable": MessageLookupByLibrary.simpleMessage(
+      "Không có voucher nào khả dụng",
+    ),
     "noWarrantyInvoicesFound": MessageLookupByLibrary.simpleMessage(
       "Không tìm thấy hóa đơn bảo hành",
     ),
     "notEnoughStock": MessageLookupByLibrary.simpleMessage("Không đủ hàng tồn"),
+    "ongoing": MessageLookupByLibrary.simpleMessage("Khả dụng"),
     "onlyUnpaidCanBeMarkedPaid": MessageLookupByLibrary.simpleMessage(
       "Chỉ hóa đơn chưa thanh toán mới có thể đánh dấu là đã thanh toán",
     ),
@@ -410,6 +426,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwordConfirmation": MessageLookupByLibrary.simpleMessage(
       "Xác nhận mật khẩu",
     ),
+    "passwordResetEmailSentSuccess": MessageLookupByLibrary.simpleMessage(
+      "Email đặt lại mật khẩu đã được gửi thành công",
+    ),
+    "passwordResetEmailWillBeSent": m8,
     "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
       "Mật khẩu không khớp.",
     ),
@@ -502,6 +522,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ramBus": MessageLookupByLibrary.simpleMessage("Bus RAM"),
     "ramCapacity": MessageLookupByLibrary.simpleMessage("Dung lượng RAM"),
     "ramType": MessageLookupByLibrary.simpleMessage("Loại RAM"),
+    "ranOut": MessageLookupByLibrary.simpleMessage("Đã hết"),
     "reactivate": MessageLookupByLibrary.simpleMessage("Kích hoạt lại"),
     "reasonForWarranty": MessageLookupByLibrary.simpleMessage("Lý do bảo hành"),
     "reasonForWarrantyLabel": MessageLookupByLibrary.simpleMessage(
@@ -536,6 +557,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "salesStatus": MessageLookupByLibrary.simpleMessage("Trạng thái bán hàng"),
     "save": MessageLookupByLibrary.simpleMessage("Lưu"),
+    "saveChanges": MessageLookupByLibrary.simpleMessage("Lưu thay đổi"),
     "searchIncomingInvoices": MessageLookupByLibrary.simpleMessage(
       "Tìm hóa đơn nhập...",
     ),
@@ -558,6 +580,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Chọn sản phẩm để bảo hành",
     ),
     "sellingPrice": MessageLookupByLibrary.simpleMessage("Giá bán"),
+    "sendPasswordResetEmail": MessageLookupByLibrary.simpleMessage(
+      "Gửi email đặt lại mật khẩu",
+    ),
     "sendVerificationLink": MessageLookupByLibrary.simpleMessage(
       "Gửi liên kết xác minh",
     ),
@@ -629,9 +654,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "unsavedChangesDiscard": MessageLookupByLibrary.simpleMessage(
       "Bạn có thay đổi chưa lưu. Bạn có muốn hủy bỏ chúng?",
     ),
+    "upcoming": MessageLookupByLibrary.simpleMessage("Sắp đến"),
     "update": MessageLookupByLibrary.simpleMessage("Cập nhật"),
     "updatePersonalInfo": MessageLookupByLibrary.simpleMessage(
       "Cập nhật thông tin cá nhân",
+    ),
+    "updateProfileSuccess": MessageLookupByLibrary.simpleMessage(
+      "Cập nhật hồ sơ thành công",
     ),
     "updateStatus": MessageLookupByLibrary.simpleMessage("Cập nhật trạng thái"),
     "updateWarrantyStatus": MessageLookupByLibrary.simpleMessage(

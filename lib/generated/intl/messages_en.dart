@@ -190,7 +190,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "discontinued": MessageLookupByLibrary.simpleMessage("Discontinued"),
     "discount": MessageLookupByLibrary.simpleMessage("Discount"),
     "discountType": MessageLookupByLibrary.simpleMessage("Discount Type"),
-    "discountValue": MessageLookupByLibrary.simpleMessage("Discount Value"),
+    "discountValue": MessageLookupByLibrary.simpleMessage("Discount value"),
     "drive": MessageLookupByLibrary.simpleMessage("Drive"),
     "driveCapacity": MessageLookupByLibrary.simpleMessage("Drive Capacity"),
     "driveType": MessageLookupByLibrary.simpleMessage("Drive Type"),
@@ -324,13 +324,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "maxUsagePerPerson": MessageLookupByLibrary.simpleMessage(
       "Max Usage Per Person",
     ),
+    "maximumDiscount": MessageLookupByLibrary.simpleMessage("Maximum discount"),
     "maximumDiscountValue": MessageLookupByLibrary.simpleMessage(
       "Maximum Discount Value",
     ),
     "maximumUsage": MessageLookupByLibrary.simpleMessage("Maximum Usage"),
     "messages": MessageLookupByLibrary.simpleMessage("Messages"),
     "min": MessageLookupByLibrary.simpleMessage("Min"),
-    "minimumPurchase": MessageLookupByLibrary.simpleMessage("Minimum Purchase"),
+    "minimumPurchase": MessageLookupByLibrary.simpleMessage("Minimum purchase"),
     "monthlySales": MessageLookupByLibrary.simpleMessage("Monthly Sales"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),
     "nameIsRequired": MessageLookupByLibrary.simpleMessage("Name is required"),
@@ -490,6 +491,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ramBus": MessageLookupByLibrary.simpleMessage("RAM Bus"),
     "ramCapacity": MessageLookupByLibrary.simpleMessage("RAM Capacity"),
     "ramType": MessageLookupByLibrary.simpleMessage("RAM Type"),
+    "ranOut": MessageLookupByLibrary.simpleMessage("Ran out"),
     "reactivate": MessageLookupByLibrary.simpleMessage("Re-activate"),
     "reasonForWarranty": MessageLookupByLibrary.simpleMessage(
       "Reason for Warranty",
@@ -621,7 +623,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "updateWarrantyStatus": MessageLookupByLibrary.simpleMessage(
       "Update Warranty Status",
     ),
-    "usageLeft": MessageLookupByLibrary.simpleMessage("Usage Left"),
+    "usageLeft": MessageLookupByLibrary.simpleMessage("Usage left"),
     "usageLimit": MessageLookupByLibrary.simpleMessage("Usage Limit"),
     "username": MessageLookupByLibrary.simpleMessage("Username"),
     "vendors": MessageLookupByLibrary.simpleMessage("Vendors"),

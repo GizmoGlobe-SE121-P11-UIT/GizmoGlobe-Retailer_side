@@ -178,7 +178,7 @@ class _VoucherScreenState extends State<VoucherScreen>
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       itemCount: vouchers.length,
       itemBuilder: (context, index) {
         final voucher = vouchers[index];
@@ -270,9 +270,14 @@ class _VoucherScreenState extends State<VoucherScreen>
               cubit.setSelectedVoucher(null);
             });
           },
-          child: VoucherCard(
-            voucher: voucher,
-            isSelected: selectedVoucher == voucher,
+          child: Column(
+            children: [
+              VoucherCard(
+                voucher: voucher,
+                isSelected: selectedVoucher == voucher,
+              ),
+              const SizedBox(height: 8),
+            ],
           ),
         );
       },

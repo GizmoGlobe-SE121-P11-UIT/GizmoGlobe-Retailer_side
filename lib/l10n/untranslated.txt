@@ -1,14 +1,1 @@
-{
-  "vi": [
-    "accountSettings",
-    "saveChanges",
-    "updateProfileSuccess",
-    "passwordResetEmailWillBeSent",
-    "passwordResetEmailSentSuccess",
-    "sendPasswordResetEmail",
-    "noUserSignedIn",
-    "ongoing",
-    "upcoming",
-    "noVouchersAvailable"
-  ]
-}
+{}

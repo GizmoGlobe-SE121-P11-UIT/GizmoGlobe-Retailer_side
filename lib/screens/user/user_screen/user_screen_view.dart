@@ -650,7 +650,7 @@ class _UserScreen extends State<UserScreen> {
                       color: Theme.of(context)
                           .colorScheme
                           .onSurface
-                          .withValues(alpha: 0.6), 
+                          .withValues(alpha: 0.6),
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
@@ -803,7 +803,6 @@ class _UserScreen extends State<UserScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -812,13 +811,23 @@ class _UserScreen extends State<UserScreen> {
   }
 }
 
-class AppSettingsContent extends StatelessWidget {
+class AppSettingsContent extends StatefulWidget {
   const AppSettingsContent({super.key});
 
   @override
+  State<AppSettingsContent> createState() => _AppSettingsContentState();
+}
+
+class _AppSettingsContentState extends State<AppSettingsContent> {
+  @override
   Widget build(BuildContext context) {
+    // Use context from here so theme changes are reflected immediately
     return Container(
       padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -844,6 +853,7 @@ class AppSettingsContent extends StatelessWidget {
                     value: themeProvider.isDarkMode,
                     onChanged: (value) {
                       themeProvider.toggleTheme();
+                      setState(() {}); // Force rebuild to update background
                     },
                   ),
                 );
@@ -872,6 +882,7 @@ class AppSettingsContent extends StatelessWidget {
                     onChanged: (value) {
                       if (value != null) {
                         localeProvider.setLocale(Locale(value));
+                        setState(() {}); // Force rebuild for language change
                       }
                     },
                   ),
@@ -897,12 +908,12 @@ class AppSettingsContent extends StatelessWidget {
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.grey.withValues(alpha: 0.1),
+          color: Colors.grey.withOpacity(0.1),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -915,7 +926,7 @@ class AppSettingsContent extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -931,21 +942,14 @@ class AppSettingsContent extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.6), 
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),

@@ -1080,14 +1080,14 @@
 		"description": "Label for voucher name field.",
 		"type": "text"
 	},
-	"discountValue": "Discount Value",
-	"@discountValue": {
-		"description": "Label for discount value field.",
+	"discount": "Discount",
+	"@discount": {
+		"description": "Label for discount amount.",
 		"type": "text"
 	},
-	"minimumPurchase": "Minimum Purchase",
+	"minimumPurchase": "Minimum purchase",
 	"@minimumPurchase": {
-		"description": "Label for minimum purchase field.",
+		"description": "Label for minimum purchase amount.",
 		"type": "text"
 	},
 	"startTime": "Start Time",
@@ -1150,9 +1150,9 @@
 		"description": "Label for maximum usage field.",
 		"type": "text"
 	},
-	"usageLeft": "Usage Left",
+	"usageLeft": "Usage left",
 	"@usageLeft": {
-		"description": "Label for usage left field.",
+		"description": "Label for remaining usage count.",
 		"type": "text"
 	},
 	"timeLimit": "Time Limit",
@@ -1187,7 +1187,7 @@
 	},
 	"hidden": "Hidden",
 	"@hidden": {
-		"description": "Label for hidden option.",
+		"description": "Label for hidden voucher status.",
 		"type": "text"
 	},
 	"visible": "Visible",
@@ -1197,7 +1197,7 @@
 	},
 	"disabled": "Disabled",
 	"@disabled": {
-		"description": "Label for disabled option.",
+		"description": "Label for disabled voucher status.",
 		"type": "text"
 	},
 	"enabled": "Enabled",
@@ -1868,6 +1868,21 @@
 	"sendVerificationLink": "Send Verification Link",
 	"@sendVerificationLink": {
 		"description": "Button label for sending verification link.",
+		"type": "text"
+	},
+	"ranOut": "Ran out",
+	"@ranOut": {
+		"description": "Label for when voucher has run out.",
+		"type": "text"
+	},
+	"maximumDiscount": "Maximum discount",
+	"@maximumDiscount": {
+		"description": "Label for maximum discount amount.",
+		"type": "text"
+	},
+	"discountValue": "Discount value",
+	"@discountValue": {
+		"description": "Label for discount value.",
 		"type": "text"
 	}
 }
