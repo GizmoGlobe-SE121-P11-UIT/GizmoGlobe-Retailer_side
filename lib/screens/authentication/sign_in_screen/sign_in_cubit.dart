@@ -56,7 +56,7 @@ class SignInCubit extends Cubit<SignInState> {
         }
       }
     } catch (error) {
-      emit(state.copyWith(
+      emit( state.copyWith(
           processState: ProcessState.failure,
           message: NotifyMessage.msg2,
           dialogName: DialogName.failure));

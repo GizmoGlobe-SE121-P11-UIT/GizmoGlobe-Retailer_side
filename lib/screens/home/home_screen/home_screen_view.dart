@@ -35,45 +35,53 @@ class _HomeScreen extends State<HomeScreen> {
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
             elevation: 0,
-            title: const AppLogo(height: 60),
-            actions: [
-              Stack(
-                children: [
-                  IconButton(
-                    color: Theme.of(context).colorScheme.primary,
-                    icon: const Icon(Icons.chat_rounded),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatListScreen.newInstance(),
+            title: Stack(
+              children: [
+                const Center(child: AppLogo(height: 60)),
+                Row(
+                  children: [
+                    const Expanded(child: SizedBox()),
+                    Stack(
+                      children: [
+                        IconButton(
+                          color: Theme.of(context).colorScheme.primary,
+                          icon: const Icon(Icons.chat_rounded),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatListScreen.newInstance(),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                  if (state.unreadChats > 0)
-                    Positioned(
-                      right: 8,
-                      top: 8,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.error,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          state.unreadChats.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                        if (state.unreadChats > 0)
+                          Positioned(
+                            right: 8,
+                            top: 8,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.error,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                state.unreadChats.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
                 ],
               ),
-            ],
           ),
           body: SingleChildScrollView(
             child: Column(

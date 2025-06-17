@@ -137,7 +137,7 @@ class _SignInScreen extends State<SignInScreen> {
                       return SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             cubit.signInWithEmailPassword(context);
                           },
                           style: ElevatedButton.styleFrom(

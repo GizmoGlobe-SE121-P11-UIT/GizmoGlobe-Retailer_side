@@ -157,9 +157,7 @@ class AuthWrapper extends StatelessWidget {
         if (currentRoute == '/sign-up') {
           return SignUpScreen.newInstance();
         }
-
-        if (snapshot.hasData) {
-          // return const MainScreen();
+        else if (snapshot.hasData) {
           return const MainScreen();
         }
 
