@@ -44,6 +44,7 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
         return v.isEnabled &&
             v.voucherTimeStatus != VoucherTimeStatus.expired &&
             !v.isVisible &&
+            !v.voucherRanOut &&
             !ownedVoucherIds.contains(v.voucherID);
       }).toList();
 
