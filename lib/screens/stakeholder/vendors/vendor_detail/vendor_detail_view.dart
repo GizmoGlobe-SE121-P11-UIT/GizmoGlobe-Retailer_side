@@ -325,7 +325,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
               _buildInfoRow(
                 S.of(context).manufacturerName, // Localized
                 state.manufacturer.manufacturerName,
-                valueColor: Colors.white,
+                valueColor: Theme.of(context).colorScheme.onSurface,
               ),
               _buildInfoRow(
                 S.of(context).status, // Localized

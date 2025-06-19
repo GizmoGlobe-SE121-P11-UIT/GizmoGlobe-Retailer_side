@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/objects/product_related/product_argument.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as path; 
 
 import '../../../enums/processing/dialog_name_enum.dart';
 import '../../../enums/processing/notify_message_enum.dart';

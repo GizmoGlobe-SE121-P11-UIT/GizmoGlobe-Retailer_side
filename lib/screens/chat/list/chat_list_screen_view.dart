@@ -23,6 +23,10 @@ class ChatListScreen extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.surface,
             elevation: 0,
             title: Text(S.of(context).messages),
+            leading: IconButton(
+              icon: const Icon(Icons.chevron_left),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
           ),
           body: state.isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -49,7 +53,7 @@ class ChatListScreen extends StatelessWidget {
 
                             if (lastChat == null) {
                               return const SizedBox.shrink();
-                            } 
+                            }
 
                             // Determine the userId for display (not admin)
                             String userId = lastChat.senderId == 'admin'

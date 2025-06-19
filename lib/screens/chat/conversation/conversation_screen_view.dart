@@ -63,6 +63,10 @@ class _ConversationScreenState extends State<ConversationScreen> {
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
             elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.chevron_left),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
             title: Row(
               children: [
                 CircleAvatar(

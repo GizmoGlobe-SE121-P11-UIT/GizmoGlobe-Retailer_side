@@ -156,8 +156,8 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                 ),
                                 StatusBadge(
                                   status: state.voucher.isEnabled
-                                      ? S.of(context).enabled
-                                      : S.of(context).disabled,
+                                      ? S.of(context).active
+                                      : S.of(context).inactive,
                                 ),
                               ],
                             ),

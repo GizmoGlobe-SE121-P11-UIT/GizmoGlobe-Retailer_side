@@ -44,6 +44,8 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('denied') ||
         text.toLowerCase().contains('inactive') ||
         text.toLowerCase().contains('discontinued') ||
+        text.toLowerCase().contains('hidden') ||
+        text.toLowerCase().contains('ẩn') ||
         text.toLowerCase().contains('đã hủy') ||
         text.toLowerCase().contains('chưa thanh toán') ||
         text.toLowerCase().contains('từ chối') ||
@@ -61,14 +63,17 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('đang chuẩn bị') ||
         text.toLowerCase().contains('đang vận chuyển') ||
         text.toLowerCase().contains('đang xử lý') ||
+        text.toLowerCase().contains('chờ xử lý') ||
         text.toLowerCase().contains('hết hàng')) {
-      color = theme.colorScheme.outline;
+      color = Colors.amber;
       icon = Icons.pending;
     } else if (text.toLowerCase().contains('completed') ||
         text.toLowerCase().contains('paid') ||
         text.toLowerCase().contains('active') ||
         text.toLowerCase().contains('shipped') ||
         text.toLowerCase().contains('available') ||
+        text.toLowerCase().contains('visible') ||
+        text.toLowerCase().contains('hiển thị') ||
         text.toLowerCase().contains('đã thanh toán') ||
         text.toLowerCase().contains('hoàn thành') ||
         text.toLowerCase().contains('đang hoạt động') ||

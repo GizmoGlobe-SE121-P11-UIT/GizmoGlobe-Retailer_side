@@ -127,7 +127,7 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
               ),
         const SizedBox(height: 4),
         Text(
-          Helper.getShortVoucherTimeWithoutEnd(startTime),
+          Helper.getShortVoucherTimeWithoutEnd(context, startTime),
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurface,
           ),
@@ -185,7 +185,6 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
     bool? isPercentage,
     bool? hasEndTime,
     bool? isLimited,
-
     int? maximumUsage,
     int? usageLeft,
     DateTime? endTime,

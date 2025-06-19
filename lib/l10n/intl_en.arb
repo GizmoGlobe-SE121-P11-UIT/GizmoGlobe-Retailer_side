@@ -1080,11 +1080,6 @@
 		"description": "Label for voucher name field.",
 		"type": "text"
 	},
-	"discount": "Discount",
-	"@discount": {
-		"description": "Label for discount amount.",
-		"type": "text"
-	},
 	"minimumPurchase": "Minimum purchase",
 	"@minimumPurchase": {
 		"description": "Label for minimum purchase amount.",
@@ -1232,7 +1227,7 @@
 	},
 	"ongoing": "Ongoing",
 	"@ongoing": {
-		"description": "Tab label for ongoing vouchers.",
+		"description": "Label indicating that a voucher is currently ongoing.",
 		"type": "text"
 	},
 	"upcoming": "Upcoming",
@@ -1918,6 +1913,21 @@
 	"giveVoucherFailed": "Failed to gift voucher. Please try again.",
 	"@giveVoucherFailed": {
 		"description": "Error message when gifting voucher fails.",
+		"type": "text"
+	},
+	"starts": "Starts",
+	"@starts": {
+		"description": "Label indicating when a voucher starts.",
+		"type": "text"
+	},
+	"expires": "Expires",
+	"@expires": {
+		"description": "Label indicating when a voucher expires.",
+		"type": "text"
+	},
+	"expired": "Expired",
+	"@expired": {
+		"description": "Label indicating that a voucher has expired.",
 		"type": "text"
 	}
 }

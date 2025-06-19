@@ -1896,14 +1896,29 @@
 		"description": "Thông báo xác nhận khi tặng voucher.",
 		"type": "text"
 	},
-	"giftVoucherSuccess": "Tặng phiếu giảm giá thành công.",
-	"@giftVoucherSuccess": {
-		"description": "Thông báo khi tặng voucher thành công.",
+	"giveVoucherSuccess": "Tặng phiếu giảm giá thành công.",
+	"@giveVoucherSuccess": {
+		"description": "Thông báo thành công khi tặng voucher.",
 		"type": "text"
 	},
-	"giftVoucherFailed": "Tặng phiếu giảm giá thất bại. Vui lòng thử lại.",
-	"@giftVoucherFailed": {
-		"description": "Thông báo khi tặng voucher thất bại.",
+	"giveVoucherFailed": "Tặng phiếu giảm giá thất bại. Vui lòng thử lại.",
+	"@giveVoucherFailed": {
+		"description": "Thông báo lỗi khi tặng voucher thất bại.",
+		"type": "text"
+	},
+	"starts": "Bắt đầu",
+	"@starts": {
+		"description": "Nhãn chỉ thời điểm phiếu giảm giá bắt đầu.",
+		"type": "text"
+	},
+	"expires": "Kết thúc",
+	"@expires": {
+		"description": "Nhãn chỉ thời điểm phiếu giảm giá kết thúc.",
+		"type": "text"
+	},
+	"expired": "Đã hết hạn",
+	"@expired": {
+		"description": "Nhãn chỉ phiếu giảm giá đã hết hạn.",
 		"type": "text"
 	}
 }

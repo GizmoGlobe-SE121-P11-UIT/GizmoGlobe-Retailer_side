@@ -1,23 +1,27 @@
 import 'converter.dart';
+import 'package:flutter/widgets.dart';
+import 'package:gizmoglobe_client/generated/l10n.dart';
 
 class Helper {
-  static String getShortVoucherTimeWithEnd(DateTime startTime, DateTime endTime) {
+  static String getShortVoucherTimeWithEnd(
+      BuildContext context, DateTime startTime, DateTime endTime) {
     final now = DateTime.now();
     if (startTime.isAfter(now)) {
-      return "Starts ${Converter.getTimeUntilString(startTime)}";
+      return "${S.of(context).starts} ${Converter.getTimeUntilString(startTime)}";
     } else if (endTime.isAfter(now)) {
-      return "Expires ${Converter.getTimeLeftString(endTime)}";
+      return "${S.of(context).expires} ${Converter.getTimeLeftString(endTime)}";
     } else {
-      return "Expired";
+      return S.of(context).expired;
     }
   }
 
-  static String getShortVoucherTimeWithoutEnd(DateTime startTime) {
+  static String getShortVoucherTimeWithoutEnd(
+      BuildContext context, DateTime startTime) {
     final now = DateTime.now();
     if (startTime.isAfter(now)) {
-      return "Starts ${Converter.getTimeUntilString(startTime)}";
+      return "${S.of(context).starts} ${Converter.getTimeUntilString(startTime)}";
     } else {
-      return "Ongoing";
+      return S.of(context).ongoing;
     }
   }
 }

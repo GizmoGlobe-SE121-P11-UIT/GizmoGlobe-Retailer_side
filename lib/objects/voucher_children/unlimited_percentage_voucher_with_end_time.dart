@@ -77,7 +77,8 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
   Widget detailsWidget(BuildContext context) {
     final theme = Theme.of(context);
     final s = S.of(context);
-    String time = Helper.getShortVoucherTimeWithEnd(startTime, endTime);
+    String time =
+        Helper.getShortVoucherTimeWithEnd(context, startTime, endTime);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +107,7 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
         Text(
           time,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: time == 'Expired'
+            color: time == s.expired
                 ? theme.colorScheme.error
                 : theme.colorScheme.onSurface,
           ),
@@ -163,7 +164,6 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
     bool? isPercentage,
     bool? hasEndTime,
     bool? isLimited,
-
     DateTime? endTime,
     double? maximumDiscountValue,
   }) {
@@ -182,8 +182,7 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
       hasEndTime: hasEndTime ?? this.hasEndTime,
       isLimited: isLimited ?? this.isLimited,
       endTime: endTime ?? this.endTime,
-      maximumDiscountValue:
-          maximumDiscountValue ?? this.maximumDiscountValue,
+      maximumDiscountValue: maximumDiscountValue ?? this.maximumDiscountValue,
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:gizmoglobe_client/enums/processing/process_state_enum.dart';
 import 'package:gizmoglobe_client/objects/address_related/address.dart';

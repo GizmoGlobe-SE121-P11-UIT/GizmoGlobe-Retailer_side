@@ -267,6 +267,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "Cập nhật phiếu giảm giá thất bại. Vui lòng thử lại.",
     ),
     "errorWithMessage": m7,
+    "expired": MessageLookupByLibrary.simpleMessage("Đã hết hạn"),
+    "expires": MessageLookupByLibrary.simpleMessage("Kết thúc"),
     "failure": MessageLookupByLibrary.simpleMessage("Thất bại"),
     "filter": MessageLookupByLibrary.simpleMessage("Lọc"),
     "filterByRole": MessageLookupByLibrary.simpleMessage("Lọc theo vai trò"),
@@ -612,6 +614,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sortBy": MessageLookupByLibrary.simpleMessage("Sắp xếp theo..."),
     "stakeholder": MessageLookupByLibrary.simpleMessage("Đối tác"),
     "startTime": MessageLookupByLibrary.simpleMessage("Thời gian bắt đầu"),
+    "starts": MessageLookupByLibrary.simpleMessage("Bắt đầu"),
     "status": MessageLookupByLibrary.simpleMessage("Trạng thái"),
     "stock": MessageLookupByLibrary.simpleMessage("Tồn kho"),
     "stockHighest": MessageLookupByLibrary.simpleMessage(

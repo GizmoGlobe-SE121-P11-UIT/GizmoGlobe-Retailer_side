@@ -3744,6 +3744,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Starts`
+  String get starts {
+    return Intl.message(
+      'Starts',
+      name: 'starts',
+      desc: 'Label indicating when a voucher starts.',
+      args: [],
+    );
+  }
+
+  /// `Expires`
+  String get expires {
+    return Intl.message(
+      'Expires',
+      name: 'expires',
+      desc: 'Label indicating when a voucher expires.',
+      args: [],
+    );
+  }
+
+  /// `Expired`
+  String get expired {
+    return Intl.message(
+      'Expired',
+      name: 'expired',
+      desc: 'Label indicating that a voucher has expired.',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

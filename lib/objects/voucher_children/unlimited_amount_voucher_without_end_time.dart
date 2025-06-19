@@ -79,7 +79,7 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
         ),
         const SizedBox(height: 4),
         Text(
-          Helper.getShortVoucherTimeWithoutEnd(startTime),
+          Helper.getShortVoucherTimeWithoutEnd(context, startTime),
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurface,
           ),
