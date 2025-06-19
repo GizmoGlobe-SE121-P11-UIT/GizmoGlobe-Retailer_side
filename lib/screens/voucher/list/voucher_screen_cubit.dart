@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/enums/processing/dialog_name_enum.dart';
+import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
 import 'package:gizmoglobe_client/enums/processing/process_state_enum.dart';
 import 'package:gizmoglobe_client/enums/voucher_related/voucher_status.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
@@ -45,11 +47,9 @@ class VoucherScreenCubit extends Cubit<VoucherScreenState> {
         processState: ProcessState.idle,
       ));
     } catch (e) {
-      emit(state.copyWith(
-        processState: ProcessState.failure,
-        dialogName: DialogName.failure,
-        dialogMessage: S.current.errorLoadingVouchers,
-      ));
+      if (kDebugMode) {
+        print('Error initializing voucher list: $e');
+      }
     }
   }
 
@@ -57,34 +57,35 @@ class VoucherScreenCubit extends Cubit<VoucherScreenState> {
     emit(state.copyWith(selectedVoucher: voucher));
   }
 
+  void toIdle() {
+    emit(state.copyWith(processState: ProcessState.idle));
+  }
+
   Future<void> toggleVoucherStatus(String voucherId) async {
     try {
       emit(state.copyWith(processState: ProcessState.loading));
 
       // Find the voucher in the list
-      final voucher =
-          state.voucherList.firstWhere((v) => v.voucherID == voucherId);
+      final voucher = state.voucherList.firstWhere((v) => v.voucherID == voucherId);
 
       // Create a copy of the voucher with updated status
-      final updatedVoucher = voucher;
-      updatedVoucher.updateVoucher(isEnabled: !voucher.isEnabled);
+      final updatedVoucher = voucher.copyWith(isEnabled: !voucher.isEnabled);
 
       // Update the voucher in Firebase
-      await _firebase.updateVoucher(updatedVoucher);
+      await _firebase.changeVoucherStatus(voucherId, updatedVoucher.isEnabled);
 
       await initialize(); // Refresh the list after status change
 
       emit(state.copyWith(
         processState: ProcessState.success,
         dialogName: DialogName.success,
-        dialogMessage:
-            updatedVoucher.isEnabled ? S.current.enabled : S.current.disabled,
+        notifyMessage: NotifyMessage.msg24,
       ));
     } catch (e) {
       emit(state.copyWith(
         processState: ProcessState.failure,
         dialogName: DialogName.failure,
-        dialogMessage: S.current.errorUpdatingVoucher,
+        notifyMessage: NotifyMessage.msg25,
       ));
     }
   }

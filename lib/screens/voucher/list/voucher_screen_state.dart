@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:gizmoglobe_client/enums/processing/dialog_name_enum.dart';
+import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
 import 'package:gizmoglobe_client/enums/processing/process_state_enum.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 
@@ -11,7 +12,7 @@ class VoucherScreenState extends Equatable {
   final Voucher? selectedVoucher;
   final ProcessState processState;
   final DialogName dialogName;
-  final String dialogMessage;
+  final NotifyMessage notifyMessage;
 
   const VoucherScreenState({
     this.voucherList = const [],
@@ -21,7 +22,7 @@ class VoucherScreenState extends Equatable {
     this.selectedVoucher,
     this.processState = ProcessState.idle,
     this.dialogName = DialogName.empty,
-    this.dialogMessage = '',
+    this.notifyMessage = NotifyMessage.empty,
   });
 
   VoucherScreenState copyWith({
@@ -32,7 +33,7 @@ class VoucherScreenState extends Equatable {
     Voucher? selectedVoucher,
     ProcessState? processState,
     DialogName? dialogName,
-    String? dialogMessage,
+    NotifyMessage? notifyMessage,
   }) {
     return VoucherScreenState(
       voucherList: voucherList ?? this.voucherList,
@@ -42,7 +43,7 @@ class VoucherScreenState extends Equatable {
       selectedVoucher: selectedVoucher ?? this.selectedVoucher,
       processState: processState ?? this.processState,
       dialogName: dialogName ?? this.dialogName,
-      dialogMessage: dialogMessage ?? this.dialogMessage,
+      notifyMessage: notifyMessage ?? this.notifyMessage,
     );
   }
 
@@ -55,6 +56,6 @@ class VoucherScreenState extends Equatable {
         selectedVoucher,
         processState,
         dialogName,
-        dialogMessage,
+        notifyMessage,
       ];
 }

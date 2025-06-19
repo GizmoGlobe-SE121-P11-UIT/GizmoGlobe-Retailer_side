@@ -14,6 +14,7 @@ import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_modular.da
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_bus.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_capacity_enum.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_type.dart';
+import 'package:gizmoglobe_client/objects/voucher_related/owned_voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher_factory.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/end_time_interface.dart';
@@ -2415,6 +2416,16 @@ class Firebase {
     }
   }
 
+  Future<List<OwnedVoucher>> getOwnedVouchers(String customerID) async {
+    final QuerySnapshot snapshot = await _firestore
+        .collection('owned_vouchers')
+        .where('customerID', isEqualTo: customerID)
+        .get();
+    return snapshot.docs.map((doc) {
+      return OwnedVoucher.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+    }).toList();
+  }
+
   Future<void> addVoucher(Voucher voucher) async {
     try {
       final collectionRef = _firestore.collection('vouchers');
@@ -2670,6 +2681,36 @@ class Firebase {
         print('Error getting unread chats count: $e');
       }
       return 0;
+    }
+  }
+
+  Future<void> changeVoucherStatus(String voucherId, bool status) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('vouchers')
+          .doc(voucherId)
+          .update({'isEnabled': status});
+
+      List<Voucher> vouchers = await getVouchers();
+      Database().updateVoucherList(vouchers);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error changing product status: $e');
+      } // Lỗi khi thay đổi trạng thái sản phẩm
+      rethrow;
+    }
+  }
+
+  Future<void> addOwnedVoucher(OwnedVoucher ownedVoucher) async {
+    try {
+      final collectionRef = _firestore.collection('owned_vouchers');
+      final docRef = await collectionRef.add(ownedVoucher.toMap());
+      await docRef.update({'ownedVoucherID': docRef.id});
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding owned voucher: $e');
+      }
+      rethrow;
     }
   }
 }

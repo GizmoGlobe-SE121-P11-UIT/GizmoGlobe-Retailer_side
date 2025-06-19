@@ -397,6 +397,10 @@ class Database {
     this.productList = productList;
   }
 
+  void updateVoucherList(List<Voucher> voucherList) {
+    this.voucherList = voucherList;
+  }
+
   Future<bool> isUserAdmin() async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;

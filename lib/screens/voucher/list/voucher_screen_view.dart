@@ -84,9 +84,9 @@ class _VoucherScreenState extends State<VoucherScreen>
               context: context,
               builder: (context) => InformationDialog(
                 title: state.dialogName.getLocalizedName(context),
-                content: state.dialogMessage,
+                content: state.notifyMessage.getLocalizedMessage(context),
                 onPressed: () {
-                  Navigator.pop(context);
+                  cubit.toIdle();
                 },
               ),
             );
@@ -95,7 +95,7 @@ class _VoucherScreenState extends State<VoucherScreen>
               context: context,
               builder: (context) => InformationDialog(
                 title: state.dialogName.getLocalizedName(context),
-                content: state.dialogMessage,
+                content: state.notifyMessage.getLocalizedMessage(context),
                 onPressed: () {
                   cubit.initialize();
                 },
@@ -109,7 +109,6 @@ class _VoucherScreenState extends State<VoucherScreen>
               child: CircularProgressIndicator(),
             );
           }
-
           return TabBarView(
             controller: _tabController,
             children: [
@@ -185,13 +184,16 @@ class _VoucherScreenState extends State<VoucherScreen>
         return GestureDetector(
           onTap: () async {
             onVoucherSelected(voucher);
-            await Navigator.push(
+            final result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => VoucherDetailScreen.newInstance(voucher),
               ),
             );
-            cubit.initialize(); // Refresh the list after returning
+            if (result == ProcessState.success) {
+              cubit.initialize();
+            }
+            cubit.initialize();
           },
           onLongPress: () {
             onVoucherSelected(voucher);

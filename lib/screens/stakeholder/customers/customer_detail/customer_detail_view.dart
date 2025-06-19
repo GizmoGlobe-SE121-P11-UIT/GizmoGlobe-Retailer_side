@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/voucher_status.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/customers/permissions/customer_permissions.dart';
+import 'package:gizmoglobe_client/widgets/dialog/confirmation_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
+import '../../../../enums/processing/process_state_enum.dart' show ProcessState;
 import '../../../../widgets/general/address_picker.dart';
 import '../../../../widgets/general/field_with_icon.dart';
+import '../../../../widgets/voucher/voucher_card.dart';
 import '../customer_edit/customer_edit_view.dart';
 import 'customer_detail_cubit.dart';
 import 'customer_detail_state.dart';
@@ -285,102 +289,131 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CustomerDetailCubit(widget.customer),
-      child: BlocBuilder<CustomerDetailCubit, CustomerDetailState>(
-        builder: (context, state) {
-          return Scaffold(
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: GradientIconButton(
-                icon: Icons.chevron_left,
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: GradientIconButton(
+          icon: Icons.chevron_left,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          fillColor: Theme.of(context).colorScheme.surface,
+        ),
+        title: GradientText(
+            text: S.of(context).customerDetail),
+      ),
+      body: BlocConsumer<CustomerDetailCubit, CustomerDetailState>(
+        listener: (context, state) {
+          if (state.processState == ProcessState.success) {
+            showDialog(
+              context: context,
+              builder: (context) => InformationDialog(
+                title: state.dialogName.getLocalizedName(context),
+                content: state.notifyMessage.getLocalizedMessage(context),
                 onPressed: () {
-                  Navigator.pop(context);
+                  cubit.toIdle();
                 },
-                fillColor: Theme.of(context).colorScheme.surface,
               ),
-              title: GradientText(
-                  text: S.of(context).customerDetail), //Chi tiết khách hàng
-            ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildHeaderSection(context, state),
-                          const SizedBox(height: 24),
-                          _buildInfoSection(context, state),
-                          const SizedBox(height: 24),
-                          _buildAddressesSection(context, state),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, -4),
-                      ),
+            );
+          } else if (state.processState == ProcessState.failure) {
+            showDialog(
+              context: context,
+              builder: (context) => InformationDialog(
+                title: state.dialogName.getLocalizedName(context),
+                content: state.notifyMessage.getLocalizedMessage(context),
+                onPressed: () {
+                  cubit.toIdle();
+                },
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state.processState == ProcessState.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeaderSection(context, state),
+                      const SizedBox(height: 24),
+                      _buildInfoSection(context, state),
+                      const SizedBox(height: 24),
+                      _buildAddressesSection(context, state),
+                      const SizedBox(height: 24),
+                      _buildVouchersSection(context, state),
                     ],
                   ),
-                  child: CustomerPermissions.canEditCustomers(state.userRole)
-                      ? Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () async {
-                                  final updatedCustomer = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CustomerEditScreen(
-                                        customer: state.customer,
-                                      ),
-                                    ),
-                                  );
-
-                                  if (updatedCustomer != null) {
-                                    // Update the customer in Firebase
-                                    cubit.updateCustomer(updatedCustomer);
-                                  }
-                                },
-                                icon: Icon(
-                                  Icons.edit,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                ),
-                                label: Text(S.of(context).edit,
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    )),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.tertiary,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 12),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : null,
                 ),
-              ],
+              ),
             ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, -4),
+                  ),
+                ],
+              ),
+              child: CustomerPermissions.canEditCustomers(state.userRole)
+                  ? Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              final updatedCustomer = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CustomerEditScreen(
+                                    customer: state.customer,
+                                  ),
+                                ),
+                              );
+
+                              if (updatedCustomer != null) {
+                                // Update the customer in Firebase
+                                cubit.updateCustomer(updatedCustomer);
+                              }
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              color:
+                                  Theme.of(context).colorScheme.onPrimary,
+                            ),
+                            label: Text(S.of(context).edit,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary,
+                                )),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.tertiary,
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : null,
+              ),
+            ],
           );
         },
       ),
@@ -568,6 +601,82 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildVouchersSection(BuildContext context, CustomerDetailState state) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.card_giftcard,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    S.of(context).giftVouchers,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              if (state.vouchers.isEmpty)
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Text(
+                      S.of(context).noVouchersAvailable,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                )
+              else
+                ...state.vouchers.map((voucher) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: GestureDetector(
+                      onTap: () async {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ConfirmationDialog(
+                            title: S.of(context).confirmation,
+                            content: S.of(context).confirmGiftVoucher,
+                            confirmText: S.of(context).confirm,
+                            cancelText: S.of(context).cancel,
+                            onConfirm: () async {
+                              cubit.toLoading();
+                              await cubit.giftVoucher(voucher);
+                            },
+                          ),
+                        );
+                      },
+                      child: VoucherCard(
+                        voucher: voucher,
+                      ),
+                    ),
+                  );
+                }),
+            ],
+          ),
+        ),
       ),
     );
   }

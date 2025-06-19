@@ -3674,6 +3674,76 @@ class S {
       args: [],
     );
   }
+
+  /// `Voucher updated successfully.`
+  String get voucherUpdateSuccess {
+    return Intl.message(
+      'Voucher updated successfully.',
+      name: 'voucherUpdateSuccess',
+      desc: 'Success message when a voucher is updated successfully.',
+      args: [],
+    );
+  }
+
+  /// `Failed to update voucher. Please try again.`
+  String get voucherUpdateFailed {
+    return Intl.message(
+      'Failed to update voucher. Please try again.',
+      name: 'voucherUpdateFailed',
+      desc: 'Error message when updating voucher fails.',
+      args: [],
+    );
+  }
+
+  /// `Gift Vouchers`
+  String get giftVouchers {
+    return Intl.message(
+      'Gift Vouchers',
+      name: 'giftVouchers',
+      desc: 'Label for gift vouchers.',
+      args: [],
+    );
+  }
+
+  /// `Confirmation`
+  String get confirmation {
+    return Intl.message(
+      'Confirmation',
+      name: 'confirmation',
+      desc: 'Title for confirmation dialog.',
+      args: [],
+    );
+  }
+
+  /// `Gift this voucher to customer? This action cannot be undone.`
+  String get confirmGiftVoucher {
+    return Intl.message(
+      'Gift this voucher to customer? This action cannot be undone.',
+      name: 'confirmGiftVoucher',
+      desc: 'Message for confirming gift voucher action.',
+      args: [],
+    );
+  }
+
+  /// `Gift voucher successfully.`
+  String get giveVoucherSuccess {
+    return Intl.message(
+      'Gift voucher successfully.',
+      name: 'giveVoucherSuccess',
+      desc: 'Success message when a voucher is gifted.',
+      args: [],
+    );
+  }
+
+  /// `Failed to gift voucher. Please try again.`
+  String get giveVoucherFailed {
+    return Intl.message(
+      'Failed to gift voucher. Please try again.',
+      name: 'giveVoucherFailed',
+      desc: 'Error message when gifting voucher fails.',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -118,4 +118,37 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
   bool get voucherRanOut {
     return false;
   }
+
+  @override
+  UnlimitedAmountVoucherWithoutEndTime copyWith({
+    String? voucherID,
+    String? voucherName,
+    DateTime? startTime,
+    double? discountValue,
+    double? minimumPurchase,
+    int? maxUsagePerPerson,
+    bool? isVisible,
+    bool? isEnabled,
+    String? enDescription,
+    String? viDescription,
+    bool? isPercentage,
+    bool? hasEndTime,
+    bool? isLimited,
+  }) {
+    return UnlimitedAmountVoucherWithoutEndTime(
+      voucherID: voucherID ?? this.voucherID,
+      voucherName: voucherName ?? this.voucherName,
+      startTime: startTime ?? this.startTime,
+      discountValue: discountValue ?? this.discountValue,
+      minimumPurchase: minimumPurchase ?? this.minimumPurchase,
+      maxUsagePerPerson: maxUsagePerPerson ?? this.maxUsagePerPerson,
+      isVisible: isVisible ?? this.isVisible,
+      isEnabled: isEnabled ?? this.isEnabled,
+      enDescription: enDescription ?? this.enDescription,
+      viDescription: viDescription ?? this.viDescription,
+      isPercentage: isPercentage ?? this.isPercentage,
+      hasEndTime: hasEndTime ?? this.hasEndTime,
+      isLimited: isLimited ?? this.isLimited,
+    );
+  }
 }

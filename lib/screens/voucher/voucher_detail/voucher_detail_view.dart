@@ -203,16 +203,17 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                         showDialog(
                             context: context,
                             builder: (context) => InformationDialog(
-                                  title: state.dialogName.toString(),
-                                  content: state.notifyMessage.toString(),
-                                  onPressed: () {},
+                                  title: state.dialogName.getLocalizedName(context),
+                                  content: state.notifyMessage.getLocalizedMessage(context),
+                                  onPressed: () {
+                                  },
                                 ));
                       } else if (state.processState == ProcessState.failure) {
                         showDialog(
                             context: context,
                             builder: (context) => InformationDialog(
-                                  title: state.dialogName.toString(),
-                                  content: state.notifyMessage.toString(),
+                                  title: state.dialogName.getLocalizedName(context),
+                                  content: state.notifyMessage.getLocalizedMessage(context),
                                   onPressed: () {
                                     cubit.toIdle();
                                   },
@@ -236,9 +237,6 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                             EditVoucherScreen.newInstance(state.voucher),
                                       ),
                                     );
-                                    if (processState == ProcessState.success) {
-                                      setState(() {});
-                                    }
                                   },
                                   icon: Icon(Icons.edit,
                                       color: theme.colorScheme.onPrimary),
@@ -256,31 +254,35 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                               ),
                               const SizedBox(width: 16),
                               Expanded(
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    cubit.toLoading();
-                                    cubit.changeVoucherStatus();
+                                child: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
+                                  builder: (context, state) {
+                                    return ElevatedButton.icon(
+                                      onPressed: () {
+                                        cubit.toLoading();
+                                        cubit.changeVoucherStatus();
+                                      },
+                                      icon: Icon(
+                                        state.voucher.isEnabled
+                                            ? Icons.not_interested
+                                            : Icons.check,
+                                        color: theme.colorScheme.onPrimary,
+                                      ),
+                                      label: Text(
+                                        state.voucher.isEnabled
+                                            ? S.of(context).disabled
+                                            : S.of(context).enabled,
+                                        style:
+                                        TextStyle(color: theme.colorScheme.onPrimary),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: state.voucher.isEnabled
+                                            ? theme.colorScheme.error
+                                            : theme.colorScheme.secondary,
+                                        padding:
+                                        const EdgeInsets.symmetric(vertical: 12),
+                                      ),
+                                    );
                                   },
-                                  icon: Icon(
-                                    state.voucher.isEnabled
-                                        ? Icons.not_interested
-                                        : Icons.check,
-                                    color: theme.colorScheme.onPrimary,
-                                  ),
-                                  label: Text(
-                                    state.voucher.isEnabled
-                                        ? S.of(context).disabled
-                                        : S.of(context).enabled,
-                                    style: TextStyle(
-                                        color: theme.colorScheme.onPrimary),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: state.voucher.isEnabled
-                                        ? theme.colorScheme.error
-                                        : theme.colorScheme.secondary,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12),
-                                  ),
                                 ),
                               ),
                             ],

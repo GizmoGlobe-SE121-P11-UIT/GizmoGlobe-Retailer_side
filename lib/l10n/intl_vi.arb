@@ -527,7 +527,7 @@
 	},
 	"voucher": "Phiếu giảm giá",
 	"@voucher": {
-		"description": "Bottom navigation label for voucher screen.",
+		"description": "Bottom navigation label for phiếu giảm giá screen.",
 		"type": "text"
 	},
 	"profile": "Hồ sơ",
@@ -1508,7 +1508,7 @@
 	},
 	"voucherWillNotExpire": "Voucher này sẽ không hết hạn",
 	"@voucherWillNotExpire": {
-		"description": "Thông báo cho voucher không có ngày hết hạn.",
+		"description": "Thông báo cho phiếu giảm giá không có ngày hết hạn.",
 		"type": "text"
 	},
 	"visibility": "Hiển thị",
@@ -1556,34 +1556,34 @@
 			}
 		}
 	},
-	"voucherAddedSuccess": "Thêm voucher thành công.",
+	"voucherAddedSuccess": "Thêm phiếu giảm giá thành công.",
 	"@voucherAddedSuccess": {
 		"description": "Thông báo thành công khi thêm voucher.",
 		"type": "text"
 	},
-	"voucherAddFailed": "Thêm voucher thất bại. Vui lòng thử lại.",
+	"voucherAddFailed": "Thêm phiếu giảm giá thất bại. Vui lòng thử lại.",
 	"@voucherAddFailed": {
-		"description": "Thông báo lỗi khi thêm voucher thất bại.",
+		"description": "Thông báo lỗi khi thêm phiếu giảm giá thất bại.",
 		"type": "text"
 	},
-	"voucherDeletedSuccess": "Xóa voucher thành công.",
+	"voucherDeletedSuccess": "Xóa phiếu giảm giá thành công.",
 	"@voucherDeletedSuccess": {
 		"description": "Thông báo thành công khi xóa voucher.",
 		"type": "text"
 	},
-	"voucherDeleteFailed": "Xóa voucher thất bại. Vui lòng thử lại.",
+	"voucherDeleteFailed": "Xóa phiếu giảm giá thất bại. Vui lòng thử lại.",
 	"@voucherDeleteFailed": {
-		"description": "Thông báo lỗi khi xóa voucher thất bại.",
+		"description": "Thông báo lỗi khi xóa phiếu giảm giá thất bại.",
 		"type": "text"
 	},
 	"errorLoadingVouchers": "Không thể tải voucher. Vui lòng thử lại.",
 	"@errorLoadingVouchers": {
-		"description": "Thông báo lỗi khi tải voucher thất bại.",
+		"description": "Thông báo lỗi khi tải phiếu giảm giá thất bại.",
 		"type": "text"
 	},
-	"errorUpdatingVoucher": "Cập nhật voucher thất bại. Vui lòng thử lại.",
+	"errorUpdatingVoucher": "Cập nhật phiếu giảm giá thất bại. Vui lòng thử lại.",
 	"@errorUpdatingVoucher": {
-		"description": "Thông báo lỗi khi cập nhật voucher thất bại.",
+		"description": "Thông báo lỗi khi cập nhật phiếu giảm giá thất bại.",
 		"type": "text"
 	},
 	"generateDescriptionButton": "Tạo mô tả",
@@ -1611,7 +1611,7 @@
 		"description": "Thông báo thành công khi tạo mô tả.",
 		"type": "text"
 	},
-	"voucherEditSuccess": "Sửa voucher thành công.",
+	"voucherEditSuccess": "Sửa phiếu giảm giá thành công.",
 	"@voucherEditSuccess": {
 		"description": "Thông báo thành công khi sửa voucher.",
 		"type": "text"
@@ -1856,19 +1856,54 @@
 		"description": "Nhãn cho trạng thái sắp tới.",
 		"type": "text"
 	},
-	"noVouchersAvailable": "Không có voucher nào khả dụng",
+	"noVouchersAvailable": "Không có phiếu giảm giá nào khả dụng",
 	"@noVouchersAvailable": {
-		"description": "Thông báo khi không có voucher nào khả dụng.",
+		"description": "Thông báo khi không có phiếu giảm giá nào khả dụng.",
 		"type": "text"
 	},
 	"ranOut": "Đã hết",
 	"@ranOut": {
-		"description": "Nhãn cho khi voucher đã hết.",
+		"description": "Nhãn cho khi phiếu giảm giá đã hết.",
 		"type": "text"
 	},
 	"maximumDiscount": "Giảm giá tối đa",
 	"@maximumDiscount": {
 		"description": "Nhãn cho số tiền giảm giá tối đa.",
+		"type": "text"
+	},
+	"voucherUpdateSuccess": "Cập nhật phiếu giảm giá thành công.",
+	"@voucherUpdateSuccess": {
+		"description": "Thông báo khi cập nhật phiếu giảm giá thành công.",
+		"type": "text"
+	},
+	"voucherUpdateFailed": "Cập nhật phiếu giảm giá thất bại. Vui lòng thử lại.",
+	"@voucherUpdateFailed": {
+		"description": "Thông báo khi cập nhật phiếu giảm giá thất bại.",
+		"type": "text"
+	},
+	"giftVouchers": "Tặng phiếu giảm giá",
+	"@giftVouchers": {
+		"description": "Nhãn cho tab tặng voucher.",
+		"type": "text"
+	},
+	"confirmation": "Xác nhận",
+	"@confirmation": {
+		"description": "Nhãn cho nút xác nhận.",
+		"type": "text"
+	},
+	"confirmGiftVoucher": "Tặng phiếu giảm giá này cho khách hàng? Hành động này sẽ không thể hoàn tác.",
+	"@confirmGiftVoucher": {
+		"description": "Thông báo xác nhận khi tặng voucher.",
+		"type": "text"
+	},
+	"giftVoucherSuccess": "Tặng phiếu giảm giá thành công.",
+	"@giftVoucherSuccess": {
+		"description": "Thông báo khi tặng voucher thành công.",
+		"type": "text"
+	},
+	"giftVoucherFailed": "Tặng phiếu giảm giá thất bại. Vui lòng thử lại.",
+	"@giftVoucherFailed": {
+		"description": "Thông báo khi tặng voucher thất bại.",
 		"type": "text"
 	}
 }

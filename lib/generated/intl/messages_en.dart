@@ -132,9 +132,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "compatibility": MessageLookupByLibrary.simpleMessage("Compatibility"),
     "completed": MessageLookupByLibrary.simpleMessage("Completed"),
     "confirm": MessageLookupByLibrary.simpleMessage("OK"),
+    "confirmGiftVoucher": MessageLookupByLibrary.simpleMessage(
+      "Gift this voucher to customer? This action cannot be undone.",
+    ),
     "confirmStatusUpdate": MessageLookupByLibrary.simpleMessage(
       "Confirm Status Update",
     ),
+    "confirmation": MessageLookupByLibrary.simpleMessage("Confirmation"),
     "contactInformationContent": MessageLookupByLibrary.simpleMessage(
       "Address: UIT",
     ),
@@ -277,6 +281,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
     "generateDescriptionButton": MessageLookupByLibrary.simpleMessage(
       "Generate description",
+    ),
+    "giftVouchers": MessageLookupByLibrary.simpleMessage("Gift Vouchers"),
+    "giveVoucherFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to gift voucher. Please try again.",
+    ),
+    "giveVoucherSuccess": MessageLookupByLibrary.simpleMessage(
+      "Gift voucher successfully.",
     ),
     "gpuBus": MessageLookupByLibrary.simpleMessage("GPU Bus"),
     "gpuCapacity": MessageLookupByLibrary.simpleMessage("GPU Capacity"),
@@ -658,6 +669,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "voucherName": MessageLookupByLibrary.simpleMessage("Voucher Name"),
     "voucherSettings": MessageLookupByLibrary.simpleMessage("Voucher Settings"),
+    "voucherUpdateFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to update voucher. Please try again.",
+    ),
+    "voucherUpdateSuccess": MessageLookupByLibrary.simpleMessage(
+      "Voucher updated successfully.",
+    ),
     "voucherWillNotExpire": MessageLookupByLibrary.simpleMessage(
       "This voucher will not expire",
     ),

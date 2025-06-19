@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../general/app_text_style.dart';
-import '../general/gradient_button.dart';
+import '../general/standard_button.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;
@@ -14,8 +14,8 @@ class ConfirmationDialog extends StatelessWidget {
     super.key,
     this.title = '',
     this.content = '',
-    this.confirmText = 'Confirm', // Xác nhận
-    this.cancelText = 'Cancel', // Hủy
+    this.confirmText = 'OK',
+    this.cancelText = 'Cancel',
     this.onConfirm,
     this.onCancel,
   });
@@ -52,7 +52,7 @@ class ConfirmationDialog extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GradientButton(
+                  StandardButton(
                     onPress: () {
                       Navigator.of(context).pop();
                       onConfirm?.call();
@@ -63,28 +63,15 @@ class ConfirmationDialog extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
 
-                  SizedBox(
+                  StandardButton(
+                    color: Theme.of(context).colorScheme.secondary,
+                    onPress: () {
+                      Navigator.of(context).pop();
+                      onCancel?.call();
+                    },
+                    text: cancelText,
                     height: 40,
                     width: 120,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        onCancel?.call();
-                      },
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        side: BorderSide(color: Theme.of(context).colorScheme.primary),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Text(
-                        cancelText,
-                        style: AppTextStyle.buttonTextBold.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),

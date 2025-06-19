@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class GradientButton extends StatelessWidget {
+class StandardButton extends StatelessWidget {
   final VoidCallback onPress;
-  final Gradient? gradient;
+  final Color? color;
   final double height;
   final double width;
   final double borderRadius;
@@ -12,10 +12,10 @@ class GradientButton extends StatelessWidget {
   final FontWeight fontWeight;
   final bool isEnabled;
 
-  const GradientButton({
+  const StandardButton({
     super.key,
     required this.onPress,
-    this.gradient,
+    this.color,
     this.height = 48.0,
     this.width = double.infinity,
     this.borderRadius = 10.0,
@@ -35,9 +35,7 @@ class GradientButton extends StatelessWidget {
         opacity: isEnabled ? 1.0 : 0.3,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color:
-                gradient != null ? null : Theme.of(context).colorScheme.primary,
-            gradient: gradient,
+            color: color ?? Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(borderRadius),
           ),
           child: TextButton(

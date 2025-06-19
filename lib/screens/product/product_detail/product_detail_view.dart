@@ -349,16 +349,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         showDialog(
                             context: context,
                             builder: (context) => InformationDialog(
-                                  title: state.dialogName.toString(),
-                                  content: state.notifyMessage.toString(),
+                                  title: state.dialogName.getLocalizedName(context),
+                                  content: state.notifyMessage.getLocalizedMessage(context),
                                   onPressed: () {},
                                 ));
                       } else if (state.processState == ProcessState.failure) {
                         showDialog(
                             context: context,
                             builder: (context) => InformationDialog(
-                                  title: state.dialogName.toString(),
-                                  content: state.notifyMessage.toString(),
+                                  title: state.dialogName.getLocalizedName(context),
+                                  content: state.notifyMessage.getLocalizedMessage(context),
                                   onPressed: () {
                                     cubit.toIdle();
                                   },

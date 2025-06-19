@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_state.dart';
 
+import '../../../data/firebase/firebase.dart';
+import '../../../enums/processing/dialog_name_enum.dart';
+import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../objects/voucher_related/voucher.dart';
 import '../../../data/database/database.dart';
@@ -17,10 +21,20 @@ class VoucherDetailCubit extends Cubit<VoucherDetailState> {
     emit(state.copyWith(processState: ProcessState.idle));
   }
 
-  void changeVoucherStatus() {
-    Voucher newVoucher = state.voucher;
-    newVoucher.updateVoucher(isEnabled: !newVoucher.isEnabled);
-    emit(state.copyWith(voucher: newVoucher));
+  Future<void> changeVoucherStatus() async {
+    try {
+      final bool status = !state.voucher.isEnabled;
+
+      await Firebase().changeVoucherStatus(state.voucher.voucherID!, status);
+
+      final updatedVoucher = state.voucher.copyWith(isEnabled: status);
+      emit(state.copyWith(voucher: updatedVoucher, processState: ProcessState.success, notifyMessage: NotifyMessage.msg24, dialogName: DialogName.success));
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(state.copyWith(processState: ProcessState.failure, notifyMessage: NotifyMessage.msg25, dialogName: DialogName.failure));
+    }
   }
 
   void updateVoucher() async {

@@ -1884,5 +1884,40 @@
 	"@discountValue": {
 		"description": "Label for discount value.",
 		"type": "text"
+	},
+	"voucherUpdateSuccess": "Voucher updated successfully.",
+	"@voucherUpdateSuccess": {
+		"description": "Success message when a voucher is updated successfully.",
+		"type": "text"
+	},
+	"voucherUpdateFailed": "Failed to update voucher. Please try again.",
+	"@voucherUpdateFailed": {
+		"description": "Error message when updating voucher fails.",
+		"type": "text"
+	},
+	"giftVouchers": "Gift Vouchers",
+	"@giftVouchers": {
+		"description": "Label for gift vouchers.",
+		"type": "text"
+	},
+	"confirmation": "Confirmation",
+	"@confirmation": {
+		"description": "Title for confirmation dialog.",
+		"type": "text"
+	},
+	"confirmGiftVoucher": "Gift this voucher to customer? This action cannot be undone.",
+	"@confirmGiftVoucher": {
+		"description": "Message for confirming gift voucher action.",
+		"type": "text"
+	},
+	"giveVoucherSuccess": "Gift voucher successfully.",
+	"@giveVoucherSuccess": {
+		"description": "Success message when a voucher is gifted.",
+		"type": "text"
+	},
+	"giveVoucherFailed": "Failed to gift voucher. Please try again.",
+	"@giveVoucherFailed": {
+		"description": "Error message when gifting voucher fails.",
+		"type": "text"
 	}
 }

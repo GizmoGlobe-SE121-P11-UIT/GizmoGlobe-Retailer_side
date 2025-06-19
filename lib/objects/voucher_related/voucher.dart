@@ -60,6 +60,23 @@ abstract class Voucher {
     this.viDescription = viDescription ?? this.viDescription;
   }
 
+  Voucher copyWith({
+    String? voucherID,
+    String? voucherName,
+    DateTime? startTime,
+    double? discountValue,
+    double? minimumPurchase,
+    int? maxUsagePerPerson,
+    bool? isVisible,
+    bool? isEnabled,
+    String? enDescription,
+    String? viDescription,
+
+    bool? isPercentage,
+    bool? hasEndTime,
+    bool? isLimited,
+  });
+
   VoucherTimeStatus get voucherTimeStatus;
   bool get voucherRanOut;
   Widget detailsWidget(BuildContext context);

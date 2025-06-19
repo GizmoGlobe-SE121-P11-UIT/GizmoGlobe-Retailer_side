@@ -139,9 +139,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "compatibility": MessageLookupByLibrary.simpleMessage("Tương thích"),
     "completed": MessageLookupByLibrary.simpleMessage("Đã hoàn thành"),
     "confirm": MessageLookupByLibrary.simpleMessage("Xác nhận"),
+    "confirmGiftVoucher": MessageLookupByLibrary.simpleMessage(
+      "Tặng phiếu giảm giá này cho khách hàng? Hành động này sẽ không thể hoàn tác.",
+    ),
     "confirmStatusUpdate": MessageLookupByLibrary.simpleMessage(
       "Xác nhận cập nhật trạng thái",
     ),
+    "confirmation": MessageLookupByLibrary.simpleMessage("Xác nhận"),
     "contactInformationContent": MessageLookupByLibrary.simpleMessage(
       "Địa chỉ: UIT",
     ),
@@ -260,7 +264,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorLoadingWarrantyInvoiceDetails": m6,
     "errorOccurred": MessageLookupByLibrary.simpleMessage("Có lỗi xảy ra"),
     "errorUpdatingVoucher": MessageLookupByLibrary.simpleMessage(
-      "Cập nhật voucher thất bại. Vui lòng thử lại.",
+      "Cập nhật phiếu giảm giá thất bại. Vui lòng thử lại.",
     ),
     "errorWithMessage": m7,
     "failure": MessageLookupByLibrary.simpleMessage("Thất bại"),
@@ -295,6 +299,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "generateDescriptionButton": MessageLookupByLibrary.simpleMessage(
       "Tạo mô tả",
     ),
+    "giftVouchers": MessageLookupByLibrary.simpleMessage("Tặng phiếu giảm giá"),
     "gpuBus": MessageLookupByLibrary.simpleMessage("Bus GPU"),
     "gpuCapacity": MessageLookupByLibrary.simpleMessage("Dung lượng GPU"),
     "gpuClockSpeed": MessageLookupByLibrary.simpleMessage("Tốc độ GPU"),
@@ -403,7 +408,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Không có người dùng đăng nhập",
     ),
     "noVouchersAvailable": MessageLookupByLibrary.simpleMessage(
-      "Không có voucher nào khả dụng",
+      "Không có phiếu giảm giá nào khả dụng",
     ),
     "noWarrantyInvoicesFound": MessageLookupByLibrary.simpleMessage(
       "Không tìm thấy hóa đơn bảo hành",
@@ -683,22 +688,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "visible": MessageLookupByLibrary.simpleMessage("Hiển thị"),
     "voucher": MessageLookupByLibrary.simpleMessage("Phiếu giảm giá"),
     "voucherAddFailed": MessageLookupByLibrary.simpleMessage(
-      "Thêm voucher thất bại. Vui lòng thử lại.",
+      "Thêm phiếu giảm giá thất bại. Vui lòng thử lại.",
     ),
     "voucherAddedSuccess": MessageLookupByLibrary.simpleMessage(
-      "Thêm voucher thành công.",
+      "Thêm phiếu giảm giá thành công.",
     ),
     "voucherDeleteFailed": MessageLookupByLibrary.simpleMessage(
-      "Xóa voucher thất bại. Vui lòng thử lại.",
+      "Xóa phiếu giảm giá thất bại. Vui lòng thử lại.",
     ),
     "voucherDeletedSuccess": MessageLookupByLibrary.simpleMessage(
-      "Xóa voucher thành công.",
+      "Xóa phiếu giảm giá thành công.",
     ),
     "voucherEditSuccess": MessageLookupByLibrary.simpleMessage(
-      "Sửa voucher thành công.",
+      "Sửa phiếu giảm giá thành công.",
     ),
     "voucherName": MessageLookupByLibrary.simpleMessage("Tên voucher"),
     "voucherSettings": MessageLookupByLibrary.simpleMessage("Cài đặt voucher"),
+    "voucherUpdateFailed": MessageLookupByLibrary.simpleMessage(
+      "Cập nhật phiếu giảm giá thất bại. Vui lòng thử lại.",
+    ),
+    "voucherUpdateSuccess": MessageLookupByLibrary.simpleMessage(
+      "Cập nhật phiếu giảm giá thành công.",
+    ),
     "voucherWillNotExpire": MessageLookupByLibrary.simpleMessage(
       "Voucher này sẽ không hết hạn",
     ),
