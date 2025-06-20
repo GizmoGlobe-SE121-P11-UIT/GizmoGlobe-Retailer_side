@@ -582,7 +582,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "signUpFailed": MessageLookupByLibrary.simpleMessage(
       "Failed to sign up. Please try again.",
     ),
-    "sortBy": MessageLookupByLibrary.simpleMessage("Sort By"),
+    "sortBy": MessageLookupByLibrary.simpleMessage("Sort By "),
     "stakeholder": MessageLookupByLibrary.simpleMessage("Stakeholder"),
     "startTime": MessageLookupByLibrary.simpleMessage("Start Time"),
     "starts": MessageLookupByLibrary.simpleMessage("Starts"),

@@ -150,7 +150,7 @@
 		"description": "Confirm button label.",
 		"type": "text"
 	},
-	"sortBy": "Sắp xếp theo...",
+	"sortBy": "Sắp xếp theo ",
 	"@sortBy": {
 		"description": "Label for sort by options.",
 		"type": "text"

@@ -113,32 +113,66 @@ class _ProductTabState extends State<ProductTab>
                         style: AppTextStyle.smallText,
                       ),
                       const SizedBox(width: 8),
-                      DropdownButton<SortEnum>(
-                        value: state.selectedSortOption,
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        onChanged: (SortEnum? newValue) {
-                          if (newValue != null &&
-                              newValue != state.selectedSortOption) {
-                            cubit.updateSortOption(newValue);
-                          }
-                        },
-                        items: SortEnum.values
-                            .map<DropdownMenuItem<SortEnum>>((SortEnum value) {
-                          return DropdownMenuItem<SortEnum>(
-                            value: value,
-                            child: Row(
-                              children: [
-                                Text(value.localized(context)),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                      Expanded(
+                        child: DropdownButton<SortEnum>(
+                          isExpanded: true,
+                          itemHeight: kMinInteractiveDimension,
+                          value: state.selectedSortOption,
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          underline: Container(
+                            height: 1,
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                          ),
+                          onChanged: (SortEnum? newValue) {
+                            if (newValue != null &&
+                                newValue != state.selectedSortOption) {
+                              cubit.updateSortOption(newValue);
+                            }
+                          },
+                          items: SortEnum.values
+                              .map<DropdownMenuItem<SortEnum>>(
+                                  (SortEnum value) {
+                                String displayText;
+                                switch (value) {
+                                  case SortEnum.salesHighest:
+                                    displayText = S.of(context).salesHighest;
+                                    break;
+                                  case SortEnum.salesLowest:
+                                    displayText = S.of(context).salesLowest;
+                                    break;
+                                  case SortEnum.releaseLatest:
+                                    displayText = S.of(context).releaseLatest;
+                                    break;
+                                  case SortEnum.releaseOldest:
+                                    displayText = S.of(context).releaseOldest;
+                                    break;
+                                  case SortEnum.stockHighest:
+                                    displayText = S.of(context).stockHighest;
+                                    break;
+                                  case SortEnum.stockLowest:
+                                    displayText = S.of(context).stockLowest;
+                                    break;
+                                }
+                                return DropdownMenuItem<SortEnum>(
+                                  value: value,
+                                  child: Container(
+                                    constraints: const BoxConstraints(minHeight: 40),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      displayText,
+                                      overflow: TextOverflow.visible,
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                        ),
                       ),
-                      const Spacer(),
                       Center(
-                        child: GradientIconButton(
-                          icon: Icons.filter_list_alt,
+                        child: IconButton(
+                          icon: const Icon(Icons.filter_list_alt),
                           iconSize: 28,
+                          color: Theme.of(context).colorScheme.primary,
                           onPressed: () async {
                             final FilterArgument arguments = state
                                 .filterArgument
@@ -146,11 +180,13 @@ class _ProductTabState extends State<ProductTab>
 
                             final result = await Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => FilterScreen.newInstance(
-                                  arguments: arguments,
-                                  selectedTabIndex: cubit.getIndex(),
-                                  manufacturerList: cubit.getManufacturerList(),
-                                ),
+                                builder: (context) =>
+                                    FilterScreen.newInstance(
+                                      arguments: arguments,
+                                      selectedTabIndex: cubit.getIndex(),
+                                      manufacturerList:
+                                      cubit.getManufacturerList(),
+                                    ),
                               ),
                             );
 

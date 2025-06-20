@@ -354,10 +354,10 @@ class S {
     );
   }
 
-  /// `Sort By`
+  /// `Sort By `
   String get sortBy {
     return Intl.message(
-      'Sort By',
+      'Sort By ',
       name: 'sortBy',
       desc: 'Label for sort by options.',
       args: [],
@@ -2095,16 +2095,6 @@ class S {
     );
   }
 
-  /// `Discount`
-  String get discount {
-    return Intl.message(
-      'Discount',
-      name: 'discount',
-      desc: 'Label for discount field.',
-      args: [],
-    );
-  }
-
   /// `Minimum purchase`
   String get minimumPurchase {
     return Intl.message(
@@ -2380,7 +2370,7 @@ class S {
     return Intl.message(
       'Ongoing',
       name: 'ongoing',
-      desc: 'Tab label for ongoing vouchers.',
+      desc: 'Label indicating that a voucher is currently ongoing.',
       args: [],
     );
   }
@@ -3071,6 +3061,16 @@ class S {
       'Selling Price',
       name: 'sellingPrice',
       desc: 'Label for selling price field.',
+      args: [],
+    );
+  }
+
+  /// `Discount`
+  String get discount {
+    return Intl.message(
+      'Discount',
+      name: 'discount',
+      desc: 'Label for discount field.',
       args: [],
     );
   }

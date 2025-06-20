@@ -302,6 +302,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tạo mô tả",
     ),
     "giftVouchers": MessageLookupByLibrary.simpleMessage("Tặng phiếu giảm giá"),
+    "giveVoucherFailed": MessageLookupByLibrary.simpleMessage(
+      "Tặng phiếu giảm giá thất bại. Vui lòng thử lại.",
+    ),
+    "giveVoucherSuccess": MessageLookupByLibrary.simpleMessage(
+      "Tặng phiếu giảm giá thành công.",
+    ),
     "gpuBus": MessageLookupByLibrary.simpleMessage("Bus GPU"),
     "gpuCapacity": MessageLookupByLibrary.simpleMessage("Dung lượng GPU"),
     "gpuClockSpeed": MessageLookupByLibrary.simpleMessage("Tốc độ GPU"),
@@ -611,7 +617,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "signUpFailed": MessageLookupByLibrary.simpleMessage(
       "Đăng ký thất bại. Vui lòng thử lại.",
     ),
-    "sortBy": MessageLookupByLibrary.simpleMessage("Sắp xếp theo..."),
+    "sortBy": MessageLookupByLibrary.simpleMessage("Sắp xếp theo "),
     "stakeholder": MessageLookupByLibrary.simpleMessage("Đối tác"),
     "startTime": MessageLookupByLibrary.simpleMessage("Thời gian bắt đầu"),
     "starts": MessageLookupByLibrary.simpleMessage("Bắt đầu"),
