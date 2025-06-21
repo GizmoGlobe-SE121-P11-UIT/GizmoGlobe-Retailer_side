@@ -26,8 +26,7 @@ class VendorDetailCubit extends Cubit<VendorDetailState> {
 
   Future<void> updateManufacturer(Manufacturer manufacturer) async {
     try {
-      await _firebase.updateManufacturer(manufacturer);
-      emit(state.copyWith(manufacturer: manufacturer));
+      await _firebase.updateManufacturerAndProducts(manufacturer);
     } catch (e) {
       if (kDebugMode) {
         print('Error updating manufacturer: $e');
@@ -59,11 +58,10 @@ class VendorDetailCubit extends Cubit<VendorDetailState> {
         status: newStatus,
       );
       await _firebase.updateManufacturerAndProducts(updatedManufacturer);
-      emit(state.copyWith(manufacturer: updatedManufacturer));
     } catch (e) {
       if (kDebugMode) {
         print('Error toggling manufacturer status: $e');
       } // Lỗi khi chuyển đổi trạng thái nhà sản xuất
     }
   }
-} 
+}

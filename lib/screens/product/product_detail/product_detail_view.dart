@@ -7,10 +7,12 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gizmoglobe_client/objects/product_related/product_extensions.dart';
 
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/product_status_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
+import '../../../enums/stakeholders/manufacturer_status.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../data/database/database.dart';
@@ -200,7 +202,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           const SizedBox(height: 16),
                           Row(
                             children: [
-                              StatusBadge(status: state.product.status),
+                              StatusBadge(status: state.product.displayStatus),
                               const SizedBox(width: 16),
                               Icon(
                                 state.product.stock > 0
@@ -407,37 +409,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    cubit.toLoading();
-                                    cubit.changeProductStatus();
-                                  },
-                                  icon: Icon(
-                                    state.product.status ==
-                                            ProductStatusEnum.discontinued
-                                        ? Icons.refresh
-                                        : Icons.cancel,
-                                    color: Colors.white,
-                                  ),
-                                  label: Text(
-                                    state.product.status ==
-                                            ProductStatusEnum.discontinued
-                                        ? S.of(context).reactivate
-                                        : S.of(context).discontinue,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: state.product.status ==
-                                            ProductStatusEnum.discontinued
-                                        ? Theme.of(context).colorScheme.tertiary
-                                        : Theme.of(context).colorScheme.error,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12),
+                              // Only show enable/disable button if manufacturer is active
+                              // If manufacturer is inactive, product will be displayed as discontinued
+                              // and we don't want to allow changing its status
+                              if (state.product.manufacturer.status != ManufacturerStatus.inactive) ...[
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      cubit.toLoading();
+                                      cubit.changeProductStatus();
+                                    },
+                                    icon: Icon(
+                                      state.product.status ==
+                                          ProductStatusEnum.discontinued
+                                          ? Icons.refresh
+                                          : Icons.cancel,
+                                      color: Colors.white,
+                                    ),
+                                    label: Text(
+                                      state.product.status ==
+                                          ProductStatusEnum.discontinued
+                                          ? S.of(context).reactivate
+                                          : S.of(context).discontinue,
+                                      style: const TextStyle(color: Colors.white),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: state.product.status ==
+                                          ProductStatusEnum.discontinued
+                                          ? Theme.of(context).colorScheme.tertiary
+                                          : Theme.of(context).colorScheme.error,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ],
                           );
                         }

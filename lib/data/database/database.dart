@@ -173,12 +173,7 @@ class Database {
       final manufacturerSnapshot =
           await FirebaseFirestore.instance.collection('manufacturers').get();
 
-      manufacturerList = manufacturerSnapshot.docs.map((doc) {
-        return Manufacturer(
-          manufacturerID: doc.id,
-          manufacturerName: doc['manufacturerName'] as String,
-        );
-      }).toList();
+      manufacturerList = await Firebase().getManufacturers();
 
       if (kDebugMode) {
         print('Manufacturers: ${manufacturerList.length}'); //Nhà sản xuất

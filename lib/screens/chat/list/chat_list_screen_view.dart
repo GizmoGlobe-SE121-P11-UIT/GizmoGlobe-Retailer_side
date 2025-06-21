@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/chat/chat_card.dart';
 import 'package:gizmoglobe_client/screens/chat/conversation/conversation_screen_view.dart';
+import '../../../widgets/general/gradient_icon_button.dart';
 import 'chat_list_screen_cubit.dart';
 import 'chat_list_screen_state.dart';
 
@@ -23,9 +24,10 @@ class ChatListScreen extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.surface,
             elevation: 0,
             title: Text(S.of(context).messages),
-            leading: IconButton(
-              icon: const Icon(Icons.chevron_left),
-              onPressed: () => Navigator.of(context).pop(),
+            leading: GradientIconButton(
+              icon: Icons.chevron_left,
+              onPressed: () => Navigator.pop(context),
+              fillColor: Colors.transparent,
             ),
           ),
           body: state.isLoading

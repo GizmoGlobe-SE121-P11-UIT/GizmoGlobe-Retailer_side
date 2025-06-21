@@ -2135,35 +2135,30 @@ class Firebase {
 
   Future<void> updateManufacturerAndProducts(Manufacturer manufacturer) async {
     try {
-      // Start a batch write
-      final batch = _firestore.batch();
-
-      // Update manufacturer
+      // Update manufacturer in Firebase
       final manufacturerDoc = _firestore
           .collection('manufacturers')
           .doc(manufacturer.manufacturerID);
-      batch.update(manufacturerDoc, _mapManufacturerToJson(manufacturer));
+      await manufacturerDoc.update(_mapManufacturerToJson(manufacturer));
 
-      // Get all products from this manufacturer
-      final productsSnapshot = await _firestore
-          .collection('products')
-          .where('manufacturerID', isEqualTo: manufacturer.manufacturerID)
-          .get();
+      // Instead of updating the products in Firebase, we only update
+      // the local manufacturer list and product list in the Database singleton
 
-      // Update each product's status based on manufacturer status
-      final newProductStatus = manufacturer.status == ManufacturerStatus.active
-          ? ProductStatusEnum.active
-          : ProductStatusEnum.discontinued;
+      // Update manufacturer in the local list
+      int manufacturerIndex = Database().manufacturerList.indexWhere(
+        (m) => m.manufacturerID == manufacturer.manufacturerID
+      );
 
-      for (var doc in productsSnapshot.docs) {
-        final productDoc = _firestore.collection('products').doc(doc.id);
-        batch.update(productDoc, {
-          'status': newProductStatus.getName(),
-        });
+      if (manufacturerIndex >= 0) {
+        Database().manufacturerList[manufacturerIndex] = manufacturer;
       }
 
-      // Commit all changes
-      await batch.commit();
+      // Update products in local list without changing them in Firebase
+      for (int i = 0; i < Database().productList.length; i++) {
+        if (Database().productList[i].manufacturer.manufacturerID == manufacturer.manufacturerID) {
+          Database().productList[i].manufacturer = manufacturer;
+        }
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error updating manufacturer and products: $e');

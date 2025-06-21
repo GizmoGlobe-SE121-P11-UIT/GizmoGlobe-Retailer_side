@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
+import '../../../widgets/general/gradient_icon_button.dart';
 import 'conversation_screen_cubit.dart';
 import 'conversation_screen_state.dart';
 
@@ -63,10 +64,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
             elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.chevron_left),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+              leading: GradientIconButton(
+                icon: Icons.chevron_left,
+                onPressed: () => Navigator.pop(context),
+                fillColor: Colors.transparent,
+              ),
             title: Row(
               children: [
                 CircleAvatar(

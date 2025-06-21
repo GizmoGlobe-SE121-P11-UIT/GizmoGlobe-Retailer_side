@@ -71,7 +71,7 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
 
   Future<void> updateManufacturer(Manufacturer manufacturer) async {
     try {
-      await _firebase.updateManufacturer(manufacturer);
+      await _firebase.updateManufacturerAndProducts(manufacturer);
     } catch (e) {
       if (kDebugMode) {
         print('Error updating manufacturer: $e');

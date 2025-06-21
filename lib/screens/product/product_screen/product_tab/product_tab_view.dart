@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/product/edit_product/edit_product_view.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/objects/product_related/product_extensions.dart';
+import 'package:gizmoglobe_client/enums/stakeholders/manufacturer_status.dart';
 
 import '../../../../data/database/database.dart';
 import '../../../../enums/processing/process_state_enum.dart';
@@ -341,6 +343,8 @@ class _ProductTabState extends State<ProductTab>
                                               }
                                             },
                                           ),
+                                          // Only show the enable/disable option if manufacturer is active
+                                          if (product.manufacturer.status != ManufacturerStatus.inactive)
                                           ListTile(
                                             dense: true,
                                             leading: Icon(
@@ -417,7 +421,7 @@ class _ProductTabState extends State<ProductTab>
                                     ),
                                     const SizedBox(width: 8),
                                     StatusBadge(
-                                      status: product.status,
+                                      status: product.displayStatus,
                                     ),
                                   ],
                                 ),
