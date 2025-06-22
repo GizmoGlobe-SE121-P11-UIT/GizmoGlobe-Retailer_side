@@ -181,13 +181,12 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 ),
                 const SizedBox(height: 24),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
+                          horizontal: 16,
                           vertical: 12,
                         ),
                       ),
@@ -195,75 +194,77 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         S.of(context).cancel,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.error,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (nameController.text.isEmpty ||
-                            emailController.text.isEmpty ||
-                            phoneController.text.isEmpty) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => InformationDialog(
-                              title: S.of(context).errorOccurred,
-                              content: S.of(context).pleaseFillInAllFields,
-                              buttonText: S.of(context).confirm,
-                            ),
-                          );
-                          return;
-                        }
-
-                        final error = await cubit.createCustomer(
-                          nameController.text,
-                          emailController.text,
-                          phoneController.text,
-                        );
-
-                        if (error != null) {
-                          if (mounted) {
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (nameController.text.isEmpty ||
+                              emailController.text.isEmpty ||
+                              phoneController.text.isEmpty) {
                             showDialog(
                               context: context,
                               builder: (context) => InformationDialog(
                                 title: S.of(context).errorOccurred,
-                                content: error,
+                                content: S.of(context).pleaseFillInAllFields,
                                 buttonText: S.of(context).confirm,
                               ),
                             );
+                            return;
                           }
-                        } else {
-                          if (mounted) {
-                            Navigator.pop(context);
-                            showDialog(
-                              context: context,
-                              builder: (context) => InformationDialog(
-                                title: S.of(context).success,
-                                content:
-                                    S.of(context).customerAddedSuccessfully,
-                                buttonText: S.of(context).confirm,
-                              ),
-                            );
+
+                          final error = await cubit.createCustomer(
+                            nameController.text,
+                            emailController.text,
+                            phoneController.text,
+                          );
+
+                          if (error != null) {
+                            if (mounted) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => InformationDialog(
+                                  title: S.of(context).errorOccurred,
+                                  content: error,
+                                  buttonText: S.of(context).confirm,
+                                ),
+                              );
+                            }
+                          } else {
+                            if (mounted) {
+                              Navigator.pop(context);
+                              showDialog(
+                                context: context,
+                                builder: (context) => InformationDialog(
+                                  title: S.of(context).success,
+                                  content:
+                                      S.of(context).customerAddedSuccessfully,
+                                  buttonText: S.of(context).confirm,
+                                ),
+                              );
+                            }
                           }
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text(
-                        S.of(context).addCustomer,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontWeight: FontWeight.w600,
+                        child: Text(
+                          S.of(context).addCustomer,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),

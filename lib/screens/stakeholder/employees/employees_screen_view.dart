@@ -341,62 +341,64 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 16),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (formKey.currentState?.validate() ?? false) {
-                                final error = await cubit.createEmployee(
-                                  nameController.text,
-                                  emailController.text,
-                                  phoneController.text,
-                                  selectedRole,
-                                );
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (formKey.currentState?.validate() ?? false) {
+                                  final error = await cubit.createEmployee(
+                                    nameController.text,
+                                    emailController.text,
+                                    phoneController.text,
+                                    selectedRole,
+                                  );
 
-                                if (error != null) {
-                                  if (mounted) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => InformationDialog(
-                                        title: S.of(context).errorOccurred,
-                                        content: error,
-                                        buttonText: S.of(context).confirm,
-                                      ),
-                                    );
-                                  }
-                                } else {
-                                  if (mounted) {
-                                    Navigator.pop(context);
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => InformationDialog(
-                                        title: S.of(context).success,
-                                        content: S
-                                            .of(context)
-                                            .employeeAddedSuccessfully,
-                                        buttonText: S.of(context).confirm,
-                                      ),
-                                    );
+                                  if (error != null) {
+                                    if (mounted) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => InformationDialog(
+                                          title: S.of(context).errorOccurred,
+                                          content: error,
+                                          buttonText: S.of(context).confirm,
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    if (mounted) {
+                                      Navigator.pop(context);
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => InformationDialog(
+                                          title: S.of(context).success,
+                                          content: S
+                                              .of(context)
+                                              .employeeAddedSuccessfully,
+                                          buttonText: S.of(context).confirm,
+                                        ),
+                                      );
+                                    }
                                   }
                                 }
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 12,
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: Text(
-                              S.of(context).addNewEmployee,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontWeight: FontWeight.bold,
+                              child: Text(
+                                S.of(context).addNewEmployee,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -703,34 +705,18 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                       ),
                                                       actions: [
                                                         TextButton(
-                                                          onPressed: () =>
-                                                              Navigator.pop(
-                                                                  context),
-                                                          child: Text(
-                                                            S
-                                                                .of(context)
-                                                                .cancel,
-                                                          ),
+                                                          onPressed: () => Navigator.pop(context),
+                                                          child: Text(S.of(context).cancel),
                                                         ),
+                                                        const SizedBox(width: 4),
                                                         TextButton(
                                                           onPressed: () async {
-                                                            Navigator.pop(
-                                                                context);
-                                                            await cubit
-                                                                .deleteEmployee(
-                                                                    employee
-                                                                        .employeeID!);
+                                                            Navigator.pop(context);
+                                                            await cubit.deleteEmployee(employee.employeeID!);
                                                           },
                                                           child: Text(
-                                                            S
-                                                                .of(context)
-                                                                .delete,
-                                                            style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .error,
-                                                            ),
+                                                            S.of(context).delete,
+                                                            style: TextStyle(color: Theme.of(context).colorScheme.error),
                                                           ),
                                                         ),
                                                       ],

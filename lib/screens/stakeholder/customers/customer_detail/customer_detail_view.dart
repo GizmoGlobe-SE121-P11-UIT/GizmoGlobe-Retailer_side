@@ -263,7 +263,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                               Text(
                                 S.of(context).addAddress,
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   color: Theme.of(context).colorScheme.onPrimary,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -388,11 +388,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           Navigator.pop(context);
                         },
                         style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         ),
                         child: Text(S.of(context).cancel, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 16, fontWeight: FontWeight.w600)),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () async {
@@ -414,7 +414,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).colorScheme.primary,
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
                           child: Row(
@@ -422,7 +422,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                             children: [
                               const Icon(Icons.save, color: Colors.white),
                               const SizedBox(width: 4),
-                              Text(S.of(context).saveAddress, style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w600)),
+                              Text(S.of(context).saveAddress, style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ),
@@ -552,8 +552,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                             },
                             icon: Icon(
                               Icons.edit,
-                              color:
-                                  Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.onPrimary,
                             ),
                             label: Text(S.of(context).edit,
                                 style: TextStyle(

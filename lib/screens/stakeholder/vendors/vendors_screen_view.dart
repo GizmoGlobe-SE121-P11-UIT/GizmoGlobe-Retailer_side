@@ -168,7 +168,6 @@ class _VendorsScreenState extends State<VendorsScreen> {
                     ),
                     const SizedBox(height: 24),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
@@ -187,7 +186,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Flexible(
+                        Expanded(
                           child: ElevatedButton(
                             onPressed: () async {
                               if (nameController.text.isEmpty) {
@@ -236,7 +235,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                               backgroundColor:
                                   Theme.of(context).colorScheme.primary,
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
+                                horizontal: 8,
                                 vertical: 12,
                               ),
                               shape: RoundedRectangleBorder(
