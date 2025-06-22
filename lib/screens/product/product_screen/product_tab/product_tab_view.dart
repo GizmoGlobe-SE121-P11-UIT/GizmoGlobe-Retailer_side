@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/product_related/product_extensions.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/manufacturer_status.dart';
+import 'package:gizmoglobe_client/widgets/product/product_card.dart';
 
 import '../../../../data/database/database.dart';
 import '../../../../enums/processing/process_state_enum.dart';
@@ -223,210 +224,155 @@ class _ProductTabState extends State<ProductTab>
                         final product = state.filteredProductList[index];
                         final isSelected = state.selectedProduct == product;
 
-                        IconData getCategoryIcon(CategoryEnum category) {
-                          switch (category) {
-                            case CategoryEnum.ram:
-                              return Icons.memory;
-                            case CategoryEnum.cpu:
-                              return Icons.computer;
-                            case CategoryEnum.psu:
-                              return Icons.power;
-                            case CategoryEnum.gpu:
-                              return Icons.videogame_asset;
-                            case CategoryEnum.drive:
-                              return Icons.storage;
-                            case CategoryEnum.mainboard:
-                              return Icons.developer_board;
-                            default:
-                              return Icons.device_unknown;
-                          }
-                        }
+                        return AnimatedOpacity(
+                          duration: const Duration(milliseconds: 200),
+                          opacity: state.selectedProduct == null ||
+                                  state.selectedProduct == product
+                              ? 1.0
+                              : 0.3,
+                          child: ProductCard(
+                            product: product,
+                            isSelected: isSelected,
+                            onTap: () async {
+                              cubit.setSelectedProduct(null);
+                              ProcessState result =
+                                  await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProductDetailScreen.newInstance(product),
+                                ),
+                              );
 
-                        return GestureDetector(
-                          onTap: () async {
-                            cubit.setSelectedProduct(null);
-                            ProcessState result =
-                                await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ProductDetailScreen.newInstance(product),
-                              ),
-                            );
+                              if (result == ProcessState.success) {
+                                await cubit.reloadProducts();
+                              }
+                            },
+                            onLongPress: () async {
+                              cubit.setSelectedProduct(product);
+                              final bool isAdmin = await Database().isUserAdmin();
 
-                            if (result == ProcessState.success) {
-                              await cubit.reloadProducts();
-                            }
-                          },
-                          onLongPress: () async {
-                            cubit.setSelectedProduct(product);
-                            final bool isAdmin = await Database().isUserAdmin();
-
-                            showDialog(
-                              context: context,
-                              barrierDismissible: true,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  backgroundColor: Colors.transparent,
-                                  contentPadding: EdgeInsets.zero,
-                                  content: Container(
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).cardColor,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8, 16, 8, 8),
-                                          child: Text(
-                                            product.productName,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium
-                                                ?.copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                              showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.transparent,
+                                    contentPadding: EdgeInsets.zero,
+                                    content: Container(
+                                      width: 120,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).cardColor,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8, 16, 8, 8),
+                                            child: Text(
+                                              product.productName,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
                                           ),
-                                        ),
-                                        ListTile(
-                                          dense: true,
-                                          leading: Icon(
-                                            Icons.visibility_outlined,
-                                            size: 20,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                          ),
-                                          title: Text(S.of(context).view),
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            cubit.setSelectedProduct(null);
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProductDetailScreen
-                                                        .newInstance(product),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        if (isAdmin) ...[
                                           ListTile(
                                             dense: true,
                                             leading: Icon(
-                                              Icons.edit_outlined,
+                                              Icons.visibility_outlined,
                                               size: 20,
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .onSurface,
                                             ),
-                                            title: Text(S.of(context).edit),
-                                            onTap: () async {
+                                            title: Text(S.of(context).view),
+                                            onTap: () {
                                               Navigator.pop(context);
                                               cubit.setSelectedProduct(null);
-                                              ProcessState processState =
-                                                  await Navigator.push(
+                                              Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      EditProductScreen
+                                                      ProductDetailScreen
                                                           .newInstance(product),
                                                 ),
                                               );
-
-                                              if (processState ==
-                                                  ProcessState.success) {
-                                                await cubit.reloadProducts();
-                                              }
                                             },
                                           ),
-                                          // Only show the enable/disable option if manufacturer is active
-                                          if (product.manufacturer.status != ManufacturerStatus.inactive)
-                                          ListTile(
-                                            dense: true,
-                                            leading: Icon(
-                                              product.status ==
-                                                      ProductStatusEnum
-                                                          .discontinued
-                                                  ? Icons.check_circle_outline
-                                                  : Icons.cancel_outlined,
-                                              size: 20,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
-                                            ),
-                                            title: Text(
-                                              product.status ==
-                                                      ProductStatusEnum
-                                                          .discontinued
-                                                  ? S.of(context).activate
-                                                  : S.of(context).deactivate,
-                                            ),
-                                            onTap: () async {
-                                              Navigator.pop(context);
-                                              cubit.toLoading();
-                                              cubit.setSelectedProduct(null);
+                                          if (isAdmin) ...[
+                                            ListTile(
+                                              dense: true,
+                                              leading: Icon(
+                                                Icons.edit_outlined,
+                                                size: 20,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                              title: Text(S.of(context).edit),
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                cubit.setSelectedProduct(null);
+                                                ProcessState processState =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditProductScreen
+                                                            .newInstance(product),
+                                                  ),
+                                                );
 
-                                              await cubit.changeStatus(product);
-                                            },
-                                          ),
+                                                if (processState ==
+                                                    ProcessState.success) {
+                                                  await cubit.reloadProducts();
+                                                }
+                                              },
+                                            ),
+                                            // Only show the enable/disable option if manufacturer is active
+                                            if (product.manufacturer.status != ManufacturerStatus.inactive)
+                                            ListTile(
+                                              dense: true,
+                                              leading: Icon(
+                                                product.status ==
+                                                        ProductStatusEnum
+                                                            .discontinued
+                                                    ? Icons.check_circle_outline
+                                                    : Icons.cancel_outlined,
+                                                size: 20,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                              title: Text(
+                                                product.status ==
+                                                        ProductStatusEnum
+                                                            .discontinued
+                                                    ? S.of(context).activate
+                                                    : S.of(context).deactivate,
+                                              ),
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                cubit.toLoading();
+                                                cubit.setSelectedProduct(null);
+
+                                                await cubit.changeStatus(product);
+                                              },
+                                            ),
+                                          ],
                                         ],
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ).then((_) {
-                              cubit.setSelectedProduct(null);
-                            });
-                          },
-                          child: AnimatedOpacity(
-                            duration: const Duration(milliseconds: 200),
-                            opacity: state.selectedProduct == null ||
-                                    state.selectedProduct == product
-                                ? 1.0
-                                : 0.3,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withValues(alpha: 0.1) 
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 4.0),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      getCategoryIcon(product.category),
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Expanded(
-                                      child: Text(
-                                        product.productName,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
-                                    StatusBadge(
-                                      status: product.displayStatus,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                                  );
+                                },
+                              ).then((_) {
+                                cubit.setSelectedProduct(null);
+                              });
+                            },
                           ),
                         );
                       },

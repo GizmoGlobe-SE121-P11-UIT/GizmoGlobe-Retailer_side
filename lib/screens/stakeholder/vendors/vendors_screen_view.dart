@@ -437,7 +437,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                 manufacturer.status ==
                                                         ManufacturerStatus
                                                             .active
-                                                    ? Icons.block_outlined
+                                                    ? Icons.cancel_outlined
                                                     : Icons
                                                         .check_circle_outline,
                                                 size: 20,
