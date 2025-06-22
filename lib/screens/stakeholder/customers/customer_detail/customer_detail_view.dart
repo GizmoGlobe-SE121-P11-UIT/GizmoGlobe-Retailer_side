@@ -9,6 +9,10 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 import '../../../../enums/processing/process_state_enum.dart' show ProcessState;
+import '../../../../objects/address_related/address.dart';
+import '../../../../objects/address_related/district.dart';
+import '../../../../objects/address_related/province.dart';
+import '../../../../objects/address_related/ward.dart';
 import '../../../../widgets/general/address_picker.dart';
 import '../../../../widgets/general/field_with_icon.dart';
 import '../../../../widgets/voucher/voucher_card.dart';
@@ -219,51 +223,208 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (receiverNameController.text.isEmpty ||
-                              receiverPhoneController.text.isEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => InformationDialog(
-                                title: S.of(context).errorOccurred,
-                                content:
-                                    S.of(context).pleaseFillInAllRequiredFields,
-                                buttonText: S.of(context).confirm,
-                              ),
-                            );
-                            return;
-                          }
-                          await cubit.addAddress();
-                          if (mounted) {
-                            Navigator.pop(context);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (receiverNameController.text.isEmpty ||
+                                receiverPhoneController.text.isEmpty) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => InformationDialog(
+                                  title: S.of(context).errorOccurred,
+                                  content:
+                                      S.of(context).pleaseFillInAllRequiredFields,
+                                  buttonText: S.of(context).confirm,
+                                ),
+                              );
+                              return;
+                            }
+                            await cubit.addAddress();
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.add_location, color: Colors.white),
+                              const SizedBox(width: 4),
+                              Text(
+                                S.of(context).addAddress,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.add_location, color: Colors.white),
-                            const SizedBox(width: 8),
-                            Text(
-                              S.of(context).addAddress,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showEditAddressDialog(BuildContext context, Address address) {
+    cubit.startEditingAddress(address);
+    receiverNameController.text = address.receiverName;
+    receiverPhoneController.text = address.receiverPhone;
+    streetController.text = address.street ?? '';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.edit_location_alt,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 28,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        S.of(context).editAddress,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Text(S.of(context).receiverName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface)),
+                  const SizedBox(height: 8),
+                  FieldWithIcon(
+                    controller: receiverNameController,
+                    hintText: S.of(context).enterReceiverName,
+                    prefixIcon: const Icon(Icons.person_outline, color: Colors.white70),
+                    fillColor: Theme.of(context).colorScheme.surface,
+                    onChanged: (value) {
+                      cubit.updateNewAddress(receiverName: value);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Text(S.of(context).receiverPhone, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface)),
+                  const SizedBox(height: 8),
+                  FieldWithIcon(
+                    controller: receiverPhoneController,
+                    hintText: S.of(context).enterPhoneNumber,
+                    prefixIcon: const Icon(Icons.phone_outlined, color: Colors.white70),
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    keyboardType: TextInputType.phone,
+                    fillColor: Theme.of(context).colorScheme.surface,
+                    onChanged: (value) {
+                      cubit.updateNewAddress(receiverPhone: value);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Text(S.of(context).location, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface)),
+                  const SizedBox(height: 8),
+                  AddressPicker(
+                    initialProvince: address.province,
+                    initialDistrict: address.district,
+                    initialWard: address.ward,
+                    onAddressChanged: (province, district, ward) {
+                      cubit.updateNewAddress(
+                        province: province,
+                        district: district,
+                        ward: ward,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Text(S.of(context).streetAddress, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface)),
+                  const SizedBox(height: 8),
+                  FieldWithIcon(
+                    controller: streetController,
+                    hintText: S.of(context).streetNameBuildingHouseNo,
+                    prefixIcon: const Icon(Icons.home_outlined, color: Colors.white70),
+                    fillColor: Theme.of(context).colorScheme.surface,
+                    onChanged: (value) {
+                      cubit.updateNewAddress(street: value);
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          cubit.clearNewAddress();
+                          Navigator.pop(context);
+                        },
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        ),
+                        child: Text(S.of(context).cancel, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 16, fontWeight: FontWeight.w600)),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (receiverNameController.text.isEmpty || receiverPhoneController.text.isEmpty) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => InformationDialog(
+                                  title: S.of(context).errorOccurred,
+                                  content: S.of(context).pleaseFillInAllRequiredFields,
+                                  buttonText: S.of(context).confirm,
+                                ),
+                              );
+                              return;
+                            }
+                            await cubit.editAddress();
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.save, color: Colors.white),
+                              const SizedBox(width: 4),
+                              Text(S.of(context).saveAddress, style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w600)),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -549,20 +710,22 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               ),
               const SizedBox(height: 16),
               ...state.customer.addresses!.map((address) {
-                return Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.symmetric(vertical: 4),
-                  child: Card(
-                    elevation: 10,
-                    shadowColor: Theme.of(context).colorScheme.shadow,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(
-                        address.toString(),
-                        style: TextStyle(
-                          fontSize: 16,
-                          // fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSurface,
+                return GestureDetector(
+                  onTap: () => _showEditAddressDialog(context, address),
+                  child: Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    child: Card(
+                      elevation: 10,
+                      shadowColor: Theme.of(context).colorScheme.shadow,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          address.toString(),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                         ),
                       ),
                     ),

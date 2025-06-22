@@ -12,6 +12,9 @@ class AddressPicker extends StatefulWidget {
   final EdgeInsets? insidePadding;
   final TextStyle? placeHolderTextStyle;
   final Function(Province? province, District? district, Ward? ward)? onAddressChanged;
+  final Province? initialProvince;
+  final District? initialDistrict;
+  final Ward? initialWard;
 
   const AddressPicker({
     super.key,
@@ -20,6 +23,9 @@ class AddressPicker extends StatefulWidget {
     this.insidePadding,
     this.placeHolderTextStyle,
     this.onAddressChanged,
+    this.initialProvince,
+    this.initialDistrict,
+    this.initialWard,
   });
 
   @override
@@ -30,6 +36,14 @@ class _AddressPickerState extends State<AddressPicker> {
   Province? _provinceSelected;
   District? _districtSelected;
   Ward? _wardSelected;
+
+  @override
+  void initState() {
+    super.initState();
+    _provinceSelected = widget.initialProvince;
+    _districtSelected = widget.initialDistrict;
+    _wardSelected = widget.initialWard;
+  }
 
   @override
   Widget build(BuildContext context) {

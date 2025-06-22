@@ -255,11 +255,39 @@ class Firebase {
       });
 
       await Database().fetchAddress();
-      Database().customerList = await getCustomers();
     } catch (e) {
       if (kDebugMode) {
         print('Error creating new address: $e');
       } // Lỗi khi tạo địa chỉ mới
+      rethrow;
+    }
+  }
+
+  Future<void> updateAddress(Address address) async {
+    try {
+      if (address.addressID == null) {
+        throw Exception('Address ID cannot be null');
+      }
+
+      // Update address information
+      await FirebaseFirestore.instance
+          .collection('addresses')
+          .doc(address.addressID)
+          .update({
+        'receiverName': address.receiverName,
+        'receiverPhone': address.receiverPhone,
+        'provinceCode': address.province?.code,
+        'districtCode': address.district?.code,
+        'wardCode': address.ward?.code,
+        'street': address.street ?? '',
+        'hidden': address.hidden,
+      });
+
+      await Database().fetchAddress();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error updating address: $e');
+      } // Lỗi khi cập nhật địa chỉ
       rethrow;
     }
   }
@@ -2704,6 +2732,21 @@ class Firebase {
     } catch (e) {
       if (kDebugMode) {
         print('Error adding owned voucher: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<Customer> getCustomerById(String customerId) async {
+    try {
+      final doc = await FirebaseFirestore.instance.collection('customers').doc(customerId).get();
+      if (!doc.exists) {
+        throw Exception('Customer not found');
+      }
+      return Customer.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting customer by ID: $e');
       }
       rethrow;
     }

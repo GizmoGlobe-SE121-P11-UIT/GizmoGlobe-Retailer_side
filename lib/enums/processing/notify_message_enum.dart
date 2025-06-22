@@ -30,6 +30,10 @@ enum NotifyMessage {
   msg25('voucherUpdateFailed'),
   msg26('giveVoucherSuccess'),
   msg27('giveVoucherFailed'),
+  msg28('addressAddedSuccess'),
+  msg29('addressAddFailed'),
+  msg30('addressUpdatedSuccess'),
+  msg31('addressUpdateFailed'),
   error('unexpectedError');
 
   final String message;
@@ -97,6 +101,14 @@ enum NotifyMessage {
         return S.of(context).giveVoucherSuccess;
       case NotifyMessage.msg27:
         return S.of(context).giveVoucherFailed;
+      case NotifyMessage.msg28:
+        return S.of(context).addressAddedSuccess;
+      case NotifyMessage.msg29:
+        return S.of(context).addressAddFailed;
+      case NotifyMessage.msg30:
+        return S.of(context).addressUpdatedSuccess;
+      case NotifyMessage.msg31:
+        return S.of(context).addressUpdateFailed;
       case NotifyMessage.error:
         return S.of(context).unexpectedError;
     }

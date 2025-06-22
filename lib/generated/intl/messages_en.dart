@@ -85,6 +85,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "Additional Information",
     ),
     "address": MessageLookupByLibrary.simpleMessage("Address"),
+    "addressAddFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to add address. Please try again.",
+    ),
+    "addressAddedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Address added successfully.",
+    ),
+    "addressUpdateFailed": MessageLookupByLibrary.simpleMessage(
+      "Failed to update address. Please try again.",
+    ),
+    "addressUpdatedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Address updated successfully.",
+    ),
     "addresses": MessageLookupByLibrary.simpleMessage("Addresses"),
     "all": MessageLookupByLibrary.simpleMessage("All"),
     "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
@@ -199,6 +211,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "driveCapacity": MessageLookupByLibrary.simpleMessage("Drive Capacity"),
     "driveType": MessageLookupByLibrary.simpleMessage("Drive Type"),
     "edit": MessageLookupByLibrary.simpleMessage("Edit"),
+    "editAddress": MessageLookupByLibrary.simpleMessage("Edit Address"),
     "editCustomer": MessageLookupByLibrary.simpleMessage("Edit Customer"),
     "editEmployee": MessageLookupByLibrary.simpleMessage("Edit Employee"),
     "editInvoice": MessageLookupByLibrary.simpleMessage("Edit Invoice"),
@@ -535,6 +548,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "salesLowest": MessageLookupByLibrary.simpleMessage("Sale: Lowest"),
     "salesStatus": MessageLookupByLibrary.simpleMessage("Sales Status"),
     "save": MessageLookupByLibrary.simpleMessage("Save"),
+    "saveAddress": MessageLookupByLibrary.simpleMessage("Save Address"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("Save changes"),
     "searchIncomingInvoices": MessageLookupByLibrary.simpleMessage(
       "Find incoming invoices...",

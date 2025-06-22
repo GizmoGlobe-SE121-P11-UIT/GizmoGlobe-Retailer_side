@@ -126,4 +126,28 @@ class Address {
       hidden: json['hidden'] as bool? ?? false,
     );
   }
+
+  Address copyWith({
+    String? addressID,
+    String? customerID,
+    String? receiverName,
+    String? receiverPhone,
+    Province? province,
+    District? district,
+    Ward? ward,
+    String? street,
+    bool? hidden,
+  }) {
+    return Address(
+      addressID: addressID ?? this.addressID,
+      customerID: customerID ?? this.customerID,
+      receiverName: receiverName ?? this.receiverName,
+      receiverPhone: receiverPhone ?? this.receiverPhone,
+      province: province ?? this.province,
+      district: district ?? this.district,
+      ward: ward ?? this.ward,
+      street: street ?? this.street,
+      hidden: hidden ?? this.hidden,
+    );
+  }
 }

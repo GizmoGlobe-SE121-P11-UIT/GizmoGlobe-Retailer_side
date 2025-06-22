@@ -94,6 +94,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "Thông tin bổ sung",
     ),
     "address": MessageLookupByLibrary.simpleMessage("Địa chỉ"),
+    "addressAddFailed": MessageLookupByLibrary.simpleMessage(
+      "Không thể thêm địa chỉ. Vui lòng thử lại.",
+    ),
+    "addressAddedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Địa chỉ đã được thêm thành công.",
+    ),
+    "addressUpdateFailed": MessageLookupByLibrary.simpleMessage(
+      "Không thể cập nhật địa chỉ. Vui lòng thử lại.",
+    ),
+    "addressUpdatedSuccess": MessageLookupByLibrary.simpleMessage(
+      "Địa chỉ đã được cập nhật thành công.",
+    ),
     "addresses": MessageLookupByLibrary.simpleMessage("Địa chỉ"),
     "all": MessageLookupByLibrary.simpleMessage("Tất cả"),
     "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
@@ -208,6 +220,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "driveCapacity": MessageLookupByLibrary.simpleMessage("Dung lượng ổ đĩa"),
     "driveType": MessageLookupByLibrary.simpleMessage("Loại ổ đĩa"),
     "edit": MessageLookupByLibrary.simpleMessage("Chỉnh sửa"),
+    "editAddress": MessageLookupByLibrary.simpleMessage("Chỉnh sửa địa chỉ"),
     "editCustomer": MessageLookupByLibrary.simpleMessage(
       "Chỉnh sửa khách hàng",
     ),
@@ -570,6 +583,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "salesStatus": MessageLookupByLibrary.simpleMessage("Trạng thái bán hàng"),
     "save": MessageLookupByLibrary.simpleMessage("Lưu"),
+    "saveAddress": MessageLookupByLibrary.simpleMessage("Lưu địa chỉ"),
     "saveChanges": MessageLookupByLibrary.simpleMessage("Lưu thay đổi"),
     "searchIncomingInvoices": MessageLookupByLibrary.simpleMessage(
       "Tìm hóa đơn nhập...",

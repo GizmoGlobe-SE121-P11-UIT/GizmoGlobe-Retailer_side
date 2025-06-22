@@ -1929,5 +1929,35 @@
 	"@expired": {
 		"description": "Label indicating that a voucher has expired.",
 		"type": "text"
+	},
+	"addressAddedSuccess": "Address added successfully.",
+	"@addressAddedSuccess": {
+		"description": "Message shown when an address is added successfully.",
+		"type": "text"
+	},
+	"addressAddFailed": "Failed to add address. Please try again.",
+	"@addressAddFailed": {
+		"description": "Message shown when adding an address fails.",
+		"type": "text"
+	},
+	"addressUpdatedSuccess": "Address updated successfully.",
+	"@addressUpdatedSuccess": {
+		"description": "Message shown when an address is updated successfully.",
+		"type": "text"
+	},
+	"addressUpdateFailed": "Failed to update address. Please try again.",
+	"@addressUpdateFailed": {
+		"description": "Message shown when updating an address fails.",
+		"type": "text"
+	},
+	"editAddress": "Edit Address",
+	"@editAddress": {
+		"description": "Button label for editing an address.",
+		"type": "text"
+	},
+	"saveAddress": "Save Address",
+	"@saveAddress": {
+		"description": "Button label for saving an address.",
+		"type": "text"
 	}
 }

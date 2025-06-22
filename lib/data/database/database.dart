@@ -145,7 +145,7 @@ class Database {
   Database._internal();
 
   Future<void> initialize() async {
-    // provinceList = await fetchProvinces();
+    provinceList = await fetchProvinces();
 
     try {
       await fetchDataFromFirestore();
@@ -359,12 +359,12 @@ class Database {
     try {
       final String response = await rootBundle.loadString(filePath);
       if (response.isEmpty) {
-        throw Exception('JSON file is empty'); // File JSON rỗng
+        throw Exception('JSON file is empty');
       }
 
       final List? jsonList = jsonDecode(response) as List<dynamic>?;
       if (jsonList == null) {
-        throw Exception('Error parsing JSON data'); // Lỗi khi parse JSON
+        throw Exception('Error parsing JSON data');
       }
 
       List<Province> provinceList =
@@ -372,7 +372,7 @@ class Database {
       return provinceList;
     } catch (e) {
       throw Exception(
-          'Error loading provinces from file: $e'); // Lỗi khi load dữ liệu từ file
+          'Error loading provinces from file: $e');
     }
   }
 

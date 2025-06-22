@@ -4,6 +4,7 @@ import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/owned_voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
+import '../../../../data/database/database.dart';
 import '../../../../enums/processing/dialog_name_enum.dart';
 import '../../../../enums/processing/notify_message_enum.dart';
 import '../../../../enums/processing/process_state_enum.dart';
@@ -15,8 +16,6 @@ import '../../../../objects/address_related/ward.dart';
 import 'customer_detail_state.dart';
 
 class CustomerDetailCubit extends Cubit<CustomerDetailState> {
-  final Firebase _firebase = Firebase();
-
   CustomerDetailCubit(Customer customer)
       : super(CustomerDetailState(customer: customer)) {
     _loadUserRole();
@@ -25,7 +24,7 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
 
   Future<void> _loadUserRole() async {
     try {
-      final userRole = await _firebase.getUserRole();
+      final userRole = await Firebase().getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
       if (kDebugMode) {
@@ -36,8 +35,8 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
 
   Future<void> _loadVouchers() async {
     try {
-      final vouchers = await _firebase.getVouchers();
-      final ownedVouchers = await _firebase.getOwnedVouchers(state.customer.customerID!);
+      final vouchers = await Firebase().getVouchers();
+      final ownedVouchers = await Firebase().getOwnedVouchers(state.customer.customerID!);
       final ownedVoucherIds = ownedVouchers.map((ov) => ov.voucherID).toSet();
 
       final availableVouchers = (vouchers).where((v) {
@@ -59,7 +58,7 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
   Future<void> updateCustomer(Customer updatedCustomer) async {
     toLoading();
     try {
-      await _firebase.updateCustomer(updatedCustomer);
+      await Firebase().updateCustomer(updatedCustomer);
       emit(state.copyWith(
         customer: updatedCustomer,
         processState: ProcessState.success,
@@ -72,10 +71,18 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
     }
   }
 
+  void startEditingAddress(Address address) {
+    emit(state.copyWith(newAddress: address));
+  }
+
+  void clearNewAddress() {
+    emit(state.copyWith(newAddress: null));
+  }
+
   Future<void> deleteCustomer() async {
     toLoading();
     try {
-      await _firebase.deleteCustomer(state.customer.customerID!);
+      await Firebase().deleteCustomer(state.customer.customerID!);
       emit(state.copyWith(processState: ProcessState.success));
     } catch (e) {
       emit(state.copyWith(
@@ -96,6 +103,7 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
   }) {
     emit(state.copyWith(
       newAddress: Address(
+        addressID: state.newAddress?.addressID,
         customerID: state.customer.customerID!,
         receiverName: receiverName ?? state.newAddress?.receiverName ?? '',
         receiverPhone: receiverPhone ?? state.newAddress?.receiverPhone ?? '',
@@ -111,16 +119,49 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
   Future<void> addAddress() async {
     toLoading();
     try {
-      await _firebase.createAddress(state.newAddress!);
+      await Firebase().createAddress(state.newAddress!);
 
+      final updatedCustomer = await Firebase().getCustomerById(state.customer.customerID!);
+      Database().customerList.removeWhere((c) => c.customerID == updatedCustomer.customerID);
+      Database().customerList.add(updatedCustomer);
+      
       emit(state.copyWith(
+        customer: updatedCustomer,
         processState: ProcessState.success,
+        dialogName: DialogName.success,
+        notifyMessage: NotifyMessage.msg28,
         newAddress: null,
       ));
     } catch (e) {
       emit(state.copyWith(
         processState: ProcessState.failure,
-        error: e.toString(),
+        dialogName: DialogName.failure,
+        notifyMessage: NotifyMessage.msg29,
+      ));
+    }
+  }
+
+  Future<void> editAddress() async {
+    toLoading();
+    try {
+      await Firebase().updateAddress(state.newAddress!);
+
+      final updatedCustomer = await Firebase().getCustomerById(state.customer.customerID!);
+      Database().customerList.removeWhere((c) => c.customerID == updatedCustomer.customerID);
+      Database().customerList.add(updatedCustomer);
+
+      emit(state.copyWith(
+        customer: updatedCustomer,
+        processState: ProcessState.success,
+        dialogName: DialogName.success,
+        notifyMessage: NotifyMessage.msg30,
+        newAddress: null,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        processState: ProcessState.failure,
+        dialogName: DialogName.failure,
+        notifyMessage: NotifyMessage.msg31,
       ));
     }
   }
@@ -132,7 +173,7 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
         customerID: state.customer.customerID!,
       );
 
-      await _firebase.addOwnedVoucher(ownedVoucher);
+      await Firebase().addOwnedVoucher(ownedVoucher);
 
       final updatedVouchers = state.vouchers.where((v) => v.voucherID != voucher.voucherID).toList();
 

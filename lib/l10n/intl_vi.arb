@@ -1920,5 +1920,35 @@
 	"@expired": {
 		"description": "Nhãn chỉ phiếu giảm giá đã hết hạn.",
 		"type": "text"
+	},
+	"addressAddedSuccess": "Địa chỉ đã được thêm thành công.",
+	"@addressAddedSuccess": {
+		"description": "Thông báo thành công khi thêm địa chỉ.",
+		"type": "text"
+	},
+	"addressAddFailed": "Không thể thêm địa chỉ. Vui lòng thử lại.",
+	"@addressAddFailed": {
+		"description": "Thông báo lỗi khi thêm địa chỉ thất bại.",
+		"type": "text"
+	},
+	"addressUpdatedSuccess": "Địa chỉ đã được cập nhật thành công.",
+	"@addressUpdatedSuccess": {
+		"description": "Thông báo thành công khi cập nhật địa chỉ.",
+		"type": "text"
+	},
+	"addressUpdateFailed": "Không thể cập nhật địa chỉ. Vui lòng thử lại.",
+	"@addressUpdateFailed": {
+		"description": "Thông báo lỗi khi cập nhật địa chỉ thất bại.",
+		"type": "text"
+	},
+	"editAddress": "Chỉnh sửa địa chỉ",
+	"@editAddress": {
+		"description": "Nhãn cho chức năng chỉnh sửa địa chỉ.",
+		"type": "text"
+	},
+	"saveAddress": "Lưu địa chỉ",
+	"@saveAddress": {
+		"description": "Nhãn cho nút lưu địa chỉ.",
+		"type": "text"
 	}
 }

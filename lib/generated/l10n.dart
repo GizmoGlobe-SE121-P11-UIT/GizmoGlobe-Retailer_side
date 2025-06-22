@@ -3774,6 +3774,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Address added successfully.`
+  String get addressAddedSuccess {
+    return Intl.message(
+      'Address added successfully.',
+      name: 'addressAddedSuccess',
+      desc: 'Message shown when an address is added successfully.',
+      args: [],
+    );
+  }
+
+  /// `Failed to add address. Please try again.`
+  String get addressAddFailed {
+    return Intl.message(
+      'Failed to add address. Please try again.',
+      name: 'addressAddFailed',
+      desc: 'Message shown when adding an address fails.',
+      args: [],
+    );
+  }
+
+  /// `Address updated successfully.`
+  String get addressUpdatedSuccess {
+    return Intl.message(
+      'Address updated successfully.',
+      name: 'addressUpdatedSuccess',
+      desc: 'Message shown when an address is updated successfully.',
+      args: [],
+    );
+  }
+
+  /// `Failed to update address. Please try again.`
+  String get addressUpdateFailed {
+    return Intl.message(
+      'Failed to update address. Please try again.',
+      name: 'addressUpdateFailed',
+      desc: 'Message shown when updating an address fails.',
+      args: [],
+    );
+  }
+
+  /// `Edit Address`
+  String get editAddress {
+    return Intl.message(
+      'Edit Address',
+      name: 'editAddress',
+      desc: 'Button label for editing an address.',
+      args: [],
+    );
+  }
+
+  /// `Save Address`
+  String get saveAddress {
+    return Intl.message(
+      'Save Address',
+      name: 'saveAddress',
+      desc: 'Button label for saving an address.',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
