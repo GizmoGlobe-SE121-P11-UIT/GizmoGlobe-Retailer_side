@@ -49,6 +49,7 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('đã hủy') ||
         text.toLowerCase().contains('chưa thanh toán') ||
         text.toLowerCase().contains('từ chối') ||
+        text.toLowerCase().contains('vô hiệu hóa') ||
         text.toLowerCase().contains('không hoạt động') ||
         text.toLowerCase().contains('ngừng kinh doanh') ||
         text.toLowerCase().contains('ngừng sản xuất')) {

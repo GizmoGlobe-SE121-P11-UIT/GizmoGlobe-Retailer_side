@@ -163,7 +163,7 @@ class _AddProductState extends State<AddProductScreen> {
           onPressed: () => Navigator.pop(context, ProcessState.idle),
           fillColor: Colors.transparent,
         ),
-        title: const GradientText(text: 'Add Product'),
+        title: GradientText(text: S.of(context).addProduct),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
