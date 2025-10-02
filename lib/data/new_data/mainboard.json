@@ -1,0 +1,1517 @@
+[
+    {
+        "product_name": "Mainboard GIGABYTE X870E AORUS MASTER (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "13990000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "X870E",
+            "socket": "AM5",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 3,
+                    "quantity": 1
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 4
+            },
+            "io_ports": [
+                {
+                    "port": "USB4® USB Type-C® ports (DisplayPorts)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
+                    "quantity": 4
+                },
+                {
+                    "port": "USB 3.2 Gen 1",
+                    "quantity": 4
+                },
+                {
+                    "port": "USB 2.0/1.1",
+                    "quantity": 2
+                },
+                {
+                    "port": "RJ-45",
+                    "quantity": 1
+                },
+                {
+                    "port": "Antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 2
+                },
+                {
+                    "port": "Optical S/PDIF out",
+                    "quantity": 2
+                },
+                {
+                    "port": "HDMI",
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE X670E AORUS XTREME (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "17990000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "X670E",
+            "socket": "AM5",
+            "form_factor": "EATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 2,
+                    "gen": 3,
+                    "quantity": 1
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 6
+            },
+            "io_ports": [
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                            
+                            ["protocol", "3.2"],
+                            ["type", "C"],
+                            ["gen", "2x2"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                            
+                            ["protocol", "3.2"],
+                            ["type", "C"],
+                            ["gen", "2"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "3.2"],
+                            ["type", "A"],
+                            ["gen", "2"]
+                        ],
+                        "note": "red"
+                    },
+                    "quantity": 6
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "2.0/1.1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "RJ-45",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Antenna connectors",
+                        "info": [],
+                        "note": "2T2R"
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "Audio jacks",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "Optical S/PDIF out",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "HDMI",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "DisplayPort",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard ASUS Prime H510M-E",
+        "vendor": "ASUS",
+        "product_type": "mainboard",
+        "price": "1790000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "H510",
+            "socket": "LGA1200",
+            "form_factor": "Micro-ATX",
+            "ram": {
+                "type": "DDR4",
+                "slots": 2,
+                "max_single_dimm_gb": 32,
+                "max_total_gb": 64
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 4,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 0,
+                    "electrical_speed": 1,
+                    "gen": 3,
+                    "quantity": 1
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 1,
+                "sata_ports": 4
+            },
+            "io_ports": [
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                            
+                            ["protocol", "3.2"],
+                            ["type", "A"],
+                            ["gen", "1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "2.0"],
+                            ["type", "A"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "Ethernet",
+                        "info": [
+                            ["model", "Intel I219-V"],
+                            ["speed", "1Gb"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "PS/2",
+                        "info": [
+                            ["device", "keyboard"]
+                        ],
+                        "note": "purple"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "PS/2",
+                        "info": [
+                            ["device", "mouse"]
+                        ],
+                        "note": "green"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Audio jacks",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 3
+                },
+                {
+                    "port": {
+                        "port_type": "D-Sub",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "HDMI",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "DisplayPort",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard ASUS ROG Strix B850-F Gaming Wifi",
+        "vendor": "ASUS",
+        "product_type": "mainboard",
+        "price": "9690000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "B850",
+            "socket": "AM5",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 1
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 2
+            },
+            "io_ports": [
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                
+                            ["type", "C"],
+                            ["speed", "20Gbps"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                
+                            ["type", "C"],
+                            ["speed", "10Gbps"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                
+                            ["type", "A"],
+                            ["speed", "10Gbps"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                
+                            ["type", "A"],
+                            ["speed", "5Gbps"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "2.0"],
+                            ["type", "A"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "Ethernet",
+                        "info": [
+                            ["model", "Intel"],
+                            ["speed", "2.5Gb"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Wi-Fi module",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Audio jacks",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "Optical S/PDIF out",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "HDMI",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "DisplayPort",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE X870E AORUS PRO ICE (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "12290000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "X870E",
+            "socket": "AM5",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 3,
+                    "quantity": 1
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 4
+            },
+            "io_ports": [
+                {
+                    "port": {
+                        "port_type": "USB4",
+                        "info": [
+                            ["type", "C"]
+                        ],
+                        "note": "DisplayPort"
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "2.0/1.1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "3.2"],
+                            ["gen", "1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "3.2"],
+                            ["gen", "2"]
+                        ],
+                        "note": "red"
+                    },
+                    "quantity": 3
+                },
+                {
+                    "port": {
+                        "port_type": "RJ-45",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Antenna connectors",
+                        "info": [],
+                        "note": "2T2R"
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "Optical S/PDIF out",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Audio jacks",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "HDMI",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE H610M-H V3 (DDR4)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "1890000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "H610",
+            "socket": "LGA1700",
+            "form_factor": "Micro-ATX",
+            "ram": {
+                "type": "DDR4",
+                "slots": 2,
+                "max_single_dimm_gb": 32
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 4,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 1,
+                    "electrical_speed": 1,
+                    "gen": 3,
+                    "quantity": 1
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 1,
+                "sata_ports": 4
+            },
+            "io_ports": [
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                            
+                            ["protocol", "3.2"],
+                            ["type", "A"],
+                            ["gen", "1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "2.0/1.1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "PS/2",
+                        "info": [
+                            ["device", "keyboard/mouse"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Audio jacks",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 3
+                },
+                {
+                    "port": {
+                        "port_type": "D-Sub",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "HDMI",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "RJ-45",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE Z890 UD WIFI6E (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "6990000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "Z890",
+            "socket": "LGA1851",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 2
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 1,
+                    "gen": 4,
+                    "quantity": 1
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 3,
+                "sata_ports": 4
+            },
+            "io_ports": [
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                            
+                            ["protocol", "3.2"],
+                            ["type", "A"],
+                            ["gen", "2"]
+                        ],
+                        "note": "red"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB4",
+                        "info": [
+                            ["type", "C"]
+                        ],
+                        "note": "DisplayPort"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                            
+                            ["protocol", "3.2"],
+                            ["gen", "1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "2.0/1.1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "Audio jacks",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 3
+                },
+                {
+                    "port": {
+                        "port_type": "RJ-45",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Antenna connectors",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "PS/2",
+                        "info": [
+                            ["device", "keyboard/mouse"]
+                        ],
+                        "note": "purple"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "DisplayPort",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE Z890 EAGLE WIFI7 (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "7990000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "Z890",
+            "socket": "LGA1851",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 2
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 4
+            },
+            "io_ports": [
+                {
+                    "port": {
+                        "port_type": "USB4",
+                        "info": [
+                            ["type", "C"],
+                            ["gen", "1"]
+                        ],
+                        "note": "DisplayPort"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "3.2"],
+                            ["type", "A"],
+                            ["gen", "2"]
+                        ],
+                        "note": "red"
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "3.2"],
+                            ["gen", "1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 3
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "2.0/1.1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "Antenna connectors",
+                        "info": [],
+                        "note": "2T2R"
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "RJ-45",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Audio jacks",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 3
+                },
+                {
+                    "port": {
+                        "port_type": "DisplayPort",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE Z890 AORUS ELITE WIFI7 (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "9590000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "Z890",
+            "socket": "LGA1851",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 2
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 4
+            },
+            "io_ports": [
+                {
+                    "port": {
+                        "port_type": "USB4",
+                        "info": [
+                            ["type", "C"]
+                        ],
+                        "note": "DisplayPort"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                            
+                            ["protocol", "3.2"],
+                            ["type", "A"],
+                            ["gen", "2"]
+                        ],
+                        "note": "red"
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [                            
+                            ["protocol", "3.2"],
+                            ["type", "A"],
+                            ["gen", "1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 3
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "2.0/1.1"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "Antenna connectors",
+                        "info": [],
+                        "note": "2T2R"
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "Audio jacks",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 2
+                },
+                {
+                    "port": {
+                        "port_type": "RJ-45",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Optical S/PDIF out",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "DisplayPort",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE Z890 AORUS ELITE WIFI7 ICE (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "9990000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "Z890",
+            "socket": "LGA1851",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "pcie_slots": [
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 2
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 4
+            },
+            "io_ports": [
+                {
+                    "port": {
+                        "port_type": "USB4",
+                        "info": [
+                            ["type", "C"]
+                        ],
+                        "note": "DisplayPort"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "USB",
+                        "info": [
+                            ["protocol", "2.0"],
+                            ["type", "A"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 4
+                },
+                {
+                    "port": {
+                        "port_type": "Ethernet",
+                        "info": [
+                            ["model", "Intel I219-V"],
+                            ["speed", "1Gb"]
+                        ],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "PS/2",
+                        "info": [
+                            ["device", "keyboard"]
+                        ],
+                        "note": "purple"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "PS/2",
+                        "info": [
+                            ["device", "mouse"]
+                        ],
+                        "note": "green"
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "Audio jacks",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 3
+                },
+                {
+                    "port": {
+                        "port_type": "D-Sub",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "HDMI",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                },
+                {
+                    "port": {
+                        "port_type": "DisplayPort",
+                        "info": [],
+                        "note": ""
+                    },
+                    "quantity": 1
+                }
+            ]
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE X870 GAMING X WIFI7 (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "8490000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "X870",
+            "socket": "AM5",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 5,
+                    "lanes": 16
+                },
+                {
+                    "format": "x16",
+                    "generation": 3,
+                    "lanes": 1
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 3,
+                "sata_ports": 4
+            }
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE X870 AORUS ELITE WIFI7 ICE (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "9990000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "X870",
+            "socket": "AM5",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 5,
+                    "lanes": 16
+                },
+                {
+                    "format": "x16",
+                    "generation": 4,
+                    "lanes": 4
+                },
+                {
+                    "format": "x16",
+                    "generation": 3,
+                    "lanes": 2
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 4
+            }
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE X870 EAGLE WIFI7 (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "7790000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "X870",
+            "socket": "AM5",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64,
+                "max_speed_mts_oc": 8000
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 5,
+                    "lanes": 16
+                },
+                {
+                    "format": "x16",
+                    "generation": 3,
+                    "lanes": 1
+                },
+                {
+                    "format": "x16",
+                    "generation": 3,
+                    "lanes": 1
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 3,
+                "sata_ports": 4
+            }
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE X670E AORUS MASTER (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "13490000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "X670E",
+            "socket": "AM5",
+            "form_factor": "E-ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64,
+                "max_speed_mts_oc": 8000
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 5,
+                    "lanes": 16
+                },
+                {
+                    "format": "x16",
+                    "generation": 4,
+                    "lanes": 4
+                },
+                {
+                    "format": "x16",
+                    "generation": 3,
+                    "lanes": 2
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 6
+            }
+        }
+    },
+    {
+        "product_name": "Mainboard ASUS ROG STRIX B650E-F GAMING WIFI (DDR5)",
+        "vendor": "ASUS",
+        "product_type": "mainboard",
+        "price": "8990000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "B650E",
+            "socket": "AM5",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64,
+                "max_speed_mts_oc": "6400+"
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 5,
+                    "lanes": 16
+                },
+                {
+                    "format": "x16",
+                    "generation": 4,
+                    "lanes": 4
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 3,
+                "sata_ports": 4
+            }
+        }
+    },
+    {
+        "product_name": "MainboardASUS ROG STRIX B650E-I GAMING WIFI (DDR5)",
+        "vendor": "ASUS",
+        "product_type": "mainboard",
+        "price": "9690000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "B650E",
+            "socket": "AM5",
+            "form_factor": "Mini-ITX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 2,
+                "max_capacity_gb": 96
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 5,
+                    "lanes": 16
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 2,
+                "sata_ports": 2
+            }
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE B650I AORUS ULTRA (rev. 1.0) (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "8990000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "B650",
+            "socket": "AM5",
+            "form_factor": "Mini-ITX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 2,
+                "max_single_dimm_gb": 32
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 4,
+                    "lanes": 16
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 3,
+                "sata_ports": 4
+            }
+        }
+    },
+    {
+        "product_name": "Mainboard GIGABYTE X670 AORUS ELITE AX (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "8490000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "X670",
+            "socket": "AM5",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 4,
+                    "lanes": 16
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 4
+            }
+        }
+    },
+    {
+        "product_name": "MainboardGIGABYTE X670 GAMING X AX (DDR5)",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "8190000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "X670",
+            "socket": "AM5",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR5",
+                "slots": 4,
+                "max_single_dimm_gb": 64
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 4,
+                    "lanes": 16
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 4,
+                "sata_ports": 4
+            }
+        }
+    },
+    {
+        "product_name": "Mainboard Gigabyte B550 Vision D",
+        "vendor": "GIGABYTE",
+        "product_type": "mainboard",
+        "price": "7250000",
+        "warranty": "",
+        "attributes": {
+            "chipset": "B550",
+            "socket": "AM4",
+            "form_factor": "ATX",
+            "ram": {
+                "type": "DDR4",
+                "slots": 4,
+                "max_single_dimm_gb": 32
+            },
+            "gpu_slots": [
+                {
+                    "format": "x16",
+                    "generation": 4,
+                    "lanes": 16
+                }
+            ],
+            "storage_slots": {
+                "m2_slots": 2,
+                "sata_ports": 4
+            }
+        }
+    }
+]

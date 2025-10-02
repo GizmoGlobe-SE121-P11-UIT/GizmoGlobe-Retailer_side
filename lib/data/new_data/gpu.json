@@ -1,0 +1,869 @@
+[
+    {
+        "product_name": "GPU MSI GeForce RTX 5080 16G VENTUS 3X OC White",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "38990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR7",
+                "memory_gb": 16
+            },
+            "boost_clock": 2640,
+            "tdp": 360,
+            "ports": "DisplayPort 2.1 x3, HDMI 2.1 x1"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE Radeon RX 9070 GAMING OC 16G (GV-R9070GAMING OC-16GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "19990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 16
+            },
+            "boost_clock": 2700,
+            "tdp": 220,
+            "ports": "DisplayPort 2.1 x3, HDMI 2.1 x1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 5090 32G VENTUS 3X OC",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "79990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR7",
+                "memory_gb": "32"
+            },
+            "boost_clock": 2437,
+            "tdp": 575,
+            "ports": "DisplayPort 2.1b x 3, HDMI 2.1b x 1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS TUF Gaming GeForce RTX 4090 24GB GDDR6X OG OC Edition (TUF-RTX4090-O24G-OG-GAMING)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "62990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 24
+            },
+            "boost_clock": 2550,
+            "tdp": 450,
+            "ports": "DisplayPort 1.4a x3, HDMI 2.1a x1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Dual Radeon RX 6500 XT V2 OC Edition 4GB GDDR6 (DUAL-RX6500XT-O4G-V2)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "3790000",
+        "warranty": "",
+        "attributes": {
+            "series": "rx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 4
+            },
+            "boost_clock": 2820,
+            "tdp": 107,
+            "ports": "DisplayPort 1.4a x1, HDMI 2.1 x1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Dual Radeon RX 6600 V3 8GB GDDR6 (DUAL-RX6600-8G-V3)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "5490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 8
+            },
+            "boost_clock": 2491,
+            "tdp": 132,
+            "ports": "DisplayPort 1.4a x1, HDMI 2.1 x1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Dual Radeon RX 7600 V2 OC Edition 8GB GDDR6 (DUAL-RX7600-O8G-V2)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "7790000",
+        "warranty": "",
+        "attributes": {
+            "series": "rx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 8
+            },
+            "boost_clock": 2715,
+            "tdp": 165,
+            "ports": "DisplayPort 1.4a x3, HDMI 2.1 x1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Dual GeForce RTX 3050 6GB GDDR6 (DUAl-RTX3050-6G)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "4790000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 6
+            },
+            "boost_clock": 1500,
+            "tdp": 70,
+            "ports": "DisplayPort 1.4a x1, HDMI 2.1 x1, DVI-D x1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS ROG Strix GeForce RTX 4090 24GB GDDR6X OC EVA-02 Edition",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "61990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 24
+            },
+            "boost_clock": 2550,
+            "tdp": 450,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS ROG Strix LC GeForce RTX 4090 24GB GDDR6X OC Edition (ROG-STRIX-LC-RTX4090-O24G)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "59990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 24
+            },
+            "boost_clock": 2640,
+            "tdp": 450,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 2"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE Radeon RX 6600 EAGLE 8G (GV-R66EAGLE-8GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "5590000",
+        "warranty": "",
+        "attributes": {
+            "series": "rx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 8
+            },
+            "boost_clock": 2491,
+            "tdp": 132.0,
+            "ports": "DisplayPort 1.4a x 2, HDMI 2.1 x 2"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Phoenix GeForce GTX 1650 4GB GDDR6 (PH-GTX1650-4GD6)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "6890000",
+        "warranty": "",
+        "attributes": {
+            "series": "gtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 4
+            },
+            "boost_clock": 1590,
+            "tdp": 75,
+            "ports": "DisplayPort 1.4 x 1, HDMI 2.0b x 1, DVI-D x 1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS TUF Gaming GeForce RTX 4090 24GB (TUF-RTX4090-24G-GAMING)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "58490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 24
+            },
+            "boost_clock": 2520,
+            "tdp": 450,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 2"
+        }
+    },
+    {
+        "product_name": "GPU ASUS ROG Strix GeForce RTX 4090 24GB (ROG-STRIX-RTX4090-24G-GAMING)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "62990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 24
+            },
+            "boost_clock": 2520,
+            "tdp": 450,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 2"
+        }
+    },
+    {
+        "product_name": "GPU ASUS TUF Gaming GeForce RTX 4070 12GB (TUF-RTX4070-12G-GAMING)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "19490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2475,
+            "tdp": 200,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1 x 2"
+        }
+    },
+    {
+        "product_name": "GPU ASUS ROG Strix GeForce RTX 4070 12GB (ROG-STRIX-RTX4070-12G-GAMING)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "21490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2475,
+            "tdp": 200,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1 x 2"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Dual GeForce RTX 4070 12GB (DUAL-RTX4070-12G)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "16990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2475,
+            "tdp": 200,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 5070 Ti 16G GAMING TRIO OC White",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "32490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR7",
+                "memory_gb": 16
+            },
+            "boost_clock": 2572,
+            "tdp": 300,
+            "ports": "DisplayPort 2.1b x 3, HDMI 2.1b x 1"
+        }
+    },
+    {
+        "product_name": "GPU Gigabyte GeForce RTX 5060  Windforce OC 8GB",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "9990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR7",
+                "memory_gb": 8
+            },
+            "boost_clock": 2512,
+            "tdp": 145,
+            "ports": "DisplayPort 2.1b x 3, HDMI 2.1b x 2"
+        }
+    },
+    {
+        "product_name": "GPU Gigabyte GeForce RTX 5060 Eagle Ice OC 8GB",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "10490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 8
+            },
+            "boost_clock": 2550,
+            "tdp": 145,
+            "ports": "DisplayPort 2.1b x 3 HDMI 2.1b x 1"
+        }
+    },
+    {
+        "product_name": "GPU Gigabyte GeForce RTX 5060 Windforce 8GB",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "9990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR7",
+                "memory_gb": 8
+            },
+            "boost_clock": 2497,
+            "tdp": 145,
+            "ports": "DisplayPort 2.1b x 3, HDMI 2.1b x 1"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 4070 SUPER WINDFORCE OC 12G (GV-N407SWF3OC-12GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "19490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2505,
+            "tdp": 220,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 3050 VENTUS 2X E 6G OC",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "4790000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 6
+            },
+            "boost_clock": 1807,
+            "tdp": 70,
+            "ports": "3 x DisplayPort 1.4a, 1 x HDMI 2.1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 4070 SUPER 12G GAMING SLIM WUKONG EDITION",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "20490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2475,
+            "tdp": 220,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS PRIME GeForce RTX 4060 Ti 8GB GDDR6 OC Edition (PRIME-RTX4060TI-O8G)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "12990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 8
+            },
+            "boost_clock": 2580,
+            "tdp": 160,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 3060 WINDFORCE OC 12G V2 (GV-N3060WF2OC-12GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "7790000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 12
+            },
+            "boost_clock": 1792,
+            "tdp": 170,
+            "ports": "DisplayPort 1.4a x 2, HDMI 2.1 x 2"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Dual GeForce RTX 4060 V2 OC Edition 8GB GDDR6 (DUAL-RTX4060-O8G-V2)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "8490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 8
+            },
+            "boost_clock": 2505,
+            "tdp": 115,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Dual GeForce RTX 4060 Ti EVO OC Edition 16GB GDDR6 (DUAL-RTX4060TI-O16G-EVO)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "14990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 16
+            },
+            "boost_clock": 2595,
+            "tdp": 165,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 4060 Ti VENTUS 3X E 8G OC",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "13990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 8
+            },
+            "boost_clock": 2565,
+            "tdp": 160,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS TUF Gaming GeForce RTX 4070 Ti SUPER BTF White OC Edition 16GB GDDR6X (TUF-RTX4070TIS-O16G-BTF-WHITE)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "29490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 16
+            },
+            "boost_clock": 2640,
+            "tdp": 285,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 2"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE AORUS GeForce RTX 4080 SUPER XTREME ICE 16G (GV-N408SAORUSX ICE-16GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "49990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 16
+            },
+            "boost_clock": 2550,
+            "tdp": 320,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 3050 WINDFORCE OC 6G (GV-N3050WF2OCV2-6GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "4790000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 6
+            },
+            "boost_clock": 1477,
+            "tdp": 70,
+            "ports": "DisplayPort 1.4a x 2, HDMI 2.1 x 2"
+        }
+    },
+    {
+        "product_name": "GPU ASUS ProArt GeForce RTX 4070 Ti SUPER 16GB GDDR6X OC Edition (PROART-RTX4070TIS-O16G)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "29190000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 16
+            },
+            "boost_clock": 2640,
+            "tdp": 285,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Dual GeForce RTX 3050 OC Edition 6GB (DUAl-RTX3050-O6G)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "4890000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 6
+            },
+            "boost_clock": 1507,
+            "tdp": 70,
+            "ports": "DisplayPort 1.4a x1, HDMI 2.1 x1, DVI-D x1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 3050 VENTUS 2X 6G OC",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "4790000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 6
+            },
+            "boost_clock": 1492,
+            "tdp": 70,
+            "ports": "DisplayPort 1.4a x 1, HDMI 2.1 x 2"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 3050 EAGLE OC 6G (GV-N3050EAGLE OC-6GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "5090000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 6
+            },
+            "boost_clock": 1500,
+            "tdp": 75,
+            "ports": "DisplayPort 1.4a x 2, HDMI 2.1 x 2"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 4070 VENTUS 3X E 12G OC",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "17390000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2505,
+            "tdp": 200,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 4070 Ti GAMING OC V2 12GB (GV-N407TGAMING OCV2-12GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "27990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2640,
+            "tdp": 285,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 4070 SUPER 12G VENTUS 2X OC",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "19490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2505,
+            "tdp": 220,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce GT 1030 AERO ITX 2GD4 OCV1",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "2090000",
+        "warranty": "",
+        "attributes": {
+            "series": "gt",
+            "vram": {
+                "version": "DDR4",
+                "memory_gb": 2
+            },
+            "boost_clock": 1430,
+            "tdp": 20,
+            "ports": "HDMI 2.0b x 1, D-sub x 1"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 4070 SUPER EAGLE OC 12G (GV-N407SEAGLE OC-12GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "21490000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2535,
+            "tdp": 220,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 4090 WINDFORCE V2 24G (GV-N4090WF3V2-24GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "59990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 24
+            },
+            "boost_clock": 2520,
+            "tdp": 450,
+            "ports": "DisplayPort 1.4a x3, HDMI 2.1 x1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 4070 GAMING X SLIM 12G",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "17990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2610,
+            "tdp": 215,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 4070 Ti GAMING X SLIM 12G",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "24990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2730,
+            "tdp": 285,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 4070 AERO OC V2 12GB (GV-N4070AERO OCV2-12GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "19290000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2565,
+            "tdp": 200,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1 x 1"
+        }
+    },
+    {
+        "product_name": "GPU Colorful GeForce RTX 4070 Ti NB EX-V 12GB 3 Fan",
+        "vendor": "Colorful",
+        "product_type": "gpu",
+        "price": "19990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2610,
+            "tdp": 285,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1 x 1"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 4060 WINDFORCE OC 8G",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "9290000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 8
+            },
+            "boost_clock": 2475,
+            "tdp": 115,
+            "ports": "DisplayPort 1.4a x 2, HDMI 2.1 x 2"
+        }
+    },
+    {
+        "product_name": "GPU GIGABYTE GeForce RTX 4060 Ti AERO OC 16G (GV-N406TAERO OC-16GD)",
+        "vendor": "GIGABYTE",
+        "product_type": "gpu",
+        "price": "15990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 16
+            },
+            "boost_clock": 2595,
+            "tdp": 165,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS ProArt GeForce RTX 4060 OC edition 8GB (PROART-RTX4060-O8G)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "10990000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 8
+            },
+            "boost_clock": 2550,
+            "tdp": 115,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU MSI GeForce RTX 4070 GAMING X SLIM WHITE 12G",
+        "vendor": "MSI",
+        "product_type": "gpu",
+        "price": "19390000",
+        "warranty": "",
+        "attributes": {
+            "series": "rtx",
+            "vram": {
+                "version": "GDDR6X",
+                "memory_gb": 12
+            },
+            "boost_clock": 2610,
+            "tdp": 215,
+            "ports": "DisplayPort 1.4a x 3, HDMI 2.1a x 1"
+        }
+    },
+    {
+        "product_name": "GPU ASUS Phoenix GeForce GTX 1660 Super OC edition 6GB (PH-GTX1660S-O6G)",
+        "vendor": "ASUS",
+        "product_type": "gpu",
+        "price": "13290000",
+        "warranty": "",
+        "attributes": {
+            "series": "gtx",
+            "vram": {
+                "version": "GDDR6",
+                "memory_gb": 6
+            },
+            "boost_clock": 1800,
+            "tdp": 125,
+            "ports": "DVI-D x 1, HDMI 2.0b x 1, DisplayPort 1.4 x 1"
+        }
+    }
+]

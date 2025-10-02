@@ -1,0 +1,1424 @@
+[
+    {
+        "product_name": "HDD Seagate Barracuda 1TB",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "1390000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 210,
+                "write_mbps": 210
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Seagate Barracuda 2TB",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "1550000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 2000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 210,
+                "write_mbps": 210
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Seagate HDD Ironwolf 2TB",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "2390000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 2000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 210,
+                "write_mbps": 210
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD SEAGATE IronWolf PRO 14TB",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "15990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 14000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 255,
+                "write_mbps": 255
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD SEAGATE IronWolf PRO 6TB",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "6490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 6000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 255,
+                "write_mbps": 255
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD WD 1TB Blue",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "1590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 100,
+                "write_mbps": 100
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD WD 1TB Blue 2.5\" for Laptop",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "1490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 130,
+                "write_mbps": 120
+            },
+            "form_factor": "2.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD WD 2TB Black",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "3390000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 2000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 100,
+                "write_mbps": 100
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD WD 2TB Blue 7200RPM",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "1790000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 2000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 215,
+                "write_mbps": 215
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD WD 4TB Black",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "4990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 4000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 100,
+                "write_mbps": 100
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD WD 4TB Blue",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "2790000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 4000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 100,
+                "write_mbps": 100
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "Ổ Cứng HDD Seagate 1TB 2.5\" for Laptop - ST1000LM048",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "1390000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 140,
+                "write_mbps": 140
+            },
+            "form_factor": "2.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Enterprise Western Digital Ultrastar DC HC550 16TB (WUH721816ALE6L4)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "9790000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 16000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 255,
+                "write_mbps": 255
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Enterprise Western Digital Ultrastar DC HC320 8TB (HUS728T8TALE6L4)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "6490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 8000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 255,
+                "write_mbps": 255
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Enterprise Western Digital Ultrastar DC HC330 10TB (WUS721010ALE6L4)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "7590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 10000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 273,
+                "write_mbps": 273
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Enterprise Western Digital Ultrastar DC HC520 12TB (HUH721212ALE604)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "9490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 12000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 255,
+                "write_mbps": 255
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Enterprise Western Digital Ultrastar DC HC550 18TB (WUH721818ALE6L4)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "12490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 18000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 269,
+                "write_mbps": 269
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Seagate Barracuda 4TB",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "2990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 4000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 190,
+                "write_mbps": 190
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Seagate FireCuda 4TB ST4000DX005 - 7200rpm",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "4290000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 4000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 255,
+                "write_mbps": 255
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Seagate IronWolf 10TB 7200 RPM (ST10000VN000)",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "9290000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 10000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 210,
+                "write_mbps": 210
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Seagate IronWolf 4TB (ST4000VN008)",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "3490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 4000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 180,
+                "write_mbps": 180
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Seagate IronWolf Pro 10TB",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "9490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 10000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 240,
+                "write_mbps": 240
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Seagate IronWolf Pro 4TB",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "4690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 4000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 214,
+                "write_mbps": 214
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD Seagate IronWolf Pro 8TB",
+        "vendor": "Seagate",
+        "product_type": "drive",
+        "price": "8990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 8000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 214,
+                "write_mbps": 214
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "HDD WD Red Plus 6TB 5400RPM",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "4690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 6000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 180,
+                "write_mbps": 180
+            },
+            "form_factor": "3.5",
+            "drive_type": "HDD"
+        }
+    },
+    {
+        "product_name": "SSD SSTC Oceanic Whitetip MAX III 512GB M.2 NVME Gen 3",
+        "vendor": "SSTC",
+        "product_type": "drive",
+        "price": "1090000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 512000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3500,
+                "write_mbps": 3150
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Blue SN5000 2TB M.2 NVMe PCIe Gen 4 (WDS200T4B0E)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "5290000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 2000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 5150,
+                "write_mbps": 4850
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Blue SN5000 500GB M.2 NVMe PCIe Gen 4 (WDS500G4B0E)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "1490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 500,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 5000,
+                "write_mbps": 4000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Blue SN5000 1TB M.2 NVMe PCIe Gen 4 (WDS100T4B0E)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "2290000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 5100,
+                "write_mbps": 4900
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 990 PRO 4TB M.2 PCIe Gen 4 NVMe (MZ-V9P4T0BW)",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "10990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 4000,
+            "interface": "PCIe",
+            "speed": {
+                "read_mbps": 7450,
+                "write_mbps": 7450
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "Addlink S68 M.2 2280 NVMe Gen 3 256GB",
+        "vendor": "Không thương hiệu",
+        "product_type": "drive",
+        "price": "690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 256,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 1700,
+                "write_mbps": 1100
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Verbatim Vi3000 256GB PCIe NVMe Gen 3",
+        "vendor": "Verbatim",
+        "product_type": "drive",
+        "price": "690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 256,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3100,
+                "write_mbps": 1300
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Corsair MP600 CORE XT 1TB PCIe 4.0 Gen 4 (CSSD-F1000GBMP600CXT)",
+        "vendor": "Corsair",
+        "product_type": "drive",
+        "price": "2990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 1000,
+            "interface": "PCIe",
+            "speed": {
+                "read_mbps": 5000,
+                "write_mbps": 3500
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Blue SN580 250GB M.2 NVMe PCIe Gen 4 (WDS250G3B0E)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "890000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 250,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 4000,
+                "write_mbps": 2000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Blue SN580 1TB M.2 NVMe PCIe Gen 4 (WDS100T3B0E)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "1890000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 4150,
+                "write_mbps": 4150
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Blue SN580 500GB M.2 NVMe PCIe Gen 4 (WDS500G3B0E)",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "1290000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 500,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 4000,
+                "write_mbps": 3600
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Corsair MP600 CORE XT 2TB PCIe 4.0 Gen 4 (CSSD-F2000GBMP600CXT)",
+        "vendor": "Corsair",
+        "product_type": "drive",
+        "price": "4990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 2000,
+            "interface": "PCIe",
+            "speed": {
+                "read_mbps": 5000,
+                "write_mbps": 3500
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD MSI SPATIUM M480 PRO PCIe 4.0 NVMe M.2 1TB",
+        "vendor": "MSI",
+        "product_type": "drive",
+        "price": "2990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 7400,
+                "write_mbps": 6000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD MSI Spatium M450 500GB M.2 PCIe NVMe Gen 4.0",
+        "vendor": "MSI",
+        "product_type": "drive",
+        "price": "1190000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 500,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3600,
+                "write_mbps": 2300
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD KLEVV CRAS C710 256GB Gen 3 (K256GM2SP0-C71)",
+        "vendor": "Klevv",
+        "product_type": "drive",
+        "price": "490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 256,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 1950,
+                "write_mbps": 1250
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "PNY SSD CS1031 M.2 2280 NVMe 256GB",
+        "vendor": "PNY",
+        "product_type": "drive",
+        "price": "690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 256,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 1700,
+                "write_mbps": 1100
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Gigabyte M.2 PCIe 256GB (GP-GSM2NE3256GNTD)",
+        "vendor": "GIGABYTE",
+        "product_type": "drive",
+        "price": "790000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 256,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 1700,
+                "write_mbps": 1100
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Kingston A400 M.2 Sata3 240Gb",
+        "vendor": "Kingston",
+        "product_type": "drive",
+        "price": "390000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 240,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 500,
+                "write_mbps": 350
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "Gigabyte SSD AORUS RGB M.2 NVMe 512GB",
+        "vendor": "GIGABYTE",
+        "product_type": "drive",
+        "price": "1190000",
+        "warranty": "",
+        "attributes": {
+            "memory_gb": 512,
+            "gen": 3,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3480,
+                "write_mbps": 2000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD SamSung 980 250GB M.2 PCIe NVMe",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "1290000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 250,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3500,
+                "write_mbps": 3000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Black SN770 250G M.2 NVMe PCIe Gen 4",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "1490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 250,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 4000,
+                "write_mbps": 2000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD SamSung 980 500GB M.2 PCIe NVMe",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "1590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 500,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3100,
+                "write_mbps": 2600
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Black SN770 500G M.2 NVMe PCIe Gen 4",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "1390000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 500,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 5000,
+                "write_mbps": 4000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 970 Evo Plus 250Gb PCIe NVMe M.2",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "1590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 250,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3500,
+                "write_mbps": 2300
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD SamSung 980 Pro 250GB M.2 NVMe",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "1890000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 250,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 6400,
+                "write_mbps": 2700
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 970 Evo Plus 500Gb PCIe NVMe M.2",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "2190000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 500,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3500,
+                "write_mbps": 3200
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD SamSung 980 1TB M.2 PCIe NVMe",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "2690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3500,
+                "write_mbps": 3000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Black SN770 1TB M.2 NVMe PCIe Gen 4",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "2190000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 5150,
+                "write_mbps": 4900
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD SamSung 980 Pro 500GB M.2 NVMe",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "1990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 500,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 6900,
+                "write_mbps": 5000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD MSI Spatium M450 1TB M.2 PCIe NVMe Gen 4.0 V1",
+        "vendor": "MSI",
+        "product_type": "drive",
+        "price": "1990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 3200,
+                "write_mbps": 2500
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD GIGABYTE AORUS 500GB M.2 PCIe NVMe gen 4 (Bản không heatsink)",
+        "vendor": "GIGABYTE",
+        "product_type": "drive",
+        "price": "3690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 500,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 5000,
+                "write_mbps": 2500
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD SamSung 980 Pro 1TB M.2 NVMe",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "3590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 7000,
+                "write_mbps": 5000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD MSI SPATIUM M480 PCIe 4.0 NVMe M.2 1TB PLAY",
+        "vendor": "MSI",
+        "product_type": "drive",
+        "price": "4190000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 7000,
+                "write_mbps": 5500
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD GIGABYTE AORUS 1TB M.2 PCIe NVMe gen 4 (Bản không heatsink)",
+        "vendor": "GIGABYTE",
+        "product_type": "drive",
+        "price": "4890000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 5000,
+                "write_mbps": 4400
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 980 PRO 2TB M.2 PCIe Gen 4 NVMe (MZ-V8P2T0BW)",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "5990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 2000,
+            "interface": "PCIe",
+            "speed": {
+                "read_mbps": 7000,
+                "write_mbps": 5100
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 990 PRO 2TB M.2 PCIe Gen 4 NVMe (MZ-V9P2T0BW)",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "6490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 2000,
+            "interface": "PCIe",
+            "speed": {
+                "read_mbps": 7450,
+                "write_mbps": 6900
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 980 PRO 2TB M.2 Heatsink PCIe Gen 4 NVMe",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "9990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 2000,
+            "interface": "PCIe",
+            "speed": {
+                "read_mbps": 7000,
+                "write_mbps": 5100
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Gigabyte Aorus Gen5 10000 2TB (AG510K2TB)",
+        "vendor": "GIGABYTE",
+        "product_type": "drive",
+        "price": "11990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 2000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 10000,
+                "write_mbps": 10000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD SSTC Megamouth 256GB Sata3",
+        "vendor": "SSTC",
+        "product_type": "drive",
+        "price": "590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 256,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 500,
+                "write_mbps": 490
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD Verbatim Vi550 256GB Sata3",
+        "vendor": "Verbatim",
+        "product_type": "drive",
+        "price": "590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 256,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 520,
+                "write_mbps": 460
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD PNY CS900 256GB Sata3",
+        "vendor": "PNY",
+        "product_type": "drive",
+        "price": "590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 256,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 535,
+                "write_mbps": 500
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD MSI Spatium S270 960GB SATA3",
+        "vendor": "MSI",
+        "product_type": "drive",
+        "price": "1190000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 960,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 500,
+                "write_mbps": 450
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD WD Black SN850x 2TB M.2 PCIe NVMe Gen 4.0",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "4990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 2000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 7300,
+                "write_mbps": 6600
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD WD Black SN850x 1TB M.2 PCIe NVMe Gen 4.0",
+        "vendor": "Western Digital",
+        "product_type": "drive",
+        "price": "3590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "nvme",
+            "speed": {
+                "read_mbps": 7300,
+                "write_mbps": 6300
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD TeamGroup CX2 2.5 inch SATA III 256GB",
+        "vendor": "Team Group",
+        "product_type": "drive",
+        "price": "590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 256,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 520,
+                "write_mbps": 430
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD PNY CS900 240GB Sata3",
+        "vendor": "PNY",
+        "product_type": "drive",
+        "price": "590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 240,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 535,
+                "write_mbps": 500
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD PNY CS900 250GB Sata3",
+        "vendor": "PNY",
+        "product_type": "drive",
+        "price": "590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 250,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 535,
+                "write_mbps": 500
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 870 EVO 500G Sata3",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "1590000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 500,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 560,
+                "write_mbps": 530
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 870 EVO 1TB Sata3",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "2690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 1000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 560,
+                "write_mbps": 530
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD Kingston KC3000 512GB M.2 PCIe gen 4 NVMe (SKC3000S/512G)",
+        "vendor": "Kingston",
+        "product_type": "drive",
+        "price": "1690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 512,
+            "interface": "PCIe",
+            "speed": {
+                "read_mbps": 7000,
+                "write_mbps": 3900
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Kingston KC3000 1TB M.2 PCIe gen 4 NVMe (SKC3000S/1024G)",
+        "vendor": "Kingston",
+        "product_type": "drive",
+        "price": "2690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 1000,
+            "interface": "PCIe",
+            "speed": {
+                "read_mbps": 7000,
+                "write_mbps": 6000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Kingston KC3000 2TB M.2 PCIe gen 4 NVMe (SKC3000D/2048G)",
+        "vendor": "Kingston",
+        "product_type": "drive",
+        "price": "4690000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 2000,
+            "interface": "PCIe",
+            "speed": {
+                "read_mbps": 7000,
+                "write_mbps": 7000
+            },
+            "form_factor": "2280",
+            "drive_type": "SSD NVME"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 870 QVO 4TB",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "10990000",
+        "warranty": "",
+        "attributes": {
+            "gen": 3,
+            "memory_gb": 4000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 560,
+                "write_mbps": 530
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    },
+    {
+        "product_name": "SSD Samsung 870 QVO 8TB",
+        "vendor": "Samsung",
+        "product_type": "drive",
+        "price": "20490000",
+        "warranty": "",
+        "attributes": {
+            "gen": 4,
+            "memory_gb": 8000,
+            "interface": "SATA",
+            "speed": {
+                "read_mbps": 560,
+                "write_mbps": 530
+            },
+            "form_factor": "2.5",
+            "drive_type": "SSD SATA"
+        }
+    }
+]
