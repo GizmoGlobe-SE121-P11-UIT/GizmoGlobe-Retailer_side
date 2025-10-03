@@ -40,23 +40,23 @@
             },
             "io_ports": [
                 {
-                    "port": "USB4® USB Type-C® ports (DisplayPorts)",
+                    "port": "USB4 USB Type-C ports (DisplayPorts)",
                     "quantity": 2
                 },
                 {
-                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
+                    "port": "USB 3.2 Type-A Gen 2 ports (red)",
                     "quantity": 4
                 },
                 {
-                    "port": "USB 3.2 Gen 1",
+                    "port": "USB 3.2 Gen 1 ports",
                     "quantity": 4
                 },
                 {
-                    "port": "USB 2.0/1.1",
+                    "port": "USB 2.0/1.1 ports",
                     "quantity": 2
                 },
                 {
-                    "port": "RJ-45",
+                    "port": "RJ-45 port",
                     "quantity": 1
                 },
                 {
@@ -68,11 +68,11 @@
                     "quantity": 2
                 },
                 {
-                    "port": "Optical S/PDIF out",
+                    "port": "Optical S/PDIF out connector",
                     "quantity": 2
                 },
                 {
-                    "port": "HDMI",
+                    "port": "HDMI port",
                     "quantity": 1
                 }
             ]
@@ -119,98 +119,44 @@
             },
             "io_ports": [
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                            
-                            ["protocol", "3.2"],
-                            ["type", "C"],
-                            ["gen", "2x2"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "SMA antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "DisplayPort",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                            
-                            ["protocol", "3.2"],
-                            ["type", "C"],
-                            ["gen", "2"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "HDMI port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "3.2"],
-                            ["type", "A"],
-                            ["gen", "2"]
-                        ],
-                        "note": "red"
-                    },
+                    "port": "USB Type-C port, with USB 3.2 Gen 2x2 support",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB Type-C port, with USB 3.2 Gen 2 support",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
                     "quantity": 6
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "2.0/1.1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 2.0/1.1 ports",
                     "quantity": 4
                 },
                 {
-                    "port": {
-                        "port_type": "RJ-45",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "RJ-45 port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "Antenna connectors",
-                        "info": [],
-                        "note": "2T2R"
-                    },
-                    "quantity": 2
-                },
-                {
-                    "port": {
-                        "port_type": "Audio jacks",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 2
-                },
-                {
-                    "port": {
-                        "port_type": "Optical S/PDIF out",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 2
-                },
-                {
-                    "port": {
-                        "port_type": "HDMI",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "Optical S/PDIF Out connector",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "DisplayPort",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
+                    "port": "Audio jacks",
+                    "quantity": 2
                 }
             ]
         }
@@ -251,89 +197,39 @@
             },
             "io_ports": [
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                            
-                            ["protocol", "3.2"],
-                            ["type", "A"],
-                            ["gen", "1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 3.2 Gen 1 ports (2 x Type-A)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 2.0 ports (2 x Type-A)",
+                    "quantity": 2
+                },
+                {
+                    "port": "DisplayPort",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "2.0"],
-                            ["type", "A"]
-                        ],
-                        "note": ""
-                    },
-                    "quantity": 4
-                },
-                {
-                    "port": {
-                        "port_type": "Ethernet",
-                        "info": [
-                            ["model", "Intel I219-V"],
-                            ["speed", "1Gb"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "D-Sub port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "PS/2",
-                        "info": [
-                            ["device", "keyboard"]
-                        ],
-                        "note": "purple"
-                    },
+                    "port": "HDMI port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "PS/2",
-                        "info": [
-                            ["device", "mouse"]
-                        ],
-                        "note": "green"
-                    },
+                    "port": "Intel I219-V 1Gb Ethernet port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "Audio jacks",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "Audio jacks",
                     "quantity": 3
                 },
                 {
-                    "port": {
-                        "port_type": "D-Sub",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "PS/2 Keyboard (purple) port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "HDMI",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "DisplayPort",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "PS/2 Mouse (green) port",
                     "quantity": 1
                 }
             ]
@@ -374,109 +270,43 @@
             },
             "io_ports": [
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                
-                            ["type", "C"],
-                            ["speed", "20Gbps"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB Type-C 20Gbps port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                
-                            ["type", "C"],
-                            ["speed", "10Gbps"]
-                        ],
-                        "note": ""
-                    },
-                    "quantity": 1
+                    "port": "USB 10Gbps ports (2 x Type-A + 1 x USB Type-C)",
+                    "quantity": 3
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                
-                            ["type", "A"],
-                            ["speed", "10Gbps"]
-                        ],
-                        "note": ""
-                    },
-                    "quantity": 2
-                },
-                {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                
-                            ["type", "A"],
-                            ["speed", "5Gbps"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB Type-A 5Gbps ports",
                     "quantity": 4
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "2.0"],
-                            ["type", "A"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 2.0 ports (4 x Type-A)",
                     "quantity": 4
                 },
                 {
-                    "port": {
-                        "port_type": "Ethernet",
-                        "info": [
-                            ["model", "Intel"],
-                            ["speed", "2.5Gb"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "DisplayPort",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "Wi-Fi module",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "HDMI port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "Audio jacks",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "Wi-Fi module",
+                    "quantity": 1
+                },
+                {
+                    "port": "Intel 2.5Gb Ethernet port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
                     "quantity": 2
                 },
                 {
-                    "port": {
-                        "port_type": "Optical S/PDIF out",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "HDMI",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "DisplayPort",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "Optical S/PDIF out port",
                     "quantity": 1
                 }
             ]
@@ -523,85 +353,39 @@
             },
             "io_ports": [
                 {
-                    "port": {
-                        "port_type": "USB4",
-                        "info": [
-                            ["type", "C"]
-                        ],
-                        "note": "DisplayPort"
-                    },
+                    "port": "USB 2.0/1.1 ports",
                     "quantity": 2
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "2.0/1.1"]
-                        ],
-                        "note": ""
-                    },
-                    "quantity": 2
+                    "port": "HDMI port",
+                    "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "3.2"],
-                            ["gen", "1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 3.2 Gen 1 ports",
                     "quantity": 4
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "3.2"],
-                            ["gen", "2"]
-                        ],
-                        "note": "red"
-                    },
+                    "port": "USB4 USB Type-C port (DisplayPort)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
                     "quantity": 3
                 },
                 {
-                    "port": {
-                        "port_type": "RJ-45",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "RJ-45 port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "Antenna connectors",
-                        "info": [],
-                        "note": "2T2R"
-                    },
+                    "port": "Antenna connectors (2T2R)",
                     "quantity": 2
                 },
                 {
-                    "port": {
-                        "port_type": "Optical S/PDIF out",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "Optical S/PDIF Out connector",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "Audio jacks",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 2
-                },
-                {
-                    "port": {
-                        "port_type": "HDMI",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "Audio jacks",
                     "quantity": 1
                 }
             ]
@@ -642,68 +426,32 @@
             },
             "io_ports": [
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                            
-                            ["protocol", "3.2"],
-                            ["type", "A"],
-                            ["gen", "1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "PS/2 keyboard/mouse port",
+                    "quantity": 1
+                },
+                {
+                    "port": "D-Sub port",
+                    "quantity": 1
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
                     "quantity": 2
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "2.0/1.1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 2.0/1.1 ports",
                     "quantity": 4
                 },
                 {
-                    "port": {
-                        "port_type": "PS/2",
-                        "info": [
-                            ["device", "keyboard/mouse"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "RJ-45 port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "Audio jacks",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "Audio jacks",
                     "quantity": 3
-                },
-                {
-                    "port": {
-                        "port_type": "D-Sub",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "HDMI",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "RJ-45",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
                 }
             ]
         }
@@ -749,89 +497,40 @@
             },
             "io_ports": [
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                            
-                            ["protocol", "3.2"],
-                            ["type", "A"],
-                            ["gen", "2"]
-                        ],
-                        "note": "red"
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "USB4",
-                        "info": [
-                            ["type", "C"]
-                        ],
-                        "note": "DisplayPort"
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                            
-                            ["protocol", "3.2"],
-                            ["gen", "1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 2.0/1.1 ports",
                     "quantity": 4
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "2.0/1.1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "PS/2 keyboard/mouse port",
+                    "quantity": 1
+                },
+                {
+                    "port": "DisplayPort",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
                     "quantity": 4
                 },
                 {
-                    "port": {
-                        "port_type": "Audio jacks",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "USB4 USB Type-C port (DisplayPort)",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A port (red)",
+                    "quantity": 1
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "SMA antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "Audio jacks",
                     "quantity": 3
-                },
-                {
-                    "port": {
-                        "port_type": "RJ-45",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "Antenna connectors",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "PS/2",
-                        "info": [
-                            ["device", "keyboard/mouse"]
-                        ],
-                        "note": "purple"
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "DisplayPort",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
                 }
             ]
         }
@@ -871,80 +570,36 @@
             },
             "io_ports": [
                 {
-                    "port": {
-                        "port_type": "USB4",
-                        "info": [
-                            ["type", "C"],
-                            ["gen", "1"]
-                        ],
-                        "note": "DisplayPort"
-                    },
+                    "port": "USB4 USB Type-C port (DisplayPort)",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "3.2"],
-                            ["type", "A"],
-                            ["gen", "2"]
-                        ],
-                        "note": "red"
-                    },
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
                     "quantity": 2
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "3.2"],
-                            ["gen", "1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 3.2 Gen 1 ports",
                     "quantity": 3
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "2.0/1.1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 2.0/1.1 ports",
                     "quantity": 4
                 },
                 {
-                    "port": {
-                        "port_type": "Antenna connectors",
-                        "info": [],
-                        "note": "2T2R"
-                    },
+                    "port": "DisplayPort",
+                    "quantity": 1
+                },
+                {
+                    "port": "Antenna connectors (2T2R)",
                     "quantity": 2
                 },
                 {
-                    "port": {
-                        "port_type": "RJ-45",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "RJ-45 port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "Audio jacks",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "Audio jacks",
                     "quantity": 3
-                },
-                {
-                    "port": {
-                        "port_type": "DisplayPort",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
                 }
             ]
         }
@@ -984,88 +639,40 @@
             },
             "io_ports": [
                 {
-                    "port": {
-                        "port_type": "USB4",
-                        "info": [
-                            ["type", "C"]
-                        ],
-                        "note": "DisplayPort"
-                    },
+                    "port": "USB4 USB Type-C port (DisplayPort)",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                            
-                            ["protocol", "3.2"],
-                            ["type", "A"],
-                            ["gen", "2"]
-                        ],
-                        "note": "red"
-                    },
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
                     "quantity": 2
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [                            
-                            ["protocol", "3.2"],
-                            ["type", "A"],
-                            ["gen", "1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 3.2 Gen 1 ports",
                     "quantity": 3
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "2.0/1.1"]
-                        ],
-                        "note": ""
-                    },
+                    "port": "USB 2.0/1.1 ports",
                     "quantity": 4
                 },
                 {
-                    "port": {
-                        "port_type": "Antenna connectors",
-                        "info": [],
-                        "note": "2T2R"
-                    },
+                    "port": "Antenna connectors (2T2R)",
                     "quantity": 2
                 },
                 {
-                    "port": {
-                        "port_type": "Audio jacks",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "DisplayPort",
+                    "quantity": 1
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Optical S/PDIF Out connector",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
                     "quantity": 2
-                },
-                {
-                    "port": {
-                        "port_type": "RJ-45",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "Optical S/PDIF out",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "DisplayPort",
-                        "info": [],
-                        "note": ""
-                    },
-                    "quantity": 1
                 }
             ]
         }
@@ -1105,88 +712,40 @@
             },
             "io_ports": [
                 {
-                    "port": {
-                        "port_type": "USB4",
-                        "info": [
-                            ["type", "C"]
-                        ],
-                        "note": "DisplayPort"
-                    },
+                    "port": "Intel Thunderbolt 4 (Note 2) connector (USB4 USB Type-C port)",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "USB",
-                        "info": [
-                            ["protocol", "2.0"],
-                            ["type", "A"]
-                        ],
-                        "note": ""
-                    },
-                    "quantity": 4
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
+                    "quantity": 2
                 },
                 {
-                    "port": {
-                        "port_type": "Ethernet",
-                        "info": [
-                            ["model", "Intel I219-V"],
-                            ["speed", "1Gb"]
-                        ],
-                        "note": ""
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "PS/2",
-                        "info": [
-                            ["device", "keyboard"]
-                        ],
-                        "note": "purple"
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "PS/2",
-                        "info": [
-                            ["device", "mouse"]
-                        ],
-                        "note": "green"
-                    },
-                    "quantity": 1
-                },
-                {
-                    "port": {
-                        "port_type": "Audio jacks",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "USB 3.2 Gen 1 ports",
                     "quantity": 3
                 },
                 {
-                    "port": {
-                        "port_type": "D-Sub",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "USB 2.0/1.1 ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "Antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "DisplayPort",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "HDMI",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "RJ-45 port",
                     "quantity": 1
                 },
                 {
-                    "port": {
-                        "port_type": "DisplayPort",
-                        "info": [],
-                        "note": ""
-                    },
+                    "port": "Optical S/PDIF Out connector",
                     "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 2
                 }
             ]
         }
@@ -1206,22 +765,58 @@
                 "slots": 4,
                 "max_single_dimm_gb": 64
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 5,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
                 },
                 {
-                    "format": "x16",
-                    "generation": 3,
-                    "lanes": 1
+                    "physical_size": 16,
+                    "electrical_speed": 1,
+                    "gen": 3,
+                    "quantity": 2
                 }
             ],
             "storage_slots": {
                 "m2_slots": 3,
                 "sata_ports": 4
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "Antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB4 USB Type-C ports (DisplayPort)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A port (red)",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
+                    "quantity": 3
+                },
+                {
+                    "port": "USB 2.0/1.1 ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 3
+                }
+            ]
         }
     },
     {
@@ -1239,27 +834,68 @@
                 "slots": 4,
                 "max_single_dimm_gb": 64
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 5,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
                 },
                 {
-                    "format": "x16",
-                    "generation": 4,
-                    "lanes": 4
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 1
                 },
                 {
-                    "format": "x16",
-                    "generation": 3,
-                    "lanes": 2
+                    "physical_size": 16,
+                    "electrical_speed": 2,
+                    "gen": 3,
+                    "quantity": 1
                 }
             ],
             "storage_slots": {
                 "m2_slots": 4,
                 "sata_ports": 4
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB4 USB Type-C ports (DisplayPort)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "USB 2.0/1.1 ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Optical S/PDIF Out connector",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 2
+                }
+            ]
         }
     },
     {
@@ -1278,27 +914,58 @@
                 "max_single_dimm_gb": 64,
                 "max_speed_mts_oc": 8000
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 5,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
                 },
                 {
-                    "format": "x16",
-                    "generation": 3,
-                    "lanes": 1
-                },
-                {
-                    "format": "x16",
-                    "generation": 3,
-                    "lanes": 1
+                    "physical_size": 16,
+                    "electrical_speed": 1,
+                    "gen": 3,
+                    "quantity": 2
                 }
             ],
             "storage_slots": {
                 "m2_slots": 3,
                 "sata_ports": 4
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "Antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB4 USB Type-C ports (DisplayPort)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A port (red)",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
+                    "quantity": 3
+                },
+                {
+                    "port": "USB 2.0/1.1 ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 3
+                }
+            ]
         }
     },
     {
@@ -1317,27 +984,76 @@
                 "max_single_dimm_gb": 64,
                 "max_speed_mts_oc": 8000
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 5,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
                 },
                 {
-                    "format": "x16",
-                    "generation": 4,
-                    "lanes": 4
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 1
                 },
                 {
-                    "format": "x16",
-                    "generation": 3,
-                    "lanes": 2
+                    "physical_size": 16,
+                    "electrical_speed": 2,
+                    "gen": 3,
+                    "quantity": 1
                 }
             ],
             "storage_slots": {
                 "m2_slots": 4,
                 "sata_ports": 6
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "SMA antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "DisplayPort",
+                    "quantity": 1
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB Type-C port (DisplayPort), with USB 3.2 Gen 2 support",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB Type-C port, with USB 3.2 Gen 2x2 support",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
+                    "quantity": 4
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "USB 2.0/1.1 ports",
+                    "quantity": 2
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Optical S/PDIF Out connector",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 2
+                }
+            ]
         }
     },
     {
@@ -1356,26 +1072,72 @@
                 "max_single_dimm_gb": 64,
                 "max_speed_mts_oc": "6400+"
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 5,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
                 },
                 {
-                    "format": "x16",
-                    "generation": 4,
-                    "lanes": 4
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 4,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 1,
+                    "gen": 3,
+                    "quantity": 2
                 }
             ],
             "storage_slots": {
                 "m2_slots": 3,
                 "sata_ports": 4
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "USB Type-C 3.2 Gen 2x2 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 2 ports (2 x Type-A + 1 x USB Type-C)",
+                    "quantity": 3
+                },
+                {
+                    "port": "USB 3.2 Type-A Gen 1 ports)",
+                    "quantity": 4
+                },
+                {
+                    "port": "USB 2.0 Type-A ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "DisplayPort",
+                    "quantity": 1
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Wi-Fi Module",
+                    "quantity": 1
+                },
+                {
+                    "port": "Intel I225-V 2.5Gb Ethernet port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 5
+                }
+            ]
         }
     },
     {
-        "product_name": "MainboardASUS ROG STRIX B650E-I GAMING WIFI (DDR5)",
+        "product_name": "Mainboard ASUS ROG STRIX B650E-I GAMING WIFI (DDR5)",
         "vendor": "ASUS",
         "product_type": "mainboard",
         "price": "9690000",
@@ -1389,17 +1151,52 @@
                 "slots": 2,
                 "max_capacity_gb": 96
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 5,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 5,
+                    "quantity": 1
                 }
             ],
             "storage_slots": {
                 "m2_slots": 2,
                 "sata_ports": 2
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "USB 3.2 Type-C Gen 2x2 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 2 ports (4 x Type-A + 1 x USB Type-C with DP Alt mode)",
+                    "quantity": 5
+                },
+                {
+                    "port": "USB 2.0 Type-A ports",
+                    "quantity": 2
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Wi-Fi Module",
+                    "quantity": 1
+                },
+                {
+                    "port": "Intel 2.5Gb Ethernet port",
+                    "quantity": 1
+                },
+                {
+                    "port": "LED-illuminated audio jacks",
+                    "quantity": 3
+                },
+                {
+                    "port": "Optical S/PDIF out port",
+                    "quantity": 1
+                }
+            ]
         }
     },
     {
@@ -1417,17 +1214,56 @@
                 "slots": 2,
                 "max_single_dimm_gb": 32
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 4,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 4,
+                    "quantity": 1
                 }
             ],
             "storage_slots": {
                 "m2_slots": 3,
                 "sata_ports": 4
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "DisplayPort",
+                    "quantity": 1
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB Type-C port (DisplayPort), with USB 3.2 Gen 2 support",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 2.0/1.1 ports",
+                    "quantity": 2
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "SMA antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 2
+                }
+            ]
         }
     },
     {
@@ -1445,21 +1281,56 @@
                 "slots": 4,
                 "max_single_dimm_gb": 64
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 4,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 4,
+                    "quantity": 1
                 }
             ],
             "storage_slots": {
                 "m2_slots": 4,
                 "sata_ports": 4
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "SMA antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
+                    "quantity": 6
+                },
+                {
+                    "port": "USB 2.0/1.1 ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB Type-C port, with USB 3.2 Gen 2x2 support",
+                    "quantity": 1
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 3
+                }
+            ]
         }
     },
     {
-        "product_name": "MainboardGIGABYTE X670 GAMING X AX (DDR5)",
+        "product_name": "Mainboard GIGABYTE X670 GAMING X AX (DDR5)",
         "vendor": "GIGABYTE",
         "product_type": "mainboard",
         "price": "8190000",
@@ -1473,17 +1344,52 @@
                 "slots": 4,
                 "max_single_dimm_gb": 64
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 4,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 4,
+                    "quantity": 1
                 }
             ],
             "storage_slots": {
                 "m2_slots": 4,
                 "sata_ports": 4
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "SMA antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
+                    "quantity": 6
+                },
+                {
+                    "port": "USB 2.0/1.1 ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB Type-C port, with USB 3.2 Gen 2x2 support",
+                    "quantity": 1
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 3
+                }
+            ]
         }
     },
     {
@@ -1501,17 +1407,70 @@
                 "slots": 4,
                 "max_single_dimm_gb": 32
             },
-            "gpu_slots": [
+            "pcie_slots": [
                 {
-                    "format": "x16",
-                    "generation": 4,
-                    "lanes": 16
+                    "physical_size": 16,
+                    "electrical_speed": 16,
+                    "gen": 4,
+                    "quantity": 1
+                },
+                {
+                    "physical_size": 16,
+                    "electrical_speed": 4,
+                    "gen": 3,
+                    "quantity": 1
                 }
             ],
             "storage_slots": {
                 "m2_slots": 2,
                 "sata_ports": 4
-            }
+            },
+            "io_ports": [
+                {
+                    "port": "PS/2 keyboard/mouse port",
+                    "quantity": 1
+                },
+                {
+                    "port": "DisplayPort In port",
+                    "quantity": 1
+                },
+                {
+                    "port": "HDMI port",
+                    "quantity": 1
+                },
+                {
+                    "port": "SMA antenna connectors (2T2R)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 3.2 Gen 2 Type-A ports (red)",
+                    "quantity": 2
+                },
+                {
+                    "port": "Thunderbolt 3 connectors (USB Type-C port, with USB 3.2 Gen 2 support)",
+                    "quantity": 2
+                },
+                {
+                    "port": "USB 3.2 Gen 1 ports",
+                    "quantity": 4
+                },
+                {
+                    "port": "USB 2.0/1.1 ports",
+                    "quantity": 2
+                },
+                {
+                    "port": "RJ-45 port",
+                    "quantity": 2
+                },
+                {
+                    "port": "Optical S/PDIF Out connector",
+                    "quantity": 1
+                },
+                {
+                    "port": "Audio jacks",
+                    "quantity": 5
+                }
+            ]
         }
     }
 ]
