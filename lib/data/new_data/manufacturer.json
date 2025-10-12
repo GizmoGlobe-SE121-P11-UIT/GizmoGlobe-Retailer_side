@@ -1,0 +1,132 @@
+[
+    {
+        "manufacturerID": "AMD",
+        "manufacturerName": "AMD",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "ASUS",
+        "manufacturerName": "ASUS",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Colorful",
+        "manufacturerName": "Colorful",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Cooler Master",
+        "manufacturerName": "Cooler Master",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Corsair",
+        "manufacturerName": "Corsair",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Deepcool",
+        "manufacturerName": "Deepcool",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "FSP",
+        "manufacturerName": "FSP",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "G.Skill",
+        "manufacturerName": "G.Skill",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "GIGABYTE",
+        "manufacturerName": "GIGABYTE",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Intel",
+        "manufacturerName": "Intel",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Addlink",
+        "manufacturerName": "Addlink",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Kingston",
+        "manufacturerName": "Kingston",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Klevv",
+        "manufacturerName": "Klevv",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Lian Li",
+        "manufacturerName": "Lian Li",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "MSI",
+        "manufacturerName": "MSI",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "NZXT",
+        "manufacturerName": "NZXT",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "PNY",
+        "manufacturerName": "PNY",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "SSTC",
+        "manufacturerName": "SSTC",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Samsung",
+        "manufacturerName": "Samsung",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Seagate",
+        "manufacturerName": "Seagate",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "SilverStone",
+        "manufacturerName": "SilverStone",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Team Group",
+        "manufacturerName": "Team Group",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Thermaltake",
+        "manufacturerName": "Thermaltake",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "V-Color",
+        "manufacturerName": "V-Color",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Verbatim",
+        "manufacturerName": "Verbatim",
+        "status": "active"
+    },
+    {
+        "manufacturerID": "Western Digital",
+        "manufacturerName": "Western Digital",
+        "status": "active"
+    }
+]

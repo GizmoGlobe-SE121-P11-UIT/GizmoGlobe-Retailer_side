@@ -1,802 +1,1252 @@
 [
     {
-        "product_name": "RAM PNY XLR8 Low Profile 1x8GB 3200 DDR4",
-        "vendor": "PNY",
-        "product_type": "ram",
-        "price": "590000",
+        "productName": "RAM PNY XLR8 Low Profile 1x8GB 3200 DDR4",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "PNY",
+        "productID": 251,
+        "importPrice": 413000,
+        "sellingPrice": 776316,
+        "sales": 153,
+        "stock": 152,
+        "discount": 24,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Vengeance LPX 8GB (1x8GB) 3200 (CMK8GX4M1E3200C16)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "650000",
+        "productName": "RAM Corsair Vengeance LPX 8GB (1x8GB) 3200 (CMK8GX4M1E3200C16)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 252,
+        "importPrice": 455000,
+        "sellingPrice": 773810,
+        "sales": 57,
+        "stock": 439,
+        "discount": 16,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM PNY XLR8 1x8GB 3200MHz DDR4 LONGDIMM (MD8GD4320016XR)",
-        "vendor": "PNY",
-        "product_type": "ram",
-        "price": "650000",
+        "productName": "RAM PNY XLR8 1x8GB 3200MHz DDR4 LONGDIMM (MD8GD4320016XR)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "PNY",
+        "productID": 253,
+        "importPrice": 455000,
+        "sellingPrice": 764706,
+        "sales": 106,
+        "stock": 385,
+        "discount": 15,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM PNY XLR8 Silver 1x8GB 3200 RGB",
-        "vendor": "PNY",
-        "product_type": "ram",
-        "price": "790000",
+        "productName": "RAM PNY XLR8 Silver 1x8GB 3200 RGB",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "PNY",
+        "productID": 254,
+        "importPrice": 553000,
+        "sellingPrice": 1082192,
+        "sales": 350,
+        "stock": 417,
+        "discount": 27,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Kingston Fury Beast 8GB 3200 DDR4 RGB (KF432C16BBA/8)",
-        "vendor": "Kingston",
-        "product_type": "ram",
-        "price": "850000",
+        "productName": "RAM Kingston Fury Beast 8GB 3200 DDR4 RGB (KF432C16BBA/8)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Kingston",
+        "productID": 255,
+        "importPrice": 595000,
+        "sellingPrice": 1231885,
+        "sales": 138,
+        "stock": 251,
+        "discount": 31,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Kingston Fury Beast 8GB 3600 DDR4 RGB SE (KF436C17BWA/8)",
-        "vendor": "Kingston",
-        "product_type": "ram",
-        "price": "890000",
+        "productName": "RAM Kingston Fury Beast 8GB 3600 DDR4 RGB SE (KF436C17BWA/8)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3600,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Kingston",
+        "productID": 256,
+        "importPrice": 623000,
+        "sellingPrice": 1059524,
+        "sales": 481,
+        "stock": 428,
+        "discount": 16,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM TeamGroup T-Force Vulcan Z Red 8GB 3200 DDR4 (TLZRD48G3200HC16F01)",
-        "vendor": "Team Group",
-        "product_type": "ram",
-        "price": "890000",
+        "productName": "RAM TeamGroup T-Force Vulcan Z Red 8GB 3200 DDR4 (TLZRD48G3200HC16F01)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Team Group",
+        "productID": 257,
+        "importPrice": 623000,
+        "sellingPrice": 1000000,
+        "sales": 245,
+        "stock": 71,
+        "discount": 11,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM PNY XLR8 Silver 1x8GB 3600 RGB",
-        "vendor": "PNY",
-        "product_type": "ram",
-        "price": "890000",
+        "productName": "RAM PNY XLR8 Silver 1x8GB 3600 RGB",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "PNY",
+        "productID": 258,
+        "importPrice": 623000,
+        "sellingPrice": 1072290,
+        "sales": 231,
+        "stock": 262,
+        "discount": 17,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM T-Group T-Force Delta 1x8GB 3600 RGB Black",
-        "vendor": "Team Group",
-        "product_type": "ram",
-        "price": "890000",
+        "productName": "RAM T-Group T-Force Delta 1x8GB 3600 RGB Black",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Team Group",
+        "productID": 259,
+        "importPrice": 623000,
+        "sellingPrice": 1390625,
+        "sales": 334,
+        "stock": 419,
+        "discount": 36,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Kingston Fury Beast 1x8GB 3600 DDR4 RGB (KF436C17BB2A/8)",
-        "vendor": "Kingston",
-        "product_type": "ram",
-        "price": "890000",
+        "productName": "RAM Kingston Fury Beast 1x8GB 3600 DDR4 RGB (KF436C17BB2A/8)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 17,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3600,
+            "clLatency": 17,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Kingston",
+        "productID": 260,
+        "importPrice": 623000,
+        "sellingPrice": 1047059,
+        "sales": 165,
+        "stock": 72,
+        "discount": 15,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Kingston Fury Beast 1x8GB 3600 DDR4 RGB  (KF436C17BBA/8)",
-        "vendor": "Kingston",
-        "product_type": "ram",
-        "price": "950000",
+        "productName": "RAM Kingston Fury Beast 1x8GB 3600 DDR4 RGB  (KF436C17BBA/8)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 17,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3600,
+            "clLatency": 17,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Kingston",
+        "productID": 261,
+        "importPrice": 665000,
+        "sellingPrice": 1507937,
+        "sales": 182,
+        "stock": 344,
+        "discount": 37,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM T-Group T-Force Delta 1x8GB 3200 RGB Black",
-        "vendor": "Team Group",
-        "product_type": "ram",
-        "price": "990000",
+        "productName": "RAM T-Group T-Force Delta 1x8GB 3200 RGB Black",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Team Group",
+        "productID": 262,
+        "importPrice": 693000,
+        "sellingPrice": 1164706,
+        "sales": 340,
+        "stock": 453,
+        "discount": 15,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM T-Group T-Force Delta 1x8GB 3200 RGB White",
-        "vendor": "Team Group",
-        "product_type": "ram",
-        "price": "990000",
+        "productName": "RAM T-Group T-Force Delta 1x8GB 3200 RGB White",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Team Group",
+        "productID": 263,
+        "importPrice": 693000,
+        "sellingPrice": 1100000,
+        "sales": 332,
+        "stock": 429,
+        "discount": 10,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM T-Group T-Force Delta 1x16GB 3600 RGB Black",
-        "vendor": "Team Group",
-        "product_type": "ram",
-        "price": "1190000",
+        "productName": "RAM T-Group T-Force Delta 1x16GB 3600 RGB Black",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 16
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Team Group",
+        "productID": 264,
+        "importPrice": 833000,
+        "sellingPrice": 1367817,
+        "sales": 63,
+        "stock": 421,
+        "discount": 13,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM T-Group T-Force Delta 1x16GB 3600 RGB White",
-        "vendor": "Team Group",
-        "product_type": "ram",
-        "price": "1190000",
+        "productName": "RAM T-Group T-Force Delta 1x16GB 3600 RGB White",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 16
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Team Group",
+        "productID": 265,
+        "importPrice": 833000,
+        "sellingPrice": 1565790,
+        "sales": 280,
+        "stock": 120,
+        "discount": 24,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM V-Color Skywalker Plus 1x16GB 3600 RGB Black DDR4 (TL416G36S818CSPKWS)",
-        "vendor": "V-Color",
-        "product_type": "ram",
-        "price": "1390000",
+        "productName": "RAM V-Color Skywalker Plus 1x16GB 3600 RGB Black DDR4 (TL416G36S818CSPKWS)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 16
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "V-Color",
+        "productID": 266,
+        "importPrice": 973000,
+        "sellingPrice": 2044118,
+        "sales": 129,
+        "stock": 163,
+        "discount": 32,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Vengeance Pro RGB 16GB (2x8GB) 3200 White (CMW16GX4M2E3200C16W)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "1790000",
+        "productName": "RAM Corsair Vengeance Pro RGB 16GB (2x8GB) 3200 White (CMW16GX4M2E3200C16W)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 267,
+        "importPrice": 1253000,
+        "sellingPrice": 2452055,
+        "sales": 234,
+        "stock": 245,
+        "discount": 27,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Dominator 32GB (2x16GB) RGB 3200 (CMT32GX4M2E3200C16)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "3390000",
+        "productName": "RAM Corsair Dominator 32GB (2x16GB) RGB 3200 (CMT32GX4M2E3200C16)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 268,
+        "importPrice": 2373000,
+        "sellingPrice": 4237500,
+        "sales": 119,
+        "stock": 59,
+        "discount": 20,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Dominator 32GB (2x16GB) RGB 3200 White (CMT32GX4M2E3200C16W)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "3590000",
+        "productName": "RAM Corsair Dominator 32GB (2x16GB) RGB 3200 White (CMT32GX4M2E3200C16W)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 269,
+        "importPrice": 2513000,
+        "sellingPrice": 5885246,
+        "sales": 470,
+        "stock": 367,
+        "discount": 39,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM PNY XLR8 MAKO 2x16GB 6000 RGB White D5",
-        "vendor": "PNY",
-        "product_type": "ram",
-        "price": "3590000",
+        "productName": "RAM PNY XLR8 MAKO 2x16GB 6000 RGB White D5",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 6000,
-            "cl_latency": 40,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 8
+            "speedMts": 6000,
+            "clLatency": 40,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "PNY",
+        "productID": 270,
+        "importPrice": 2513000,
+        "sellingPrice": 4786667,
+        "sales": 227,
+        "stock": 174,
+        "discount": 25,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM V-Color MANTA XFinity RGB 32GB (2x16GB) 6000 DDR5 (TMXFL1660836KWK)",
-        "vendor": "V-Color",
-        "product_type": "ram",
-        "price": "3590000",
+        "productName": "RAM V-Color MANTA XFinity RGB 32GB (2x16GB) 6000 DDR5 (TMXFL1660836KWK)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 6000,
-            "cl_latency": 30,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 6000,
+            "clLatency": 30,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "V-Color",
+        "productID": 271,
+        "importPrice": 2513000,
+        "sellingPrice": 4786667,
+        "sales": 89,
+        "stock": 498,
+        "discount": 25,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM V-Color MANTA XFinity RGB 32GB (2x16GB) 6000 DDR5 White (TMXFL1660836WWK)",
-        "vendor": "V-Color",
-        "product_type": "ram",
-        "price": "3590000",
+        "productName": "RAM V-Color MANTA XFinity RGB 32GB (2x16GB) 6000 DDR5 White (TMXFL1660836WWK)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 6000,
-            "cl_latency": 30,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 6000,
+            "clLatency": 30,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "V-Color",
+        "productID": 272,
+        "importPrice": 2513000,
+        "sellingPrice": 4487500,
+        "sales": 332,
+        "stock": 421,
+        "discount": 20,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.Skill Trident Z5 RGB 32GB (2x16GB) 5600 DDR5 Silver CL40 (F5-5600J4040C16GX2-TZ5RS)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "3590000",
+        "productName": "RAM G.Skill Trident Z5 RGB 32GB (2x16GB) 5600 DDR5 Silver CL40 (F5-5600J4040C16GX2-TZ5RS)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 5600,
-            "cl_latency": 40,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 5600,
+            "clLatency": 40,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 273,
+        "importPrice": 2513000,
+        "sellingPrice": 4223530,
+        "sales": 299,
+        "stock": 434,
+        "discount": 15,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.Skill Trident Z5 RGB 32GB (2x16GB) 6400 DDR5 Silver (F5-6400J3239G16GX2-TZ5RS)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "3590000",
+        "productName": "RAM G.Skill Trident Z5 RGB 32GB (2x16GB) 6400 DDR5 Silver (F5-6400J3239G16GX2-TZ5RS)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 6400,
-            "cl_latency": 32,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 6400,
+            "clLatency": 32,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 274,
+        "importPrice": 2513000,
+        "sellingPrice": 4723685,
+        "sales": 318,
+        "stock": 343,
+        "discount": 24,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.Skill Trident Z5 RGB 2x16GB 6000mhz DDR5  Silver (F5-6000J3636F16GX2-TZ5RS)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "3690000",
+        "productName": "RAM G.Skill Trident Z5 RGB 2x16GB 6000mhz DDR5  Silver (F5-6000J3636F16GX2-TZ5RS)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 6000,
-            "cl_latency": 36,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 6000,
+            "clLatency": 36,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 275,
+        "importPrice": 2583000,
+        "sellingPrice": 4100000,
+        "sales": 264,
+        "stock": 285,
+        "discount": 10,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Dominator Platinum 32GB (2x16GB) RGB 5600 DDR5 (CMT32GX5M2B5600c36)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "4690000",
+        "productName": "RAM Corsair Dominator Platinum 32GB (2x16GB) RGB 5600 DDR5 (CMT32GX5M2B5600c36)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 5600,
-            "cl_latency": 36,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 5600,
+            "clLatency": 36,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 276,
+        "importPrice": 3283000,
+        "sellingPrice": 6012821,
+        "sales": 430,
+        "stock": 469,
+        "discount": 22,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM TeamGroup T-Force XTreem 2x16GB 8000Mhz Black DDR5",
-        "vendor": "Team Group",
-        "product_type": "ram",
-        "price": "6390000",
+        "productName": "RAM TeamGroup T-Force XTreem 2x16GB 8000Mhz Black DDR5",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 8000,
-            "cl_latency": 38,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 8000,
+            "clLatency": 38,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Team Group",
+        "productID": 277,
+        "importPrice": 4473000,
+        "sellingPrice": 9397059,
+        "sales": 497,
+        "stock": 193,
+        "discount": 32,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM TeamGroup T-Force XTreem ARGB 2x24GB 8000Mhz DDR5",
-        "vendor": "Team Group",
-        "product_type": "ram",
-        "price": "8990000",
+        "productName": "RAM TeamGroup T-Force XTreem ARGB 2x24GB 8000Mhz DDR5",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 8000,
-            "cl_latency": 38,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 24
+            "speedMts": 8000,
+            "clLatency": 38,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 24
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Team Group",
+        "productID": 278,
+        "importPrice": 6293000,
+        "sellingPrice": 11525642,
+        "sales": 82,
+        "stock": 375,
+        "discount": 22,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.Skill Trident Z5 RGB 32GB (2x16GB) 5600 DDR5 Black CL30 (F5-5600J3036D16GX2-TZ5RK)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "11990000",
+        "productName": "RAM G.Skill Trident Z5 RGB 32GB (2x16GB) 5600 DDR5 Black CL30 (F5-5600J3036D16GX2-TZ5RK)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 5600,
-            "cl_latency": 30,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 5600,
+            "clLatency": 30,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 279,
+        "importPrice": 8393000,
+        "sellingPrice": 15371795,
+        "sales": 361,
+        "stock": 166,
+        "discount": 22,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Kingston Fury 1x8GB 3200 Beast",
-        "vendor": "Kingston",
-        "product_type": "ram",
-        "price": "490000",
+        "productName": "RAM Kingston Fury 1x8GB 3200 Beast",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Kingston",
+        "productID": 280,
+        "importPrice": 343000,
+        "sellingPrice": 644737,
+        "sales": 355,
+        "stock": 91,
+        "discount": 24,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.SKILL Ripjaws V 1x8GB 2800 DDR4 (F4-2800C17S-8GVR)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "590000",
+        "productName": "RAM G.SKILL Ripjaws V 1x8GB 2800 DDR4 (F4-2800C17S-8GVR)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 2800,
-            "cl_latency": 17,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 2800,
+            "clLatency": 17,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 281,
+        "importPrice": 413000,
+        "sellingPrice": 728396,
+        "sales": 454,
+        "stock": 360,
+        "discount": 19,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.Skill Ripjaws V 1x8G 3200 (F4-3200C16S-8GVKB)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "650000",
+        "productName": "RAM G.Skill Ripjaws V 1x8G 3200 (F4-3200C16S-8GVKB)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 282,
+        "importPrice": 455000,
+        "sellingPrice": 783133,
+        "sales": 258,
+        "stock": 373,
+        "discount": 17,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.Skill Ripjaws V 1x8G 3600 (F4-3600C18S-8GVK)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "650000",
+        "productName": "RAM G.Skill Ripjaws V 1x8G 3600 (F4-3600C18S-8GVK)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 283,
+        "importPrice": 455000,
+        "sellingPrice": 792683,
+        "sales": 182,
+        "stock": 377,
+        "discount": 18,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Kingston Fury Beast Black 8GB 3200 DDR4 (KF432C16BB/8)",
-        "vendor": "Kingston",
-        "product_type": "ram",
-        "price": "750000",
+        "productName": "RAM Kingston Fury Beast Black 8GB 3200 DDR4 (KF432C16BB/8)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Kingston",
+        "productID": 284,
+        "importPrice": 525000,
+        "sellingPrice": 1190477,
+        "sales": 251,
+        "stock": 493,
+        "discount": 37,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM PNY XLR8 1x8GB 3200 RGB",
-        "vendor": "PNY",
-        "product_type": "ram",
-        "price": "790000",
+        "productName": "RAM PNY XLR8 1x8GB 3200 RGB",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 1,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 1,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "PNY",
+        "productID": 285,
+        "importPrice": 553000,
+        "sellingPrice": 1274194,
+        "sales": 60,
+        "stock": 254,
+        "discount": 38,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM V-Color Skywalker Plus 1x8GB 3600 RGB Silver DDR4",
-        "vendor": "V-Color",
-        "product_type": "ram",
-        "price": "890000",
+        "productName": "RAM V-Color Skywalker Plus 1x8GB 3600 RGB Silver DDR4",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "V-Color",
+        "productID": 286,
+        "importPrice": 623000,
+        "sellingPrice": 1171053,
+        "sales": 343,
+        "stock": 55,
+        "discount": 24,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM V-Color Skywalker Plus 1x8GB 3600 RGB Black DDR4",
-        "vendor": "V-Color",
-        "product_type": "ram",
-        "price": "890000",
+        "productName": "RAM V-Color Skywalker Plus 1x8GB 3600 RGB Black DDR4",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "V-Color",
+        "productID": 287,
+        "importPrice": 623000,
+        "sellingPrice": 1034884,
+        "sales": 199,
+        "stock": 485,
+        "discount": 14,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.Skill Trident Z 1x8GB RGB 3200 (F4-3200C16S-8GTZR)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "990000",
+        "productName": "RAM G.Skill Trident Z 1x8GB RGB 3200 (F4-3200C16S-8GTZR)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 288,
+        "importPrice": 693000,
+        "sellingPrice": 1455883,
+        "sales": 133,
+        "stock": 473,
+        "discount": 32,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Vengeance RS RGB 1x8GB 3600 (CMG8GX4M1D3600C18)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "990000",
+        "productName": "RAM Corsair Vengeance RS RGB 1x8GB 3600 (CMG8GX4M1D3600C18)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 289,
+        "importPrice": 693000,
+        "sellingPrice": 1192772,
+        "sales": 229,
+        "stock": 479,
+        "discount": 17,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Kingston HyperX Predator RGB 8GB 3200 (HX432C16PB3A/8)",
-        "vendor": "Kingston",
-        "product_type": "ram",
-        "price": "1190000",
+        "productName": "RAM Kingston HyperX Predator RGB 8GB 3200 (HX432C16PB3A/8)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Kingston",
+        "productID": 290,
+        "importPrice": 833000,
+        "sellingPrice": 1776120,
+        "sales": 335,
+        "stock": 396,
+        "discount": 33,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.Skill Ripjaws V 1x8GB 4600mhz (F4-4600C19D-16GVKE)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "1490000",
+        "productName": "RAM G.Skill Ripjaws V 1x8GB 4600mhz (F4-4600C19D-16GVKE)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 4600,
-            "cl_latency": 19,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 8
+            "speedMts": 4600,
+            "clLatency": 19,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 291,
+        "importPrice": 1043000,
+        "sellingPrice": 2013514,
+        "sales": 441,
+        "stock": 333,
+        "discount": 26,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Kingston Fury Beast RGB 16GB (2x8GB) bus 5600 DDR5 (KF556C40BBAK2-16)",
-        "vendor": "Kingston",
-        "product_type": "ram",
-        "price": "2190000",
+        "productName": "RAM Kingston Fury Beast RGB 16GB (2x8GB) bus 5600 DDR5 (KF556C40BBAK2-16)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": "",
-            "cl_latency": 40,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 8
+            "speedMts": "",
+            "clLatency": 40,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Kingston",
+        "productID": 292,
+        "importPrice": 1533000,
+        "sellingPrice": 3041667,
+        "sales": 70,
+        "stock": 198,
+        "discount": 28,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM G.Skill Trident Z 1x16GB RGB 3000 (F4-3000C16D-32GTZR)",
-        "vendor": "G.Skill",
-        "product_type": "ram",
-        "price": "2290000",
+        "productName": "RAM G.Skill Trident Z 1x16GB RGB 3000 (F4-3000C16D-32GTZR)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 1,
-                "capacity_per_stick_gb": 16
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 1,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "G.Skill",
+        "productID": 293,
+        "importPrice": 1603000,
+        "sellingPrice": 2974026,
+        "sales": 496,
+        "stock": 232,
+        "discount": 23,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Dominator Platinum 16GB (2x8GB) RGB 3200 White (CMT16GX4M2C3200C16W)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "2390000",
+        "productName": "RAM Corsair Dominator Platinum 16GB (2x8GB) RGB 3200 White (CMT16GX4M2C3200C16W)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 294,
+        "importPrice": 1673000,
+        "sellingPrice": 3918033,
+        "sales": 366,
+        "stock": 280,
+        "discount": 39,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Dominator Platinum 16GB (2x8GB) RGB 3200 (CMT16GX4M2E3200C16)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "2490000",
+        "productName": "RAM Corsair Dominator Platinum 16GB (2x8GB) RGB 3200 (CMT16GX4M2E3200C16)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3200,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 8
+            "speedMts": 3200,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 8
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 295,
+        "importPrice": 1743000,
+        "sellingPrice": 3233767,
+        "sales": 374,
+        "stock": 380,
+        "discount": 23,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Vengeance RS RGB 2x16GB 3600 (CMG32GX4M2D3600C18)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "2590000",
+        "productName": "RAM Corsair Vengeance RS RGB 2x16GB 3600 (CMG32GX4M2D3600C18)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 3600,
-            "cl_latency": 18,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 3600,
+            "clLatency": 18,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 296,
+        "importPrice": 1813000,
+        "sellingPrice": 2877778,
+        "sales": 427,
+        "stock": 192,
+        "discount": 10,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Vengeance RGB 32GB (2x16GB) 5600 DDR5 (CMH32GX5M2B5600C36K)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "3390000",
+        "productName": "RAM Corsair Vengeance RGB 32GB (2x16GB) 5600 DDR5 (CMH32GX5M2B5600C36K)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 5600,
-            "cl_latency": 36,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 5600,
+            "clLatency": 36,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 297,
+        "importPrice": 2373000,
+        "sellingPrice": 5650000,
+        "sales": 301,
+        "stock": 292,
+        "discount": 40,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Vengeance RS RGB 64GB (2x32GB) 3200 (CMG64GX4M2E3200C16)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "3490000",
+        "productName": "RAM Corsair Vengeance RS RGB 64GB (2x32GB) 3200 (CMG64GX4M2E3200C16)",
         "warranty": "",
         "attributes": {
             "type": 4,
-            "speed_mts": 2133,
-            "cl_latency": 16,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 32
+            "speedMts": 2133,
+            "clLatency": 16,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 32
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 298,
+        "importPrice": 2443000,
+        "sellingPrice": 4058140,
+        "sales": 297,
+        "stock": 426,
+        "discount": 14,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Vengeance RGB 32GB (2x16GB) 5600 DDR5 (CMH32GX5M2B5600C40K)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "3590000",
+        "productName": "RAM Corsair Vengeance RGB 32GB (2x16GB) 5600 DDR5 (CMH32GX5M2B5600C40K)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 5600,
-            "cl_latency": 40,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 5600,
+            "clLatency": 40,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 299,
+        "importPrice": 2513000,
+        "sellingPrice": 5358209,
+        "sales": 351,
+        "stock": 390,
+        "discount": 33,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     },
     {
-        "product_name": "RAM Corsair Vengeance RGB White 32GB (2x16GB) 5600 DDR5 (CMH32GX5M2B5600C40W)",
-        "vendor": "Corsair",
-        "product_type": "ram",
-        "price": "3690000",
+        "productName": "RAM Corsair Vengeance RGB White 32GB (2x16GB) 5600 DDR5 (CMH32GX5M2B5600C40W)",
         "warranty": "",
         "attributes": {
             "type": 5,
-            "speed_mts": 5600,
-            "cl_latency": 40,
-            "kit_configuration": {
-                "stick_count": 2,
-                "capacity_per_stick_gb": 16
+            "speedMts": 5600,
+            "clLatency": 40,
+            "kitConfiguration": {
+                "stickCount": 2,
+                "capacityPerStickGb": 16
             }
-        }
+        },
+        "category": "ram",
+        "manufacturer": "Corsair",
+        "productID": 300,
+        "importPrice": 2583000,
+        "sellingPrice": 4241380,
+        "sales": 192,
+        "stock": 309,
+        "discount": 13,
+        "enDescription": "",
+        "viDescription": "",
+        "imageUrl": "",
+        "release": 1595203200
     }
 ]
