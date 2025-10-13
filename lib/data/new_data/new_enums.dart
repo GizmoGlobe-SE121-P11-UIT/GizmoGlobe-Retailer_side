@@ -33,8 +33,6 @@ extension SocketExtension on Socket {
 
 enum DriveFormFactor {
     m2_2280('M.2 2280'),
-    m2_2230('M.2 2230'),
-    m2_2242('M.2 2242'),
     inch3_5('3.5"'),
     inch2_5('2.5"');
     
@@ -82,7 +80,7 @@ extension InterfaceTypeExtension on InterfaceType {
   }
 }
 
-enum VramVersion {
+enum GPUVersion {
     gddr4('GDDR4'),
     gddr5('GDDR5'),
     gddr5x('GDDR5X'),
@@ -93,7 +91,7 @@ enum VramVersion {
 
   final String description;
 
-  const VramVersion(this.description);
+  const GPUVersion(this.description);
 
   String getName() {
     return name;
@@ -105,8 +103,8 @@ enum VramVersion {
   }
 }
 
-extension VramVersionExtension on VramVersion {
-  static VramVersion fromName(String name) {
-    return VramVersion.values.firstWhere((e) => e.getName() == name);
+extension GPUVersionExtension on GPUVersion {
+  static GPUVersion fromName(String name) {
+    return GPUVersion.values.firstWhere((e) => e.getName() == name);
   }
 }
