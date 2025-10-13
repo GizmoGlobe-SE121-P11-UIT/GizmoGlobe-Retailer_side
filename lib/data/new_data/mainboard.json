@@ -3,14 +3,12 @@
         "productName": "Mainboard GIGABYTE X870E AORUS MASTER (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
-            "chipsetFamily": "X870E",
-            "chipsetCode": "x870e",
+            "chipsetCode": "X870E",
             "socket": "am5",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -79,7 +77,8 @@
             ]
         },
         "productID": 181,
-        "importPrice": 0,
+        "importPrice": 11000,
+        "sellingPrice": 17500,
         "sales": 373,
         "stock": 440,
         "discount": 20,
@@ -92,13 +91,12 @@
         "productName": "Mainboard GIGABYTE X670E AORUS XTREME (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "X670E",
             "socket": "am5",
             "formFactor": "eatx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -171,7 +169,8 @@
             ]
         },
         "productID": 182,
-        "importPrice": 0,
+        "importPrice": 15000,
+        "sellingPrice": 26500,
         "sales": 363,
         "stock": 351,
         "discount": 32,
@@ -184,17 +183,15 @@
         "productName": "Mainboard ASUS Prime H510M-E",
         "manufacturer": "ASUS",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "H510",
             "socket": "lga1200",
             "formFactor": "micro_atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR4",
                 "slots": 2,
-                "maxSingleDimmGb": 32,
-                "maxTotalGb": 64
+                "maxSingleDimmGb": 32
             },
             "pcieSlots": [
                 {
@@ -254,7 +251,8 @@
             ]
         },
         "productID": 183,
-        "importPrice": 0,
+        "importPrice": 1500,
+        "sellingPrice": 2700,
         "sales": 201,
         "stock": 448,
         "discount": 35,
@@ -267,13 +265,12 @@
         "productName": "Mainboard ASUS ROG Strix B850-F Gaming Wifi",
         "manufacturer": "ASUS",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "B850",
             "socket": "am5",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -340,7 +337,8 @@
             ]
         },
         "productID": 184,
-        "importPrice": 0,
+        "importPrice": 7000,
+        "sellingPrice": 13300,
         "sales": 463,
         "stock": 490,
         "discount": 33,
@@ -353,13 +351,12 @@
         "productName": "Mainboard GIGABYTE X870E AORUS PRO ICE (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
-            "chipsetCode": "x870e",
+            "chipsetCode": "X870E",
             "socket": "am5",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -428,7 +425,8 @@
             ]
         },
         "productID": 185,
-        "importPrice": 0,
+        "importPrice": 10000,
+        "sellingPrice": 19500,
         "sales": 324,
         "stock": 314,
         "discount": 37,
@@ -441,13 +439,12 @@
         "productName": "Mainboard GIGABYTE H610M-H V3 (DDR4)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "H610",
             "socket": "lga1700",
             "formFactor": "micro_atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR4",
                 "slots": 2,
                 "maxSingleDimmGb": 32
@@ -502,7 +499,8 @@
             ]
         },
         "productID": 186,
-        "importPrice": 0,
+        "importPrice": 1500,
+        "sellingPrice": 2000,
         "sales": 371,
         "stock": 379,
         "discount": 10,
@@ -515,13 +513,12 @@
         "productName": "Mainboard GIGABYTE Z890 UD WIFI6E (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "Z890",
             "socket": "lga1851",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -590,7 +587,8 @@
             ]
         },
         "productID": 187,
-        "importPrice": 0,
+        "importPrice": 5000,
+        "sellingPrice": 8000,
         "sales": 471,
         "stock": 245,
         "discount": 18,
@@ -603,13 +601,12 @@
         "productName": "Mainboard GIGABYTE Z890 EAGLE WIFI7 (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "Z890",
             "socket": "lga1851",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -668,7 +665,8 @@
             ]
         },
         "productID": 188,
-        "importPrice": 0,
+        "importPrice": 5000,
+        "sellingPrice": 8250,
         "sales": 63,
         "stock": 50,
         "discount": 14,
@@ -681,13 +679,12 @@
         "productName": "Mainboard GIGABYTE Z890 AORUS ELITE WIFI7 (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "Z890",
             "socket": "lga1851",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -750,7 +747,8 @@
             ]
         },
         "productID": 189,
-        "importPrice": 0,
+        "importPrice": 7000,
+        "sellingPrice": 11500,
         "sales": 289,
         "stock": 487,
         "discount": 21,
@@ -763,13 +761,12 @@
         "productName": "Mainboard GIGABYTE Z890 AORUS ELITE WIFI7 ICE (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "Z890",
             "socket": "lga1851",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -832,7 +829,8 @@
             ]
         },
         "productID": 190,
-        "importPrice": 0,
+        "importPrice": 7000,
+        "sellingPrice": 13000,
         "sales": 123,
         "stock": 498,
         "discount": 25,
@@ -845,13 +843,12 @@
         "productName": "Mainboard GIGABYTE X870 GAMING X WIFI7 (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
-            "chipsetCode": "x870",
+            "chipsetCode": "X870",
             "socket": "am5",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -910,7 +907,8 @@
             ]
         },
         "productID": 191,
-        "importPrice": 0,
+        "importPrice": 6000,
+        "sellingPrice": 10000,
         "sales": 217,
         "stock": 300,
         "discount": 11,
@@ -923,13 +921,12 @@
         "productName": "Mainboard GIGABYTE X870 AORUS ELITE WIFI7 ICE (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
-            "chipsetCode": "x870",
+            "chipsetCode": "X870",
             "socket": "am5",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -998,7 +995,8 @@
             ]
         },
         "productID": 192,
-        "importPrice": 0,
+        "importPrice": 8000,
+        "sellingPrice": 15500,
         "sales": 411,
         "stock": 433,
         "discount": 36,
@@ -1011,13 +1009,12 @@
         "productName": "Mainboard GIGABYTE X870 EAGLE WIFI7 (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
-            "chipsetCode": "x870",
+            "chipsetCode": "X870",
             "socket": "am5",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64,
@@ -1077,7 +1074,8 @@
             ]
         },
         "productID": 193,
-        "importPrice": 0,
+        "importPrice": 5000,
+        "sellingPrice": 8800,
         "sales": 179,
         "stock": 152,
         "discount": 30,
@@ -1090,13 +1088,12 @@
         "productName": "Mainboard GIGABYTE X670E AORUS MASTER (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "X670E",
             "socket": "am5",
             "formFactor": "e-atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64,
@@ -1174,7 +1171,8 @@
             ]
         },
         "productID": 194,
-        "importPrice": 0,
+        "importPrice": 10000,
+        "sellingPrice": 19300,
         "sales": 277,
         "stock": 103,
         "discount": 30,
@@ -1187,13 +1185,12 @@
         "productName": "Mainboard ASUS ROG STRIX B650E-F GAMING WIFI (DDR5)",
         "manufacturer": "ASUS",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "B650E",
             "socket": "am5",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64,
@@ -1263,7 +1260,8 @@
             ]
         },
         "productID": 195,
-        "importPrice": 0,
+        "importPrice": 7000,
+        "sellingPrice": 12900,
         "sales": 76,
         "stock": 269,
         "discount": 31,
@@ -1276,13 +1274,12 @@
         "productName": "Mainboard ASUS ROG STRIX B650E-I GAMING WIFI (DDR5)",
         "manufacturer": "ASUS",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "B650E",
             "socket": "am5",
             "formFactor": "Mini-ITX",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 2,
                 "maxCapacityGb": 96
@@ -1335,7 +1332,8 @@
             ]
         },
         "productID": 196,
-        "importPrice": 0,
+        "importPrice": 7000,
+        "sellingPrice": 12300,
         "sales": 117,
         "stock": 232,
         "discount": 21,
@@ -1348,13 +1346,12 @@
         "productName": "Mainboard GIGABYTE B650I AORUS ULTRA (rev. 1.0) (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "B650",
             "socket": "am5",
             "formFactor": "Mini-ITX",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 2,
                 "maxSingleDimmGb": 32
@@ -1411,7 +1408,8 @@
             ]
         },
         "productID": 197,
-        "importPrice": 0,
+        "importPrice": 6000,
+        "sellingPrice": 11000,
         "sales": 492,
         "stock": 268,
         "discount": 19,
@@ -1424,13 +1422,12 @@
         "productName": "Mainboard GIGABYTE X670 AORUS ELITE AX (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "X670",
             "socket": "am5",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -1483,7 +1480,8 @@
             ]
         },
         "productID": 198,
-        "importPrice": 0,
+        "importPrice": 6000,
+        "sellingPrice": 10400,
         "sales": 329,
         "stock": 141,
         "discount": 18,
@@ -1496,13 +1494,12 @@
         "productName": "Mainboard GIGABYTE X670 GAMING X AX (DDR5)",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "X670",
             "socket": "am5",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR5",
                 "slots": 4,
                 "maxSingleDimmGb": 64
@@ -1555,7 +1552,8 @@
             ]
         },
         "productID": 199,
-        "importPrice": 0,
+        "importPrice": 6000,
+        "sellingPrice": 11200,
         "sales": 482,
         "stock": 68,
         "discount": 27,
@@ -1568,13 +1566,12 @@
         "productName": "Mainboard Gigabyte B550 Vision D",
         "manufacturer": "GIGABYTE",
         "category": "mainboard",
-        "sellingPrice": 0,
         "warranty": "",
         "attributes": {
             "chipsetCode": "B550",
             "socket": "am4",
             "formFactor": "atx",
-            "ram": {
+            "ramSpec": {
                 "type": "DDR4",
                 "slots": 4,
                 "maxSingleDimmGb": 32
@@ -1645,7 +1642,8 @@
             ]
         },
         "productID": 200,
-        "importPrice": 0,
+        "importPrice": 6000,
+        "sellingPrice": 10000,
         "sales": 92,
         "stock": 194,
         "discount": 27,
