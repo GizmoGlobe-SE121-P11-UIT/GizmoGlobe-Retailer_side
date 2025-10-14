@@ -1,0 +1,16 @@
+{
+  "name": "gizmo-globe-product-uploader",
+  "version": "1.0.0",
+  "description": "Script to upload product data to Firebase Firestore",
+  "main": "upload_products.js",
+  "scripts": {
+    "upload": "node upload_products.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

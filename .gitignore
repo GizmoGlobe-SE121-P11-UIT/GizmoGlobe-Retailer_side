@@ -143,3 +143,8 @@ android/local.properties
 android/local.properties
 firebase_options.dart
 .env
+.cursorignore
+
+# Node/npm artifacts used in dummy_data_script/
+dummy_data_script/node_modules/
+dummy_data_script/package-lock.json
