@@ -68,7 +68,7 @@ class _SignInScreen extends State<SignInScreen> {
                     hintTextColor: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withValues(alpha: 0.6),  
+                        .withValues(alpha: 0.6),
                     onChanged: (value) {
                       cubit.emailChanged(value);
                     },
@@ -85,7 +85,7 @@ class _SignInScreen extends State<SignInScreen> {
                     hintTextColor: Theme.of(context)
                         .colorScheme
                         .onSurface
-                        .withValues(alpha: 0.6), 
+                        .withValues(alpha: 0.6),
                     onChanged: (value) {
                       cubit.passwordChanged(value);
                     },
@@ -140,8 +140,8 @@ class _SignInScreen extends State<SignInScreen> {
                           onPressed: state.processState == ProcessState.loading
                               ? null
                               : () async {
-                            cubit.signInWithEmailPassword(context);
-                          },
+                                  cubit.signInWithEmailPassword(context);
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 Theme.of(context).colorScheme.primary,

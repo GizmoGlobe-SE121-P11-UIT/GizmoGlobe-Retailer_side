@@ -22,11 +22,27 @@
           }
         },
         {
+          "client_id": "413433346211-ntdnch55ivtl8a12sru7ehr6sme0o7n7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gizmoglobe_client",
+            "certificate_hash": "1f43b3dfe637bb268951067052033b6afe5ce0e6"
+          }
+        },
+        {
           "client_id": "413433346211-o2u44f162of4b1u1c212om796sgphg9g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.gizmoglobe_client",
             "certificate_hash": "c894737a03db30db6a50b5d0e7f1932f46c2d91a"
+          }
+        },
+        {
+          "client_id": "413433346211-vocgl08p4b06gaud2ch698153l39gu00.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gizmoglobe_client",
+            "certificate_hash": "07f03b143926fb6b9025ea084281c50a8a14d651"
           }
         },
         {
