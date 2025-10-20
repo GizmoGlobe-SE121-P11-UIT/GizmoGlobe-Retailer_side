@@ -1,4 +1,5 @@
 enum GPUSeries {
+  unknown('Unknown'),
   gtx('GTX'),
   rtx('RTX'),
   quadro('Quadro'),

@@ -1,4 +1,5 @@
 enum PSUEfficiency {
+  unknown('Unknown'),
   white('80+ White'),
   bronze('80+ Bronze'),
   gold('80+ Gold'),

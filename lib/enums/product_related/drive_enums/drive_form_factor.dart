@@ -1,4 +1,5 @@
 enum DriveFormFactor {
+  unknown('Unknown'),
   m2_2280('M.2 2280'),
   m2_2230('M.2 2230'),
   m2_2242('M.2 2242'),

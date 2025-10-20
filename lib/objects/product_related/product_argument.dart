@@ -31,8 +31,8 @@ class ProductArgument {
   String? productID;
   String? productName;
   CategoryEnum? category;
-  double? importPrice;
-  double? sellingPrice;
+  int? importPrice;
+  int? sellingPrice;
   double? discount;
   DateTime? release;
   int? sales;
@@ -44,7 +44,7 @@ class ProductArgument {
   String? viDescription;
 
   // RAM specific properties
-  RAMType? ramType;
+  RAMType? type;
   int? bus;
   int? clLatency;
   int? stickCount;
@@ -55,8 +55,8 @@ class ProductArgument {
   Socket? socket;
   int? core;
   int? thread;
-  int? baseClock;
-  int? turboClock;
+  double? baseClock;
+  double? turboClock;
 
   // PSU specific properties
   int? maxWattage;
@@ -109,7 +109,7 @@ class ProductArgument {
     this.viDescription,
 
     // RAM
-    this.ramType,
+    this.type,
     this.bus,
     this.clLatency,
     this.stickCount,
@@ -158,8 +158,8 @@ class ProductArgument {
         String? productName,
         Manufacturer? manufacturer,
         CategoryEnum? category,
-        double? importPrice,
-        double? sellingPrice,
+        int? importPrice,
+        int? sellingPrice,
         double? discount,
         DateTime? release,
         int? sales,
@@ -171,7 +171,7 @@ class ProductArgument {
 
         // RAM specific properties
         int? ramBus,
-        RAMType? ramType,
+        RAMType? type,
         int? bus,
         int? clLatency,
         int? stickCount,
@@ -182,8 +182,8 @@ class ProductArgument {
         Socket? socket,
         int? core,
         int? thread,
-        int? baseClock,
-        int? turboClock,
+        double? baseClock,
+        double? turboClock,
 
         // PSU specific properties
         int? maxWattage,
@@ -235,7 +235,7 @@ class ProductArgument {
       enDescription: enDescription ?? this.enDescription,
       viDescription: viDescription ?? this.viDescription,
       // RAM
-      ramType: ramType ?? this.ramType,
+      type: type ?? this.type,
       bus: bus ?? this.bus,
       clLatency: clLatency ?? this.clLatency,
       stickCount: stickCount ?? this.stickCount,
@@ -289,7 +289,7 @@ class ProductArgument {
           imageUrl: imageUrl,
           enDescription: enDescription,
           viDescription: viDescription,
-          type: ramType!,
+          type: type!,
           bus: bus!,
           capacityPerStickGb: capacity!,
           kitStickCount: stickCount!,
@@ -380,7 +380,7 @@ class ProductArgument {
           formFactor: mainboardFormFactor!,
           pcieSlots: pcieSlots!,
           storageSlot: storageSlot!,
-          ramSpec: RamSpec(type: ramType!, slots: stickCount!, maxSingleDimmGb: capacity!),
+          ramSpec: RamSpec(type: type!, slots: stickCount!, maxSingleDimmGb: capacity!),
           ioPorts: ioPorts!,
         )..productID = productID;
       case CategoryEnum.drive:
@@ -432,7 +432,7 @@ class ProductArgument {
       case CategoryEnum.ram:
         return result.copyWith(
           ramBus: (product as RAM).bus,
-          ramType: (product).type,
+          type: (product).type,
           clLatency: (product).clLatency,
           stickCount: (product).kitStickCount,
           capacity: (product).capacityPerStickGb,
@@ -470,7 +470,7 @@ class ProductArgument {
           pcieSlots: (product).pcieSlots,
           storageSlot: (product).storageSlot,
           ioPorts: (product).ioPorts,
-          ramType: (product).ramSpec.type,
+          type: (product).ramSpec.type,
           capacity: (product).ramSpec.maxSingleDimmGb,
           stickCount: (product).ramSpec.slots,
         );

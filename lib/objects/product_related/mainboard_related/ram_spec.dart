@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../../enums/product_related/ram_enums/ram_type.dart';
 
 class RamSpec {
@@ -29,4 +31,24 @@ class RamSpec {
         slots: (json['slots'] is num) ? (json['slots'] as num).toInt() : int.tryParse(json['slots']?.toString() ?? '') ?? 0,
         maxSingleDimmGb: (json['maxSingleDimmGb'] is num) ? (json['maxSingleDimmGb'] as num).toInt() : int.tryParse(json['maxSingleDimmGb']?.toString() ?? '') ?? 0,
    );
+}
+
+class RamSpecControllers {
+  final TextEditingController typeController;
+  final TextEditingController slotsController;
+  final TextEditingController maxSingleDimmGbController;
+
+  RamSpecControllers({
+    RAMType? type,
+    int? slots,
+    int? maxSingleDimmGb,
+  }) : typeController = TextEditingController(text: type.toString()),
+       slotsController = TextEditingController(text: slots.toString()),
+       maxSingleDimmGbController = TextEditingController(text: maxSingleDimmGb.toString());
+
+  void dispose() {
+    typeController.dispose();
+    slotsController.dispose();
+    maxSingleDimmGbController.dispose();
+  }
 }

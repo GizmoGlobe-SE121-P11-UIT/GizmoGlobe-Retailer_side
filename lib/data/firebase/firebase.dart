@@ -1,18 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:gizmoglobe_client/enums/product_related/cpu_enums/cpu_family.dart';
-import 'package:gizmoglobe_client/enums/product_related/drive_enums/drive_capacity.dart';
+import 'package:gizmoglobe_client/enums/product_related/cpu_enums/cpu_series.dart';
+import 'package:gizmoglobe_client/enums/product_related/cpu_enums/socket.dart';
 import 'package:gizmoglobe_client/enums/product_related/drive_enums/drive_type.dart';
-import 'package:gizmoglobe_client/enums/product_related/gpu_enums/gpu_bus.dart';
-import 'package:gizmoglobe_client/enums/product_related/gpu_enums/gpu_capacity.dart';
 import 'package:gizmoglobe_client/enums/product_related/gpu_enums/gpu_series.dart';
-import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_compatibility.dart';
 import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_form_factor.dart';
-import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_series.dart';
 import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_efficiency.dart';
 import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_modular.dart';
-import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_bus.dart';
-import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_capacity_enum.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_type.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/owned_voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
@@ -29,6 +23,8 @@ import 'package:gizmoglobe_client/objects/product_related/ram_related/ram.dart';
 import '../../enums/invoice_related/payment_status.dart';
 import '../../enums/invoice_related/sales_status.dart';
 import '../../enums/product_related/category_enum.dart';
+import '../../enums/product_related/gpu_enums/gpu_version.dart';
+import '../../enums/product_related/product_serializer.dart';
 import '../../enums/product_related/product_status_enum.dart';
 import '../../enums/stakeholders/employee_role.dart';
 import '../../enums/stakeholders/manufacturer_status.dart';
@@ -611,131 +607,8 @@ class Firebase {
       for (var doc in snapshot.docs) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-        // Lấy manufacturer từ manufacturerID
-        String manufacturerId = data['manufacturerID'];
-        Manufacturer? manufacturer = await getManufacturerById(manufacturerId);
-        if (manufacturer == null) continue;
-
-        // Chuyển đổi category string thành enum
-        CategoryEnum category = CategoryEnum.nonEmptyValues.firstWhere(
-          (e) => e.getName() == data['category'],
-          orElse: () => CategoryEnum.ram,
-        );
-
-        // Tạo product với các thuộc tính cơ bản
-        Map<String, dynamic> productProps = {
-          'productID': doc.id,
-          'productName': data['productName'],
-          'manufacturer': manufacturer,
-          'importPrice': (data['importPrice'] as num).toDouble(),
-          'sellingPrice': (data['sellingPrice'] as num).toDouble(),
-          'discount': (data['discount'] as num).toDouble(),
-          'release': (data['release'] as Timestamp).toDate(),
-          'sales': data['sales'] as int,
-          'stock': data['stock'] as int,
-          'enDescription': data['enDescription'],
-          'viDescription': data['viDescription'],
-          'status': ProductStatusEnum.values.firstWhere(
-            (e) => e.getName() == data['status'],
-            orElse: () => ProductStatusEnum.active,
-          ),
-        };
-
-        // Thêm các thuộc tính đặc thù theo category
-        switch (category) {
-          case CategoryEnum.ram:
-            productProps.addAll({
-              'bus': RAMBus.values.firstWhere(
-                (e) => e.getName() == data['bus'],
-                orElse: () => RAMBus.mhz3200,
-              ),
-              'capacity': RAMCapacity.values.firstWhere(
-                (e) => e.getName() == data['capacity'],
-                orElse: () => RAMCapacity.gb8,
-              ),
-              'ramType': RAMType.values.firstWhere(
-                (e) => e.getName() == data['ramType'],
-                orElse: () => RAMType.ddr4,
-              ),
-            });
-            break;
-          case CategoryEnum.cpu:
-            productProps.addAll({
-              'family': CPUFamily.values.firstWhere(
-                (e) => e.getName() == data['family'],
-                orElse: () => CPUFamily.corei3Ultra3,
-              ),
-              'core': data['core'] as int,
-              'thread': data['thread'] as int,
-              'clockSpeed': (data['clockSpeed'] as num).toDouble(),
-            });
-            break;
-          case CategoryEnum.gpu:
-            productProps.addAll({
-              'series': GPUSeries.values.firstWhere(
-                (e) => e.getName() == data['series'],
-                orElse: () => GPUSeries.rtx,
-              ),
-              'capacity': GPUCapacity.values.firstWhere(
-                (e) => e.getName() == data['capacity'],
-                orElse: () => GPUCapacity.gb8,
-              ),
-              'busWidth': GPUBus.values.firstWhere(
-                (e) => e.getName() == data['busWidth'],
-                orElse: () => GPUBus.bit128,
-              ),
-              'clockSpeed': (data['clockSpeed'] as num).toDouble(),
-            });
-            break;
-          case CategoryEnum.mainboard:
-            productProps.addAll({
-              'formFactor': MainboardFormFactor.values.firstWhere(
-                (e) => e.getName() == data['formFactor'],
-                orElse: () => MainboardFormFactor.atx,
-              ),
-              'series': MainboardSeries.values.firstWhere(
-                (e) => e.getName() == data['series'],
-                orElse: () => MainboardSeries.h,
-              ),
-              'compatibility': MainboardCompatibility.values.firstWhere(
-                (e) => e.getName() == data['compatibility'],
-                orElse: () => MainboardCompatibility.intel,
-              ),
-            });
-            break;
-          case CategoryEnum.drive:
-            productProps.addAll({
-              'type': DriveType.values.firstWhere(
-                (e) => e.getName() == data['type'],
-                orElse: () => DriveType.sataSSD,
-              ),
-              'capacity': DriveCapacity.values.firstWhere(
-                (e) => e.getName() == data['capacity'],
-                orElse: () => DriveCapacity.gb256,
-              ),
-            });
-            break;
-          case CategoryEnum.psu:
-            productProps.addAll({
-              'wattage': data['wattage'] as int,
-              'efficiency': PSUEfficiency.values.firstWhere(
-                (e) => e.getName() == data['efficiency'],
-                orElse: () => PSUEfficiency.gold,
-              ),
-              'modular': PSUModular.values.firstWhere(
-                (e) => e.getName() == data['modular'],
-                orElse: () => PSUModular.fullModular,
-              ),
-            });
-            break;
-          default:
-            if (kDebugMode) {
-              print('Unknown category: ${data['category']}');
-            } // Loại sản phẩm không xác định
-        }
-
         // Tạo product instance thông qua factory
-        Product product = ProductFactory.createProduct(category, productProps);
+        Product product = ProductFactory.createProduct(data);
         products.add(product);
       }
 
@@ -758,134 +631,8 @@ class Firebase {
         try {
           Map<String, dynamic> data = doc.data();
 
-          String manufacturerId = data['manufacturerID'];
-          Manufacturer? manufacturer =
-              await getManufacturerById(manufacturerId);
-          if (manufacturer == null) continue;
-
-          CategoryEnum category = CategoryEnum.nonEmptyValues.firstWhere(
-            (e) => e.getName() == data['category'],
-            orElse: () => CategoryEnum.ram,
-          );
-
-          Map<String, dynamic> productProps = {
-            'productID': doc.id,
-            'productName': data['productName'],
-            'manufacturer': manufacturer,
-            'importPrice': (data['importPrice'] as num).toDouble(),
-            'sellingPrice': (data['sellingPrice'] as num).toDouble(),
-            'discount': (data['discount'] as num).toDouble(),
-            'release': (data['release'] as Timestamp).toDate(),
-            'sales': data['sales'] as int,
-            'stock': data['stock'] as int,
-            'enDescription': data['enDescription'],
-            'viDescription': data['viDescription'],
-            'status': ProductStatusEnum.values.firstWhere(
-              (e) => e.getName() == data['status'],
-              orElse: () => ProductStatusEnum.active,
-            ),
-          };
-
-          switch (category) {
-            case CategoryEnum.ram:
-              productProps.addAll({
-                'bus': RAMBus.values.firstWhere(
-                  (e) => e.getName() == data['bus'],
-                  orElse: () => RAMBus.mhz3200,
-                ),
-                'capacity': RAMCapacity.values.firstWhere(
-                  (e) => e.getName() == data['capacity'],
-                  orElse: () => RAMCapacity.gb8,
-                ),
-                'ramType': RAMType.values.firstWhere(
-                  (e) => e.getName() == data['ramType'],
-                  orElse: () => RAMType.ddr4,
-                ),
-              });
-              break;
-
-            case CategoryEnum.cpu:
-              productProps.addAll({
-                'family': CPUFamily.values.firstWhere(
-                  (e) => e.getName() == data['family'],
-                  orElse: () => CPUFamily.corei3Ultra3,
-                ),
-                'core': data['core'],
-                'thread': data['thread'],
-                'clockSpeed': (data['clockSpeed'] as num).toDouble(),
-              });
-              break;
-
-            case CategoryEnum.gpu:
-              productProps.addAll({
-                'series': GPUSeries.values.firstWhere(
-                  (e) => e.getName() == data['series'],
-                  orElse: () => GPUSeries.rtx,
-                ),
-                'capacity': GPUCapacity.values.firstWhere(
-                  (e) => e.getName() == data['capacity'],
-                  orElse: () => GPUCapacity.gb4,
-                ),
-                'busWidth': GPUBus.values.firstWhere(
-                  (e) => e.getName() == data['busWidth'],
-                  orElse: () => GPUBus.bit128,
-                ),
-                'clockSpeed': (data['clockSpeed'] as num).toDouble(),
-              });
-              break;
-
-            case CategoryEnum.mainboard:
-              productProps.addAll({
-                'formFactor': MainboardFormFactor.values.firstWhere(
-                  (e) => e.getName() == data['formFactor'],
-                  orElse: () => MainboardFormFactor.atx,
-                ),
-                'series': MainboardSeries.values.firstWhere(
-                  (e) => e.getName() == data['series'],
-                  orElse: () => MainboardSeries.h,
-                ),
-                'compatibility': MainboardCompatibility.values.firstWhere(
-                  (e) => e.getName() == data['compatibility'],
-                  orElse: () => MainboardCompatibility.intel,
-                ),
-              });
-              break;
-
-            case CategoryEnum.drive:
-              productProps.addAll({
-                'type': DriveType.values.firstWhere(
-                  (e) => e.getName() == data['type'],
-                  orElse: () => DriveType.sataSSD,
-                ),
-                'capacity': DriveCapacity.values.firstWhere(
-                  (e) => e.getName() == data['capacity'],
-                  orElse: () => DriveCapacity.gb256,
-                ),
-              });
-              break;
-
-            case CategoryEnum.psu:
-              productProps.addAll({
-                'wattage': data['wattage'] as int,
-                'efficiency': PSUEfficiency.values.firstWhere(
-                  (e) => e.getName() == data['efficiency'],
-                  orElse: () => PSUEfficiency.bronze,
-                ),
-                'modular': PSUModular.values.firstWhere(
-                  (e) => e.getName() == data['modular'],
-                  orElse: () => PSUModular.nonModular,
-                ),
-              });
-              break;
-
-            default:
-              if (kDebugMode) {
-                print('Unknown category: ${data['category']}');
-              } // Loại sản phẩm không xác định
-          }
-
           Product product =
-              ProductFactory.createProduct(category, productProps);
+              ProductFactory.createProduct(data);
           products.add(product);
         } catch (e) {
           if (kDebugMode) {
@@ -1288,83 +1035,10 @@ class Firebase {
 
   Future<void> updateProduct(Product product) async {
     try {
-      Map<String, dynamic> productData = {
-        'productName': product.productName,
-        'importPrice': product.importPrice,
-        'sellingPrice': product.sellingPrice,
-        'discount': product.discount,
-        'release': product.release,
-        'sales': product.sales,
-        'stock': product.stock,
-        'status': product.status.getName(),
-        'manufacturerID': product.manufacturer.manufacturerID,
-        'category': product.category.getName(),
-        'imageUrl': product.imageUrl,
-        'enDescription': product.enDescription,
-        'viDescription': product.viDescription,
-      };
-
-      switch (product.runtimeType) {
-        case const (RAM):
-          final ram = product as RAM;
-          productData.addAll({
-            'bus': ram.bus.getName(),
-            'capacity': ram.capacity.getName(),
-            'ramType': ram.ramType.getName(),
-          });
-          break;
-
-        case const (CPU):
-          final cpu = product as CPU;
-          productData.addAll({
-            'family': cpu.family.getName(),
-            'core': cpu.core,
-            'thread': cpu.thread,
-            'clockSpeed': cpu.clockSpeed,
-          });
-          break;
-
-        case const (GPU):
-          final gpu = product as GPU;
-          productData.addAll({
-            'series': gpu.series.getName(),
-            'capacity': gpu.capacity.getName(),
-            'busWidth': gpu.bus.getName(),
-            'clockSpeed': gpu.clockSpeed,
-          });
-          break;
-
-        case const (Mainboard):
-          final mainboard = product as Mainboard;
-          productData.addAll({
-            'formFactor': mainboard.formFactor.getName(),
-            'series': mainboard.series.getName(),
-            'compatibility': mainboard.compatibility.getName(),
-          });
-          break;
-
-        case const (Drive):
-          final drive = product as Drive;
-          productData.addAll({
-            'type': drive.type.getName(),
-            'capacity': drive.capacity.getName(),
-          });
-          break;
-
-        case const (PSU):
-          final psu = product as PSU;
-          productData.addAll({
-            'wattage': psu.wattage,
-            'efficiency': psu.efficiency.getName(),
-            'modular': psu.modular.getName(),
-          });
-          break;
-      }
-
       await FirebaseFirestore.instance
           .collection('products')
           .doc(product.productID)
-          .update(productData);
+          .update(productToJson(product));
 
       List<Product> products = await getProducts();
       Database().updateProductList(products);
@@ -1378,80 +1052,7 @@ class Firebase {
 
   Future<void> addProduct(Product product) async {
     try {
-      Map<String, dynamic> productData = {
-        'productName': product.productName,
-        'importPrice': product.importPrice,
-        'sellingPrice': product.sellingPrice,
-        'discount': product.discount,
-        'release': product.release,
-        'sales': product.sales,
-        'stock': product.stock,
-        'status': product.status.getName(),
-        'manufacturerID': product.manufacturer.manufacturerID,
-        'category': product.category.getName(),
-        'imageUrl': product.imageUrl,
-        'enDescription': product.enDescription,
-        'viDescription': product.viDescription,
-      };
-
-      switch (product.runtimeType) {
-        case const (RAM):
-          final ram = product as RAM;
-          productData.addAll({
-            'bus': ram.bus.getName(),
-            'capacity': ram.capacity.getName(),
-            'ramType': ram.ramType.getName(),
-          });
-          break;
-
-        case const (CPU):
-          final cpu = product as CPU;
-          productData.addAll({
-            'family': cpu.family.getName(),
-            'core': cpu.core,
-            'thread': cpu.thread,
-            'clockSpeed': cpu.clockSpeed,
-          });
-          break;
-
-        case const (GPU):
-          final gpu = product as GPU;
-          productData.addAll({
-            'series': gpu.series.getName(),
-            'capacity': gpu.capacity.getName(),
-            'busWidth': gpu.bus.getName(),
-            'clockSpeed': gpu.clockSpeed,
-          });
-          break;
-
-        case const (Mainboard):
-          final mainboard = product as Mainboard;
-          productData.addAll({
-            'formFactor': mainboard.formFactor.getName(),
-            'series': mainboard.series.getName(),
-            'compatibility': mainboard.compatibility.getName(),
-          });
-          break;
-
-        case const (Drive):
-          final drive = product as Drive;
-          productData.addAll({
-            'type': drive.type.getName(),
-            'capacity': drive.capacity.getName(),
-          });
-          break;
-
-        case const (PSU):
-          final psu = product as PSU;
-          productData.addAll({
-            'wattage': psu.wattage,
-            'efficiency': psu.efficiency.getName(),
-            'modular': psu.modular.getName(),
-          });
-          break;
-      }
-
-      await FirebaseFirestore.instance.collection('products').add(productData);
+      await FirebaseFirestore.instance.collection('products').add(productToJson(product));
       List<Product> products = await getProducts();
       Database().updateProductList(products);
     } catch (e) {
@@ -1790,172 +1391,7 @@ class Firebase {
       }
 
       final data = Map<String, dynamic>.from(doc.data()!);
-      data['productID'] = doc.id;
-
-      // Convert Timestamp to DateTime
-      if (data['release'] is Timestamp) {
-        data['release'] = (data['release'] as Timestamp).toDate();
-      }
-
-      // Convert numeric values to double
-      data['importPrice'] = (data['importPrice'] as num).toDouble();
-      data['sellingPrice'] = (data['sellingPrice'] as num).toDouble();
-      data['discount'] = (data['discount'] as num).toDouble();
-      data['sales'] = (data['sales'] as num).toInt();
-      data['stock'] = (data['stock'] as num).toInt();
-
-      // Get manufacturer data
-      final manufacturerDoc = await _firestore
-          .collection('manufacturers')
-          .doc(data['manufacturerID'] as String)
-          .get();
-
-      if (!manufacturerDoc.exists) {
-        if (kDebugMode) {
-          print('Manufacturer not found for product $productId');
-        }
-        return null;
-      }
-
-      // Add manufacturer to product data
-      data['manufacturer'] = _mapManufacturerFromJson(
-        manufacturerDoc.data()!,
-        manufacturerDoc.id,
-      );
-
-      final categoryStr = (data['category'] as String).toLowerCase();
-      if (kDebugMode) {
-        print('Product category: $categoryStr');
-      }
-
-      final category = CategoryEnum.nonEmptyValues.firstWhere(
-        (e) => e.getName().toLowerCase() == categoryStr,
-        orElse: () => CategoryEnum.ram,
-      );
-
-      try {
-        // Convert category-specific numeric values and enums
-        switch (category) {
-          case CategoryEnum.cpu:
-            data['core'] = (data['core'] as num).toInt();
-            data['thread'] = (data['thread'] as num).toInt();
-            data['clockSpeed'] = (data['clockSpeed'] as num).toDouble();
-            data['family'] = CPUFamily.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['family'] as String).toLowerCase(),
-              orElse: () => CPUFamily.corei3Ultra3,
-            );
-            break;
-          case CategoryEnum.gpu:
-            data['clockSpeed'] = (data['clockSpeed'] as num).toDouble();
-            data['series'] = GPUSeries.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['series'] as String).toLowerCase(),
-              orElse: () => GPUSeries.rtx,
-            );
-            data['capacity'] = GPUCapacity.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['capacity'] as String).toLowerCase(),
-              orElse: () => GPUCapacity.gb4,
-            );
-            data['busWidth'] = GPUBus.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['busWidth'] as String).toLowerCase(),
-              orElse: () => GPUBus.bit128,
-            );
-            break;
-          case CategoryEnum.psu:
-            data['wattage'] = (data['wattage'] as num).toInt();
-            data['efficiency'] = PSUEfficiency.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['efficiency'] as String).toLowerCase(),
-              orElse: () => PSUEfficiency.bronze,
-            );
-            data['modular'] = PSUModular.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['modular'] as String).toLowerCase(),
-              orElse: () => PSUModular.nonModular,
-            );
-            break;
-          case CategoryEnum.ram:
-            data['bus'] = RAMBus.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['bus'] as String).toLowerCase(),
-              orElse: () => RAMBus.mhz3200,
-            );
-            data['capacity'] = RAMCapacity.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['capacity'] as String).toLowerCase(),
-              orElse: () => RAMCapacity.gb8,
-            );
-            data['ramType'] = RAMType.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['ramType'] as String).toLowerCase(),
-              orElse: () => RAMType.ddr4,
-            );
-            break;
-          case CategoryEnum.drive:
-            data['type'] = DriveType.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['type'] as String).toLowerCase(),
-              orElse: () => DriveType.hdd,
-            );
-            data['capacity'] = DriveCapacity.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['capacity'] as String).toLowerCase(),
-              orElse: () => DriveCapacity.gb256,
-            );
-            break;
-          case CategoryEnum.mainboard:
-            data['formFactor'] = MainboardFormFactor.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['formFactor'] as String).toLowerCase(),
-              orElse: () => MainboardFormFactor.atx,
-            );
-            data['series'] = MainboardSeries.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['series'] as String).toLowerCase(),
-              orElse: () => MainboardSeries.h,
-            );
-            data['compatibility'] = MainboardCompatibility.values.firstWhere(
-              (e) =>
-                  e.getName().toLowerCase() ==
-                  (data['compatibility'] as String).toLowerCase(),
-              orElse: () => MainboardCompatibility.intel,
-            );
-            break;
-          default:
-            break;
-        }
-
-        // Convert common enums
-        data['status'] = ProductStatusEnum.values.firstWhere(
-          (e) =>
-              e.getName().toLowerCase() ==
-              (data['status'] as String).toLowerCase(),
-          orElse: () => ProductStatusEnum.active,
-        );
-      } catch (e) {
-        if (kDebugMode) {
-          print('Invalid category for product $productId: $categoryStr');
-        }
-        return null;
-      }
-
-      final product = ProductFactory.createProduct(category, data);
+      final product = ProductFactory.createProduct(data);
       if (kDebugMode) {
         print('Created product: ${product.productName}');
       }

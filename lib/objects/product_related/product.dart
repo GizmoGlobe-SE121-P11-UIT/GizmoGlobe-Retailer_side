@@ -8,8 +8,8 @@ abstract class Product {
   String? productID;
   String productName;
   CategoryEnum category;
-  double importPrice;
-  double sellingPrice;
+  int importPrice;
+  int sellingPrice;
   double discount;
   DateTime release;
   int sales;
@@ -39,10 +39,9 @@ abstract class Product {
     this.viDescription,
   });
 
-  Product changeCategory(
-      CategoryEnum newCategory, Map<String, dynamic> properties) {
+  Product changeCategory(Map<String, dynamic> properties) {
     properties['productID'] = productID;
-    return ProductFactory.createProduct(newCategory, properties);
+    return ProductFactory.createProduct(properties);
   }
 
   void updateStatus(ProductStatusEnum newStatus) {
@@ -53,8 +52,8 @@ abstract class Product {
     String? productID,
     String? productName,
     Manufacturer? manufacturer,
-    double? importPrice,
-    double? sellingPrice,
+    int? importPrice,
+    int? sellingPrice,
     double? discount,
     DateTime? release,
     int? sales,

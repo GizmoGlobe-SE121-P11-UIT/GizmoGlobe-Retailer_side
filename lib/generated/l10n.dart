@@ -3834,6 +3834,15 @@ class S {
       args: [],
     );
   }
+
+  String get unknown {
+    return Intl.message(
+      'Unknown',
+      name: 'unknown',
+      desc: 'Label for unknown value.',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

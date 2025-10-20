@@ -46,8 +46,8 @@ class Drive extends Product {
   void updateProduct({
     String? productID,
     String? productName,
-    double? importPrice,
-    double? sellingPrice,
+    int? importPrice,
+    int? sellingPrice,
     double? discount,
     DateTime? release,
     int? sales,

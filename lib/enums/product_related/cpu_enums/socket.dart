@@ -31,3 +31,4 @@ extension SocketExtension on Socket {
     return Socket.values.firstWhere((e) => e.getName() == name);
   }
 }
+

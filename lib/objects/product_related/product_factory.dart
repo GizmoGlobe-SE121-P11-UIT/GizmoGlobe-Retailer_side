@@ -1,3 +1,4 @@
+import '../../data/database/database.dart';
 import '../../enums/product_related/category_enum.dart';
 import '../../enums/product_related/mainboard_enums/mainboard_form_factor.dart';
 import 'product.dart';
@@ -29,171 +30,9 @@ import 'mainboard_related/io_port.dart';
 import 'psu_related/connector.dart';
 
 class ProductFactory {
-  static Product createProduct(
-      CategoryEnum category, Map<String, dynamic> properties) {
-    // common helpers
-    Manufacturer parseManufacturer(dynamic v) {
-      if (v == null) return Manufacturer.nullManufacturer;
-      if (v is Map<String, dynamic>) {
-        return Manufacturer(
-          manufacturerID: v['manufacturerID']?.toString(),
-          manufacturerName: v['manufacturerName']?.toString() ?? 'Unknown',
-        );
-      }
-      return Manufacturer(
-        manufacturerName: v.toString(),
-        manufacturerID: v.toString(),
-      );
-    }
-
-    double toDouble(dynamic v) {
-      if (v == null) return 0.0;
-      if (v is num) return v.toDouble();
-      return double.tryParse(v.toString()) ?? 0.0;
-    }
-
-    int toInt(dynamic v) {
-      if (v == null) return 0;
-      if (v is num) return (v as num).toInt();
-      return int.tryParse(v.toString()) ?? 0;
-    }
-
-    DateTime parseDate(dynamic v) {
-      if (v == null) return DateTime.fromMillisecondsSinceEpoch(0);
-      if (v is DateTime) return v;
-      // assume epoch seconds if numeric
-      if (v is num) return DateTime.fromMillisecondsSinceEpoch((v as num).toInt() * 1000);
-      final parsed = int.tryParse(v.toString());
-      if (parsed != null) return DateTime.fromMillisecondsSinceEpoch(parsed * 1000);
-      return DateTime.tryParse(v.toString()) ?? DateTime.fromMillisecondsSinceEpoch(0);
-    }
-
-    ProductStatusEnum parseStatus(dynamic v) {
-      if (v == null) return ProductStatusEnum.active;
-      if (v is ProductStatusEnum) return v;
-      try {
-        return ProductStatusEnumExtension.fromName(v.toString());
-      } catch (_) {
-        return ProductStatusEnum.active;
-      }
-    }
-
-    RAMType parseRamType(dynamic v) {
-      if (v == null) return RAMType.unknown;
-      try {
-        return RAMTypeExtension.fromName(v.toString());
-      } catch (_) {
-        return RAMType.unknown;
-      }
-    }
-
-    GPUSeries parseGPUSeries(dynamic v) {
-      if (v == null) return GPUSeries.gtx;
-      try {
-        return GPUSeriesExtension.fromName(v.toString());
-      } catch (_) {
-        return GPUSeries.gtx;
-      }
-    }
-
-    GPUVersion parseGPUVersion(dynamic v) {
-      if (v == null) return GPUVersion.gddr6;
-      try {
-        return GPUVersionExtension.fromName(v.toString());
-      } catch (_) {
-        return GPUVersion.gddr6;
-      }
-    }
-
-    CPUSeries parseCPUSeries(dynamic v) {
-      if (v == null) return CPUSeries.unknown;
-      try {
-        return CPUSeriesExtension.fromName(v.toString());
-      } catch (_) {
-        return CPUSeries.unknown;
-      }
-    }
-
-    Socket parseSocket(dynamic v) {
-      if (v == null) return Socket.unknown;
-      try {
-        return SocketExtension.fromName(v.toString());
-      } catch (_) {
-        return Socket.unknown;
-      }
-    }
-
-    DriveGen parseDriveGen(dynamic v) {
-      if (v == null) return DriveGen.gen3;
-      if (v is num) {
-        switch ((v as num).toInt()) {
-          case 3:
-            return DriveGen.gen3;
-          case 4:
-            return DriveGen.gen4;
-          case 5:
-            return DriveGen.gen5;
-          default:
-            return DriveGen.gen3;
-        }
-      }
-      // try by name
-      try {
-        return DriveGenExtension.fromName(v.toString());
-      } catch (_) {
-        return DriveGen.gen3;
-      }
-    }
-
-    InterfaceType parseInterfaceType(dynamic v) {
-      if (v == null) return InterfaceType.sata;
-      final s = v.toString().toLowerCase();
-      if (s.contains('pcie') || s.contains('nvme')) return InterfaceType.pcie;
-      return InterfaceType.sata;
-    }
-
-    DriveFormFactor parseDriveFormFactor(dynamic v) {
-      if (v == null) return DriveFormFactor.inch3_5;
-      try {
-        return DriveFormFactorExtension.fromName(v.toString());
-      } catch (_) {
-        return DriveFormFactor.inch3_5;
-      }
-    }
-
-    DriveType parseDriveType(dynamic v) {
-      if (v == null) return DriveType.hdd;
-      final s = v.toString().toLowerCase();
-      if (s.contains('hdd')) return DriveType.hdd;
-      if (s.contains('nvme') || s.contains('m2_nvme') || s.contains('m2nvme')) return DriveType.m2NVME;
-      if (s.contains('m2') && s.contains('ngff')) return DriveType.m2NGFF;
-      return DriveType.sataSSD;
-    }
-
-    PSUEfficiency parsePSUEfficiency(dynamic v) {
-      if (v == null) return PSUEfficiency.gold;
-      try {
-        return PSUEfficiencyExtension.fromName(v.toString());
-      } catch (_) {
-        return PSUEfficiency.gold;
-      }
-    }
-
-    PSUModular parsePSUModular(dynamic v) {
-      if (v == null) return PSUModular.fullModular;
-      try {
-        return PSUModularExtension.fromName(v.toString());
-      } catch (_) {
-        // handle common variations
-        final s = v.toString().toLowerCase();
-        if (s.contains('full')) return PSUModular.fullModular;
-        if (s.contains('semi')) return PSUModular.semiModular;
-        return PSUModular.nonModular;
-      }
-    }
-
-    // path getter
+  static Product createProduct(Map<String, dynamic> properties) {
     dynamic getAttr(String path) => getByPath(properties, path);
+    CategoryEnum category = CategoryEnumExtension.fromName(properties['category']?.toString() ?? '');
 
     switch (category) {
       case CategoryEnum.ram:
@@ -201,8 +40,8 @@ class ProductFactory {
           productName: properties['productName']?.toString() ?? '',
           manufacturer: parseManufacturer(properties['manufacturer']),
           category: category,
-          importPrice: toDouble(properties['importPrice']),
-          sellingPrice: toDouble(properties['sellingPrice']),
+          importPrice: toInt(properties['importPrice']),
+          sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
           stock: toInt(properties['stock']),
@@ -224,8 +63,8 @@ class ProductFactory {
           productName: properties['productName']?.toString() ?? '',
           manufacturer: parseManufacturer(properties['manufacturer']),
           category: category,
-          importPrice: toDouble(properties['importPrice']),
-          sellingPrice: toDouble(properties['sellingPrice']),
+          importPrice: toInt(properties['importPrice']),
+          sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
           stock: toInt(properties['stock']),
@@ -239,9 +78,9 @@ class ProductFactory {
           socket: parseSocket(attrs['socket']),
           core: toInt(attrs['core']),
           thread: toInt(attrs['thread']),
-          baseClock: toInt(attrs['baseClock']),
+          baseClock: toDouble(attrs['baseClock']),
           tdp: toInt(attrs['tdp']),
-          turboClock: toInt(attrs['turboClock']),
+          turboClock: toDouble(attrs['turboClock']),
         )..productID = properties['productID']?.toString();
       case CategoryEnum.psu:
         final attrs = getAttr('attributes') as Map<String, dynamic>? ?? {};
@@ -249,8 +88,8 @@ class ProductFactory {
           productName: properties['productName']?.toString() ?? '',
           manufacturer: parseManufacturer(properties['manufacturer']),
           category: category,
-          importPrice: toDouble(properties['importPrice']),
-          sellingPrice: toDouble(properties['sellingPrice']),
+          importPrice: toInt(properties['importPrice']),
+          sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
 
@@ -274,15 +113,15 @@ class ProductFactory {
           productName: properties['productName']?.toString() ?? '',
           manufacturer: parseManufacturer(properties['manufacturer']),
           category: category,
-          importPrice: toDouble(properties['importPrice']),
-          sellingPrice: toDouble(properties['sellingPrice']),
+          importPrice: toInt(properties['importPrice']),
+          sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
 
           series: parseGPUSeries(attrs['series']),
           version: parseGPUVersion(attrs['vramVersion'] ?? attrs['vram']),
           memory: toInt(attrs['memory']),
-          boostClock: toInt(attrs['boostClock']),
+          boostClock: toDouble(attrs['boostClock']),
           tdp: toInt(attrs['tdp']),
           ports: (attrs['ports'] is Iterable)
               ? (attrs['ports'] as Iterable).map((e) => IOPort.fromJson(e as Map<String, dynamic>)).toList()
@@ -301,8 +140,8 @@ class ProductFactory {
           productName: properties['productName']?.toString() ?? '',
           manufacturer: parseManufacturer(properties['manufacturer']),
           category: category,
-          importPrice: toDouble(properties['importPrice']),
-          sellingPrice: toDouble(properties['sellingPrice']),
+          importPrice: toInt(properties['importPrice']),
+          sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
 
@@ -338,8 +177,8 @@ class ProductFactory {
           productName: properties['productName']?.toString() ?? '',
           manufacturer: parseManufacturer(properties['manufacturer']),
           category: category,
-          importPrice: toDouble(properties['importPrice']),
-          sellingPrice: toDouble(properties['sellingPrice']),
+          importPrice: toInt(properties['importPrice']),
+          sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
 
@@ -374,4 +213,105 @@ dynamic getByPath(Map<String, dynamic> map, String path) {
     }
   }
   return cur;
+}
+
+Manufacturer parseManufacturer(dynamic v) {
+  if (v == null) return Manufacturer.nullManufacturer;
+
+  if (v is Map<String, dynamic>) {
+    return Manufacturer(
+      manufacturerID: v['manufacturerID']?.toString(),
+      manufacturerName: Database().manufacturerList.firstWhere(
+        (m) => m.manufacturerID == v['manufacturerID']?.toString(),
+        orElse: () => Manufacturer.nullManufacturer,
+      ).manufacturerName,
+    );
+  }
+
+  return Manufacturer(
+    manufacturerName: v.toString(),
+    manufacturerID: v.toString(),
+  );
+}
+
+double toDouble(dynamic v) {
+  if (v == null) return 0.0;
+  if (v is num) return v.toDouble();
+  return double.tryParse(v.toString()) ?? 0.0;
+}
+
+int toInt(dynamic v) {
+  if (v == null) return 0;
+  if (v is num) return (v).toInt();
+  return int.tryParse(v.toString()) ?? 0;
+}
+
+DateTime parseDate(dynamic v) {
+  if (v == null) return DateTime.fromMillisecondsSinceEpoch(0);
+  if (v is DateTime) return v;
+  // assume epoch seconds if numeric
+  if (v is num) return DateTime.fromMillisecondsSinceEpoch((v).toInt() * 1000);
+  final parsed = int.tryParse(v.toString());
+  if (parsed != null) return DateTime.fromMillisecondsSinceEpoch(parsed * 1000);
+  return DateTime.tryParse(v.toString()) ?? DateTime.fromMillisecondsSinceEpoch(0);
+}
+
+ProductStatusEnum parseStatus(dynamic v) {
+  if (v == null) return ProductStatusEnum.unknown;
+  return ProductStatusEnumExtension.fromName(v.toString());
+}
+
+RAMType parseRamType(dynamic v) {
+  if (v == null) return RAMType.unknown;
+  return RAMTypeExtension.fromName(v.toString());
+}
+
+GPUSeries parseGPUSeries(dynamic v) {
+  if (v == null) return GPUSeries.unknown;
+  return GPUSeriesExtension.fromName(v.toString());
+}
+
+GPUVersion parseGPUVersion(dynamic v) {
+  if (v == null) return GPUVersion.unknown;
+  return GPUVersionExtension.fromName(v.toString());
+}
+
+CPUSeries parseCPUSeries(dynamic v) {
+  if (v == null) return CPUSeries.unknown;
+  return CPUSeriesExtension.fromName(v.toString());
+}
+
+Socket parseSocket(dynamic v) {
+  if (v == null) return Socket.unknown;
+  return SocketExtension.fromName(v.toString());
+}
+
+DriveGen parseDriveGen(dynamic v) {
+  if (v == null) DriveGen.unknown;
+  return DriveGenExtension.fromName(v.toString());
+}
+
+InterfaceType parseInterfaceType(dynamic v) {
+  if (v == null) return InterfaceType.unknown;
+  return InterfaceTypeExtension.fromName(v.toString());
+}
+
+DriveFormFactor parseDriveFormFactor(dynamic v) {
+  if (v == null) return DriveFormFactor.unknown;
+  return DriveFormFactorExtension.fromName(v.toString());
+}
+
+DriveType parseDriveType(dynamic v) {
+  if (v == null) return DriveType.unknown;
+  return DriveTypeExtension.fromName(v.toString());
+}
+
+PSUEfficiency parsePSUEfficiency(dynamic v) {
+  if (v == null) return PSUEfficiency.unknown;
+  return PSUEfficiencyExtension.fromName(v.toString());
+}
+
+PSUModular parsePSUModular(dynamic v) {
+  if (v == null) return PSUModular.unknown;
+  return PSUModularExtension.fromName(v.toString());
 }

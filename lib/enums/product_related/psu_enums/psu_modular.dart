@@ -1,4 +1,5 @@
 enum PSUModular {
+  unknown('Unknown'),
   nonModular('Non-Modular'),
   semiModular('Semi-Modular'),
   fullModular('Full-Modular');

@@ -11,8 +11,8 @@ class CPU extends Product {
   Socket socket;
   int core;
   int thread;
-  int baseClock;
-  int turboClock;
+  double baseClock;
+  double turboClock;
   int tdp;
 
   CPU({
@@ -44,8 +44,8 @@ class CPU extends Product {
   void updateProduct({
     String? productID,
     String? productName,
-    double? importPrice,
-    double? sellingPrice,
+    int? importPrice,
+    int? sellingPrice,
     double? discount,
     DateTime? release,
     int? sales,
@@ -55,9 +55,9 @@ class CPU extends Product {
     Socket? socket,
     int? core,
     int? thread,
-    int? baseClock,
+    double? baseClock,
     int? tdp,
-    int? turboClock,
+    double? turboClock,
     ProductStatusEnum? status,
     String? imageUrl,
 

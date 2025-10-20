@@ -11,7 +11,7 @@ class GPU extends Product {
   GPUSeries series;
   GPUVersion version;
   int memory;
-  int boostClock;
+  double boostClock;
   int tdp;
   List<IOPort> ports;
 
@@ -43,8 +43,8 @@ class GPU extends Product {
   void updateProduct({
     String? productID,
     String? productName,
-    double? importPrice,
-    double? sellingPrice,
+    int? importPrice,
+    int? sellingPrice,
     double? discount,
     DateTime? release,
     int? sales,
@@ -53,7 +53,7 @@ class GPU extends Product {
     GPUSeries? series,
     GPUVersion? version,
     int? memory,
-    int? boostClock,
+    double? boostClock,
     int? tdp,
     List<IOPort>? ports,
     ProductStatusEnum? status,

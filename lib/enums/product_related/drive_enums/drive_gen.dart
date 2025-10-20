@@ -1,4 +1,5 @@
 enum DriveGen {
+  unknown('Unknown', 'Unknown'),
   gen3('Gen 3', 'III'),
   gen4('Gen 4', 'IV'),
   gen5('Gen 5', 'V');

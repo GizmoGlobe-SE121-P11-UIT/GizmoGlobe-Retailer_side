@@ -8,11 +8,11 @@ class Manufacturer {
   Manufacturer({
     this.manufacturerID,
     required this.manufacturerName,
-    this.status = ManufacturerStatus.active,  // Default to active
+    this.status = ManufacturerStatus.active,
   });
 
   static Manufacturer nullManufacturer = Manufacturer(
-    manufacturerName: 'Unknown', // Không xác định
+    manufacturerName: 'Unknown',
     manufacturerID: '',
     status: ManufacturerStatus.inactive,
   );

@@ -1,4 +1,5 @@
 enum GPUVersion {
+  unknown('Unknown'),
   gddr4('GDDR4'),
   gddr5('GDDR5'),
   gddr5x('GDDR5X'),

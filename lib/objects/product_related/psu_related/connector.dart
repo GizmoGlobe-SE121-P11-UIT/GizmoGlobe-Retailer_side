@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Connector {
   String type;
   int quantity;
@@ -9,4 +11,20 @@ class Connector {
     quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : int.tryParse(json['quantity']?.toString() ?? '') ?? 0,
   );
 
+}
+
+class ConnectorControllers {
+  final TextEditingController typeController;
+  final TextEditingController quantityController;
+
+  ConnectorControllers({
+    String? type,
+    String? quantity,
+  })  : typeController = TextEditingController(text: type),
+        quantityController = TextEditingController(text: quantity);
+
+  void dispose() {
+    typeController.dispose();
+    quantityController.dispose();
+  }
 }

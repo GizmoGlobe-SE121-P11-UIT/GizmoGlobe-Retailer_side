@@ -1,4 +1,5 @@
 enum InterfaceType {
+  unknown('Unknown'),
   sata('SATA'),
   pcie('PCIe');
 

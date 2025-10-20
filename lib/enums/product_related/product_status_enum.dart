@@ -2,9 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 
 enum ProductStatusEnum {
-  active('Active'), // Đang hoạt động
-  outOfStock('Out of Stock'), // Hết hàng
-  discontinued('Discontinued'); // Ngừng kinh doanh
+  unknown('Unknown'),
+  active('Active'),
+  outOfStock('Out of Stock'),
+  discontinued('Discontinued');
 
   final String description;
 
@@ -36,6 +37,8 @@ extension ProductStatusEnumLocalized on ProductStatusEnum {
         return S.of(context).outOfStock;
       case ProductStatusEnum.discontinued:
         return S.of(context).discontinued;
+      default:
+        return S.of(context).unknown;
     }
   }
 }

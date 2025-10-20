@@ -1,4 +1,5 @@
 enum DriveType {
+  unknown('Unknown'),
   hdd('HDD'),
   sataSSD('SATA SSD'),
   m2NGFF('M2 NGFF'),

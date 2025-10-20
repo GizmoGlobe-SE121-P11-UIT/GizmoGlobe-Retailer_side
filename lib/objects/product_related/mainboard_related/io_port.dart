@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class IOPort {
   String port;
   int quantity;
@@ -8,4 +10,20 @@ class IOPort {
     port: json['port']?.toString() ?? '',
     quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : int.tryParse(json['quantity']?.toString() ?? '') ?? 0,
   );
+}
+
+class IOPortControllers {
+  final TextEditingController portController;
+  final TextEditingController quantityController;
+
+  IOPortControllers({
+    String? port,
+    String? quantity,
+  })  : portController = TextEditingController(text: port),
+        quantityController = TextEditingController(text: quantity);
+
+  void dispose() {
+    portController.dispose();
+    quantityController.dispose();
+  }
 }
