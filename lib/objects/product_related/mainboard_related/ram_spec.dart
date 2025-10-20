@@ -1,0 +1,32 @@
+import '../../../enums/product_related/ram_enums/ram_type.dart';
+
+class RamSpec {
+  RAMType type;
+  int slots;
+  int maxSingleDimmGb;
+
+  RamSpec({
+    required this.type,
+    required this.slots,
+    required this.maxSingleDimmGb,
+  });
+
+  void updateRamSpec({
+    RAMType? type,
+    int? slots,
+    int? maxSingleDimmGb,
+    int? maxTotalGb
+  }) {
+    this.type = type ?? this.type;
+    this.slots = slots ?? this.slots;
+    this.maxSingleDimmGb = maxSingleDimmGb ?? this.maxSingleDimmGb;
+  }
+
+  factory RamSpec.fromJson(Map<String, dynamic> json) => RamSpec(
+        type: RAMType.values.firstWhere(
+            (e) => e.toString() == 'RAMType.${json['type']?.toString() ?? ''}',
+            orElse: () => RAMType.unknown),
+        slots: (json['slots'] is num) ? (json['slots'] as num).toInt() : int.tryParse(json['slots']?.toString() ?? '') ?? 0,
+        maxSingleDimmGb: (json['maxSingleDimmGb'] is num) ? (json['maxSingleDimmGb'] as num).toInt() : int.tryParse(json['maxSingleDimmGb']?.toString() ?? '') ?? 0,
+   );
+}

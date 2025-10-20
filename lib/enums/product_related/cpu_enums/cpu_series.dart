@@ -1,4 +1,5 @@
-enum CPUFamily {
+enum CPUSeries {
+  unknown('Unknown'),
   corei3Ultra3('Core i3 - Ultra 3'),
   corei5Ultra5('Core i5 - Ultra 5'),
   corei7Ultra7('Core i7 - Ultra 7'),
@@ -10,7 +11,7 @@ enum CPUFamily {
 
   final String description;
 
-  const CPUFamily(this.description);
+  const CPUSeries(this.description);
 
   String getName() {
     return name;
@@ -22,8 +23,8 @@ enum CPUFamily {
   }
 }
 
-extension CPUFamilyExtension on CPUFamily {
-  static CPUFamily fromName(String name) {
-    return CPUFamily.values.firstWhere((e) => e.getName() == name);
+extension CPUSeriesExtension on CPUSeries {
+  static CPUSeries fromName(String name) {
+    return CPUSeries.values.firstWhere((e) => e.getName() == name);
   }
 }

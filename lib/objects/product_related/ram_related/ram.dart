@@ -1,16 +1,16 @@
-import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_bus.dart';
-import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_capacity_enum.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_type.dart';
 
-import '../../enums/product_related/category_enum.dart';
-import '../../enums/product_related/product_status_enum.dart';
-import '../manufacturer.dart';
-import 'product.dart';
+import '../../../enums/product_related/category_enum.dart';
+import '../../../enums/product_related/product_status_enum.dart';
+import '../../manufacturer.dart';
+import '../product.dart';
 
 class RAM extends Product {
-  RAMBus bus;
-  RAMCapacity capacity;
-  RAMType ramType;
+  RAMType type;
+  int bus;
+  int clLatency;
+  int kitStickCount;
+  int capacityPerStickGb;
 
   RAM({
     required super.productName,
@@ -19,17 +19,20 @@ class RAM extends Product {
     required super.discount,
     required super.release,
     required super.manufacturer,
+
+    super.imageUrl,
+    super.enDescription,
+    super.viDescription,
     super.category = CategoryEnum.ram,
+
+    required this.type,
     required this.bus,
-    required this.capacity,
-    required this.ramType,
+    required this.clLatency,
+    required this.kitStickCount,
+    required this.capacityPerStickGb,
     required super.sales,
     required super.stock,
     required super.status,
-    super.imageUrl,
-
-    super.enDescription,
-    super.viDescription,
   });
 
   @override
@@ -43,9 +46,11 @@ class RAM extends Product {
     int? sales,
     int? stock,
     Manufacturer? manufacturer,
-    RAMBus? bus,
-    RAMCapacity? capacity,
-    RAMType? ramType,
+    RAMType? type,
+    int? bus,
+    int? clLatency,
+    int? kitStickCount,
+    int? capacityPerStickGb,
     ProductStatusEnum? status,
     String? imageUrl,
 
@@ -68,8 +73,10 @@ class RAM extends Product {
       viDescription: viDescription,
     );
 
+    this.type = type ?? this.type;
     this.bus = bus ?? this.bus;
-    this.capacity = capacity ?? this.capacity;
-    this.ramType = ramType ?? this.ramType;
+    this.clLatency = clLatency ?? this.clLatency;
+    this.kitStickCount = kitStickCount ?? this.kitStickCount;
+    this.capacityPerStickGb = capacityPerStickGb ?? this.capacityPerStickGb;
   }
 }

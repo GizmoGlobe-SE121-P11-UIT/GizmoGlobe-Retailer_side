@@ -9,13 +9,13 @@ import 'package:gizmoglobe_client/data/database/database.dart';
 import '../../../../data/firebase/firebase.dart';
 import '../../../../enums/processing/process_state_enum.dart';
 import '../../../../enums/processing/sort_enum.dart';
-import '../../../../objects/product_related/cpu.dart';
-import '../../../../objects/product_related/drive.dart';
+import '../../../../objects/product_related/cpu_related/cpu.dart';
+import '../../../../objects/product_related/drive_related/drive.dart';
 import '../../../../objects/product_related/filter_argument.dart';
-import '../../../../objects/product_related/gpu.dart';
-import '../../../../objects/product_related/mainboard.dart';
-import '../../../../objects/product_related/psu.dart';
-import '../../../../objects/product_related/ram.dart';
+import '../../../../objects/product_related/gpu_related/gpu.dart';
+import '../../../../objects/product_related/mainboard_related/mainboard.dart';
+import '../../../../objects/product_related/psu_related/psu.dart';
+import '../../../../objects/product_related/ram_related/ram.dart';
 import 'product_tab_state.dart';
 
 abstract class TabCubit extends Cubit<TabState> {

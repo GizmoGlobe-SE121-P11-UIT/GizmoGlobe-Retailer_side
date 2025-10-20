@@ -1,16 +1,23 @@
-import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_compatibility.dart';
 import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_form_factor.dart';
-import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_series.dart';
 import 'package:gizmoglobe_client/enums/product_related/product_status_enum.dart';
+import 'package:gizmoglobe_client/enums/product_related/cpu_enums/socket.dart';
+import 'package:gizmoglobe_client/objects/product_related/mainboard_related/ram_spec.dart';
 
-import '../../enums/product_related/category_enum.dart';
-import '../manufacturer.dart';
-import 'product.dart';
+import '../../../enums/product_related/category_enum.dart';
+import 'io_port.dart';
+import 'pcie_slot.dart';
+import 'storage_slot.dart';
+import '../../manufacturer.dart';
+import '../product.dart';
 
 class Mainboard extends Product {
+  String chipsetCode;
+  Socket socket;
   MainboardFormFactor formFactor;
-  MainboardSeries series;
-  MainboardCompatibility compatibility;
+  RamSpec ramSpec;
+  List<PCIeSlot> pcieSlots;
+  StorageSlot storageSlot;
+  List<IOPort> ioPorts;
 
   Mainboard({
     required super.productName,
@@ -19,17 +26,22 @@ class Mainboard extends Product {
     required super.discount,
     required super.release,
     required super.manufacturer,
+
+    super.imageUrl,
+    super.enDescription,
+    super.viDescription,
     super.category = CategoryEnum.mainboard,
+
+    required this.chipsetCode,
+    required this.socket,
     required this.formFactor,
-    required this.series,
-    required this.compatibility,
+    required this.ramSpec,
+    required this.pcieSlots,
+    required this.storageSlot,
+    required this.ioPorts,
     required super.sales,
     required super.stock,
     required super.status,
-    super.imageUrl,
-
-    super.enDescription,
-    super.viDescription,
   });
 
   @override
@@ -43,9 +55,13 @@ class Mainboard extends Product {
     int? sales,
     int? stock,
     Manufacturer? manufacturer,
+    String? chipsetCode,
+    Socket? socket,
     MainboardFormFactor? formFactor,
-    MainboardSeries? series,
-    MainboardCompatibility? compatibility,
+    RamSpec? ramSpec,
+    List<PCIeSlot>? pcieSlots,
+    StorageSlot? storageSlot,
+    List<IOPort>? ioPorts,
     ProductStatusEnum? status,
     String? imageUrl,
 
@@ -68,8 +84,12 @@ class Mainboard extends Product {
       viDescription: viDescription,
     );
 
+    this.chipsetCode = chipsetCode ?? this.chipsetCode;
+    this.socket = socket ?? this.socket;
     this.formFactor = formFactor ?? this.formFactor;
-    this.series = series ?? this.series;
-    this.compatibility = compatibility ?? this.compatibility;
+    this.ramSpec = ramSpec ?? this.ramSpec;
+    this.pcieSlots = pcieSlots ?? this.pcieSlots;
+    this.storageSlot = storageSlot ?? this.storageSlot;
+    this.ioPorts = ioPorts ?? this.ioPorts;
   }
 }

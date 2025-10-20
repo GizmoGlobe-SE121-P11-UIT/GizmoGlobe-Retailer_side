@@ -5,13 +5,13 @@ import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart'
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice_detail.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
-import '../../../../objects/product_related/cpu.dart';
-import '../../../../objects/product_related/drive.dart';
-import '../../../../objects/product_related/gpu.dart';
-import '../../../../objects/product_related/mainboard.dart';
+import '../../../../objects/product_related/cpu_related/cpu.dart';
+import '../../../../objects/product_related/drive_related/drive.dart';
+import '../../../../objects/product_related/gpu_related/gpu.dart';
+import '../../../../objects/product_related/mainboard_related/mainboard.dart';
 import '../../../../objects/product_related/product_factory.dart';
-import '../../../../objects/product_related/psu.dart';
-import '../../../../objects/product_related/ram.dart';
+import '../../../../objects/product_related/psu_related/psu.dart';
+import '../../../../objects/product_related/ram_related/ram.dart';
 import 'incoming_add_state.dart';
 
 class IncomingAddCubit extends Cubit<IncomingAddState> {

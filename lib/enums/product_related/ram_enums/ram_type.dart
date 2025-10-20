@@ -1,4 +1,5 @@
 enum RAMType {
+  unknown('Unknown'),
   ddr3('DDR3'),
   ddr4('DDR4'),
   ddr5('DDR5');

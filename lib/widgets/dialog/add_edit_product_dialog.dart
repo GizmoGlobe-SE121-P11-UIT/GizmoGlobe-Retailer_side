@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 
-import '../../../objects/product_related/ram.dart';
-import '../../../objects/product_related/cpu.dart';
-import '../../../objects/product_related/psu.dart';
-import '../../../objects/product_related/gpu.dart';
-import '../../../objects/product_related/mainboard.dart';
-import '../../../objects/product_related/drive.dart';
+import '../../objects/product_related/ram_related/ram.dart';
+import '../../objects/product_related/cpu_related/cpu.dart';
+import '../../objects/product_related/psu_related/psu.dart';
+import '../../objects/product_related/gpu_related/gpu.dart';
+import '../../objects/product_related/mainboard_related/mainboard.dart';
+import '../../objects/product_related/drive_related/drive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';

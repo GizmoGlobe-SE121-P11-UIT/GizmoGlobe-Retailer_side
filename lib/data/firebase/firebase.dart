@@ -19,12 +19,12 @@ import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher_factory.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/end_time_interface.dart';
 import '../../data/database/database.dart';
-import 'package:gizmoglobe_client/objects/product_related/cpu.dart';
-import 'package:gizmoglobe_client/objects/product_related/drive.dart';
-import 'package:gizmoglobe_client/objects/product_related/gpu.dart';
-import 'package:gizmoglobe_client/objects/product_related/mainboard.dart';
-import 'package:gizmoglobe_client/objects/product_related/psu.dart';
-import 'package:gizmoglobe_client/objects/product_related/ram.dart';
+import 'package:gizmoglobe_client/objects/product_related/cpu_related/cpu.dart';
+import 'package:gizmoglobe_client/objects/product_related/drive_related/drive.dart';
+import 'package:gizmoglobe_client/objects/product_related/gpu_related/gpu.dart';
+import 'package:gizmoglobe_client/objects/product_related/mainboard_related/mainboard.dart';
+import 'package:gizmoglobe_client/objects/product_related/psu_related/psu.dart';
+import 'package:gizmoglobe_client/objects/product_related/ram_related/ram.dart';
 
 import '../../enums/invoice_related/payment_status.dart';
 import '../../enums/invoice_related/sales_status.dart';

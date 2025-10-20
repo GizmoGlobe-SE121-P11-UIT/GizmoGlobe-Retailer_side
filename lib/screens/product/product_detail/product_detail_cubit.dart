@@ -10,12 +10,12 @@ import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
 import '../../../enums/product_related/product_status_enum.dart';
-import '../../../objects/product_related/cpu.dart';
-import '../../../objects/product_related/drive.dart';
-import '../../../objects/product_related/gpu.dart';
-import '../../../objects/product_related/mainboard.dart';
-import '../../../objects/product_related/psu.dart';
-import '../../../objects/product_related/ram.dart';
+import '../../../objects/product_related/cpu_related/cpu.dart';
+import '../../../objects/product_related/drive_related/drive.dart';
+import '../../../objects/product_related/gpu_related/gpu.dart';
+import '../../../objects/product_related/mainboard_related/mainboard.dart';
+import '../../../objects/product_related/psu_related/psu.dart';
+import '../../../objects/product_related/ram_related/ram.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit(Product product) : super(ProductDetailState(product: product)) {
