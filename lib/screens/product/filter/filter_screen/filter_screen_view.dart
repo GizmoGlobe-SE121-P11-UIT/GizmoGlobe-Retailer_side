@@ -247,6 +247,24 @@ class _FilterScreenState extends State<FilterScreen> {
           toValue: state.filterArgument.minClockSpeed,
         ),
         const SizedBox(height: 16),
+        RangeFilter(
+          name: 'TDP',
+          fromController: TextEditingController(text: state.filterArgument.minTdp),
+          toController: TextEditingController(text: state.filterArgument.maxTdp),
+          onFromValueChanged: (value) {
+            cubit.updateFilterArgument(
+              state.filterArgument.copyWith(minTdp: value),
+            );
+          },
+          onToValueChanged: (value) {
+            cubit.updateFilterArgument(
+              state.filterArgument.copyWith(maxTdp: value),
+            );
+          },
+          fromValue: state.filterArgument.minTdp,
+          toValue: state.filterArgument.maxTdp,
+        ),
+        const SizedBox(height: 16),
         OptionFilter(
           name: 'CPU socket',
           enumValues: Socket.values,
@@ -538,8 +556,7 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  Widget _buildMainboardFilterUI(
-      FilterScreenState state, FilterScreenCubit cubit) {
+  Widget _buildMainboardFilterUI(FilterScreenState state, FilterScreenCubit cubit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -194,17 +194,6 @@ class Database {
             },
           );
 
-          // Chuyển đổi dữ liệu từ Firestore sang enum
-          final category = CategoryEnum.nonEmptyValues.firstWhere(
-            (c) => c.getName() == data['category'],
-            orElse: () {
-              if (kDebugMode) {
-                print('Invalid category for product ${doc.id}');
-              }
-              throw Exception('Invalid category for product ${doc.id}');
-            },
-          );
-
           return ProductFactory.createProduct(data);
         } catch (e) {
           if (kDebugMode) {

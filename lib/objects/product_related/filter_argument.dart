@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_efficiency.dart';
 import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_modular.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_type.dart';
@@ -128,6 +130,36 @@ class FilterArgument {
       gen: gen ?? this.gen,
       psuEfficiency: psuEfficiency ?? this.psuEfficiency,
       psuModularity: psuModularity ?? this.psuModularity,
+    );
+  }
+
+  FilterArgument copy({required FilterArgument filter}) {
+    return FilterArgument(
+      manufacturerList: filter.manufacturerList,
+      minPrice: filter.minPrice,
+      maxPrice: filter.maxPrice,
+      cpuSeries: filter.cpuSeries,
+      sockets: filter.sockets,
+      mainboardFormFactor: filter.mainboardFormFactor,
+      minM2Slots: filter.minM2Slots,
+      maxM2Slots: filter.maxM2Slots,
+      minSataPorts: filter.minSataPorts,
+      maxSataPorts: filter.maxSataPorts,
+      ramType: filter.ramType,
+      gpuSeries: filter.gpuSeries,
+      gpuVersion: filter.gpuVersion,
+      minMemoryGb: filter.minMemoryGb,
+      maxMemoryGb: filter.maxMemoryGb,
+      minClockSpeed: filter.minClockSpeed,
+      maxClockSpeed: filter.maxClockSpeed,
+      minTdp: filter.minTdp,
+      maxTdp: filter.maxTdp,
+      driveFormFactor: filter.driveFormFactor,
+      driveType: filter.driveType,
+      interfaceType: filter.interfaceType,
+      gen: filter.gen,
+      psuEfficiency: filter.psuEfficiency,
+      psuModularity: filter.psuModularity,
     );
   }
 }
