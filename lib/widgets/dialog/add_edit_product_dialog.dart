@@ -275,14 +275,14 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
           const SizedBox(height: 8),
           TextFormField(
               controller: baseClockController,
-              decoration: const InputDecoration(labelText: 'CPU base clock speed (Hz)'),
+              decoration: const InputDecoration(labelText: 'CPU base clock speed (GHz)'),
               keyboardType: TextInputType.number,
               validator: _validateField
           ),
           const SizedBox(height: 8),
           TextFormField(
               controller: turboClockController,
-              decoration: const InputDecoration(labelText: 'CPU turbo clock speed (Hz)'),
+              decoration: const InputDecoration(labelText: 'CPU turbo clock speed (GHz)'),
               keyboardType: TextInputType.number,
               validator: _validateField
           ),
@@ -402,7 +402,7 @@ class _AddEditProductDialogState extends State<AddEditProductDialog> {
           const SizedBox(width: 8),
           TextFormField(
               controller: turboClockController,
-              decoration: const InputDecoration(labelText: 'GPU boost clock speed (Hz)'),
+              decoration: const InputDecoration(labelText: 'GPU boost clock speed (GHz)'),
               keyboardType: TextInputType.number,
               validator: _validateField
           ),

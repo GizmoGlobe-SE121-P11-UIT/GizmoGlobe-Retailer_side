@@ -1,4 +1,3 @@
-import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_efficiency.dart';
 import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_modular.dart';
 import 'package:gizmoglobe_client/enums/product_related/ram_enums/ram_type.dart';
@@ -15,15 +14,10 @@ import '../../enums/product_related/gpu_enums/gpu_version.dart';
 
 class FilterArgument {
   final List<Manufacturer> manufacturerList;
-  final String minStock;
-  final String maxStock;
   final String minPrice;
   final String maxPrice;
 
-  final CategoryEnum category;
-
   final List<CPUSeries> cpuSeries;
-
   final List<Socket> sockets;
 
   final List<MainboardFormFactor> mainboardFormFactor;
@@ -33,8 +27,6 @@ class FilterArgument {
   final String maxSataPorts;
 
   final List<RAMType> ramType;
-  final String minTotalRamGb;
-  final String maxTotalRamGb;
 
   final List<GPUSeries> gpuSeries;
   final List<GPUVersion> gpuVersion;
@@ -50,24 +42,15 @@ class FilterArgument {
   final List<DriveFormFactor> driveFormFactor;
   final List<DriveType> driveType;
   final List<InterfaceType> interfaceType;
-  final String minReadMbps;
-  final String maxReadMbps;
-  final String minWriteMbps;
-  final String maxWriteMbps;
   final List<DriveGen> gen;
 
   final List<PSUEfficiency> psuEfficiency;
   final List<PSUModular> psuModularity;
-  final String minWattage;
-  final String maxWattage;
 
   const FilterArgument({
     this.manufacturerList = const [],
-    this.minStock = '',
-    this.maxStock = '',
     this.minPrice = '',
     this.maxPrice = '',
-    this.category = CategoryEnum.cpu,
     this.cpuSeries = const [],
     this.sockets = const [],
     this.mainboardFormFactor = const [],
@@ -76,8 +59,6 @@ class FilterArgument {
     this.minSataPorts = '',
     this.maxSataPorts = '',
     this.ramType = const [],
-    this.minTotalRamGb = '',
-    this.maxTotalRamGb = '',
     this.gpuSeries = const [],
     this.gpuVersion = const [],
     this.minMemoryGb = '',
@@ -89,24 +70,15 @@ class FilterArgument {
     this.driveFormFactor = const [],
     this.driveType = const [],
     this.interfaceType = const [],
-    this.minReadMbps = '',
-    this.maxReadMbps = '',
-    this.minWriteMbps = '',
-    this.maxWriteMbps = '',
     this.gen = const [],
     this.psuEfficiency = const [],
     this.psuModularity = const [],
-    this.minWattage = '',
-    this.maxWattage = '',
   });
 
   FilterArgument copyWith({
     List<Manufacturer>? manufacturerList,
-    String? minStock,
-    String? maxStock,
     String? minPrice,
     String? maxPrice,
-    CategoryEnum? category,
     List<CPUSeries>? cpuSeries,
     List<Socket>? sockets,
     List<MainboardFormFactor>? mainboardFormFactor,
@@ -115,8 +87,6 @@ class FilterArgument {
     String? minSataPorts,
     String? maxSataPorts,
     List<RAMType>? ramType,
-    String? minTotalRamGb,
-    String? maxTotalRamGb,
     List<GPUSeries>? gpuSeries,
     List<GPUVersion>? gpuVersion,
     String? minMemoryGb,
@@ -128,23 +98,14 @@ class FilterArgument {
     List<DriveFormFactor>? driveFormFactor,
     List<DriveType>? driveType,
     List<InterfaceType>? interfaceType,
-    String? minReadMbps,
-    String? maxReadMbps,
-    String? minWriteMbps,
-    String? maxWriteMbps,
     List<DriveGen>? gen,
     List<PSUEfficiency>? psuEfficiency,
     List<PSUModular>? psuModularity,
-    String? minWattage,
-    String? maxWattage,
   }) {
     return FilterArgument(
       manufacturerList: manufacturerList ?? this.manufacturerList,
-      minStock: minStock ?? this.minStock,
-      maxStock: maxStock ?? this.maxStock,
       minPrice: minPrice ?? this.minPrice,
       maxPrice: maxPrice ?? this.maxPrice,
-      category: category ?? this.category,
       cpuSeries: cpuSeries ?? this.cpuSeries,
       sockets: sockets ?? this.sockets,
       mainboardFormFactor: mainboardFormFactor ?? this.mainboardFormFactor,
@@ -153,8 +114,6 @@ class FilterArgument {
       minSataPorts: minSataPorts ?? this.minSataPorts,
       maxSataPorts: maxSataPorts ?? this.maxSataPorts,
       ramType: ramType ?? this.ramType,
-      minTotalRamGb: minTotalRamGb ?? this.minTotalRamGb,
-      maxTotalRamGb: maxTotalRamGb ?? this.maxTotalRamGb,
       gpuSeries: gpuSeries ?? this.gpuSeries,
       gpuVersion: gpuVersion ?? this.gpuVersion,
       minMemoryGb: minMemoryGb ?? this.minMemoryGb,
@@ -166,15 +125,9 @@ class FilterArgument {
       driveFormFactor: driveFormFactor ?? this.driveFormFactor,
       driveType: driveType ?? this.driveType,
       interfaceType: interfaceType ?? this.interfaceType,
-      minReadMbps: minReadMbps ?? this.minReadMbps,
-      maxReadMbps: maxReadMbps ?? this.maxReadMbps,
-      minWriteMbps: minWriteMbps ?? this.minWriteMbps,
-      maxWriteMbps: maxWriteMbps ?? this.maxWriteMbps,
       gen: gen ?? this.gen,
       psuEfficiency: psuEfficiency ?? this.psuEfficiency,
       psuModularity: psuModularity ?? this.psuModularity,
-      minWattage: minWattage ?? this.minWattage,
-      maxWattage: maxWattage ?? this.maxWattage,
     );
   }
 }
