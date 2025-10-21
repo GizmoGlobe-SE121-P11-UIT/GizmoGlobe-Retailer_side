@@ -11,6 +11,10 @@ class Connector {
     quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : int.tryParse(json['quantity']?.toString() ?? '') ?? 0,
   );
 
+  @override
+  String toString() {
+    return '$quantity x $type';
+  }
 }
 
 class ConnectorControllers {

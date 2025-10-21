@@ -41,7 +41,7 @@ class _ProductScreenState extends State<ProductScreen>
     super.initState();
     searchController = TextEditingController();
     searchFocusNode = FocusNode();
-    tabController = TabController(length: CategoryEnum.nonEmptyValues.length + 1, vsync: this);
+    tabController = TabController(length: CategoryEnum.values.length + 1, vsync: this);
     cubit.initialize(widget.initialProducts ?? Database().productList);
   }
 
@@ -135,7 +135,7 @@ class _ProductScreenState extends State<ProductScreen>
               indicator: const BoxDecoration(),
               tabs: [
                 Tab(text: S.of(context).all),
-                ...CategoryEnum.nonEmptyValues.map((category) => Tab(
+                ...CategoryEnum.values.map((category) => Tab(
                   text: category.getLocalizedDescription(context),
                 )),
               ],

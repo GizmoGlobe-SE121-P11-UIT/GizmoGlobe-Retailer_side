@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import 'converter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
@@ -23,5 +25,15 @@ class Helper {
     } else {
       return S.of(context).ongoing;
     }
+  }
+
+  static String toMoney(num value) {
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '', decimalDigits: 0);
+    return formatter.format(value);
+  }
+
+  static String toMoneyWithCurrency(num value) {
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0);
+    return formatter.format(value);
   }
 }

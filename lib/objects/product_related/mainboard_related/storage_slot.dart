@@ -10,6 +10,11 @@ class StorageSlot {
     m2Slots: (json['m2Slots'] is num) ? (json['m2Slots'] as num).toInt() : int.tryParse(json['m2Slots']?.toString() ?? '') ?? 0,
     sataPorts: (json['sataPorts'] is num) ? (json['sataPorts'] as num).toInt() : int.tryParse(json['sataPorts']?.toString() ?? '') ?? 0,
   );
+
+  @override
+  String toString() {
+    return '$m2Slots x M.2 Slots\n$sataPorts x SATA Ports';
+  }
 }
 
 class StorageSlotControllers {

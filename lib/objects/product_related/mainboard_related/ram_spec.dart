@@ -30,7 +30,13 @@ class RamSpec {
             orElse: () => RAMType.unknown),
         slots: (json['slots'] is num) ? (json['slots'] as num).toInt() : int.tryParse(json['slots']?.toString() ?? '') ?? 0,
         maxSingleDimmGb: (json['maxSingleDimmGb'] is num) ? (json['maxSingleDimmGb'] as num).toInt() : int.tryParse(json['maxSingleDimmGb']?.toString() ?? '') ?? 0,
-   );
+  );
+
+  @override
+  String toString() {
+    final total = slots * maxSingleDimmGb;
+    return '$slots x ${type.name}\nMax $maxSingleDimmGb GB each\n$total GB in total';
+  }
 }
 
 class RamSpecControllers {

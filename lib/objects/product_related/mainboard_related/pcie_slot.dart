@@ -14,6 +14,14 @@ class PCIeSlot {
     gen: (json['gen'] is num) ? (json['gen'] as num).toInt() : int.tryParse(json['gen']?.toString() ?? '') ?? 0,
     quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : int.tryParse(json['quantity']?.toString() ?? '') ?? 0,
   );
+
+  @override
+  String toString() {
+    final mode = (physicalSize == electricalSpeed)
+        ? 'PCIe $gen.0 x$physicalSize mode'
+        : 'PCIe $gen.0 x$physicalSize and running at x$electricalSpeed';
+    return '$quantity x $mode (input $physicalSize-$electricalSpeed-$gen-$quantity)';
+  }
 }
 
 class PCIeSlotControllers {

@@ -30,55 +30,68 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       case CategoryEnum.ram:
         final ram = product as RAM;
         specs.addAll({
-          'Bus': ram.bus.toString(), //Tốc độ bus
-          'Capacity': ram.capacity.toString(), //Dung lượng
-          'Type': ram.ramType.toString(), //Loại RAM
+          'Type': ram.type.toString(),
+          'Bus': '${ram.bus} MHz',
+          'CL Latency': 'CL${ram.clLatency}',
+          'Kit Stick Count': ram.kitStickCount.toString(),
+          'Capacity per Stick': '${ram.capacityPerStickGb} GB',
         });
         break;
 
       case CategoryEnum.cpu:
         final cpu = product as CPU;
         specs.addAll({
-          'Family': cpu.family.toString(), //Thế hệ
-          'Core': cpu.core.toString(), //Số nhân
-          'Thread': cpu.thread.toString(), //Số luồng
-          'Clock Speed': '${cpu.clockSpeed} GHz', //Tốc độ xung nhịp
+          'Cores': cpu.core.toString(),
+          'Threads': cpu.thread.toString(),
+          'Base Clock': '${cpu.baseClock} GHz',
+          'Turbo Clock': '${cpu.turboClock} GHz',
         });
         break;
 
       case CategoryEnum.gpu:
         final gpu = product as GPU;
         specs.addAll({
-          'Series': gpu.series.toString(), //Dòng sản phẩm
-          'Memory': gpu.capacity.toString(), //Dung lượng
-          'Bus Width': gpu.bus.toString(), //Băng thông
-          'Clock Speed': '${gpu.clockSpeed} MHz', //Tốc độ xung nhịp
+          'Version': gpu.version.toString(),
+          'Memory': gpu.memory.toString(),
+          'Clock Speed': '${gpu.boostClock} MHz',
+          'TDP': '${gpu.tdp} W',
+          'I/O Ports': gpu.ports.map((port) => port.toString()).join('\n'),
         });
         break;
 
       case CategoryEnum.mainboard:
         final mainboard = product as Mainboard;
         specs.addAll({
-          'Form Factor': mainboard.formFactor.toString(), //Kích thước
-          'Series': mainboard.series.toString(), //Dòng sản phẩm
-          'Compatibility': mainboard.compatibility.toString(), //Tương thích
+          'Chipset': mainboard.chipsetCode.toString(),
+          'Socket': mainboard.socket.toString(),
+          'Form Factor': mainboard.formFactor.toString(),
+          'RAM Spec': mainboard.ramSpec.toString(),
+          'Storage:' : mainboard.storageSlot.toString(),
+          'PCIe Slots:': mainboard.pcieSlots.map((slot) => slot.toString()).join('\n'),
+          'I/O Ports:': mainboard.ioPorts.map((port) => port.toString()).join('\n'),
         });
         break;
 
       case CategoryEnum.drive:
         final drive = product as Drive;
         specs.addAll({
-          'Type': drive.type.toString(), //Loại ổ đĩa
-          'Capacity': drive.capacity.toString(), //Dung lượng
+          'Drive Type': drive.driveType.toString(),
+          'Generation': drive.gen.toString(),
+          'Memory': '${drive.memoryGb} GB',
+          'Interface': drive.interfaceType.toString(),
+          'Form Factor': drive.formFactor.toString(),
+          'Read Speed': '${drive.readMbps} MB/s',
+          'Write Speed': '${drive.writeMbps} MB/s',
         });
         break;
 
       case CategoryEnum.psu:
         final psu = product as PSU;
         specs.addAll({
-          'Wattage': '${psu.wattage}W', //Công suất
-          'Efficiency': psu.efficiency.toString(), //Hiệu suất
-          'Modular': psu.modular.toString(), //Modular
+          'Wattage': '${psu.maxWattage} W',
+          'Efficiency Rating': psu.efficiency.toString(),
+          'Modularity': psu.modularity.toString(),
+          'Connectors': psu.connectors.map((type) => type.toString()).join('\n'),
         });
         break;
 

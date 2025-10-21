@@ -10,6 +10,9 @@ class IOPort {
     port: json['port']?.toString() ?? '',
     quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : int.tryParse(json['quantity']?.toString() ?? '') ?? 0,
   );
+
+  @override
+  String toString() => '$quantity x $port';
 }
 
 class IOPortControllers {
