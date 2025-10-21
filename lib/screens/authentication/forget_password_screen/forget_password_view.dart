@@ -7,7 +7,7 @@ import 'forget_password_cubit.dart';
 import '../../../widgets/general/app_logo.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import 'forget_password_state.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});

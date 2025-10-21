@@ -88,7 +88,6 @@ flutter:
   assets:
     - lib/GIzmoGlobe.png
     - lib/data/database/full_json_generated_data_vn_units.json
-    - lib/l10n/
     - .env
 
   # To add assets to your application, add an assets section, like this:

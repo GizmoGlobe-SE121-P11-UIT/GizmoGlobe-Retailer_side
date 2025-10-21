@@ -1,7 +1,7 @@
 // lib/screens/main/main_screen/main_screen_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_view.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';

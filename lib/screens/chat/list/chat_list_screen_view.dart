@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/chat/chat_card.dart';
 import 'package:gizmoglobe_client/screens/chat/conversation/conversation_screen_view.dart';
 import '../../../widgets/general/gradient_icon_button.dart';

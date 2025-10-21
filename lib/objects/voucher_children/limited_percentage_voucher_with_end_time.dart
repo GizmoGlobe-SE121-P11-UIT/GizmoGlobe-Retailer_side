@@ -5,7 +5,7 @@ import '../../enums/voucher_related/voucher_status.dart';
 import '../../functions/helper.dart';
 import '../voucher_related/end_time_interface.dart';
 import '../voucher_related/limited_interface.dart';
-import '../../generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 
 class LimitedPercentageVoucherWithEndTime extends Voucher
     implements LimitedInterface, EndTimeInterface, PercentageInterface {

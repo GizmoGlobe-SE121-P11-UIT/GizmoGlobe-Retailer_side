@@ -8,7 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gizmoglobe_client/data/database/database.dart';
 import 'package:gizmoglobe_client/firebase_options.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/presentation/resources/app_theme.dart';
 import 'package:gizmoglobe_client/providers/locale_provider.dart';
 import 'package:gizmoglobe_client/providers/theme_provider.dart';
@@ -178,7 +178,7 @@ class MyApp extends StatelessWidget {
                 Locale('vi'),
               ],
               localizationsDelegates: const [
-                S.delegate,
+                AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,

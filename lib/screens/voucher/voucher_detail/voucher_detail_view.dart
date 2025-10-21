@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
-import '../../../generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import '../../../objects/voucher_related/end_time_interface.dart';
 import '../../../objects/voucher_related/percentage_interface.dart';
 import '../../../objects/voucher_related/voucher.dart';

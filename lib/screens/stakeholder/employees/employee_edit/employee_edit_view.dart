@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
 
 import '../../../../screens/stakeholder/employees/permissions/employee_permissions.dart';

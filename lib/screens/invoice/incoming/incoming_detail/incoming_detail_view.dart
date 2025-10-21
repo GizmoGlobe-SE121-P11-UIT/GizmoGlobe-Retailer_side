@@ -10,7 +10,7 @@ import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import '../permissions/incoming_invoice_permissions.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 class IncomingDetailScreen extends StatefulWidget {

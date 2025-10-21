@@ -6,7 +6,7 @@ import 'package:gizmoglobe_client/screens/invoice/incoming/permissions/incoming_
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../enums/invoice_related/payment_status.dart';

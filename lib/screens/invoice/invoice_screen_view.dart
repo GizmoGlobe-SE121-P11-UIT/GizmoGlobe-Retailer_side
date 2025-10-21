@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/invoice/incoming/incoming_screen_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_state.dart';

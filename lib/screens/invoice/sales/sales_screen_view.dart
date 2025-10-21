@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_add/sales_add_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_detail/sales_detail_view.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';

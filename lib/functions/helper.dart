@@ -1,6 +1,6 @@
 import 'converter.dart';
 import 'package:flutter/widgets.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 
 class Helper {
   static String getShortVoucherTimeWithEnd(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
 import '../../functions/helper.dart';
-import '../../generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 
 class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
   UnlimitedAmountVoucherWithoutEndTime({

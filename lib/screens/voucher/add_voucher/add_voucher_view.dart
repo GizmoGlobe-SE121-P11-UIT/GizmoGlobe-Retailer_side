@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_state.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';

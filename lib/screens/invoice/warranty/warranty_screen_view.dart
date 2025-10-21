@@ -11,7 +11,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
-import '../../../generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import '../../../objects/invoice_related/warranty_invoice.dart';
 import '../../../widgets/general/status_badge.dart';
 import 'warranty_screen_cubit.dart';

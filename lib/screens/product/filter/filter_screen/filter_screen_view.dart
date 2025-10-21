@@ -24,7 +24,7 @@ import '../option_filter/option_filter.dart';
 import '../range_filter/range_filter.dart';
 import 'filter_screen_cubit.dart';
 import 'filter_screen_state.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 
 class FilterScreen extends StatefulWidget {
   final FilterArgument arguments;

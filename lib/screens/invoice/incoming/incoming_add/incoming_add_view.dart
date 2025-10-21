@@ -8,7 +8,7 @@ import '../../../../enums/invoice_related/payment_status.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'incoming_add_cubit.dart';
 import 'incoming_add_state.dart';
-import '../../../../generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import '../../../../widgets/dialog/information_dialog.dart';
 
 class IncomingAddScreen extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/product/edit_product/edit_product_view.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/product_related/product_extensions.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/manufacturer_status.dart';
 import 'package:gizmoglobe_client/widgets/product/product_card.dart';

@@ -10,7 +10,7 @@ import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
-import '../../../generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/general/gradient_icon_button.dart';
 import '../add_product/add_product_view.dart';

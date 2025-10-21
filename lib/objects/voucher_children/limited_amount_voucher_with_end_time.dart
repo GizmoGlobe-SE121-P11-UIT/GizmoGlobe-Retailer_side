@@ -4,7 +4,7 @@ import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/voucher_related/voucher_status.dart';
 import '../voucher_related/end_time_interface.dart';
 import '../voucher_related/limited_interface.dart';
-import '../../generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 
 class LimitedAmountVoucherWithEndTime extends Voucher
     implements LimitedInterface, EndTimeInterface {

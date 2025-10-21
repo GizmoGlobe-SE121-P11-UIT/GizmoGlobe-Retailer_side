@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/limited_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/percentage_interface.dart';
 import 'package:gizmoglobe_client/screens/voucher/edit_voucher/edit_voucher_cubit.dart';

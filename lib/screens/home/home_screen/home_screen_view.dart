@@ -5,7 +5,7 @@ import 'package:gizmoglobe_client/widgets/general/app_logo.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:intl/intl.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/chat/list/chat_list_screen_view.dart';
 
 import 'home_screen_cubit.dart';

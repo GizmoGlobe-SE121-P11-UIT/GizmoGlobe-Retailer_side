@@ -5,7 +5,7 @@ import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_state.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/objects/product_related/product_extensions.dart';
 

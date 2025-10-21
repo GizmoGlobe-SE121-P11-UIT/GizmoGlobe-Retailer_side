@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/user/information/information_screen_view.dart';
 import 'package:gizmoglobe_client/screens/user/support/support_screen_view.dart';
 import 'package:provider/provider.dart';
@@ -773,8 +773,12 @@ class _UserScreen extends State<UserScreen> {
                     showDialog(
                       context: context,
                       builder: (context) => InformationDialog(
-                        title: S.of(context).passwordResetEmailSentSuccess,
-                        content: S.of(context).passwordResetEmailSentSuccess,
+                        title: S
+                            .of(context)
+                            .passwordResetEmailSentSuccess(user.email!),
+                        content: S
+                            .of(context)
+                            .passwordResetEmailSentSuccess(user.email!),
                         buttonText: S.of(context).saveChanges,
                       ),
                     );

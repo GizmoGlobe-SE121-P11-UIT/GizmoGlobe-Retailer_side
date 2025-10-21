@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:gizmoglobe_client/generated/l10n.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 
 enum ProductStatusEnum {
   active('Active'), // Đang hoạt động
