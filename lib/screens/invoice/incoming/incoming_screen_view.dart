@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
-import 'package:gizmoglobe_client/screens/invoice/incoming/incoming_add/incoming_add_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/incoming/permissions/incoming_invoice_permissions.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
@@ -75,17 +74,17 @@ class _IncomingScreenState extends State<IncomingScreen> {
                         icon: Icons.add,
                         iconSize: 32,
                         onPressed: () async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  IncomingAddScreen.newInstance(),
-                            ),
-                          );
+                          // final result = await Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) =>
+                          //         IncomingAddScreen.newInstance(),
+                          //   ),
+                          // );
 
-                          if (result != null && mounted) {
-                            context.read<IncomingScreenCubit>().loadInvoices();
-                          }
+                          // if (result != null && mounted) {
+                          //   context.read<IncomingScreenCubit>().loadInvoices();
+                          // }
                         },
                       )
                   ],

@@ -13,6 +13,16 @@ class IOPort {
 
   @override
   String toString() => '$quantity x $port';
+
+  IOPort copyWith({
+    String? port,
+    int? quantity,
+  }) {
+    return IOPort(
+      port: port ?? this.port,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
 
 class IOPortControllers {

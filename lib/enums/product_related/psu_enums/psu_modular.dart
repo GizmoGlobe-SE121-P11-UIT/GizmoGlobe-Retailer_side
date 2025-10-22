@@ -12,6 +12,10 @@ enum PSUModular {
     return name;
   }
 
+  static List<PSUModular> getValues() {
+    return PSUModular.values.where((e) => e != PSUModular.unknown).toList();
+  }
+
   @override
   String toString() {
     return description;
@@ -20,6 +24,9 @@ enum PSUModular {
 
 extension PSUModularExtension on PSUModular {
   static PSUModular fromName(String name) {
-    return PSUModular.values.firstWhere((e) => e.getName() == name);
+    return PSUModular.values.firstWhere(
+      (e) => e.getName() == name,
+      orElse: () => PSUModular.unknown,
+    );
   }
 }

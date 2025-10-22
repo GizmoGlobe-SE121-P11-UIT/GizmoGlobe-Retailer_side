@@ -45,6 +45,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
           'Threads': cpu.thread.toString(),
           'Base Clock': '${cpu.baseClock} GHz',
           'Turbo Clock': '${cpu.turboClock} GHz',
+          'TDP': '${cpu.tdp} W',
+          'Socket': cpu.socket.toString(),
         });
         break;
 
@@ -77,7 +79,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
         specs.addAll({
           'Drive Type': drive.driveType.toString(),
           'Generation': drive.gen.toString(),
-          'Memory': '${drive.memoryGb} GB',
+          'Capacity': '${drive.memoryGb} GB',
           'Interface': drive.interfaceType.toString(),
           'Form Factor': drive.formFactor.toString(),
           'Read Speed': '${drive.readMbps} MB/s',

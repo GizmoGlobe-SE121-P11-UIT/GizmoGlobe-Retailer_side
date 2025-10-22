@@ -14,6 +14,10 @@ enum DriveFormFactor {
     return name;
   }
 
+  static List<DriveFormFactor> getValues() {
+    return DriveFormFactor.values.where((e) => e != DriveFormFactor.unknown).toList();
+  }
+
   @override
   String toString() {
     return description;
@@ -22,6 +26,9 @@ enum DriveFormFactor {
 
 extension DriveFormFactorExtension on DriveFormFactor {
   static DriveFormFactor fromName(String name) {
-    return DriveFormFactor.values.firstWhere((e) => e.getName() == name);
+    return DriveFormFactor.values.firstWhere(
+      (e) => e.getName() == name,
+      orElse: () => DriveFormFactor.unknown
+    );
   }
 }

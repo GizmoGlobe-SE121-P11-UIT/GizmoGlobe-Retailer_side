@@ -22,6 +22,20 @@ class PCIeSlot {
         : 'PCIe $gen.0 x$physicalSize and running at x$electricalSpeed';
     return '$quantity x $mode (input $physicalSize-$electricalSpeed-$gen-$quantity)';
   }
+
+  PCIeSlot copyWith({
+    int? physicalSize,
+    int? electricalSpeed,
+    int? gen,
+    int? quantity,
+  }) {
+    return PCIeSlot(
+      physicalSize: physicalSize ?? this.physicalSize,
+      electricalSpeed: electricalSpeed ?? this.electricalSpeed,
+      gen: gen ?? this.gen,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
 
 class PCIeSlotControllers {

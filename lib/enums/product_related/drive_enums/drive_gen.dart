@@ -13,6 +13,10 @@ enum DriveGen {
     return name;
   }
 
+  static List<DriveGen> getValues() {
+    return DriveGen.values.where((e) => e != DriveGen.unknown).toList();
+  }
+
   @override
   String toString() {
     return description;
@@ -25,6 +29,9 @@ enum DriveGen {
 
 extension DriveGenExtension on DriveGen {
   static DriveGen fromName(String name) {
-    return DriveGen.values.firstWhere((e) => e.getName() == name);
+    return DriveGen.values.firstWhere(
+        (e) => e.getName() == name,
+        orElse: () => DriveGen.unknown
+    );
   }
 }

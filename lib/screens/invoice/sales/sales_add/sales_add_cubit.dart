@@ -82,7 +82,7 @@ class SalesAddCubit extends Cubit<SalesAddState> {
         productName: existingDetail.productName ?? '',
         quantity: newQuantity,
         sellingPrice: existingDetail.sellingPrice,
-        subtotal: existingDetail.sellingPrice * newQuantity,
+        subtotal: (existingDetail.sellingPrice * newQuantity).toDouble(),
         salesInvoiceID: '',
       );
     } else {
@@ -92,7 +92,7 @@ class SalesAddCubit extends Cubit<SalesAddState> {
         productName: product.productName,
         quantity: quantity,
         sellingPrice: product.sellingPrice,
-        subtotal: product.sellingPrice * quantity,
+        subtotal: (product.sellingPrice * quantity).toDouble(),
         salesInvoiceID: '',
       ));
     }
@@ -111,7 +111,7 @@ class SalesAddCubit extends Cubit<SalesAddState> {
       productName: detail.productName ?? '',
       quantity: newQuantity,
       sellingPrice: detail.sellingPrice,
-      subtotal: detail.sellingPrice * newQuantity,
+      subtotal: (detail.sellingPrice * newQuantity).toDouble(),
       salesInvoiceID: '',
     );
     emit(state.copyWith(invoiceDetails: details));

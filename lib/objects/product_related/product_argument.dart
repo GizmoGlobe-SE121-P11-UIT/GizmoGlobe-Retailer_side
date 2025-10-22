@@ -59,7 +59,6 @@ class ProductArgument {
   double? turboClock;
 
   // PSU specific properties
-  int? maxWattage;
   PSUEfficiency? efficiency;
   PSUModular? modularity;
   List<Connector>? connectors;
@@ -122,7 +121,6 @@ class ProductArgument {
     this.baseClock,
     this.turboClock,
     // PSU
-    this.maxWattage,
     this.efficiency,
     this.modularity,
     this.connectors,
@@ -170,7 +168,6 @@ class ProductArgument {
         String? viDescription,
 
         // RAM specific properties
-        int? ramBus,
         RAMType? type,
         int? bus,
         int? clLatency,
@@ -194,25 +191,17 @@ class ProductArgument {
         // GPU specific properties
         GPUSeries? gpuSeries,
         GPUVersion? gpuVersion,
-        //use RAM capacity
-        //use CPU turboClock
         int? tdp,
         List<IOPort>? ioPorts,
 
         // Mainboard specific properties
         String? chipsetCode,
-        //use CPU socket
         MainboardFormFactor? mainboardFormFactor,
         List<PCIeSlot>? pcieSlots,
         StorageSlot? storageSlot,
-        //use GPU ioPorts
-        //use RAM type
-        //use RAM capacity
-        //use RAM stickCount
 
         // Drive specific properties
         DriveGen? gen,
-        //use RAM capacity
         InterfaceType? interfaceType,
         int? readMbps,
         int? writeMbps,
@@ -248,7 +237,6 @@ class ProductArgument {
       baseClock: baseClock ?? this.baseClock,
       turboClock: turboClock ?? this.turboClock,
       // PSU
-      maxWattage: maxWattage ?? this.maxWattage,
       efficiency: efficiency ?? this.efficiency,
       modularity: modularity ?? this.modularity,
       connectors: connectors ?? this.connectors,
@@ -333,7 +321,7 @@ class ProductArgument {
           imageUrl: imageUrl,
           enDescription: enDescription,
           viDescription: viDescription,
-          maxWattage: maxWattage!,
+          maxWattage: tdp!,
           efficiency: efficiency!,
           modularity: modularity!,
           connectors: connectors!,
@@ -431,7 +419,7 @@ class ProductArgument {
     switch (product.category) {
       case CategoryEnum.ram:
         return result.copyWith(
-          ramBus: (product as RAM).bus,
+          bus: (product as RAM).bus,
           type: (product).type,
           clLatency: (product).clLatency,
           stickCount: (product).kitStickCount,

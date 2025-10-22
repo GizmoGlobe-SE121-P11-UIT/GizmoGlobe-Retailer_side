@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/enums/processing/sort_enum.dart';
+import 'package:gizmoglobe_client/screens/product/add_product/add_product_view.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_state.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_tab/product_tab_view.dart';
@@ -13,7 +12,6 @@ import '../../../enums/product_related/category_enum.dart';
 import '../../../generated/l10n.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/general/gradient_icon_button.dart';
-import '../add_product/add_product_view.dart';
 
 class ProductScreen extends StatefulWidget {
   final List<Product>? initialProducts;
@@ -41,7 +39,7 @@ class _ProductScreenState extends State<ProductScreen>
     super.initState();
     searchController = TextEditingController();
     searchFocusNode = FocusNode();
-    tabController = TabController(length: CategoryEnum.values.length + 1, vsync: this);
+    tabController = TabController(length: CategoryEnum.getValues().length + 1, vsync: this);
     cubit.initialize(widget.initialProducts ?? Database().productList);
   }
 
@@ -52,7 +50,7 @@ class _ProductScreenState extends State<ProductScreen>
     super.dispose();
   }
 
-  int getTabCount() => CategoryEnum.values.length + 1;
+  int getTabCount() => CategoryEnum.getValues().length + 1;
 
   void onTabChanged(int index) {
     cubit.updateSelectedTabIndex(index);
@@ -105,8 +103,7 @@ class _ProductScreenState extends State<ProductScreen>
                           ProcessState result = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  AddProductScreen.newInstance(),
+                              builder: (context) => AddProductScreen.addInstance()
                             ),
                           );
 
@@ -135,7 +132,7 @@ class _ProductScreenState extends State<ProductScreen>
               indicator: const BoxDecoration(),
               tabs: [
                 Tab(text: S.of(context).all),
-                ...CategoryEnum.values.map((category) => Tab(
+                ...CategoryEnum.getValues().map((category) => Tab(
                   text: category.getLocalizedDescription(context),
                 )),
               ],

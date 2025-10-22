@@ -20,6 +20,10 @@ enum Socket {
     return name;
   }
 
+  static List<Socket> getValues() {
+    return Socket.values.where((e) => e != Socket.unknown).toList();
+  }
+
   @override
   String toString() {
     return description;
@@ -28,7 +32,10 @@ enum Socket {
 
 extension SocketExtension on Socket {
   static Socket fromName(String name) {
-    return Socket.values.firstWhere((e) => e.getName() == name);
+    return Socket.values.firstWhere(
+        (e) => e.getName() == name,
+        orElse: () => Socket.unknown
+    );
   }
 }
 

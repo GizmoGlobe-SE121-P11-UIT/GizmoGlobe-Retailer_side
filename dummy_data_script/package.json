@@ -4,7 +4,9 @@
   "description": "Script to upload product data to Firebase Firestore",
   "main": "upload_products.js",
   "scripts": {
-    "upload": "node upload_products.js"
+    "upload": "node upload_products.js",
+    "upload-all": "node upload_products_and_manufacturers.js",
+    "validate": "node validate_data.js"
   },
   "dependencies": {
     "firebase-admin": "^12.0.0",

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/screens/product/edit_product/edit_product_view.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/objects/product_related/product_extensions.dart';
@@ -15,6 +14,7 @@ import '../../../../enums/product_related/product_status_enum.dart';
 import '../../../../objects/product_related/filter_argument.dart';
 import '../../../../objects/product_related/product.dart';
 import '../../../../widgets/general/app_text_style.dart';
+import '../../add_product/add_product_view.dart';
 import '../../filter/filter_screen/filter_screen_view.dart';
 import '../../mixin/product_tab_mixin.dart';
 import '../../product_detail/product_detail_view.dart';
@@ -322,8 +322,7 @@ class _ProductTabState extends State<ProductTab>
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        EditProductScreen
-                                                            .newInstance(product),
+                                                        AddProductScreen.editInstance(product),
                                                   ),
                                                 );
 
@@ -389,7 +388,7 @@ class _ProductTabState extends State<ProductTab>
               return Stack(
                 children: [
                   ModalBarrier(
-                      dismissible: false, color: Colors.black.withValues(alpha: 0.5)), 
+                      dismissible: false, color: Colors.black.withValues(alpha: 0.5)),
                   Center(
                     child: CircularProgressIndicator(
                       color: Theme.of(context).colorScheme.primary,

@@ -13,6 +13,10 @@ enum DriveType {
     return name;
   }
 
+  static List<DriveType> getValues() {
+    return DriveType.values.where((e) => e != DriveType.unknown).toList();
+  }
+
   @override
   String toString() {
     return description;
@@ -21,6 +25,9 @@ enum DriveType {
 
 extension DriveTypeExtension on DriveType {
   static DriveType fromName(String name) {
-    return DriveType.values.firstWhere((e) => e.getName() == name);
+    return DriveType.values.firstWhere(
+      (e) => e.getName() == name,
+      orElse: () => DriveType.unknown
+    );
   }
 }

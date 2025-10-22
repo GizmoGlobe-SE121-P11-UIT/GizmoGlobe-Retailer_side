@@ -114,7 +114,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 ),
                 const SizedBox(height: 16.0),
                 RangeFilter(
-                  name: S.of(context).stock,
+                  name: S.of(context).price,
                   fromController: minPriceController,
                   toController: maxPriceController,
                   onFromValueChanged: (value) {
@@ -210,7 +210,7 @@ class _FilterScreenState extends State<FilterScreen> {
       children: [
         OptionFilter(
           name: 'Series',
-          enumValues: CPUSeries.values,
+          enumValues: CPUSeries.getValues(),
           selectedValues:
               List<CPUSeries>.from(state.filterArgument.cpuSeries),
           onToggleSelection: (family) {
@@ -267,7 +267,7 @@ class _FilterScreenState extends State<FilterScreen> {
         const SizedBox(height: 16),
         OptionFilter(
           name: 'CPU socket',
-          enumValues: Socket.values,
+          enumValues: Socket.getValues(),
           selectedValues: List<Socket>.from(state.filterArgument.sockets),
           onToggleSelection: (socket) {
             final selected = List<Socket>.from(state.filterArgument.sockets);
@@ -291,7 +291,7 @@ class _FilterScreenState extends State<FilterScreen> {
       children: [
         OptionFilter(
           name: 'Modular',
-          enumValues: PSUModular.values,
+          enumValues: PSUModular.getValues(),
           selectedValues:
               List<PSUModular>.from(state.filterArgument.psuModularity),
           onToggleSelection: (modular) {
@@ -312,7 +312,7 @@ class _FilterScreenState extends State<FilterScreen> {
         const SizedBox(height: 16.0),
         OptionFilter(
           name: 'Efficiency',
-          enumValues: PSUEfficiency.values,
+          enumValues: PSUEfficiency.getValues(),
           selectedValues:
               List<PSUEfficiency>.from(state.filterArgument.psuEfficiency),
           onToggleSelection: (efficiency) {
@@ -358,7 +358,7 @@ class _FilterScreenState extends State<FilterScreen> {
       children: [
         OptionFilter(
           name: 'GPU series',
-          enumValues: GPUSeries.values,
+          enumValues: GPUSeries.getValues(),
           selectedValues:
               List<GPUSeries>.from(state.filterArgument.gpuSeries),
           onToggleSelection: (series) {
@@ -379,7 +379,7 @@ class _FilterScreenState extends State<FilterScreen> {
         const SizedBox(height: 16),
         OptionFilter(
           name: 'GPU version',
-          enumValues: GPUVersion.values,
+          enumValues: GPUVersion.getValues(),
           selectedValues:
           List<GPUVersion>.from(state.filterArgument.gpuVersion),
           onToggleSelection: (capacity) {
@@ -461,7 +461,7 @@ class _FilterScreenState extends State<FilterScreen> {
       children: [
         OptionFilter(
           name: 'Type',
-          enumValues: DriveType.values,
+          enumValues: DriveType.getValues(),
           selectedValues: List<DriveType>.from(state.filterArgument.driveType),
           onToggleSelection: (type) {
             final selected = List<DriveType>.from(state.filterArgument.driveType);
@@ -480,7 +480,7 @@ class _FilterScreenState extends State<FilterScreen> {
         const SizedBox(height: 16),
         OptionFilter(
           name: 'Drive form factor',
-          enumValues: DriveFormFactor.values,
+          enumValues: DriveFormFactor.getValues(),
           selectedValues:
               List<DriveFormFactor>.from(state.filterArgument.driveFormFactor),
           onToggleSelection: (formFactor) {
@@ -501,7 +501,7 @@ class _FilterScreenState extends State<FilterScreen> {
         const SizedBox(height: 16),
         OptionFilter(
           name: 'Interface',
-          enumValues: InterfaceType.values,
+          enumValues: InterfaceType.getValues(),
           selectedValues:
               List<InterfaceType>.from(state.filterArgument.interfaceType),
           onToggleSelection: (interfaceType) {
@@ -520,7 +520,7 @@ class _FilterScreenState extends State<FilterScreen> {
         const SizedBox(height: 16),
         OptionFilter(
           name: 'Generation',
-          enumValues: DriveGen.values,
+          enumValues: DriveGen.getValues(),
           selectedValues: List<DriveGen>.from(state.filterArgument.gen),
           onToggleSelection: (gen) {
             final selected = List<DriveGen>.from(state.filterArgument.gen);
@@ -562,7 +562,7 @@ class _FilterScreenState extends State<FilterScreen> {
       children: [
         OptionFilter(
           name: 'Mainboard form factor',
-          enumValues: MainboardFormFactor.values,
+          enumValues: MainboardFormFactor.getValues(),
           selectedValues: List<MainboardFormFactor>.from(state.filterArgument.mainboardFormFactor),
           onToggleSelection: (formFactor) {
             final selected = List<MainboardFormFactor>.from(state.filterArgument.mainboardFormFactor);
@@ -581,7 +581,7 @@ class _FilterScreenState extends State<FilterScreen> {
         const SizedBox(height: 16.0),
         OptionFilter(
           name: 'Socket',
-          enumValues: Socket.values,
+          enumValues: Socket.getValues(),
           selectedValues:
               List<Socket>.from(state.filterArgument.sockets),
           onToggleSelection: (socket) {
@@ -599,7 +599,7 @@ class _FilterScreenState extends State<FilterScreen> {
         const SizedBox(height: 16),
         OptionFilter(
           name: 'RAM type',
-          enumValues: RAMType.values,
+          enumValues: RAMType.getValues(),
           selectedValues: List<RAMType>.from(state.filterArgument.ramType),
           onToggleSelection: (type) {
             final selected = List<RAMType>.from(state.filterArgument.ramType);

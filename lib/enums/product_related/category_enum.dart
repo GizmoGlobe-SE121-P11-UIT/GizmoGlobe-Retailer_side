@@ -23,6 +23,10 @@ enum CategoryEnum {
     return description;
   }
 
+  static List<CategoryEnum> getValues() {
+    return CategoryEnum.values.where((e) => e != CategoryEnum.empty).toList();
+  }
+
   String getLocalizedDescription(BuildContext context) {
     switch (this) {
       case CategoryEnum.ram:

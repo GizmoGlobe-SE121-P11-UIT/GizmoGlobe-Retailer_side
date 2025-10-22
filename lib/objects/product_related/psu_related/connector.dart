@@ -15,6 +15,16 @@ class Connector {
   String toString() {
     return '$quantity x $type';
   }
+
+  Connector copyWith({
+    String? type,
+    int? quantity,
+  }) {
+    return Connector(
+      type: type ?? this.type,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }
 
 class ConnectorControllers {
