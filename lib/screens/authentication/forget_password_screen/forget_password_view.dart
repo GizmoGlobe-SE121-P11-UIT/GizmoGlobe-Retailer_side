@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
@@ -7,6 +8,7 @@ import 'forget_password_cubit.dart';
 import '../../../widgets/general/app_logo.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import 'forget_password_state.dart';
+import 'forget_password_webview.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -29,6 +31,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Use web view for web platform, mobile view for mobile platforms
+    if (kIsWeb) {
+      return const ForgetPasswordWebView();
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -95,8 +102,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 fontWeight: FontWeight.normal,
                 obscureText: false,
                 textColor: Theme.of(context).colorScheme.onSurface,
-                hintTextColor:
-                    Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
+                hintTextColor: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
                 onChanged: (value) {
                   cubit.emailChanged(value);
                 },

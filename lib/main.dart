@@ -145,6 +145,22 @@ Future<void> _setup() async {
   WidgetsFlutterBinding.ensureInitialized();
 }
 
+// Page transition builder that disables animations (used for web)
+class NoAnimationPageTransitionsBuilder extends PageTransitionsBuilder {
+  const NoAnimationPageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -209,8 +225,42 @@ class MyApp extends StatelessWidget {
                   child: child!,
                 );
               },
-              theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.darkTheme,
+              theme: kIsWeb
+                  ? AppTheme.lightTheme.copyWith(
+                      pageTransitionsTheme: const PageTransitionsTheme(
+                        builders: {
+                          TargetPlatform.android:
+                              NoAnimationPageTransitionsBuilder(),
+                          TargetPlatform.iOS:
+                              NoAnimationPageTransitionsBuilder(),
+                          TargetPlatform.linux:
+                              NoAnimationPageTransitionsBuilder(),
+                          TargetPlatform.macOS:
+                              NoAnimationPageTransitionsBuilder(),
+                          TargetPlatform.windows:
+                              NoAnimationPageTransitionsBuilder(),
+                        },
+                      ),
+                    )
+                  : AppTheme.lightTheme,
+              darkTheme: kIsWeb
+                  ? AppTheme.darkTheme.copyWith(
+                      pageTransitionsTheme: const PageTransitionsTheme(
+                        builders: {
+                          TargetPlatform.android:
+                              NoAnimationPageTransitionsBuilder(),
+                          TargetPlatform.iOS:
+                              NoAnimationPageTransitionsBuilder(),
+                          TargetPlatform.linux:
+                              NoAnimationPageTransitionsBuilder(),
+                          TargetPlatform.macOS:
+                              NoAnimationPageTransitionsBuilder(),
+                          TargetPlatform.windows:
+                              NoAnimationPageTransitionsBuilder(),
+                        },
+                      ),
+                    )
+                  : AppTheme.darkTheme,
               routes: {
                 '/sign-in': (context) => SignInScreen.newInstance(),
                 '/sign-up': (context) => SignUpScreen.newInstance(),

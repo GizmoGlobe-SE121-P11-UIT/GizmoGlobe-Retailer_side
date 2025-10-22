@@ -12,6 +12,7 @@ import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_view.dart'
 import 'package:gizmoglobe_client/screens/authentication/sign_in_screen/sign_in_view.dart';
 
 import '../../../widgets/general/selectable_gradient_icon.dart';
+import '../../../components/general/web_sidebar.dart';
 import '../../home/home_screen/home_screen_view.dart';
 import '../../user/user_screen/user_screen_view.dart';
 
@@ -59,83 +60,111 @@ class _MainScreenState extends State<MainScreen> {
 
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Stack(
-      children: [
-        Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: widgetList[index](),
-          bottomNavigationBar: ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(30),
-            ),
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              onTap: (value) {
+    // Web: use left sidebar; Mobile: keep bottom navigation
+    if (kIsWeb) {
+      final items = buildDefaultSidebarItems(
+        home: S.of(context).home,
+        product: S.of(context).product,
+        invoice: S.of(context).invoice,
+        stakeholder: S.of(context).stakeholder,
+        voucher: S.of(context).voucher,
+        profile: S.of(context).profile,
+      );
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Row(
+          children: [
+            WebSidebarModes(
+              currentIndex: index,
+              onItemSelected: (value) {
                 if (value != index) {
                   setState(() {
                     index = value;
                   });
                 }
               },
-              currentIndex: index,
-              backgroundColor: colorScheme.primary,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              elevation: 3,
-              items: [
-                BottomNavigationBarItem(
-                  icon: SelectableGradientIcon(
-                    icon: Icons.home,
-                    isSelected: index == 0,
-                    label: S.of(context).home, // Trang chủ
-                  ),
-                  label: S.of(context).home, // Trang chủ
-                ),
-                BottomNavigationBarItem(
-                  icon: SelectableGradientIcon(
-                    icon: Icons.inventory,
-                    isSelected: index == 1,
-                    label: S.of(context).product, // Sản phẩm
-                  ),
-                  label: S.of(context).product, // Sản phẩm
-                ),
-                BottomNavigationBarItem(
-                  icon: SelectableGradientIcon(
-                    icon: Icons.receipt,
-                    isSelected: index == 2,
-                    label: S.of(context).invoice, // Hóa đơn
-                  ),
-                  label: S.of(context).invoice, // Hóa đơn
-                ),
-                BottomNavigationBarItem(
-                  icon: SelectableGradientIcon(
-                    icon: Icons.groups,
-                    isSelected: index == 3,
-                    label: S.of(context).stakeholder,
-                  ),
-                  label: S.of(context).stakeholder,
-                ),
-                BottomNavigationBarItem(
-                  icon: SelectableGradientIcon(
-                    icon: Icons.discount,
-                    isSelected: index == 4,
-                    label: S.of(context).voucher,
-                  ),
-                  label: S.of(context).voucher,
-                ),
-                BottomNavigationBarItem(
-                  icon: SelectableGradientIcon(
-                    icon: Icons.account_circle,
-                    isSelected: index == 5,
-                    label: S.of(context).profile,
-                  ),
-                  label: S.of(context).profile,
-                ),
-              ],
+              items: items,
             ),
-          ),
+            const VerticalDivider(width: 1),
+            Expanded(child: widgetList[index]()),
+          ],
         ),
-      ],
+      );
+    }
+
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: widgetList[index](),
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          onTap: (value) {
+            if (value != index) {
+              setState(() {
+                index = value;
+              });
+            }
+          },
+          currentIndex: index,
+          backgroundColor: colorScheme.primary,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          elevation: 3,
+          items: [
+            BottomNavigationBarItem(
+              icon: SelectableGradientIcon(
+                icon: Icons.home,
+                isSelected: index == 0,
+                label: S.of(context).home, // Trang chủ
+              ),
+              label: S.of(context).home, // Trang chủ
+            ),
+            BottomNavigationBarItem(
+              icon: SelectableGradientIcon(
+                icon: Icons.inventory,
+                isSelected: index == 1,
+                label: S.of(context).product, // Sản phẩm
+              ),
+              label: S.of(context).product, // Sản phẩm
+            ),
+            BottomNavigationBarItem(
+              icon: SelectableGradientIcon(
+                icon: Icons.receipt,
+                isSelected: index == 2,
+                label: S.of(context).invoice, // Hóa đơn
+              ),
+              label: S.of(context).invoice, // Hóa đơn
+            ),
+            BottomNavigationBarItem(
+              icon: SelectableGradientIcon(
+                icon: Icons.groups,
+                isSelected: index == 3,
+                label: S.of(context).stakeholder,
+              ),
+              label: S.of(context).stakeholder,
+            ),
+            BottomNavigationBarItem(
+              icon: SelectableGradientIcon(
+                icon: Icons.discount,
+                isSelected: index == 4,
+                label: S.of(context).voucher,
+              ),
+              label: S.of(context).voucher,
+            ),
+            BottomNavigationBarItem(
+              icon: SelectableGradientIcon(
+                icon: Icons.account_circle,
+                isSelected: index == 5,
+                label: S.of(context).profile,
+              ),
+              label: S.of(context).profile,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

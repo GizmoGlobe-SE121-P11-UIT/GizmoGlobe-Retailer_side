@@ -390,6 +390,7 @@ class AppLocalizations {
     'emailAddress': 'Email address',
     'enterYourEmailAddress': 'Enter your email address',
     'sendVerificationLink': 'Send Verification Link',
+    'rememberYourPassword': 'Remember your password?',
     'ranOut': 'Ran out',
     'maximumDiscount': 'Maximum discount',
     'discountValue': 'Discount value',
@@ -793,6 +794,7 @@ class AppLocalizations {
     'emailAddress': 'Địa chỉ email',
     'enterYourEmailAddress': 'Nhập địa chỉ email của bạn',
     'sendVerificationLink': 'Gửi liên kết xác minh',
+    'rememberYourPassword': 'Nhớ mật khẩu?',
     'ranOut': 'Đã hết',
     'maximumDiscount': 'Giảm giá tối đa',
     'discountValue': 'Giá trị giảm giá',
@@ -1194,6 +1196,7 @@ class AppLocalizations {
   String get password => _getTranslation('password');
   String get authorizedByAdmin => _getTranslation('authorizedByAdmin');
   String get passwordConfirmation => _getTranslation('passwordConfirmation');
+  String get rememberYourPassword => _getTranslation('rememberYourPassword');
   String get forgetPasswordTitle => _getTranslation('forgetPasswordTitle');
   String get forgetPasswordDescription =>
       _getTranslation('forgetPasswordDescription');

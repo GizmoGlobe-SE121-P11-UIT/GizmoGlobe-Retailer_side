@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
@@ -8,6 +9,7 @@ import '../../../widgets/general/gradient_icon_button.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import 'sign_up_cubit.dart';
 import 'sign_up_state.dart';
+import 'sign_up_webview.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -51,6 +53,11 @@ class _SignUpScreen extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Use web view for web platform, mobile view for mobile platforms
+    if (kIsWeb) {
+      return const SignUpWebView();
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -108,8 +115,10 @@ class _SignUpScreen extends State<SignUpScreen> {
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
                 textColor: Theme.of(context).colorScheme.onSurface,
-                hintTextColor:
-                    Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
+                hintTextColor: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
                 onChanged: (value) {
                   cubit.updateEmail(value);
                 },
@@ -124,8 +133,10 @@ class _SignUpScreen extends State<SignUpScreen> {
                 fontWeight: FontWeight.normal,
                 obscureText: true,
                 textColor: Theme.of(context).colorScheme.onSurface,
-                hintTextColor:
-                    Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
+                hintTextColor: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
                 onChanged: (value) {
                   cubit.updatePassword(value);
                 },
@@ -141,8 +152,10 @@ class _SignUpScreen extends State<SignUpScreen> {
                 fontWeight: FontWeight.normal,
                 obscureText: true,
                 textColor: Theme.of(context).colorScheme.onSurface,
-                hintTextColor:
-                    Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6), 
+                hintTextColor: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
                 onChanged: (value) {
                   cubit.updateConfirmPassword(value);
                 },
