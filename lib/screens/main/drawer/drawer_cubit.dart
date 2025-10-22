@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../authentication/sign_in_screen/sign_in_view.dart';
+import '../../../data/database/database.dart';
 import 'drawer_state.dart';
 
 class DrawerCubit extends Cubit<DrawerState> {
@@ -15,13 +15,23 @@ class DrawerCubit extends Cubit<DrawerState> {
   Future<void> logOut(BuildContext context) async {
     try {
       closeDrawer();
+
+      // Sign out from Firebase
       await FirebaseAuth.instance.signOut();
+
+      // Clear cached user data from Database
+      Database().clearUserData();
+
+      // Force a delay to ensure auth state is completely cleared
+      await Future.delayed(const Duration(milliseconds: 200));
+
       if (context.mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => SignInScreen.newInstance()),
-              (Route<dynamic> route) => false,
-        );
+        if (kDebugMode) {
+          print('DrawerCubit - User signed out, redirecting to /sign-in');
+        }
+
+        // Use pushReplacementNamed to ensure proper route handling
+        Navigator.pushReplacementNamed(context, '/sign-in');
       }
     } catch (e) {
       if (kDebugMode) {

@@ -241,16 +241,74 @@ class AuthWrapper extends StatelessWidget {
 
         // Get the current route name
         final currentRoute = ModalRoute.of(context)?.settings.name;
+        final user = snapshot.data;
+        final isAuthenticated =
+            user != null; // More robust check: user must not be null
 
-        // If we're on the sign-up screen, don't redirect
-        if (currentRoute == '/sign-up') {
-          return SignUpScreen.newInstance();
-        } else if (snapshot.hasData) {
+        // ABSOLUTE WEB SECURITY: If on web and not authenticated, BLOCK EVERYTHING
+        if (kIsWeb && !isAuthenticated) {
+          return SignInScreen.newInstance();
+        }
+
+        // CRITICAL WEB SECURITY: Check authentication FIRST, before any other logic
+        // This prevents any bypass attempts on web platform
+        if (kIsWeb) {
+          // Block access if user is null, has no UID, or authentication is false
+          if (user == null || user.uid.isEmpty || !isAuthenticated) {
+            return SignInScreen.newInstance();
+          }
+
+          // Additional security: Ensure user has valid email
+          if (user.email == null || user.email!.isEmpty) {
+            return SignInScreen.newInstance();
+          }
+        }
+
+        // Define protected routes that require authentication
+        const protectedRoutes = ['/main'];
+
+        // Define public routes that don't require authentication
+        const publicRoutes = ['/sign-in', '/sign-up', '/forget-password'];
+
+        // If trying to access a protected route without authentication
+        if (protectedRoutes.contains(currentRoute) && !isAuthenticated) {
+          // Redirect to sign-in screen
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacementNamed(context, '/sign-in');
+          });
+          return SignInScreen.newInstance();
+        }
+
+        // If authenticated and trying to access public auth routes, redirect to main
+        if (isAuthenticated && publicRoutes.contains(currentRoute)) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacementNamed(context, '/main');
+          });
           return const MainScreen();
         }
 
-        // For all other cases, show sign in screen
-        return SignInScreen.newInstance();
+        // Handle specific route logic
+        if (currentRoute == '/sign-up') {
+          return SignUpScreen.newInstance();
+        } else if (currentRoute == '/forget-password') {
+          return ForgetPasswordScreen.newInstance();
+        } else if (currentRoute == '/main' && isAuthenticated) {
+          return const MainScreen();
+        } else if (currentRoute == '/sign-in') {
+          return SignInScreen.newInstance();
+        }
+
+        // ABSOLUTE FINAL WEB SECURITY: Last chance to block web access
+        if (kIsWeb && !isAuthenticated) {
+          return SignInScreen.newInstance();
+        }
+
+        // Default behavior based on authentication status
+        if (isAuthenticated) {
+          return const MainScreen();
+        } else {
+          return SignInScreen.newInstance();
+        }
       },
     );
   }

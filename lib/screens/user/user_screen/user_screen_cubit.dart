@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../data/database/database.dart';
-import '../../authentication/sign_in_screen/sign_in_view.dart';
 import 'user_screen_state.dart';
 
 class UserScreenCubit extends Cubit<UserScreenState> {
@@ -11,18 +10,28 @@ class UserScreenCubit extends Cubit<UserScreenState> {
 
   Future<void> getUser() async {
     await Database().getUser();
-    emit(state.copyWith(username: Database().username, email: Database().email));
+    emit(
+        state.copyWith(username: Database().username, email: Database().email));
   }
 
   Future<void> logOut(BuildContext context) async {
     try {
+      // Sign out from Firebase
       await FirebaseAuth.instance.signOut();
+
+      // Clear cached user data from Database
+      Database().clearUserData();
+
+      // Force a delay to ensure auth state is completely cleared
+      await Future.delayed(const Duration(milliseconds: 200));
+
       if (context.mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => SignInScreen.newInstance()),
-              (Route<dynamic> route) => false,
-        );
+        if (kDebugMode) {
+          print('UserScreenCubit - User signed out, redirecting to /sign-in');
+        }
+
+        // Use pushReplacementNamed to ensure proper route handling
+        Navigator.pushReplacementNamed(context, '/sign-in');
       }
     } catch (e) {
       if (kDebugMode) {

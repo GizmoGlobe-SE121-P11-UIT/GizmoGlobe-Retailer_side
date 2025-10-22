@@ -194,12 +194,12 @@ class Database {
           // Tìm manufacturer tương ứng
           final manufacturer = manufacturerList.firstWhere(
             (m) => m.manufacturerID == data['manufacturerID'],
-            orElse: () {
-              if (kDebugMode) {
-                print('Manufacturer not found for product ${doc.id}');
-              }
-              throw Exception('Manufacturer not found for product ${doc.id}');
-            },
+            // orElse: () {
+            //   if (kDebugMode) {
+            //     print('Manufacturer not found for product ${doc.id}');
+            //   }
+            //   throw Exception('Manufacturer not found for product ${doc.id}');
+            // },
           );
 
           // Chuyển đổi dữ liệu từ Firestore sang enum
@@ -249,10 +249,11 @@ class Database {
             },
           );
         } catch (e) {
-          if (kDebugMode) {
-            print('Error processing product ${doc.id}: $e');
-          }
-          return Future.error('Error processing product ${doc.id}: $e');
+          // if (kDebugMode) {
+          //   print('Error processing product ${doc.id}: $e');
+          // }
+          // return Future.error('Error processing product ${doc.id}: $e');
+          return Future.value(null);
         }
       }));
 
@@ -338,6 +339,9 @@ class Database {
           .doc(user.uid)
           .get();
       username = userDoc['username'];
+    } else {
+      // Clear username if no user is authenticated
+      username = null;
     }
   }
 
@@ -350,6 +354,11 @@ class Database {
           .get();
       username = userDoc['username'];
       email = userDoc['email'];
+    } else {
+      // Clear user data if no user is authenticated
+      username = null;
+      email = null;
+      role = null;
     }
   }
 
@@ -371,8 +380,7 @@ class Database {
           jsonList.map((province) => Province.fromJson(province)).toList();
       return provinceList;
     } catch (e) {
-      throw Exception(
-          'Error loading provinces from file: $e');
+      throw Exception('Error loading provinces from file: $e');
     }
   }
 
@@ -417,4 +425,14 @@ class Database {
   }
 
   String? get userId => FirebaseAuth.instance.currentUser?.uid;
+
+  // Clear cached user data when user logs out
+  void clearUserData() {
+    username = null;
+    email = null;
+    role = null;
+    if (kDebugMode) {
+      print('Database - User data cleared');
+    }
+  }
 }

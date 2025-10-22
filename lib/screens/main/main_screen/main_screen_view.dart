@@ -1,12 +1,15 @@
 // lib/screens/main/main_screen/main_screen_view.dart
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_view.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_view.dart';
 import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_view.dart';
+import 'package:gizmoglobe_client/screens/authentication/sign_in_screen/sign_in_view.dart';
 
 import '../../../widgets/general/selectable_gradient_icon.dart';
 import '../../home/home_screen/home_screen_view.dart';
@@ -40,6 +43,20 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // CRITICAL SECURITY: Check authentication directly in MainScreen
+    final user = FirebaseAuth.instance.currentUser;
+    final isAuthenticated = user != null;
+
+    // ABSOLUTE WEB SECURITY: Block access if not authenticated
+    if (kIsWeb && !isAuthenticated) {
+      return SignInScreen.newInstance();
+    }
+
+    // Additional security: Block access if user is null or has no UID
+    if (user == null || user.uid.isEmpty) {
+      return SignInScreen.newInstance();
+    }
+
     final colorScheme = Theme.of(context).colorScheme;
 
     return Stack(
