@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/functions/converter.dart';
-import 'package:gizmoglobe_client/screens/product/edit_product/edit_product_view.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_state.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
@@ -376,19 +375,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    ProcessState processState =
-                                        await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditProductScreen.newInstance(
-                                                state.product),
-                                      ),
-                                    );
-
-                                    if (processState == ProcessState.success) {
-                                      cubit.updateProduct();
-                                    }
+                                    // ProcessState processState =
+                                    //     await Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         EditProductScreen.newInstance(
+                                    //             state.product),
+                                    //   ),
+                                    // );
+                                    //
+                                    // if (processState == ProcessState.success) {
+                                    //   cubit.updateProduct();
+                                    // }
                                   },
                                   icon: Icon(Icons.edit,
                                       color: Theme.of(context)

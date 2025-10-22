@@ -203,7 +203,10 @@ abstract class TabCubit extends Cubit<TabState> {
   }
 
   int getIndex();
-  List<Manufacturer> getManufacturerList();
+
+  List<Manufacturer> getManufacturerList() {
+    return Database().manufacturerList;
+  }
 
   bool matchesMinMax(double value, String? minStr, String? maxStr) {
     final double min = double.tryParse(minStr ?? '') ?? 0;

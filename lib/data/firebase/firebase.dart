@@ -24,7 +24,7 @@ import '../../enums/invoice_related/payment_status.dart';
 import '../../enums/invoice_related/sales_status.dart';
 import '../../enums/product_related/category_enum.dart';
 import '../../enums/product_related/gpu_enums/gpu_version.dart';
-import '../../enums/product_related/product_serializer.dart';
+import '../../objects/product_related/product_serializer.dart';
 import '../../enums/product_related/product_status_enum.dart';
 import '../../enums/stakeholders/employee_role.dart';
 import '../../enums/stakeholders/manufacturer_status.dart';
@@ -892,7 +892,7 @@ class Firebase {
           productName: productDetails['productName'],
           category: productDetails['category'],
           quantity: detailData['quantity'] as int,
-          sellingPrice: (detailData['sellingPrice'] as num).toDouble(),
+          sellingPrice: (detailData['sellingPrice'] as num).toInt(),
           subtotal: (detailData['subtotal'] as num).toDouble(),
         ));
       }

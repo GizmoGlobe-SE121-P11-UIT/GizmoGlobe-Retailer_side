@@ -17,6 +17,10 @@ enum CPUSeries {
     return name;
   }
 
+  static List<CPUSeries> getValues() {
+    return CPUSeries.values.where((e) => e != CPUSeries.unknown).toList();;
+  }
+
   @override
   String toString() {
     return description;
@@ -25,6 +29,9 @@ enum CPUSeries {
 
 extension CPUSeriesExtension on CPUSeries {
   static CPUSeries fromName(String name) {
-    return CPUSeries.values.firstWhere((e) => e.getName() == name);
+    return CPUSeries.values.firstWhere(
+      (e) => e.getName() == name,
+      orElse: () => CPUSeries.unknown,
+    );
   }
 }

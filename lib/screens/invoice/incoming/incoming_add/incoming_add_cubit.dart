@@ -190,56 +190,57 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
           case const (RAM):
             final ram = product as RAM;
             productProps.addAll({
-              'bus': ram.bus,
-              'capacity': ram.capacity,
-              'ramType': ram.ramType,
+              // 'capacity': ram.capacity,
+              // 'type': ram.type,
+              // 'speed': ram.speed,
+              // 'modules': ram.modules,
             });
             break;
           case const (CPU):
             final cpu = product as CPU;
             productProps.addAll({
-              'family': cpu.family,
-              'core': cpu.core,
-              'thread': cpu.thread,
-              'clockSpeed': cpu.clockSpeed,
+              // 'family': cpu.family,
+              // 'core': cpu.core,
+              // 'thread': cpu.thread,
+              // 'clockSpeed': cpu.clockSpeed,
             });
             break;
           case const (GPU):
             final gpu = product as GPU;
             productProps.addAll({
-              'series': gpu.series,
-              'capacity': gpu.capacity,
-              'busWidth': gpu.bus,
-              'clockSpeed': gpu.clockSpeed,
+              // 'series': gpu.series,
+              // 'capacity': gpu.capacity,
+              // 'busWidth': gpu.bus,
+              // 'clockSpeed': gpu.clockSpeed,
             });
             break;
           case const (Mainboard):
             final mainboard = product as Mainboard;
             productProps.addAll({
-              'formFactor': mainboard.formFactor,
-              'series': mainboard.series,
-              'compatibility': mainboard.compatibility,
+              // 'formFactor': mainboard.formFactor,
+              // 'series': mainboard.series,
+              // 'compatibility': mainboard.compatibility,
             });
             break;
           case const (Drive):
             final drive = product as Drive;
             productProps.addAll({
-              'type': drive.type,
-              'capacity': drive.capacity,
+              // 'type': drive.type,
+              // 'capacity': drive.capacity,
             });
             break;
           case const (PSU):
             final psu = product as PSU;
             productProps.addAll({
-              'wattage': psu.wattage,
-              'efficiency': psu.efficiency,
-              'modular': psu.modular,
+              // 'wattage': psu.wattage,
+              // 'efficiency': psu.efficiency,
+              // 'modular': psu.modular,
             });
             break;
         }
 
         // Create new product instance and update
-        final updatedProduct = ProductFactory.createProduct(product.category, productProps);
+        final updatedProduct = ProductFactory.createProduct(productProps);
         await _firebase.updateProduct(updatedProduct);
       }
 

@@ -16,6 +16,10 @@ enum GPUVersion {
     return name;
   }
 
+  static List<GPUVersion> getValues() {
+    return GPUVersion.values.where((e) => e != GPUVersion.unknown).toList();
+  }
+
   @override
   String toString() {
     return description;
@@ -24,6 +28,9 @@ enum GPUVersion {
 
 extension GPUVersionExtension on GPUVersion {
   static GPUVersion fromName(String name) {
-    return GPUVersion.values.firstWhere((e) => e.getName() == name);
+    return GPUVersion.values.firstWhere(
+      (e) => e.getName() == name,
+      orElse: () => GPUVersion.unknown,
+    );
   }
 }

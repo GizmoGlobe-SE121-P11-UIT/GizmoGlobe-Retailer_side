@@ -15,6 +15,16 @@ class StorageSlot {
   String toString() {
     return '$m2Slots x M.2 Slots\n$sataPorts x SATA Ports';
   }
+
+  StorageSlot copyWith({
+    int? m2Slots,
+    int? sataPorts,
+  }) {
+    return StorageSlot(
+      m2Slots: m2Slots ?? this.m2Slots,
+      sataPorts: sataPorts ?? this.sataPorts,
+    );
+  }
 }
 
 class StorageSlotControllers {

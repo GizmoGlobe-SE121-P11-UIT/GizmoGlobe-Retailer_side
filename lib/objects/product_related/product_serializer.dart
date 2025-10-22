@@ -1,12 +1,12 @@
-import '../../objects/manufacturer.dart';
+import '../manufacturer.dart';
 import '../../enums/product_related/category_enum.dart';
-import '../../objects/product_related/cpu_related/cpu.dart';
-import '../../objects/product_related/drive_related/drive.dart';
-import '../../objects/product_related/gpu_related/gpu.dart';
-import '../../objects/product_related/mainboard_related/mainboard.dart';
-import '../../objects/product_related/product.dart';
-import '../../objects/product_related/psu_related/psu.dart';
-import '../../objects/product_related/ram_related/ram.dart';
+import 'cpu_related/cpu.dart';
+import 'drive_related/drive.dart';
+import 'gpu_related/gpu.dart';
+import 'mainboard_related/mainboard.dart';
+import 'product.dart';
+import 'psu_related/psu.dart';
+import 'ram_related/ram.dart';
 
 String _enumName(dynamic e) {
   if (e == null) return '';
