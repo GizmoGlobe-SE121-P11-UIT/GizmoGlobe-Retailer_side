@@ -356,6 +356,12 @@ class AuthWrapper extends StatelessWidget {
           return const MainScreen();
         } else if (currentRoute == '/chat' && isAuthenticated) {
           return const ChatRouteHandler();
+        } else if (currentRoute == '/invoices' && isAuthenticated) {
+          return const InvoiceRouteHandler();
+        } else if (currentRoute == '/stakeholders' && isAuthenticated) {
+          return const StakeholderRouteHandler();
+        } else if (currentRoute == '/vouchers' && isAuthenticated) {
+          return const VoucherRouteHandler();
         } else if (currentRoute == '/sign-in') {
           return SignInScreen.newInstance();
         }

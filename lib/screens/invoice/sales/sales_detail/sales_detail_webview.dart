@@ -37,7 +37,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
     // Convert string to CategoryEnum
     CategoryEnum? categoryEnum;
     try {
-      categoryEnum = CategoryEnum.values.firstWhere(
+      categoryEnum = CategoryEnum.getValues().firstWhere(
           (e) => e.getName().toLowerCase() == category.toLowerCase());
     } catch (e) {
       return Icons.device_unknown;

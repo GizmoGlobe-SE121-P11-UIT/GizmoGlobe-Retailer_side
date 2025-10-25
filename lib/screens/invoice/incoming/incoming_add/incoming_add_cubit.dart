@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
@@ -31,7 +32,8 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
       ));
     } catch (e) {
       emit(state.copyWith(
-        errorMessage: 'Error loading manufacturers: $e', // Lỗi khi load dữ liệu nhà sản xuất
+        errorMessage:
+            'Error loading manufacturers: $e', // Lỗi khi load dữ liệu nhà sản xuất
         isLoading: false,
       ));
     }
@@ -48,7 +50,9 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
       // Load products for selected manufacturer
       final allProducts = await _firebase.getProducts();
       final manufacturerProducts = allProducts
-          .where((product) => product.manufacturer.manufacturerID == manufacturer.manufacturerID)
+          .where((product) =>
+              product.manufacturer.manufacturerID ==
+              manufacturer.manufacturerID)
           .toList();
 
       emit(state.copyWith(
@@ -57,7 +61,8 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
       ));
     } catch (e) {
       emit(state.copyWith(
-        errorMessage: 'Error loading products: $e', // Lỗi khi load dữ liệu sản phẩm
+        errorMessage:
+            'Error loading products: $e', // Lỗi khi load dữ liệu sản phẩm
         isLoading: false,
       ));
     }
@@ -65,12 +70,16 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
 
   void addDetail(Product product, double importPrice, int quantity) {
     if (importPrice <= 0) {
-      emit(state.copyWith(errorMessage: 'Import price must be greater than 0')); // Giá nhập phải lớn hơn 0
+      emit(state.copyWith(
+          errorMessage:
+              'Import price must be greater than 0')); // Giá nhập phải lớn hơn 0
       return;
     }
 
     if (quantity <= 0) {
-      emit(state.copyWith(errorMessage: 'Quantity must be greater than 0')); // Số lượng phải lớn hơn 0
+      emit(state.copyWith(
+          errorMessage:
+              'Quantity must be greater than 0')); // Số lượng phải lớn hơn 0
       return;
     }
 
@@ -119,7 +128,9 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
 
   void updateDetailQuantity(int index, int newQuantity) {
     if (newQuantity <= 0) {
-      emit(state.copyWith(errorMessage: 'Quantity must be greater than 0')); // Số lượng phải lớn hơn 0
+      emit(state.copyWith(
+          errorMessage:
+              'Quantity must be greater than 0')); // Số lượng phải lớn hơn 0
       return;
     }
 
@@ -143,12 +154,16 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
 
   Future<bool> submitInvoice() async {
     if (state.selectedManufacturer == null) {
-      emit(state.copyWith(errorMessage: 'Please select a manufacturer')); // Vui lòng chọn nhà sản xuất
+      emit(state.copyWith(
+          errorMessage:
+              'Please select a manufacturer')); // Vui lòng chọn nhà sản xuất
       return false;
     }
 
     if (state.details.isEmpty) {
-      emit(state.copyWith(errorMessage: 'Please add at least one product')); // Vui lòng thêm ít nhất một sản phẩm
+      emit(state.copyWith(
+          errorMessage:
+              'Please add at least one product')); // Vui lòng thêm ít nhất một sản phẩm
       return false;
     }
 
@@ -175,7 +190,8 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
         final Map<String, dynamic> productProps = {
           'productID': product.productID!,
           'productName': product.productName,
-          'manufacturer': product.manufacturer,
+          'manufacturer': product.manufacturer.manufacturerID,
+          'category': product.category.name,
           'importPrice': detail.importPrice, // Use new import price from detail
           'sellingPrice': product.sellingPrice,
           'discount': product.discount,
@@ -240,8 +256,16 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
         }
 
         // Create new product instance and update
-        final updatedProduct = ProductFactory.createProduct(productProps);
-        await _firebase.updateProduct(updatedProduct);
+        try {
+          final updatedProduct = ProductFactory.createProduct(productProps);
+          await _firebase.updateProduct(updatedProduct);
+        } catch (e) {
+          // Log the error but don't fail the entire invoice creation
+          if (kDebugMode) {
+            print('Error updating product ${product.productID}: $e');
+          }
+          // Continue with other products
+        }
       }
 
       emit(state.copyWith(
@@ -266,4 +290,4 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
   void updatePaymentStatus(PaymentStatus status) {
     emit(state.copyWith(paymentStatus: status));
   }
-} 
+}

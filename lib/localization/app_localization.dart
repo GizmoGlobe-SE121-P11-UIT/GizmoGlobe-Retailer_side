@@ -275,10 +275,10 @@ class AppLocalizations {
     'shipped': 'Shipped',
     'completed': 'Completed',
     'cancelled': 'Cancelled',
-    'warrantyStatus_pending': 'Pending',
-    'warrantyStatus_processing': 'Processing',
-    'warrantyStatus_completed': 'Completed',
-    'warrantyStatus_denied': 'Denied',
+    'warrantyStatusPending': 'Pending',
+    'warrantyStatusProcessing': 'Processing',
+    'warrantyStatusCompleted': 'Completed',
+    'warrantyStatusDenied': 'Denied',
     'success': 'Success',
     'failure': 'Failure',
     'signInSuccess': 'Signed in successfully.',
@@ -678,10 +678,10 @@ class AppLocalizations {
     'shipped': 'Đã giao',
     'completed': 'Đã hoàn thành',
     'cancelled': 'Đã hủy',
-    'warrantyStatus_pending': 'Chờ xử lý',
-    'warrantyStatus_processing': 'Đang xử lý',
-    'warrantyStatus_completed': 'Đã hoàn thành',
-    'warrantyStatus_denied': 'Từ chối',
+    'warrantyStatusPending': 'Chờ xử lý',
+    'warrantyStatusProcessing': 'Đang xử lý',
+    'warrantyStatusCompleted': 'Đã hoàn thành',
+    'warrantyStatusDenied': 'Từ chối',
     'success': 'Thành công',
     'failure': 'Thất bại',
     'signInSuccess': 'Đăng nhập thành công.',
@@ -1081,13 +1081,12 @@ class AppLocalizations {
   String get shipped => _getTranslation('shipped');
   String get completed => _getTranslation('completed');
   String get cancelled => _getTranslation('cancelled');
-  String get warrantyStatus_pending =>
-      _getTranslation('warrantyStatus_pending');
-  String get warrantyStatus_processing =>
-      _getTranslation('warrantyStatus_processing');
-  String get warrantyStatus_completed =>
-      _getTranslation('warrantyStatus_completed');
-  String get warrantyStatus_denied => _getTranslation('warrantyStatus_denied');
+  String get warrantyStatusPending => _getTranslation('warrantyStatusPending');
+  String get warrantyStatusProcessing =>
+      _getTranslation('warrantyStatusProcessing');
+  String get warrantyStatusCompleted =>
+      _getTranslation('warrantyStatusCompleted');
+  String get warrantyStatusDenied => _getTranslation('warrantyStatusDenied');
   String get success => _getTranslation('success');
   String get failure => _getTranslation('failure');
   String get signInSuccess => _getTranslation('signInSuccess');

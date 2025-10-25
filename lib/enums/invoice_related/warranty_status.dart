@@ -31,13 +31,13 @@ extension WarrantyStatusLocalized on WarrantyStatus {
   String localized(BuildContext context) {
     switch (this) {
       case WarrantyStatus.pending:
-        return S.of(context).warrantyStatus_pending;
+        return S.of(context).warrantyStatusPending;
       case WarrantyStatus.processing:
-        return S.of(context).warrantyStatus_processing;
+        return S.of(context).warrantyStatusProcessing;
       case WarrantyStatus.completed:
-        return S.of(context).warrantyStatus_completed;
+        return S.of(context).warrantyStatusCompleted;
       case WarrantyStatus.denied:
-        return S.of(context).warrantyStatus_denied;
+        return S.of(context).warrantyStatusDenied;
     }
   }
 }

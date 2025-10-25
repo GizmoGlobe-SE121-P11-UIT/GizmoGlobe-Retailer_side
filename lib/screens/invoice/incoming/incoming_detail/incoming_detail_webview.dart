@@ -433,7 +433,9 @@ class _IncomingDetailWebViewState extends State<IncomingDetailWebView> {
                               Navigator.pop(context);
                               await cubit
                                   .updatePaymentStatus(PaymentStatus.paid);
-                              Navigator.of(context).pop(true);
+                              if (mounted) {
+                                Navigator.of(context).pop(true);
+                              }
                             },
                             child: Text(
                               S.of(context).confirm,

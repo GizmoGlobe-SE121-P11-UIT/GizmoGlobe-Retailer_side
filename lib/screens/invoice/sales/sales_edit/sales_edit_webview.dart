@@ -508,7 +508,7 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
 
     CategoryEnum? categoryEnum;
     try {
-      categoryEnum = CategoryEnum.values.firstWhere(
+      categoryEnum = CategoryEnum.getValues().firstWhere(
           (e) => e.getName().toLowerCase() == category.toLowerCase());
     } catch (e) {
       return Icons.device_unknown;

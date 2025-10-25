@@ -92,7 +92,7 @@ class _AdvancedFilterSearchScreenState
               children: [
                 OptionFilterView<CategoryEnum>(
                   name: S.of(context).category, //Danh mục
-                  enumValues: CategoryEnum.values,
+                  enumValues: CategoryEnum.getValues(),
                   selectedValues: state.selectedCategories,
                   onToggleSelection: cubit.toggleCategory,
                 ),

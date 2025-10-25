@@ -463,10 +463,8 @@ class Firebase {
   }
 
   Stream<List<Manufacturer>> manufacturersStream() {
-    return _firestore
-        .collection('manufacturers')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
+    return _firestore.collection('manufacturers').snapshots().map((snapshot) =>
+        snapshot.docs
             .map((doc) => _mapManufacturerFromJson(doc.data()))
             .toList());
   }
@@ -624,8 +622,7 @@ class Firebase {
         try {
           Map<String, dynamic> data = doc.data();
 
-          Product product =
-              ProductFactory.createProduct(data);
+          Product product = ProductFactory.createProduct(data);
           products.add(product);
         } catch (e) {
           if (kDebugMode) {
@@ -1028,10 +1025,19 @@ class Firebase {
 
   Future<void> updateProduct(Product product) async {
     try {
-      await FirebaseFirestore.instance
+      // Find the document by productID attribute since productID is no longer the document ID
+      final querySnapshot = await FirebaseFirestore.instance
           .collection('products')
-          .doc(product.productID)
-          .update(productToJson(product));
+          .where('productID', isEqualTo: product.productID)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        throw Exception(
+            'Product not found with productID: ${product.productID}');
+      }
+
+      final docRef = querySnapshot.docs.first.reference;
+      await docRef.update(productToJson(product));
 
       List<Product> products = await getProducts();
       Database().updateProductList(products);
@@ -1045,7 +1051,9 @@ class Firebase {
 
   Future<void> addProduct(Product product) async {
     try {
-      await FirebaseFirestore.instance.collection('products').add(productToJson(product));
+      await FirebaseFirestore.instance
+          .collection('products')
+          .add(productToJson(product));
       List<Product> products = await getProducts();
       Database().updateProductList(products);
     } catch (e) {
@@ -1602,9 +1610,9 @@ class Firebase {
       // the local manufacturer list and product list in the Database singleton
 
       // Update manufacturer in the local list
-      int manufacturerIndex = Database().manufacturerList.indexWhere(
-        (m) => m.manufacturerID == manufacturer.manufacturerID
-      );
+      int manufacturerIndex = Database()
+          .manufacturerList
+          .indexWhere((m) => m.manufacturerID == manufacturer.manufacturerID);
 
       if (manufacturerIndex >= 0) {
         Database().manufacturerList[manufacturerIndex] = manufacturer;
@@ -1612,7 +1620,8 @@ class Firebase {
 
       // Update products in local list without changing them in Firebase
       for (int i = 0; i < Database().productList.length; i++) {
-        if (Database().productList[i].manufacturer.manufacturerID == manufacturer.manufacturerID) {
+        if (Database().productList[i].manufacturer.manufacturerID ==
+            manufacturer.manufacturerID) {
           Database().productList[i].manufacturer = manufacturer;
         }
       }
@@ -2168,7 +2177,10 @@ class Firebase {
 
   Future<Customer> getCustomerById(String customerId) async {
     try {
-      final doc = await FirebaseFirestore.instance.collection('customers').doc(customerId).get();
+      final doc = await FirebaseFirestore.instance
+          .collection('customers')
+          .doc(customerId)
+          .get();
       if (!doc.exists) {
         throw Exception('Customer not found');
       }
