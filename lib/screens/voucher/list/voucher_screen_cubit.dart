@@ -15,7 +15,12 @@ class VoucherScreenCubit extends Cubit<VoucherScreenState> {
 
   Future<void> initialize() async {
     try {
-      emit(state.copyWith(processState: ProcessState.loading));
+      // Skip if already loaded to prevent unnecessary refresh
+      if (state.voucherList.isNotEmpty && !state.isLoading) {
+        return;
+      }
+
+      emit(state.copyWith(processState: ProcessState.loading, isLoading: true));
 
       final List<Voucher> voucherList = await _firebase.getVouchers();
       voucherList.sort((a, b) => a.startTime.compareTo(b.startTime));
@@ -44,11 +49,13 @@ class VoucherScreenCubit extends Cubit<VoucherScreenState> {
         upcomingList: upcomingList,
         inactiveList: inactiveList,
         processState: ProcessState.idle,
+        isLoading: false,
       ));
     } catch (e) {
       if (kDebugMode) {
         print('Error initializing voucher list: $e');
       }
+      emit(state.copyWith(isLoading: false));
     }
   }
 
@@ -60,12 +67,19 @@ class VoucherScreenCubit extends Cubit<VoucherScreenState> {
     emit(state.copyWith(processState: ProcessState.idle));
   }
 
+  Future<void> refresh() async {
+    // Force refresh by clearing the list first
+    emit(state.copyWith(voucherList: []));
+    await initialize();
+  }
+
   Future<void> toggleVoucherStatus(String voucherId) async {
     try {
       emit(state.copyWith(processState: ProcessState.loading));
 
       // Find the voucher in the list
-      final voucher = state.voucherList.firstWhere((v) => v.voucherID == voucherId);
+      final voucher =
+          state.voucherList.firstWhere((v) => v.voucherID == voucherId);
 
       // Create a copy of the voucher with updated status
       final updatedVoucher = voucher.copyWith(isEnabled: !voucher.isEnabled);

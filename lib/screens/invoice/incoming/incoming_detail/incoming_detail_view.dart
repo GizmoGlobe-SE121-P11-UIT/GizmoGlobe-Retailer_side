@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'incoming_detail_cubit.dart';
 import 'incoming_detail_state.dart';
+import 'incoming_detail_webview.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import '../permissions/incoming_invoice_permissions.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
@@ -25,6 +27,27 @@ class IncomingDetailScreen extends StatefulWidget {
         create: (context) => IncomingDetailCubit(invoice),
         child: IncomingDetailScreen(invoice: invoice),
       );
+
+  static Future<bool?> showModal(
+      BuildContext context, IncomingInvoice invoice) async {
+    if (kIsWeb) {
+      return showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: IncomingDetailWebView.newInstance(invoice),
+        ),
+      );
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => IncomingDetailScreen.newInstance(invoice),
+        ),
+      );
+    }
+  }
 
   @override
   State<IncomingDetailScreen> createState() => _IncomingDetailScreenState();
@@ -71,6 +94,11 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Use web view for web platform, mobile view for mobile platforms
+    if (kIsWeb) {
+      return const SizedBox.shrink(); // This will be handled by the dialog
+    }
+
     return BlocConsumer<IncomingDetailCubit, IncomingDetailState>(
       listener: (context, state) {
         if (state.errorMessage != null) {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
@@ -10,6 +11,7 @@ import '../../../../enums/stakeholders/manufacturer_status.dart';
 import '../vendor_edit/vendor_edit_view.dart';
 import 'vendor_detail_cubit.dart';
 import 'vendor_detail_state.dart';
+import 'vendor_detail_webview.dart';
 
 class VendorDetailScreen extends StatefulWidget {
   final Manufacturer manufacturer;
@@ -21,6 +23,36 @@ class VendorDetailScreen extends StatefulWidget {
     this.readOnly = false,
   });
 
+  static Future<Manufacturer?> showModal(
+    BuildContext context,
+    Manufacturer manufacturer, {
+    bool readOnly = false,
+  }) async {
+    if (kIsWeb) {
+      return await showDialog<Manufacturer>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: VendorDetailWebView.newInstance(
+            manufacturer: manufacturer,
+            readOnly: readOnly,
+          ),
+        ),
+      );
+    } else {
+      return await Navigator.push<Manufacturer>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VendorDetailScreen(
+            manufacturer: manufacturer,
+            readOnly: readOnly,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   State<VendorDetailScreen> createState() => _VendorDetailScreenState();
 }
@@ -28,6 +60,11 @@ class VendorDetailScreen extends StatefulWidget {
 class _VendorDetailScreenState extends State<VendorDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    // For web, return minimal widget since modal is handled by showModal
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return BlocProvider(
       create: (context) => VendorDetailCubit(widget.manufacturer),
       child: BlocBuilder<VendorDetailCubit, VendorDetailState>(
@@ -257,7 +294,9 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isActive ? Theme.of(context).colorScheme.tertiary : Theme.of(context).colorScheme.error,
+        color: isActive
+            ? Theme.of(context).colorScheme.tertiary
+            : Theme.of(context).colorScheme.error,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isActive

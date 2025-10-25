@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
@@ -6,6 +7,7 @@ import 'package:gizmoglobe_client/objects/employee.dart';
 import '../../../../screens/stakeholder/employees/permissions/employee_permissions.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import '../../../../widgets/general/gradient_text.dart';
+import 'employee_edit_webview.dart';
 
 class EmployeeEditScreen extends StatefulWidget {
   final Employee employee;
@@ -16,6 +18,36 @@ class EmployeeEditScreen extends StatefulWidget {
     required this.employee,
     required this.userRole,
   });
+
+  static Future<Employee?> showModal(
+    BuildContext context,
+    Employee employee,
+    String? userRole,
+  ) async {
+    if (kIsWeb) {
+      return await showDialog<Employee>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: EmployeeEditWebView.newInstance(
+            employee: employee,
+            userRole: userRole,
+          ),
+        ),
+      );
+    } else {
+      return await Navigator.push<Employee>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EmployeeEditScreen(
+            employee: employee,
+            userRole: userRole,
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   State<EmployeeEditScreen> createState() => _EmployeeEditScreenState();
@@ -37,6 +69,11 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // For web, return minimal widget since modal is handled by showModal
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: GradientText(text: S.of(context).editEmployee),

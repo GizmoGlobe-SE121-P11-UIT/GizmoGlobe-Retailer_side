@@ -20,10 +20,12 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
 
   void _listenToManufacturers() {
     _subscription = _manufacturersStream.listen((manufacturers) {
-      if (state.searchQuery.isEmpty) {
-        emit(state.copyWith(manufacturers: manufacturers));
-      } else {
-        searchManufacturers(state.searchQuery);
+      if (!isClosed) {
+        if (state.searchQuery.isEmpty) {
+          emit(state.copyWith(manufacturers: manufacturers));
+        } else {
+          searchManufacturers(state.searchQuery);
+        }
       }
     });
   }
@@ -38,15 +40,19 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
     emit(state.copyWith(isLoading: true));
     try {
       final manufacturers = await _firebase.getManufacturers();
-      emit(state.copyWith(
-        manufacturers: manufacturers,
-        isLoading: false,
-      ));
+      if (!isClosed) {
+        emit(state.copyWith(
+          manufacturers: manufacturers,
+          isLoading: false,
+        ));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error loading manufacturer list: $e');
       } // Lỗi khi tải danh sách nhà sản xuất
-      emit(state.copyWith(isLoading: false));
+      if (!isClosed) {
+        emit(state.copyWith(isLoading: false));
+      }
     }
   }
 
@@ -129,7 +135,9 @@ class VendorsScreenCubit extends Cubit<VendorsScreenState> {
   Future<void> _loadUserRole() async {
     try {
       final userRole = await _firebase.getUserRole();
-      emit(state.copyWith(userRole: userRole));
+      if (!isClosed) {
+        emit(state.copyWith(userRole: userRole));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error loading user role: $e');

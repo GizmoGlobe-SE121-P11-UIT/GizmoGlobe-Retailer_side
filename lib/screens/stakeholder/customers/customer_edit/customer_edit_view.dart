@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
@@ -5,11 +6,33 @@ import 'package:gizmoglobe_client/objects/customer.dart';
 
 import '../../../../widgets/general/gradient_icon_button.dart';
 import '../../../../widgets/general/gradient_text.dart';
+import 'customer_edit_webview.dart';
 
 class CustomerEditScreen extends StatefulWidget {
   final Customer customer;
 
   const CustomerEditScreen({super.key, required this.customer});
+
+  static Future<Customer?> showModal(
+      BuildContext context, Customer customer) async {
+    if (kIsWeb) {
+      return showDialog<Customer>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: CustomerEditWebView.newInstance(customer),
+        ),
+      );
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CustomerEditScreen(customer: customer),
+        ),
+      );
+    }
+  }
 
   @override
   State<CustomerEditScreen> createState() => _CustomerEditScreenState();
@@ -44,6 +67,11 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // For web, return minimal widget since modal is handled by showModal
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop, result) async {

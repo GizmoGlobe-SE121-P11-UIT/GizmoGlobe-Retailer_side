@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/home/home_screen/home_screen_state.dart';
 import 'package:gizmoglobe_client/widgets/general/app_logo.dart';
@@ -9,6 +10,7 @@ import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/chat/list/chat_list_screen_view.dart';
 
 import 'home_screen_cubit.dart';
+import 'home_screen_webview.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,6 +29,11 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Web: use web view; Mobile: use regular view
+    if (kIsWeb) {
+      return HomeScreenWebView.newInstance();
+    }
+
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
         final currencyFormat =
@@ -50,7 +57,8 @@ class _HomeScreen extends State<HomeScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ChatListScreen.newInstance(),
+                                builder: (context) =>
+                                    ChatListScreen.newInstance(),
                               ),
                             );
                           },
@@ -75,13 +83,13 @@ class _HomeScreen extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                      ],
+                    ),
                     const SizedBox(width: 8),
                   ],
                 ),
-                ],
-              ),
+              ],
+            ),
           ),
           body: SingleChildScrollView(
             child: Column(

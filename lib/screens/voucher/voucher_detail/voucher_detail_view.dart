@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/functions/converter.dart';
@@ -17,6 +18,7 @@ import '../../../widgets/dialog/information_dialog.dart';
 import '../../../widgets/general/gradient_text.dart';
 import '../../../screens/voucher/edit_voucher/edit_voucher_view.dart';
 import '../../../widgets/general/status_badge.dart';
+import 'voucher_detail_webview.dart';
 
 class VoucherDetailScreen extends StatefulWidget {
   final Voucher voucher;
@@ -27,6 +29,26 @@ class VoucherDetailScreen extends StatefulWidget {
         child: VoucherDetailScreen(voucher: voucher),
       );
 
+  static Future<bool?> showModal(BuildContext context, Voucher voucher) async {
+    if (kIsWeb) {
+      return await showDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: VoucherDetailWebView.newInstance(voucher),
+        ),
+      );
+    } else {
+      return await Navigator.push<bool>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VoucherDetailScreen(voucher: voucher),
+        ),
+      );
+    }
+  }
+
   @override
   State<VoucherDetailScreen> createState() => _VoucherDetailScreen();
 }
@@ -36,6 +58,10 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -167,7 +193,6 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                 value: state.voucher.enDescription!,
                                 theme: theme,
                               ),
-
                             if (state.voucher.viDescription != null)
                               _buildInfoRow(
                                 title: S.of(context).viDescription,
@@ -191,7 +216,7 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                     color: theme.scaffoldBackgroundColor,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1), 
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, -4),
                       ),
@@ -203,17 +228,20 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                         showDialog(
                             context: context,
                             builder: (context) => InformationDialog(
-                                  title: state.dialogName.getLocalizedName(context),
-                                  content: state.notifyMessage.getLocalizedMessage(context),
-                                  onPressed: () {
-                                  },
+                                  title: state.dialogName
+                                      .getLocalizedName(context),
+                                  content: state.notifyMessage
+                                      .getLocalizedMessage(context),
+                                  onPressed: () {},
                                 ));
                       } else if (state.processState == ProcessState.failure) {
                         showDialog(
                             context: context,
                             builder: (context) => InformationDialog(
-                                  title: state.dialogName.getLocalizedName(context),
-                                  content: state.notifyMessage.getLocalizedMessage(context),
+                                  title: state.dialogName
+                                      .getLocalizedName(context),
+                                  content: state.notifyMessage
+                                      .getLocalizedMessage(context),
                                   onPressed: () {
                                     cubit.toIdle();
                                   },
@@ -229,14 +257,17 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    ProcessState? processState =
-                                        await Navigator.push(
+                                    final processState =
+                                        await EditVoucherScreen.showModal(
                                       context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditVoucherScreen.newInstance(state.voucher),
-                                      ),
+                                      state.voucher,
                                     );
+                                    if (processState == ProcessState.success) {
+                                      if (mounted) {
+                                        Navigator.pop(
+                                            context, ProcessState.success);
+                                      }
+                                    }
                                   },
                                   icon: Icon(Icons.edit,
                                       color: theme.colorScheme.onPrimary),
@@ -254,7 +285,8 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                               ),
                               const SizedBox(width: 16),
                               Expanded(
-                                child: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
+                                child: BlocBuilder<VoucherDetailCubit,
+                                    VoucherDetailState>(
                                   builder: (context, state) {
                                     return ElevatedButton.icon(
                                       onPressed: () {
@@ -271,15 +303,15 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                         state.voucher.isEnabled
                                             ? S.of(context).disabled
                                             : S.of(context).enabled,
-                                        style:
-                                        TextStyle(color: theme.colorScheme.onPrimary),
+                                        style: TextStyle(
+                                            color: theme.colorScheme.onPrimary),
                                       ),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: state.voucher.isEnabled
                                             ? theme.colorScheme.error
                                             : theme.colorScheme.secondary,
-                                        padding:
-                                        const EdgeInsets.symmetric(vertical: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
                                       ),
                                     );
                                   },

@@ -4,8 +4,8 @@ import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
-import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
+import 'employee_add/employee_add_view.dart';
 import 'employee_detail/employee_detail_view.dart';
 import 'employee_edit/employee_edit_view.dart';
 import 'employees_screen_cubit.dart';
@@ -29,390 +29,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
   EmployeesScreenCubit get cubit => context.read<EmployeesScreenCubit>();
 
   void _showAddEmployeeDialog() {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final phoneController = TextEditingController();
-    // final passwordController = TextEditingController();
-    RoleEnum selectedRole = RoleEnum.employee;
-    final formKey = GlobalKey<FormState>();
-
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 400),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.person_add,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 28,
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            S.of(context).addNewEmployee,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      TextFormField(
-                        controller: nameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return S.of(context).pleaseEnterName;
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: S.of(context).name,
-                          hintText: S.of(context).fullName,
-                          prefixIcon: Icon(
-                            Icons.person_outline,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.outline),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.outline),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Theme.of(context)
-                              .colorScheme
-                              .surface
-                              .withValues(alpha: 0.8), 
-                          labelStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                          floatingLabelStyle: WidgetStateTextStyle.resolveWith(
-                            (states) => TextStyle(
-                              color: states.contains(WidgetState.focused)
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                          hintStyle: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.7),
-                          ),
-                          errorStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.error),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: emailController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return S.of(context).pleaseEnterEmail;
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: S.of(context).email,
-                          hintText: S.of(context).email,
-                          prefixIcon: Icon(
-                            Icons.email_outlined,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.outline),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.outline),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Theme.of(context)
-                              .colorScheme
-                              .surface
-                              .withValues(alpha: 0.8), 
-                          labelStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                          floatingLabelStyle: WidgetStateTextStyle.resolveWith(
-                            (states) => TextStyle(
-                              color: states.contains(WidgetState.focused)
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                          hintStyle: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.7),
-                          ),
-                          errorStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.error),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: phoneController,
-                        decoration: InputDecoration(
-                          labelText: S.of(context).phoneNumber,
-                          hintText: S.of(context).enterPhoneNumber,
-                          prefixIcon: Icon(
-                            Icons.phone_outlined,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.outline),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.outline),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Theme.of(context)
-                              .colorScheme
-                              .surface
-                              .withValues(alpha: 0.8), 
-                          labelStyle: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.7),
-                          ),
-                          floatingLabelStyle: WidgetStateTextStyle.resolveWith(
-                            (states) => TextStyle(
-                              color: states.contains(WidgetState.focused)
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                          hintStyle: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.7),
-                          ),
-                          errorStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.error),
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
-                      const SizedBox(height: 16),
-                      StatefulBuilder(
-                        builder: (context, setState) {
-                          return DropdownButtonFormField<RoleEnum>(
-                            value: selectedRole,
-                            decoration: InputDecoration(
-                              labelText: S.of(context).role,
-                              prefixIcon: Icon(
-                                Icons.work_outline,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.outline),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.outline),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                              filled: true,
-                              fillColor: Theme.of(context)
-                                  .colorScheme
-                                  .surface
-                                  .withValues(alpha: 0.8), 
-                              labelStyle: TextStyle( 
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                              floatingLabelStyle:
-                                  WidgetStateTextStyle.resolveWith(
-                                (states) => TextStyle(
-                                  color: states.contains(WidgetState.focused)
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
-                                ),
-                              ),
-                            ),
-                            items: RoleEnum.values
-                                .where((role) => role != RoleEnum.owner)
-                                .map((role) {
-                              return DropdownMenuItem(
-                                value: role,
-                                child: Text(
-                                  role.localizedName(context),
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withValues(alpha: 0.7),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (RoleEnum? value) {
-                              if (value != null) {
-                                setState(() => selectedRole = value);
-                              }
-                            },
-                            dropdownColor:
-                                Theme.of(context).colorScheme.surface,
-                            icon: Icon(Icons.arrow_drop_down,
-                                color: Theme.of(context).colorScheme.onSurface),
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text(
-                              S.of(context).cancel,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                if (formKey.currentState?.validate() ?? false) {
-                                  final error = await cubit.createEmployee(
-                                    nameController.text,
-                                    emailController.text,
-                                    phoneController.text,
-                                    selectedRole,
-                                  );
-
-                                  if (error != null) {
-                                    if (mounted) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => InformationDialog(
-                                          title: S.of(context).errorOccurred,
-                                          content: error,
-                                          buttonText: S.of(context).confirm,
-                                        ),
-                                      );
-                                    }
-                                  } else {
-                                    if (mounted) {
-                                      Navigator.pop(context);
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => InformationDialog(
-                                          title: S.of(context).success,
-                                          content: S
-                                              .of(context)
-                                              .employeeAddedSuccessfully,
-                                          buttonText: S.of(context).confirm,
-                                        ),
-                                      );
-                                    }
-                                  }
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 12,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: Text(
-                                S.of(context).addNewEmployee,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context).colorScheme.onPrimary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
+    EmployeeAddScreen.showModal(context);
   }
 
   void _showFilterDialog() {
@@ -560,13 +177,9 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                           final employee = state.employees[index];
                           return GestureDetector(
                             onTap: () {
-                              Navigator.push(
+                              EmployeeDetailScreen.showModal(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => EmployeeDetailScreen(
-                                    employee: employee,
-                                  ),
-                                ),
+                                employee,
                               );
                             },
                             onLongPress: () {
@@ -607,19 +220,13 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                             onTap: () {
                                               Navigator.pop(context);
                                               cubit.setSelectedIndex(null);
-                                              Navigator.push(
+                                              EmployeeDetailScreen.showModal(
                                                 context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EmployeeDetailScreen(
-                                                    employee: employee,
-                                                    readOnly:
-                                                        !EmployeePermissions
-                                                            .canEditEmployee(
-                                                                state.userRole,
-                                                                employee),
-                                                  ),
-                                                ),
+                                                employee,
+                                                readOnly: !EmployeePermissions
+                                                    .canEditEmployee(
+                                                        state.userRole,
+                                                        employee),
                                               );
                                             },
                                           ),
@@ -647,15 +254,11 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedIndex(null);
                                                 final updatedEmployee =
-                                                    await Navigator.push(
+                                                    await EmployeeEditScreen
+                                                        .showModal(
                                                   context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EmployeeEditScreen(
-                                                      employee: employee,
-                                                      userRole: state.userRole,
-                                                    ),
-                                                  ),
+                                                  employee,
+                                                  state.userRole,
                                                 );
 
                                                 if (updatedEmployee != null) {
@@ -705,18 +308,33 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                       ),
                                                       actions: [
                                                         TextButton(
-                                                          onPressed: () => Navigator.pop(context),
-                                                          child: Text(S.of(context).cancel),
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: Text(S
+                                                              .of(context)
+                                                              .cancel),
                                                         ),
-                                                        const SizedBox(width: 4),
+                                                        const SizedBox(
+                                                            width: 4),
                                                         TextButton(
                                                           onPressed: () async {
-                                                            Navigator.pop(context);
-                                                            await cubit.deleteEmployee(employee.employeeID!);
+                                                            Navigator.pop(
+                                                                context);
+                                                            await cubit
+                                                                .deleteEmployee(
+                                                                    employee
+                                                                        .employeeID!);
                                                           },
                                                           child: Text(
-                                                            S.of(context).delete,
-                                                            style: TextStyle(color: Theme.of(context).colorScheme.error),
+                                                            S
+                                                                .of(context)
+                                                                .delete,
+                                                            style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .error),
                                                           ),
                                                         ),
                                                       ],

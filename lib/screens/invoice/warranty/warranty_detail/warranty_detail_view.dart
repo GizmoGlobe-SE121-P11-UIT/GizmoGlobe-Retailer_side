@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
@@ -7,6 +8,7 @@ import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
+import 'warranty_detail_webview.dart';
 
 import '../../../../enums/invoice_related/warranty_status.dart';
 import '../permissions/warranty_invoice_permissions.dart';
@@ -21,8 +23,34 @@ class WarrantyDetailView extends StatelessWidget {
     required this.invoice,
   });
 
+  static Future<bool?> showModal(
+      BuildContext context, WarrantyInvoice invoice) async {
+    if (kIsWeb) {
+      return showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: WarrantyDetailWebView.newInstance(invoice),
+        ),
+      );
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WarrantyDetailView(invoice: invoice),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // For web, return minimal widget since modal is handled by showModal
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return BlocProvider(
       create: (context) => WarrantyDetailCubit(invoice),
       child: const _WarrantyDetailView(),

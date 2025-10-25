@@ -21,13 +21,15 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
 
   void _listenToEmployees() {
     _subscription = _employeesStream.listen((employees) {
-      _allEmployees = employees;
-      if (state.selectedRoleFilter != null) {
-        filterByRole(state.selectedRoleFilter);
-      } else if (state.searchQuery.isNotEmpty) {
-        searchEmployees(state.searchQuery);
-      } else {
-        emit(state.copyWith(employees: employees));
+      if (!isClosed) {
+        _allEmployees = employees;
+        if (state.selectedRoleFilter != null) {
+          filterByRole(state.selectedRoleFilter);
+        } else if (state.searchQuery.isNotEmpty) {
+          searchEmployees(state.searchQuery);
+        } else {
+          emit(state.copyWith(employees: employees));
+        }
       }
     });
   }
@@ -42,15 +44,19 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
     emit(state.copyWith(isLoading: true));
     try {
       final employees = await _firebase.getEmployees();
-      emit(state.copyWith(
-        employees: employees,
-        isLoading: false,
-      ));
+      if (!isClosed) {
+        emit(state.copyWith(
+          employees: employees,
+          isLoading: false,
+        ));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error when loading the employee list: $e');
       } // Lỗi khi tải danh sách nhân viên
-      emit(state.copyWith(isLoading: false));
+      if (!isClosed) {
+        emit(state.copyWith(isLoading: false));
+      }
     }
   }
 
@@ -144,7 +150,9 @@ class EmployeesScreenCubit extends Cubit<EmployeesScreenState> {
   Future<void> _loadUserRole() async {
     try {
       final userRole = await _firebase.getUserRole();
-      emit(state.copyWith(userRole: userRole));
+      if (!isClosed) {
+        emit(state.copyWith(userRole: userRole));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error loading user role: $e');

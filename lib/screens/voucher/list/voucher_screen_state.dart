@@ -13,6 +13,7 @@ class VoucherScreenState extends Equatable {
   final ProcessState processState;
   final DialogName dialogName;
   final NotifyMessage notifyMessage;
+  final bool isLoading;
 
   const VoucherScreenState({
     this.voucherList = const [],
@@ -23,6 +24,7 @@ class VoucherScreenState extends Equatable {
     this.processState = ProcessState.idle,
     this.dialogName = DialogName.empty,
     this.notifyMessage = NotifyMessage.empty,
+    this.isLoading = false,
   });
 
   VoucherScreenState copyWith({
@@ -34,6 +36,7 @@ class VoucherScreenState extends Equatable {
     ProcessState? processState,
     DialogName? dialogName,
     NotifyMessage? notifyMessage,
+    bool? isLoading,
   }) {
     return VoucherScreenState(
       voucherList: voucherList ?? this.voucherList,
@@ -44,6 +47,7 @@ class VoucherScreenState extends Equatable {
       processState: processState ?? this.processState,
       dialogName: dialogName ?? this.dialogName,
       notifyMessage: notifyMessage ?? this.notifyMessage,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 
@@ -57,5 +61,6 @@ class VoucherScreenState extends Equatable {
         processState,
         dialogName,
         notifyMessage,
+        isLoading,
       ];
 }

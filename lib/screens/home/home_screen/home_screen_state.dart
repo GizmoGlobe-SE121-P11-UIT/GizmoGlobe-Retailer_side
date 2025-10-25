@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 
 class HomeScreenState extends Equatable {
   final String username;
@@ -9,6 +10,8 @@ class HomeScreenState extends Equatable {
   final Map<String, double> salesByCategory;
   final List<SalesData> monthlySales;
   final int unreadChats;
+  final List<SalesInvoice> recentOrders;
+  final List<TopProduct> topProducts;
 
   const HomeScreenState({
     this.username = '',
@@ -19,6 +22,8 @@ class HomeScreenState extends Equatable {
     this.salesByCategory = const {},
     this.monthlySales = const [],
     this.unreadChats = 0,
+    this.recentOrders = const [],
+    this.topProducts = const [],
   });
 
   @override
@@ -31,6 +36,8 @@ class HomeScreenState extends Equatable {
         salesByCategory,
         monthlySales,
         unreadChats,
+        recentOrders,
+        topProducts,
       ];
 
   HomeScreenState copyWith({
@@ -42,6 +49,8 @@ class HomeScreenState extends Equatable {
     Map<String, double>? salesByCategory,
     List<SalesData>? monthlySales,
     int? unreadChats,
+    List<SalesInvoice>? recentOrders,
+    List<TopProduct>? topProducts,
   }) {
     return HomeScreenState(
       username: username ?? this.username,
@@ -52,6 +61,8 @@ class HomeScreenState extends Equatable {
       salesByCategory: salesByCategory ?? this.salesByCategory,
       monthlySales: monthlySales ?? this.monthlySales,
       unreadChats: unreadChats ?? this.unreadChats,
+      recentOrders: recentOrders ?? this.recentOrders,
+      topProducts: topProducts ?? this.topProducts,
     );
   }
 }
@@ -61,4 +72,18 @@ class SalesData {
   final double amount;
 
   SalesData(this.date, this.amount);
+}
+
+class TopProduct {
+  final String productID;
+  final String productName;
+  final int totalSales;
+  final double totalRevenue;
+
+  TopProduct({
+    required this.productID,
+    required this.productName,
+    required this.totalSales,
+    required this.totalRevenue,
+  });
 }

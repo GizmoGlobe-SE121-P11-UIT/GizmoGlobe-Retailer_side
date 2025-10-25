@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
-import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
+import 'customer_add/customer_add_view.dart';
 import 'customer_detail/customer_detail_view.dart';
 import 'customer_edit/customer_edit_view.dart';
 import 'customers_screen_cubit.dart';
@@ -25,264 +25,12 @@ class CustomersScreen extends StatefulWidget {
 
 class _CustomersScreenState extends State<CustomersScreen> {
   final TextEditingController searchController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
 
   CustomersScreenCubit get cubit => context.read<CustomersScreenCubit>();
 
-  void _showAddCustomerModal(BuildContext context) {
-    // Reset controllers
-    nameController.clear();
-    emailController.clear();
-    phoneController.clear();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.person_add,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 28,
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      S.of(context).addNewCustomer,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: S.of(context).fullName,
-                    prefixIcon: Icon(
-                      Icons.person_outline,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    labelStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface),
-                    floatingLabelStyle: WidgetStateTextStyle.resolveWith(
-                      (states) => TextStyle(
-                        color: states.contains(WidgetState.focused)
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: S.of(context).email,
-                    prefixIcon: Icon(
-                      Icons.email_outlined,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    labelStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface),
-                    floatingLabelStyle: WidgetStateTextStyle.resolveWith(
-                      (states) => TextStyle(
-                        color: states.contains(WidgetState.focused)
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: phoneController,
-                  decoration: InputDecoration(
-                    labelText: S.of(context).phoneNumber,
-                    prefixIcon: Icon(
-                      Icons.phone_outlined,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    labelStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface),
-                    floatingLabelStyle: WidgetStateTextStyle.resolveWith(
-                      (states) => TextStyle(
-                        color: states.contains(WidgetState.focused)
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                      ),
-                      child: Text(
-                        S.of(context).cancel,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.error,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (nameController.text.isEmpty ||
-                              emailController.text.isEmpty ||
-                              phoneController.text.isEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => InformationDialog(
-                                title: S.of(context).errorOccurred,
-                                content: S.of(context).pleaseFillInAllFields,
-                                buttonText: S.of(context).confirm,
-                              ),
-                            );
-                            return;
-                          }
-
-                          final error = await cubit.createCustomer(
-                            nameController.text,
-                            emailController.text,
-                            phoneController.text,
-                          );
-
-                          if (error != null) {
-                            if (mounted) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => InformationDialog(
-                                  title: S.of(context).errorOccurred,
-                                  content: error,
-                                  buttonText: S.of(context).confirm,
-                                ),
-                              );
-                            }
-                          } else {
-                            if (mounted) {
-                              Navigator.pop(context);
-                              showDialog(
-                                context: context,
-                                builder: (context) => InformationDialog(
-                                  title: S.of(context).success,
-                                  content:
-                                      S.of(context).customerAddedSuccessfully,
-                                  buttonText: S.of(context).confirm,
-                                ),
-                              );
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          S.of(context).addCustomer,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
@@ -320,8 +68,8 @@ class _CustomersScreenState extends State<CustomersScreen> {
                       GradientIconButton(
                         icon: Icons.person_add,
                         iconSize: 32,
-                        onPressed: () {
-                          _showAddCustomerModal(context);
+                        onPressed: () async {
+                          await CustomerAddScreen.showModal(context);
                         },
                       ),
                     ],
@@ -349,18 +97,12 @@ class _CustomersScreenState extends State<CustomersScreen> {
                           // final isSelected = state.selectedIndex == index;
 
                           return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
+                            onTap: () async {
+                              await CustomerDetailScreen.showModal(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      CustomerDetailScreen.newInstance(
-                                    customer: customer,
-                                    readOnly:
-                                        !CustomerPermissions.canEditCustomers(
-                                            state.userRole),
-                                  ),
-                                ),
+                                customer,
+                                readOnly: !CustomerPermissions.canEditCustomers(
+                                    state.userRole),
                               );
                             },
                             onLongPress: () {
@@ -389,22 +131,16 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                               color: Colors.white,
                                             ),
                                             title: Text(S.of(context).view),
-                                            onTap: () {
+                                            onTap: () async {
                                               Navigator.pop(context);
                                               cubit.setSelectedIndex(null);
-                                              Navigator.push(
+                                              await CustomerDetailScreen
+                                                  .showModal(
                                                 context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CustomerDetailScreen
-                                                          .newInstance(
-                                                    customer: customer,
-                                                    readOnly:
-                                                        !CustomerPermissions
-                                                            .canEditCustomers(
-                                                                state.userRole),
-                                                  ),
-                                                ),
+                                                customer,
+                                                readOnly: !CustomerPermissions
+                                                    .canEditCustomers(
+                                                        state.userRole),
                                               );
                                             },
                                           ),
@@ -423,14 +159,10 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedIndex(null);
                                                 final updatedCustomer =
-                                                    await Navigator.push(
+                                                    await CustomerEditScreen
+                                                        .showModal(
                                                   context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CustomerEditScreen(
-                                                      customer: customer,
-                                                    ),
-                                                  ),
+                                                  customer,
                                                 );
 
                                                 if (updatedCustomer != null) {

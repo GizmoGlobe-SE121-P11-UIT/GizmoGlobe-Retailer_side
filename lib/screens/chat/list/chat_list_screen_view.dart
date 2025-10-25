@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/chat/chat_card.dart';
@@ -6,13 +7,18 @@ import 'package:gizmoglobe_client/screens/chat/conversation/conversation_screen_
 import '../../../widgets/general/gradient_icon_button.dart';
 import 'chat_list_screen_cubit.dart';
 import 'chat_list_screen_state.dart';
+import 'chat_list_screen_webview.dart';
 
 class ChatListScreen extends StatelessWidget {
-  const ChatListScreen({super.key});
+  final String? selectedChatId;
 
-  static Widget newInstance() => BlocProvider(
+  const ChatListScreen({super.key, this.selectedChatId});
+
+  static Widget newInstance({String? selectedChatId}) => BlocProvider(
         create: (context) => ChatListScreenCubit(),
-        child: const ChatListScreen(),
+        child: kIsWeb
+            ? ChatListScreenWebView(selectedChatId: selectedChatId)
+            : ChatListScreen(selectedChatId: selectedChatId),
       );
 
   @override

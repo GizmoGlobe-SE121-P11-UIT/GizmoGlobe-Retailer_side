@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
@@ -12,6 +13,7 @@ import '../../../providers/locale_provider.dart';
 import 'user_screen_cubit.dart';
 import 'user_screen_state.dart';
 import '../../../widgets/dialog/information_dialog.dart';
+import 'user_screen_webview.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -20,6 +22,26 @@ class UserScreen extends StatefulWidget {
         create: (context) => UserScreenCubit(),
         child: const UserScreen(),
       );
+
+  static Future<bool?> showModal(BuildContext context) async {
+    if (kIsWeb) {
+      return await showDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: UserScreenWebView.newInstance(),
+        ),
+      );
+    } else {
+      return await Navigator.push<bool>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const UserScreen(),
+        ),
+      );
+    }
+  }
 
   @override
   State<UserScreen> createState() => _UserScreen();
@@ -36,6 +58,10 @@ class _UserScreen extends State<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       // floatingActionButton: FloatingActionButton(

@@ -13,11 +13,14 @@ import 'package:gizmoglobe_client/screens/authentication/sign_in_screen/sign_in_
 
 import '../../../widgets/general/selectable_gradient_icon.dart';
 import '../../../components/general/web_sidebar.dart';
+import '../../../components/general/web_header.dart';
 import '../../home/home_screen/home_screen_view.dart';
 import '../../user/user_screen/user_screen_view.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final int? initialIndex;
+
+  const MainScreen({super.key, this.initialIndex});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -25,21 +28,40 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int index = 0;
+  bool isSidebarCompact = false;
   MainScreenCubit get cubit => context.read<MainScreenCubit>();
 
   final List<Widget Function()> widgetList = [
     () => HomeScreen.newInstance(),
     () => ProductScreen.newInstance(),
-    () => InvoiceScreen.newInstance(),
+    () => InvoiceScreen.newInstance(), // This will use showFullLayout: false
     () => StakeholderScreen.newInstance(),
     () => VoucherScreen.newInstance(),
-    () => UserScreen.newInstance(),
+    () => kIsWeb ? const SizedBox.shrink() : UserScreen.newInstance(),
   ];
 
   @override
   void initState() {
     super.initState();
+    // Set initial index if provided
+    if (widget.initialIndex != null) {
+      index = widget.initialIndex!;
+    }
     cubit.getUserName();
+  }
+
+  @override
+  void didUpdateWidget(MainScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Only update index if initialIndex actually changed
+    if (oldWidget.initialIndex != widget.initialIndex) {
+      final newIndex = widget.initialIndex ?? 0;
+      if (index != newIndex) {
+        setState(() {
+          index = newIndex;
+        });
+      }
+    }
   }
 
   @override
@@ -60,7 +82,7 @@ class _MainScreenState extends State<MainScreen> {
 
     final colorScheme = Theme.of(context).colorScheme;
 
-    // Web: use left sidebar; Mobile: keep bottom navigation
+    // Web: use left sidebar with header; Mobile: keep bottom navigation
     if (kIsWeb) {
       final items = buildDefaultSidebarItems(
         home: S.of(context).home,
@@ -70,23 +92,56 @@ class _MainScreenState extends State<MainScreen> {
         voucher: S.of(context).voucher,
         profile: S.of(context).profile,
       );
+
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Row(
+        body: Column(
           children: [
-            WebSidebarModes(
-              currentIndex: index,
-              onItemSelected: (value) {
-                if (value != index) {
-                  setState(() {
-                    index = value;
-                  });
-                }
-              },
-              items: items,
+            // Web Header
+            WebHeader(
+              unreadChats: 0,
+              isSidebarCompact: isSidebarCompact,
             ),
-            const VerticalDivider(width: 1),
-            Expanded(child: widgetList[index]()),
+            // Main content with sidebar
+            Expanded(
+              child: Row(
+                children: [
+                  WebSidebarModes(
+                    currentIndex: index,
+                    onItemSelected: (value) {
+                      if (value != index) {
+                        setState(() {
+                          index = value;
+                        });
+
+                        // For web only: use Navigator for proper routing
+                        if (kIsWeb) {
+                          if (value == 2) {
+                            Navigator.pushReplacementNamed(
+                                context, '/invoices');
+                          } else if (value == 3) {
+                            Navigator.pushReplacementNamed(
+                                context, '/stakeholders');
+                          } else if (value == 4) {
+                            Navigator.pushReplacementNamed(
+                                context, '/vouchers');
+                          }
+                          // Profile section (value == 5) is handled directly in the sidebar
+                        }
+                      }
+                    },
+                    items: items,
+                    onCompactModeChanged: (isCompact) {
+                      setState(() {
+                        isSidebarCompact = isCompact;
+                      });
+                    },
+                  ),
+                  const VerticalDivider(width: 1),
+                  Expanded(child: widgetList[index]()),
+                ],
+              ),
+            ),
           ],
         ),
       );

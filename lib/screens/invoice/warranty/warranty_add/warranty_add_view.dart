@@ -8,6 +8,7 @@ import '../../../../widgets/general/gradient_icon_button.dart';
 import 'warranty_add_cubit.dart';
 import 'warranty_add_state.dart';
 import '../../../../widgets/dialog/information_dialog.dart';
+import 'warranty_add_webview.dart';
 
 class WarrantyAddView extends StatefulWidget {
   const WarrantyAddView({super.key});
@@ -16,6 +17,26 @@ class WarrantyAddView extends StatefulWidget {
         create: (context) => WarrantyAddCubit(),
         child: const WarrantyAddView(),
       );
+
+  static Future<bool?> showModal(BuildContext context) async {
+    if (kIsWeb) {
+      return showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: WarrantyAddWebView.newInstance(),
+        ),
+      );
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WarrantyAddView.newInstance(),
+        ),
+      );
+    }
+  }
 
   @override
   State<WarrantyAddView> createState() => _WarrantyAddViewState();
@@ -29,6 +50,11 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
 
   @override
   Widget build(BuildContext context) {
+    // For web, return minimal widget since modal is handled by showModal
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return BlocBuilder<WarrantyAddCubit, WarrantyAddState>(
       builder: (context, state) {
         return Scaffold(

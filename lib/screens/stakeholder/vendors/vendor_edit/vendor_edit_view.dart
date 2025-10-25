@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
@@ -5,11 +6,39 @@ import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 import '../../../../enums/stakeholders/manufacturer_status.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
+import 'vendor_edit_webview.dart';
 
 class VendorEditScreen extends StatefulWidget {
   final Manufacturer manufacturer;
 
   const VendorEditScreen({super.key, required this.manufacturer});
+
+  static Future<Manufacturer?> showModal(
+    BuildContext context,
+    Manufacturer manufacturer,
+  ) async {
+    if (kIsWeb) {
+      return await showDialog<Manufacturer>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: VendorEditWebView.newInstance(
+            manufacturer: manufacturer,
+          ),
+        ),
+      );
+    } else {
+      return await Navigator.push<Manufacturer>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VendorEditScreen(
+            manufacturer: manufacturer,
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   State<VendorEditScreen> createState() => _VendorEditScreenState();
@@ -29,6 +58,11 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // For web, return minimal widget since modal is handled by showModal
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: GradientText(text: S.of(context).editManufacturer), // Localized

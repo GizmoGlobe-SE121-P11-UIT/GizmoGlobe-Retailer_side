@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
@@ -9,6 +10,7 @@ import '../employee_edit/employee_edit_view.dart';
 import '../permissions/employee_permissions.dart';
 import 'employee_detail_cubit.dart';
 import 'employee_detail_state.dart';
+import 'employee_detail_webview.dart';
 
 class EmployeeDetailScreen extends StatefulWidget {
   final Employee employee;
@@ -19,6 +21,36 @@ class EmployeeDetailScreen extends StatefulWidget {
     required this.employee,
     this.readOnly = false,
   });
+
+  static Future<Employee?> showModal(
+    BuildContext context,
+    Employee employee, {
+    bool readOnly = false,
+  }) async {
+    if (kIsWeb) {
+      return await showDialog<Employee>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: EmployeeDetailWebView.newInstance(
+            employee: employee,
+            readOnly: readOnly,
+          ),
+        ),
+      );
+    } else {
+      return await Navigator.push<Employee>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EmployeeDetailScreen(
+            employee: employee,
+            readOnly: readOnly,
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   State<EmployeeDetailScreen> createState() => _EmployeeDetailScreenState();
@@ -111,7 +143,10 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.2),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onPrimary
+                  .withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(

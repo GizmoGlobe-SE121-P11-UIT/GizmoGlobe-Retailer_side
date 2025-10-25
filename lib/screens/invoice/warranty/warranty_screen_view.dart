@@ -69,12 +69,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                       icon: Icons.add,
                       iconSize: 32,
                       onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WarrantyAddView.newInstance(),
-                          ),
-                        );
+                        final result = await WarrantyAddView.showModal(context);
 
                         if (result == true) {
                           if (kDebugMode) {
@@ -319,11 +314,9 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
       Navigator.of(dialogContext).pop();
 
       if (!mounted) return;
-      await Navigator.push(
+      await WarrantyDetailView.showModal(
         dialogContext,
-        MaterialPageRoute(
-          builder: (context) => WarrantyDetailView(invoice: detailedInvoice),
-        ),
+        detailedInvoice,
       );
     } catch (e) {
       if (!mounted) return;

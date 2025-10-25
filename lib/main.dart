@@ -1,3 +1,5 @@
+import 'dart:html' as html show window, Event;
+import 'dart:async';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +20,10 @@ import 'package:gizmoglobe_client/screens/authentication/sign_up_screen/sign_up_
 import 'package:gizmoglobe_client/screens/main/drawer/drawer_cubit.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_view.dart';
+import 'package:gizmoglobe_client/screens/chat/list/chat_list_screen_view.dart';
+import 'package:gizmoglobe_client/screens/invoice/invoice_screen_view.dart';
+import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_view.dart';
+import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -266,7 +272,11 @@ class MyApp extends StatelessWidget {
                 '/sign-up': (context) => SignUpScreen.newInstance(),
                 '/forget-password': (context) =>
                     ForgetPasswordScreen.newInstance(),
-                '/main': (context) => const MainScreen(),
+                '/main': (context) => const MainRouteHandler(),
+                '/chat': (context) => const ChatRouteHandler(),
+                '/invoices': (context) => const InvoiceRouteHandler(),
+                '/stakeholders': (context) => const StakeholderRouteHandler(),
+                '/vouchers': (context) => const VoucherRouteHandler(),
               },
               home: const AuthWrapper(),
             ),
@@ -315,7 +325,7 @@ class AuthWrapper extends StatelessWidget {
         }
 
         // Define protected routes that require authentication
-        const protectedRoutes = ['/main'];
+        const protectedRoutes = ['/main', '/chat'];
 
         // Define public routes that don't require authentication
         const publicRoutes = ['/sign-in', '/sign-up', '/forget-password'];
@@ -344,6 +354,8 @@ class AuthWrapper extends StatelessWidget {
           return ForgetPasswordScreen.newInstance();
         } else if (currentRoute == '/main' && isAuthenticated) {
           return const MainScreen();
+        } else if (currentRoute == '/chat' && isAuthenticated) {
+          return const ChatRouteHandler();
         } else if (currentRoute == '/sign-in') {
           return SignInScreen.newInstance();
         }
@@ -361,6 +373,51 @@ class AuthWrapper extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+// Chat route handler for /#/chat and /#/chat?id=chat-document-id
+class ChatRouteHandler extends StatefulWidget {
+  const ChatRouteHandler({super.key});
+
+  @override
+  State<ChatRouteHandler> createState() => _ChatRouteHandlerState();
+}
+
+class _ChatRouteHandlerState extends State<ChatRouteHandler> {
+  String? selectedChatId;
+
+  @override
+  void initState() {
+    super.initState();
+    _parseUrlParameters();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void _parseUrlParameters() {
+    if (kIsWeb) {
+      // Parse URL parameters for web
+      final uri = Uri.parse(html.window.location.href);
+      selectedChatId = uri.queryParameters['id'];
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Check authentication
+    final user = FirebaseAuth.instance.currentUser;
+    final isAuthenticated = user != null;
+
+    if (!isAuthenticated) {
+      return SignInScreen.newInstance();
+    }
+
+    // Return chat list screen with optional selected chat
+    return ChatListScreen.newInstance(selectedChatId: selectedChatId);
   }
 }
 
@@ -419,5 +476,269 @@ class ErrorBoundary extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+// Main route handler for /#/main and /#/main?index=section-index
+class MainRouteHandler extends StatefulWidget {
+  const MainRouteHandler({super.key});
+
+  @override
+  State<MainRouteHandler> createState() => _MainRouteHandlerState();
+}
+
+class _MainRouteHandlerState extends State<MainRouteHandler> {
+  int? initialIndex;
+  StreamSubscription<html.Event>? _hashChangeSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _parseUrlParameters();
+
+    // Listen to URL changes on web
+    if (kIsWeb) {
+      _hashChangeSubscription = html.window.onHashChange.listen((event) {
+        if (mounted) {
+          _parseUrlParameters();
+          setState(() {});
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _hashChangeSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _parseUrlParameters() {
+    if (kIsWeb) {
+      // Parse URL parameters for web
+      final uri = Uri.parse(html.window.location.href);
+      final indexParam = uri.queryParameters['index'];
+      if (indexParam != null) {
+        initialIndex = int.tryParse(indexParam);
+      } else {
+        initialIndex = null; // No index specified, use default (home = 0)
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Check authentication
+    final user = FirebaseAuth.instance.currentUser;
+    final isAuthenticated = user != null;
+
+    if (!isAuthenticated) {
+      return SignInScreen.newInstance();
+    }
+
+    // Return main screen with optional initial index
+    return MainScreen(initialIndex: initialIndex);
+  }
+}
+
+// Invoice route handler for /#/invoices and /#/invoices?tabs=incoming/sales/warranty
+class InvoiceRouteHandler extends StatefulWidget {
+  const InvoiceRouteHandler({super.key});
+
+  @override
+  State<InvoiceRouteHandler> createState() => _InvoiceRouteHandlerState();
+}
+
+class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
+  int? initialTabIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _parseUrlParameters();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void _parseUrlParameters() {
+    if (kIsWeb) {
+      // Parse URL parameters for web
+      final uri = Uri.parse(html.window.location.href);
+      final tabsParam = uri.queryParameters['tabs'];
+
+      if (tabsParam != null) {
+        switch (tabsParam.toLowerCase()) {
+          case 'incoming':
+            initialTabIndex = 1; // Incoming tab index
+            break;
+          case 'sales':
+            initialTabIndex = 0; // Sales tab index
+            break;
+          case 'warranty':
+            initialTabIndex = 2; // Warranty tab index
+            break;
+          default:
+            initialTabIndex = 0; // Default to sales
+        }
+      } else {
+        initialTabIndex = 0; // Default to sales tab if no tab specified
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Check authentication
+    final user = FirebaseAuth.instance.currentUser;
+    final isAuthenticated = user != null;
+
+    if (!isAuthenticated) {
+      return SignInScreen.newInstance();
+    }
+
+    // Return invoice screen with optional initial tab index
+    return InvoiceScreen.newInstanceWithTab(initialTabIndex: initialTabIndex);
+  }
+}
+
+// Stakeholder route handler for /#/stakeholders and /#/stakeholders?tabs=customers/employees/vendors
+class StakeholderRouteHandler extends StatefulWidget {
+  const StakeholderRouteHandler({super.key});
+
+  @override
+  State<StakeholderRouteHandler> createState() =>
+      _StakeholderRouteHandlerState();
+}
+
+class _StakeholderRouteHandlerState extends State<StakeholderRouteHandler> {
+  int? initialTabIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _parseUrlParameters();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void _parseUrlParameters() {
+    if (kIsWeb) {
+      // Parse URL parameters for web
+      final uri = Uri.parse(html.window.location.href);
+      final tabsParam = uri.queryParameters['tabs'];
+
+      if (tabsParam != null) {
+        switch (tabsParam.toLowerCase()) {
+          case 'customers':
+            initialTabIndex = 0; // Customers tab index
+            break;
+          case 'employees':
+            initialTabIndex = 1; // Employees tab index
+            break;
+          case 'vendors':
+            initialTabIndex = 2; // Vendors tab index
+            break;
+          default:
+            initialTabIndex = 0; // Default to customers
+        }
+      } else {
+        initialTabIndex = 0; // Default to customers tab if no tab specified
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Check authentication
+    final user = FirebaseAuth.instance.currentUser;
+    final isAuthenticated = user != null;
+
+    if (!isAuthenticated) {
+      return SignInScreen.newInstance();
+    }
+
+    // Return stakeholder screen with optional initial tab index
+    return StakeholderScreen.newInstanceWithTab(
+        initialTabIndex: initialTabIndex);
+  }
+}
+
+// Voucher route handler for /#/vouchers and /#/vouchers?tabs=all/ongoing/upcoming/inactive
+class VoucherRouteHandler extends StatefulWidget {
+  const VoucherRouteHandler({super.key});
+
+  @override
+  State<VoucherRouteHandler> createState() => _VoucherRouteHandlerState();
+}
+
+class _VoucherRouteHandlerState extends State<VoucherRouteHandler> {
+  int? initialTabIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _parseUrlParameters();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void _parseUrlParameters() {
+    if (kIsWeb) {
+      // Parse URL parameters for web
+      final uri = Uri.parse(html.window.location.href);
+      final tabsParam = uri.queryParameters['tabs'];
+
+      if (tabsParam != null) {
+        switch (tabsParam.toLowerCase()) {
+          case 'all':
+            initialTabIndex = 0; // All tab index
+            break;
+          case 'ongoing':
+            initialTabIndex = 1; // Ongoing tab index
+            break;
+          case 'upcoming':
+            initialTabIndex = 2; // Upcoming tab index
+            break;
+          case 'inactive':
+            initialTabIndex = 3; // Inactive tab index
+            break;
+          default:
+            initialTabIndex = 0; // Default to all
+        }
+      } else {
+        initialTabIndex = 0; // Default to all tab if no tab specified
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Check authentication
+    final user = FirebaseAuth.instance.currentUser;
+    final isAuthenticated = user != null;
+
+    if (!isAuthenticated) {
+      return SignInScreen.newInstance();
+    }
+
+    // Return voucher screen with optional initial tab index
+    try {
+      return VoucherScreen.newInstanceWithTab(initialTabIndex: initialTabIndex);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error creating VoucherScreen: $e');
+      }
+      // Fallback to basic voucher screen
+      return VoucherScreen.newInstance();
+    }
   }
 }

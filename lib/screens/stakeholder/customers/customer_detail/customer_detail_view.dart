@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,12 +8,10 @@ import 'package:gizmoglobe_client/screens/stakeholder/customers/permissions/cust
 import 'package:gizmoglobe_client/widgets/dialog/confirmation_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+import 'customer_detail_webview.dart';
 
 import '../../../../enums/processing/process_state_enum.dart' show ProcessState;
 import '../../../../objects/address_related/address.dart';
-import '../../../../objects/address_related/district.dart';
-import '../../../../objects/address_related/province.dart';
-import '../../../../objects/address_related/ward.dart';
 import '../../../../widgets/general/address_picker.dart';
 import '../../../../widgets/general/field_with_icon.dart';
 import '../../../../widgets/voucher/voucher_card.dart';
@@ -36,6 +35,33 @@ class CustomerDetailScreen extends StatefulWidget {
           readOnly: readOnly,
         ),
       );
+
+  static Future<bool?> showModal(BuildContext context, Customer customer,
+      {bool readOnly = false}) async {
+    if (kIsWeb) {
+      return showDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: CustomerDetailWebView.newInstance(
+            customer: customer,
+            readOnly: readOnly,
+          ),
+        ),
+      );
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CustomerDetailScreen(
+            customer: customer,
+            readOnly: readOnly,
+          ),
+        ),
+      );
+    }
+  }
 
   const CustomerDetailScreen({
     super.key,
@@ -232,8 +258,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                                 context: context,
                                 builder: (context) => InformationDialog(
                                   title: S.of(context).errorOccurred,
-                                  content:
-                                      S.of(context).pleaseFillInAllRequiredFields,
+                                  content: S
+                                      .of(context)
+                                      .pleaseFillInAllRequiredFields,
                                   buttonText: S.of(context).confirm,
                                 ),
                               );
@@ -258,13 +285,15 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.add_location, color: Colors.white),
+                              const Icon(Icons.add_location,
+                                  color: Colors.white),
                               const SizedBox(width: 4),
                               Text(
                                 S.of(context).addAddress,
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -326,24 +355,34 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  Text(S.of(context).receiverName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface)),
+                  Text(S.of(context).receiverName,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.onSurface)),
                   const SizedBox(height: 8),
                   FieldWithIcon(
                     controller: receiverNameController,
                     hintText: S.of(context).enterReceiverName,
-                    prefixIcon: const Icon(Icons.person_outline, color: Colors.white70),
+                    prefixIcon:
+                        const Icon(Icons.person_outline, color: Colors.white70),
                     fillColor: Theme.of(context).colorScheme.surface,
                     onChanged: (value) {
                       cubit.updateNewAddress(receiverName: value);
                     },
                   ),
                   const SizedBox(height: 16),
-                  Text(S.of(context).receiverPhone, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface)),
+                  Text(S.of(context).receiverPhone,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.onSurface)),
                   const SizedBox(height: 8),
                   FieldWithIcon(
                     controller: receiverPhoneController,
                     hintText: S.of(context).enterPhoneNumber,
-                    prefixIcon: const Icon(Icons.phone_outlined, color: Colors.white70),
+                    prefixIcon:
+                        const Icon(Icons.phone_outlined, color: Colors.white70),
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     keyboardType: TextInputType.phone,
                     fillColor: Theme.of(context).colorScheme.surface,
@@ -352,7 +391,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  Text(S.of(context).location, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface)),
+                  Text(S.of(context).location,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.onSurface)),
                   const SizedBox(height: 8),
                   AddressPicker(
                     initialProvince: address.province,
@@ -367,12 +410,17 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  Text(S.of(context).streetAddress, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSurface)),
+                  Text(S.of(context).streetAddress,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.onSurface)),
                   const SizedBox(height: 8),
                   FieldWithIcon(
                     controller: streetController,
                     hintText: S.of(context).streetNameBuildingHouseNo,
-                    prefixIcon: const Icon(Icons.home_outlined, color: Colors.white70),
+                    prefixIcon:
+                        const Icon(Icons.home_outlined, color: Colors.white70),
                     fillColor: Theme.of(context).colorScheme.surface,
                     onChanged: (value) {
                       cubit.updateNewAddress(street: value);
@@ -388,20 +436,30 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           Navigator.pop(context);
                         },
                         style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
                         ),
-                        child: Text(S.of(context).cancel, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 16, fontWeight: FontWeight.w600)),
+                        child: Text(S.of(context).cancel,
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600)),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (receiverNameController.text.isEmpty || receiverPhoneController.text.isEmpty) {
+                            if (receiverNameController.text.isEmpty ||
+                                receiverPhoneController.text.isEmpty) {
                               showDialog(
                                 context: context,
                                 builder: (context) => InformationDialog(
                                   title: S.of(context).errorOccurred,
-                                  content: S.of(context).pleaseFillInAllRequiredFields,
+                                  content: S
+                                      .of(context)
+                                      .pleaseFillInAllRequiredFields,
                                   buttonText: S.of(context).confirm,
                                 ),
                               );
@@ -413,16 +471,25 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).colorScheme.primary,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Icon(Icons.save, color: Colors.white),
                               const SizedBox(width: 4),
-                              Text(S.of(context).saveAddress, style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w600)),
+                              Text(S.of(context).saveAddress,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ),
@@ -449,6 +516,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // For web, return minimal widget since modal is handled by showModal
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -461,8 +533,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           },
           fillColor: Theme.of(context).colorScheme.surface,
         ),
-        title: GradientText(
-            text: S.of(context).customerDetail),
+        title: GradientText(text: S.of(context).customerDetail),
       ),
       body: BlocConsumer<CustomerDetailCubit, CustomerDetailState>(
         listener: (context, state) {
@@ -496,81 +567,80 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               child: CircularProgressIndicator(),
             );
           }
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildHeaderSection(context, state),
-                      const SizedBox(height: 24),
-                      _buildInfoSection(context, state),
-                      const SizedBox(height: 24),
-                      _buildAddressesSection(context, state),
-                      const SizedBox(height: 24),
-                      _buildVouchersSection(context, state),
-                    ],
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildHeaderSection(context, state),
+                        const SizedBox(height: 24),
+                        _buildInfoSection(context, state),
+                        const SizedBox(height: 24),
+                        _buildAddressesSection(context, state),
+                        const SizedBox(height: 24),
+                        _buildVouchersSection(context, state),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, -4),
-                  ),
-                ],
-              ),
-              child: CustomerPermissions.canEditCustomers(state.userRole)
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () async {
-                              final updatedCustomer = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CustomerEditScreen(
-                                    customer: state.customer,
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, -4),
+                    ),
+                  ],
+                ),
+                child: CustomerPermissions.canEditCustomers(state.userRole)
+                    ? Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                final updatedCustomer = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CustomerEditScreen(
+                                      customer: state.customer,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
 
-                              if (updatedCustomer != null) {
-                                // Update the customer in Firebase
-                                cubit.updateCustomer(updatedCustomer);
-                              }
-                            },
-                            icon: Icon(
-                              Icons.edit,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                            label: Text(S.of(context).edit,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimary,
-                                )),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.tertiary,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 12),
+                                if (updatedCustomer != null) {
+                                  // Update the customer in Firebase
+                                  cubit.updateCustomer(updatedCustomer);
+                                }
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                              label: Text(S.of(context).edit,
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  )),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.tertiary,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  : null,
+                        ],
+                      )
+                    : null,
               ),
             ],
           );
@@ -766,7 +836,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     );
   }
 
-  Widget _buildVouchersSection(BuildContext context, CustomerDetailState state) {
+  Widget _buildVouchersSection(
+      BuildContext context, CustomerDetailState state) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Card(

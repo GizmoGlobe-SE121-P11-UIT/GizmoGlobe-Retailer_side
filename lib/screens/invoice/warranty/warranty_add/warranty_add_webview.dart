@@ -1,0 +1,846 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
+import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+
+import 'warranty_add_cubit.dart';
+import 'warranty_add_state.dart';
+import '../../../../widgets/dialog/information_dialog.dart';
+
+class WarrantyAddWebView extends StatefulWidget {
+  const WarrantyAddWebView({super.key});
+
+  static Widget newInstance() => BlocProvider(
+        create: (context) => WarrantyAddCubit(),
+        child: const WarrantyAddWebView(),
+      );
+
+  @override
+  State<WarrantyAddWebView> createState() => _WarrantyAddWebViewState();
+}
+
+class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
+  final _formKey = GlobalKey<FormState>();
+  final _reasonController = TextEditingController();
+
+  WarrantyAddCubit get cubit => context.read<WarrantyAddCubit>();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WarrantyAddCubit, WarrantyAddState>(
+      builder: (context, state) {
+        return Container(
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: MediaQuery.of(context).size.height * 0.9,
+          constraints: const BoxConstraints(
+            maxWidth: 1200,
+            maxHeight: 800,
+          ),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              // Header with close and save buttons
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.1),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.build,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 28,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: GradientText(text: S.of(context).createInvoice),
+                    ),
+                    if (state.isLoading)
+                      const SizedBox(
+                        width: 36,
+                        height: 36,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      )
+                    else
+                      IconButton(
+                        onPressed: () => _saveInvoice(state),
+                        icon: const Icon(Icons.check),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      icon: const Icon(Icons.close),
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Content
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Customer Information Card
+                        Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  S.of(context).customerInformation,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                // Customer Selection
+                                DropdownButtonFormField<String>(
+                                  value: state.selectedCustomerId,
+                                  decoration: InputDecoration(
+                                    labelText: S.of(context).selectCustomer,
+                                    labelStyle: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.8)),
+                                    prefixIcon: Icon(Icons.person_outline,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.7)),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                    ),
+                                  ),
+                                  items:
+                                      state.availableCustomers.map((customer) {
+                                    return DropdownMenuItem(
+                                      value: customer.customerID,
+                                      child: Text(customer.customerName),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    if (value != null) {
+                                      cubit.selectCustomer(value);
+                                    }
+                                  },
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return S.of(context).pleaseSelectCustomer;
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        if (state.selectedCustomerId != null) ...[
+                          if (state.customerInvoices.isEmpty)
+                            // No Invoices Message Card
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.info_outline,
+                                      size: 48,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.4),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      S.of(context).noSalesInvoicesAvailable,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      S.of(context).noEligibleSalesInvoices,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.4),
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          else ...[
+                            // Invoice Details Card
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      S.of(context).invoiceDetails,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    // Sales Invoice Selection
+                                    DropdownButtonFormField<String>(
+                                      decoration: InputDecoration(
+                                        labelText: S.of(context).salesInvoice,
+                                        labelStyle: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withValues(alpha: 0.8)),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                        ),
+                                        filled: true,
+                                        fillColor: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                      ),
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface),
+                                      dropdownColor:
+                                          Theme.of(context).colorScheme.surface,
+                                      items:
+                                          state.customerInvoices.map((invoice) {
+                                        return DropdownMenuItem<String>(
+                                          value: invoice.salesInvoiceID,
+                                          child: Text(
+                                            '${invoice.salesInvoiceID} - ${invoice.customerName}',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String? invoiceId) {
+                                        if (invoiceId != null) {
+                                          final selectedInvoice =
+                                              state.customerInvoices.firstWhere(
+                                            (invoice) =>
+                                                invoice.salesInvoiceID ==
+                                                invoiceId,
+                                            orElse: () =>
+                                                state.customerInvoices.first,
+                                          );
+                                          cubit.selectSalesInvoice(
+                                              selectedInvoice);
+                                        }
+                                      },
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return S
+                                              .of(context)
+                                              .pleaseSelectSalesInvoice;
+                                        }
+                                        return null;
+                                      },
+                                      value: state.customerInvoices.any(
+                                              (invoice) =>
+                                                  invoice.salesInvoiceID ==
+                                                  state.selectedSalesInvoiceId)
+                                          ? state.selectedSalesInvoiceId
+                                          : null,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    // Reason Input
+                                    TextFormField(
+                                      controller: _reasonController,
+                                      decoration: InputDecoration(
+                                        labelText: S
+                                            .of(context)
+                                            .reasonForWarrantyLabel,
+                                        labelStyle: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withValues(alpha: 0.8)),
+                                        prefixIcon: Icon(
+                                            Icons.description_outlined,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withValues(alpha: 0.7)),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                        ),
+                                      ),
+                                      maxLines: 3,
+                                      onChanged: cubit.updateReason,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Products Card
+                            if (state.selectedSalesInvoice != null)
+                              Card(
+                                elevation: 2,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        S.of(context).selectProductsForWarranty,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: state.selectedSalesInvoice!
+                                            .details.length,
+                                        itemBuilder: (context, index) {
+                                          final detail = state
+                                              .selectedSalesInvoice!
+                                              .details[index];
+                                          final product =
+                                              state.products[detail.productID];
+                                          final isSelected = state
+                                              .selectedProducts
+                                              .contains(detail.productID);
+
+                                          return Card(
+                                            margin: const EdgeInsets.only(
+                                                bottom: 8),
+                                            child: ListTile(
+                                              leading: Checkbox(
+                                                value: isSelected,
+                                                onChanged: (bool? value) {
+                                                  if (value == true) {
+                                                    cubit.selectProduct(
+                                                        detail.productID);
+                                                  } else {
+                                                    cubit.deselectProduct(
+                                                        detail.productID);
+                                                  }
+                                                },
+                                                activeColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                checkColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary,
+                                                side: BorderSide(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface
+                                                      .withValues(alpha: 0.8),
+                                                  width: 2,
+                                                ),
+                                              ),
+                                              title: Text(
+                                                product?.productName ??
+                                                    S.of(context).loading,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              subtitle: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Wrap(
+                                                    spacing: 8,
+                                                    runSpacing: 8,
+                                                    crossAxisAlignment:
+                                                        WrapCrossAlignment
+                                                            .center,
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 4),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary
+                                                                  .withValues(
+                                                                      alpha:
+                                                                          0.1),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                        ),
+                                                        child: Text(
+                                                          '${S.of(context).category}: ${product?.category.toString() ?? S.of(context).unknownCategory}',
+                                                          style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .primary,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 13,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 4),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.green
+                                                              .withValues(
+                                                                  alpha: 0.1),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                        ),
+                                                        child: Text(
+                                                          '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.green,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 13,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  if (isSelected)
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Flexible(
+                                                          child: Text(
+                                                            '${S.of(context).availableStock}: ${detail.quantity}',
+                                                            style: TextStyle(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 14,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 8),
+                                                        GestureDetector(
+                                                          onTap:
+                                                              () {}, // Prevent tap propagation
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              Material(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                child:
+                                                                    IconButton(
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .remove_circle_outline,
+                                                                    color: state.productQuantities[detail.productID] ==
+                                                                            1
+                                                                        ? Theme.of(context)
+                                                                            .colorScheme
+                                                                            .onSurface
+                                                                            .withValues(
+                                                                                alpha:
+                                                                                    0.4)
+                                                                        : Theme.of(context)
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                  ),
+                                                                  onPressed:
+                                                                      state.productQuantities[detail.productID] ==
+                                                                              1
+                                                                          ? null
+                                                                          : () {
+                                                                              cubit.decrementProductQuantity(detail.productID);
+                                                                            },
+                                                                  constraints:
+                                                                      const BoxConstraints(
+                                                                    minWidth:
+                                                                        40,
+                                                                    minHeight:
+                                                                        40,
+                                                                  ),
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                width: 40,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .primary
+                                                                      .withValues(
+                                                                          alpha:
+                                                                              0.1),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                        vertical:
+                                                                            4),
+                                                                child: Text(
+                                                                  '${state.productQuantities[detail.productID] ?? 1}',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        16,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                  ),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                ),
+                                                              ),
+                                                              Material(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                child:
+                                                                    IconButton(
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .add_circle_outline,
+                                                                    color: (state.productQuantities[detail.productID] ??
+                                                                                1) >=
+                                                                            detail
+                                                                                .quantity
+                                                                        ? Theme.of(context)
+                                                                            .colorScheme
+                                                                            .onSurface
+                                                                            .withValues(
+                                                                                alpha:
+                                                                                    0.4)
+                                                                        : Theme.of(context)
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                  ),
+                                                                  onPressed: (state.productQuantities[detail.productID] ??
+                                                                              1) >=
+                                                                          detail
+                                                                              .quantity
+                                                                      ? null
+                                                                      : () {
+                                                                          cubit.incrementProductQuantity(
+                                                                              detail.productID);
+                                                                        },
+                                                                  constraints:
+                                                                      const BoxConstraints(
+                                                                    minWidth:
+                                                                        40,
+                                                                    minHeight:
+                                                                        40,
+                                                                  ),
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  else
+                                                    Text(
+                                                      '${S.of(context).availableStock}: ${detail.quantity}',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                              onTap: () {
+                                                if (isSelected) {
+                                                  cubit.deselectProduct(
+                                                      detail.productID);
+                                                } else {
+                                                  cubit.selectProduct(
+                                                      detail.productID);
+                                                }
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _saveInvoice(WarrantyAddState state) async {
+    // Unfocus any text field first
+    FocusScope.of(context).unfocus();
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    if (!_formKey.currentState!.validate()) {
+      if (kDebugMode) {
+        print('Form validation failed');
+      }
+      return;
+    }
+
+    if (kDebugMode) {
+      print('Starting save process');
+    }
+
+    // Store context before async operation
+    final BuildContext dialogContext = context;
+
+    // Show loading indicator
+    showDialog(
+      context: dialogContext,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const PopScope(
+          canPop: false,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
+
+    try {
+      final invoice = await cubit.submit();
+
+      if (!mounted) return;
+
+      // Hide loading indicator
+      if (Navigator.canPop(dialogContext)) {
+        Navigator.pop(dialogContext);
+      }
+
+      if (invoice != null) {
+        if (kDebugMode) {
+          print(
+              'Invoice created successfully, force navigating back to warranty screen');
+        }
+
+        // Show success message using root context
+        showDialog(
+          context: context,
+          builder: (context) => InformationDialog(
+            title: S.of(context).success,
+            content: S.of(context).warrantyInvoiceCreated,
+            buttonText: 'OK',
+            onPressed: () {
+              if (mounted) {
+                Navigator.of(context).pop(true);
+              }
+            },
+          ),
+        );
+      } else if (state.errorMessage != null) {
+        if (kDebugMode) {
+          print('Error creating invoice: ${state.errorMessage}');
+        }
+        showDialog(
+          context: dialogContext,
+          builder: (context) => InformationDialog(
+            title: S.of(context).errorOccurred,
+            content: state.errorMessage!,
+            buttonText: 'OK',
+          ),
+        );
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error during save process: $e');
+      }
+      if (!mounted) return;
+
+      // Hide loading indicator if still showing
+      if (Navigator.canPop(dialogContext)) {
+        Navigator.pop(dialogContext);
+      }
+
+      // Show error message
+      showDialog(
+        context: dialogContext,
+        builder: (context) => InformationDialog(
+          title: S.of(context).errorOccurred,
+          content: S.of(context).errorCreatingWarrantyInvoice(e.toString()),
+          buttonText: 'OK',
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _reasonController.dispose();
+    super.dispose();
+  }
+}

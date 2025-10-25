@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
+import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_add/vendor_add_view.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_detail/vendor_detail_view.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_edit/vendor_edit_view.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
-import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../enums/stakeholders/manufacturer_status.dart';
 import 'vendors_screen_cubit.dart';
@@ -26,247 +26,16 @@ class VendorsScreen extends StatefulWidget {
 
 class _VendorsScreenState extends State<VendorsScreen> {
   final TextEditingController searchController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  ManufacturerStatus selectedStatus = ManufacturerStatus.active;
 
   VendorsScreenCubit get cubit => context.read<VendorsScreenCubit>();
 
   void _showAddManufacturerModal() {
-    // Reset controllers and status
-    nameController.clear();
-    selectedStatus = ManufacturerStatus.active;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.business_center,
-                          color: Theme.of(context).colorScheme.primary,
-                          size: 28,
-                        ),
-                        const SizedBox(width: 12),
-                        Flexible(
-                          child: Text(
-                            S.of(context).addNewManufacturer,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        labelText: S.of(context).manufacturerName,
-                        prefixIcon: Icon(
-                          Icons.business_center,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        labelStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface),
-                        floatingLabelStyle: WidgetStateTextStyle.resolveWith(
-                          (states) => TextStyle(
-                            color: states.contains(WidgetState.focused)
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    DropdownButtonFormField<ManufacturerStatus>(
-                      value: selectedStatus,
-                      decoration: InputDecoration(
-                        labelText: S.of(context).status,
-                        prefixIcon: Icon(
-                          Icons.circle,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        labelStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface),
-                        floatingLabelStyle: WidgetStateTextStyle.resolveWith(
-                          (states) => TextStyle(
-                            color: states.contains(WidgetState.focused)
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                      items: ManufacturerStatus.values.map((status) {
-                        return DropdownMenuItem(
-                          value: status,
-                          child: Text(
-                            status == ManufacturerStatus.active
-                                ? S.of(context).active
-                                : S.of(context).inactive,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        if (newValue != null) {
-                          setState(() {
-                            selectedStatus = newValue;
-                          });
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 12,
-                            ),
-                          ),
-                          child: Text(
-                            S.of(context).cancel,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (nameController.text.isEmpty) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => InformationDialog(
-                                    title: S.of(context).errorOccurred,
-                                    content: S.of(context).pleaseEnterName,
-                                    buttonText: S.of(context).confirm,
-                                  ),
-                                );
-                                return;
-                              }
-
-                              final error = await cubit.createManufacturer(
-                                nameController.text,
-                                selectedStatus,
-                              );
-
-                              if (error != null) {
-                                if (mounted) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => InformationDialog(
-                                      title: S.of(context).errorOccurred,
-                                      content: error,
-                                      buttonText: S.of(context).confirm,
-                                    ),
-                                  );
-                                }
-                              } else {
-                                if (mounted) {
-                                  Navigator.pop(context);
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => InformationDialog(
-                                      title: S.of(context).success,
-                                      content: S.of(context).addManufacturer,
-                                      buttonText: S.of(context).confirm,
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 12,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: Text(
-                              S.of(context).addManufacturer,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
+    VendorAddScreen.showModal(context);
   }
 
   @override
   void dispose() {
-    nameController.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
@@ -329,13 +98,9 @@ class _VendorsScreenState extends State<VendorsScreen> {
                           final manufacturer = state.manufacturers[index];
                           return GestureDetector(
                             onTap: () {
-                              Navigator.push(
+                              VendorDetailScreen.showModal(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => VendorDetailScreen(
-                                    manufacturer: manufacturer,
-                                  ),
-                                ),
+                                manufacturer,
                               );
                             },
                             onLongPress: () {
@@ -376,16 +141,11 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                             onTap: () {
                                               Navigator.pop(context);
                                               cubit.setSelectedIndex(null);
-                                              Navigator.push(
+                                              VendorDetailScreen.showModal(
                                                 context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      VendorDetailScreen(
-                                                    manufacturer: manufacturer,
-                                                    readOnly: state.userRole !=
-                                                        'admin',
-                                                  ),
-                                                ),
+                                                manufacturer,
+                                                readOnly:
+                                                    state.userRole != 'admin',
                                               );
                                             },
                                           ),
@@ -411,15 +171,10 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedIndex(null);
                                                 final updatedManufacturer =
-                                                    await Navigator.push(
+                                                    await VendorEditScreen
+                                                        .showModal(
                                                   context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        VendorEditScreen(
-                                                      manufacturer:
-                                                          manufacturer,
-                                                    ),
-                                                  ),
+                                                  manufacturer,
                                                 );
 
                                                 if (updatedManufacturer !=

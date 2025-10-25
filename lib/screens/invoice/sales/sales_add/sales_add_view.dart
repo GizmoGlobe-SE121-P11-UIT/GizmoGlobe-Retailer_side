@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
@@ -12,12 +13,43 @@ import '../../../../objects/customer.dart';
 import '../../../../objects/product_related/product.dart';
 import 'sales_add_cubit.dart';
 import 'sales_add_state.dart';
+import 'sales_add_webview.dart';
 
 class SalesAddScreen extends StatelessWidget {
   const SalesAddScreen({super.key});
 
+  static Widget newInstance() => BlocProvider(
+        create: (context) => SalesAddCubit(),
+        child: const SalesAddScreen(),
+      );
+
+  static Future<bool?> showModal(BuildContext context) async {
+    if (kIsWeb) {
+      return showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: SalesAddWebView.newInstance(),
+        ),
+      );
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SalesAddScreen.newInstance(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Use web view for web platform, mobile view for mobile platforms
+    if (kIsWeb) {
+      return const SizedBox.shrink(); // This will be handled by the dialog
+    }
+
     return BlocProvider(
       create: (context) => SalesAddCubit(),
       child: const _SalesAddView(),

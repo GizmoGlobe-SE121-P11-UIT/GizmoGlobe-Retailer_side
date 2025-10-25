@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +17,7 @@ import '../../../enums/processing/process_state_enum.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
+import 'add_voucher_webview.dart';
 
 class AddVoucherScreen extends StatefulWidget {
   const AddVoucherScreen({super.key});
@@ -24,6 +26,26 @@ class AddVoucherScreen extends StatefulWidget {
         create: (context) => AddVoucherCubit(),
         child: const AddVoucherScreen(),
       );
+
+  static Future<bool?> showModal(BuildContext context) async {
+    if (kIsWeb) {
+      return await showDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: AddVoucherWebView.newInstance(),
+        ),
+      );
+    } else {
+      return await Navigator.push<bool>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AddVoucherScreen(),
+        ),
+      );
+    }
+  }
 
   @override
   State<AddVoucherScreen> createState() => _AddVoucherScreen();
@@ -58,6 +80,11 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // For web, return minimal widget since modal is handled by showModal
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -96,8 +123,10 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
         listener: (context, state) {
           if (state.processState == ProcessState.success) {
             if (state.notifyMessage == NotifyMessage.msg21) {
-              enDescriptionController.text = state.voucherArgument?.enDescription ?? '';
-              viDescriptionController.text = state.voucherArgument?.viDescription ?? '';
+              enDescriptionController.text =
+                  state.voucherArgument?.enDescription ?? '';
+              viDescriptionController.text =
+                  state.voucherArgument?.viDescription ?? '';
 
               showDialog(
                 context: context,
@@ -228,20 +257,23 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                         .copyWith(maxUsagePerPerson: value));
                                   },
                                 ),
-
                                 const SizedBox(height: 16),
                                 MultiFieldWithIcon(
                                   controller: enDescriptionController,
-                                  hintText: S.of(context).enterField(S.of(context).enDescription),
+                                  hintText: S
+                                      .of(context)
+                                      .enterField(S.of(context).enDescription),
                                   labelText: S.of(context).enDescription,
                                   onChanged: (value) {
                                     cubit.updateVoucherArgument(state
                                         .voucherArgument!
                                         .copyWith(enDescription: value));
                                   },
-                                  suffixIcon: (state.voucherArgument!.isEnEmpty && state.voucherArgument!.isViEmpty)
-                                      ? Icons.add_comment
-                                      : Icons.g_translate,
+                                  suffixIcon:
+                                      (state.voucherArgument!.isEnEmpty &&
+                                              state.voucherArgument!.isViEmpty)
+                                          ? Icons.add_comment
+                                          : Icons.g_translate,
                                   onSuffixIconPressed: () {
                                     cubit.generateEnDescription();
                                   },
@@ -249,16 +281,20 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                 const SizedBox(height: 16),
                                 MultiFieldWithIcon(
                                   controller: viDescriptionController,
-                                  hintText: S.of(context).enterField(S.of(context).viDescription),
+                                  hintText: S
+                                      .of(context)
+                                      .enterField(S.of(context).viDescription),
                                   labelText: S.of(context).viDescription,
                                   onChanged: (value) {
                                     cubit.updateVoucherArgument(state
                                         .voucherArgument!
                                         .copyWith(viDescription: value));
                                   },
-                                  suffixIcon: (state.voucherArgument!.isEnEmpty && state.voucherArgument!.isViEmpty)
-                                      ? Icons.add_comment
-                                      : Icons.g_translate,
+                                  suffixIcon:
+                                      (state.voucherArgument!.isEnEmpty &&
+                                              state.voucherArgument!.isViEmpty)
+                                          ? Icons.add_comment
+                                          : Icons.g_translate,
                                   onSuffixIconPressed: () {
                                     cubit.generateViDescription();
                                   },
@@ -348,11 +384,9 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                           ?.toDouble(),
                                       (value) {
                                         cubit.updateVoucherArgument(
-                                          state.voucherArgument!.copyWith(
-                                              maximumUsage: value?.toInt(),
-                                              usageLeft: value?.toInt()
-                                          )
-                                        );
+                                            state.voucherArgument!.copyWith(
+                                                maximumUsage: value?.toInt(),
+                                                usageLeft: value?.toInt()));
                                       },
                                     ),
                                   ),
@@ -478,7 +512,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1), 
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
           ),
           child: Row(
             children: [
@@ -540,13 +574,13 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
   }
 
   Widget buildInputWidget<T>(
-      String propertyName,
-      TextEditingController controller,
-      T? propertyValue,
-      void Function(T?) onChanged, [
-        List<T>? enumValues,
-        Map<T, String>? enumLabels,
-      ]) {
+    String propertyName,
+    TextEditingController controller,
+    T? propertyValue,
+    void Function(T?) onChanged, [
+    List<T>? enumValues,
+    Map<T, String>? enumLabels,
+  ]) {
     return Builder(
       builder: (BuildContext context) {
         // Handle DateTime fields
@@ -572,7 +606,8 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                           ),
                           textButtonTheme: TextButtonThemeData(
                             style: TextButton.styleFrom(
-                              foregroundColor: Theme.of(context).colorScheme.primary,
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ),
@@ -591,12 +626,15 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                           data: Theme.of(context).copyWith(
                             colorScheme: ColorScheme.light(
                               primary: Theme.of(context).colorScheme.primary,
-                              onPrimary: Theme.of(context).colorScheme.onPrimary,
-                              onSurface: Theme.of(context).colorScheme.onSurface,
+                              onPrimary:
+                                  Theme.of(context).colorScheme.onPrimary,
+                              onSurface:
+                                  Theme.of(context).colorScheme.onSurface,
                             ),
                             textButtonTheme: TextButtonThemeData(
                               style: TextButton.styleFrom(
-                                foregroundColor: Theme.of(context).colorScheme.primary,
+                                foregroundColor:
+                                    Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
@@ -622,7 +660,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                     controller: TextEditingController(
                       text: (propertyValue as DateTime?) != null
                           ? DateFormat('dd/MM/yyyy HH:mm')
-                          .format(propertyValue as DateTime)
+                              .format(propertyValue as DateTime)
                           : '',
                     ),
                     readOnly: true,
@@ -643,7 +681,8 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
             children: [
               Text(propertyName, style: AppTextStyle.smallText),
               GradientDropdown<T>(
-                items: (String filter, dynamic infiniteScrollProps) => enumValues,
+                items: (String filter, dynamic infiniteScrollProps) =>
+                    enumValues,
                 compareFn: (T? d1, T? d2) => d1 == d2,
                 itemAsString: (T d) => enumLabels?[d] ?? d.toString(),
                 onChanged: onChanged,
@@ -660,7 +699,8 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
             children: [
               Text(propertyName, style: AppTextStyle.smallText),
               GradientDropdown<T>(
-                items: (String filter, dynamic infiniteScrollProps) => enumValues,
+                items: (String filter, dynamic infiniteScrollProps) =>
+                    enumValues,
                 compareFn: (T? d1, T? d2) => d1 == d2,
                 itemAsString: (T d) => d.toString(),
                 onChanged: onChanged,
@@ -685,7 +725,9 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
             inputFormatters = [FilteringTextInputFormatter.digitsOnly];
           } else {
             keyboardType = TextInputType.text;
-            inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'.*'))];
+            inputFormatters = [
+              FilteringTextInputFormatter.allow(RegExp(r'.*'))
+            ];
           }
 
           return Column(

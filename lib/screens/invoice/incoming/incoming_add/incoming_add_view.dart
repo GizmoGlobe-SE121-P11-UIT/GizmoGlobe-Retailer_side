@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
@@ -8,6 +9,7 @@ import '../../../../enums/invoice_related/payment_status.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'incoming_add_cubit.dart';
 import 'incoming_add_state.dart';
+import 'incoming_add_webview.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import '../../../../widgets/dialog/information_dialog.dart';
 
@@ -19,6 +21,26 @@ class IncomingAddScreen extends StatefulWidget {
         child: const IncomingAddScreen(),
       );
 
+  static Future<bool?> showModal(BuildContext context) async {
+    if (kIsWeb) {
+      return showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: IncomingAddWebView.newInstance(),
+        ),
+      );
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => IncomingAddScreen.newInstance(),
+        ),
+      );
+    }
+  }
+
   @override
   State<IncomingAddScreen> createState() => _IncomingAddScreenState();
 }
@@ -28,6 +50,11 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Use web view for web platform, mobile view for mobile platforms
+    if (kIsWeb) {
+      return const SizedBox.shrink(); // This will be handled by the dialog
+    }
+
     return BlocConsumer<IncomingAddCubit, IncomingAddState>(
       listener: (context, state) {
         if (state.errorMessage != null) {

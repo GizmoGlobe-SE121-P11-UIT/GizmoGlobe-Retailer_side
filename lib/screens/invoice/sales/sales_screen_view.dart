@@ -50,9 +50,7 @@ class _SalesScreenState extends State<SalesScreen> {
                     Expanded(
                       child: FieldWithIcon(
                         controller: searchController,
-                        hintText: S
-                            .of(context)
-                            .searchSalesInvoices,
+                        hintText: S.of(context).searchSalesInvoices,
                         fillColor: Theme.of(context).colorScheme.surface,
                         onChanged: (value) {
                           cubit.searchInvoices(value);
@@ -74,12 +72,7 @@ class _SalesScreenState extends State<SalesScreen> {
                       icon: Icons.add,
                       iconSize: 32,
                       onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SalesAddScreen(),
-                          ),
-                        );
+                        final result = await SalesAddScreen.showModal(context);
 
                         // Refresh list if new invoice was created
                         if (result != null && mounted) {
@@ -96,9 +89,7 @@ class _SalesScreenState extends State<SalesScreen> {
                       : state.invoices.isEmpty
                           ? Center(
                               child: Text(
-                                S
-                                    .of(context)
-                                    .noSalesInvoicesFound,
+                                S.of(context).noSalesInvoicesFound,
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -348,9 +339,7 @@ class _SalesScreenState extends State<SalesScreen> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          S
-                              .of(context)
-                              .sortBy,
+                          S.of(context).sortBy,
                           style: TextStyle(
                             color:
                                 Theme.of(dialogContext).colorScheme.onSurface,

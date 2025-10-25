@@ -75,13 +75,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                         icon: Icons.add,
                         iconSize: 32,
                         onPressed: () async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  IncomingAddScreen.newInstance(),
-                            ),
-                          );
+                          final result =
+                              await IncomingAddScreen.showModal(context);
 
                           if (result != null && mounted) {
                             context.read<IncomingScreenCubit>().loadInvoices();
@@ -140,13 +135,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                       if (!mounted) return;
 
                                       Navigator.pop(context);
-                                      Navigator.push(
+                                      await IncomingDetailScreen.showModal(
                                         context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              IncomingDetailScreen.newInstance(
-                                                  detailedInvoice),
-                                        ),
+                                        detailedInvoice,
                                       );
                                     } catch (e) {
                                       Navigator.pop(context);
@@ -399,12 +390,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
 
       if (!mounted) return;
       // Navigate to detail screen
-      await Navigator.push(
+      await IncomingDetailScreen.showModal(
         dialogContext,
-        MaterialPageRoute(
-          builder: (context) =>
-              IncomingDetailScreen.newInstance(detailedInvoice),
-        ),
+        detailedInvoice,
       );
     } catch (e) {
       if (!mounted) return;

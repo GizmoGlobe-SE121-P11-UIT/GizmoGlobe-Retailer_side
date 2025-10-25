@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../screens/user/user_screen/user_screen_view.dart';
 
 class WebSidebarModes extends StatefulWidget {
   final int currentIndex;
   final void Function(int) onItemSelected;
   final List<SidebarItem> items;
+  final void Function(bool)? onCompactModeChanged;
+  final bool initialCompactMode;
 
   const WebSidebarModes({
     super.key,
     required this.currentIndex,
     required this.onItemSelected,
     required this.items,
+    this.onCompactModeChanged,
+    this.initialCompactMode = false,
   });
 
   @override
@@ -17,14 +24,19 @@ class WebSidebarModes extends StatefulWidget {
 }
 
 class _WebSidebarModesState extends State<WebSidebarModes> {
-  bool isCompactMode = false;
+  late bool isCompactMode;
+
+  @override
+  void initState() {
+    super.initState();
+    isCompactMode = widget.initialCompactMode;
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final int profileIndex = widget.items.length - 1;
     final List<SidebarItem> mainItems = widget.items.sublist(0, profileIndex);
-    final SidebarItem profileItem = widget.items[profileIndex];
 
     final int selectedForRail = widget.currentIndex < mainItems.length
         ? widget.currentIndex
@@ -33,7 +45,7 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       width: isCompactMode ? 80 : 200,
-      color: colorScheme.surface,
+      color: colorScheme.surface.withValues(alpha: 0.7),
       child: Column(
         children: [
           Padding(
@@ -46,11 +58,11 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
                 setState(() {
                   isCompactMode = !isCompactMode;
                 });
+                widget.onCompactModeChanged?.call(isCompactMode);
               },
               tooltip: isCompactMode ? 'Expand' : 'Collapse',
             ),
           ),
-          const Divider(height: 1),
           Expanded(
             child: ListView.builder(
               itemCount: mainItems.length,
@@ -67,15 +79,15 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
               },
             ),
           ),
-          const Divider(height: 1),
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: _ProfileRailButton(
-              label: profileItem.label,
-              icon: profileItem.icon,
+            child: _UserProfileSection(
               selected: widget.currentIndex == profileIndex,
               isCompact: isCompactMode,
-              onTap: () => widget.onItemSelected(profileIndex),
+              onTap: () {
+                // Show user screen modal for web
+                UserScreen.showModal(context);
+              },
             ),
           ),
         ],
@@ -109,71 +121,265 @@ List<SidebarItem> buildDefaultSidebarItems({
   ];
 }
 
-class _ProfileRailButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
+class _UserProfileSection extends StatefulWidget {
   final bool selected;
   final bool isCompact;
   final VoidCallback onTap;
 
-  const _ProfileRailButton({
-    required this.label,
-    required this.icon,
+  const _UserProfileSection({
     required this.selected,
     required this.isCompact,
     required this.onTap,
   });
 
   @override
+  State<_UserProfileSection> createState() => _UserProfileSectionState();
+}
+
+class _UserProfileSectionState extends State<_UserProfileSection> {
+  Stream<DocumentSnapshot>? _userStream;
+
+  @override
+  void initState() {
+    super.initState();
+    // Cache the stream to prevent recreation on every rebuild
+    _userStream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .snapshots();
+  }
+
+  @override
+  void didUpdateWidget(_UserProfileSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Only rebuild if the compact mode actually changed
+    if (oldWidget.isCompact != widget.isCompact) {
+      setState(() {});
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final Color bg = selected
+    final Color bg = widget.selected
         ? colorScheme.primary.withValues(alpha: 0.15)
         : Colors.transparent;
-    final Color fg = selected ? colorScheme.primary : colorScheme.onSurface;
+    final Color fg =
+        widget.selected ? colorScheme.primary : colorScheme.onSurface;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(24),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: isCompact
-              ? Container(
+    return StreamBuilder<DocumentSnapshot>(
+      stream: _userStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _buildLoadingProfile(context, bg, fg);
+        }
+
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return _buildErrorProfile(context, bg, fg);
+        }
+
+        final userData = snapshot.data!.data() as Map<String, dynamic>;
+        final username = userData['username'] ?? 'User';
+        final email =
+            userData['email'] ?? FirebaseAuth.instance.currentUser?.email ?? '';
+
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(24),
+            onTap: widget.onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: widget.isCompact
+                  ? _buildCompactProfile(context, username, bg, fg)
+                  : _buildFullProfile(context, username, email, bg, fg),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLoadingProfile(BuildContext context, Color bg, Color fg) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: widget.isCompact
+          ? Container(
+              decoration: BoxDecoration(
+                color: bg,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
                   decoration: BoxDecoration(
                     color: bg,
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  padding: const EdgeInsets.all(8),
-                  child: Icon(icon, color: fg, size: 24),
-                )
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: bg,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: Icon(icon, color: fg, size: 24),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      label,
-                      style: TextStyle(
-                        color: fg,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
                 ),
-        ),
+                const SizedBox(height: 8),
+                Text(
+                  'Loading...',
+                  style: TextStyle(
+                    color: fg,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildErrorProfile(BuildContext context, Color bg, Color fg) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: widget.isCompact
+          ? Container(
+              decoration: BoxDecoration(
+                color: bg,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Icon(Icons.person, color: fg, size: 24),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: bg,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Icon(Icons.person, color: fg, size: 24),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: fg,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildCompactProfile(
+      BuildContext context, String username, Color bg, Color fg) {
+    return Container(
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(24),
       ),
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: 16,
+            backgroundColor: fg.withValues(alpha: 0.1),
+            child: Text(
+              username.isNotEmpty ? username[0].toUpperCase() : 'U',
+              style: TextStyle(
+                color: fg,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            username,
+            style: TextStyle(
+              color: fg,
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFullProfile(
+      BuildContext context, String username, String email, Color bg, Color fg) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: bg,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: fg.withValues(alpha: 0.1),
+                child: Text(
+                  username.isNotEmpty ? username[0].toUpperCase() : 'U',
+                  style: TextStyle(
+                    color: fg,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                username,
+                style: TextStyle(
+                  color: fg,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                email,
+                style: TextStyle(
+                  color: fg.withValues(alpha: 0.7),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

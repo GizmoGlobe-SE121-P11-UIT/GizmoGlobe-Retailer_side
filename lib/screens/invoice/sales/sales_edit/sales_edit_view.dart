@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
@@ -7,6 +8,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
+import 'sales_edit_webview.dart';
 
 import '../../../../enums/invoice_related/payment_status.dart';
 import '../../../../enums/invoice_related/sales_status.dart';
@@ -23,6 +25,27 @@ class SalesEditScreen extends StatefulWidget {
     super.key,
     required this.invoice,
   });
+
+  static Future<SalesInvoice?> showModal(
+      BuildContext context, SalesInvoice invoice) async {
+    if (kIsWeb) {
+      return showDialog<SalesInvoice>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: SalesEditWebView.newInstance(invoice),
+        ),
+      );
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SalesEditScreen(invoice: invoice),
+        ),
+      );
+    }
+  }
 
   @override
   State<SalesEditScreen> createState() => _SalesEditScreenState();
@@ -60,6 +83,11 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // For web, return minimal widget since modal is handled by showModal
+    if (kIsWeb) {
+      return const SizedBox.shrink();
+    }
+
     return BlocProvider(
       create: (context) => cubit,
       child: BlocBuilder<SalesEditCubit, SalesEditState>(

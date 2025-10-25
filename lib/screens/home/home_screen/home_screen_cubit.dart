@@ -5,6 +5,20 @@ import '../../../data/database/database.dart';
 import '../../../data/firebase/firebase.dart';
 import 'home_screen_state.dart';
 
+class TopProductData {
+  final String productID;
+  final String productName;
+  int totalSales;
+  double totalRevenue;
+
+  TopProductData({
+    required this.productID,
+    required this.productName,
+    required this.totalSales,
+    required this.totalRevenue,
+  });
+}
+
 class HomeScreenCubit extends Cubit<HomeScreenState> {
   final Database db = Database();
 
@@ -69,18 +83,74 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       // Get unread chats count
       final unreadChats = await Firebase().getUnreadChatsCount();
 
+      // Get recent orders (last 5 orders, sorted by date descending)
+      final recentOrders = salesInvoices
+          .where((invoice) => invoice.paymentStatus == PaymentStatus.paid)
+          .toList()
+        ..sort((a, b) => b.date.compareTo(a.date));
+
+      final recentOrdersList = recentOrders.take(5).toList();
+
+      // Calculate top products from sales data
+      final Map<String, TopProductData> productSalesMap = {};
+
+      for (var invoice in salesInvoices) {
+        if (invoice.paymentStatus == PaymentStatus.paid) {
+          // Get invoice details to access product information
+          final invoiceWithDetails = await Firebase()
+              .getSalesInvoiceWithDetails(invoice.salesInvoiceID);
+
+          for (var detail in invoiceWithDetails.details) {
+            final productID = detail.productID;
+            final productName = detail.productName ?? 'Unknown Product';
+            final quantity = detail.quantity;
+            final revenue = detail.subtotal;
+
+            if (productSalesMap.containsKey(productID)) {
+              productSalesMap[productID]!.totalSales += quantity;
+              productSalesMap[productID]!.totalRevenue += revenue;
+            } else {
+              productSalesMap[productID] = TopProductData(
+                productID: productID,
+                productName: productName,
+                totalSales: quantity,
+                totalRevenue: revenue,
+              );
+            }
+          }
+        }
+      }
+
+      // Convert to TopProduct list and sort by total sales
+      final topProductsList = productSalesMap.values
+          .map((data) => TopProduct(
+                productID: data.productID,
+                productName: data.productName,
+                totalSales: data.totalSales,
+                totalRevenue: data.totalRevenue,
+              ))
+          .toList()
+        ..sort((a, b) => b.totalSales.compareTo(a.totalSales));
+
+      // Take top 3 products
+      final topProducts = topProductsList.take(3).toList();
+
       await db.getUser();
-      // Emit new state with loaded data
-      emit(state.copyWith(
-        username: db.username ?? '',
-        totalProducts: db.productList.length,
-        totalCustomers: db.customerList.length,
-        totalRevenue: totalRevenue,
-        totalOrders: totalPaidOrders,
-        salesByCategory: salesByCategory,
-        monthlySales: monthlySales,
-        unreadChats: unreadChats,
-      ));
+      // Emit new state with loaded data - check if cubit is still open
+      if (!isClosed) {
+        emit(state.copyWith(
+          username: db.username ?? '',
+          totalProducts: db.productList.length,
+          totalCustomers: db.customerList.length,
+          totalRevenue: totalRevenue,
+          totalOrders: totalPaidOrders,
+          salesByCategory: salesByCategory,
+          monthlySales: monthlySales,
+          unreadChats: unreadChats,
+          recentOrders: recentOrdersList,
+          topProducts: topProducts,
+        ));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error initializing dashboard: $e');
