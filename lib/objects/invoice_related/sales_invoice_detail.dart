@@ -4,7 +4,7 @@ class SalesInvoiceDetail {
   final String? productName;
   final String? category;
   final int quantity;
-  final double sellingPrice;
+  final int sellingPrice;
   final double subtotal;
 
   SalesInvoiceDetail({
@@ -36,7 +36,7 @@ class SalesInvoiceDetail {
       productName: map['productName'] as String?,
       category: map['category'] as String?,
       quantity: (map['quantity'] as num?)?.toInt() ?? 0,
-      sellingPrice: (map['sellingPrice'] as num?)?.toDouble() ?? 0.0,
+      sellingPrice: (map['sellingPrice'] as num?)?.toInt() ?? 0,
       subtotal: (map['subtotal'] as num?)?.toDouble() ?? 0.0,
     );
   }

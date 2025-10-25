@@ -27,7 +27,7 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
     String? voucherName,
     DateTime? startTime,
     double? discountValue,
-    double? minimumPurchase,
+    int? minimumPurchase,
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
@@ -65,14 +65,14 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
         ),
         const SizedBox(height: 4),
         Text(
-          '${s.discount} \$$discountValue',
+          '${s.discount} ${Helper.toCurrencyFormat(discountValue)}',
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.tertiary,
           ),
         ),
         const SizedBox(height: 4),
         Text(
-          '${s.minimumPurchase}: \$$minimumPurchase',
+          '${s.minimumPurchase}: ${Helper.toCurrencyFormat(minimumPurchase)}',
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurface,
           ),
@@ -125,7 +125,7 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
     String? voucherName,
     DateTime? startTime,
     double? discountValue,
-    double? minimumPurchase,
+    int? minimumPurchase,
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,

@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'sales_detail_webview.dart';
 
 import '../../../../enums/product_related/category_enum.dart';
+import '../../../../functions/helper.dart';
 import '../permissions/sales_invoice_permissions.dart';
 import '../sales_edit/sales_edit_view.dart';
 import 'sales_detail_cubit.dart';
@@ -264,7 +265,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                           const SizedBox(height: 16),
                           _buildTotalPriceRow(
                             S.of(context).totalPrice,
-                            '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
+                            Helper.toCurrencyFormat(state.invoice.totalPrice),
                           ),
 
                           const SizedBox(height: 32),
@@ -358,7 +359,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
-                                                    '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
+                                                    '${S.of(context).price}: ${Helper.toCurrencyFormat(detail.sellingPrice)}',
                                                     style: TextStyle(
                                                       color: Theme.of(context)
                                                           .colorScheme
@@ -369,7 +370,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                                   ),
                                                   const SizedBox(height: 4),
                                                   Text(
-                                                    '${S.of(context).subtotal}: \$${detail.subtotal.toStringAsFixed(2)}',
+                                                    '${S.of(context).subtotal}: ${Helper.toCurrencyFormat(detail.subtotal)}',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,

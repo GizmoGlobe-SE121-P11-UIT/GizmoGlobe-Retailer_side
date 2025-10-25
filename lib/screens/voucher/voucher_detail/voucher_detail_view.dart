@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/functions/converter.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/limited_interface.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_state.dart';
@@ -109,20 +110,20 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                               title: S.of(context).discountValue,
                               value: state.voucher.isPercentage
                                   ? '${Converter.formatDouble(state.voucher.discountValue)}%'
-                                  : '\$${Converter.formatDouble(state.voucher.discountValue)}',
+                                  : Helper.toCurrencyFormat(state.voucher.discountValue),
                               theme: theme,
                             ),
                             if (state.voucher.isPercentage)
                               _buildInfoRow(
                                 title: S.of(context).maximumDiscountValue,
                                 value:
-                                    '\$${Converter.formatDouble((state.voucher as PercentageInterface).maximumDiscountValue)}',
+                                    Helper.toCurrencyFormat((state.voucher as PercentageInterface).maximumDiscountValue),
                                 theme: theme,
                               ),
                             _buildInfoRow(
                               title: S.of(context).minimumPurchase,
                               value:
-                                  '\$${Converter.formatDouble(state.voucher.minimumPurchase)}',
+                                  Helper.toCurrencyFormat(state.voucher.minimumPurchase),
                               theme: theme,
                             ),
                             if (state.voucher.isLimited)

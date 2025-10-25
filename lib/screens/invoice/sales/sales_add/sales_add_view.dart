@@ -9,6 +9,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
+import '../../../../functions/helper.dart';
 import '../../../../objects/customer.dart';
 import '../../../../objects/product_related/product.dart';
 import 'sales_add_cubit.dart';
@@ -191,7 +192,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
-                                  '(\$${product.sellingPrice.toStringAsFixed(2)})',
+                                  '(${Helper.toCurrencyFormat(product.sellingPrice)})',
                                   style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.tertiary,
@@ -854,7 +855,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                       ],
                                     ),
                                     Text(
-                                      '\$${state.totalPrice.toStringAsFixed(2)}',
+                                      Helper.toCurrencyFormat(state.totalPrice),
                                       style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
@@ -996,7 +997,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                                 WrapCrossAlignment.center,
                                             children: [
                                               Text(
-                                                '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
+                                                '${S.of(context).price}: ${Helper.toCurrencyFormat(detail.sellingPrice)}',
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -1080,7 +1081,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                                 ],
                                               ),
                                               Text(
-                                                '\$${detail.subtotal.toStringAsFixed(2)}',
+                                                Helper.toCurrencyFormat(detail.subtotal),
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,

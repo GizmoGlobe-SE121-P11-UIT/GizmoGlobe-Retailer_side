@@ -10,7 +10,7 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
     implements LimitedInterface, PercentageInterface {
   int _maximumUsage;
   int _usageLeft;
-  double _maximumDiscountValue;
+  int _maximumDiscountValue;
 
   LimitedPercentageVoucherWithoutEndTime({
     super.voucherID,
@@ -28,7 +28,7 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
     super.isLimited = true,
     required int maximumUsage,
     required int usageLeft,
-    required double maximumDiscountValue,
+    required int maximumDiscountValue,
   })  : _maximumUsage = maximumUsage,
         _usageLeft = usageLeft,
         _maximumDiscountValue = maximumDiscountValue;
@@ -44,9 +44,9 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
   set usageLeft(int value) => _usageLeft = value;
 
   @override
-  double get maximumDiscountValue => _maximumDiscountValue;
+  int get maximumDiscountValue => _maximumDiscountValue;
   @override
-  set maximumDiscountValue(double value) => _maximumDiscountValue = value;
+  set maximumDiscountValue(int value) => _maximumDiscountValue = value;
 
   @override
   void updateVoucher({
@@ -54,7 +54,7 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
     String? voucherName,
     DateTime? startTime,
     double? discountValue,
-    double? minimumPurchase,
+    int? minimumPurchase,
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
@@ -62,7 +62,7 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
     String? viDescription,
     int? maximumUsage,
     int? usageLeft,
-    double? maximumDiscountValue,
+    int? maximumDiscountValue,
   }) {
     super.updateVoucher(
       voucherID: voucherID,
@@ -99,14 +99,14 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
         ),
         const SizedBox(height: 4),
         Text(
-          '${s.discount} $discountValue% ${s.maximumDiscount}: \$$maximumDiscountValue',
+          '${s.discount} $discountValue% ${s.maximumDiscount}: ${Helper.toCurrencyFormat(maximumDiscountValue)}',
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.tertiary,
           ),
         ),
         const SizedBox(height: 4),
         Text(
-          '${s.minimumPurchase}: \$$minimumPurchase',
+          '${s.minimumPurchase}: ${Helper.toCurrencyFormat(minimumPurchase)}',
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurface,
           ),
@@ -176,7 +176,7 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
     String? voucherName,
     DateTime? startTime,
     double? discountValue,
-    double? minimumPurchase,
+    int? minimumPurchase,
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
@@ -188,7 +188,7 @@ class LimitedPercentageVoucherWithoutEndTime extends Voucher
     int? maximumUsage,
     int? usageLeft,
     DateTime? endTime,
-    double? maximumDiscountValue,
+    int? maximumDiscountValue,
   }) {
     return LimitedPercentageVoucherWithoutEndTime(
       voucherID: voucherID ?? this.voucherID,

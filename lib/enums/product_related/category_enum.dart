@@ -23,7 +23,7 @@ enum CategoryEnum {
     return description;
   }
 
-  static List<CategoryEnum> get nonEmptyValues {
+  static List<CategoryEnum> getValues() {
     return CategoryEnum.values.where((e) => e != CategoryEnum.empty).toList();
   }
 
@@ -49,6 +49,9 @@ enum CategoryEnum {
 
 extension CategoryEnumExtension on CategoryEnum {
   static CategoryEnum fromName(String name) {
-    return CategoryEnum.nonEmptyValues.firstWhere((e) => e.getName() == name);
+    return CategoryEnum.values.firstWhere(
+      (e) => e.name == name,
+      orElse: () => CategoryEnum.empty,
+    );
   }
 }

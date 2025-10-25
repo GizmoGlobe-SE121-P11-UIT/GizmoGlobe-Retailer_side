@@ -1,1961 +1,2411 @@
 [
-    {
-        "product_name": "PSU Cooler Master MWE GOLD 1050W V2 ATX3.1 - 80 Plus Gold - Full Modular",
-        "vendor": "Cooler Master",
-        "product_type": "psu",
-        "price": "4490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1050,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS 4+4 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS 8 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCI-e 6+2 Pin",
-                    "quantity": 3
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 12
-                },
-                {
-                    "type": "Peripheral 4 Pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "12VHPWR",
-                    "quantity": 1
-                }
-            ]
+  {
+    "productName": "PSU Cooler Master MWE GOLD 1050W V2 ATX3.1 - 80 Plus Gold - Full Modular",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1050,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS 4+4 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS 8 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "PCI-e 6+2 Pin",
+          "quantity": 3
+        },
+        {
+          "type": "SATA",
+          "quantity": 12
+        },
+        {
+          "type": "Peripheral 4 Pin",
+          "quantity": 4
+        },
+        {
+          "type": "12VHPWR",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU Cooler Master MWE GOLD 1250W V2 ATX3.1 - 80 Plus Gold - Full Modular",
-        "vendor": "Cooler Master",
-        "product_type": "psu",
-        "price": "5490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1250,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS 4+4-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS 8-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 12VHPWR (600W)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 3
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 12
-                },
-                {
-                    "type": "Peripheral 4-pin (Molex)",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Cooler Master",
+    "productID": 201,
+    "importPrice": 3143,
+    "sellingPrice": 5908,
+    "sales": 226,
+    "stock": 104,
+    "discount": 24,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Cooler Master MWE GOLD 1250W V2 ATX3.1 - 80 Plus Gold - Full Modular",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1250,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS 4+4-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS 8-pin",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 12VHPWR (600W)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 3
+        },
+        {
+          "type": "SATA",
+          "quantity": 12
+        },
+        {
+          "type": "Peripheral 4-pin (Molex)",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair RM1200x SHIFT White ATX 3.1 - 80 Plus Gold - Full Modular (1200W) (CP-9020276-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "6150000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1200,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/ATX12V 8-pin (4+4)",
-                    "quantity": 2
-                },
-                {
-                    "type": "12V-2x6 (PCIe 5.1)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 6
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 16
-                },
-                {
-                    "type": "PATA 4-pin",
-                    "quantity": 8
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Cooler Master",
+    "productID": 202,
+    "importPrice": 3843,
+    "sellingPrice": 6169,
+    "sales": 261,
+    "stock": 375,
+    "discount": 11,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair RM1200x SHIFT White ATX 3.1 - 80 Plus Gold - Full Modular (1200W) (CP-9020276-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1200,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/ATX12V 8-pin (4+4)",
+          "quantity": 2
+        },
+        {
+          "type": "12V-2x6 (PCIe 5.1)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 6
+        },
+        {
+          "type": "SATA",
+          "quantity": 16
+        },
+        {
+          "type": "PATA 4-pin",
+          "quantity": 8
         }
+      ]
     },
-    {
-        "product_name": "PSU Cooler Master MWE GOLD 850W V2 ATX3.1 - 80 Plus Gold - Full Modular",
-        "vendor": "Cooler Master",
-        "product_type": "psu",
-        "price": "2990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS 4+4 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS 8 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 12
-                },
-                {
-                    "type": "Peripheral 4 Pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "PCI-e 6+2 Pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "12V-2x6",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 203,
+    "importPrice": 4305,
+    "sellingPrice": 7235,
+    "sales": 121,
+    "stock": 167,
+    "discount": 15,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Cooler Master MWE GOLD 850W V2 ATX3.1 - 80 Plus Gold - Full Modular",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS 4+4 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS 8 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "SATA",
+          "quantity": 12
+        },
+        {
+          "type": "Peripheral 4 Pin",
+          "quantity": 4
+        },
+        {
+          "type": "PCI-e 6+2 Pin",
+          "quantity": 4
+        },
+        {
+          "type": "12V-2x6",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU ASUS ROG Thor 1000P2 - 80 Plus Platinum - Full Modular (1000W)",
-        "vendor": "ASUS",
-        "product_type": "psu",
-        "price": "8990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "MB 24/20-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU 4+4-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 5.0 16-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 8
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 12
-                },
-                {
-                    "type": "Peripheral (Molex 4-pin)",
-                    "quantity": 6
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Cooler Master",
+    "productID": 204,
+    "importPrice": 2093,
+    "sellingPrice": 3738,
+    "sales": 486,
+    "stock": 256,
+    "discount": 20,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU ASUS ROG Thor 1000P2 - 80 Plus Platinum - Full Modular (1000W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "MB 24/20-pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU 4+4-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 5.0 16-pin",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 8
+        },
+        {
+          "type": "SATA",
+          "quantity": 12
+        },
+        {
+          "type": "Peripheral (Molex 4-pin)",
+          "quantity": 6
         }
+      ]
     },
-    {
-        "product_name": "PSU ASUS ROG Thor 1600T GAMING- 80 Plus Titanium - Full Modular (1600W)",
-        "vendor": "ASUS",
-        "product_type": "psu",
-        "price": "16990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1600,
-            "efficiency_rating": "80 Plus Titanium",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "MB 24/20-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU 4+4-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCI-E 16-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCI-E 6+2-pin",
-                    "quantity": 10
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 12
-                },
-                {
-                    "type": "PERIPHERAL (Molex 4-pin)",
-                    "quantity": 6
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "ASUS",
+    "productID": 205,
+    "importPrice": 6293,
+    "sellingPrice": 13029,
+    "sales": 325,
+    "stock": 316,
+    "discount": 31,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU ASUS ROG Thor 1600T GAMING- 80 Plus Titanium - Full Modular (1600W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1600,
+      "efficiency": "titanium",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "MB 24/20-pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU 4+4-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCI-E 16-pin",
+          "quantity": 1
+        },
+        {
+          "type": "PCI-E 6+2-pin",
+          "quantity": 10
+        },
+        {
+          "type": "SATA",
+          "quantity": 12
+        },
+        {
+          "type": "PERIPHERAL (Molex 4-pin)",
+          "quantity": 6
         }
+      ]
     },
-    {
-        "product_name": "PSU Lian Li EDGE 1000W Black L-Shape - 80 Plus Platinum - Full Modular",
-        "vendor": "Lian Li",
-        "product_type": "psu",
-        "price": "4690000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 20+4-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU EPS 8-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 12VHPWR (12V-2x6)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 10
-                },
-                {
-                    "type": "Peripheral (4-pin Molex)",
-                    "quantity": 4
-                },
-                {
-                    "type": "Internal USB 2.0 Header (9-pin)",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "ASUS",
+    "productID": 206,
+    "importPrice": 11893,
+    "sellingPrice": 26968,
+    "sales": 405,
+    "stock": 375,
+    "discount": 37,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Lian Li EDGE 1000W Black L-Shape - 80 Plus Platinum - Full Modular",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 20+4-pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU EPS 8-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 12VHPWR (12V-2x6)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 10
+        },
+        {
+          "type": "Peripheral (4-pin Molex)",
+          "quantity": 4
+        },
+        {
+          "type": "Internal USB 2.0 Header (9-pin)",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU Lian Li EDGE 1000W White L-Shape - 80 Plus Platinum - Full Modular",
-        "vendor": "Lian Li",
-        "product_type": "psu",
-        "price": "4990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX Motherboard",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/CPU 8-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 12VHPWR 16-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 10
-                },
-                {
-                    "type": "Peripheral (Molex)",
-                    "quantity": 3
-                },
-                {
-                    "type": "Internal USB 2.0 Header",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Lian Li",
+    "productID": 207,
+    "importPrice": 3283,
+    "sellingPrice": 7817,
+    "sales": 112,
+    "stock": 143,
+    "discount": 40,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Lian Li EDGE 1000W White L-Shape - 80 Plus Platinum - Full Modular",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX Motherboard",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/CPU 8-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 12VHPWR 16-pin",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 10
+        },
+        {
+          "type": "Peripheral (Molex)",
+          "quantity": 3
+        },
+        {
+          "type": "Internal USB 2.0 Header",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU Thermaltake TOUGHPOWER GT 850W SNOW - 80 Plus Gold - Full Modular (850W)",
-        "vendor": "Thermaltake",
-        "product_type": "psu",
-        "price": "2790000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "PCIe 12V-2x6 (12+4 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU (4+4 pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe (6+2 pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 6
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Lian Li",
+    "productID": 208,
+    "importPrice": 3493,
+    "sellingPrice": 7448,
+    "sales": 398,
+    "stock": 448,
+    "discount": 33,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Thermaltake TOUGHPOWER GT 850W SNOW - 80 Plus Gold - Full Modular (850W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "PCIe 12V-2x6 (12+4 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "CPU (4+4 pin)",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe (6+2 pin)",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 6
         }
+      ]
     },
-    {
-        "product_name": "PSU Lian Li EDGE 1300W White L-Shape - 80 Plus Platinum - Full Modular",
-        "vendor": "Lian Li",
-        "product_type": "psu",
-        "price": "5990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1300,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/CPU 8-pin (4+4 pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 12VHPWR (16-pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 14
-                },
-                {
-                    "type": "Molex 4-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "Internal USB 2.0 (9-pin)",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Thermaltake",
+    "productID": 209,
+    "importPrice": 1953,
+    "sellingPrice": 4650,
+    "sales": 411,
+    "stock": 446,
+    "discount": 40,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Lian Li EDGE 1300W White L-Shape - 80 Plus Platinum - Full Modular",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1300,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/CPU 8-pin (4+4 pin)",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 12VHPWR (16-pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 14
+        },
+        {
+          "type": "Molex 4-pin",
+          "quantity": 4
+        },
+        {
+          "type": "Internal USB 2.0 (9-pin)",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU Thermaltake TOUGHPOWER GT 850W - 80 Plus Gold - Full Modular (850W)",
-        "vendor": "Thermaltake",
-        "product_type": "psu",
-        "price": "2690000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "PCIe 12V-2x6 (12+4 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe (6+2 pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 6
-                },
-                {
-                    "type": "CPU (4+4 pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "Peripheral (Molex)",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Lian Li",
+    "productID": 210,
+    "importPrice": 4193,
+    "sellingPrice": 7131,
+    "sales": 371,
+    "stock": 331,
+    "discount": 16,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Thermaltake TOUGHPOWER GT 850W - 80 Plus Gold - Full Modular (850W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "PCIe 12V-2x6 (12+4 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe (6+2 pin)",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 6
+        },
+        {
+          "type": "CPU (4+4 pin)",
+          "quantity": 2
+        },
+        {
+          "type": "Peripheral (Molex)",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU Lian Li EDGE 1300W Black L-Shape - 80 Plus Platinum - Full Modular",
-        "vendor": "Lian Li",
-        "product_type": "psu",
-        "price": "5490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1300,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 20+4 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS (CPU) 4+4 Pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 16-pin (12VHPWR/12V-2x6)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 12V-2x6 (to 2x 8-pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2 Pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 12
-                },
-                {
-                    "type": "Molex 4-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "Internal USB 2.0 Headers (for hub)",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Thermaltake",
+    "productID": 211,
+    "importPrice": 1883,
+    "sellingPrice": 3128,
+    "sales": 323,
+    "stock": 472,
+    "discount": 14,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Lian Li EDGE 1300W Black L-Shape - 80 Plus Platinum - Full Modular",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1300,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 20+4 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS (CPU) 4+4 Pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 16-pin (12VHPWR/12V-2x6)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 12V-2x6 (to 2x 8-pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2 Pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 12
+        },
+        {
+          "type": "Molex 4-pin",
+          "quantity": 4
+        },
+        {
+          "type": "Internal USB 2.0 Headers (for hub)",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU GIGABYTE AORUS ELITE P1000W PCIe 5.0 - 80 Plus Platinum - Full Modular (1000W)",
-        "vendor": "GIGABYTE",
-        "product_type": "psu",
-        "price": "6490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX/MB 20+4 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU/EPS 4+4 Pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCI-e 16 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCI-e 6+2 Pin",
-                    "quantity": 6
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "4 Pin Peripheral",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Lian Li",
+    "productID": 212,
+    "importPrice": 3843,
+    "sellingPrice": 7625,
+    "sales": 338,
+    "stock": 313,
+    "discount": 28,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU GIGABYTE AORUS ELITE P1000W PCIe 5.0 - 80 Plus Platinum - Full Modular (1000W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX/MB 20+4 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU/EPS 4+4 Pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCI-e 16 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "PCI-e 6+2 Pin",
+          "quantity": 6
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "4 Pin Peripheral",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU GIGABYTE AORUS ELITE P1000W PCIe 5.0 ICE - 80 Plus Platinum - Full Modular (1000W)",
-        "vendor": "GIGABYTE",
-        "product_type": "psu",
-        "price": "6590000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX/MB 20+4 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU/EPS 4+4 Pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 16 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2 Pin",
-                    "quantity": 6
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "4 Pin Peripherals",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "GIGABYTE",
+    "productID": 213,
+    "importPrice": 4543,
+    "sellingPrice": 10817,
+    "sales": 326,
+    "stock": 157,
+    "discount": 40,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU GIGABYTE AORUS ELITE P1000W PCIe 5.0 ICE - 80 Plus Platinum - Full Modular (1000W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX/MB 20+4 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU/EPS 4+4 Pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 16 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2 Pin",
+          "quantity": 6
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "4 Pin Peripherals",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU MSI MAG A1250GL PCIE5 - 80 Plus Gold - Full Modular (1250W)",
-        "vendor": "MSI",
-        "product_type": "psu",
-        "price": "5490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1250,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "24-Pin ATX Motherboard",
-                    "quantity": 1
-                },
-                {
-                    "type": "4+4-Pin EPS CPU",
-                    "quantity": 2
-                },
-                {
-                    "type": "16-Pin PCIe 5.1",
-                    "quantity": 1
-                },
-                {
-                    "type": "6+2-Pin PCIe",
-                    "quantity": 4
-                },
-                {
-                    "type": "15-Pin SATA",
-                    "quantity": 12
-                },
-                {
-                    "type": "4-Pin Molex",
-                    "quantity": 4
-                },
-                {
-                    "type": "4-Pin FDD",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "GIGABYTE",
+    "productID": 214,
+    "importPrice": 4613,
+    "sellingPrice": 8905,
+    "sales": 66,
+    "stock": 184,
+    "discount": 26,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU MSI MAG A1250GL PCIE5 - 80 Plus Gold - Full Modular (1250W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1250,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "24-Pin ATX Motherboard",
+          "quantity": 1
+        },
+        {
+          "type": "4+4-Pin EPS CPU",
+          "quantity": 2
+        },
+        {
+          "type": "16-Pin PCIe 5.1",
+          "quantity": 1
+        },
+        {
+          "type": "6+2-Pin PCIe",
+          "quantity": 4
+        },
+        {
+          "type": "15-Pin SATA",
+          "quantity": 12
+        },
+        {
+          "type": "4-Pin Molex",
+          "quantity": 4
+        },
+        {
+          "type": "4-Pin FDD",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU Deepcool PN850M - 80 Plus Gold - ATX 3.1 - Full Modular (850W)",
-        "vendor": "Deepcool",
-        "product_type": "psu",
-        "price": "2890000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "20+4 pin ATX",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS (4+4 pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "12V-2x6 (PCIe 5.1)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe (6+2 pin)",
-                    "quantity": 3
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "Molex (4-pin)",
-                    "quantity": 2
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "MSI",
+    "productID": 215,
+    "importPrice": 3843,
+    "sellingPrice": 8578,
+    "sales": 466,
+    "stock": 262,
+    "discount": 36,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Deepcool PN850M - 80 Plus Gold - ATX 3.1 - Full Modular (850W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "20+4 pin ATX",
+          "quantity": 1
+        },
+        {
+          "type": "EPS (4+4 pin)",
+          "quantity": 2
+        },
+        {
+          "type": "12V-2x6 (PCIe 5.1)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe (6+2 pin)",
+          "quantity": 3
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "Molex (4-pin)",
+          "quantity": 2
         }
+      ]
     },
-    {
-        "product_name": "PSU ASUS Prime 850W - 80 Plus Gold - Full Modular ( 850W )",
-        "vendor": "ASUS",
-        "product_type": "psu",
-        "price": "3490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "MB 24/20-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU 4+4-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCI-E 16-pin (12VHPWR/12V-2x6)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCI-E 8-pin",
-                    "quantity": 3
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 5
-                },
-                {
-                    "type": "Peripheral (Molex)",
-                    "quantity": 3
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Deepcool",
+    "productID": 216,
+    "importPrice": 2023,
+    "sellingPrice": 3803,
+    "sales": 411,
+    "stock": 394,
+    "discount": 24,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU ASUS Prime 850W - 80 Plus Gold - Full Modular ( 850W )",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "MB 24/20-pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU 4+4-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCI-E 16-pin (12VHPWR/12V-2x6)",
+          "quantity": 1
+        },
+        {
+          "type": "PCI-E 8-pin",
+          "quantity": 3
+        },
+        {
+          "type": "SATA",
+          "quantity": 5
+        },
+        {
+          "type": "Peripheral (Molex)",
+          "quantity": 3
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair HX1200i - 80 Plus Platinum - Full Modular (1200W) (CP-9020281-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "7590000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1200,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS 8-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 12V-2x6 (12+4 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 5
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "Molex 4-pin",
-                    "quantity": 6
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "ASUS",
+    "productID": 217,
+    "importPrice": 2443,
+    "sellingPrice": 5209,
+    "sales": 77,
+    "stock": 161,
+    "discount": 33,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair HX1200i - 80 Plus Platinum - Full Modular (1200W) (CP-9020281-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1200,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS 8-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 12V-2x6 (12+4 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 5
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "Molex 4-pin",
+          "quantity": 6
         }
+      ]
     },
-    {
-        "product_name": "PSU GIGABYTE UD850GM PG5 - 80 Plus Gold - Full Modular (850W)",
-        "vendor": "GIGABYTE",
-        "product_type": "psu",
-        "price": "2990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 20+4 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "12VHPWR (PCIe Gen 5.0 16-pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2 Pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "EPS/CPU 4+4 Pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "Peripheral (Molex) 4-pin",
-                    "quantity": 3
-                },
-                {
-                    "type": "Floppy",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 218,
+    "importPrice": 5313,
+    "sellingPrice": 9370,
+    "sales": 441,
+    "stock": 436,
+    "discount": 19,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU GIGABYTE UD850GM PG5 - 80 Plus Gold - Full Modular (850W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 20+4 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "12VHPWR (PCIe Gen 5.0 16-pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2 Pin",
+          "quantity": 4
+        },
+        {
+          "type": "EPS/CPU 4+4 Pin",
+          "quantity": 2
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "Peripheral (Molex) 4-pin",
+          "quantity": 3
+        },
+        {
+          "type": "Floppy",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU ASUS ROG Strix 1000W AURA White Edition - 80 Plus Gold - Full Modular (1000W)",
-        "vendor": "ASUS",
-        "product_type": "psu",
-        "price": "6990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 20+4-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU 4+4-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 16-pin (12VHPWR)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 5
-                },
-                {
-                    "type": "Molex",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "GIGABYTE",
+    "productID": 219,
+    "importPrice": 2093,
+    "sellingPrice": 4983,
+    "sales": 397,
+    "stock": 265,
+    "discount": 40,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU ASUS ROG Strix 1000W AURA White Edition - 80 Plus Gold - Full Modular (1000W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 20+4-pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU 4+4-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 16-pin (12VHPWR)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 5
+        },
+        {
+          "type": "Molex",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU Thermaltake TOUGHPOWER GF A3 750W - 80 Plus Gold - Full Modular (750W)",
-        "vendor": "Thermaltake",
-        "product_type": "psu",
-        "price": "2690000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 750,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS (CPU) 4+4-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "PCIe 12+4-pin (12VHPWR)",
-                    "quantity": 1
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "4-pin Molex",
-                    "quantity": 4
-                },
-                {
-                    "type": "Floppy (FDD)",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "ASUS",
+    "productID": 220,
+    "importPrice": 4893,
+    "sellingPrice": 9575,
+    "sales": 269,
+    "stock": 120,
+    "discount": 27,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Thermaltake TOUGHPOWER GF A3 750W - 80 Plus Gold - Full Modular (750W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 750,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS (CPU) 4+4-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 4
+        },
+        {
+          "type": "PCIe 12+4-pin (12VHPWR)",
+          "quantity": 1
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "4-pin Molex",
+          "quantity": 4
+        },
+        {
+          "type": "Floppy (FDD)",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair HX1500i - 80 Plus Platinum - Full Modular (1500W) (CP-9020261-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "9490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1500,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS12V 8-pin",
-                    "quantity": 3
-                },
-                {
-                    "type": "PCIe 12VHPWR 16-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 7
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "Molex 4-pin",
-                    "quantity": 8
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Thermaltake",
+    "productID": 221,
+    "importPrice": 1883,
+    "sellingPrice": 3789,
+    "sales": 427,
+    "stock": 437,
+    "discount": 29,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair HX1500i - 80 Plus Platinum - Full Modular (1500W) (CP-9020261-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1500,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS12V 8-pin",
+          "quantity": 3
+        },
+        {
+          "type": "PCIe 12VHPWR 16-pin",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 7
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "Molex 4-pin",
+          "quantity": 8
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair HX1000i - 80 Plus Platinum - Full Modular (1000W) (CP-9020259-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "6490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX (20+4 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/ATX 12V (4+4 pin)",
-                    "quantity": 3
-                },
-                {
-                    "type": "PCIe (6+2 pin)",
-                    "quantity": 6
-                },
-                {
-                    "type": "PCIe (12VHPWR/12+4 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "PATA/Molex (4 pin)",
-                    "quantity": 8
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 222,
+    "importPrice": 6643,
+    "sellingPrice": 10663,
+    "sales": 324,
+    "stock": 73,
+    "discount": 11,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair HX1000i - 80 Plus Platinum - Full Modular (1000W) (CP-9020259-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX (20+4 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/ATX 12V (4+4 pin)",
+          "quantity": 3
+        },
+        {
+          "type": "PCIe (6+2 pin)",
+          "quantity": 6
+        },
+        {
+          "type": "PCIe (12VHPWR/12+4 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "PATA/Molex (4 pin)",
+          "quantity": 8
         }
+      ]
     },
-    {
-        "product_name": "PSU ASUS ROG Thor 1200P2 - 80 Plus Platinum - Full Modular (1200W)",
-        "vendor": "ASUS",
-        "product_type": "psu",
-        "price": "9490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1200,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "MB 24/20-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU 4+4-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCI-E 16-pin (PCIe Gen 5)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCI-E 6+2-pin",
-                    "quantity": 8
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 12
-                },
-                {
-                    "type": "PERIPHERAL (Molex 4-pin)",
-                    "quantity": 6
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 223,
+    "importPrice": 4543,
+    "sellingPrice": 7726,
+    "sales": 147,
+    "stock": 158,
+    "discount": 16,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU ASUS ROG Thor 1200P2 - 80 Plus Platinum - Full Modular (1200W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1200,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "MB 24/20-pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU 4+4-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCI-E 16-pin (PCIe Gen 5)",
+          "quantity": 1
+        },
+        {
+          "type": "PCI-E 6+2-pin",
+          "quantity": 8
+        },
+        {
+          "type": "SATA",
+          "quantity": 12
+        },
+        {
+          "type": "PERIPHERAL (Molex 4-pin)",
+          "quantity": 6
         }
+      ]
     },
-    {
-        "product_name": "PSU ASUS ROG Strix 1000W AURA Edition - 80 Plus Gold - Full Modular (1000W)",
-        "vendor": "ASUS",
-        "product_type": "psu",
-        "price": "5990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "MB 24/20-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU 4+4-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 16-pin (12VHPWR)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 8-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 5
-                },
-                {
-                    "type": "Peripheral",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "ASUS",
+    "productID": 224,
+    "importPrice": 6643,
+    "sellingPrice": 11035,
+    "sales": 463,
+    "stock": 246,
+    "discount": 14,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU ASUS ROG Strix 1000W AURA Edition - 80 Plus Gold - Full Modular (1000W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "MB 24/20-pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU 4+4-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 16-pin (12VHPWR)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 8-pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 5
+        },
+        {
+          "type": "Peripheral",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair RM1000e ATX 3.0 - 80 Plus Gold - Full Modular (1000W) (CP-9020264-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "4590000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/ATX 12V (4+4-pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 12VHPWR (12+4-pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe (6+2-pin)",
-                    "quantity": 6
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 7
-                },
-                {
-                    "type": "PATA",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "ASUS",
+    "productID": 225,
+    "importPrice": 4193,
+    "sellingPrice": 7395,
+    "sales": 353,
+    "stock": 345,
+    "discount": 19,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair RM1000e ATX 3.0 - 80 Plus Gold - Full Modular (1000W) (CP-9020264-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/ATX 12V (4+4-pin)",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 12VHPWR (12+4-pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe (6+2-pin)",
+          "quantity": 6
+        },
+        {
+          "type": "SATA",
+          "quantity": 7
+        },
+        {
+          "type": "PATA",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair RM750e ATX 3.0 - 80 Plus Gold - Full Modular (750W) (CP-9020262-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "2890000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 750,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "24-pin ATX",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS12V (4+4-pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe (6+2-pin)",
-                    "quantity": 3
-                },
-                {
-                    "type": "12VHPWR (12+4-pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 7
-                },
-                {
-                    "type": "PATA",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 226,
+    "importPrice": 3213,
+    "sellingPrice": 5276,
+    "sales": 491,
+    "stock": 444,
+    "discount": 13,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair RM750e ATX 3.0 - 80 Plus Gold - Full Modular (750W) (CP-9020262-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 750,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "24-pin ATX",
+          "quantity": 1
+        },
+        {
+          "type": "EPS12V (4+4-pin)",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe (6+2-pin)",
+          "quantity": 3
+        },
+        {
+          "type": "12VHPWR (12+4-pin)",
+          "quantity": 1
+        },
+        {
+          "type": "SATA",
+          "quantity": 7
+        },
+        {
+          "type": "PATA",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU MSI MAG A850GL PCIE5 WHITE - 80 Plus Gold - Full Modular (850W)",
-        "vendor": "MSI",
-        "product_type": "psu",
-        "price": "3290000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 5,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS (CPU)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 5.0/5.1 (12VHPWR/12V-2x6)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe (6+2-pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "Molex (4-pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "FDD (4-pin)",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 227,
+    "importPrice": 2023,
+    "sellingPrice": 4661,
+    "sales": 420,
+    "stock": 69,
+    "discount": 38,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU MSI MAG A850GL PCIE5 WHITE - 80 Plus Gold - Full Modular (850W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 5,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX",
+          "quantity": 1
+        },
+        {
+          "type": "EPS (CPU)",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 5.0/5.1 (12VHPWR/12V-2x6)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe (6+2-pin)",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "Molex (4-pin)",
+          "quantity": 4
+        },
+        {
+          "type": "FDD (4-pin)",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU NZXT C750W - 80 Plus Bronze - Non Modular (750W)",
-        "vendor": "NZXT",
-        "product_type": "psu",
-        "price": "1390000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 750,
-            "efficiency_rating": "80 Plus Bronze",
-            "cable_modularity": "Non-Modular",
-            "connectors": [
-                {
-                    "type": "24-pin ATX Power",
-                    "quantity": 1
-                },
-                {
-                    "type": "4+4-pin CPU power",
-                    "quantity": 1
-                },
-                {
-                    "type": "8-pin CPU power",
-                    "quantity": 1
-                },
-                {
-                    "type": "6+2-pin PCIe power",
-                    "quantity": 3
-                },
-                {
-                    "type": "16-pin (12+4) 12V-2x6 PCIe power",
-                    "quantity": 1
-                },
-                {
-                    "type": "SATA Power",
-                    "quantity": 6
-                },
-                {
-                    "type": "Peripherals (Molex)",
-                    "quantity": 6
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "MSI",
+    "productID": 228,
+    "importPrice": 2303,
+    "sellingPrice": 3656,
+    "sales": 83,
+    "stock": 415,
+    "discount": 10,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU NZXT C750W - 80 Plus Bronze - Non Modular (750W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 750,
+      "efficiency": "bronze",
+      "modularity": "nonModular",
+      "connectors": [
+        {
+          "type": "24-pin ATX Power",
+          "quantity": 1
+        },
+        {
+          "type": "4+4-pin CPU power",
+          "quantity": 1
+        },
+        {
+          "type": "8-pin CPU power",
+          "quantity": 1
+        },
+        {
+          "type": "6+2-pin PCIe power",
+          "quantity": 3
+        },
+        {
+          "type": "16-pin (12+4) 12V-2x6 PCIe power",
+          "quantity": 1
+        },
+        {
+          "type": "SATA Power",
+          "quantity": 6
+        },
+        {
+          "type": "Peripherals (Molex)",
+          "quantity": 6
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair RM1200x SHIFT ATX 3.0 - 80 Plus Gold - Full Modular (1200W) (CP-9020254-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "6690000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1200,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "ATX 12V/EPS12V (4+4-pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 5 (12+4-pin) 12VHPWR",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe (6+2-pin)",
-                    "quantity": 12
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 16
-                },
-                {
-                    "type": "PATA",
-                    "quantity": 8
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "NZXT",
+    "productID": 229,
+    "importPrice": 973,
+    "sellingPrice": 2242,
+    "sales": 387,
+    "stock": 496,
+    "discount": 38,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair RM1200x SHIFT ATX 3.0 - 80 Plus Gold - Full Modular (1200W) (CP-9020254-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1200,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "ATX 12V/EPS12V (4+4-pin)",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 5 (12+4-pin) 12VHPWR",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe (6+2-pin)",
+          "quantity": 12
+        },
+        {
+          "type": "SATA",
+          "quantity": 16
+        },
+        {
+          "type": "PATA",
+          "quantity": 8
         }
+      ]
     },
-    {
-        "product_name": "PSU MSI MAG A750GL PCIE5 - 80 Plus Gold (750W)",
-        "vendor": "MSI",
-        "product_type": "psu",
-        "price": "2690000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 750,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Non-Modular",
-            "connectors": [
-                {
-                    "type": "ATX",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS (CPU)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCI-E 5.0 (16 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCI-E (6+2 pin)",
-                    "quantity": 3
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "Peripheral (Molex)",
-                    "quantity": 4
-                },
-                {
-                    "type": "FDD",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 230,
+    "importPrice": 4683,
+    "sellingPrice": 7690,
+    "sales": 313,
+    "stock": 391,
+    "discount": 13,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU MSI MAG A750GL PCIE5 - 80 Plus Gold (750W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 750,
+      "efficiency": "gold",
+      "modularity": "nonModular",
+      "connectors": [
+        {
+          "type": "ATX",
+          "quantity": 1
+        },
+        {
+          "type": "EPS (CPU)",
+          "quantity": 2
+        },
+        {
+          "type": "PCI-E 5.0 (16 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCI-E (6+2 pin)",
+          "quantity": 3
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "Peripheral (Molex)",
+          "quantity": 4
+        },
+        {
+          "type": "FDD",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU Deepcool DQ850M-V3L - 80 Plus Gold - Full Modular (850W)",
-        "vendor": "Deepcool",
-        "product_type": "psu",
-        "price": "2690000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX Main (20+4 Pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/CPU (4+4 Pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/CPU (8 Pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe (6+2 Pin)",
-                    "quantity": 3
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "4-Pin Peripheral (Molex)",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "MSI",
+    "productID": 231,
+    "importPrice": 1883,
+    "sellingPrice": 3057,
+    "sales": 195,
+    "stock": 233,
+    "discount": 12,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Deepcool DQ850M-V3L - 80 Plus Gold - Full Modular (850W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX Main (20+4 Pin)",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/CPU (4+4 Pin)",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/CPU (8 Pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe (6+2 Pin)",
+          "quantity": 3
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "4-Pin Peripheral (Molex)",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU MSI MAG A850GL PCIE5 - 80 Plus Gold - Full Modular (850W)",
-        "vendor": "MSI",
-        "product_type": "psu",
-        "price": "2990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX (24 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS (4+4 pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 5.0 (16 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe (6+2 pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA (15 pin)",
-                    "quantity": 8
-                },
-                {
-                    "type": "Peripheral (4 pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "FDD (4 pin)",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Deepcool",
+    "productID": 232,
+    "importPrice": 1883,
+    "sellingPrice": 4203,
+    "sales": 439,
+    "stock": 493,
+    "discount": 36,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU MSI MAG A850GL PCIE5 - 80 Plus Gold - Full Modular (850W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX (24 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "EPS (4+4 pin)",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 5.0 (16 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe (6+2 pin)",
+          "quantity": 4
+        },
+        {
+          "type": "SATA (15 pin)",
+          "quantity": 8
+        },
+        {
+          "type": "Peripheral (4 pin)",
+          "quantity": 4
+        },
+        {
+          "type": "FDD (4 pin)",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU SilverStone HELA 1300R - 80 Plus Platinum - Full Modular (1300W) (SST-HA1300R-PM)",
-        "vendor": "SilverStone",
-        "product_type": "psu",
-        "price": "7490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1300,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "24 / 20-Pin Motherboard",
-                    "quantity": 1
-                },
-                {
-                    "type": "4+4-Pin ATX 12V (EPS/CPU)",
-                    "quantity": 2
-                },
-                {
-                    "type": "12+4-Pin 12VHPWR (PCIe Gen 5)",
-                    "quantity": 1
-                },
-                {
-                    "type": "8 / 6-Pin PCIe",
-                    "quantity": 8
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "4-Pin Peripheral (Molex)",
-                    "quantity": 6
-                },
-                {
-                    "type": "4-Pin Floppy",
-                    "quantity": 2
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "MSI",
+    "productID": 233,
+    "importPrice": 2093,
+    "sellingPrice": 4983,
+    "sales": 271,
+    "stock": 75,
+    "discount": 40,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU SilverStone HELA 1300R - 80 Plus Platinum - Full Modular (1300W) (SST-HA1300R-PM)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1300,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "24 / 20-Pin Motherboard",
+          "quantity": 1
+        },
+        {
+          "type": "4+4-Pin ATX 12V (EPS/CPU)",
+          "quantity": 2
+        },
+        {
+          "type": "12+4-Pin 12VHPWR (PCIe Gen 5)",
+          "quantity": 1
+        },
+        {
+          "type": "8 / 6-Pin PCIe",
+          "quantity": 8
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "4-Pin Peripheral (Molex)",
+          "quantity": 6
+        },
+        {
+          "type": "4-Pin Floppy",
+          "quantity": 2
         }
+      ]
     },
-    {
-        "product_name": "PSU NZXT C1200W - 80 Plus Gold - Full Modular (1200W)",
-        "vendor": "NZXT",
-        "product_type": "psu",
-        "price": "4690000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1200,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "24-pin ATX Power Cable",
-                    "quantity": 1
-                },
-                {
-                    "type": "4+4-pin CPU Power Cable",
-                    "quantity": 1
-                },
-                {
-                    "type": "8-pin CPU Power Cable",
-                    "quantity": 1
-                },
-                {
-                    "type": "6+2-pin PCIe Power Cable",
-                    "quantity": 3
-                },
-                {
-                    "type": "16-pin (12+4) 12V-2x6 PCIe Cable",
-                    "quantity": 1
-                },
-                {
-                    "type": "SATA Cable",
-                    "quantity": 12
-                },
-                {
-                    "type": "Peripheral Cable (4-pin Molex)",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "SilverStone",
+    "productID": 234,
+    "importPrice": 5243,
+    "sellingPrice": 9855,
+    "sales": 395,
+    "stock": 225,
+    "discount": 24,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU NZXT C1200W - 80 Plus Gold - Full Modular (1200W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1200,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "24-pin ATX Power Cable",
+          "quantity": 1
+        },
+        {
+          "type": "4+4-pin CPU Power Cable",
+          "quantity": 1
+        },
+        {
+          "type": "8-pin CPU Power Cable",
+          "quantity": 1
+        },
+        {
+          "type": "6+2-pin PCIe Power Cable",
+          "quantity": 3
+        },
+        {
+          "type": "16-pin (12+4) 12V-2x6 PCIe Cable",
+          "quantity": 1
+        },
+        {
+          "type": "SATA Cable",
+          "quantity": 12
+        },
+        {
+          "type": "Peripheral Cable (4-pin Molex)",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair RM850e ATX 3.0 - 80 Plus Gold - Full Modular (850W) (CP-9020263-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "3290000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "24-pin ATX",
-                    "quantity": 1
-                },
-                {
-                    "type": "ATX 12V/EPS12V (4+4-pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe (6+2-pin)",
-                    "quantity": 3
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 7
-                },
-                {
-                    "type": "PATA",
-                    "quantity": 4
-                },
-                {
-                    "type": "PCIe 5.0 12VHPWR (12+4-pin)",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "NZXT",
+    "productID": 235,
+    "importPrice": 3283,
+    "sellingPrice": 5651,
+    "sales": 208,
+    "stock": 165,
+    "discount": 17,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair RM850e ATX 3.0 - 80 Plus Gold - Full Modular (850W) (CP-9020263-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "24-pin ATX",
+          "quantity": 1
+        },
+        {
+          "type": "ATX 12V/EPS12V (4+4-pin)",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe (6+2-pin)",
+          "quantity": 3
+        },
+        {
+          "type": "SATA",
+          "quantity": 7
+        },
+        {
+          "type": "PATA",
+          "quantity": 4
+        },
+        {
+          "type": "PCIe 5.0 12VHPWR (12+4-pin)",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU ASUS TUF Gaming 1000W - 80 Plus Gold - Full Modular (1000W)",
-        "vendor": "ASUS",
-        "product_type": "psu",
-        "price": "5050000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "MB 24/20-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU 4+4-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCI-E 16-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCI-E 8-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 5
-                },
-                {
-                    "type": "PERIPHERAL (Molex)",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 236,
+    "importPrice": 2303,
+    "sellingPrice": 5483,
+    "sales": 428,
+    "stock": 225,
+    "discount": 40,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU ASUS TUF Gaming 1000W - 80 Plus Gold - Full Modular (1000W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "MB 24/20-pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU 4+4-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCI-E 16-pin",
+          "quantity": 1
+        },
+        {
+          "type": "PCI-E 8-pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 5
+        },
+        {
+          "type": "PERIPHERAL (Molex)",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU NZXT C1000W - 80 Plus Gold - Full Modular (1000W)",
-        "vendor": "NZXT",
-        "product_type": "psu",
-        "price": "4490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "24-pin ATX power",
-                    "quantity": 1
-                },
-                {
-                    "type": "4+4-pin CPU power",
-                    "quantity": 2
-                },
-                {
-                    "type": "6+2-pin PCIe power",
-                    "quantity": 6
-                },
-                {
-                    "type": "16-pin (12+4) 12V-2x6 PCIe",
-                    "quantity": 1
-                },
-                {
-                    "type": "SATA power",
-                    "quantity": 12
-                },
-                {
-                    "type": "4-pin Molex",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "ASUS",
+    "productID": 237,
+    "importPrice": 3535,
+    "sellingPrice": 7214,
+    "sales": 168,
+    "stock": 387,
+    "discount": 30,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU NZXT C1000W - 80 Plus Gold - Full Modular (1000W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "24-pin ATX power",
+          "quantity": 1
+        },
+        {
+          "type": "4+4-pin CPU power",
+          "quantity": 2
+        },
+        {
+          "type": "6+2-pin PCIe power",
+          "quantity": 6
+        },
+        {
+          "type": "16-pin (12+4) 12V-2x6 PCIe",
+          "quantity": 1
+        },
+        {
+          "type": "SATA power",
+          "quantity": 12
+        },
+        {
+          "type": "4-pin Molex",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU MSI MEG Ai1300P PCIE5 - 80 Plus Platinum - Full Modular (1300W)",
-        "vendor": "MSI",
-        "product_type": "psu",
-        "price": "9990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1300,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX (24 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS (8 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS (4+4 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCI-E 5.0 (16 pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCI-E (6+2 pin)",
-                    "quantity": 8
-                },
-                {
-                    "type": "SATA (15 pin)",
-                    "quantity": 16
-                },
-                {
-                    "type": "PERIPHERAL (4 pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "FDD (4 pin)",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "NZXT",
+    "productID": 238,
+    "importPrice": 3143,
+    "sellingPrice": 5476,
+    "sales": 183,
+    "stock": 70,
+    "discount": 18,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU MSI MEG Ai1300P PCIE5 - 80 Plus Platinum - Full Modular (1300W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1300,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX (24 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "EPS (8 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "EPS (4+4 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCI-E 5.0 (16 pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCI-E (6+2 pin)",
+          "quantity": 8
+        },
+        {
+          "type": "SATA (15 pin)",
+          "quantity": 16
+        },
+        {
+          "type": "PERIPHERAL (4 pin)",
+          "quantity": 4
+        },
+        {
+          "type": "FDD (4 pin)",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU Thermaltake Smart BM2 750 Bronze (750W)",
-        "vendor": "Thermaltake",
-        "product_type": "psu",
-        "price": "1990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 750,
-            "efficiency_rating": "80 Plus Bronze",
-            "cable_modularity": "Semi Modular",
-            "connectors": [
-                {
-                    "type": "Main Power (24pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "ATX 12V (4+4pin)",
-                    "quantity": 2
-                },
-                {
-                    "type": "SATA (5pin)",
-                    "quantity": 9
-                },
-                {
-                    "type": "PCI-E (6+2pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "Peripheral (4pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "Floppy Adapter",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "MSI",
+    "productID": 239,
+    "importPrice": 6993,
+    "sellingPrice": 14271,
+    "sales": 201,
+    "stock": 371,
+    "discount": 30,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Thermaltake Smart BM2 750 Bronze (750W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 750,
+      "efficiency": "bronze",
+      "modularity": "semiModular",
+      "connectors": [
+        {
+          "type": "Main Power (24pin)",
+          "quantity": 1
+        },
+        {
+          "type": "ATX 12V (4+4pin)",
+          "quantity": 2
+        },
+        {
+          "type": "SATA (5pin)",
+          "quantity": 9
+        },
+        {
+          "type": "PCI-E (6+2pin)",
+          "quantity": 4
+        },
+        {
+          "type": "Peripheral (4pin)",
+          "quantity": 4
+        },
+        {
+          "type": "Floppy Adapter",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU GIGABYTE UD850GM - 80 Plus Gold - Full Modular (850W)",
-        "vendor": "GIGABYTE",
-        "product_type": "psu",
-        "price": "3490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX/MB 20+4 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU 4+4 Pin (EPS)",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 16-Pin (12VHPWR Gen 5.0)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2 Pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA Power",
-                    "quantity": 8
-                },
-                {
-                    "type": "4-Pin Peripheral (Molex)",
-                    "quantity": 3
-                },
-                {
-                    "type": "Floppy Drive",
-                    "quantity": 2
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Thermaltake",
+    "productID": 240,
+    "importPrice": 1393,
+    "sellingPrice": 2457,
+    "sales": 196,
+    "stock": 316,
+    "discount": 19,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU GIGABYTE UD850GM - 80 Plus Gold - Full Modular (850W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX/MB 20+4 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU 4+4 Pin (EPS)",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 16-Pin (12VHPWR Gen 5.0)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2 Pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA Power",
+          "quantity": 8
+        },
+        {
+          "type": "4-Pin Peripheral (Molex)",
+          "quantity": 3
+        },
+        {
+          "type": "Floppy Drive",
+          "quantity": 2
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair RM750e - 80 Plus Gold - Full Modular (750W) (CP-9020248-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "2890000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 750,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/ATX12V 4+4-pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 3
-                },
-                {
-                    "type": "PCIe 12V-2x6 (12+4-pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 7
-                },
-                {
-                    "type": "PATA (Molex) 4-pin",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "GIGABYTE",
+    "productID": 241,
+    "importPrice": 2443,
+    "sellingPrice": 5132,
+    "sales": 60,
+    "stock": 367,
+    "discount": 32,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair RM750e - 80 Plus Gold - Full Modular (750W) (CP-9020248-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 750,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/ATX12V 4+4-pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 3
+        },
+        {
+          "type": "PCIe 12V-2x6 (12+4-pin)",
+          "quantity": 1
+        },
+        {
+          "type": "SATA",
+          "quantity": 7
+        },
+        {
+          "type": "PATA (Molex) 4-pin",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU SilverStone DA850 - 80 Plus Gold - Full Modular (850W) (SST-DA850-G)",
-        "vendor": "SilverStone",
-        "product_type": "psu",
-        "price": "2490000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "24 / 20-Pin Motherboard",
-                    "quantity": 1
-                },
-                {
-                    "type": "8 / 4-Pin EPS / ATX 12V",
-                    "quantity": 2
-                },
-                {
-                    "type": "8 / 6-Pin PCIe",
-                    "quantity": 6
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "4-Pin Peripheral",
-                    "quantity": 6
-                },
-                {
-                    "type": "4-Pin Floppy Adapter",
-                    "quantity": 2
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 242,
+    "importPrice": 2023,
+    "sellingPrice": 3524,
+    "sales": 182,
+    "stock": 168,
+    "discount": 18,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU SilverStone DA850 - 80 Plus Gold - Full Modular (850W) (SST-DA850-G)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "24 / 20-Pin Motherboard",
+          "quantity": 1
+        },
+        {
+          "type": "8 / 4-Pin EPS / ATX 12V",
+          "quantity": 2
+        },
+        {
+          "type": "8 / 6-Pin PCIe",
+          "quantity": 6
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "4-Pin Peripheral",
+          "quantity": 6
+        },
+        {
+          "type": "4-Pin Floppy Adapter",
+          "quantity": 2
         }
+      ]
     },
-    {
-        "product_name": "PSU FSP Dagger Pro 850 Gen 5 - 80 Plus Gold - SFX (850W)",
-        "vendor": "FSP",
-        "product_type": "psu",
-        "price": "3290000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Non-Modular",
-            "connectors": [
-                {
-                    "type": "ATX Main",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS (CPU) 4+4 Pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "12VHPWR (PCIe 5.0)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2 Pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 6
-                },
-                {
-                    "type": "4-pin Peripheral (Molex)",
-                    "quantity": 3
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "SilverStone",
+    "productID": 243,
+    "importPrice": 1743,
+    "sellingPrice": 3234,
+    "sales": 237,
+    "stock": 169,
+    "discount": 23,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU FSP Dagger Pro 850 Gen 5 - 80 Plus Gold - SFX (850W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "nonModular",
+      "connectors": [
+        {
+          "type": "ATX Main",
+          "quantity": 1
+        },
+        {
+          "type": "EPS (CPU) 4+4 Pin",
+          "quantity": 2
+        },
+        {
+          "type": "12VHPWR (PCIe 5.0)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2 Pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 6
+        },
+        {
+          "type": "4-pin Peripheral (Molex)",
+          "quantity": 3
         }
+      ]
     },
-    {
-        "product_name": "PSU FSP Dagger Pro 650W - 80 Plus Gold - SFX (650W)",
-        "vendor": "FSP",
-        "product_type": "psu",
-        "price": "2790000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 650,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Non-Modular",
-            "connectors": [
-                {
-                    "type": "ATX Main Power",
-                    "quantity": 1,
-                    "pins": "20+4"
-                },
-                {
-                    "type": "EPS/CPU",
-                    "quantity": 2,
-                    "pins": "4+4"
-                },
-                {
-                    "type": "PCIe",
-                    "quantity": 2,
-                    "pins": "6+2"
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 5
-                },
-                {
-                    "type": "Molex",
-                    "quantity": 2
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "FSP",
+    "productID": 244,
+    "importPrice": 2303,
+    "sellingPrice": 5306,
+    "sales": 88,
+    "stock": 156,
+    "discount": 38,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU FSP Dagger Pro 650W - 80 Plus Gold - SFX (650W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 650,
+      "efficiency": "gold",
+      "modularity": "nonModular",
+      "connectors": [
+        {
+          "type": "ATX Main Power",
+          "quantity": 1,
+          "pins": "20+4"
+        },
+        {
+          "type": "EPS/CPU",
+          "quantity": 2,
+          "pins": "4+4"
+        },
+        {
+          "type": "PCIe",
+          "quantity": 2,
+          "pins": "6+2"
+        },
+        {
+          "type": "SATA",
+          "quantity": 5
+        },
+        {
+          "type": "Molex",
+          "quantity": 2
         }
+      ]
     },
-    {
-        "product_name": "PSU GIGABYTE UD1000GM - 80 Plus Gold - Full Modular (1000W)",
-        "vendor": "GIGABYTE",
-        "product_type": "psu",
-        "price": "4390000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1000,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 20+4 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU EPS 4+4 Pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCIe 5.0 12VHPWR (16-pin)",
-                    "quantity": 1
-                },
-                {
-                    "type": "PCIe 6+2 Pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 8
-                },
-                {
-                    "type": "Peripheral (Molex 4-pin)",
-                    "quantity": 3
-                },
-                {
-                    "type": "Floppy 4-pin",
-                    "quantity": 1
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "FSP",
+    "productID": 245,
+    "importPrice": 1953,
+    "sellingPrice": 4429,
+    "sales": 284,
+    "stock": 144,
+    "discount": 37,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU GIGABYTE UD1000GM - 80 Plus Gold - Full Modular (1000W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1000,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 20+4 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU EPS 4+4 Pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCIe 5.0 12VHPWR (16-pin)",
+          "quantity": 1
+        },
+        {
+          "type": "PCIe 6+2 Pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 8
+        },
+        {
+          "type": "Peripheral (Molex 4-pin)",
+          "quantity": 3
+        },
+        {
+          "type": "Floppy 4-pin",
+          "quantity": 1
         }
+      ]
     },
-    {
-        "product_name": "PSU GIGABYTE AORUS P1200W - 80 Plus Platinum - Full Modular (1200W)",
-        "vendor": "GIGABYTE",
-        "product_type": "psu",
-        "price": "9990000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 1200,
-            "efficiency_rating": "80 Plus Platinum",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX/MB 20+4 Pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "CPU/EPS 4+4 Pin",
-                    "quantity": 2
-                },
-                {
-                    "type": "PCI-e 6+2 Pin",
-                    "quantity": 10
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 16
-                },
-                {
-                    "type": "4 Pin Peripheral (Molex)",
-                    "quantity": 6
-                },
-                {
-                    "type": "4-Pin Floppy",
-                    "quantity": 2
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "GIGABYTE",
+    "productID": 246,
+    "importPrice": 3073,
+    "sellingPrice": 5701,
+    "sales": 132,
+    "stock": 106,
+    "discount": 23,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU GIGABYTE AORUS P1200W - 80 Plus Platinum - Full Modular (1200W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 1200,
+      "efficiency": "platinum",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX/MB 20+4 Pin",
+          "quantity": 1
+        },
+        {
+          "type": "CPU/EPS 4+4 Pin",
+          "quantity": 2
+        },
+        {
+          "type": "PCI-e 6+2 Pin",
+          "quantity": 10
+        },
+        {
+          "type": "SATA",
+          "quantity": 16
+        },
+        {
+          "type": "4 Pin Peripheral (Molex)",
+          "quantity": 6
+        },
+        {
+          "type": "4-Pin Floppy",
+          "quantity": 2
         }
+      ]
     },
-    {
-        "product_name": "PSU NZXT C650W - 80 Plus Bronze - Semi Modular (650W)",
-        "vendor": "NZXT",
-        "product_type": "psu",
-        "price": "1590000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 650,
-            "efficiency_rating": "80 Plus Bronze",
-            "cable_modularity": "Semi Modular",
-            "connectors": [
-                {
-                    "type": "24-pin ATX Power",
-                    "quantity": 1
-                },
-                {
-                    "type": "4+4-pin CPU Power",
-                    "quantity": 2
-                },
-                {
-                    "type": "6+2-pin PCIe Power",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA Power",
-                    "quantity": 6
-                },
-                {
-                    "type": "4-pin Peripheral",
-                    "quantity": 3
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "GIGABYTE",
+    "productID": 247,
+    "importPrice": 6993,
+    "sellingPrice": 15857,
+    "sales": 413,
+    "stock": 217,
+    "discount": 37,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU NZXT C650W - 80 Plus Bronze - Semi Modular (650W)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 650,
+      "efficiency": "bronze",
+      "modularity": "semiModular",
+      "connectors": [
+        {
+          "type": "24-pin ATX Power",
+          "quantity": 1
+        },
+        {
+          "type": "4+4-pin CPU Power",
+          "quantity": 2
+        },
+        {
+          "type": "6+2-pin PCIe Power",
+          "quantity": 4
+        },
+        {
+          "type": "SATA Power",
+          "quantity": 6
+        },
+        {
+          "type": "4-pin Peripheral",
+          "quantity": 3
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair RM850 White - 80 Plus Gold - Full Modular (850W) (CP-9020232-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "3590000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 850,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX 24-pin",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/ATX12V 8-pin (4+4)",
-                    "quantity": 3
-                },
-                {
-                    "type": "PCIe 6+2-pin",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 14
-                },
-                {
-                    "type": "PATA",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "NZXT",
+    "productID": 248,
+    "importPrice": 1113,
+    "sellingPrice": 2038,
+    "sales": 167,
+    "stock": 121,
+    "discount": 22,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair RM850 White - 80 Plus Gold - Full Modular (850W) (CP-9020232-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 850,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX 24-pin",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/ATX12V 8-pin (4+4)",
+          "quantity": 3
+        },
+        {
+          "type": "PCIe 6+2-pin",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 14
+        },
+        {
+          "type": "PATA",
+          "quantity": 4
         }
+      ]
     },
-    {
-        "product_name": "PSU Corsair RM750 White - 80 Plus Gold - Full Modular (750W) (CP-9020231-NA)",
-        "vendor": "Corsair",
-        "product_type": "psu",
-        "price": "2890000",
-        "warranty": "",
-        "attributes": {
-            "max_wattage": 750,
-            "efficiency_rating": "80 Plus Gold",
-            "cable_modularity": "Full Modular",
-            "connectors": [
-                {
-                    "type": "ATX",
-                    "quantity": 1
-                },
-                {
-                    "type": "EPS/ATX12V (4+4-pin)",
-                    "quantity": 3
-                },
-                {
-                    "type": "PCIe (6+2-pin)",
-                    "quantity": 4
-                },
-                {
-                    "type": "SATA",
-                    "quantity": 7
-                },
-                {
-                    "type": "Peripheral (4-pin Molex)",
-                    "quantity": 4
-                }
-            ]
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 249,
+    "importPrice": 2513,
+    "sellingPrice": 4325,
+    "sales": 76,
+    "stock": 443,
+    "discount": 17,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "PSU Corsair RM750 White - 80 Plus Gold - Full Modular (750W) (CP-9020231-NA)",
+    "warranty": "",
+    "attributes": {
+      "maxWattage": 750,
+      "efficiency": "gold",
+      "modularity": "fullModular",
+      "connectors": [
+        {
+          "type": "ATX",
+          "quantity": 1
+        },
+        {
+          "type": "EPS/ATX12V (4+4-pin)",
+          "quantity": 3
+        },
+        {
+          "type": "PCIe (6+2-pin)",
+          "quantity": 4
+        },
+        {
+          "type": "SATA",
+          "quantity": 7
+        },
+        {
+          "type": "Peripheral (4-pin Molex)",
+          "quantity": 4
         }
-    }
+      ]
+    },
+    "category": "psu",
+    "manufacturer": "Corsair",
+    "productID": 250,
+    "importPrice": 2023,
+    "sellingPrice": 4070,
+    "sales": 382,
+    "stock": 163,
+    "discount": 29,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  }
 ]

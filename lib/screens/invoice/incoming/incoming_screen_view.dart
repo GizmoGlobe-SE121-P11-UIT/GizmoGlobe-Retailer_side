@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
-import 'package:gizmoglobe_client/screens/invoice/incoming/incoming_add/incoming_add_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/incoming/permissions/incoming_invoice_permissions.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
@@ -10,6 +9,7 @@ import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../enums/invoice_related/payment_status.dart';
+import '../../../functions/helper.dart';
 import '../../../objects/invoice_related/incoming_invoice.dart';
 import '../../../widgets/general/status_badge.dart';
 import 'incoming_detail/incoming_detail_view.dart';
@@ -333,7 +333,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                             ),
                                             const SizedBox(width: 8),
                                             Text(
-                                              '\$${invoice.totalPrice.toStringAsFixed(2)}',
+                                              Helper.toCurrencyFormat(
+                                                  invoice.totalPrice),
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,

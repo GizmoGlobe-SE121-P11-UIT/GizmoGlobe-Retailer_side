@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../data/firebase/firebase.dart';
+import '../../../functions/helper.dart';
 import '../../../objects/invoice_related/sales_invoice.dart';
 import 'sales_screen_cubit.dart';
 import 'sales_screen_state.dart';
@@ -268,7 +269,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                             ),
                                             const SizedBox(width: 8),
                                             Text(
-                                              '\$${invoice.totalPrice.toStringAsFixed(2)}',
+                                              Helper.toCurrencyFormat(invoice.totalPrice),
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,

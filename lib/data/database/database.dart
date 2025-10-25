@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:gizmoglobe_client/enums/product_related/mainboard_enums/mainboard_compatibility.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
@@ -11,19 +10,12 @@ import 'package:gizmoglobe_client/objects/customer.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../enums/product_related/category_enum.dart';
-import '../../enums/product_related/cpu_enums/cpu_family.dart';
-import '../../enums/product_related/drive_enums/drive_capacity.dart';
 import '../../enums/product_related/drive_enums/drive_type.dart';
-import '../../enums/product_related/gpu_enums/gpu_bus.dart';
-import '../../enums/product_related/gpu_enums/gpu_capacity.dart';
 import '../../enums/product_related/gpu_enums/gpu_series.dart';
 import '../../enums/product_related/mainboard_enums/mainboard_form_factor.dart';
-import '../../enums/product_related/mainboard_enums/mainboard_series.dart';
 import '../../enums/product_related/product_status_enum.dart';
 import '../../enums/product_related/psu_enums/psu_efficiency.dart';
 import '../../enums/product_related/psu_enums/psu_modular.dart';
-import '../../enums/product_related/ram_enums/ram_bus.dart';
-import '../../enums/product_related/ram_enums/ram_capacity_enum.dart';
 import '../../enums/product_related/ram_enums/ram_type.dart';
 import '../../objects/address_related/address.dart';
 import '../../objects/address_related/province.dart';
@@ -151,111 +143,99 @@ class Database {
       await fetchDataFromFirestore();
     } catch (e) {
       if (kDebugMode) {
-        print(
-            'Error when initializing database: $e'); // Lỗi khi khởi tạo database
+        print('Error when initializing database: $e');
       }
       // Nếu không lấy được dữ liệu từ Firestore, sử dụng dữ liệu mẫu
       // _initializeSampleData();
     }
   }
 
+  // Future<void> migrateManufacturerData() async {
+  //   final productsSnapshot = await FirebaseFirestore.instance.collection('products').get();
+  //   final manufacturers = await Firebase().getManufacturers();
+  //   final manufacturerMap = {for (var m in manufacturers) m.manufacturerID: m.manufacturerName};
+  //
+  //   for (var doc in productsSnapshot.docs) {
+  //     final data = doc.data();
+  //     if (data['manufacturer'] is String) {
+  //       final manufacturerId = data['manufacturer'];
+  //       if (manufacturerId == 'vIQErfxHn8kBv3YRHxya\n') {
+  //         await doc.reference.update({'manufacturer': 'vIQErfxHn8kBv3YRHxya'});
+  //       }
+  //     }
+  //   }
+  // }
+
   Future<void> fetchDataFromFirestore() async {
     try {
       if (kDebugMode) {
-        print(
-            'Initializing connection to Firebase'); //Bắt đầu lấy dữ liệu từ Firestore
+        print('Initializing connection to Firebase');
       }
       await getUser();
       await getUsername();
       if (kDebugMode) {
-        print('User: $username, Email: $email'); //Thông tin người dùng
+        print('User: $username, Email: $email');
       }
-      final manufacturerSnapshot =
-          await FirebaseFirestore.instance.collection('manufacturers').get();
 
       manufacturerList = await Firebase().getManufacturers();
 
+      // await migrateManufacturerData();
+
       if (kDebugMode) {
-        print('Manufacturers: ${manufacturerList.length}'); //Nhà sản xuất
+        print('Manufacturers: ${manufacturerList.length}');
       }
 
-      // Lấy danh sách products từ Firestore
       final productSnapshot =
           await FirebaseFirestore.instance.collection('products').get();
 
       if (kDebugMode) {
-        print('Products: ${productSnapshot.docs.length}'); //Sản phẩm
+        print('Products: ${productSnapshot.docs.length}');
       }
 
-      productList = await Future.wait(productSnapshot.docs.map((doc) async {
+      final products = (await Future.wait(productSnapshot.docs.map((doc) async {
         try {
-          final data = doc.data();
-
-          // Tìm manufacturer tương ứng
-          final manufacturer = manufacturerList.firstWhere(
-            (m) => m.manufacturerID == data['manufacturerID'],
-            // orElse: () {
-            //   if (kDebugMode) {
-            //     print('Manufacturer not found for product ${doc.id}');
-            //   }
-            //   throw Exception('Manufacturer not found for product ${doc.id}');
-            // },
-          );
-
-          // Chuyển đổi dữ liệu từ Firestore sang enum
-          final category = CategoryEnum.nonEmptyValues.firstWhere(
-            (c) => c.getName() == data['category'],
-            orElse: () {
-              if (kDebugMode) {
-                print('Invalid category for product ${doc.id}');
-              }
-              throw Exception('Invalid category for product ${doc.id}');
-            },
-          );
-
-          final specificData = _getSpecificProductData(data, category);
-          if (specificData.isEmpty) {
+          final dynamic raw = doc.data();
+          if (raw is! Map<String, dynamic>) {
             if (kDebugMode) {
-              print('Cannot get specific data for product ${doc.id}');
+              print(
+                  'Product ${doc.id} has unexpected data type: ${raw.runtimeType}');
             }
-            throw Exception('Cannot get specific data for product ${doc.id}');
+            return null;
           }
 
-          return ProductFactory.createProduct(
-            category,
-            {
-              'productID': doc.id,
-              'productName': data['productName'],
-              'importPrice': data['importPrice'].toDouble(),
-              'sellingPrice': data['sellingPrice'].toDouble(),
-              'discount': data['discount'].toDouble(),
-              'release': (data['release'] as Timestamp).toDate(),
-              'sales': data['sales'],
-              'stock': data['stock'],
-              'enDescription': data['enDescription'],
-              'viDescription': data['viDescription'],
-              'status': ProductStatusEnum.values.firstWhere(
-                (s) => s.getName() == data['status'],
-                orElse: () {
-                  if (kDebugMode) {
-                    print('Invalid status for product ${doc.id}');
-                  }
-                  throw Exception('Invalid status for product ${doc.id}');
-                },
-              ),
-              'manufacturer': manufacturer,
-              'imageUrl': data['imageUrl'],
-              ...specificData,
-            },
-          );
-        } catch (e) {
-          // if (kDebugMode) {
-          //   print('Error processing product ${doc.id}: $e');
-          // }
-          // return Future.error('Error processing product ${doc.id}: $e');
-          return Future.value(null);
+          // Normalize: parse JSON strings into Map/List where applicable
+          final Map<String, dynamic> data =
+              raw.map<String, dynamic>((key, value) {
+            dynamic normalized = value;
+            if (value is String) {
+              final s = value.trim();
+              if ((s.startsWith('{') && s.endsWith('}')) ||
+                  (s.startsWith('[') && s.endsWith(']'))) {
+                try {
+                  normalized = jsonDecode(s);
+                } catch (_) {
+                  normalized = value; // leave original if parse fails
+                }
+              }
+            }
+            return MapEntry(key, normalized);
+          });
+
+          // Ensure productID present (some factories expect it)
+          data.putIfAbsent('productID', () => doc.id);
+
+          return ProductFactory.createProduct(data);
+        } catch (e, st) {
+          if (kDebugMode) {
+            print('Error processing product ${doc.id}: $e\n$st');
+          }
+          return null;
         }
-      }));
+      })))
+          .whereType<Product>()
+          .toList();
+
+      productList = products;
 
       await fetchAddress();
 
@@ -269,65 +249,6 @@ class Database {
       if (kDebugMode) {
         print('Error fetching data: $e');
       }
-    }
-  }
-
-  Map<String, dynamic> _getSpecificProductData(
-      Map<String, dynamic> data, CategoryEnum category) {
-    switch (category) {
-      case CategoryEnum.ram:
-        return {
-          'bus': RAMBus.values.firstWhere((b) => b.getName() == data['bus']),
-          'capacity': RAMCapacity.values
-              .firstWhere((c) => c.getName() == data['capacity']),
-          'ramType':
-              RAMType.values.firstWhere((t) => t.getName() == data['ramType']),
-        };
-
-      case CategoryEnum.cpu:
-        return {
-          'family':
-              CPUFamily.values.firstWhere((f) => f.getName() == data['family']),
-          'core': data['core'],
-          'thread': data['thread'],
-          'clockSpeed': data['clockSpeed'].toDouble(),
-        };
-      case CategoryEnum.gpu:
-        return {
-          'series':
-              GPUSeries.values.firstWhere((s) => s.getName() == data['series']),
-          'capacity': GPUCapacity.values
-              .firstWhere((c) => c.getName() == data['capacity']),
-          'busWidth':
-              GPUBus.values.firstWhere((b) => b.getName() == data['busWidth']),
-          'clockSpeed': data['clockSpeed'].toDouble(),
-        };
-      case CategoryEnum.mainboard:
-        return {
-          'formFactor': MainboardFormFactor.values
-              .firstWhere((f) => f.getName() == data['formFactor']),
-          'series': MainboardSeries.values
-              .firstWhere((s) => s.getName() == data['series']),
-          'compatibility': MainboardCompatibility.values
-              .firstWhere((c) => c.getName() == data['compatibility']),
-        };
-      case CategoryEnum.drive:
-        return {
-          'type':
-              DriveType.values.firstWhere((t) => t.getName() == data['type']),
-          'capacity': DriveCapacity.values
-              .firstWhere((c) => c.getName() == data['capacity']),
-        };
-      case CategoryEnum.psu:
-        return {
-          'wattage': data['wattage'],
-          'efficiency': PSUEfficiency.values
-              .firstWhere((e) => e.getName() == data['efficiency']),
-          'modular': PSUModular.values
-              .firstWhere((m) => m.getName() == data['modular']),
-        };
-      default:
-        return {};
     }
   }
 

@@ -1,802 +1,1252 @@
 [
-    {
-        "product_name": "CPU Intel Core Ultra 9 285K / Turbo up to 5.7GHz / 24 Core 24 Thread / 36MB / LGA 1851",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "17490000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei9Ultra9",
-            "socket": "LGA 1851",
-            "core": 24,
-            "thread": 24,
-            "base_clock": 3.7,
-            "tdp": 250,
-            "turbo_clock": 5.7
-        }
+  {
+    "productName": "CPU Intel Core Ultra 9 285K / Turbo up to 5.7GHz / 24 Core 24 Thread / 36MB / lga1851",
+    "warranty": "",
+    "attributes": {
+      "series": "corei9Ultra9",
+      "socket": "lga1851",
+      "core": 24,
+      "thread": 24,
+      "baseClock": 3.7,
+      "tdp": 250,
+      "turboClock": 5.7
     },
-    {
-        "product_name": "CPU Intel Core Ultra 9 285 / Turbo up to 5.6GHz / 24 Core 24 Thread / 36MB / LGA 1851",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "16990000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei9Ultra9",
-            "socket": "LGA 1851",
-            "core": 24,
-            "thread": 24,
-            "base_clock": 2.5,
-            "tdp": 182,
-            "turbo_clock": 5.6
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 1,
+    "importPrice": 12243,
+    "sellingPrice": 21593,
+    "sales": 418,
+    "stock": 109,
+    "discount": 19,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core Ultra 9 285 / Turbo up to 5.6GHz / 24 Core 24 Thread / 36MB / lga1851",
+    "warranty": "",
+    "attributes": {
+      "series": "corei9Ultra9",
+      "socket": "lga1851",
+      "core": 24,
+      "thread": 24,
+      "baseClock": 2.5,
+      "tdp": 182,
+      "turboClock": 5.6
     },
-    {
-        "product_name": "CPU Intel Core Ultra 7 265K / Turbo up to 5.5GHz / 20 Core 20 Thread / 30MB / LGA 1851",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "11790000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei7Ultra7",
-            "socket": "LGA 1851",
-            "core": 20,
-            "thread": 20,
-            "base_clock": 3.9,
-            "tdp": 250,
-            "turbo_clock": 5.5
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 2,
+    "importPrice": 11893,
+    "sellingPrice": 21782,
+    "sales": 132,
+    "stock": 458,
+    "discount": 22,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core Ultra 7 265K / Turbo up to 5.5GHz / 20 Core 20 Thread / 30MB / lga1851",
+    "warranty": "",
+    "attributes": {
+      "series": "corei7Ultra7",
+      "socket": "lga1851",
+      "core": 20,
+      "thread": 20,
+      "baseClock": 3.9,
+      "tdp": 250,
+      "turboClock": 5.5
     },
-    {
-        "product_name": "CPU Intel Core Ultra 7 265 / Turbo up to 5.3GHz / 20 Core 20 Thread / 30MB / LGA 1851",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "10990000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei7Ultra7",
-            "socket": "LGA 1851",
-            "core": 20,
-            "thread": 20,
-            "base_clock": 2.4,
-            "tdp": 182,
-            "turbo_clock": 5.3
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 3,
+    "importPrice": 8253,
+    "sellingPrice": 19650,
+    "sales": 366,
+    "stock": 345,
+    "discount": 40,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core Ultra 7 265 / Turbo up to 5.3GHz / 20 Core 20 Thread / 30MB / lga1851",
+    "warranty": "",
+    "attributes": {
+      "series": "corei7Ultra7",
+      "socket": "lga1851",
+      "core": 20,
+      "thread": 20,
+      "baseClock": 2.4,
+      "tdp": 182,
+      "turboClock": 5.3
     },
-    {
-        "product_name": "CPU Intel Core Ultra 5 245K / Turbo up to 5.2GHz / 14 Core 14 Thread / 24MB / LGA 1851",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "8690000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei5Ultra5",
-            "socket": "LGA 1851",
-            "core": 14,
-            "thread": 14,
-            "base_clock": 4.2,
-            "tdp": 159,
-            "turbo_clock": 5.2
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 4,
+    "importPrice": 7693,
+    "sellingPrice": 12929,
+    "sales": 324,
+    "stock": 104,
+    "discount": 15,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core Ultra 5 245K / Turbo up to 5.2GHz / 14 Core 14 Thread / 24MB / lga1851",
+    "warranty": "",
+    "attributes": {
+      "series": "corei5Ultra5",
+      "socket": "lga1851",
+      "core": 14,
+      "thread": 14,
+      "baseClock": 4.2,
+      "tdp": 159,
+      "turboClock": 5.2
     },
-    {
-        "product_name": "CPU Intel Core Ultra 5 245 / Turbo up to 5.1GHz / 14 Core 14 Thread / 24MB / LGA 1851",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "8490000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei5Ultra5",
-            "socket": "LGA 1851",
-            "core": 14,
-            "thread": 14,
-            "base_clock": 3.5,
-            "tdp": 121,
-            "turbo_clock": 5.1
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 5,
+    "importPrice": 6083,
+    "sellingPrice": 9989,
+    "sales": 271,
+    "stock": 147,
+    "discount": 13,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core Ultra 5 245 / Turbo up to 5.1GHz / 14 Core 14 Thread / 24MB / lga1851",
+    "warranty": "",
+    "attributes": {
+      "series": "corei5Ultra5",
+      "socket": "lga1851",
+      "core": 14,
+      "thread": 14,
+      "baseClock": 3.5,
+      "tdp": 121,
+      "turboClock": 5.1
     },
-    {
-        "product_name": "CPU Intel Core Ultra 5 235 / Turbo up to 5.0 GHz / 14 Core 14 Thread / 24MB / LGA 1851",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "7990000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei5Ultra5",
-            "socket": "LGA 1851",
-            "core": 14,
-            "thread": 14,
-            "base_clock": 3.4,
-            "tdp": 121,
-            "turbo_clock": 5.0
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 6,
+    "importPrice": 5943,
+    "sellingPrice": 11320,
+    "sales": 146,
+    "stock": 294,
+    "discount": 25,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core Ultra 5 235 / Turbo up to 5.0 GHz / 14 Core 14 Thread / 24MB / lga1851",
+    "warranty": "",
+    "attributes": {
+      "series": "corei5Ultra5",
+      "socket": "lga1851",
+      "core": 14,
+      "thread": 14,
+      "baseClock": 3.4,
+      "tdp": 121,
+      "turboClock": 5.0
     },
-    {
-        "product_name": "CPU Intel Core Ultra 5 225 / Turbo up to 4.9 GHz / 10 Core 10 Thread / 20MB / LGA 1851",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "7490000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei5Ultra5",
-            "socket": "LGA 1851",
-            "core": 10,
-            "thread": 10,
-            "base_clock": 3.3,
-            "tdp": 121,
-            "turbo_clock": 4.9
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 7,
+    "importPrice": 5593,
+    "sellingPrice": 11750,
+    "sales": 81,
+    "stock": 84,
+    "discount": 32,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core Ultra 5 225 / Turbo up to 4.9 GHz / 10 Core 10 Thread / 20MB / lga1851",
+    "warranty": "",
+    "attributes": {
+      "series": "corei5Ultra5",
+      "socket": "lga1851",
+      "core": 10,
+      "thread": 10,
+      "baseClock": 3.3,
+      "tdp": 121,
+      "turboClock": 4.9
     },
-    {
-        "product_name": "CPU Intel Core i9 14900K / Turbo up to 6.0GHz / 24 Core 32 Thread / 36MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "13690000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei9Ultra9",
-            "socket": "LGA 1700",
-            "core": 24,
-            "thread": 32,
-            "base_clock": 3.2,
-            "tdp": 253,
-            "turbo_clock": 6.0
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 8,
+    "importPrice": 5243,
+    "sellingPrice": 9855,
+    "sales": 327,
+    "stock": 235,
+    "discount": 24,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i9 14900K / Turbo up to 6.0GHz / 24 Core 32 Thread / 36MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei9Ultra9",
+      "socket": "lga1700",
+      "core": 24,
+      "thread": 32,
+      "baseClock": 3.2,
+      "tdp": 253,
+      "turboClock": 6.0
     },
-    {
-        "product_name": "CPU Intel Core i9 14900 / Turbo up to 5.8GHz / 24 Core 32 Thread / 36MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "15690000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei9Ultra9",
-            "socket": "LGA 1700",
-            "core": 24,
-            "thread": 32,
-            "base_clock": 2.0,
-            "tdp": 219,
-            "turbo_clock": 5.8
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 9,
+    "importPrice": 9583,
+    "sellingPrice": 16695,
+    "sales": 100,
+    "stock": 209,
+    "discount": 18,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i9 14900 / Turbo up to 5.8GHz / 24 Core 32 Thread / 36MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei9Ultra9",
+      "socket": "lga1700",
+      "core": 24,
+      "thread": 32,
+      "baseClock": 2.0,
+      "tdp": 219,
+      "turboClock": 5.8
     },
-    {
-        "product_name": "CPU Intel Core i7 14700K / Turbo up to 5.6GHz / 20 Core 28 Thread / 33MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "10690000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei7Ultra7",
-            "socket": "LGA 1700",
-            "core": 20,
-            "thread": 28,
-            "base_clock": 3.4,
-            "tdp": 253,
-            "turbo_clock": 5.6
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 10,
+    "importPrice": 10983,
+    "sellingPrice": 22099,
+    "sales": 328,
+    "stock": 235,
+    "discount": 29,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i7 14700K / Turbo up to 5.6GHz / 20 Core 28 Thread / 33MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei7Ultra7",
+      "socket": "lga1700",
+      "core": 20,
+      "thread": 28,
+      "baseClock": 3.4,
+      "tdp": 253,
+      "turboClock": 5.6
     },
-    {
-        "product_name": "CPU Intel Core i7 14700 / Turbo up to 5.4GHz / 20 Core 28 Thread / 33MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "9290000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei7Ultra7",
-            "socket": "LGA 1700",
-            "core": 20,
-            "thread": 28,
-            "base_clock": 2.1,
-            "tdp": 219,
-            "turbo_clock": 5.4
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 11,
+    "importPrice": 7483,
+    "sellingPrice": 14253,
+    "sales": 135,
+    "stock": 230,
+    "discount": 25,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i7 14700 / Turbo up to 5.4GHz / 20 Core 28 Thread / 33MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei7Ultra7",
+      "socket": "lga1700",
+      "core": 20,
+      "thread": 28,
+      "baseClock": 2.1,
+      "tdp": 219,
+      "turboClock": 5.4
     },
-    {
-        "product_name": "CPU Intel Core i5 14600K / Turbo up to 5.3GHz / 14 Core 20 Thread / 24MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "6790000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei5Ultra5",
-            "socket": "LGA 1700",
-            "core": 14,
-            "thread": 20,
-            "base_clock": 3.5,
-            "tdp": 181,
-            "turbo_clock": 5.3
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 12,
+    "importPrice": 6503,
+    "sellingPrice": 12726,
+    "sales": 160,
+    "stock": 493,
+    "discount": 27,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i5 14600K / Turbo up to 5.3GHz / 14 Core 20 Thread / 24MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei5Ultra5",
+      "socket": "lga1700",
+      "core": 14,
+      "thread": 20,
+      "baseClock": 3.5,
+      "tdp": 181,
+      "turboClock": 5.3
     },
-    {
-        "product_name": "CPU Intel Core i5 14500 / Turbo up to 5.0GHz / 14 Core 20 Thread / 24MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "6690000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei5Ultra5",
-            "socket": "LGA 1700",
-            "core": 14,
-            "thread": 20,
-            "base_clock": 2.6,
-            "tdp": 154,
-            "turbo_clock": 5.0
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 13,
+    "importPrice": 4753,
+    "sellingPrice": 9431,
+    "sales": 312,
+    "stock": 409,
+    "discount": 28,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i5 14500 / Turbo up to 5.0GHz / 14 Core 20 Thread / 24MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei5Ultra5",
+      "socket": "lga1700",
+      "core": 14,
+      "thread": 20,
+      "baseClock": 2.6,
+      "tdp": 154,
+      "turboClock": 5.0
     },
-    {
-        "product_name": "CPU Intel Core i5 14400 / Turbo up to 4.7GHz / 10 Core 16 Thread / 20MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "5190000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei5Ultra5",
-            "socket": "LGA 1700",
-            "core": 10,
-            "thread": 16,
-            "base_clock": 2.5,
-            "tdp": 148,
-            "turbo_clock": 4.7
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 14,
+    "importPrice": 4683,
+    "sellingPrice": 7690,
+    "sales": 468,
+    "stock": 219,
+    "discount": 13,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i5 14400 / Turbo up to 4.7GHz / 10 Core 16 Thread / 20MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei5Ultra5",
+      "socket": "lga1700",
+      "core": 10,
+      "thread": 16,
+      "baseClock": 2.5,
+      "tdp": 148,
+      "turboClock": 4.7
     },
-    {
-        "product_name": "CPU Intel Core i3 14100 / Turbo up to 4.7GHz / 4 Core 8 Thread / 12MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "3890000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei3Ultra3",
-            "socket": "LGA 1700",
-            "core": 4,
-            "thread": 8,
-            "base_clock": 3.5,
-            "tdp": 110,
-            "turbo_clock": 4.7
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 15,
+    "importPrice": 3633,
+    "sellingPrice": 6570,
+    "sales": 235,
+    "stock": 217,
+    "discount": 21,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i3 14100 / Turbo up to 4.7GHz / 4 Core 8 Thread / 12MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei3Ultra3",
+      "socket": "lga1700",
+      "core": 4,
+      "thread": 8,
+      "baseClock": 3.5,
+      "tdp": 110,
+      "turboClock": 4.7
     },
-    {
-        "product_name": "CPU Intel Core i7 13700 / 2.1GHz Turbo 5.2GHz / 16 Core 24 Thread / 30MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "10490000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei7Ultra7",
-            "socket": "LGA 1700",
-            "core": 16,
-            "thread": 24,
-            "base_clock": 2.1,
-            "tdp": 219,
-            "turbo_clock": 5.2
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 16,
+    "importPrice": 2723,
+    "sellingPrice": 6483,
+    "sales": 252,
+    "stock": 184,
+    "discount": 40,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i7 13700 / 2.1GHz Turbo 5.2GHz / 16 Core 24 Thread / 30MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei7Ultra7",
+      "socket": "lga1700",
+      "core": 16,
+      "thread": 24,
+      "baseClock": 2.1,
+      "tdp": 219,
+      "turboClock": 5.2
     },
-    {
-        "product_name": "CPU Intel Core i7 12700K / 3.6GHz Turbo 5.0GHz / 12 Core 20 Thread / 25MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "7890000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei7Ultra7",
-            "socket": "LGA 1700",
-            "core": 12,
-            "thread": 20,
-            "base_clock": 3.6,
-            "tdp": 190,
-            "turbo_clock": 5.0
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 17,
+    "importPrice": 7343,
+    "sellingPrice": 14176,
+    "sales": 283,
+    "stock": 358,
+    "discount": 26,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i7 12700K / 3.6GHz Turbo 5.0GHz / 12 Core 20 Thread / 25MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei7Ultra7",
+      "socket": "lga1700",
+      "core": 12,
+      "thread": 20,
+      "baseClock": 3.6,
+      "tdp": 190,
+      "turboClock": 5.0
     },
-    {
-        "product_name": "CPU Intel Core i7 12700 / 2.1GHz Turbo 4.9GHz / 12 Core 20 Thread / 25MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "8490000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei7Ultra7",
-            "socket": "LGA 1700",
-            "core": 12,
-            "thread": 20,
-            "base_clock": 2.1,
-            "tdp": 180,
-            "turbo_clock": 4.9
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 18,
+    "importPrice": 5523,
+    "sellingPrice": 9069,
+    "sales": 161,
+    "stock": 500,
+    "discount": 13,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i7 12700 / 2.1GHz Turbo 4.9GHz / 12 Core 20 Thread / 25MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei7Ultra7",
+      "socket": "lga1700",
+      "core": 12,
+      "thread": 20,
+      "baseClock": 2.1,
+      "tdp": 180,
+      "turboClock": 4.9
     },
-    {
-        "product_name": "CPU Intel Core i5 13400 / 2.5GHz Turbo 4.6GHz / 10 Core 16 Thread / 20MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "4490000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei5Ultra5",
-            "socket": "LGA 1700",
-            "core": 10,
-            "thread": 16,
-            "base_clock": 2.5,
-            "tdp": 154,
-            "turbo_clock": 4.6
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 19,
+    "importPrice": 5943,
+    "sellingPrice": 9648,
+    "sales": 424,
+    "stock": 404,
+    "discount": 12,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i5 13400 / 2.5GHz Turbo 4.6GHz / 10 Core 16 Thread / 20MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei5Ultra5",
+      "socket": "lga1700",
+      "core": 10,
+      "thread": 16,
+      "baseClock": 2.5,
+      "tdp": 154,
+      "turboClock": 4.6
     },
-    {
-        "product_name": "CPU Intel Core i5 12400 / 2.5GHz Turbo 4.4GHz / 6 Core 12 Thread / 18MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "3790000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei5Ultra5",
-            "socket": "LGA 1700",
-            "core": 6,
-            "thread": 12,
-            "base_clock": 2.5,
-            "tdp": 117,
-            "turbo_clock": 4.4
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 20,
+    "importPrice": 3143,
+    "sellingPrice": 5282,
+    "sales": 167,
+    "stock": 248,
+    "discount": 15,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i5 12400 / 2.5GHz Turbo 4.4GHz / 6 Core 12 Thread / 18MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei5Ultra5",
+      "socket": "lga1700",
+      "core": 6,
+      "thread": 12,
+      "baseClock": 2.5,
+      "tdp": 117,
+      "turboClock": 4.4
     },
-    {
-        "product_name": "CPU Intel Core i3 13100 / 3.4GHz Turbo 4.5GHz / 4 Core 8 Thread / 12MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "3990000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei3Ultra3",
-            "socket": "LGA 1700",
-            "core": 4,
-            "thread": 8,
-            "base_clock": 3.4,
-            "tdp": 89,
-            "turbo_clock": 4.5
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 21,
+    "importPrice": 2653,
+    "sellingPrice": 6213,
+    "sales": 367,
+    "stock": 81,
+    "discount": 39,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i3 13100 / 3.4GHz Turbo 4.5GHz / 4 Core 8 Thread / 12MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei3Ultra3",
+      "socket": "lga1700",
+      "core": 4,
+      "thread": 8,
+      "baseClock": 3.4,
+      "tdp": 89,
+      "turboClock": 4.5
     },
-    {
-        "product_name": "CPU Intel Core i3 12100 / 3.3GHz Turbo 4.3GHz / 4 Core 8 Thread / 12MB / LGA 1700",
-        "vendor": "Intel",
-        "product_type": "cpu",
-        "price": "2890000",
-        "warranty": "",
-        "attributes": {
-            "series": "corei3Ultra3",
-            "socket": "LGA 1700",
-            "core": 4,
-            "thread": 8,
-            "base_clock": 3.3,
-            "tdp": 89,
-            "turbo_clock": 4.3
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 22,
+    "importPrice": 2793,
+    "sellingPrice": 4750,
+    "sales": 384,
+    "stock": 474,
+    "discount": 16,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU Intel Core i3 12100 / 3.3GHz Turbo 4.3GHz / 4 Core 8 Thread / 12MB / lga1700",
+    "warranty": "",
+    "attributes": {
+      "series": "corei3Ultra3",
+      "socket": "lga1700",
+      "core": 4,
+      "thread": 8,
+      "baseClock": 3.3,
+      "tdp": 89,
+      "turboClock": 4.3
     },
-    {
-        "product_name": "CPU AMD Ryzen Threadripper Pro 7995WX/ 2.5GHz Boost 5.1GHz / 96 Core 192 Thread / 480MB / sTR5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "292000000",
-        "warranty": "",
-        "attributes": {
-            "series": "threadripper",
-            "socket": "sTR5",
-            "core": 96,
-            "thread": 192,
-            "base_clock": 2.5,
-            "tdp": 350,
-            "turbo_clock": 5.1
-        }
+    "category": "cpu",
+    "manufacturer": "Intel",
+    "productID": 23,
+    "importPrice": 2023,
+    "sellingPrice": 3440,
+    "sales": 216,
+    "stock": 382,
+    "discount": 16,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen Threadripper Pro 7995WX/ 2.5GHz Boost 5.1GHz / 96 Core 192 Thread / 480MB / sTR5",
+    "warranty": "",
+    "attributes": {
+      "series": "threadripper",
+      "socket": "sTR5",
+      "core": 96,
+      "thread": 192,
+      "baseClock": 2.5,
+      "tdp": 350,
+      "turboClock": 5.1
     },
-    {
-        "product_name": "CPU AMD Ryzen Threadripper Pro 7985WX/ 3.2GHz Boost 5.1GHz / 64 Core 128 Thread / 320MB / sTR5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "212000000",
-        "warranty": "",
-        "attributes": {
-            "series": "threadripper",
-            "socket": "sTR5",
-            "core": 64,
-            "thread": 128,
-            "base_clock": 3.2,
-            "tdp": 350,
-            "turbo_clock": 5.1
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 24,
+    "importPrice": 204400,
+    "sellingPrice": 356098,
+    "sales": 209,
+    "stock": 395,
+    "discount": 18,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen Threadripper Pro 7985WX/ 3.2GHz Boost 5.1GHz / 64 Core 128 Thread / 320MB / sTR5",
+    "warranty": "",
+    "attributes": {
+      "series": "threadripper",
+      "socket": "sTR5",
+      "core": 64,
+      "thread": 128,
+      "baseClock": 3.2,
+      "tdp": 350,
+      "turboClock": 5.1
     },
-    {
-        "product_name": "CPU AMD Ryzen Threadripper Pro 7975WX/ 4.0GHz Boost 5.3GHz / 32 Core 64 Thread / 160MB / sTR5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "110000000",
-        "warranty": "",
-        "attributes": {
-            "series": "threadripper",
-            "socket": "sTR5",
-            "core": 32,
-            "thread": 64,
-            "base_clock": 4.0,
-            "tdp": 350,
-            "turbo_clock": 5.3
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 25,
+    "importPrice": 148400,
+    "sellingPrice": 235556,
+    "sales": 63,
+    "stock": 313,
+    "discount": 10,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen Threadripper Pro 7975WX/ 4.0GHz Boost 5.3GHz / 32 Core 64 Thread / 160MB / sTR5",
+    "warranty": "",
+    "attributes": {
+      "series": "threadripper",
+      "socket": "sTR5",
+      "core": 32,
+      "thread": 64,
+      "baseClock": 4.0,
+      "tdp": 350,
+      "turboClock": 5.3
     },
-    {
-        "product_name": "CPU AMD Ryzen Threadripper Pro 7965WX/ 4.2GHz Boost 5.3GHz / 24 Core 48 Thread / 152MB / sTR5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "75990000",
-        "warranty": "",
-        "attributes": {
-            "series": "threadripper",
-            "socket": "sTR5",
-            "core": 24,
-            "thread": 48,
-            "base_clock": 4.2,
-            "tdp": 350,
-            "turbo_clock": 5.3
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 26,
+    "importPrice": 77000,
+    "sellingPrice": 169231,
+    "sales": 177,
+    "stock": 231,
+    "discount": 35,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen Threadripper Pro 7965WX/ 4.2GHz Boost 5.3GHz / 24 Core 48 Thread / 152MB / sTR5",
+    "warranty": "",
+    "attributes": {
+      "series": "threadripper",
+      "socket": "sTR5",
+      "core": 24,
+      "thread": 48,
+      "baseClock": 4.2,
+      "tdp": 350,
+      "turboClock": 5.3
     },
-    {
-        "product_name": "CPU AMD Ryzen Threadripper Pro 3995WX / 2.7GHz Boost 4.2GHz / 64 Core 128 Thread / 256MB / sWRX8",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "140990000",
-        "warranty": "",
-        "attributes": {
-            "series": "threadripper",
-            "socket": "sWRX8",
-            "core": 64,
-            "thread": 128,
-            "base_clock": 2.7,
-            "tdp": 280,
-            "turbo_clock": 4.2
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 27,
+    "importPrice": 53193,
+    "sellingPrice": 91554,
+    "sales": 136,
+    "stock": 90,
+    "discount": 17,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen Threadripper Pro 3995WX / 2.7GHz Boost 4.2GHz / 64 Core 128 Thread / 256MB / sWRX8",
+    "warranty": "",
+    "attributes": {
+      "series": "threadripper",
+      "socket": "sWRX8",
+      "core": 64,
+      "thread": 128,
+      "baseClock": 2.7,
+      "tdp": 280,
+      "turboClock": 4.2
     },
-    {
-        "product_name": "CPU AMD Ryzen Threadripper Pro 3955WX / 3.9GHz Boost 4.3GHz / 16 Core 32 Thread / 64MB / sWRX8",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "29890000",
-        "warranty": "",
-        "attributes": {
-            "series": "threadripper",
-            "socket": "sWRX8",
-            "core": 16,
-            "thread": 32,
-            "base_clock": 3.9,
-            "tdp": 280,
-            "turbo_clock": 4.3
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 28,
+    "importPrice": 98693,
+    "sellingPrice": 162057,
+    "sales": 449,
+    "stock": 237,
+    "discount": 13,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen Threadripper Pro 3955WX / 3.9GHz Boost 4.3GHz / 16 Core 32 Thread / 64MB / sWRX8",
+    "warranty": "",
+    "attributes": {
+      "series": "threadripper",
+      "socket": "sWRX8",
+      "core": 16,
+      "thread": 32,
+      "baseClock": 3.9,
+      "tdp": 280,
+      "turboClock": 4.3
     },
-    {
-        "product_name": "CPU AMD Ryzen Threadripper 7980X/ 3.2GHz Boost 5.1GHz / 64 Core 128 Thread / 320MB / sTR5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "141990000",
-        "warranty": "",
-        "attributes": {
-            "series": "threadripper",
-            "socket": "sTR5",
-            "core": 64,
-            "thread": 128,
-            "base_clock": 3.2,
-            "tdp": 350,
-            "turbo_clock": 5.1
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 29,
+    "importPrice": 20923,
+    "sellingPrice": 37362,
+    "sales": 354,
+    "stock": 349,
+    "discount": 20,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen Threadripper 7980X/ 3.2GHz Boost 5.1GHz / 64 Core 128 Thread / 320MB / sTR5",
+    "warranty": "",
+    "attributes": {
+      "series": "threadripper",
+      "socket": "sTR5",
+      "core": 64,
+      "thread": 128,
+      "baseClock": 3.2,
+      "tdp": 350,
+      "turboClock": 5.1
     },
-    {
-        "product_name": "CPU AMD Ryzen Threadripper 7970X/ 4.0GHz Boost 5.3GHz / 32 Core 64 Thread / 160MB / sTR5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "71990000",
-        "warranty": "",
-        "attributes": {
-            "series": "threadripper",
-            "socket": "sTR5",
-            "core": 32,
-            "thread": 64,
-            "base_clock": 4.0,
-            "tdp": 350,
-            "turbo_clock": 5.3
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 30,
+    "importPrice": 99393,
+    "sellingPrice": 175296,
+    "sales": 312,
+    "stock": 327,
+    "discount": 19,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen Threadripper 7970X/ 4.0GHz Boost 5.3GHz / 32 Core 64 Thread / 160MB / sTR5",
+    "warranty": "",
+    "attributes": {
+      "series": "threadripper",
+      "socket": "sTR5",
+      "core": 32,
+      "thread": 64,
+      "baseClock": 4.0,
+      "tdp": 350,
+      "turboClock": 5.3
     },
-    {
-        "product_name": "CPU AMD Ryzen 9 7950X / 4.5GHz Boost 5.7GHz / 16 Core 32 Thread / 81MB / AM5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "15190000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen9",
-            "socket": "AM5",
-            "core": 16,
-            "thread": 32,
-            "base_clock": 4.5,
-            "tdp": 170,
-            "turbo_clock": 5.7
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 31,
+    "importPrice": 50393,
+    "sellingPrice": 95987,
+    "sales": 245,
+    "stock": 88,
+    "discount": 25,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 9 7950X / 4.5GHz Boost 5.7GHz / 16 Core 32 Thread / 81MB / AM5",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen9",
+      "socket": "AM5",
+      "core": 16,
+      "thread": 32,
+      "baseClock": 4.5,
+      "tdp": 170,
+      "turboClock": 5.7
     },
-    {
-        "product_name": "CPU AMD Ryzen 9 7900X / 4.7GHz Boost 5.6GHz / 12 Core 24 Thread / 76MB / AM5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "10990000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen9",
-            "socket": "AM5",
-            "core": 12,
-            "thread": 24,
-            "base_clock": 4.7,
-            "tdp": 170,
-            "turbo_clock": 5.6
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 32,
+    "importPrice": 10633,
+    "sellingPrice": 18988,
+    "sales": 141,
+    "stock": 377,
+    "discount": 20,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 9 7900X / 4.7GHz Boost 5.6GHz / 12 Core 24 Thread / 76MB / AM5",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen9",
+      "socket": "AM5",
+      "core": 12,
+      "thread": 24,
+      "baseClock": 4.7,
+      "tdp": 170,
+      "turboClock": 5.6
     },
-    {
-        "product_name": "CPU AMD Ryzen 9 7900 / 3.7GHz Boost 5.4GHz / 12 Core 24 Thread / 76MB / AM5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "10490000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen9",
-            "socket": "AM5",
-            "core": 12,
-            "thread": 24,
-            "base_clock": 3.7,
-            "tdp": 65,
-            "turbo_clock": 5.4
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 33,
+    "importPrice": 7693,
+    "sellingPrice": 14461,
+    "sales": 128,
+    "stock": 301,
+    "discount": 24,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 9 7900 / 3.7GHz Boost 5.4GHz / 12 Core 24 Thread / 76MB / AM5",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen9",
+      "socket": "AM5",
+      "core": 12,
+      "thread": 24,
+      "baseClock": 3.7,
+      "tdp": 65,
+      "turboClock": 5.4
     },
-    {
-        "product_name": "CPU AMD Ryzen 9 5950X / 3.4GHz Boost 4.9GHz / 16 Core 32 Thread / 64MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "10590000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen9",
-            "socket": "AM4",
-            "core": 16,
-            "thread": 32,
-            "base_clock": 3.4,
-            "tdp": 105,
-            "turbo_clock": 4.9
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 34,
+    "importPrice": 7343,
+    "sellingPrice": 15426,
+    "sales": 397,
+    "stock": 250,
+    "discount": 32,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 9 5950X / 3.4GHz Boost 4.9GHz / 16 Core 32 Thread / 64MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen9",
+      "socket": "AM4",
+      "core": 16,
+      "thread": 32,
+      "baseClock": 3.4,
+      "tdp": 105,
+      "turboClock": 4.9
     },
-    {
-        "product_name": "CPU AMD Ryzen 9 5900X / 3.7GHz Boost 4.8GHz / 12 Core 24 Thread / 64MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "8590000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen9",
-            "socket": "AM4",
-            "core": 12,
-            "thread": 24,
-            "base_clock": 3.7,
-            "tdp": 105,
-            "turbo_clock": 4.8
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 35,
+    "importPrice": 7413,
+    "sellingPrice": 16045,
+    "sales": 366,
+    "stock": 150,
+    "discount": 34,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 9 5900X / 3.7GHz Boost 4.8GHz / 12 Core 24 Thread / 64MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen9",
+      "socket": "AM4",
+      "core": 12,
+      "thread": 24,
+      "baseClock": 3.7,
+      "tdp": 105,
+      "turboClock": 4.8
     },
-    {
-        "product_name": "CPU AMD Ryzen 7 8700G / 4.2GHz Boost 5.1GHz / 8 Core 16 Thread / 24MB / AM5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "7690000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen7",
-            "socket": "AM5",
-            "core": 8,
-            "thread": 16,
-            "base_clock": 4.2,
-            "tdp": 65,
-            "turbo_clock": 5.1
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 36,
+    "importPrice": 6013,
+    "sellingPrice": 13015,
+    "sales": 77,
+    "stock": 382,
+    "discount": 34,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 7 8700G / 4.2GHz Boost 5.1GHz / 8 Core 16 Thread / 24MB / AM5",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen7",
+      "socket": "AM5",
+      "core": 8,
+      "thread": 16,
+      "baseClock": 4.2,
+      "tdp": 65,
+      "turboClock": 5.1
     },
-    {
-        "product_name": "CPU AMD Ryzen 7 7700X / 4.5GHz Boost 5.4GHz / 8 Core 16 Thread / 40MB / AM5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "9290000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen7",
-            "socket": "AM5",
-            "core": 8,
-            "thread": 16,
-            "base_clock": 4.5,
-            "tdp": 105,
-            "turbo_clock": 5.4
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 37,
+    "importPrice": 5383,
+    "sellingPrice": 9612,
+    "sales": 489,
+    "stock": 500,
+    "discount": 20,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 7 7700X / 4.5GHz Boost 5.4GHz / 8 Core 16 Thread / 40MB / AM5",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen7",
+      "socket": "AM5",
+      "core": 8,
+      "thread": 16,
+      "baseClock": 4.5,
+      "tdp": 105,
+      "turboClock": 5.4
     },
-    {
-        "product_name": "CPU AMD Ryzen 7 7700 / 3.8GHz Boost 5.3GHz / 8 Core 16 Thread / 40MB / AM5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "8790000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen7",
-            "socket": "AM5",
-            "core": 8,
-            "thread": 16,
-            "base_clock": 3.8,
-            "tdp": 65,
-            "turbo_clock": 5.3
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 38,
+    "importPrice": 6503,
+    "sellingPrice": 13464,
+    "sales": 486,
+    "stock": 94,
+    "discount": 31,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 7 7700 / 3.8GHz Boost 5.3GHz / 8 Core 16 Thread / 40MB / AM5",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen7",
+      "socket": "AM5",
+      "core": 8,
+      "thread": 16,
+      "baseClock": 3.8,
+      "tdp": 65,
+      "turboClock": 5.3
     },
-    {
-        "product_name": "CPU AMD Ryzen 7 5700 / 3.7GHz Boost 4.6GHz / 8 Core 16 Thread / 20MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "4790000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen7",
-            "socket": "AM4",
-            "core": 8,
-            "thread": 16,
-            "base_clock": 3.7,
-            "tdp": 65,
-            "turbo_clock": 4.6
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 39,
+    "importPrice": 6153,
+    "sellingPrice": 13318,
+    "sales": 144,
+    "stock": 436,
+    "discount": 34,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 7 5700 / 3.7GHz Boost 4.6GHz / 8 Core 16 Thread / 20MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen7",
+      "socket": "AM4",
+      "core": 8,
+      "thread": 16,
+      "baseClock": 3.7,
+      "tdp": 65,
+      "turboClock": 4.6
     },
-    {
-        "product_name": "CPU AMD Ryzen 5 8500G / 3.5GHz Boost 5.0GHz / 6 Core 12 Thread / 22MB / AM5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "4190000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen5",
-            "socket": "AM5",
-            "core": 6,
-            "thread": 12,
-            "base_clock": 3.5,
-            "tdp": 65,
-            "turbo_clock": 5.0
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 40,
+    "importPrice": 3353,
+    "sellingPrice": 6141,
+    "sales": 215,
+    "stock": 92,
+    "discount": 22,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 5 8500G / 3.5GHz Boost 5.0GHz / 6 Core 12 Thread / 22MB / AM5",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen5",
+      "socket": "AM5",
+      "core": 6,
+      "thread": 12,
+      "baseClock": 3.5,
+      "tdp": 65,
+      "turboClock": 5.0
     },
-    {
-        "product_name": "CPU AMD Ryzen 5 7600X / 4.7GHz Boost 5.3GHz / 6 Core 12 Thread / 38MB / AM5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "6490000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen5",
-            "socket": "AM5",
-            "core": 6,
-            "thread": 12,
-            "base_clock": 4.7,
-            "tdp": 105,
-            "turbo_clock": 5.3
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 41,
+    "importPrice": 2933,
+    "sellingPrice": 5238,
+    "sales": 173,
+    "stock": 326,
+    "discount": 20,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 5 7600X / 4.7GHz Boost 5.3GHz / 6 Core 12 Thread / 38MB / AM5",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen5",
+      "socket": "AM5",
+      "core": 6,
+      "thread": 12,
+      "baseClock": 4.7,
+      "tdp": 105,
+      "turboClock": 5.3
     },
-    {
-        "product_name": "CPU AMD Ryzen 5 7600 / 3.8GHz Boost 5.1GHz / 6 Core 12 Thread / 38MB / AM5",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "5790000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen5",
-            "socket": "AM5",
-            "core": 6,
-            "thread": 12,
-            "base_clock": 3.8,
-            "tdp": 65,
-            "turbo_clock": 5.1
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 42,
+    "importPrice": 4543,
+    "sellingPrice": 10468,
+    "sales": 476,
+    "stock": 249,
+    "discount": 38,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 5 7600 / 3.8GHz Boost 5.1GHz / 6 Core 12 Thread / 38MB / AM5",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen5",
+      "socket": "AM5",
+      "core": 6,
+      "thread": 12,
+      "baseClock": 3.8,
+      "tdp": 65,
+      "turboClock": 5.1
     },
-    {
-        "product_name": "CPU AMD Ryzen 5 5600 / 3.5GHz Boost 4.4GHz / 6 Core 12 Thread / 32MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "2790000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen5",
-            "socket": "AM4",
-            "core": 6,
-            "thread": 12,
-            "base_clock": 3.5,
-            "tdp": 65,
-            "turbo_clock": 4.4
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 43,
+    "importPrice": 4053,
+    "sellingPrice": 7329,
+    "sales": 136,
+    "stock": 352,
+    "discount": 21,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 5 5600 / 3.5GHz Boost 4.4GHz / 6 Core 12 Thread / 32MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen5",
+      "socket": "AM4",
+      "core": 6,
+      "thread": 12,
+      "baseClock": 3.5,
+      "tdp": 65,
+      "turboClock": 4.4
     },
-    {
-        "product_name": "CPU AMD Ryzen 5 5500GT / 3.6GHz Boost 4.4GHz / 6 Core 12 Thread / 19MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "3090000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen5",
-            "socket": "AM4",
-            "core": 6,
-            "thread": 12,
-            "base_clock": 3.6,
-            "tdp": 65,
-            "turbo_clock": 4.4
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 44,
+    "importPrice": 1953,
+    "sellingPrice": 3770,
+    "sales": 248,
+    "stock": 213,
+    "discount": 26,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 5 5500GT / 3.6GHz Boost 4.4GHz / 6 Core 12 Thread / 19MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen5",
+      "socket": "AM4",
+      "core": 6,
+      "thread": 12,
+      "baseClock": 3.6,
+      "tdp": 65,
+      "turboClock": 4.4
     },
-    {
-        "product_name": "CPU AMD Ryzen 5 5500 / 3.6GHz Boost 4.2GHz / 6 Core 12 Thread / 16MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "2390000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen5",
-            "socket": "AM4",
-            "core": 6,
-            "thread": 12,
-            "base_clock": 3.6,
-            "tdp": 65,
-            "turbo_clock": 4.2
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 45,
+    "importPrice": 2163,
+    "sellingPrice": 3723,
+    "sales": 56,
+    "stock": 208,
+    "discount": 17,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 5 5500 / 3.6GHz Boost 4.2GHz / 6 Core 12 Thread / 16MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen5",
+      "socket": "AM4",
+      "core": 6,
+      "thread": 12,
+      "baseClock": 3.6,
+      "tdp": 65,
+      "turboClock": 4.2
     },
-    {
-        "product_name": "CPU AMD Ryzen 5 4500 / 3.6GHz Boost 4.1GHz / 6 Core 12 Thread / 11MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "2090000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen5",
-            "socket": "AM4",
-            "core": 6,
-            "thread": 12,
-            "base_clock": 3.6,
-            "tdp": 65,
-            "turbo_clock": 4.1
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 46,
+    "importPrice": 1673,
+    "sellingPrice": 3677,
+    "sales": 299,
+    "stock": 142,
+    "discount": 35,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 5 4500 / 3.6GHz Boost 4.1GHz / 6 Core 12 Thread / 11MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen5",
+      "socket": "AM4",
+      "core": 6,
+      "thread": 12,
+      "baseClock": 3.6,
+      "tdp": 65,
+      "turboClock": 4.1
     },
-    {
-        "product_name": "CPU AMD Ryzen 3 4300G / 3.8GHz Boost 4.0GHz / 4 Core 8 Thread / 6MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "2490000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen3",
-            "socket": "AM4",
-            "core": 4,
-            "thread": 8,
-            "base_clock": 3.8,
-            "tdp": 65,
-            "turbo_clock": 4.0
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 47,
+    "importPrice": 1463,
+    "sellingPrice": 2402,
+    "sales": 109,
+    "stock": 176,
+    "discount": 13,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 3 4300G / 3.8GHz Boost 4.0GHz / 4 Core 8 Thread / 6MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen3",
+      "socket": "AM4",
+      "core": 4,
+      "thread": 8,
+      "baseClock": 3.8,
+      "tdp": 65,
+      "turboClock": 4.0
     },
-    {
-        "product_name": "CPU AMD Ryzen 3 3200G / 3.6GHz Boost 4.0GHz / 4 Core 4 Thread / 4MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "1990000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen3",
-            "socket": "AM4",
-            "core": 4,
-            "thread": 4,
-            "base_clock": 3.6,
-            "tdp": 65,
-            "turbo_clock": 4.0
-        }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 48,
+    "importPrice": 1743,
+    "sellingPrice": 3557,
+    "sales": 302,
+    "stock": 59,
+    "discount": 30,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD Ryzen 3 3200G / 3.6GHz Boost 4.0GHz / 4 Core 4 Thread / 4MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen3",
+      "socket": "AM4",
+      "core": 4,
+      "thread": 4,
+      "baseClock": 3.6,
+      "tdp": 65,
+      "turboClock": 4.0
     },
-    {
-        "product_name": "CPU AMD AMD Ryzen 3 4100 / 3.8GHz Boost 4.0GHz / 4 Core 8 Thread / 6MB / AM4",
-        "vendor": "AMD",
-        "product_type": "cpu",
-        "price": "1900000",
-        "warranty": "",
-        "attributes": {
-            "series": "ryzen3",
-            "socket": "AM4",
-            "core": 4,
-            "thread": 8,
-            "base_clock": 3.8,
-            "tdp": 65,
-            "turbo_clock": 4.0
-        }
-    }
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 49,
+    "importPrice": 1393,
+    "sellingPrice": 3109,
+    "sales": 482,
+    "stock": 212,
+    "discount": 36,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  },
+  {
+    "productName": "CPU AMD AMD Ryzen 3 4100 / 3.8GHz Boost 4.0GHz / 4 Core 8 Thread / 6MB / AM4",
+    "warranty": "",
+    "attributes": {
+      "series": "ryzen3",
+      "socket": "AM4",
+      "core": 4,
+      "thread": 8,
+      "baseClock": 3.8,
+      "tdp": 65,
+      "turboClock": 4.0
+    },
+    "category": "cpu",
+    "manufacturer": "AMD",
+    "productID": 50,
+    "importPrice": 1330,
+    "sellingPrice": 2159,
+    "sales": 232,
+    "stock": 169,
+    "discount": 12,
+    "enDescription": "",
+    "viDescription": "",
+    "imageUrl": "",
+    "release": 1595203200
+  }
 ]

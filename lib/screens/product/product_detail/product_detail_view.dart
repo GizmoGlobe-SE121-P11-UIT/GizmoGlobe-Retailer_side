@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/screens/product/edit_product/edit_product_view.dart';
+import 'package:gizmoglobe_client/functions/converter.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_state.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
@@ -247,8 +247,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                           ),
 
-                          ..._buildProductSpecificDetails(
-                              context, state.product, state.technicalSpecs),
+                          ..._buildProductSpecificDetails(context, state.product, state.technicalSpecs),
 
                           const SizedBox(height: 24),
                           Text(
@@ -376,19 +375,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    ProcessState processState =
-                                        await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditProductScreen.newInstance(
-                                                state.product),
-                                      ),
-                                    );
-
-                                    if (processState == ProcessState.success) {
-                                      cubit.updateProduct();
-                                    }
+                                    // ProcessState processState =
+                                    //     await Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         EditProductScreen.newInstance(
+                                    //             state.product),
+                                    //   ),
+                                    // );
+                                    //
+                                    // if (processState == ProcessState.success) {
+                                    //   cubit.updateProduct();
+                                    // }
                                   },
                                   icon: Icon(Icons.edit,
                                       color: Theme.of(context)
@@ -552,11 +551,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget _buildPriceSection({
-    required double sellingPrice,
+    required int sellingPrice,
     required double discount,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
-    final discountedPrice = sellingPrice * (1 - discount);
+    final discountedPrice = sellingPrice * (100 - discount) * 10;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -574,7 +573,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
           if (discount > 0) ...[
             Text(
-              ': \$${sellingPrice.toStringAsFixed(2)}',
+              ': ${Converter.toMoneyWithCurrency(sellingPrice)}',
               style: TextStyle(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w400,
@@ -584,7 +583,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              '\$${discountedPrice.toStringAsFixed(2)}',
+              Converter.toMoneyWithCurrency(discountedPrice),
               style: TextStyle(
                 color: colorScheme.tertiary,
                 fontWeight: FontWeight.bold,
@@ -599,7 +598,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                '-${(discount * 100).toStringAsFixed(0)}%',
+                '-${discount.toInt()}%',
                 style: TextStyle(
                   color: colorScheme.error,
                   fontSize: 12,
@@ -609,7 +608,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ] else
             Text(
-              '\$${sellingPrice.toStringAsFixed(2)}',
+              Converter.toMoneyWithCurrency(sellingPrice),
               style: TextStyle(
                 color: colorScheme.onSurface,
                 fontWeight: FontWeight.w400,

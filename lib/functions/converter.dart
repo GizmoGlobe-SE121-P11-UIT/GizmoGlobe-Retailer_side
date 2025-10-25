@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class Converter {
   static Timestamp toTimestamp(DateTime dateInput) {
@@ -62,5 +63,15 @@ class Converter {
     } else {
       return "in ${diff.inDays} day${diff.inDays == 1 ? '' : 's'}";
     }
+  }
+
+  static String toMoney(num value) {
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '', decimalDigits: 0);
+    return formatter.format(value);
+  }
+
+  static String toMoneyWithCurrency(num value) {
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0);
+    return formatter.format(value);
   }
 }

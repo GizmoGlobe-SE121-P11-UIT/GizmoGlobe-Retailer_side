@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/screens/home/home_screen/home_screen_state.dart';
 import 'package:gizmoglobe_client/widgets/general/app_logo.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -36,8 +37,6 @@ class _HomeScreen extends State<HomeScreen> {
 
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
-        final currencyFormat =
-            NumberFormat.currency(locale: 'en_US', symbol: '\$');
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.surface,
@@ -161,14 +160,14 @@ class _HomeScreen extends State<HomeScreen> {
                             context,
                             icon: Icons.payments_rounded,
                             title: S.of(context).revenue,
-                            value: currencyFormat.format(state.totalRevenue),
+                            value: Helper.toCurrencyFormat(state.totalRevenue),
                             color: Colors.orange,
                           ),
                           _buildStatsCard(
                             context,
                             icon: Icons.trending_up_rounded,
                             title: S.of(context).avgIncome,
-                            value: currencyFormat.format(state.totalOrders > 0
+                            value: Helper.toCurrencyFormat(state.totalOrders > 0
                                 ? state.totalRevenue / state.totalOrders
                                 : 0),
                             color: Colors.purple,

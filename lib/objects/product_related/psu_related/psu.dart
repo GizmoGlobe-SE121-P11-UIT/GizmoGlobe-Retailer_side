@@ -1,15 +1,17 @@
 import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_efficiency.dart';
 import 'package:gizmoglobe_client/enums/product_related/psu_enums/psu_modular.dart';
 
-import '../../enums/product_related/category_enum.dart';
-import '../../enums/product_related/product_status_enum.dart';
-import '../manufacturer.dart';
-import 'product.dart';
+import '../../../enums/product_related/category_enum.dart';
+import 'connector.dart';
+import '../../../enums/product_related/product_status_enum.dart';
+import '../../manufacturer.dart';
+import '../product.dart';
 
 class PSU extends Product {
-  int wattage;
+  int maxWattage;
   PSUEfficiency efficiency;
-  PSUModular modular;
+  PSUModular modularity;
+  List<Connector> connectors;
 
   PSU({
     required super.productName,
@@ -18,33 +20,36 @@ class PSU extends Product {
     required super.discount,
     required super.release,
     required super.manufacturer,
+
+    super.imageUrl,
+    super.enDescription,
+    super.viDescription,
     super.category = CategoryEnum.psu,
-    required this.wattage,
+
+    required this.maxWattage,
     required this.efficiency,
-    required this.modular,
+    required this.modularity,
+    required this.connectors,
     required super.sales,
     required super.stock,
     required super.status,
-    super.imageUrl,
-
-    super.enDescription,
-    super.viDescription,
   });
 
   @override
   void updateProduct({
     String? productID,
     String? productName,
-    double? importPrice,
-    double? sellingPrice,
+    int? importPrice,
+    int? sellingPrice,
     double? discount,
     DateTime? release,
     int? sales,
     int? stock,
     Manufacturer? manufacturer,
-    int? wattage,
+    int? maxWattage,
     PSUEfficiency? efficiency,
-    PSUModular? modular,
+    PSUModular? modularity,
+    List<Connector>? connectors,
     ProductStatusEnum? status,
     String? imageUrl,
 
@@ -67,8 +72,9 @@ class PSU extends Product {
       viDescription: viDescription,
     );
 
-    this.wattage = wattage ?? this.wattage;
+    this.maxWattage = maxWattage ?? this.maxWattage;
     this.efficiency = efficiency ?? this.efficiency;
-    this.modular = modular ?? this.modular;
+    this.modularity = modularity ?? this.modularity;
+    this.connectors = connectors ?? this.connectors;
   }
 }

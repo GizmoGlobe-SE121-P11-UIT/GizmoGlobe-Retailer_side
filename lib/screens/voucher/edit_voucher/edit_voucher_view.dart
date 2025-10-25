@@ -250,7 +250,7 @@ class _EditVoucherScreen extends State<EditVoucherScreen> {
                                     ),
                                     const SizedBox(width: 16),
                                     Expanded(
-                                      child: buildInputWidget<double>(
+                                      child: buildInputWidget<int>(
                                         S.of(context).minimumPurchase,
                                         minimumPurchaseController,
                                         state.voucherArgument?.minimumPurchase,
@@ -374,7 +374,7 @@ class _EditVoucherScreen extends State<EditVoucherScreen> {
                                 if (state.voucherArgument?.isPercentage == true)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 16.0),
-                                    child: buildInputWidget<double>(
+                                    child: buildInputWidget<int>(
                                       S.of(context).maximumDiscountValue,
                                       maximumDiscountValueController,
                                       state.voucherArgument

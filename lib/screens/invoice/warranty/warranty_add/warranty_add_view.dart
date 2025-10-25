@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
+import '../../../../functions/helper.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'warranty_add_cubit.dart';
 import 'warranty_add_state.dart';
@@ -467,7 +468,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
                                                             12),
                                                   ),
                                                   child: Text(
-                                                    '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
+                                                    '${S.of(context).price}: ${Helper.toCurrencyFormat(detail.sellingPrice)}',
                                                     style: const TextStyle(
                                                       color: Colors.green,
                                                       fontWeight:

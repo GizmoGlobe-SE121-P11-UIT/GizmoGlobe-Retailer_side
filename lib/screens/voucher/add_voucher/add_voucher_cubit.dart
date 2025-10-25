@@ -43,7 +43,7 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
             : null,
         maximumUsage: (voucherArgument.isLimited ?? false) ? voucherArgument.maximumUsage : 0,
         usageLeft: (voucherArgument.isLimited ?? false) ? voucherArgument.usageLeft : 0,
-        maximumDiscountValue: (voucherArgument.isPercentage ?? false) ? voucherArgument.maximumDiscountValue : 0.0,
+        maximumDiscountValue: (voucherArgument.isPercentage ?? false) ? voucherArgument.maximumDiscountValue : 0,
         enDescription: voucherArgument.enDescription ?? '',
         viDescription: voucherArgument.viDescription ?? '',
       ),
@@ -154,7 +154,7 @@ Future<String> translateIntoEnglish(String inputText) async {
       data: {
         'contents': [{
           'parts': [{
-            'text': 'Translate this Vietnamese text to English changing special character like \$ or %. Return only the translated text: $inputText'
+            'text': 'Translate this Vietnamese text to English changing special character like ₫ or %. Return only the translated text: $inputText'
           }]
         }],
         'generationConfig': {
@@ -203,7 +203,7 @@ Future<String> translateIntoVietnamese(String inputText) async {
       data: {
         'contents': [{
           'parts': [{
-            'text': 'INSTRUCTION: Translate the following English text to Vietnamese without changing special character like \$ or %.\n\nENGLISH TEXT: $inputText\n\nTRANSLATION (in Vietnamese only, no English explanation or notes):'
+            'text': 'INSTRUCTION: Translate the following English text to Vietnamese without changing special character like ₫ or %.\n\nENGLISH TEXT: $inputText\n\nTRANSLATION (in Vietnamese only, no English explanation or notes):'
           }]
         }],
       },
@@ -254,7 +254,7 @@ Future<String> generateDescription(VoucherArgument inputVoucher) async {
       data: {
         'contents': [{
           'parts': [{
-            'text': 'Create a short, professional 1-2 sentence voucher description in English based on these details:\n$promptDetails\n\nMake it concise, appealing and marketing-oriented. Return ONLY the description, no additional text, and use special character like \$ or % if needed.'
+            'text': 'Create a short, professional 1-2 sentence voucher description in English based on these details:\n$promptDetails\n\nMake it concise, appealing and marketing-oriented. Return ONLY the description, no additional text, and use special character like ₫ or % if needed.'
           }]
         }],
         'generationConfig': {

@@ -13,6 +13,7 @@ import 'sales_edit_webview.dart';
 import '../../../../enums/invoice_related/payment_status.dart';
 import '../../../../enums/invoice_related/sales_status.dart';
 import '../../../../enums/product_related/category_enum.dart';
+import '../../../../functions/helper.dart';
 import '../permissions/sales_invoice_permissions.dart';
 import 'sales_edit_cubit.dart';
 import 'sales_edit_state.dart';
@@ -412,7 +413,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                 ),
                               ),
                               Text(
-                                '\$${detail.subtotal.toStringAsFixed(2)}',
+                                Helper.toCurrencyFormat(detail.subtotal),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -452,7 +453,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                             ),
                           ),
                           Text(
-                            '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
+                            Helper.toCurrencyFormat(state.invoice.totalPrice),
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
