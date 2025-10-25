@@ -28,7 +28,10 @@ enum ProductStatusEnum {
 
 extension ProductStatusEnumExtension on ProductStatusEnum {
   static ProductStatusEnum fromName(String name) {
-    return ProductStatusEnum.values.firstWhere((e) => e.getName() == name);
+    return ProductStatusEnum.values.firstWhere(
+      (e) => e.getName() == name,
+      orElse: () => ProductStatusEnum.unknown,
+    );
   }
 }
 

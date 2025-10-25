@@ -44,8 +44,8 @@ class EditVoucherCubit extends Cubit<EditVoucherState> {
               ? voucherArgument.usageLeft
               : 0,
           maximumDiscountValue: (voucherArgument.isPercentage ?? false)
-              ? voucherArgument.maximumDiscountValue
-              : 0.0,
+              ? (voucherArgument.maximumDiscountValue ?? 0)
+              : 0,
           enDescription: voucherArgument.enDescription ?? '',
           viDescription: voucherArgument.viDescription ?? '',
         ),

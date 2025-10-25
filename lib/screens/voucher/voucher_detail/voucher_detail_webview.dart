@@ -369,11 +369,11 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
               if (state.voucher.isPercentage)
                 _buildInfoRow(
                   S.of(context).maximumDiscountValue,
-                  '\$${Converter.formatDouble((state.voucher as PercentageInterface).maximumDiscountValue)}',
+                  '\$${Converter.formatDouble((state.voucher as PercentageInterface).maximumDiscountValue.toDouble())}',
                 ),
               _buildInfoRow(
                 S.of(context).minimumPurchase,
-                '\$${Converter.formatDouble(state.voucher.minimumPurchase)}',
+                '\$${Converter.formatDouble(state.voucher.minimumPurchase.toDouble())}',
               ),
               if (state.voucher.isLimited)
                 _buildInfoRow(

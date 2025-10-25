@@ -62,7 +62,7 @@ class VoucherArgument {
     bool? isPercentage,
     bool? hasEndTime,
     bool? isLimited,
-    double? maximumDiscountValue,
+    int? maximumDiscountValue,
     int? maximumUsage,
     int? usageLeft,
     DateTime? endTime,

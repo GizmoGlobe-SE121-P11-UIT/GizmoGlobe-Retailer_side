@@ -71,6 +71,7 @@ class AppLocalizations {
     'reasonForWarranty': 'Reason for Warranty',
     'productsUnderWarranty': 'Products Under Warranty',
     'unknownCategory': 'Unknown Category',
+    'unknown': 'Unknown',
     'updateWarrantyStatus': 'Update Warranty Status',
     'confirmStatusUpdate': 'Confirm Status Update',
     'areYouSureChangeStatus':
@@ -473,6 +474,7 @@ class AppLocalizations {
     'reasonForWarranty': 'Lý do bảo hành',
     'productsUnderWarranty': 'Sản phẩm được bảo hành',
     'unknownCategory': 'Không xác định',
+    'unknown': 'Không xác định',
     'updateWarrantyStatus': 'Cập nhật trạng thái bảo hành',
     'confirmStatusUpdate': 'Xác nhận cập nhật trạng thái',
     'areYouSureChangeStatus':
@@ -878,6 +880,7 @@ class AppLocalizations {
   String get reasonForWarranty => _getTranslation('reasonForWarranty');
   String get productsUnderWarranty => _getTranslation('productsUnderWarranty');
   String get unknownCategory => _getTranslation('unknownCategory');
+  String get unknown => _getTranslation('unknown');
   String get updateWarrantyStatus => _getTranslation('updateWarrantyStatus');
   String get confirmStatusUpdate => _getTranslation('confirmStatusUpdate');
   String get save => _getTranslation('save');

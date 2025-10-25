@@ -309,10 +309,10 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                   child: buildInputWidget<double>(
                     S.of(context).minimumPurchase,
                     minimumPurchaseController,
-                    state.voucherArgument?.minimumPurchase,
+                    state.voucherArgument?.minimumPurchase?.toDouble(),
                     (value) {
                       cubit.updateVoucherArgument(state.voucherArgument!
-                          .copyWith(minimumPurchase: value));
+                          .copyWith(minimumPurchase: value?.toInt()));
                     },
                   ),
                 ),
@@ -427,10 +427,10 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                 child: buildInputWidget<double>(
                   S.of(context).maximumDiscountValue,
                   maximumDiscountValueController,
-                  state.voucherArgument?.maximumDiscountValue,
+                  state.voucherArgument?.maximumDiscountValue?.toDouble(),
                   (value) {
                     cubit.updateVoucherArgument(state.voucherArgument!
-                        .copyWith(maximumDiscountValue: value));
+                        .copyWith(maximumDiscountValue: value?.toInt()));
                   },
                 ),
               ),

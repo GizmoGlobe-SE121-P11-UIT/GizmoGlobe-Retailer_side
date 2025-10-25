@@ -339,10 +339,10 @@ class _EditVoucherWebViewState extends State<EditVoucherWebView> {
                   child: buildInputWidget<double>(
                     S.of(context).minimumPurchase,
                     minimumPurchaseController,
-                    state.voucherArgument?.minimumPurchase,
+                    state.voucherArgument?.minimumPurchase?.toDouble(),
                     (value) {
                       cubit.updateVoucherArgument(state.voucherArgument!
-                          .copyWith(minimumPurchase: value));
+                          .copyWith(minimumPurchase: value?.toInt()));
                     },
                   ),
                 ),
@@ -457,10 +457,10 @@ class _EditVoucherWebViewState extends State<EditVoucherWebView> {
                 child: buildInputWidget<double>(
                   S.of(context).maximumDiscountValue,
                   maximumDiscountValueController,
-                  state.voucherArgument?.maximumDiscountValue,
+                  state.voucherArgument?.maximumDiscountValue?.toDouble(),
                   (value) {
                     cubit.updateVoucherArgument(state.voucherArgument!
-                        .copyWith(maximumDiscountValue: value));
+                        .copyWith(maximumDiscountValue: value?.toInt()));
                   },
                 ),
               ),
@@ -671,8 +671,9 @@ class _EditVoucherWebViewState extends State<EditVoucherWebView> {
               Text(propertyName, style: AppTextStyle.smallText),
               GestureDetector(
                 onTap: () async {
+                  final BuildContext currentContext = context;
                   final DateTime? pickedDate = await showDatePicker(
-                    context: context,
+                    context: currentContext,
                     initialDate: propertyValue as DateTime? ?? DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
@@ -698,7 +699,7 @@ class _EditVoucherWebViewState extends State<EditVoucherWebView> {
 
                   if (pickedDate != null) {
                     final TimeOfDay? pickedTime = await showTimePicker(
-                      context: context,
+                      context: currentContext,
                       initialTime: TimeOfDay.fromDateTime(
                           propertyValue as DateTime? ?? DateTime.now()),
                       builder: (context, child) {
