@@ -10,7 +10,7 @@ class VoucherArgument {
   String? voucherName;
   DateTime? startTime;
   double? discountValue;
-  double? minimumPurchase;
+  int? minimumPurchase;
   int? maxUsagePerPerson;
   bool? isVisible;
   bool? isEnabled;
@@ -21,7 +21,7 @@ class VoucherArgument {
   bool? hasEndTime;
   bool? isLimited;
 
-  double? maximumDiscountValue;
+  int? maximumDiscountValue;
 
   int? maximumUsage;
   int? usageLeft;
@@ -57,7 +57,7 @@ class VoucherArgument {
     String? voucherName,
     DateTime? startTime,
     double? discountValue,
-    double? minimumPurchase,
+    int? minimumPurchase,
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
@@ -68,7 +68,7 @@ class VoucherArgument {
     bool? hasEndTime,
     bool? isLimited,
 
-    double? maximumDiscountValue,
+    int? maximumDiscountValue,
 
     int? maximumUsage,
     int? usageLeft,

@@ -43,7 +43,7 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
             : null,
         maximumUsage: (voucherArgument.isLimited ?? false) ? voucherArgument.maximumUsage : 0,
         usageLeft: (voucherArgument.isLimited ?? false) ? voucherArgument.usageLeft : 0,
-        maximumDiscountValue: (voucherArgument.isPercentage ?? false) ? voucherArgument.maximumDiscountValue : 0.0,
+        maximumDiscountValue: (voucherArgument.isPercentage ?? false) ? voucherArgument.maximumDiscountValue : 0,
         enDescription: voucherArgument.enDescription ?? '',
         viDescription: voucherArgument.viDescription ?? '',
       ),

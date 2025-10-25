@@ -11,7 +11,7 @@ class LimitedPercentageVoucherWithEndTime extends Voucher
     implements LimitedInterface, EndTimeInterface, PercentageInterface {
   int _maximumUsage;
   int _usageLeft;
-  double _maximumDiscountValue;
+  int _maximumDiscountValue;
   DateTime _endTime;
 
   LimitedPercentageVoucherWithEndTime({
@@ -31,7 +31,7 @@ class LimitedPercentageVoucherWithEndTime extends Voucher
     required int maximumUsage,
     required int usageLeft,
     required DateTime endTime,
-    required double maximumDiscountValue,
+    required int maximumDiscountValue,
   })  : _maximumUsage = maximumUsage,
         _usageLeft = usageLeft,
         _endTime = endTime,
@@ -53,9 +53,9 @@ class LimitedPercentageVoucherWithEndTime extends Voucher
   set endTime(DateTime value) => _endTime = value;
 
   @override
-  double get maximumDiscountValue => _maximumDiscountValue;
+  int get maximumDiscountValue => _maximumDiscountValue;
   @override
-  set maximumDiscountValue(double value) => _maximumDiscountValue = value;
+  set maximumDiscountValue(int value) => _maximumDiscountValue = value;
 
   @override
   void updateVoucher({
@@ -63,7 +63,7 @@ class LimitedPercentageVoucherWithEndTime extends Voucher
     String? voucherName,
     DateTime? startTime,
     double? discountValue,
-    double? minimumPurchase,
+    int? minimumPurchase,
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
@@ -72,7 +72,7 @@ class LimitedPercentageVoucherWithEndTime extends Voucher
     int? maximumUsage,
     int? usageLeft,
     DateTime? endTime,
-    double? maximumDiscountValue,
+    int? maximumDiscountValue,
   }) {
     super.updateVoucher(
       voucherID: voucherID,
@@ -192,7 +192,7 @@ class LimitedPercentageVoucherWithEndTime extends Voucher
     String? voucherName,
     DateTime? startTime,
     double? discountValue,
-    double? minimumPurchase,
+    int? minimumPurchase,
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
@@ -204,7 +204,7 @@ class LimitedPercentageVoucherWithEndTime extends Voucher
     int? maximumUsage,
     int? usageLeft,
     DateTime? endTime,
-    double? maximumDiscountValue,
+    int? maximumDiscountValue,
   }) {
     return LimitedPercentageVoucherWithEndTime(
       voucherID: voucherID ?? this.voucherID,

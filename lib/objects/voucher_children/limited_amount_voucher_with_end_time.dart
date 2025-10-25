@@ -54,7 +54,7 @@ class LimitedAmountVoucherWithEndTime extends Voucher
     String? voucherName,
     DateTime? startTime,
     double? discountValue,
-    double? minimumPurchase,
+    int? minimumPurchase,
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,
@@ -63,7 +63,7 @@ class LimitedAmountVoucherWithEndTime extends Voucher
     int? maximumUsage,
     int? usageLeft,
     DateTime? endTime,
-    double? maximumDiscountValue,
+    int? maximumDiscountValue,
   }) {
     super.updateVoucher(
       voucherID: voucherID,
@@ -181,7 +181,7 @@ class LimitedAmountVoucherWithEndTime extends Voucher
     String? voucherName,
     DateTime? startTime,
     double? discountValue,
-    double? minimumPurchase,
+    int? minimumPurchase,
     int? maxUsagePerPerson,
     bool? isVisible,
     bool? isEnabled,

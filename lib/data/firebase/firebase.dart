@@ -1829,7 +1829,7 @@ class Firebase {
         // Handle required fields with default values
         data['voucherName'] ??= '';
         data['discountValue'] ??= 0.0;
-        data['minimumPurchase'] ??= 0.0;
+        data['minimumPurchase'] ??= 0;
         data['maxUsagePerPerson'] ??= 1;
         data['isVisible'] ??= true;
         data['isEnabled'] ??= true;
@@ -1847,7 +1847,7 @@ class Firebase {
 
         // Handle fields for percentage vouchers
         if (data['isPercentage'] == true) {
-          data['maximumDiscountValue'] ??= 0.0;
+          data['maximumDiscountValue'] ??= 0;
         }
 
         // Ensure all DateTime fields are properly set
