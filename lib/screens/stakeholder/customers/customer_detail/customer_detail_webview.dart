@@ -608,7 +608,6 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
                         _buildAddressesSection(context, state),
                         const SizedBox(height: 16),
                         _buildVouchersSection(context, state),
-                        const SizedBox(height: 80), // Space for bottom buttons
                       ],
                     ),
                   ),

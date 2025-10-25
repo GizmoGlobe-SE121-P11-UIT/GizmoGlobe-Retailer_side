@@ -257,15 +257,14 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    final processState =
+                                    final result =
                                         await EditVoucherScreen.showModal(
                                       context,
                                       state.voucher,
                                     );
-                                    if (processState == ProcessState.success) {
+                                    if (result == true) {
                                       if (mounted) {
-                                        Navigator.pop(
-                                            context, ProcessState.success);
+                                        Navigator.pop(context, true);
                                       }
                                     }
                                   },

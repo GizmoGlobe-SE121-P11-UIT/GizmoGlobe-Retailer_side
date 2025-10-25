@@ -42,12 +42,8 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
 
-    // Initialize cubit lazily
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        cubit.initialize();
-      }
-    });
+    // Initialize cubit immediately
+    cubit.initialize();
 
     // Set the initial tab if provided
     if (widget.initialTabIndex != null) {
@@ -56,6 +52,15 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
           _tabController.animateTo(widget.initialTabIndex!);
         }
       });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Refresh data when dependencies change (e.g., when returning from other screens)
+    if (mounted) {
+      cubit.refresh();
     }
   }
 
@@ -217,10 +222,13 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                     icon: Icons.add,
                     onPressed: () async {
                       if (mounted) {
-                        await AddVoucherScreen.showModal(context);
+                        final result =
+                            await AddVoucherScreen.showModal(context);
                         if (mounted) {
-                          await cubit
-                              .refresh(); // Refresh the list after adding
+                          if (result == true) {
+                            await cubit
+                                .refresh(); // Refresh the list after adding
+                          }
                         }
                       }
                     },
@@ -407,7 +415,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
               final result =
                   await VoucherDetailScreen.showModal(context, voucher);
               if (mounted) {
-                if (result == ProcessState.success) {
+                if (result == true) {
                   await cubit.refresh();
                 }
               }
@@ -455,8 +463,12 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                             onTap: () async {
                               if (mounted) {
                                 Navigator.pop(context);
-                                await VoucherDetailScreen.showModal(
-                                    context, voucher);
+                                final result =
+                                    await VoucherDetailScreen.showModal(
+                                        context, voucher);
+                                if (mounted && result == true) {
+                                  await cubit.refresh();
+                                }
                               }
                             },
                           ),
@@ -474,10 +486,14 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                                   ? S.of(context).disabled
                                   : S.of(context).enabled,
                             ),
-                            onTap: () {
+                            onTap: () async {
                               if (mounted) {
                                 Navigator.pop(context);
-                                cubit.toggleVoucherStatus(voucher.voucherID!);
+                                await cubit
+                                    .toggleVoucherStatus(voucher.voucherID!);
+                                if (mounted) {
+                                  await cubit.refresh();
+                                }
                               }
                             },
                           ),

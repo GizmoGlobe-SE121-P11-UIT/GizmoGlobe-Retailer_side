@@ -133,7 +133,6 @@ class _EmployeeDetailWebViewState extends State<EmployeeDetailWebView> {
                         _buildHeaderSection(context, state),
                         const SizedBox(height: 16),
                         _buildInfoSection(context, state),
-                        const SizedBox(height: 80), // Space for bottom buttons
                       ],
                     ),
                   ),

@@ -22,22 +22,26 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
   }
 
   Future<void> loadInvoices() async {
-    emit(state.copyWith(isLoading: true));
+    if (!isClosed) emit(state.copyWith(isLoading: true));
     try {
       final invoices = await _firebase.getSalesInvoices();
-      emit(state.copyWith(
-        invoices: invoices,
-        isLoading: false,
-      ));
-      _subscribeToSales();
+      if (!isClosed) {
+        emit(state.copyWith(
+          invoices: invoices,
+          isLoading: false,
+        ));
+        _subscribeToSales();
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error loading sales invoices: $e');
       } // Lỗi khi load hóa đơn
-      emit(state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
+      if (!isClosed) {
+        emit(state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        ));
+      }
     }
   }
 
@@ -45,44 +49,52 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
     _salesSubscription?.cancel();
     _salesSubscription = _firebase.salesInvoicesStream().listen(
       (invoices) {
-        if (state.searchQuery.isEmpty) {
-          final sortedInvoices = _applySorting(invoices);
-          emit(state.copyWith(
-            invoices: sortedInvoices,
-            isLoading: false,
-          ));
-        } else {
-          searchInvoices(state.searchQuery);
+        if (!isClosed) {
+          if (state.searchQuery.isEmpty) {
+            final sortedInvoices = _applySorting(invoices);
+            emit(state.copyWith(
+              invoices: sortedInvoices,
+              isLoading: false,
+            ));
+          } else {
+            searchInvoices(state.searchQuery);
+          }
         }
       },
       onError: (error) {
-        emit(state.copyWith(
-          error: error.toString(),
-          isLoading: false,
-        ));
+        if (!isClosed) {
+          emit(state.copyWith(
+            error: error.toString(),
+            isLoading: false,
+          ));
+        }
       },
     );
   }
 
   Future<void> refreshInvoices() async {
-    emit(state.copyWith(isLoading: true));
+    if (!isClosed) emit(state.copyWith(isLoading: true));
     try {
       final invoices = await _firebase.getSalesInvoices();
-      emit(state.copyWith(
-        invoices: invoices,
-        isLoading: false,
-      ));
+      if (!isClosed) {
+        emit(state.copyWith(
+          invoices: invoices,
+          isLoading: false,
+        ));
+      }
     } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
+      if (!isClosed) {
+        emit(state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        ));
+      }
     }
   }
 
   void searchInvoices(String query) {
-    emit(state.copyWith(searchQuery: query));
-    
+    if (!isClosed) emit(state.copyWith(searchQuery: query));
+
     if (query.isEmpty) {
       _subscribeToSales();
       return;
@@ -90,14 +102,14 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
 
     final filteredInvoices = state.invoices.where((invoice) {
       return invoice.customerName.toLowerCase().contains(query.toLowerCase()) ||
-             invoice.salesInvoiceID.toLowerCase().contains(query.toLowerCase());
+          invoice.salesInvoiceID.toLowerCase().contains(query.toLowerCase());
     }).toList();
 
-    emit(state.copyWith(invoices: filteredInvoices));
+    if (!isClosed) emit(state.copyWith(invoices: filteredInvoices));
   }
 
   void setSelectedIndex(int? index) {
-    emit(state.copyWith(selectedIndex: index));
+    if (!isClosed) emit(state.copyWith(selectedIndex: index));
   }
 
   Future<void> updateSalesInvoice(SalesInvoice invoice) async {
@@ -107,7 +119,7 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
       if (kDebugMode) {
         print('Error updating sales invoice: $e');
       } // Lỗi cập nhật hóa đơn
-      emit(state.copyWith(error: e.toString()));
+      if (!isClosed) emit(state.copyWith(error: e.toString()));
     }
   }
 
@@ -126,22 +138,24 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
   void sortInvoices(String criteria, bool descending) {
     _currentSortCriteria = criteria;
     _currentSortDescending = descending;
-    
+
     if (state.invoices.isEmpty) return;
 
     final sortedInvoices = _applySorting(state.invoices);
-    
-    emit(state.copyWith(
-      invoices: sortedInvoices,
-      isLoading: false,
-    ));
+
+    if (!isClosed) {
+      emit(state.copyWith(
+        invoices: sortedInvoices,
+        isLoading: false,
+      ));
+    }
   }
 
   List<SalesInvoice> _applySorting(List<SalesInvoice> invoices) {
     if (_currentSortCriteria == null) return invoices;
 
     final sortedInvoices = List<SalesInvoice>.from(invoices);
-    
+
     switch (_currentSortCriteria) {
       case 'date':
         sortedInvoices.sort((a, b) => _currentSortDescending
@@ -154,7 +168,7 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
             : a.totalPrice.compareTo(b.totalPrice));
         break;
     }
-    
+
     return sortedInvoices;
   }
 

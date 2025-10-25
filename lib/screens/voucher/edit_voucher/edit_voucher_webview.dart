@@ -136,7 +136,8 @@ class _EditVoucherWebViewState extends State<EditVoucherWebView> {
                   content: state.notifyMessage.getLocalizedMessage(context),
                   onPressed: () {
                     if (mounted) {
-                      Navigator.pop(context, state.processState);
+                      Navigator.pop(
+                          context, state.processState == ProcessState.success);
                     }
                   },
                 ),

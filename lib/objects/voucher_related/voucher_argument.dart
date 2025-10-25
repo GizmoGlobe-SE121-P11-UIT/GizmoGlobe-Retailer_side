@@ -39,16 +39,12 @@ class VoucherArgument {
     this.isEnabled,
     this.enDescription,
     this.viDescription,
-
     this.isPercentage,
     this.hasEndTime,
     this.isLimited,
-    
     this.maximumDiscountValue,
-    
     this.maximumUsage,
     this.usageLeft,
-    
     this.endTime,
   });
 
@@ -63,16 +59,12 @@ class VoucherArgument {
     bool? isEnabled,
     String? enDescription,
     String? viDescription,
-
     bool? isPercentage,
     bool? hasEndTime,
     bool? isLimited,
-
     double? maximumDiscountValue,
-
     int? maximumUsage,
     int? usageLeft,
-
     DateTime? endTime,
   }) {
     return VoucherArgument(
@@ -86,16 +78,12 @@ class VoucherArgument {
       isEnabled: isEnabled ?? this.isEnabled,
       enDescription: enDescription ?? this.enDescription,
       viDescription: viDescription ?? this.viDescription,
-
       isPercentage: isPercentage ?? this.isPercentage,
       hasEndTime: hasEndTime ?? this.hasEndTime,
       isLimited: isLimited ?? this.isLimited,
-
       maximumDiscountValue: maximumDiscountValue ?? this.maximumDiscountValue,
-
       maximumUsage: maximumUsage ?? this.maximumUsage,
       usageLeft: usageLeft ?? this.usageLeft,
-
       endTime: endTime ?? this.endTime,
     );
   }
@@ -109,21 +97,20 @@ class VoucherArgument {
         isLimited: isLimited!,
         isPercentage: isPercentage!,
         hasEndTime: hasEndTime!,
-
         properties: {
           'voucherID': voucherID,
           'voucherName': voucherName,
           'startTime': startTime,
-          'discountValue': discountValue,
-          'minimumPurchase': minimumPurchase,
-          'maxUsagePerPerson': maxUsagePerPerson,
-          'isVisible': isVisible,
-          'isEnabled': isEnabled,
-          'enDescription': enDescription,
-          'viDescription': viDescription,
-          'maximumDiscountValue': maximumDiscountValue,
-          'maximumUsage': maximumUsage,
-          'usageLeft': usageLeft,
+          'discountValue': discountValue ?? 0.0,
+          'minimumPurchase': minimumPurchase ?? 0.0,
+          'maxUsagePerPerson': maxUsagePerPerson ?? 1,
+          'isVisible': isVisible ?? true,
+          'isEnabled': isEnabled ?? true,
+          'enDescription': enDescription ?? '',
+          'viDescription': viDescription ?? '',
+          'maximumDiscountValue': maximumDiscountValue ?? 0.0,
+          'maximumUsage': maximumUsage ?? 0,
+          'usageLeft': usageLeft ?? 0,
           'endTime': endTime,
           'isLimited': isLimited,
           'isPercentage': isPercentage,
@@ -155,14 +142,15 @@ class VoucherArgument {
       isEnabled: voucher.isEnabled,
       enDescription: voucher.enDescription,
       viDescription: voucher.viDescription,
-
       isPercentage: voucher.isPercentage,
       hasEndTime: voucher.hasEndTime,
       isLimited: voucher.isLimited,
     );
 
     if (voucher is PercentageInterface) {
-      result.copyWith(maximumDiscountValue: (voucher as PercentageInterface).maximumDiscountValue);
+      result.copyWith(
+          maximumDiscountValue:
+              (voucher as PercentageInterface).maximumDiscountValue);
     }
 
     if (voucher is LimitedInterface) {

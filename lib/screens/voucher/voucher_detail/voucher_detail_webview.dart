@@ -159,7 +159,6 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
                         _buildInfoSection(context, state),
                         const SizedBox(height: 16),
                         _buildStatusSection(context, state),
-                        const SizedBox(height: 80), // Space for bottom buttons
                       ],
                     ),
                   ),
@@ -187,12 +186,12 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: () async {
-                                final processState =
+                                final result =
                                     await EditVoucherScreen.showModal(
                                   context,
                                   state.voucher,
                                 );
-                                if (processState == ProcessState.success) {
+                                if (result == true) {
                                   if (mounted) {
                                     Navigator.of(context).pop(true);
                                   }
