@@ -1,4 +1,5 @@
 import 'package:gizmoglobe_client/enums/product_related/drive_enums/drive_type.dart';
+import 'package:gizmoglobe_client/objects/product_related/drive_related/speed.dart';
 
 import '../../../enums/product_related/category_enum.dart';
 import '../../../enums/product_related/drive_enums/drive_form_factor.dart';
@@ -12,8 +13,7 @@ class Drive extends Product {
   DriveGen gen;
   int memoryGb;
   InterfaceType interfaceType;
-  int readMbps;
-  int writeMbps;
+  Speed speed;
   DriveFormFactor formFactor;
   DriveType driveType;
 
@@ -33,8 +33,7 @@ class Drive extends Product {
     required this.gen,
     required this.memoryGb,
     required this.interfaceType,
-    required this.readMbps,
-    required this.writeMbps,
+    required this.speed,
     required this.formFactor,
     required this.driveType,
     required super.sales,
@@ -56,8 +55,7 @@ class Drive extends Product {
     DriveGen? gen,
     int? memoryGb,
     InterfaceType? interfaceType,
-    int? readMbps,
-    int? writeMbps,
+    Speed? speed,
     DriveFormFactor? formFactor,
     DriveType? driveType,
     ProductStatusEnum? status,
@@ -85,9 +83,10 @@ class Drive extends Product {
     this.gen = gen ?? this.gen;
     this.memoryGb = memoryGb ?? this.memoryGb;
     this.interfaceType = interfaceType ?? this.interfaceType;
-    this.readMbps = readMbps ?? this.readMbps;
-    this.writeMbps = writeMbps ?? this.writeMbps;
+    this.speed = speed ?? this.speed;
     this.formFactor = formFactor ?? this.formFactor;
     this.driveType = driveType ?? this.driveType;
   }
 }
+
+

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart';
 import 'package:intl/intl.dart';
+import '../../../../functions/helper.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'incoming_detail_cubit.dart';
 import 'incoming_detail_state.dart';
@@ -183,7 +184,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                               ),
                               _buildTotalPriceRow(
                                 S.of(context).totalPrice,
-                                '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
+                                Helper.toCurrencyFormat(state.invoice.totalPrice),
                               ),
                               const SizedBox(height: 32),
                               Text(
@@ -238,7 +239,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                         ),
                                       ),
                                       subtitle: Text(
-                                        '${S.of(context).importPrice}: \$${detail.importPrice.toStringAsFixed(2)}',
+                                        '${S.of(context).importPrice}: ${Helper.toCurrencyFormat(detail.importPrice)}',
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme

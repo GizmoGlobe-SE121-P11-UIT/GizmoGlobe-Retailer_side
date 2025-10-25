@@ -21,6 +21,7 @@ import '../../enums/product_related/product_status_enum.dart';
 import '../manufacturer.dart';
 import 'cpu_related/cpu.dart';
 import 'drive_related/drive.dart';
+import 'drive_related/speed.dart';
 import 'gpu_related/gpu.dart';
 import 'mainboard_related/io_port.dart';
 import 'mainboard_related/mainboard.dart';
@@ -390,8 +391,10 @@ class ProductArgument {
           memoryGb: capacity!,
           gen: gen!,
           interfaceType: interfaceType!,
-          readMbps: readMbps!,
-          writeMbps: writeMbps!,
+          speed: Speed(
+              readMbps: readMbps!,
+              writeMbps: writeMbps!
+          ),
           formFactor: driveFormFactor!,
         )..productID = productID;
       default:
@@ -468,8 +471,8 @@ class ProductArgument {
           capacity: (product).memoryGb,
           gen: (product).gen,
           interfaceType: (product).interfaceType,
-          readMbps: (product).readMbps,
-          writeMbps: (product).writeMbps,
+          readMbps: (product).speed.readMbps,
+          writeMbps: (product).speed.writeMbps,
           driveFormFactor: (product).formFactor,
         );
       default:

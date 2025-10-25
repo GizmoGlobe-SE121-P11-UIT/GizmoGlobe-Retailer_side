@@ -21,6 +21,11 @@ enum DriveType {
   String toString() {
     return description;
   }
+
+  factory DriveType.fromJson(Map<String, dynamic> json) {
+    String name = json['driveType'] ?? 'Unknown';
+    return DriveTypeExtension.fromName(name);
+  }
 }
 
 extension DriveTypeExtension on DriveType {

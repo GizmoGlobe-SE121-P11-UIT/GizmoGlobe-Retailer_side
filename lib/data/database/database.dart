@@ -144,64 +144,95 @@ class Database {
     } catch (e) {
       if (kDebugMode) {
         print(
-            'Error when initializing database: $e'); // Lỗi khi khởi tạo database
+            'Error when initializing database: $e');
       }
       // Nếu không lấy được dữ liệu từ Firestore, sử dụng dữ liệu mẫu
       // _initializeSampleData();
     }
   }
 
+  // Future<void> migrateManufacturerData() async {
+  //   final productsSnapshot = await FirebaseFirestore.instance.collection('products').get();
+  //   final manufacturers = await Firebase().getManufacturers();
+  //   final manufacturerMap = {for (var m in manufacturers) m.manufacturerID: m.manufacturerName};
+  //
+  //   for (var doc in productsSnapshot.docs) {
+  //     final data = doc.data();
+  //     if (data['manufacturer'] is String) {
+  //       final manufacturerId = data['manufacturer'];
+  //       if (manufacturerId == 'vIQErfxHn8kBv3YRHxya\n') {
+  //         await doc.reference.update({'manufacturer': 'vIQErfxHn8kBv3YRHxya'});
+  //       }
+  //     }
+  //   }
+  // }
+
   Future<void> fetchDataFromFirestore() async {
     try {
       if (kDebugMode) {
-        print(
-            'Initializing connection to Firebase'); //Bắt đầu lấy dữ liệu từ Firestore
+        print('Initializing connection to Firebase');
       }
       await getUser();
       await getUsername();
       if (kDebugMode) {
-        print('User: $username, Email: $email'); //Thông tin người dùng
+        print('User: $username, Email: $email');
       }
-      final manufacturerSnapshot =
-          await FirebaseFirestore.instance.collection('manufacturers').get();
 
       manufacturerList = await Firebase().getManufacturers();
 
+      // await migrateManufacturerData();
+
       if (kDebugMode) {
-        print('Manufacturers: ${manufacturerList.length}'); //Nhà sản xuất
+        print('Manufacturers: ${manufacturerList.length}');
       }
 
-      // Lấy danh sách products từ Firestore
       final productSnapshot =
-          await FirebaseFirestore.instance.collection('products').get();
+      await FirebaseFirestore.instance.collection('products').get();
 
       if (kDebugMode) {
-        print('Products: ${productSnapshot.docs.length}'); //Sản phẩm
+        print('Products: ${productSnapshot.docs.length}');
       }
 
-      productList = await Future.wait(productSnapshot.docs.map((doc) async {
+      final products = (await Future.wait(productSnapshot.docs.map((doc) async {
         try {
-          final data = doc.data();
+          final dynamic raw = doc.data();
+          if (raw is! Map<String, dynamic>) {
+            if (kDebugMode) {
+              print('Product ${doc.id} has unexpected data type: ${raw.runtimeType}');
+            }
+            return null;
+          }
 
-          // Tìm manufacturer tương ứng
-          final manufacturer = manufacturerList.firstWhere(
-            (m) => m.manufacturerID == data['manufacturerID'],
-            orElse: () {
-              if (kDebugMode) {
-                print('Manufacturer not found for product ${doc.id}');
+          // Normalize: parse JSON strings into Map/List where applicable
+          final Map<String, dynamic> data = raw.map<String, dynamic>((key, value) {
+            dynamic normalized = value;
+            if (value is String) {
+              final s = value.trim();
+              if ((s.startsWith('{') && s.endsWith('}')) ||
+                  (s.startsWith('[') && s.endsWith(']'))) {
+                try {
+                  normalized = jsonDecode(s);
+                } catch (_) {
+                  normalized = value; // leave original if parse fails
+                }
               }
-              throw Exception('Manufacturer not found for product ${doc.id}');
-            },
-          );
+            }
+            return MapEntry(key, normalized);
+          });
+
+          // Ensure productID present (some factories expect it)
+          data.putIfAbsent('productID', () => doc.id);
 
           return ProductFactory.createProduct(data);
-        } catch (e) {
+        } catch (e, st) {
           if (kDebugMode) {
-            print('Error processing product ${doc.id}: $e');
+            print('Error processing product ${doc.id}: $e\n$st');
           }
-          return Future.error('Error processing product ${doc.id}: $e');
+          return null;
         }
-      }));
+      }))).whereType<Product>().toList();
+
+      productList = products;
 
       await fetchAddress();
 

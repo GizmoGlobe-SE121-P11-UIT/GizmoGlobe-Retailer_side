@@ -9,6 +9,7 @@ import 'package:gizmoglobe_client/generated/l10n.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../enums/invoice_related/payment_status.dart';
+import '../../../functions/helper.dart';
 import '../../../objects/invoice_related/incoming_invoice.dart';
 import '../../../widgets/general/status_badge.dart';
 import 'incoming_detail/incoming_detail_view.dart';
@@ -341,7 +342,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                             ),
                                             const SizedBox(width: 8),
                                             Text(
-                                              '\$${invoice.totalPrice.toStringAsFixed(2)}',
+                                              Helper.toCurrencyFormat(invoice.totalPrice),
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,

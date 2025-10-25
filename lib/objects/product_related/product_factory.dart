@@ -1,3 +1,5 @@
+import 'package:gizmoglobe_client/objects/product_related/drive_related/speed.dart';
+
 import '../../data/database/database.dart';
 import '../../enums/product_related/category_enum.dart';
 import '../../enums/product_related/mainboard_enums/mainboard_form_factor.dart';
@@ -32,7 +34,7 @@ import 'psu_related/connector.dart';
 class ProductFactory {
   static Product createProduct(Map<String, dynamic> properties) {
     dynamic getAttr(String path) => getByPath(properties, path);
-    CategoryEnum category = CategoryEnumExtension.fromName(properties['category']?.toString() ?? '');
+    CategoryEnum category = CategoryEnumExtension.fromName(properties['category'].toString());
 
     switch (category) {
       case CategoryEnum.ram:
@@ -182,13 +184,12 @@ class ProductFactory {
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
 
-          gen: parseDriveGen(attrs['gen']),
-          memoryGb: toInt(attrs['memoryGb'] ?? attrs['memory'] ?? attrs['capacity']),
+          gen: DriveGen.fromJson(toInt(attrs['gen'])),
+          memoryGb: toInt(attrs['memoryGb']),
           interfaceType: parseInterfaceType(attrs['interfaceType']),
-          readMbps: toInt(speed['readMbps']),
-          writeMbps: toInt(speed['writeMbps']),
-          formFactor: parseDriveFormFactor(attrs['formFactor']),
-          driveType: parseDriveType(attrs['driveType'] ?? attrs['driveTypeRaw'] ?? attrs['driveTypeString']),
+          speed: Speed.fromJson(attrs['speed'] is Map<String, dynamic> ? speed : {}),
+          formFactor: DriveFormFactorExtension.fromName(attrs['formFactor']),
+          driveType: parseDriveType(attrs['driveType']),
 
           sales: toInt(properties['sales']),
           stock: toInt(properties['stock']),
@@ -201,6 +202,7 @@ class ProductFactory {
         throw Exception('Invalid product category');
     }
   }
+
 }
 
 dynamic getByPath(Map<String, dynamic> map, String path) {
@@ -215,22 +217,12 @@ dynamic getByPath(Map<String, dynamic> map, String path) {
   return cur;
 }
 
-Manufacturer parseManufacturer(dynamic v) {
+Manufacturer parseManufacturer(String? v) {
   if (v == null) return Manufacturer.nullManufacturer;
 
-  if (v is Map<String, dynamic>) {
-    return Manufacturer(
-      manufacturerID: v['manufacturerID']?.toString(),
-      manufacturerName: Database().manufacturerList.firstWhere(
-        (m) => m.manufacturerID == v['manufacturerID']?.toString(),
-        orElse: () => Manufacturer.nullManufacturer,
-      ).manufacturerName,
-    );
-  }
-
-  return Manufacturer(
-    manufacturerName: v.toString(),
-    manufacturerID: v.toString(),
+  return Database().manufacturerList.firstWhere(
+        (m) => m.manufacturerID == v.toString(),
+    orElse: () => Manufacturer.nullManufacturer
   );
 }
 
@@ -286,24 +278,9 @@ Socket parseSocket(dynamic v) {
   return SocketExtension.fromName(v.toString());
 }
 
-DriveGen parseDriveGen(dynamic v) {
-  if (v == null) DriveGen.unknown;
-  return DriveGenExtension.fromName(v.toString());
-}
-
 InterfaceType parseInterfaceType(dynamic v) {
   if (v == null) return InterfaceType.unknown;
   return InterfaceTypeExtension.fromName(v.toString());
-}
-
-DriveFormFactor parseDriveFormFactor(dynamic v) {
-  if (v == null) return DriveFormFactor.unknown;
-  return DriveFormFactorExtension.fromName(v.toString());
-}
-
-DriveType parseDriveType(dynamic v) {
-  if (v == null) return DriveType.unknown;
-  return DriveTypeExtension.fromName(v.toString());
 }
 
 PSUEfficiency parsePSUEfficiency(dynamic v) {
@@ -314,4 +291,9 @@ PSUEfficiency parsePSUEfficiency(dynamic v) {
 PSUModular parsePSUModular(dynamic v) {
   if (v == null) return PSUModular.unknown;
   return PSUModularExtension.fromName(v.toString());
+}
+
+DriveType parseDriveType(dynamic v) {
+  if (v == null) return DriveType.unknown;
+  return DriveTypeExtension.fromName(v.toString());
 }

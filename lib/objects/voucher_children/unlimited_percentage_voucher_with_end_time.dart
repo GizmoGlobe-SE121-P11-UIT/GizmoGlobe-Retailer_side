@@ -91,14 +91,14 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
         ),
         const SizedBox(height: 4),
         Text(
-          '${s.discount} $discountValue% ${s.maximumDiscount}: \$$maximumDiscountValue',
+          '${s.discount} $discountValue% ${s.maximumDiscount}: ${Helper.toCurrencyFormat(maximumDiscountValue)}',
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.tertiary,
           ),
         ),
         const SizedBox(height: 4),
         Text(
-          '${s.minimumPurchase}: \$$minimumPurchase',
+          '${s.minimumPurchase}: ${Helper.toCurrencyFormat(minimumPurchase)}',
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurface,
           ),

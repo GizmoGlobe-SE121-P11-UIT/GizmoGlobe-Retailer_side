@@ -452,10 +452,7 @@ class Firebase {
     try {
       final snapshot = await _firestore.collection('manufacturers').get();
       return snapshot.docs
-          .map((doc) => _mapManufacturerFromJson(
-                doc.data(),
-                doc.id,
-              ))
+          .map((doc) => _mapManufacturerFromJson(doc.data()))
           .toList();
     } catch (e) {
       if (kDebugMode) {
@@ -470,10 +467,7 @@ class Firebase {
         .collection('manufacturers')
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => _mapManufacturerFromJson(
-                  doc.data(),
-                  doc.id,
-                ))
+            .map((doc) => _mapManufacturerFromJson(doc.data()))
             .toList());
   }
 
@@ -500,8 +494,7 @@ class Firebase {
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        throw Exception(
-            'Manufacturer not found'); // Không tìm thấy nhà sản xuất
+        throw Exception('Manufacturer not found');
       }
 
       await FirebaseFirestore.instance
@@ -2189,9 +2182,9 @@ class Firebase {
   }
 }
 
-Manufacturer _mapManufacturerFromJson(Map<String, dynamic> json, String id) {
+Manufacturer _mapManufacturerFromJson(Map<String, dynamic> json) {
   return Manufacturer(
-    manufacturerID: id,
+    manufacturerID: json['manufacturerID'] as String,
     manufacturerName: json['manufacturerName'] as String,
     status: _mapManufacturerStatus(json['status'] as String? ?? 'active'),
   );
@@ -2199,6 +2192,7 @@ Manufacturer _mapManufacturerFromJson(Map<String, dynamic> json, String id) {
 
 Map<String, dynamic> _mapManufacturerToJson(Manufacturer manufacturer) {
   return {
+    'manufacturerID': manufacturer.manufacturerID,
     'manufacturerName': manufacturer.manufacturerName,
     'status': manufacturer.status.toString().split('.').last,
   };

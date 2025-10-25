@@ -4,6 +4,8 @@ import 'package:gizmoglobe_client/enums/product_related/product_status_enum.dart
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/objects/product_related/product_extensions.dart';
 
+import '../../functions/helper.dart';
+
 class ProductCard extends StatelessWidget {
   final Product product;
   final bool isSelected;
@@ -21,7 +23,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0), // Space between cards
+      padding: const EdgeInsets.only(bottom: 8.0),
       child: GestureDetector(
         onTap: onTap,
         onLongPress: onLongPress,
@@ -155,7 +157,7 @@ class ProductCard extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  '\$${product.sellingPrice.toStringAsFixed(2)}',
+                                  Helper.toCurrencyFormat(product.sellingPrice),
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Theme.of(context).colorScheme.primary,

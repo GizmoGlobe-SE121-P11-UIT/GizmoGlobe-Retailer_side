@@ -123,8 +123,8 @@ Map<String, dynamic> productToJson(Product p) {
         'memoryGb': d.memoryGb,
         'interfaceType': _enumName(d.interfaceType),
         'speed': {
-          'readMbps': d.readMbps,
-          'writeMbps': d.writeMbps,
+          'readMbps': d.speed.readMbps,
+          'writeMbps': d.speed.writeMbps,
         },
         'formFactor': _enumName(d.formFactor),
         'driveType': _enumName(d.driveType),

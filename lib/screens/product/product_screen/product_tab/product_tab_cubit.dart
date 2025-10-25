@@ -23,16 +23,12 @@ abstract class TabCubit extends Cubit<TabState> {
 
   void initialize(FilterArgument filter, {String? searchText, required List<Product> initialProducts}) {
     emit(state.copyWith(
+      manufacturerList: Database().manufacturerList,
       productList: initialProducts.isEmpty ? Database().productList : initialProducts,
       filteredProductList: initialProducts.isEmpty ? Database().productList : initialProducts,
-      searchText: searchText ?? '',
+      searchText: searchText ?? ''
     ));
 
-    emit(state.copyWith(
-      manufacturerList: getManufacturerList(),
-      filterArgument: filter.copyWith(manufacturerList: getManufacturerList()
-      ),
-    ));
     // Set the active category based on this tab's index so filters apply correctly on init
     final initialCategory = _categoryForIndex(getIndex());
     emit(state.copyWith(activeCategory: initialCategory));
@@ -86,7 +82,6 @@ abstract class TabCubit extends Cubit<TabState> {
   }
 
   void updateTabIndex(int index) {
-    // Set the active category for this tab and reapply filters
     final newCategory = _categoryForIndex(index);
     emit(state.copyWith(activeCategory: newCategory));
     applyFilters();
@@ -109,42 +104,46 @@ abstract class TabCubit extends Cubit<TabState> {
   void applyFilters() {
     if (kDebugMode) {
       print('Apply filter');
-    } //Áp dụng bộ lọc
-    final filteredProducts = state.productList.where((product) {
-      if (!product.productName.toLowerCase().contains(state.searchText.toLowerCase())) {
-        return false;
+    }
+
+    final allProducts = state.productList;
+    final fa = state.filterArgument;
+    final activeCategory = state.activeCategory;
+    final query = state.searchText.trim();
+    final applyCategory = activeCategory != CategoryEnum.empty;
+    final applySearch = query.isNotEmpty;
+    final queryLower = query.toLowerCase();
+
+    final selectedMans = fa.manufacturerList;
+    final applyManufacturer = selectedMans.isNotEmpty && !_isAllManufacturersSelected(selectedMans, state.manufacturerList);
+
+    final List<Product> filteredProducts = <Product>[];
+
+    for (final product in allProducts) {
+      // Category
+      if (applyCategory && product.category != activeCategory) continue;
+
+      // Search
+      if (applySearch && !product.productName.toLowerCase().contains(queryLower)) continue;
+
+      // Manufacturer
+      if (applyManufacturer) {
+        final manu = product.manufacturer;
+        if (!selectedMans.contains(manu)) continue;
       }
 
-      if (!state.filterArgument.manufacturerList.any((manufacturer) => manufacturer.manufacturerID == product.manufacturer.manufacturerID)) {
-        return false;
-      }
+      // Price range
+      final priceValue = (product.sellingPrice * (100 - product.discount) * 10).toDouble();
+      if (!matchesMinMax(priceValue, fa.minPrice, fa.maxPrice)) continue;
 
+      // Category-specific filters
+      if (!matchFilter(product, fa)) continue;
 
-      if (!matchesMinMax(
-          (product.sellingPrice * (100 - product.discount) * 1000).toDouble(),
-          state.filterArgument.minPrice,
-          state.filterArgument.maxPrice
-      )) {
-        return false;
-      }
+      // Passed all checks
+      filteredProducts.add(product);
+    }
 
-      // Determine matching by using the activeCategory stored in state.
-      final index = getIndex();
-      final CategoryEnum tabCategory = _categoryForIndex(index);
-      // If this is the 'All' tab (tabCategory == empty), respect activeCategory if set, otherwise accept all.
-      if (tabCategory == CategoryEnum.empty) {
-        if (state.activeCategory != CategoryEnum.empty && product.category != state.activeCategory) {
-          return false;
-        }
-      } else {
-        if (product.category != tabCategory) {
-          return false;
-        }
-      }
-
-      return matchFilter(product, state.filterArgument);
-    }).toList();
-
+    // Sorting
     switch (state.selectedSortOption) {
       case SortEnum.releaseOldest:
         filteredProducts.sort((a, b) => a.release.compareTo(b.release));
@@ -220,108 +219,149 @@ abstract class TabCubit extends Cubit<TabState> {
     return turboClock >= min && baseClock <= max;
   }
 
+  // dart
   bool matchFilter(Product product, FilterArgument filterArgument) {
+    // helpers
+    bool shouldApplyRange(String? min, String? max) =>
+        (min?.isNotEmpty == true) || (max?.isNotEmpty == true);
+
+    bool applyRangeCheck(double value, String? min, String? max) {
+      if (!shouldApplyRange(min, max)) return true;
+      return matchesMinMax(value, min, max);
+    }
+
     switch (product.category) {
       case CategoryEnum.ram:
         product as RAM;
-        final matchesRamCapacity = matchesMinMax(
-          (product.capacityPerStickGb * product.kitStickCount).toDouble(),
-          state.filterArgument.minMemoryGb,
-          state.filterArgument.maxMemoryGb
-        );
-        return filterArgument.ramType.contains(product.type) &&
-            matchesRamCapacity;
+        final memGb = (product.capacityPerStickGb * product.kitStickCount).toDouble();
+        if (!applyRangeCheck(memGb, filterArgument.minMemoryGb, filterArgument.maxMemoryGb)) {
+          return false;
+        }
+        if (filterArgument.ramType.isNotEmpty && !filterArgument.ramType.contains(product.type)) {
+          return false;
+        }
+        return true;
 
       case CategoryEnum.cpu:
         product as CPU;
-        final matchesCpuClockSpeed = matchedCpuClockSpeed(
-            product.baseClock,
-            product.turboClock,
-            state.filterArgument.minClockSpeed,
-            state.filterArgument.maxClockSpeed
-        );
-        final matchesCpuTdp = matchesMinMax(
-            product.tdp.toDouble(),
-            state.filterArgument.minTdp,
-            state.filterArgument.maxTdp
-        );
-        return filterArgument.cpuSeries.contains(product.series) &&
-            filterArgument.sockets.contains(product.socket) &&
-            matchesCpuClockSpeed &&
-            matchesCpuTdp;
+        if (shouldApplyRange(filterArgument.minClockSpeed, filterArgument.maxClockSpeed)) {
+          if (!matchedCpuClockSpeed(
+              product.baseClock, product.turboClock, filterArgument.minClockSpeed, filterArgument.maxClockSpeed)) {
+            return false;
+          }
+        }
+
+        if (!applyRangeCheck(product.tdp.toDouble(), filterArgument.minTdp, filterArgument.maxTdp)) {
+          return false;
+        }
+
+        if (filterArgument.cpuSeries.isNotEmpty && !filterArgument.cpuSeries.contains(product.series)) {
+          return false;
+        }
+        if (filterArgument.sockets.isNotEmpty && !filterArgument.sockets.contains(product.socket)) {
+          return false;
+        }
+
+        return true;
 
       case CategoryEnum.gpu:
         product as GPU;
-        final matchesGpuClockSpeed = matchesMinMax(
-            product.boostClock,
-            state.filterArgument.minClockSpeed,
-            state.filterArgument.maxClockSpeed
-        );
-        final matchesGpuCapacity = matchesMinMax(
-            product.memory.toDouble(),
-            state.filterArgument.minMemoryGb,
-            state.filterArgument.maxMemoryGb
-        );
-        final matchesGpuTdp = matchesMinMax(
-            product.tdp.toDouble(),
-            state.filterArgument.minTdp,
-            state.filterArgument.maxTdp
-        );
-        return filterArgument.gpuVersion.contains(product.version) &&
-            filterArgument.gpuSeries.contains(product.series) &&
-            matchesGpuClockSpeed &&
-            matchesGpuCapacity &&
-            matchesGpuTdp;
+        if (shouldApplyRange(filterArgument.minClockSpeed, filterArgument.maxClockSpeed)) {
+          if (!applyRangeCheck(product.boostClock.toDouble(), filterArgument.minClockSpeed, filterArgument.maxClockSpeed)) {
+            return false;
+          }
+        }
+
+        if (!applyRangeCheck(product.memory.toDouble(), filterArgument.minMemoryGb, filterArgument.maxMemoryGb)) {
+          return false;
+        }
+
+        if (!applyRangeCheck(product.tdp.toDouble(), filterArgument.minTdp, filterArgument.maxTdp)) {
+          return false;
+        }
+
+        if (filterArgument.gpuVersion.isNotEmpty && !filterArgument.gpuVersion.contains(product.version)) {
+          return false;
+        }
+
+        if (filterArgument.gpuSeries.isNotEmpty && !filterArgument.gpuSeries.contains(product.series)) {
+          return false;
+        }
+
+        return true;
 
       case CategoryEnum.mainboard:
         product as Mainboard;
-        final matchesMainboardCapacity = matchesMinMax(
-          (product.ramSpec.maxSingleDimmGb * product.ramSpec.slots).toDouble(),
-          state.filterArgument.minMemoryGb,
-          state.filterArgument.maxMemoryGb
-        );
-        final matchesMainboardM2Slot = matchesMinMax(
-          product.storageSlot.m2Slots.toDouble(),
-          state.filterArgument.minM2Slots,
-          state.filterArgument.maxM2Slots
-        );
-        final matchesMainboardSataSlot = matchesMinMax(
-            product.storageSlot.sataPorts.toDouble(),
-            state.filterArgument.minSataPorts,
-            state.filterArgument.maxSataPorts
-        );
-        return filterArgument.mainboardFormFactor.contains(product.formFactor) &&
-            filterArgument.sockets.contains(product.socket) &&
-            filterArgument.ramType.contains(product.ramSpec.type) &&
-            matchesMainboardCapacity &&
-            matchesMainboardM2Slot &&
-            matchesMainboardSataSlot;
+        final maxRamGb = (product.ramSpec.maxSingleDimmGb * product.ramSpec.slots).toDouble();
+        if (!applyRangeCheck(maxRamGb, filterArgument.minMemoryGb, filterArgument.maxMemoryGb)) {
+          return false;
+        }
+
+        if (!applyRangeCheck(product.storageSlot.m2Slots.toDouble(), filterArgument.minM2Slots, filterArgument.maxM2Slots)) {
+          return false;
+        }
+
+        if (!applyRangeCheck(product.storageSlot.sataPorts.toDouble(), filterArgument.minSataPorts, filterArgument.maxSataPorts)) {
+          return false;
+        }
+
+        if (filterArgument.mainboardFormFactor.isNotEmpty && !filterArgument.mainboardFormFactor.contains(product.formFactor)) {
+          return false;
+        }
+
+        if (filterArgument.sockets.isNotEmpty && !filterArgument.sockets.contains(product.socket)) {
+          return false;
+        }
+
+        if (filterArgument.ramType.isNotEmpty && !filterArgument.ramType.contains(product.ramSpec.type)) {
+          return false;
+        }
+
+        return true;
 
       case CategoryEnum.drive:
         product as Drive;
-        final matchesDriveCapacity = matchesMinMax(
-          product.memoryGb.toDouble(),
-          state.filterArgument.minMemoryGb,
-          state.filterArgument.maxMemoryGb
-        );
-        return filterArgument.driveType.contains(product.driveType) &&
-            filterArgument.driveFormFactor.contains(product.formFactor) &&
-            filterArgument.interfaceType.contains(product.interfaceType) &&
-            filterArgument.gen.contains(product.gen) &&
-            matchesDriveCapacity;
+        if (!applyRangeCheck(product.memoryGb.toDouble(), filterArgument.minMemoryGb, filterArgument.maxMemoryGb)) {
+          return false;
+        }
+        if (filterArgument.driveType.isNotEmpty && !filterArgument.driveType.contains(product.driveType)) {
+          return false;
+        }
+        if (filterArgument.driveFormFactor.isNotEmpty && !filterArgument.driveFormFactor.contains(product.formFactor)) {
+          return false;
+        }
+        if (filterArgument.interfaceType.isNotEmpty && !filterArgument.interfaceType.contains(product.interfaceType)) {
+          return false;
+        }
+        if (filterArgument.gen.isNotEmpty && !filterArgument.gen.contains(product.gen)) {
+          return false;
+        }
+
+        return true;
 
       case CategoryEnum.psu:
         product as PSU;
-        final matchesPsuWattage = matchesMinMax(
-            product.maxWattage.toDouble(),
-            state.filterArgument.minTdp,
-            state.filterArgument.maxTdp
-        );
-        return filterArgument.psuModularity.contains(product.modularity) &&
-            filterArgument.psuEfficiency.contains(product.efficiency) &&
-            matchesPsuWattage;
+        if (!applyRangeCheck(product.maxWattage.toDouble(), filterArgument.minTdp, filterArgument.maxTdp)) {
+          return false;
+        }
+
+        // If both lists empty -> don't filter by PSU attributes
+        if (filterArgument.psuModularity.isEmpty && filterArgument.psuEfficiency.isEmpty) {
+          return true;
+        }
+
+        if (filterArgument.psuModularity.isNotEmpty && !filterArgument.psuModularity.contains(product.modularity)) {
+          return false;
+        }
+
+        if (filterArgument.psuEfficiency.isNotEmpty && !filterArgument.psuEfficiency.contains(product.efficiency)) {
+          return false;
+        }
+
+        return true;
+
       default:
-        return false;
+        return true;
     }
   }
 }
@@ -432,4 +472,11 @@ class MainboardTabCubit extends TabCubit {
         .toSet()
         .toList();
   }
+}
+
+bool _isAllManufacturersSelected(List<Manufacturer> selected, List<Manufacturer> all) {
+  if (all.isEmpty) return false;
+  final selIds = selected.map((m) => m.manufacturerID).toSet();
+  final allIds = all.map((m) => m.manufacturerID).toSet();
+  return selIds.length == allIds.length && selIds.containsAll(allIds);
 }

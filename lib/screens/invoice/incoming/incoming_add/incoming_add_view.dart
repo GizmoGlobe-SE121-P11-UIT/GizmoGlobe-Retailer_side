@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice_detail.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import '../../../../enums/invoice_related/payment_status.dart';
+import '../../../../functions/helper.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import 'incoming_add_cubit.dart';
 import 'incoming_add_state.dart';
@@ -208,7 +209,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                         Expanded(
                           flex: 2,
                           child: Text(
-                            'Import Price: \$${detail.importPrice.toStringAsFixed(2)}',
+                            'Import Price: ${Helper.toCurrencyFormat(detail.importPrice)}',
                             style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.8),
                             ),
@@ -279,7 +280,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                         Expanded(
                           flex: 1,
                           child: Text(
-                            '\$${detail.subtotal.toStringAsFixed(2)}',
+                            Helper.toCurrencyFormat(detail.subtotal),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -312,7 +313,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
           ),
         ),
         Text(
-          '\$${state.totalPrice.toStringAsFixed(2)}',
+          Helper.toCurrencyFormat(state.totalPrice),
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

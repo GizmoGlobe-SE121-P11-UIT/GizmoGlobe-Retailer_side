@@ -19,6 +19,11 @@ enum ProductStatusEnum {
   String toString() {
     return description;
   }
+
+  factory ProductStatusEnum.fromJson(Map<String, dynamic> json) {
+    String name = json['status'] ?? 'Unknown';
+    return ProductStatusEnumExtension.fromName(name);
+  }
 }
 
 extension ProductStatusEnumExtension on ProductStatusEnum {

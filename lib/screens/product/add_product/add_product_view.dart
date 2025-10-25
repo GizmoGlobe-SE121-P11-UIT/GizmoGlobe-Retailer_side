@@ -256,9 +256,9 @@ class _AddProductState extends State<AddProductScreen> {
       capacityController = TextEditingController(
           text: (widget.product as Drive).memoryGb.toString());
       writeMbpsController = TextEditingController(
-          text: (widget.product as Drive).writeMbps.toString());
+          text: (widget.product as Drive).speed.writeMbps.toString());
       readMbpsController = TextEditingController(
-          text: (widget.product as Drive).readMbps.toString());
+          text: (widget.product as Drive).speed.readMbps.toString());
     }
   }
 
@@ -732,7 +732,7 @@ class _AddProductState extends State<AddProductScreen> {
                       .productArgument!
                       .copyWith(bus: value));
                 },
-              ), 
+              ),
               const SizedBox(height: 8),
 
               buildInputWidget<RAMType>(

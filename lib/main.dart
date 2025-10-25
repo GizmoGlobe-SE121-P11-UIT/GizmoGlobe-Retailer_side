@@ -35,7 +35,6 @@ void main() async {
       appleProvider: AppleProvider.deviceCheck,
     );
     FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
-    await Database().initialize();
     await Permission.camera.request();
     await Permission.photos.request();
     runApp(const MyApp());

@@ -82,8 +82,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
           'Capacity': '${drive.memoryGb} GB',
           'Interface': drive.interfaceType.toString(),
           'Form Factor': drive.formFactor.toString(),
-          'Read Speed': '${drive.readMbps} MB/s',
-          'Write Speed': '${drive.writeMbps} MB/s',
+          'Read Speed': '${drive.speed.readMbps} MB/s',
+          'Write Speed': '${drive.speed.writeMbps} MB/s',
         });
         break;
 

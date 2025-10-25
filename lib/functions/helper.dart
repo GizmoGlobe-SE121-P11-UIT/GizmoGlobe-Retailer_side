@@ -27,13 +27,13 @@ class Helper {
     }
   }
 
-  static String toMoney(num value) {
+  static String toMoneyFormat(num value) {
     final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '', decimalDigits: 0);
-    return formatter.format(value);
+    return formatter.format(value * 1000);
   }
 
-  static String toMoneyWithCurrency(num value) {
+  static String toCurrencyFormat(num value) {
     final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: '₫', decimalDigits: 0);
-    return formatter.format(value);
+    return formatter.format(value * 1000);
   }
 }

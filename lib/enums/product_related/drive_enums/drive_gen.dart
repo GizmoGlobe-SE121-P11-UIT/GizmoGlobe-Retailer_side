@@ -1,37 +1,42 @@
 enum DriveGen {
-  unknown('Unknown', 'Unknown'),
-  gen3('Gen 3', 'III'),
-  gen4('Gen 4', 'IV'),
-  gen5('Gen 5', 'V');
+  unknown(0, 'Unknown', 'Unknown'),
+  gen3(3, 'Gen 3', 'III'),
+  gen4(4, 'Gen 4', 'IV'),
+  gen5(5, 'Gen 5', 'V');
 
+  final int genNumber;
   final String description;
   final String romanNumeral;
 
-  const DriveGen(this.description, this.romanNumeral);
+  const DriveGen(this.genNumber, this.description, this.romanNumeral);
 
-  String getName() {
-    return name;
-  }
+  int getNumber() => genNumber;
 
   static List<DriveGen> getValues() {
     return DriveGen.values.where((e) => e != DriveGen.unknown).toList();
   }
 
   @override
-  String toString() {
-    return description;
-  }
+  String toString() => description;
 
-  String toRoman() {
-    return romanNumeral;
+  String toRoman() => romanNumeral;
+
+  factory DriveGen.fromJson(dynamic json) {
+    int? gen;
+    if (json is int) {
+      gen = json;
+    } else if (json is Map<String, dynamic>) {
+      gen = json['gen'] is int ? json['gen'] : int.tryParse(json['gen']?.toString() ?? '');
+    }
+    return DriveGenExtension.fromInt(gen ?? 0);
   }
 }
 
 extension DriveGenExtension on DriveGen {
-  static DriveGen fromName(String name) {
+  static DriveGen fromInt(int gen) {
     return DriveGen.values.firstWhere(
-        (e) => e.getName() == name,
-        orElse: () => DriveGen.unknown
+          (e) => e.genNumber == gen,
+      orElse: () => DriveGen.unknown,
     );
   }
 }
