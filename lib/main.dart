@@ -23,31 +23,121 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize error handling for web
+  if (kIsWeb) {
+    // Set up error handling for web platform
+    FlutterError.onError = (FlutterErrorDetails details) {
+      if (kDebugMode) {
+        print('Flutter Error: ${details.exception}');
+        print('Stack trace: ${details.stack}');
+      }
+    };
+  }
+
   await dotenv.load(fileName: ".env");
   await _setup();
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    await FirebaseAppCheck.instance.activate(
-      androidProvider:
-          kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
-      appleProvider: AppleProvider.deviceCheck,
-    );
-    FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
-    await Permission.camera.request();
-    await Permission.photos.request();
-    runApp(const MyApp());
+    // Initialize Firebase with error handling
+    if (kIsWeb) {
+      // For web, try to initialize with a more robust approach
+      try {
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+      } catch (webInitError) {
+        if (kDebugMode) {
+          print('Web Firebase init failed, trying fallback: $webInitError');
+        }
+        // Try without options as fallback
+        await Firebase.initializeApp();
+      }
+    } else {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+
+    // Only initialize App Check on mobile platforms
+    if (!kIsWeb) {
+      try {
+        await FirebaseAppCheck.instance.activate(
+          androidProvider: kDebugMode
+              ? AndroidProvider.debug
+              : AndroidProvider.playIntegrity,
+          appleProvider: AppleProvider.deviceCheck,
+        );
+        FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
+      } catch (appCheckError) {
+        if (kDebugMode) {
+          print('App Check initialization failed: $appCheckError');
+        }
+        // Continue without App Check if it fails
+      }
+    }
+
+    // Initialize database with error handling
+    try {
+      await Database().initialize();
+    } catch (dbError) {
+      if (kDebugMode) {
+        print('Database initialization failed: $dbError');
+      }
+      // Continue without database if it fails
+    }
+
+    // Request permissions only on mobile
+    if (!kIsWeb) {
+      try {
+        await Permission.camera.request();
+        await Permission.photos.request();
+      } catch (permissionError) {
+        if (kDebugMode) {
+          print('Permission request failed: $permissionError');
+        }
+      }
+    }
+
+    runApp(const ErrorBoundary(child: MyApp()));
   } catch (e) {
     if (kDebugMode) {
-      runApp(MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Text('Error initializing Firebase: $e'),
+      print('Firebase initialization error: $e');
+    }
+    // Show error screen with more details
+    runApp(MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
+              const Text(
+                'Firebase Initialization Failed',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Error: $e',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  // Reload the page
+                  if (kIsWeb) {
+                    // ignore: avoid_web_libraries_in_flutter
+                    // html.window.location.reload();
+                  }
+                },
+                child: const Text('Reload Page'),
+              ),
+            ],
           ),
         ),
-      ));
-    }
+      ),
+    ));
   }
 }
 
@@ -162,6 +252,64 @@ class AuthWrapper extends StatelessWidget {
 
         // For all other cases, show sign in screen
         return SignInScreen.newInstance();
+      },
+    );
+  }
+}
+
+// Error boundary widget to catch and handle errors gracefully
+class ErrorBoundary extends StatelessWidget {
+  final Widget child;
+
+  const ErrorBoundary({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        try {
+          return child;
+        } catch (error, stackTrace) {
+          if (kDebugMode) {
+            print('Error caught by ErrorBoundary: $error');
+            print('Stack trace: $stackTrace');
+          }
+
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error, size: 64, color: Colors.red),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Something went wrong',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Please refresh the page or try again later.',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Reload the page on web
+                        if (kIsWeb) {
+                          // ignore: avoid_web_libraries_in_flutter
+                          // html.window.location.reload();
+                        }
+                      },
+                      child: const Text('Reload'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
       },
     );
   }

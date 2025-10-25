@@ -66,7 +66,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_gen: any
-  intl_utils: any
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -123,4 +122,3 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-  generate: true
