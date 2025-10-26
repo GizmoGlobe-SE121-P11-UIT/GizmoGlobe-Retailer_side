@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/functions/helper.dart' show Helper;
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice_detail.dart';
@@ -305,39 +306,42 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                 itemCount: state.products.length,
                 itemBuilder: (context, index) {
                   final product = state.products[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .surfaceVariant
-                          .withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
+                  return InkWell(
+                    onTap: () => _showAddProductDialog(context, selectedProduct: product),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      decoration: BoxDecoration(
                         color: Theme.of(context)
                             .colorScheme
-                            .outline
+                            .surfaceVariant
                             .withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .outline
+                              .withValues(alpha: 0.3),
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            product.productName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              product.productName,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '\$${product.importPrice.toStringAsFixed(2)}',
-                            style: TextStyle(
+                            const SizedBox(height: 4),
+                            Text(
+                              Helper.toCurrencyFormat(product.importPrice),
+                              style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                               fontSize: 12,
@@ -346,7 +350,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                         ],
                       ),
                     ),
-                  );
+                  ));
                 },
               ),
           ],
@@ -487,7 +491,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Import Price: \$${detail.importPrice.toStringAsFixed(2)}',
+                                  'Import Price: ${Helper.toCurrencyFormat(detail.importPrice)}',
                                   style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
@@ -564,7 +568,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                               ),
                               const SizedBox(width: 16),
                               Text(
-                                '\$${detail.subtotal.toStringAsFixed(2)}',
+                                Helper.toCurrencyFormat(detail.subtotal),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -602,7 +606,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  S.of(context).totalPrice,
+                  S.of(context).totalPrice, 
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -611,7 +615,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
               ],
             ),
             Text(
-              '\$${state.totalPrice.toStringAsFixed(2)}',
+              Helper.toCurrencyFormat(state.totalPrice),
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -748,10 +752,12 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
     );
   }
 
-  Future<void> _showAddProductDialog(BuildContext context) async {
-    Product? selectedProduct;
-    final quantityController = TextEditingController();
-    final importPriceController = TextEditingController();
+  Future<void> _showAddProductDialog(BuildContext context, {Product? selectedProduct}) async {
+    Product? product = selectedProduct;
+    final quantityController = TextEditingController(text: '1');
+    final importPriceController = TextEditingController(
+      text: selectedProduct?.importPrice.toString() ?? '',
+    );
 
     final inputDecoration = InputDecoration(
       border: OutlineInputBorder(
@@ -783,90 +789,101 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
       context: context,
       builder: (dialogContext) => BlocProvider.value(
         value: cubit,
-        child: AlertDialog(
-          title: GradientText(text: S.of(context).addProduct),
-          content: BlocBuilder<IncomingAddCubit, IncomingAddState>(
-            builder: (context, state) {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    DropdownButtonFormField<Product>(
-                      value: selectedProduct,
-                      decoration: inputDecoration.copyWith(
-                          labelText: S.of(context).selectProduct),
-                      dropdownColor: Theme.of(context).cardColor,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface),
-                      items: state.products.map((product) {
-                        return DropdownMenuItem(
-                          value: product,
-                          child: Text(
-                            product.productName,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        );
-                      }).toList(),
-                      isExpanded: true,
-                      onChanged: (product) {
-                        selectedProduct = product;
-                        if (product != null) {
-                          importPriceController.text =
-                              product.importPrice.toString();
-                        }
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: importPriceController,
-                      decoration: inputDecoration.copyWith(
-                          labelText: S.of(context).importPrice),
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface),
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: quantityController,
-                      decoration: inputDecoration.copyWith(
-                          labelText: S.of(context).quantity),
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface),
-                      keyboardType: TextInputType.number,
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: Text(
-                S.of(context).cancel,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                if (selectedProduct != null) {
-                  final importPrice =
-                      double.tryParse(importPriceController.text);
-                  final quantity = int.tryParse(quantityController.text);
-
-                  if (importPrice != null && quantity != null) {
-                    cubit.addDetail(selectedProduct!, importPrice, quantity);
-                    Navigator.pop(dialogContext);
-                  }
-                }
+        child: StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+            title: GradientText(text: S.of(context).addProduct),
+            content: BlocBuilder<IncomingAddCubit, IncomingAddState>(
+              builder: (context, state) {
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      DropdownButtonFormField<Product>(
+                        value: product,
+                        decoration: inputDecoration.copyWith(
+                            labelText: S.of(context).selectProduct),
+                        dropdownColor: Theme.of(context).cardColor,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
+                        items: state.products.map((p) {
+                          return DropdownMenuItem(
+                            value: p,
+                            child: Text(
+                              p.productName,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        }).toList(),
+                        isExpanded: true,
+                        onChanged: (p) {
+                          setState(() {
+                            product = p;
+                            if (p != null) {
+                              importPriceController.text =
+                                  p.importPrice.toString();
+                            }
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: importPriceController,
+                        decoration: inputDecoration.copyWith(
+                            labelText: S.of(context).importPrice,
+                            suffixText: '.000 VND',
+                            suffixStyle: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.6),
+                            )),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
+                        keyboardType:
+                            const TextInputType.numberWithOptions(decimal: true),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: quantityController,
+                        decoration: inputDecoration.copyWith(
+                            labelText: S.of(context).quantity),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ],
+                  ),
+                );
               },
-              child: Text(
-                S.of(context).add,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              ),
             ),
-          ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: Text(
+                  S.of(context).cancel,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (product != null) {
+                    final importPrice =
+                        double.tryParse(importPriceController.text);
+                    final quantity = int.tryParse(quantityController.text);
+
+                    if (importPrice != null && quantity != null && quantity > 0) {
+                      cubit.addDetail(product!, importPrice, quantity);
+                      Navigator.pop(dialogContext);
+                    }
+                  }
+                },
+                child: Text(
+                  S.of(context).add,
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -951,7 +968,14 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                     TextField(
                       controller: importPriceController,
                       decoration: inputDecoration.copyWith(
-                          labelText: S.of(context).importPrice),
+                          labelText: S.of(context).importPrice,
+                          suffixText: '.000 VND',
+                          suffixStyle: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.6),
+                          )),
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface),
                       keyboardType:

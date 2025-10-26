@@ -15,6 +15,7 @@ import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
+import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 class IncomingDetailScreen extends StatefulWidget {
   final IncomingInvoice invoice;
@@ -127,6 +128,13 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
               onPressed: () => Navigator.pop(context),
               fillColor: Colors.transparent,
             ),
+            actions: [
+              GradientIconButton(
+                icon: Icons.download,
+                onPressed: () => cubit.printInvoice(),
+                fillColor: Colors.transparent,
+              ),
+            ],
           ),
           body: state.isLoading
               ? Center(

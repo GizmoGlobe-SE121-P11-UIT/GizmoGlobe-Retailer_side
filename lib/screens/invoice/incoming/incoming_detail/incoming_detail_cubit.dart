@@ -3,8 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
+import 'package:gizmoglobe_client/objects/manufacturer.dart';
+import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
 import '../../../../enums/invoice_related/payment_status.dart';
 import 'incoming_detail_state.dart';
+import 'incoming_detail_pdf_service.dart';
+
+// Import for web platform
+import 'dart:html' as html show Blob, Url, AnchorElement;
 
 class IncomingDetailCubit extends Cubit<IncomingDetailState> {
   final _firebase = Firebase();
@@ -18,13 +25,18 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
   Future<void> _loadUserRole() async {
     try {
       final userRole = await _firebase.getUserRole();
-      emit(state.copyWith(userRole: userRole));
+      if (!isClosed) {
+        emit(state.copyWith(userRole: userRole));
+      }
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Error loading user role: $e')); // Lỗi khi load user role
+      if (!isClosed) {
+        emit(state.copyWith(errorMessage: 'Error loading user role: $e')); // Lỗi khi load user role
+      }
     }
   }
 
   Future<void> loadDetails() async {
+    if (isClosed) return;
     emit(state.copyWith(isLoading: true));
 
     try {
@@ -43,21 +55,27 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
         products[detail.productID] = product;
       }
 
-      emit(state.copyWith(
-        manufacturer: manufacturer,
-        products: products,
-        isLoading: false,
-      ));
+      if (!isClosed) {
+        emit(state.copyWith(
+          manufacturer: manufacturer,
+          products: products,
+          isLoading: false,
+        ));
+      }
     } catch (e) {
-      emit(state.copyWith(
-        errorMessage: 'Error loading details: $e', // Lỗi khi load chi tiết sản phẩm
-        isLoading: false,
-      ));
+      if (!isClosed) {
+        emit(state.copyWith(
+          errorMessage: 'Error loading details: $e', // Lỗi khi load chi tiết sản phẩm
+          isLoading: false,
+        ));
+      }
     }
   }
 
   void clearError() {
-    emit(state.copyWith(errorMessage: null));
+    if (!isClosed) {
+      emit(state.copyWith(errorMessage: null));
+    }
   }
 
   Future<void> updatePaymentStatus(PaymentStatus newStatus) async {
@@ -72,9 +90,13 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
       );
 
       await _firebase.updateIncomingInvoice(updatedInvoice);
-      emit(state.copyWith(invoice: updatedInvoice));
+      if (!isClosed) {
+        emit(state.copyWith(invoice: updatedInvoice));
+      }
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Error updating payment status: $e')); // Lỗi khi cập nhật trạng thái thanh toán
+      if (!isClosed) {
+        emit(state.copyWith(errorMessage: 'Error updating payment status: $e')); // Lỗi khi cập nhật trạng thái thanh toán
+      }
     }
   }
 
@@ -86,6 +108,60 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
         print('Error loading product: $e');
       } // Lỗi khi load sản phẩm
       return null;
+    }
+  }
+
+  Future<void> printInvoice() async {
+    try {
+      // Generate PDF
+      final pdf = await IncomingInvoicePdfService.generatePdf(
+        invoice: state.invoice,
+        manufacturer: state.manufacturer,
+        products: state.products,
+      );
+
+      // Download PDF
+      final bytes = await pdf.save();
+      final blob = html.Blob([bytes]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.AnchorElement(href: url)
+        ..setAttribute('download', 'Invoice_${state.invoice.incomingInvoiceID}.pdf')
+        ..click();
+      html.Url.revokeObjectUrl(url);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error downloading invoice: $e');
+      }
+      if (!isClosed) {
+        emit(state.copyWith(errorMessage: 'Error downloading invoice: $e'));
+      }
+    }
+  }
+
+  Future<void> shareInvoice() async {
+    try {
+      // Generate PDF
+      final pdf = await IncomingInvoicePdfService.generatePdf(
+        invoice: state.invoice,
+        manufacturer: state.manufacturer,
+        products: state.products,
+      );
+
+      // Download PDF (web doesn't support share API)
+      final bytes = await pdf.save();
+      final blob = html.Blob([bytes]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.AnchorElement(href: url)
+        ..setAttribute('download', 'Invoice_${state.invoice.incomingInvoiceID}.pdf')
+        ..click();
+      html.Url.revokeObjectUrl(url);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error downloading invoice: $e');
+      }
+      if (!isClosed) {
+        emit(state.copyWith(errorMessage: 'Error downloading invoice: $e'));
+      }
     }
   }
 }

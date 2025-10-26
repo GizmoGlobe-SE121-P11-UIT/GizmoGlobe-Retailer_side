@@ -13,6 +13,7 @@ import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 
 class IncomingDetailWebView extends StatefulWidget {
   final IncomingInvoice invoice;
@@ -150,10 +151,20 @@ class _IncomingDetailWebViewState extends State<IncomingDetailWebView> {
                   '${S.of(context).invoiceDetails} #${state.invoice.incomingInvoiceID}',
             ),
           ),
-          GradientIconButton(
-            icon: Icons.close,
-            onPressed: () => Navigator.of(context).pop(false),
-            fillColor: Colors.transparent,
+          Row(
+            children: [
+              GradientIconButton(
+                icon: Icons.download,
+                onPressed: () => cubit.printInvoice(),
+                fillColor: Colors.transparent,
+              ),
+              const SizedBox(width: 8),
+              GradientIconButton(
+                icon: Icons.close,
+                onPressed: () => Navigator.of(context).pop(false),
+                fillColor: Colors.transparent,
+              ),
+            ],
           ),
         ],
       ),
@@ -162,7 +173,7 @@ class _IncomingDetailWebViewState extends State<IncomingDetailWebView> {
 
   Widget _buildContent(IncomingDetailState state) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +244,7 @@ class _IncomingDetailWebViewState extends State<IncomingDetailWebView> {
             ),
             _buildTotalPriceRow(
               S.of(context).totalPrice,
-              '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
+              '${Helper.toCurrencyFormat(state.invoice.totalPrice)}',
             ),
           ],
         ),
@@ -355,13 +366,7 @@ class _IncomingDetailWebViewState extends State<IncomingDetailWebView> {
                         ),
                       ),
                       subtitle: Text(
-                        '${S.of(context).importPrice}: \$${detail.importPrice.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.6),
-                        ),
+                        '${S.of(context).importPrice}: ${Helper.toCurrencyFormat(detail.importPrice)}',
                       ),
                       trailing: Text(
                         '${S.of(context).quantity}: ${detail.quantity}',

@@ -190,6 +190,20 @@ class _InvoiceScreenWithInitialTabState
   }
 
   @override
+  void didUpdateWidget(InvoiceScreenWithInitialTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update tab when initialTabIndex changes (e.g., from URL change)
+    if (oldWidget.initialTabIndex != widget.initialTabIndex &&
+        widget.initialTabIndex != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.read<InvoiceScreenCubit>().changeTab(widget.initialTabIndex!);
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InvoiceScreen(showFullLayout: true);
   }

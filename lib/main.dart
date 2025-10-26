@@ -179,13 +179,6 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (context, themeProvider, localeProvider, child) {
-          if (kDebugMode) {
-            print('Current locale: \\${localeProvider.locale}');
-            print('Supported locales: \\${[
-              const Locale('en'),
-              const Locale('vi')
-            ]}');
-          }
           return MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => MainScreenCubit()),
@@ -206,30 +199,13 @@ class MyApp extends StatelessWidget {
                 GlobalCupertinoLocalizations.delegate,
               ],
               localeResolutionCallback: (locale, supportedLocales) {
-                if (kDebugMode) {
-                  print('Locale resolution callback called');
-                  print('Requested locale: \\$locale');
-                  print('Supported locales: \\$supportedLocales');
-                }
                 if (!supportedLocales.contains(locale)) {
-                  if (kDebugMode) {
-                    print('Locale not supported, returning Vietnamese');
-                  }
                   return const Locale('vi');
                 }
                 return locale;
               },
               builder: (context, child) {
-                if (kDebugMode) {
-                  print('MaterialApp builder called');
-                  print(
-                      'Current locale in builder: \\${Localizations.localeOf(context)}');
-                }
-                return Localizations.override(
-                  context: context,
-                  locale: localeProvider.locale,
-                  child: child!,
-                );
+                return child!;
               },
               theme: kIsWeb
                   ? AppTheme.lightTheme.copyWith(
@@ -277,6 +253,47 @@ class MyApp extends StatelessWidget {
                 '/invoices': (context) => const InvoiceRouteHandler(),
                 '/stakeholders': (context) => const StakeholderRouteHandler(),
                 '/vouchers': (context) => const VoucherRouteHandler(),
+              },
+              onGenerateRoute: (settings) {
+                // Handle routes with query parameters
+                final uri = Uri.parse(settings.name ?? '/');
+                final path = uri.path;
+                
+                // Strip query parameters from route name
+                if (settings.name?.contains('?') ?? false) {
+                  return MaterialPageRoute(
+                    settings: RouteSettings(
+                      name: path,
+                      arguments: settings.arguments,
+                    ),
+                    builder: (context) {
+                      // Handle each route
+                      switch (path) {
+                        case '/invoices':
+                          return const InvoiceRouteHandler();
+                        case '/chat':
+                          return const ChatRouteHandler();
+                        case '/stakeholders':
+                          return const StakeholderRouteHandler();
+                        case '/vouchers':
+                          return const VoucherRouteHandler();
+                        case '/main':
+                          return const MainRouteHandler();
+                        case '/sign-in':
+                          return SignInScreen.newInstance();
+                        case '/sign-up':
+                          return SignUpScreen.newInstance();
+                        case '/forget-password':
+                          return ForgetPasswordScreen.newInstance();
+                        default:
+                          return const AuthWrapper();
+                      }
+                    },
+                  );
+                }
+                
+                // Default routing
+                return null;
               },
               home: const AuthWrapper(),
             ),
@@ -557,15 +574,27 @@ class InvoiceRouteHandler extends StatefulWidget {
 
 class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
   int? initialTabIndex;
+  StreamSubscription<html.Event>? _hashChangeSubscription;
 
   @override
   void initState() {
     super.initState();
     _parseUrlParameters();
+
+    // Listen to URL changes on web
+    if (kIsWeb) {
+      _hashChangeSubscription = html.window.onHashChange.listen((event) {
+        if (mounted) {
+          _parseUrlParameters();
+          setState(() {});
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
+    _hashChangeSubscription?.cancel();
     super.dispose();
   }
 

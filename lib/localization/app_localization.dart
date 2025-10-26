@@ -181,7 +181,7 @@ class AppLocalizations {
         'Are you sure you want to activate this manufacturer?',
     'inactive': 'Inactive',
     'manufacturerInformation': 'Manufacturer Information',
-    'manufacturerName': 'Name',
+    'manufacturerName': 'Manufacturer Name',
     'editManufacturer': 'Edit Manufacturer',
     'addNewManufacturer': 'Add New Manufacturer',
     'addManufacturer': 'Add Manufacturer',

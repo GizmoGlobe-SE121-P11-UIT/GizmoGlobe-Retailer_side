@@ -21,7 +21,9 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
   Future<void> _loadUserRole() async {
     try {
       final userRole = await _firebase.getUserRole();
-      emit(state.copyWith(userRole: userRole));
+      if (!isClosed) {
+        emit(state.copyWith(userRole: userRole));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error loading user role: $e');
@@ -31,10 +33,12 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
 
   void _listenToInvoices() {
     _subscription = _invoicesStream.listen((invoices) {
-      if (state.searchQuery.isEmpty) {
-        emit(state.copyWith(invoices: invoices));
-      } else {
-        searchInvoices(state.searchQuery);
+      if (!isClosed) {
+        if (state.searchQuery.isEmpty) {
+          emit(state.copyWith(invoices: invoices));
+        } else {
+          searchInvoices(state.searchQuery);
+        }
       }
     });
   }
@@ -46,22 +50,28 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
   }
 
   Future<void> loadInvoices() async {
+    if (isClosed) return;
     emit(state.copyWith(isLoading: true));
     try {
       final invoices = await _firebase.getIncomingInvoices();
-      emit(state.copyWith(
-        invoices: invoices,
-        isLoading: false,
-      ));
+      if (!isClosed) {
+        emit(state.copyWith(
+          invoices: invoices,
+          isLoading: false,
+        ));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error loading incoming invoices: $e');
       } // Lỗi lấy hóa đơn
-      emit(state.copyWith(isLoading: false));
+      if (!isClosed) {
+        emit(state.copyWith(isLoading: false));
+      }
     }
   }
 
   void searchInvoices(String query) {
+    if (isClosed) return;
     emit(state.copyWith(searchQuery: query));
     
     if (query.isEmpty) {
@@ -75,11 +85,15 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
           invoice.incomingInvoiceID!.toLowerCase().contains(searchQuery);
     }).toList();
 
-    emit(state.copyWith(invoices: filteredInvoices));
+    if (!isClosed) {
+      emit(state.copyWith(invoices: filteredInvoices));
+    }
   }
 
   void setSelectedIndex(int? index) {
-    emit(state.copyWith(selectedIndex: index));
+    if (!isClosed) {
+      emit(state.copyWith(selectedIndex: index));
+    }
   }
 
   Future<void> updateIncomingInvoice(IncomingInvoice invoice) async {
@@ -147,6 +161,8 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
   }
 
   void sortInvoices(SortField field, [SortOrder? order]) {
+    if (isClosed) return;
+    
     final currentOrder = order ?? 
       (state.sortField == field ? 
         (state.sortOrder == SortOrder.ascending ? SortOrder.descending : SortOrder.ascending)
@@ -167,10 +183,12 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
         break;
     }
 
-    emit(state.copyWith(
-      invoices: sortedInvoices,
-      sortField: field,
-      sortOrder: currentOrder,
-    ));
+    if (!isClosed) {
+      emit(state.copyWith(
+        invoices: sortedInvoices,
+        sortField: field,
+        sortOrder: currentOrder,
+      ));
+    }
   }
 }
