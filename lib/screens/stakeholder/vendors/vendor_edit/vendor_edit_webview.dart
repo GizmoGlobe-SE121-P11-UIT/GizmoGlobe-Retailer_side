@@ -224,7 +224,7 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                             ),
                             const SizedBox(height: 8),
                             DropdownButtonFormField<ManufacturerStatus>(
-                              value: status,
+                              initialValue: status,
                               decoration: InputDecoration(
                                 labelText: S.of(context).status,
                                 labelStyle: TextStyle(

@@ -286,6 +286,7 @@ class AppLocalizations {
     'signInFailed': 'Failed to sign in. Please try again.',
     'verificationLinkFailed':
         'Failed to send verification link. Please try again.',
+    'sendingVerificationLink': 'Sending verification link...',
     'changePasswordFailed': 'Error changing password. Please try again.',
     'passwordsDoNotMatch': 'Passwords do not match.',
     'verificationEmailSent':
@@ -688,6 +689,7 @@ class AppLocalizations {
     'failure': 'Thất bại',
     'signInSuccess': 'Đăng nhập thành công.',
     'signInFailed': 'Đăng nhập thất bại. Vui lòng thử lại.',
+    'sendingVerificationLink': 'Gửi liên kết xác minh...',
     'verificationLinkFailed':
         'Gửi liên kết xác minh thất bại. Vui lòng thử lại.',
     'changePasswordFailed': 'Lỗi thay đổi mật khẩu. Vui lòng thử lại.',
@@ -1268,6 +1270,8 @@ class AppLocalizations {
   String manufacturerAddedSuccessfully(String name) =>
       _getTranslation('manufacturerAddedSuccessfully')
           .replaceAll('{name}', name);
+  String sendingVerificationLink(String email) =>
+      _getTranslation('sendingVerificationLink').replaceAll('{email}', email);
 
   String _getTranslation(String key) {
     final translations = locale.languageCode == 'vi' ? _vi : _en;

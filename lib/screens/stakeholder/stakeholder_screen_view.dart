@@ -173,7 +173,7 @@ class _StakeholderScreenState extends State<StakeholderScreen> {
             body: Column(
               children: [
                 // Web Header
-                WebHeader(
+                const WebHeader(
                   unreadChats: 0,
                   isSidebarCompact: false,
                 ),
@@ -252,6 +252,6 @@ class _StakeholderScreenWithInitialTabState
 
   @override
   Widget build(BuildContext context) {
-    return StakeholderScreen(showFullLayout: true);
+    return const StakeholderScreen(showFullLayout: true);
   }
 }

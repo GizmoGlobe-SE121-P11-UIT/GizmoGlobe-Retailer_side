@@ -183,7 +183,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                   color: Theme.of(context).primaryColor,
                 ),
               ),
-              value: state.selectedManufacturer,
+              initialValue: state.selectedManufacturer,
               items: state.manufacturers.map((manufacturer) {
                 return DropdownMenuItem(
                   value: manufacturer,
@@ -261,7 +261,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
-                      .surfaceVariant
+                      .surfaceContainerHighest
                       .withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
@@ -307,50 +307,51 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                 itemBuilder: (context, index) {
                   final product = state.products[index];
                   return InkWell(
-                    onTap: () => _showAddProductDialog(context, selectedProduct: product),
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .surfaceVariant
-                            .withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
+                      onTap: () => _showAddProductDialog(context,
+                          selectedProduct: product),
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        decoration: BoxDecoration(
                           color: Theme.of(context)
                               .colorScheme
-                              .outline
+                              .surfaceContainerHighest
                               .withValues(alpha: 0.3),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              product.productName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                              ),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              Helper.toCurrencyFormat(product.importPrice),
-                              style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .outline
+                                .withValues(alpha: 0.3),
                           ),
-                        ],
-                      ),
-                    ),
-                  ));
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                product.productName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                Helper.toCurrencyFormat(product.importPrice),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ));
                 },
               ),
           ],
@@ -391,7 +392,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
-                      .surfaceVariant
+                      .surfaceContainerHighest
                       .withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
@@ -606,7 +607,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  S.of(context).totalPrice, 
+                  S.of(context).totalPrice,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -673,7 +674,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                   color: Theme.of(context).primaryColor,
                 ),
               ),
-              value: state.paymentStatus,
+              initialValue: state.paymentStatus,
               items: PaymentStatus.values.map((status) {
                 return DropdownMenuItem(
                   value: status,
@@ -752,7 +753,8 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
     );
   }
 
-  Future<void> _showAddProductDialog(BuildContext context, {Product? selectedProduct}) async {
+  Future<void> _showAddProductDialog(BuildContext context,
+      {Product? selectedProduct}) async {
     Product? product = selectedProduct;
     final quantityController = TextEditingController(text: '1');
     final importPriceController = TextEditingController(
@@ -799,7 +801,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       DropdownButtonFormField<Product>(
-                        value: product,
+                        initialValue: product,
                         decoration: inputDecoration.copyWith(
                             labelText: S.of(context).selectProduct),
                         dropdownColor: Theme.of(context).cardColor,
@@ -839,8 +841,8 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                             )),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface),
-                        keyboardType:
-                            const TextInputType.numberWithOptions(decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                       ),
                       const SizedBox(height: 16),
                       TextField(
@@ -871,7 +873,9 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                         double.tryParse(importPriceController.text);
                     final quantity = int.tryParse(quantityController.text);
 
-                    if (importPrice != null && quantity != null && quantity > 0) {
+                    if (importPrice != null &&
+                        quantity != null &&
+                        quantity > 0) {
                       cubit.addDetail(product!, importPrice, quantity);
                       Navigator.pop(dialogContext);
                     }
@@ -879,7 +883,8 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                 },
                 child: Text(
                   S.of(context).add,
-                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
             ],
@@ -940,7 +945,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField<Product>(
-                      value: selectedProduct,
+                      initialValue: selectedProduct,
                       decoration: inputDecoration.copyWith(
                           labelText: S.of(context).selectProduct),
                       dropdownColor: Theme.of(context).cardColor,

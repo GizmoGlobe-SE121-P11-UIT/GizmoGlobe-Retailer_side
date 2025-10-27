@@ -163,7 +163,7 @@ class _VendorEditScreenState extends State<VendorEditScreen> {
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<ManufacturerStatus>(
-                          value: status,
+                          initialValue: status,
                           decoration: InputDecoration(
                             labelText: S.of(context).status, // Localized
                             labelStyle: TextStyle(

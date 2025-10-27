@@ -202,57 +202,18 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
         };
 
         // Add specific properties based on product type
-        switch (product.runtimeType) {
-          case const (RAM):
-            final ram = product as RAM;
-            productProps.addAll({
-              // 'capacity': ram.capacity,
-              // 'type': ram.type,
-              // 'speed': ram.speed,
-              // 'modules': ram.modules,
-            });
-            break;
-          case const (CPU):
-            final cpu = product as CPU;
-            productProps.addAll({
-              // 'family': cpu.family,
-              // 'core': cpu.core,
-              // 'thread': cpu.thread,
-              // 'clockSpeed': cpu.clockSpeed,
-            });
-            break;
-          case const (GPU):
-            final gpu = product as GPU;
-            productProps.addAll({
-              // 'series': gpu.series,
-              // 'capacity': gpu.capacity,
-              // 'busWidth': gpu.bus,
-              // 'clockSpeed': gpu.clockSpeed,
-            });
-            break;
-          case const (Mainboard):
-            final mainboard = product as Mainboard;
-            productProps.addAll({
-              // 'formFactor': mainboard.formFactor,
-              // 'series': mainboard.series,
-              // 'compatibility': mainboard.compatibility,
-            });
-            break;
-          case const (Drive):
-            final drive = product as Drive;
-            productProps.addAll({
-              // 'type': drive.type,
-              // 'capacity': drive.capacity,
-            });
-            break;
-          case const (PSU):
-            final psu = product as PSU;
-            productProps.addAll({
-              // 'wattage': psu.wattage,
-              // 'efficiency': psu.efficiency,
-              // 'modular': psu.modular,
-            });
-            break;
+        if (product is RAM) {
+          productProps.addAll({});
+        } else if (product is CPU) {
+          productProps.addAll({});
+        } else if (product is GPU) {
+          productProps.addAll({});
+        } else if (product is Mainboard) {
+          productProps.addAll({});
+        } else if (product is Drive) {
+          productProps.addAll({});
+        } else if (product is PSU) {
+          productProps.addAll({});
         }
 
         // Create new product instance and update

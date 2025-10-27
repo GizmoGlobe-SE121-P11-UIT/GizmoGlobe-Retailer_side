@@ -49,14 +49,14 @@ class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key, this.product});
 
   static Widget addInstance() => BlocProvider(
-    create: (context) => AddProductCubit(),
-    child: const AddProductScreen(),
-  );
+        create: (context) => AddProductCubit(),
+        child: const AddProductScreen(),
+      );
 
   static Widget editInstance(Product product) => BlocProvider(
-    create: (context) => AddProductCubit(),
-    child: AddProductScreen(product: product),
-  );
+        create: (context) => AddProductCubit(),
+        child: AddProductScreen(product: product),
+      );
 
   @override
   State<AddProductScreen> createState() => _AddProductState();
@@ -129,8 +129,9 @@ class _AddProductState extends State<AddProductScreen> {
     discountController =
         TextEditingController(text: widget.product?.discount.toString());
     releaseDateController = TextEditingController(
-        text: widget.product?.release != null ? DateFormat('yyyy-MM-dd').format(
-            widget.product!.release) : '');
+        text: widget.product?.release != null
+            ? DateFormat('yyyy-MM-dd').format(widget.product!.release)
+            : '');
     stockController =
         TextEditingController(text: widget.product?.stock.toString());
     enDescriptionController =
@@ -159,7 +160,7 @@ class _AddProductState extends State<AddProductScreen> {
       socketController = TextEditingController(
           text: (widget.product as CPU).socket.toString());
       coreController =
-          TextEditingController(text: (widget.product as CPU).core.toString() ?? '');
+          TextEditingController(text: (widget.product as CPU).core.toString());
       threadController = TextEditingController(
           text: (widget.product as CPU).thread.toString());
       baseClockController = TextEditingController(
@@ -180,11 +181,10 @@ class _AddProductState extends State<AddProductScreen> {
       final connectors = (widget.product as PSU).connectors;
       if (connectors.isNotEmpty) {
         connectorControllers = connectors
-            .map((c) =>
-            ConnectorControllers(
-              type: c.type,
-              quantity: c.quantity.toString(),
-            ))
+            .map((c) => ConnectorControllers(
+                  type: c.type,
+                  quantity: c.quantity.toString(),
+                ))
             .toList();
       } else {
         connectorControllers = [ConnectorControllers()];
@@ -205,11 +205,10 @@ class _AddProductState extends State<AddProductScreen> {
       final ioPorts = (widget.product as GPU).ports;
       if (ioPorts.isNotEmpty) {
         ioPortsControllers = ioPorts
-            .map((port) =>
-            IOPortControllers(
-              port: port.port,
-              quantity: port.quantity.toString(),
-            ))
+            .map((port) => IOPortControllers(
+                  port: port.port,
+                  quantity: port.quantity.toString(),
+                ))
             .toList();
       } else {
         ioPortsControllers = [IOPortControllers()];
@@ -225,13 +224,12 @@ class _AddProductState extends State<AddProductScreen> {
       final pcieSlots = (widget.product as Mainboard).pcieSlots;
       if (pcieSlots.isNotEmpty) {
         pcieSlotsController = pcieSlots
-            .map((slot) =>
-            PCIeSlotControllers(
-              physicalSize: slot.physicalSize.toString(),
-              electricalSpeed: slot.electricalSpeed.toString(),
-              gen: slot.gen.toString(),
-              quantity: slot.quantity.toString(),
-            ))
+            .map((slot) => PCIeSlotControllers(
+                  physicalSize: slot.physicalSize.toString(),
+                  electricalSpeed: slot.electricalSpeed.toString(),
+                  gen: slot.gen.toString(),
+                  quantity: slot.quantity.toString(),
+                ))
             .toList();
       } else {
         pcieSlotsController = [PCIeSlotControllers()];
@@ -316,697 +314,563 @@ class _AddProductState extends State<AddProductScreen> {
     super.dispose();
   }
 
-  Widget buildCategorySpecificInputs(CategoryEnum category, AddProductState state, AddProductCubit cubit) {
+  Widget buildCategorySpecificInputs(
+      CategoryEnum category, AddProductState state, AddProductCubit cubit) {
     switch (_selectedCategory) {
       case CategoryEnum.ram:
-        return Column(
-            children: [
-              buildInputWidget<RAMType>(
-                  'RAM type',
-                  TextEditingController(),
-                  state.productArgument?.type,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(type: value));
-                  },
-                  RAMType.getValues()
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'RAM bus',
-                TextEditingController(),
-                state.productArgument?.bus,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(bus: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'Capacity per stick (GB)',
-                TextEditingController(),
-                state.productArgument?.capacity,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(capacity: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'Kit stick count',
-                TextEditingController(),
-                state.productArgument?.stickCount,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(stickCount: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'CL Latency',
-                TextEditingController(),
-                state.productArgument?.clLatency,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(clLatency: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-            ]
-        );
+        return Column(children: [
+          buildInputWidget<RAMType>(
+              'RAM type', TextEditingController(), state.productArgument?.type,
+              (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(type: value));
+          }, RAMType.getValues()),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'RAM bus',
+            TextEditingController(),
+            state.productArgument?.bus,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(bus: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'Capacity per stick (GB)',
+            TextEditingController(),
+            state.productArgument?.capacity,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(capacity: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'Kit stick count',
+            TextEditingController(),
+            state.productArgument?.stickCount,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(stickCount: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'CL Latency',
+            TextEditingController(),
+            state.productArgument?.clLatency,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(clLatency: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+        ]);
 
       case CategoryEnum.cpu:
-        return Column(
-            children: [
-              buildInputWidget<CPUSeries>(
-                  'CPU series',
-                  TextEditingController(),
-                  state.productArgument?.cpuSeries,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(cpuSeries: value));
-                  },
-                  CPUSeries.getValues()
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'Number of CPU cores',
-                TextEditingController(),
-                state.productArgument?.core,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(core: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'Number of CPU threads',
-                TextEditingController(),
-                state.productArgument?.thread,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(thread: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<double>(
-                  'CPU base clock speed (GHz)',
-                  TextEditingController(),
-                  state.productArgument?.baseClock,
-                      (value) {
-                    cubit.updateProductArgument(state
-                        .productArgument!
-                        .copyWith(baseClock: value));
-                  },
-                  null
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<double>(
-                  'CPU turbo clock speed (GHz)',
-                  TextEditingController(),
-                  state.productArgument?.turboClock,
-                      (value) {
-                    cubit.updateProductArgument(state
-                        .productArgument!
-                        .copyWith(turboClock: value));
-                  },
-                  null
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'CPU TDP (W)',
-                TextEditingController(),
-                state.productArgument?.tdp,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(tdp: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<Socket>(
-                  'CPU socket',
-                  TextEditingController(),
-                  state.productArgument?.socket,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(socket: value));
-                  },
-                  Socket.getValues()
-              ),
-              const SizedBox(height: 8),
-            ]
-        );
+        return Column(children: [
+          buildInputWidget<CPUSeries>('CPU series', TextEditingController(),
+              state.productArgument?.cpuSeries, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(cpuSeries: value));
+          }, CPUSeries.getValues()),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'Number of CPU cores',
+            TextEditingController(),
+            state.productArgument?.core,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(core: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'Number of CPU threads',
+            TextEditingController(),
+            state.productArgument?.thread,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(thread: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<double>(
+              'CPU base clock speed (GHz)',
+              TextEditingController(),
+              state.productArgument?.baseClock, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(baseClock: value));
+          }, null),
+          const SizedBox(height: 8),
+          buildInputWidget<double>(
+              'CPU turbo clock speed (GHz)',
+              TextEditingController(),
+              state.productArgument?.turboClock, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(turboClock: value));
+          }, null),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'CPU TDP (W)',
+            TextEditingController(),
+            state.productArgument?.tdp,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(tdp: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<Socket>('CPU socket', TextEditingController(),
+              state.productArgument?.socket, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(socket: value));
+          }, Socket.getValues()),
+          const SizedBox(height: 8),
+        ]);
       case CategoryEnum.psu:
-        return Column(
-            children: [
-              buildInputWidget<int>(
-                'Max wattage (W)',
-                TextEditingController(),
-                state.productArgument?.tdp,
+        return Column(children: [
+          buildInputWidget<int>(
+            'Max wattage (W)',
+            TextEditingController(),
+            state.productArgument?.tdp,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(maxWattage: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<PSUEfficiency>(
+              'PSU efficiency',
+              TextEditingController(),
+              state.productArgument?.efficiency, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(efficiency: value));
+          }, PSUEfficiency.getValues()),
+          const SizedBox(height: 8),
+          buildInputWidget<PSUModular>(
+              'PSU modularity',
+              TextEditingController(),
+              state.productArgument?.modularity, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(modularity: value));
+          }, PSUModular.getValues()),
+          const SizedBox(height: 8),
+          ...connectorControllers.asMap().entries.map((entry) {
+            final i = entry.key;
+            return Row(
+              children: [
+                Expanded(
+                  child: buildInputWidget<String>(
+                    'Connector type',
+                    TextEditingController(),
+                    state.productArgument?.connectors != null &&
+                            i < state.productArgument!.connectors!.length
+                        ? state.productArgument!.connectors![i].type
+                        : null,
                     (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(maxWattage: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<PSUEfficiency>(
-                  'PSU efficiency',
-                  TextEditingController(),
-                  state.productArgument?.efficiency,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(efficiency: value));
-                  },
-                  PSUEfficiency.getValues()
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<PSUModular>(
-                  'PSU modularity',
-                  TextEditingController(),
-                  state.productArgument?.modularity,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(modularity: value));
-                  },
-                  PSUModular.getValues()
-              ),
-              const SizedBox(height: 8),
-
-              ...connectorControllers
-                  .asMap()
-                  .entries
-                  .map((entry) {
-                final i = entry.key;
-                return Row(
-                  children: [
-                    Expanded(
-                      child: buildInputWidget<String>(
-                        'Connector type',
-                        TextEditingController(),
-                        state.productArgument?.connectors != null && i < state.productArgument!.connectors!.length
-                            ? state.productArgument!.connectors![i].type
-                            : null,
-                            (value) {
-                          cubit.changeConnectorType(value, i);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: buildInputWidget<int>(
-                        'Quantity',
-                        TextEditingController(),
-                        state.productArgument?.connectors != null && i < state.productArgument!.connectors!.length
-                            ? state.productArgument!.connectors![i].quantity
-                            : null,
-                            (value) {
-                          cubit.changeConnectorQuantity(value, i);
-                        },
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle),
-                      onPressed: () {
-                        setState(() {
-                          connectorControllers.removeAt(i);
-                        });
-                      },
-                    ),
-                  ],
-                );
-              }),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add Connector'),
+                      cubit.changeConnectorType(value, i);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: buildInputWidget<int>(
+                    'Quantity',
+                    TextEditingController(),
+                    state.productArgument?.connectors != null &&
+                            i < state.productArgument!.connectors!.length
+                        ? state.productArgument!.connectors![i].quantity
+                        : null,
+                    (value) {
+                      cubit.changeConnectorQuantity(value, i);
+                    },
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.remove_circle),
                   onPressed: () {
                     setState(() {
-                      connectorControllers.add(ConnectorControllers());
+                      connectorControllers.removeAt(i);
                     });
                   },
                 ),
-              ),
-            ]
-        );
+              ],
+            );
+          }),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text('Add Connector'),
+              onPressed: () {
+                setState(() {
+                  connectorControllers.add(ConnectorControllers());
+                });
+              },
+            ),
+          ),
+        ]);
       case CategoryEnum.gpu:
-        return Column(
-            children: [
-              buildInputWidget<GPUSeries>(
-                  'GPU series',
+        return Column(children: [
+          buildInputWidget<GPUSeries>('GPU series', TextEditingController(),
+              state.productArgument?.gpuSeries, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(gpuSeries: value));
+          }, GPUSeries.getValues()),
+          const SizedBox(width: 8),
+          buildInputWidget<GPUVersion>('GPU version', TextEditingController(),
+              state.productArgument?.gpuVersion, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(gpuVersion: value));
+          }, GPUVersion.getValues()),
+          const SizedBox(width: 8),
+          buildInputWidget<int>(
+            'GPU memory (GB)',
+            capacityController,
+            state.productArgument?.capacity,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(capacity: value));
+            },
+            null,
+          ),
+          const SizedBox(width: 8),
+          buildInputWidget<int>(
+            'GPU TDP (W)',
+            tdpController,
+            state.productArgument?.tdp,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(tdp: value));
+            },
+            null,
+          ),
+          const SizedBox(width: 8),
+          buildInputWidget<double>('GPU boost clock (GHz)',
+              turboClockController, state.productArgument?.turboClock, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(turboClock: value));
+          }, null),
+          const SizedBox(width: 8),
+          ...ioPortsControllers.asMap().entries.map((entry) {
+            final i = entry.key;
+            return Row(
+              children: [
+                Expanded(
+                    child: buildInputWidget<String>(
+                  'Port',
                   TextEditingController(),
-                  state.productArgument?.gpuSeries,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(gpuSeries: value));
+                  state.productArgument?.ioPorts != null &&
+                          i < state.productArgument!.ioPorts!.length
+                      ? state.productArgument!.ioPorts![i].port
+                      : null,
+                  (value) {
+                    cubit.changeIoPortType(value, i);
                   },
-                  GPUSeries.getValues()
-              ),
-              const SizedBox(width: 8),
-              buildInputWidget<GPUVersion>(
-                  'GPU version',
+                )),
+                const SizedBox(width: 8),
+                Expanded(
+                    child: buildInputWidget<int>(
+                  'Quantity',
                   TextEditingController(),
-                  state.productArgument?.gpuVersion,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(gpuVersion: value));
+                  state.productArgument?.ioPorts != null &&
+                          i < state.productArgument!.ioPorts!.length
+                      ? state.productArgument!.ioPorts![i].quantity
+                      : null,
+                  (value) {
+                    cubit.changeIoPortQuantity(value, i);
                   },
-                  GPUVersion.getValues()
-              ),
-              const SizedBox(width: 8),
-              buildInputWidget<int>(
-                'GPU memory (GB)',
-                capacityController,
-                state.productArgument?.capacity,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(capacity: value));
-                },
-                null,
-              ),
-              const SizedBox(width: 8),
-              buildInputWidget<int>(
-                'GPU TDP (W)',
-                tdpController,
-                state.productArgument?.tdp,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(tdp: value));
-                },
-                null,
-              ),
-              const SizedBox(width: 8),
-              buildInputWidget<double>(
-                  'GPU boost clock (GHz)',
-                  turboClockController,
-                  state.productArgument?.turboClock,
-                      (value) {
-                    cubit.updateProductArgument(state
-                        .productArgument!
-                        .copyWith(turboClock: value));
-                  },
-                  null
-              ),
-              const SizedBox(width: 8),
-              ...ioPortsControllers
-                  .asMap()
-                  .entries
-                  .map((entry) {
-                final i = entry.key;
-                return Row(
-                  children: [
-                    Expanded(
-                      child: buildInputWidget<String>(
-                        'Port',
-                        TextEditingController(),
-                        state.productArgument?.ioPorts != null && i < state.productArgument!.ioPorts!.length
-                            ? state.productArgument!.ioPorts![i].port
-                            : null,
-                            (value) {
-                          cubit.changeIoPortType(value, i);
-                        },
-                      )
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: buildInputWidget<int>(
-                        'Quantity',
-                        TextEditingController(),
-                        state.productArgument?.ioPorts != null && i < state.productArgument!.ioPorts!.length
-                            ? state.productArgument!.ioPorts![i].quantity
-                            : null,
-                            (value) {
-                          cubit.changeIoPortQuantity(value, i);
-                        },
-                      )
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle),
-                      onPressed: () {
-                        setState(() {
-                          ioPortsControllers.removeAt(i);
-                        });
-                      },
-                    ),
-                  ],
-                );
-              }),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add IO Port'),
+                )),
+                IconButton(
+                  icon: const Icon(Icons.remove_circle),
                   onPressed: () {
                     setState(() {
-                      ioPortsControllers.add(IOPortControllers());
+                      ioPortsControllers.removeAt(i);
                     });
                   },
                 ),
-              ),
-            ]
-        );
+              ],
+            );
+          }),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text('Add IO Port'),
+              onPressed: () {
+                setState(() {
+                  ioPortsControllers.add(IOPortControllers());
+                });
+              },
+            ),
+          ),
+        ]);
       case CategoryEnum.mainboard:
-        return Column(
-            children: [
-              buildInputWidget<String>(
-                  'Chipset code',
-                  chipsetCodeController,
-                  state.productArgument?.chipsetCode,
-                      (value) {
-                    cubit.updateProductArgument(state
-                        .productArgument!
-                        .copyWith(chipsetCode: value));
-                  },
-                  null
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<MainboardFormFactor>(
-                  'Mainboard form factor',
+        return Column(children: [
+          buildInputWidget<String>('Chipset code', chipsetCodeController,
+              state.productArgument?.chipsetCode, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(chipsetCode: value));
+          }, null),
+          const SizedBox(height: 8),
+          buildInputWidget<MainboardFormFactor>(
+              'Mainboard form factor',
+              TextEditingController(),
+              state.productArgument?.mainboardFormFactor, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(mainboardFormFactor: value));
+          }, MainboardFormFactor.getValues()),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'RAM bus speed (MHz)',
+            TextEditingController(),
+            state.productArgument?.bus,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(bus: value));
+            },
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<RAMType>('Supported RAM type',
+              TextEditingController(), state.productArgument?.type, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(type: value));
+          }, RAMType.getValues()),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+              'Maximum single RAM capacity (GB)',
+              TextEditingController(),
+              state.productArgument?.capacity, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(capacity: value));
+          }, null),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'Number of M.2 slots',
+            TextEditingController(),
+            state.productArgument?.storageSlot?.m2Slots,
+            (value) {
+              cubit.updateProductArgument(state.productArgument!.copyWith(
+                  storageSlot: state.productArgument!.storageSlot
+                      ?.copyWith(m2Slots: value)));
+            },
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'Number of SATA ports',
+            TextEditingController(),
+            state.productArgument?.storageSlot?.sataPorts,
+            (value) {
+              cubit.updateProductArgument(state.productArgument!.copyWith(
+                  storageSlot: state.productArgument!.storageSlot
+                      ?.copyWith(sataPorts: value)));
+            },
+          ),
+          const SizedBox(height: 8),
+          ...ioPortsControllers.asMap().entries.map((entry) {
+            final i = entry.key;
+            return Row(
+              children: [
+                Expanded(
+                    child: buildInputWidget<String>(
+                  'Port',
                   TextEditingController(),
-                  state.productArgument?.mainboardFormFactor,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(mainboardFormFactor: value));
+                  state.productArgument?.ioPorts != null &&
+                          i < state.productArgument!.ioPorts!.length
+                      ? state.productArgument!.ioPorts![i].port
+                      : null,
+                  (value) {
+                    cubit.changeIoPortType(value, i);
                   },
-                  MainboardFormFactor.getValues()
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'RAM bus speed (MHz)',
-                TextEditingController(),
-                state.productArgument?.bus,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(bus: value));
-                },
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<RAMType>(
-                  'Supported RAM type',
+                )),
+                const SizedBox(width: 8),
+                Expanded(
+                    child: buildInputWidget<int>(
+                  'Quantity',
                   TextEditingController(),
-                  state.productArgument?.type,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(type: value));
+                  state.productArgument?.ioPorts != null &&
+                          i < state.productArgument!.ioPorts!.length
+                      ? state.productArgument!.ioPorts![i].quantity
+                      : null,
+                  (value) {
+                    cubit.changeIoPortQuantity(value, i);
                   },
-                  RAMType.getValues()
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                  'Maximum single RAM capacity (GB)',
-                  TextEditingController(),
-                  state.productArgument?.capacity,
-                      (value) {
-                    cubit.updateProductArgument(state
-                        .productArgument!.copyWith(capacity: value));
-                  },
-                  null
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'Number of M.2 slots',
-                TextEditingController(),
-                state.productArgument?.storageSlot?.m2Slots,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(storageSlot: state.productArgument!.storageSlot?.copyWith(m2Slots: value)));
-                },
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'Number of SATA ports',
-                TextEditingController(),
-                state.productArgument?.storageSlot?.sataPorts,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(storageSlot: state.productArgument!.storageSlot?.copyWith(sataPorts: value)));
-                },
-              ),
-              const SizedBox(height: 8),
-
-              ...ioPortsControllers
-                  .asMap()
-                  .entries
-                  .map((entry) {
-                final i = entry.key;
-                return Row(
-                  children: [
-                    Expanded(
-                        child: buildInputWidget<String>(
-                          'Port',
-                          TextEditingController(),
-                          state.productArgument?.ioPorts != null && i < state.productArgument!.ioPorts!.length
-                              ? state.productArgument!.ioPorts![i].port
-                              : null,
-                              (value) {
-                            cubit.changeIoPortType(value, i);
-                          },
-                        )
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                        child: buildInputWidget<int>(
-                          'Quantity',
-                          TextEditingController(),
-                          state.productArgument?.ioPorts != null && i < state.productArgument!.ioPorts!.length
-                              ? state.productArgument!.ioPorts![i].quantity
-                              : null,
-                              (value) {
-                            cubit.changeIoPortQuantity(value, i);
-                          },
-                        )
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle),
-                      onPressed: () {
-                        setState(() {
-                          ioPortsControllers.removeAt(i);
-                        });
-                      },
-                    ),
-                  ],
-                );
-              }),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add IO Port'),
+                )),
+                IconButton(
+                  icon: const Icon(Icons.remove_circle),
                   onPressed: () {
                     setState(() {
-                      ioPortsControllers.add(IOPortControllers());
+                      ioPortsControllers.removeAt(i);
                     });
                   },
                 ),
-              ),
-              const SizedBox(height: 8),
-
-              ...pcieSlotsController
-                  .asMap()
-                  .entries
-                  .map((entry) {
-                final i = entry.key;
-                final controller = entry.value;
-                return Row(
-                  children: [
-                    Expanded(
-                      child: buildInputWidget<int>(
-                        'Physical size',
-                        controller.physicalSizeController,
-                        state.productArgument?.pcieSlots != null && i < state.productArgument!.pcieSlots!.length
-                            ? state.productArgument!.pcieSlots![i].physicalSize
-                            : null,
-                            (value) {
-                          cubit.changePCIeSlotPhysicalSize(value, i);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-
-                    Expanded(
-                      child: buildInputWidget<int>(
-                        'Electrical speed',
-                        controller.electricalSpeedController,
-                        state.productArgument?.pcieSlots != null && i < state.productArgument!.pcieSlots!.length
-                            ? state.productArgument!.pcieSlots![i].electricalSpeed
-                            : null,
-                            (value) {
-                          cubit.changePCIeSlotElectricalSpeed(value, i);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: buildInputWidget<int>(
-                        'Generation',
-                        controller.genController,
-                        state.productArgument?.pcieSlots != null && i < state.productArgument!.pcieSlots!.length
-                            ? state.productArgument!.pcieSlots![i].gen
-                            : null,
-                            (value) {
-                          cubit.changePCIeSlotGen(value, i);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: buildInputWidget<int>(
-                        'Quantity',
-                        controller.quantityController,
-                        state.productArgument?.pcieSlots != null && i < state.productArgument!.pcieSlots!.length
-                            ? state.productArgument!.pcieSlots![i].quantity
-                            : null,
-                            (value) {
-                          cubit.changePCIeSlotQuantity(value, i);
-                        },
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle),
-                      onPressed: () {
-                        setState(() {
-                          pcieSlotsController.removeAt(i);
-                        });
-                      },
-                    ),
-                  ],
-                );
-              }),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add PCIe Slot'),
+              ],
+            );
+          }),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text('Add IO Port'),
+              onPressed: () {
+                setState(() {
+                  ioPortsControllers.add(IOPortControllers());
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          ...pcieSlotsController.asMap().entries.map((entry) {
+            final i = entry.key;
+            final controller = entry.value;
+            return Row(
+              children: [
+                Expanded(
+                  child: buildInputWidget<int>(
+                    'Physical size',
+                    controller.physicalSizeController,
+                    state.productArgument?.pcieSlots != null &&
+                            i < state.productArgument!.pcieSlots!.length
+                        ? state.productArgument!.pcieSlots![i].physicalSize
+                        : null,
+                    (value) {
+                      cubit.changePCIeSlotPhysicalSize(value, i);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: buildInputWidget<int>(
+                    'Electrical speed',
+                    controller.electricalSpeedController,
+                    state.productArgument?.pcieSlots != null &&
+                            i < state.productArgument!.pcieSlots!.length
+                        ? state.productArgument!.pcieSlots![i].electricalSpeed
+                        : null,
+                    (value) {
+                      cubit.changePCIeSlotElectricalSpeed(value, i);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: buildInputWidget<int>(
+                    'Generation',
+                    controller.genController,
+                    state.productArgument?.pcieSlots != null &&
+                            i < state.productArgument!.pcieSlots!.length
+                        ? state.productArgument!.pcieSlots![i].gen
+                        : null,
+                    (value) {
+                      cubit.changePCIeSlotGen(value, i);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: buildInputWidget<int>(
+                    'Quantity',
+                    controller.quantityController,
+                    state.productArgument?.pcieSlots != null &&
+                            i < state.productArgument!.pcieSlots!.length
+                        ? state.productArgument!.pcieSlots![i].quantity
+                        : null,
+                    (value) {
+                      cubit.changePCIeSlotQuantity(value, i);
+                    },
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.remove_circle),
                   onPressed: () {
                     setState(() {
-                      pcieSlotsController.add(PCIeSlotControllers());
+                      pcieSlotsController.removeAt(i);
                     });
                   },
                 ),
-              ),
-            ]
-        );
+              ],
+            );
+          }),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              icon: const Icon(Icons.add),
+              label: const Text('Add PCIe Slot'),
+              onPressed: () {
+                setState(() {
+                  pcieSlotsController.add(PCIeSlotControllers());
+                });
+              },
+            ),
+          ),
+        ]);
       case CategoryEnum.drive:
-        return Column(
-            children: [
-              buildInputWidget<DriveGen>(
-                  'Drive generation',
-                  TextEditingController(),
-                  state.productArgument?.gen,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(gen: value));
-                  },
-                  DriveGen.getValues()
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<DriveType>(
-                  'Drive type',
-                  TextEditingController(),
-                  state.productArgument?.driveType,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(driveType: value));
-                  },
-                  DriveType.getValues()
-              ),
-              const SizedBox(height: 8),
-
-              TextFormField(
-                  controller: capacityController,
-                  decoration: const InputDecoration(labelText: 'Capacity (GB)'),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  validator: _validateField
-              ),
-              const SizedBox(height: 8),
-
-              TextFormField(
-                  controller: interfaceTypeController,
-                  decoration: const InputDecoration(labelText: 'Interface type'),
-                  validator: _validateField
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<DriveFormFactor>(
-                  'Drive form factor',
-                  TextEditingController(),
-                  state.productArgument?.driveFormFactor,
-                      (value) {
-                    cubit.updateProductArgument(state.productArgument!
-                        .copyWith(driveFormFactor: value));
-                  },
-                  DriveFormFactor.getValues()
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'Read speed (MB/s)',
-                readMbpsController,
-                state.productArgument?.readMbps,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(readMbps: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-
-              buildInputWidget<int>(
-                'Write speed (MB/s)',
-                writeMbpsController,
-                state.productArgument?.writeMbps,
-                    (value) {
-                  cubit.updateProductArgument(state
-                      .productArgument!
-                      .copyWith(writeMbps: value));
-                },
-                null,
-              ),
-              const SizedBox(height: 8),
-            ]
-        );
+        return Column(children: [
+          buildInputWidget<DriveGen>('Drive generation',
+              TextEditingController(), state.productArgument?.gen, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(gen: value));
+          }, DriveGen.getValues()),
+          const SizedBox(height: 8),
+          buildInputWidget<DriveType>('Drive type', TextEditingController(),
+              state.productArgument?.driveType, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(driveType: value));
+          }, DriveType.getValues()),
+          const SizedBox(height: 8),
+          TextFormField(
+              controller: capacityController,
+              decoration: const InputDecoration(labelText: 'Capacity (GB)'),
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              validator: _validateField),
+          const SizedBox(height: 8),
+          TextFormField(
+              controller: interfaceTypeController,
+              decoration: const InputDecoration(labelText: 'Interface type'),
+              validator: _validateField),
+          const SizedBox(height: 8),
+          buildInputWidget<DriveFormFactor>(
+              'Drive form factor',
+              TextEditingController(),
+              state.productArgument?.driveFormFactor, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(driveFormFactor: value));
+          }, DriveFormFactor.getValues()),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'Read speed (MB/s)',
+            readMbpsController,
+            state.productArgument?.readMbps,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(readMbps: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            'Write speed (MB/s)',
+            writeMbpsController,
+            state.productArgument?.writeMbps,
+            (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(writeMbps: value));
+            },
+            null,
+          ),
+          const SizedBox(height: 8),
+        ]);
       default:
         return Container();
     }
@@ -1028,9 +892,7 @@ class _AddProductState extends State<AddProductScreen> {
             children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.photo_library),
-                title: Text(S
-                    .of(context)
-                    .chooseFromGallery),
+                title: Text(S.of(context).chooseFromGallery),
                 onTap: () {
                   Navigator.pop(context);
                   cubit.pickImageFromGallery();
@@ -1038,9 +900,7 @@ class _AddProductState extends State<AddProductScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.camera_alt),
-                title: Text(S
-                    .of(context)
-                    .takePhoto),
+                title: Text(S.of(context).takePhoto),
                 onTap: () {
                   Navigator.pop(context);
                   cubit.pickImageFromCamera();
@@ -1048,9 +908,7 @@ class _AddProductState extends State<AddProductScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.link),
-                title: Text(S
-                    .of(context)
-                    .enterUrl),
+                title: Text(S.of(context).enterUrl),
                 onTap: () {
                   Navigator.pop(context);
                   _showUrlInputDialog();
@@ -1069,9 +927,7 @@ class _AddProductState extends State<AddProductScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(S
-              .of(context)
-              .enterImageUrl),
+          title: Text(S.of(context).enterImageUrl),
           content: TextField(
             controller: urlController,
             decoration: const InputDecoration(
@@ -1081,15 +937,11 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(S
-                  .of(context)
-                  .cancel),
+              child: Text(S.of(context).cancel),
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(
-              child: Text(S
-                  .of(context)
-                  .confirm),
+              child: Text(S.of(context).confirm),
               onPressed: () {
                 if (urlController.text.isNotEmpty) {
                   cubit.pickImageFromUrl(urlController.text);
@@ -1105,9 +957,7 @@ class _AddProductState extends State<AddProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -1118,30 +968,29 @@ class _AddProductState extends State<AddProductScreen> {
           onPressed: () => Navigator.pop(context, ProcessState.idle),
           fillColor: Colors.transparent,
         ),
-        title: widget.product == null ? GradientText(text: S
-            .of(context)
-            .addProduct) : const GradientText(
-            text: "S.of(context).editProduct"),
+        title: widget.product == null
+            ? GradientText(text: S.of(context).addProduct)
+            : const GradientText(text: "S.of(context).editProduct"),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: BlocBuilder<AddProductCubit, AddProductState>(
               buildWhen: (previous, current) =>
-              previous.processState != current.processState,
+                  previous.processState != current.processState,
               builder: (context, state) {
                 return state.processState == ProcessState.loading
                     ? const Center(
-                  child: SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                )
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      )
                     : GradientIconButton(
-                  icon: Icons.check,
-                  onPressed: () => cubit.addProduct(),
-                  fillColor: Colors.transparent,
-                );
+                        icon: Icons.check,
+                        onPressed: () => cubit.addProduct(),
+                        fillColor: Colors.transparent,
+                      );
               },
             ),
           ),
@@ -1158,40 +1007,37 @@ class _AddProductState extends State<AddProductScreen> {
 
               showDialog(
                 context: context,
-                builder: (context) =>
-                    InformationDialog(
-                      title: state.dialogName.getLocalizedName(context),
-                      content: state.notifyMessage.getLocalizedMessage(context),
-                      onPressed: () {
-                        cubit.toIdle();
-                        //Navigator.pop(context);
-                      },
-                    ),
+                builder: (context) => InformationDialog(
+                  title: state.dialogName.getLocalizedName(context),
+                  content: state.notifyMessage.getLocalizedMessage(context),
+                  onPressed: () {
+                    cubit.toIdle();
+                    //Navigator.pop(context);
+                  },
+                ),
               );
             } else {
               showDialog(
                 context: context,
-                builder: (context) =>
-                    InformationDialog(
-                      title: state.dialogName.getLocalizedName(context),
-                      content: state.notifyMessage.getLocalizedMessage(context),
-                      onPressed: () {
-                        Navigator.pop(context, state.processState);
-                      },
-                    ),
+                builder: (context) => InformationDialog(
+                  title: state.dialogName.getLocalizedName(context),
+                  content: state.notifyMessage.getLocalizedMessage(context),
+                  onPressed: () {
+                    Navigator.pop(context, state.processState);
+                  },
+                ),
               );
             }
           } else if (state.processState == ProcessState.failure) {
             showDialog(
               context: context,
-              builder: (context) =>
-                  InformationDialog(
-                    title: state.dialogName.getLocalizedName(context),
-                    content: state.notifyMessage.getLocalizedMessage(context),
-                    onPressed: () {
-                      cubit.toIdle();
-                    },
-                  ),
+              builder: (context) => InformationDialog(
+                title: state.dialogName.getLocalizedName(context),
+                content: state.notifyMessage.getLocalizedMessage(context),
+                onPressed: () {
+                  cubit.toIdle();
+                },
+              ),
             );
           }
         },
@@ -1305,7 +1151,7 @@ class _AddProductState extends State<AddProductScreen> {
                             S.of(context).productName,
                             productNameController,
                             state.productArgument?.productName,
-                                (value) {
+                            (value) {
                               cubit.updateProductArgument(state.productArgument!
                                   .copyWith(productName: value));
                             },
@@ -1318,7 +1164,7 @@ class _AddProductState extends State<AddProductScreen> {
                                   S.of(context).importPrice,
                                   importPriceController,
                                   state.productArgument?.importPrice,
-                                      (value) {
+                                  (value) {
                                     cubit.updateProductArgument(state
                                         .productArgument!
                                         .copyWith(importPrice: value));
@@ -1331,7 +1177,7 @@ class _AddProductState extends State<AddProductScreen> {
                                   S.of(context).sellingPrice,
                                   sellingPriceController,
                                   state.productArgument?.sellingPrice,
-                                      (value) {
+                                  (value) {
                                     cubit.updateProductArgument(state
                                         .productArgument!
                                         .copyWith(sellingPrice: value));
@@ -1348,7 +1194,7 @@ class _AddProductState extends State<AddProductScreen> {
                                   S.of(context).discount,
                                   discountController,
                                   state.productArgument?.discount?.toString(),
-                                      (value) {
+                                  (value) {
                                     double? parsed;
                                     if (value != null && value.isNotEmpty) {
                                       parsed = double.tryParse(value);
@@ -1366,7 +1212,7 @@ class _AddProductState extends State<AddProductScreen> {
                                   S.of(context).stock,
                                   stockController,
                                   state.productArgument?.stock,
-                                      (value) {
+                                  (value) {
                                     final newStatus = value! > 0
                                         ? ProductStatusEnum.active
                                         : ProductStatusEnum.outOfStock;
@@ -1408,7 +1254,7 @@ class _AddProductState extends State<AddProductScreen> {
                             S.of(context).releaseDate,
                             TextEditingController(),
                             state.productArgument?.release ?? DateTime.now(),
-                                (value) {
+                            (value) {
                               cubit.updateProductArgument(state.productArgument!
                                   .copyWith(release: value));
                             },
@@ -1418,7 +1264,7 @@ class _AddProductState extends State<AddProductScreen> {
                             S.of(context).category,
                             TextEditingController(),
                             state.productArgument?.category ?? CategoryEnum.cpu,
-                                (value) {
+                            (value) {
                               cubit.updateProductArgument(state.productArgument!
                                   .copyWith(category: value));
                             },
@@ -1432,7 +1278,7 @@ class _AddProductState extends State<AddProductScreen> {
                                 S.of(context).manufacturer,
                                 TextEditingController(),
                                 state.productArgument?.manufacturer,
-                                    (value) {
+                                (value) {
                                   cubit.updateProductArgument(state
                                       .productArgument!
                                       .copyWith(manufacturer: value));
@@ -1451,27 +1297,27 @@ class _AddProductState extends State<AddProductScreen> {
                               BlocBuilder<AddProductCubit, AddProductState>(
                                 builder: (context, state) {
                                   final status =
-                                  (state.productArgument?.stock ?? 0) > 0
-                                      ? ProductStatusEnum.active
-                                      : ProductStatusEnum.outOfStock;
+                                      (state.productArgument?.stock ?? 0) > 0
+                                          ? ProductStatusEnum.active
+                                          : ProductStatusEnum.outOfStock;
 
                                   return Container(
                                     margin:
-                                    const EdgeInsets.symmetric(vertical: 8),
+                                        const EdgeInsets.symmetric(vertical: 8),
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 12),
                                     decoration: BoxDecoration(
                                       color: status == ProductStatusEnum.active
                                           ? colorScheme.tertiary
-                                          .withValues(alpha: 0.1)
+                                              .withValues(alpha: 0.1)
                                           : colorScheme.error
-                                          .withValues(alpha: 0.1),
+                                              .withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
                                         color:
-                                        status == ProductStatusEnum.active
-                                            ? colorScheme.tertiary
-                                            : colorScheme.error,
+                                            status == ProductStatusEnum.active
+                                                ? colorScheme.tertiary
+                                                : colorScheme.error,
                                         width: 2,
                                       ),
                                     ),
@@ -1483,9 +1329,9 @@ class _AddProductState extends State<AddProductScreen> {
                                               ? Icons.check_circle
                                               : Icons.error,
                                           color:
-                                          status == ProductStatusEnum.active
-                                              ? Colors.green
-                                              : Colors.red,
+                                              status == ProductStatusEnum.active
+                                                  ? Colors.green
+                                                  : Colors.red,
                                           size: 20,
                                         ),
                                         const SizedBox(width: 8),
@@ -1495,7 +1341,7 @@ class _AddProductState extends State<AddProductScreen> {
                                               : S.of(context).outOfStock,
                                           style: TextStyle(
                                             color: status ==
-                                                ProductStatusEnum.active
+                                                    ProductStatusEnum.active
                                                 ? Colors.green
                                                 : Colors.red,
                                             fontWeight: FontWeight.bold,
@@ -1542,17 +1388,19 @@ class _AddProductState extends State<AddProductScreen> {
                               state,
                               cubit,
                             ),
-
                             MultiFieldWithIcon(
                               controller: enDescriptionController,
-                              hintText: S.of(context).enterField(S.of(context).enDescription),
+                              hintText: S
+                                  .of(context)
+                                  .enterField(S.of(context).enDescription),
                               labelText: S.of(context).enDescription,
                               onChanged: (value) {
                                 cubit.updateProductArgument(state
                                     .productArgument!
                                     .copyWith(enDescription: value));
                               },
-                              suffixIcon: (state.productArgument!.isEnEmpty && state.productArgument!.isViEmpty)
+                              suffixIcon: (state.productArgument!.isEnEmpty &&
+                                      state.productArgument!.isViEmpty)
                                   ? Icons.add_comment
                                   : Icons.g_translate,
                               onSuffixIconPressed: () {
@@ -1560,17 +1408,19 @@ class _AddProductState extends State<AddProductScreen> {
                               },
                             ),
                             const SizedBox(height: 16),
-
                             MultiFieldWithIcon(
                               controller: viDescriptionController,
-                              hintText: S.of(context).enterField(S.of(context).viDescription),
+                              hintText: S
+                                  .of(context)
+                                  .enterField(S.of(context).viDescription),
                               labelText: S.of(context).viDescription,
                               onChanged: (value) {
                                 cubit.updateProductArgument(state
                                     .productArgument!
                                     .copyWith(viDescription: value));
                               },
-                              suffixIcon: (state.productArgument!.isEnEmpty && state.productArgument!.isViEmpty)
+                              suffixIcon: (state.productArgument!.isEnEmpty &&
+                                      state.productArgument!.isViEmpty)
                                   ? Icons.add_comment
                                   : Icons.g_translate,
                               onSuffixIconPressed: () {
@@ -1591,15 +1441,14 @@ class _AddProductState extends State<AddProductScreen> {
     );
   }
 
-  Widget buildInputWidget<T>(String propertyName,
+  Widget buildInputWidget<T>(
+      String propertyName,
       TextEditingController controller,
       T? propertyValue,
       void Function(T?) onChanged,
       [List<T>? enumValues]) {
     return Builder(builder: (BuildContext context) {
-      final colorScheme = Theme
-          .of(context)
-          .colorScheme;
+      final colorScheme = Theme.of(context).colorScheme;
 
       if (T == DateTime) {
         return Column(
@@ -1639,9 +1488,9 @@ class _AddProductState extends State<AddProductScreen> {
                 child: FieldWithIcon(
                   controller: TextEditingController(
                     text: (propertyValue as DateTime?) != null &&
-                        propertyValue != null
+                            propertyValue != null
                         ? DateFormat('dd/MM/yyyy')
-                        .format(propertyValue as DateTime)
+                            .format(propertyValue as DateTime)
                         : '',
                   ),
                   readOnly: true,
@@ -1668,12 +1517,12 @@ class _AddProductState extends State<AddProductScreen> {
                 return d1 == d2;
               },
               itemAsString: (T d) =>
-              d is Manufacturer ? d.manufacturerName : d.toString(),
+                  d is Manufacturer ? d.manufacturerName : d.toString(),
               onChanged: (value) {
                 if (value is Manufacturer) {
-                  final selected = (enumValues as List<Manufacturer>)
-                      .firstWhere(
-                        (m) => m.manufacturerID == value.manufacturerID,
+                  final selected =
+                      (enumValues as List<Manufacturer>).firstWhere(
+                    (m) => m.manufacturerID == value.manufacturerID,
                     orElse: () => value as Manufacturer,
                   );
                   onChanged(selected as T?);
@@ -1751,7 +1600,6 @@ class _AddProductState extends State<AddProductScreen> {
           ],
         );
       }
-    }
-    );
+    });
   }
 }

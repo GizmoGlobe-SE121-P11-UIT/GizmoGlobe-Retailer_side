@@ -15,7 +15,6 @@ import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 class IncomingDetailScreen extends StatefulWidget {
   final IncomingInvoice invoice;
@@ -220,7 +219,8 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                               ),
                               _buildTotalPriceRow(
                                 S.of(context).totalPrice,
-                                Helper.toCurrencyFormat(state.invoice.totalPrice),
+                                Helper.toCurrencyFormat(
+                                    state.invoice.totalPrice),
                               ),
                               const SizedBox(height: 32),
                               Text(

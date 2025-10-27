@@ -230,7 +230,7 @@ class _VoucherScreenState extends State<VoucherScreen>
             body: Column(
               children: [
                 // Web Header
-                WebHeader(
+                const WebHeader(
                   unreadChats: 0,
                   isSidebarCompact: false,
                 ),

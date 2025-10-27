@@ -114,7 +114,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             body: Column(
               children: [
                 // Web Header
-                WebHeader(
+                const WebHeader(
                   unreadChats: 0,
                   isSidebarCompact: false,
                 ),
@@ -205,6 +205,6 @@ class _InvoiceScreenWithInitialTabState
 
   @override
   Widget build(BuildContext context) {
-    return InvoiceScreen(showFullLayout: true);
+    return const InvoiceScreen(showFullLayout: true);
   }
 }

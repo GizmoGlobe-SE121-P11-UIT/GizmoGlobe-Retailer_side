@@ -122,7 +122,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                 Theme.of(context).colorScheme.primary.withValues(alpha: 0.8)),
         floatingLabelStyle: TextStyle(color: Theme.of(context).primaryColor),
       ),
-      value: state.selectedManufacturer,
+      initialValue: state.selectedManufacturer,
       items: state.manufacturers.map((manufacturer) {
         return DropdownMenuItem(
           value: manufacturer,
@@ -363,7 +363,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
           color: Theme.of(context).primaryColor,
         ),
       ),
-      value: state.paymentStatus,
+      initialValue: state.paymentStatus,
       items: PaymentStatus.values.map((status) {
         return DropdownMenuItem(
           value: status,
@@ -437,7 +437,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField<Product>(
-                      value: selectedProduct,
+                      initialValue: selectedProduct,
                       decoration: inputDecoration.copyWith(
                           labelText: S.of(context).selectManufacturer),
                       dropdownColor: Theme.of(context).cardColor,
@@ -564,7 +564,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField<Product>(
-                      value: selectedProduct,
+                      initialValue: selectedProduct,
                       decoration: inputDecoration.copyWith(
                           labelText: S.of(context).selectManufacturer),
                       dropdownColor: Theme.of(context).cardColor,

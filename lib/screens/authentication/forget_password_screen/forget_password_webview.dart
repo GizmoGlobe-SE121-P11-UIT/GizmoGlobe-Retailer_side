@@ -171,8 +171,9 @@ class _ForgetPasswordWebViewState extends State<ForgetPasswordWebView> {
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      'Sending link...',
-                                      style: TextStyle(
+                                      S.of(context).sendingVerificationLink(
+                                          _emailController.text.trim()),
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -181,7 +182,7 @@ class _ForgetPasswordWebViewState extends State<ForgetPasswordWebView> {
                                 )
                               : Text(
                                   S.of(context).sendVerificationLink,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),

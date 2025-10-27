@@ -214,8 +214,8 @@ class _SignUpWebViewState extends State<SignUpWebView> {
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      'Creating account...',
-                                      style: TextStyle(
+                                      S.of(context).createNewAccount,
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -224,7 +224,7 @@ class _SignUpWebViewState extends State<SignUpWebView> {
                                 )
                               : Text(
                                   S.of(context).createNewAccount,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),

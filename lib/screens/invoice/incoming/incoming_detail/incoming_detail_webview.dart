@@ -244,7 +244,7 @@ class _IncomingDetailWebViewState extends State<IncomingDetailWebView> {
             ),
             _buildTotalPriceRow(
               S.of(context).totalPrice,
-              '${Helper.toCurrencyFormat(state.invoice.totalPrice)}',
+              Helper.toCurrencyFormat(state.invoice.totalPrice),
             ),
           ],
         ),
@@ -284,7 +284,7 @@ class _IncomingDetailWebViewState extends State<IncomingDetailWebView> {
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
-                      .surfaceVariant
+                      .surfaceContainerHighest
                       .withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(

@@ -283,7 +283,7 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
                         StatefulBuilder(
                           builder: (context, setState) {
                             return DropdownButtonFormField<RoleEnum>(
-                              value: selectedRole,
+                              initialValue: selectedRole,
                               decoration: InputDecoration(
                                 labelText: S.of(context).role,
                                 prefixIcon: Icon(

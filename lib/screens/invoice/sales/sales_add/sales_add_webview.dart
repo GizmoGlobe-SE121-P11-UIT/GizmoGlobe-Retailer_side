@@ -82,7 +82,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField<Product>(
-                      value: state.selectedModalProduct,
+                      initialValue: state.selectedModalProduct,
                       onChanged: (product) {
                         context
                             .read<SalesAddCubit>()
@@ -583,7 +583,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<Customer>(
-              value: state.selectedCustomer,
+              initialValue: state.selectedCustomer,
               hint: Text(
                 S.of(context).selectCustomer,
                 style: TextStyle(
@@ -945,7 +945,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
-                      .surfaceVariant
+                      .surfaceContainerHighest
                       .withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(

@@ -1,7 +1,6 @@
 // Mobile-specific utilities
 import 'dart:async';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
@@ -39,9 +38,13 @@ class MobileUtils {
       await file.writeAsBytes(bytes);
 
       // Show a message to the user (you might want to use a proper notification system)
-      print('File downloaded to: ${file.path}');
+      if (kDebugMode) {
+        print('File downloaded to: ${file.path}');
+      }
     } catch (e) {
-      print('Error downloading file: $e');
+      if (kDebugMode) {
+        print('Error downloading file: $e');
+      }
       rethrow;
     }
   }

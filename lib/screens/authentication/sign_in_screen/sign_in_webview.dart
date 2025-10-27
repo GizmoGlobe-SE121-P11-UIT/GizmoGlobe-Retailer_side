@@ -187,8 +187,8 @@ class _SignInWebViewState extends State<SignInWebView> {
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      'Signing in...',
-                                      style: TextStyle(
+                                      S.of(context).signIn,
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -197,7 +197,7 @@ class _SignInWebViewState extends State<SignInWebView> {
                                 )
                               : Text(
                                   S.of(context).signIn,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 
 class WebHeader extends StatelessWidget {
   final int unreadChats;
@@ -115,7 +114,7 @@ class WebHeader extends StatelessWidget {
                           ),
                           child: Text(
                             unreadChats > 99 ? '99+' : unreadChats.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -206,8 +205,7 @@ class WebScaffold extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor:
-          backgroundColor ?? Theme.of(context).colorScheme.background,
+      backgroundColor: backgroundColor ?? Theme.of(context).colorScheme.surface,
       body: WebHeaderWrapper(
         unreadChats: unreadChats,
         onChatPressed: onChatPressed,

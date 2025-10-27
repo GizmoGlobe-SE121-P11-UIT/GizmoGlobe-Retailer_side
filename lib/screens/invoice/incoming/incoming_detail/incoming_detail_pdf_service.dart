@@ -7,7 +7,6 @@ import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/functions/helper.dart';
 
 class IncomingInvoicePdfService {
-
   static Future<pw.Document> generatePdf({
     required IncomingInvoice invoice,
     required Manufacturer? manufacturer,
@@ -43,9 +42,9 @@ class IncomingInvoicePdfService {
   static pw.Widget _buildHeader() {
     return pw.Container(
       padding: const pw.EdgeInsets.all(20),
-      decoration: pw.BoxDecoration(
+      decoration: const pw.BoxDecoration(
         color: PdfColors.blue700,
-        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+        borderRadius: pw.BorderRadius.all(pw.Radius.circular(8)),
       ),
       child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -63,7 +62,7 @@ class IncomingInvoicePdfService {
               ),
               pw.Text(
                 'Retailer Management System',
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                   color: PdfColors.white,
                   fontSize: 12,
                 ),
@@ -107,7 +106,6 @@ class IncomingInvoicePdfService {
             'Name: ${manufacturer?.manufacturerName ?? 'Unknown'}',
             style: const pw.TextStyle(fontSize: 12),
           ),
-
         ],
       ),
     );
@@ -115,7 +113,6 @@ class IncomingInvoicePdfService {
 
   static pw.Widget _buildInvoiceInfo(IncomingInvoice invoice) {
     final dateFormat = DateFormat('dd/MM/yyyy');
-    final numberFormat = NumberFormat('#,###');
 
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -161,7 +158,13 @@ class IncomingInvoicePdfService {
     IncomingInvoice invoice,
     Map<String, Product> products,
   ) {
-    final tableHeaders = ['Product', 'Product ID', 'Quantity', 'Unit Price', 'Subtotal'];
+    final tableHeaders = [
+      'Product',
+      'Product ID',
+      'Quantity',
+      'Unit Price',
+      'Subtotal'
+    ];
 
     return pw.Table(
       border: pw.TableBorder.all(color: PdfColors.grey400, width: 1),
@@ -228,7 +231,7 @@ class IncomingInvoicePdfService {
               ),
             ],
           );
-        }).toList(),
+        }),
       ],
     );
   }

@@ -135,7 +135,7 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                 const SizedBox(height: 16),
                                 // Customer Selection
                                 DropdownButtonFormField<String>(
-                                  value: state.selectedCustomerId,
+                                  initialValue: state.selectedCustomerId,
                                   decoration: InputDecoration(
                                     labelText: S.of(context).selectCustomer,
                                     labelStyle: TextStyle(
@@ -330,7 +330,7 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                         }
                                         return null;
                                       },
-                                      value: state.customerInvoices.any(
+                                      initialValue: state.customerInvoices.any(
                                               (invoice) =>
                                                   invoice.salesInvoiceID ==
                                                   state.selectedSalesInvoiceId)

@@ -10,8 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/objects/product_related/product_argument.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as path; 
-import 'package:gizmoglobe_client/data/database/database.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/enums/product_related/product_status_enum.dart';
 
@@ -21,7 +19,6 @@ import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
 import '../../../objects/product_related/mainboard_related/pcie_slot.dart';
 import 'add_product_state.dart';
-
 
 class AddProductCubit extends Cubit<AddProductState> {
   final ImagePicker _picker = ImagePicker();
@@ -35,7 +32,7 @@ class AddProductCubit extends Cubit<AddProductState> {
   void initialize() {
     // Provide safe defaults for basic fields. Category-specific fields remain null until user inputs them.
     emit(state.copyWith(
-      productArgument: ProductArgument(
+        productArgument: ProductArgument(
       sales: 0,
       release: DateTime.now(),
       importPrice: 0,
@@ -83,7 +80,8 @@ class AddProductCubit extends Cubit<AddProductState> {
     final arg = state.productArgument;
     if (arg == null) return;
     // update status according to stock
-    final newStatus = value > 0 ? ProductStatusEnum.active : ProductStatusEnum.outOfStock;
+    final newStatus =
+        value > 0 ? ProductStatusEnum.active : ProductStatusEnum.outOfStock;
     updateProductArgument(arg.copyWith(stock: value, status: newStatus));
   }
 
@@ -124,7 +122,8 @@ class AddProductCubit extends Cubit<AddProductState> {
     final connectors = arg.connectors ?? [];
     if (index < 0 || index >= connectors.length) return connectors;
     final updatedConnectors = List<Connector>.from(connectors);
-    updatedConnectors[index] = updatedConnectors[index].copyWith(quantity: quantity);
+    updatedConnectors[index] =
+        updatedConnectors[index].copyWith(quantity: quantity);
     updateProductArgument(arg.copyWith(connectors: updatedConnectors));
     return updatedConnectors;
   }
@@ -202,8 +201,6 @@ class AddProductCubit extends Cubit<AddProductState> {
     return updatedPcieSlots;
   }
 
-
-
   void toSuccess() {
     emit(state.copyWith(processState: ProcessState.success));
   }
@@ -271,7 +268,7 @@ class AddProductCubit extends Cubit<AddProductState> {
       // Get product ID (if available)
       final productId = state.productArgument?.productID ??
           DateTime.now().millisecondsSinceEpoch.toString();
-      final String fileExtension = path.extension(imageFile.path);
+      final String fileExtension = imageFile.path.split('.').last;
       final String fileName = 'image$fileExtension';
       final Reference storageRef =
           _storage.ref().child('products/$productId/$fileName');
@@ -305,7 +302,7 @@ class AddProductCubit extends Cubit<AddProductState> {
       }
 
       // Basic validation helper that tolerates numbers stored as different numeric types
-      num? _toNum(dynamic v) {
+      num? toNum(dynamic v) {
         if (v == null) return null;
         if (v is num) return v;
         return double.tryParse(v.toString());
@@ -324,8 +321,8 @@ class AddProductCubit extends Cubit<AddProductState> {
       if (arg.productName == null || arg.productName!.trim().isEmpty) {
         if (fail('productName missing')) return;
       }
-      final importP = _toNum(arg.importPrice);
-      final sellP = _toNum(arg.sellingPrice);
+      final importP = toNum(arg.importPrice);
+      final sellP = toNum(arg.sellingPrice);
       if (importP == null || importP <= 0) {
         if (fail('import price invalid')) return;
       }
@@ -342,32 +339,62 @@ class AddProductCubit extends Cubit<AddProductState> {
       // Category-specific validation (mirror fields used in ProductArgument.buildProduct)
       switch (arg.category) {
         case CategoryEnum.ram:
-          if (arg.type == null || arg.bus == null || arg.capacity == null || arg.stickCount == null || arg.clLatency == null) {
+          if (arg.type == null ||
+              arg.bus == null ||
+              arg.capacity == null ||
+              arg.stickCount == null ||
+              arg.clLatency == null) {
             if (fail('RAM required fields missing')) return;
           }
           break;
         case CategoryEnum.cpu:
-          if (arg.cpuSeries == null || arg.core == null || arg.thread == null || arg.turboClock == null || arg.socket == null || arg.tdp == null) {
+          if (arg.cpuSeries == null ||
+              arg.core == null ||
+              arg.thread == null ||
+              arg.turboClock == null ||
+              arg.socket == null ||
+              arg.tdp == null) {
             if (fail('CPU required fields missing')) return;
           }
           break;
         case CategoryEnum.psu:
-          if (arg.tdp == null || arg.efficiency == null || arg.modularity == null || arg.connectors == null) {
+          if (arg.tdp == null ||
+              arg.efficiency == null ||
+              arg.modularity == null ||
+              arg.connectors == null) {
             if (fail('PSU required fields missing')) return;
           }
           break;
         case CategoryEnum.gpu:
-          if (arg.gpuSeries == null || arg.gpuVersion == null || arg.capacity == null || arg.tdp == null || arg.ioPorts == null || arg.turboClock == null) {
+          if (arg.gpuSeries == null ||
+              arg.gpuVersion == null ||
+              arg.capacity == null ||
+              arg.tdp == null ||
+              arg.ioPorts == null ||
+              arg.turboClock == null) {
             if (fail('GPU required fields missing')) return;
           }
           break;
         case CategoryEnum.mainboard:
-          if (arg.chipsetCode == null || arg.socket == null || arg.mainboardFormFactor == null || arg.pcieSlots == null || arg.storageSlot == null || arg.type == null || arg.capacity == null || arg.stickCount == null) {
+          if (arg.chipsetCode == null ||
+              arg.socket == null ||
+              arg.mainboardFormFactor == null ||
+              arg.pcieSlots == null ||
+              arg.storageSlot == null ||
+              arg.type == null ||
+              arg.capacity == null ||
+              arg.stickCount == null) {
             if (fail('Mainboard required fields missing')) return;
           }
           break;
         case CategoryEnum.drive:
-          if (arg.driveType == null || arg.capacity == null || arg.gen == null || arg.interfaceType == null || arg.readMbps == null || arg.writeMbps == null || arg.driveFormFactor == null) {
+          if (arg.driveType == null ||
+              arg.capacity == null ||
+              arg.gen == null ||
+              arg.interfaceType == null ||
+              arg.readMbps == null ||
+              arg.writeMbps == null ||
+              arg.driveFormFactor == null) {
             if (fail('Drive required fields missing')) return;
           }
           break;
@@ -411,15 +438,12 @@ class AddProductCubit extends Cubit<AddProductState> {
 
         updateProductArgument(
             state.productArgument!.copyWith(enDescription: enDescription));
-      }
-      else {
+      } else {
         enDescription = await generateDescription(state.productArgument!);
         viDescription = await translateIntoVietnamese(enDescription);
 
         updateProductArgument(state.productArgument!.copyWith(
-            enDescription: enDescription,
-            viDescription: viDescription
-        ));
+            enDescription: enDescription, viDescription: viDescription));
       }
 
       emit(state.copyWith(
@@ -440,15 +464,12 @@ class AddProductCubit extends Cubit<AddProductState> {
 
         updateProductArgument(
             state.productArgument!.copyWith(viDescription: viDescription));
-      }
-      else {
+      } else {
         enDescription = await generateDescription(state.productArgument!);
         viDescription = await translateIntoVietnamese(enDescription);
 
         updateProductArgument(state.productArgument!.copyWith(
-            enDescription: enDescription,
-            viDescription: viDescription
-        ));
+            enDescription: enDescription, viDescription: viDescription));
       }
 
       emit(state.copyWith(
@@ -462,18 +483,24 @@ class AddProductCubit extends Cubit<AddProductState> {
 Future<String> translateIntoEnglish(String inputText) async {
   try {
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
+    final url =
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
 
     final dio = Dio();
     final response = await dio.post(
       url,
       options: Options(headers: {'Content-Type': 'application/json'}),
       data: {
-        'contents': [{
-          'parts': [{
-            'text': 'Translate this Vietnamese text to English changing special character like ₫ or %. Return only the translated text: $inputText'
-          }]
-        }],
+        'contents': [
+          {
+            'parts': [
+              {
+                'text':
+                    'Translate this Vietnamese text to English changing special character like ₫ or %. Return only the translated text: $inputText'
+              }
+            ]
+          }
+        ],
         'generationConfig': {
           'temperature': 0.2,
           'topP': 0.8,
@@ -511,18 +538,24 @@ Future<String> translateIntoVietnamese(String inputText) async {
     }
 
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
+    final url =
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
 
     final dio = Dio();
     final response = await dio.post(
       url,
       options: Options(headers: {'Content-Type': 'application/json'}),
       data: {
-        'contents': [{
-          'parts': [{
-            'text': 'INSTRUCTION: Translate the following English text to Vietnamese without changing special character like ₫ or %.\n\nENGLISH TEXT: $inputText\n\nTRANSLATION (in Vietnamese only, no English explanation or notes):'
-          }]
-        }],
+        'contents': [
+          {
+            'parts': [
+              {
+                'text':
+                    'INSTRUCTION: Translate the following English text to Vietnamese without changing special character like ₫ or %.\n\nENGLISH TEXT: $inputText\n\nTRANSLATION (in Vietnamese only, no English explanation or notes):'
+              }
+            ]
+          }
+        ],
       },
     );
 
@@ -551,7 +584,8 @@ Future<String> translateIntoVietnamese(String inputText) async {
 Future<String> generateDescription(ProductArgument inputProduct) async {
   try {
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
+    final url =
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
 
     final dio = Dio();
     final productInfo = inputProduct;
@@ -559,60 +593,76 @@ Future<String> generateDescription(ProductArgument inputProduct) async {
       'Product Name: ${productInfo.productName}',
       'Category: ${productInfo.category}',
       'Manufacturer: ${productInfo.manufacturer}',
-
-      if (productInfo.category == CategoryEnum.ram) {
-        'RAM type: ${productInfo.type.toString()}',
-        'RAM bus: ${productInfo.bus} MHz',
-        'RAM capacity: ${productInfo.capacity} GB',
-        'Number of sticks: ${productInfo.stickCount}',
-      } else if (productInfo.category ==  CategoryEnum.cpu) {
-        'CPU series: ${productInfo.cpuSeries}',
-        'Cores: ${productInfo.core}',
-        'Threads: ${productInfo.thread}',
-        'Base clock: ${productInfo.baseClock} GHz',
-        'Turbo clock: ${productInfo.turboClock} GHz',
-        'Socket: ${productInfo.socket}',
-        'TDP: ${productInfo.tdp} W',
-      } else if (productInfo.category == CategoryEnum.psu) {
-        'PSU wattage: ${productInfo.tdp} W',
-        'PSU efficiency: ${productInfo.efficiency}',
-        'PSU modularity: ${productInfo.modularity}',
-        'PSU connectors: ${productInfo.connectors!.join(', ')}',
-      } else if (productInfo.category == CategoryEnum.gpu) {
-        'GPU series: ${productInfo.gpuSeries}',
-        'GPU version: ${productInfo.gpuVersion}',
-        'GPU capacity: ${productInfo.capacity} GB',
-        'GPU boost clock: ${productInfo.turboClock} MHz',
-        'GPU TDP: ${productInfo.tdp} W',
-        'GPU I/O ports: ${productInfo.ioPorts!.join(', ')}',
-      } else if (productInfo.category == CategoryEnum.mainboard) {
-        'Chipset code: ${productInfo.chipsetCode}',
-        'Socket: ${productInfo.socket}',
-        'Form factor: ${productInfo.mainboardFormFactor}',
-        'RAM type: ${productInfo.type}',
-        'RAM capacity: ${productInfo.capacity} GB',
-        'Number of RAM sticks: ${productInfo.stickCount}',
-        'Storage slots: ${productInfo.storageSlot}',
-        'PCIe slots: ${productInfo.pcieSlots!.join(', ')}',
-        'I/O ports: ${productInfo.ioPorts!.join(', ')}',
-      } else if (productInfo.category == CategoryEnum.drive) {
-        'Drive type: ${productInfo.driveType}',
-        'Generation: ${productInfo.gen}',
-        'Capacity: ${productInfo.capacity} GB',
-        'Interface: ${productInfo.interfaceType}',
-        'Form factor: ${productInfo.driveFormFactor}',
-        'Read speed: ${productInfo.readMbps} MB/s',
-        'Write speed: ${productInfo.writeMbps} MB/s',
-      }
+      if (productInfo.category == CategoryEnum.ram)
+        {
+          'RAM type: ${productInfo.type.toString()}',
+          'RAM bus: ${productInfo.bus} MHz',
+          'RAM capacity: ${productInfo.capacity} GB',
+          'Number of sticks: ${productInfo.stickCount}',
+        }
+      else if (productInfo.category == CategoryEnum.cpu)
+        {
+          'CPU series: ${productInfo.cpuSeries}',
+          'Cores: ${productInfo.core}',
+          'Threads: ${productInfo.thread}',
+          'Base clock: ${productInfo.baseClock} GHz',
+          'Turbo clock: ${productInfo.turboClock} GHz',
+          'Socket: ${productInfo.socket}',
+          'TDP: ${productInfo.tdp} W',
+        }
+      else if (productInfo.category == CategoryEnum.psu)
+        {
+          'PSU wattage: ${productInfo.tdp} W',
+          'PSU efficiency: ${productInfo.efficiency}',
+          'PSU modularity: ${productInfo.modularity}',
+          'PSU connectors: ${productInfo.connectors!.join(', ')}',
+        }
+      else if (productInfo.category == CategoryEnum.gpu)
+        {
+          'GPU series: ${productInfo.gpuSeries}',
+          'GPU version: ${productInfo.gpuVersion}',
+          'GPU capacity: ${productInfo.capacity} GB',
+          'GPU boost clock: ${productInfo.turboClock} MHz',
+          'GPU TDP: ${productInfo.tdp} W',
+          'GPU I/O ports: ${productInfo.ioPorts!.join(', ')}',
+        }
+      else if (productInfo.category == CategoryEnum.mainboard)
+        {
+          'Chipset code: ${productInfo.chipsetCode}',
+          'Socket: ${productInfo.socket}',
+          'Form factor: ${productInfo.mainboardFormFactor}',
+          'RAM type: ${productInfo.type}',
+          'RAM capacity: ${productInfo.capacity} GB',
+          'Number of RAM sticks: ${productInfo.stickCount}',
+          'Storage slots: ${productInfo.storageSlot}',
+          'PCIe slots: ${productInfo.pcieSlots!.join(', ')}',
+          'I/O ports: ${productInfo.ioPorts!.join(', ')}',
+        }
+      else if (productInfo.category == CategoryEnum.drive)
+        {
+          'Drive type: ${productInfo.driveType}',
+          'Generation: ${productInfo.gen}',
+          'Capacity: ${productInfo.capacity} GB',
+          'Interface: ${productInfo.interfaceType}',
+          'Form factor: ${productInfo.driveFormFactor}',
+          'Read speed: ${productInfo.readMbps} MB/s',
+          'Write speed: ${productInfo.writeMbps} MB/s',
+        }
     ].join('\n');
     final response = await dio.post(
       url,
       options: Options(headers: {'Content-Type': 'application/json'}),
       data: {
-        'contents': [{
-          'parts': [{
-            'text': 'Create a detailed yet concise product description in English (3-5 sentences) based on these specifications:\n$promptDetails\n\nInclude: (1) what the product is, (2) its key technical specifications, (3) its main benefits or use cases, and (4) one standout feature. Balance technical details with consumer benefits. Use professional, marketing-oriented language that highlights value. Return ONLY the description, no additional text.'}]
-        }],
+        'contents': [
+          {
+            'parts': [
+              {
+                'text':
+                    'Create a detailed yet concise product description in English (3-5 sentences) based on these specifications:\n$promptDetails\n\nInclude: (1) what the product is, (2) its key technical specifications, (3) its main benefits or use cases, and (4) one standout feature. Balance technical details with consumer benefits. Use professional, marketing-oriented language that highlights value. Return ONLY the description, no additional text.'
+              }
+            ]
+          }
+        ],
         'generationConfig': {
           'temperature': 0.2,
           'topP': 0.8,

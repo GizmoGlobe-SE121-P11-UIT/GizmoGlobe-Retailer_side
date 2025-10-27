@@ -282,7 +282,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                             ),
                             const SizedBox(height: 16),
                             DropdownButtonFormField<RoleEnum>(
-                              value: role,
+                              initialValue: role,
                               decoration: InputDecoration(
                                 labelText: S.of(context).role,
                                 labelStyle: TextStyle(

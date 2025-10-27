@@ -122,7 +122,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     DropdownButtonFormField<Product>(
-                      value: state.selectedModalProduct,
+                      initialValue: state.selectedModalProduct,
                       onChanged: (product) {
                         context
                             .read<SalesAddCubit>()
@@ -550,7 +550,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
                             ),
                             const SizedBox(height: 16),
                             DropdownButtonFormField<Customer>(
-                              value: state.selectedCustomer,
+                              initialValue: state.selectedCustomer,
                               hint: Text(
                                 S.of(context).selectCustomer,
                                 style: TextStyle(
@@ -1081,7 +1081,8 @@ class _SalesAddViewState extends State<_SalesAddView> {
                                                 ],
                                               ),
                                               Text(
-                                                Helper.toCurrencyFormat(detail.subtotal),
+                                                Helper.toCurrencyFormat(
+                                                    detail.subtotal),
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,

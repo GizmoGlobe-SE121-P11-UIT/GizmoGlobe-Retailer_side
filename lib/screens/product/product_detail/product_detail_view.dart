@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/functions/converter.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_state.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
@@ -78,7 +77,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       height: MediaQuery.of(context).size.height * 0.25,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: colorScheme.surface, 
+                        color: colorScheme.surface,
                       ),
                       child: (state.product.imageUrl != null &&
                               state.product.imageUrl!.isNotEmpty)
@@ -95,7 +94,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     Center(child: child),
                                     Positioned.fill(
                                       child: Container(
-                                        color: Colors.black.withValues(alpha: 0.05), 
+                                        color: Colors.black
+                                            .withValues(alpha: 0.05),
                                         child: Center(
                                           child: CircularProgressIndicator(
                                             color: colorScheme.primary,
@@ -248,7 +248,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                           ),
 
-                          ..._buildProductSpecificDetails(context, state.product, state.technicalSpecs),
+                          ..._buildProductSpecificDetails(
+                              context, state.product, state.technicalSpecs),
 
                           const SizedBox(height: 24),
                           Text(
@@ -351,16 +352,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         showDialog(
                             context: context,
                             builder: (context) => InformationDialog(
-                                  title: state.dialogName.getLocalizedName(context),
-                                  content: state.notifyMessage.getLocalizedMessage(context),
+                                  title: state.dialogName
+                                      .getLocalizedName(context),
+                                  content: state.notifyMessage
+                                      .getLocalizedMessage(context),
                                   onPressed: () {},
                                 ));
                       } else if (state.processState == ProcessState.failure) {
                         showDialog(
                             context: context,
                             builder: (context) => InformationDialog(
-                                  title: state.dialogName.getLocalizedName(context),
-                                  content: state.notifyMessage.getLocalizedMessage(context),
+                                  title: state.dialogName
+                                      .getLocalizedName(context),
+                                  content: state.notifyMessage
+                                      .getLocalizedMessage(context),
                                   onPressed: () {
                                     cubit.toIdle();
                                   },
@@ -412,7 +417,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               // Only show enable/disable button if manufacturer is active
                               // If manufacturer is inactive, product will be displayed as discontinued
                               // and we don't want to allow changing its status
-                              if (state.product.manufacturer.status != ManufacturerStatus.inactive) ...[
+                              if (state.product.manufacturer.status !=
+                                  ManufacturerStatus.inactive) ...[
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: ElevatedButton.icon(
@@ -422,22 +428,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     },
                                     icon: Icon(
                                       state.product.status ==
-                                          ProductStatusEnum.discontinued
+                                              ProductStatusEnum.discontinued
                                           ? Icons.refresh
                                           : Icons.cancel,
                                       color: Colors.white,
                                     ),
                                     label: Text(
                                       state.product.status ==
-                                          ProductStatusEnum.discontinued
+                                              ProductStatusEnum.discontinued
                                           ? S.of(context).reactivate
                                           : S.of(context).discontinue,
-                                      style: const TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: state.product.status ==
-                                          ProductStatusEnum.discontinued
-                                          ? Theme.of(context).colorScheme.tertiary
+                                              ProductStatusEnum.discontinued
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .tertiary
                                           : Theme.of(context).colorScheme.error,
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 12),
@@ -595,7 +604,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: colorScheme.error.withValues(alpha: 0.1), 
+                color: colorScheme.error.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(

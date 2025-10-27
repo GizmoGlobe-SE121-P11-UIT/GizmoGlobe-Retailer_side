@@ -328,7 +328,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
       body: Column(
         children: [
           // Web Header
-          WebHeader(
+          const WebHeader(
             unreadChats: 0,
             isSidebarCompact: false,
           ),

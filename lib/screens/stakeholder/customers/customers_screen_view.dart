@@ -194,7 +194,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                       ? Theme.of(context)
                                           .colorScheme
                                           .primary
-                                          .withOpacity(0.1)
+                                          .withValues(alpha: 0.1)
                                       : Theme.of(context).colorScheme.surface,
                                   borderRadius: BorderRadius.circular(8),
                                 ),

@@ -230,8 +230,9 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
                                   String userId = lastChat.senderId == 'admin'
                                       ? lastChat.receiverId
                                       : lastChat.senderId;
-                                  if (userId == 'admin')
+                                  if (userId == 'admin') {
                                     userId = lastChat.senderId;
+                                  }
                                   final displayName =
                                       state.userIdToUsername[userId] ?? userId;
 
@@ -270,7 +271,7 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
                   ),
                 )
               : Container(
-                  color: Theme.of(context).colorScheme.background,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

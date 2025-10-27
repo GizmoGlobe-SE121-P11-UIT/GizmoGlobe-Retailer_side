@@ -62,7 +62,7 @@ class _ConversationScreenWebViewState extends State<ConversationScreenWebView> {
       builder: (context, state) {
         return Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
           ),
           child: Column(
             children: [
@@ -271,7 +271,7 @@ class _ConversationScreenWebViewState extends State<ConversationScreenWebView> {
                             borderSide: BorderSide.none,
                           ),
                           filled: true,
-                          fillColor: Theme.of(context).colorScheme.background,
+                          fillColor: Theme.of(context).colorScheme.surface,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 12,

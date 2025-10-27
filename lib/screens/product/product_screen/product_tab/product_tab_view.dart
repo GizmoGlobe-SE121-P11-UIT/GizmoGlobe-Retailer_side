@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
-import 'package:gizmoglobe_client/objects/product_related/product_extensions.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/manufacturer_status.dart';
 import 'package:gizmoglobe_client/widgets/product/product_card.dart';
 
 import '../../../../data/database/database.dart';
 import '../../../../enums/processing/process_state_enum.dart';
 import '../../../../enums/processing/sort_enum.dart';
-import '../../../../enums/product_related/category_enum.dart';
 import '../../../../enums/product_related/product_status_enum.dart';
 import '../../../../objects/product_related/filter_argument.dart';
 import '../../../../objects/product_related/product.dart';
@@ -20,7 +17,6 @@ import '../../mixin/product_tab_mixin.dart';
 import '../../product_detail/product_detail_view.dart';
 import 'product_tab_cubit.dart';
 import 'product_tab_state.dart';
-import '../../../../widgets/general/status_badge.dart';
 
 class ProductTab extends StatefulWidget {
   const ProductTab({super.key});
@@ -124,7 +120,10 @@ class _ProductTabState extends State<ProductTab>
                           icon: const Icon(Icons.keyboard_arrow_down),
                           underline: Container(
                             height: 1,
-                            color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.5),
                           ),
                           onChanged: (SortEnum? newValue) {
                             if (newValue != null &&
@@ -135,40 +134,41 @@ class _ProductTabState extends State<ProductTab>
                           items: SortEnum.values
                               .map<DropdownMenuItem<SortEnum>>(
                                   (SortEnum value) {
-                                String displayText;
-                                switch (value) {
-                                  case SortEnum.salesHighest:
-                                    displayText = S.of(context).salesHighest;
-                                    break;
-                                  case SortEnum.salesLowest:
-                                    displayText = S.of(context).salesLowest;
-                                    break;
-                                  case SortEnum.releaseLatest:
-                                    displayText = S.of(context).releaseLatest;
-                                    break;
-                                  case SortEnum.releaseOldest:
-                                    displayText = S.of(context).releaseOldest;
-                                    break;
-                                  case SortEnum.stockHighest:
-                                    displayText = S.of(context).stockHighest;
-                                    break;
-                                  case SortEnum.stockLowest:
-                                    displayText = S.of(context).stockLowest;
-                                    break;
-                                }
-                                return DropdownMenuItem<SortEnum>(
-                                  value: value,
-                                  child: Container(
-                                    constraints: const BoxConstraints(minHeight: 40),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      displayText,
-                                      overflow: TextOverflow.visible,
-                                      softWrap: true,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
+                            String displayText;
+                            switch (value) {
+                              case SortEnum.salesHighest:
+                                displayText = S.of(context).salesHighest;
+                                break;
+                              case SortEnum.salesLowest:
+                                displayText = S.of(context).salesLowest;
+                                break;
+                              case SortEnum.releaseLatest:
+                                displayText = S.of(context).releaseLatest;
+                                break;
+                              case SortEnum.releaseOldest:
+                                displayText = S.of(context).releaseOldest;
+                                break;
+                              case SortEnum.stockHighest:
+                                displayText = S.of(context).stockHighest;
+                                break;
+                              case SortEnum.stockLowest:
+                                displayText = S.of(context).stockLowest;
+                                break;
+                            }
+                            return DropdownMenuItem<SortEnum>(
+                              value: value,
+                              child: Container(
+                                constraints:
+                                    const BoxConstraints(minHeight: 40),
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  displayText,
+                                  overflow: TextOverflow.visible,
+                                  softWrap: true,
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
                       ),
                       Center(
@@ -183,13 +183,11 @@ class _ProductTabState extends State<ProductTab>
 
                             final result = await Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    FilterScreen.newInstance(
-                                      arguments: arguments,
-                                      selectedTabIndex: cubit.getIndex(),
-                                      manufacturerList:
-                                      cubit.getManufacturerList(),
-                                    ),
+                                builder: (context) => FilterScreen.newInstance(
+                                  arguments: arguments,
+                                  selectedTabIndex: cubit.getIndex(),
+                                  manufacturerList: cubit.getManufacturerList(),
+                                ),
                               ),
                             );
 
@@ -249,7 +247,8 @@ class _ProductTabState extends State<ProductTab>
                             },
                             onLongPress: () async {
                               cubit.setSelectedProduct(product);
-                              final bool isAdmin = await Database().isUserAdmin();
+                              final bool isAdmin =
+                                  await Database().isUserAdmin();
 
                               showDialog(
                                 context: context,
@@ -322,7 +321,9 @@ class _ProductTabState extends State<ProductTab>
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
-                                                        AddProductScreen.editInstance(product),
+                                                        AddProductScreen
+                                                            .editInstance(
+                                                                product),
                                                   ),
                                                 );
 
@@ -333,35 +334,41 @@ class _ProductTabState extends State<ProductTab>
                                               },
                                             ),
                                             // Only show the enable/disable option if manufacturer is active
-                                            if (product.manufacturer.status != ManufacturerStatus.inactive)
-                                            ListTile(
-                                              dense: true,
-                                              leading: Icon(
-                                                product.status ==
-                                                        ProductStatusEnum
-                                                            .discontinued
-                                                    ? Icons.check_circle_outline
-                                                    : Icons.cancel_outlined,
-                                                size: 20,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                              ),
-                                              title: Text(
-                                                product.status ==
-                                                        ProductStatusEnum
-                                                            .discontinued
-                                                    ? S.of(context).activate
-                                                    : S.of(context).deactivate,
-                                              ),
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                cubit.toLoading();
-                                                cubit.setSelectedProduct(null);
+                                            if (product.manufacturer.status !=
+                                                ManufacturerStatus.inactive)
+                                              ListTile(
+                                                dense: true,
+                                                leading: Icon(
+                                                  product.status ==
+                                                          ProductStatusEnum
+                                                              .discontinued
+                                                      ? Icons
+                                                          .check_circle_outline
+                                                      : Icons.cancel_outlined,
+                                                  size: 20,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                                title: Text(
+                                                  product.status ==
+                                                          ProductStatusEnum
+                                                              .discontinued
+                                                      ? S.of(context).activate
+                                                      : S
+                                                          .of(context)
+                                                          .deactivate,
+                                                ),
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  cubit.toLoading();
+                                                  cubit
+                                                      .setSelectedProduct(null);
 
-                                                await cubit.changeStatus(product);
-                                              },
-                                            ),
+                                                  await cubit
+                                                      .changeStatus(product);
+                                                },
+                                              ),
                                           ],
                                         ],
                                       ),
@@ -388,7 +395,8 @@ class _ProductTabState extends State<ProductTab>
               return Stack(
                 children: [
                   ModalBarrier(
-                      dismissible: false, color: Colors.black.withValues(alpha: 0.5)),
+                      dismissible: false,
+                      color: Colors.black.withValues(alpha: 0.5)),
                   Center(
                     child: CircularProgressIndicator(
                       color: Theme.of(context).colorScheme.primary,

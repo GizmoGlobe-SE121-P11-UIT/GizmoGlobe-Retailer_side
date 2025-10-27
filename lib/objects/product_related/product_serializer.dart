@@ -48,7 +48,7 @@ Map<String, dynamic> productToJson(Product p) {
     'importPrice': p.importPrice,
     'sellingPrice': p.sellingPrice,
     'discount': p.discount,
-    'release': p.release != null ? (p.release!.millisecondsSinceEpoch ~/ 1000) : null,
+    'release': (p.release.millisecondsSinceEpoch ~/ 1000),
     'stock': p.stock,
     'sales': p.sales,
     'status': _enumName(p.status),

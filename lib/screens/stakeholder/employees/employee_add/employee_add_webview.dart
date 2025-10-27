@@ -295,7 +295,7 @@ class _EmployeeAddWebViewState extends State<EmployeeAddWebView> {
                                 ),
                                 const SizedBox(height: 16),
                                 DropdownButtonFormField<RoleEnum>(
-                                  value: selectedRole,
+                                  initialValue: selectedRole,
                                   decoration: InputDecoration(
                                     labelText: S.of(context).role,
                                     labelStyle: TextStyle(

@@ -139,7 +139,7 @@ class _VendorAddScreenState extends State<VendorAddScreen> {
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<ManufacturerStatus>(
-                          value: selectedStatus,
+                          initialValue: selectedStatus,
                           decoration: InputDecoration(
                             labelText: S.of(context).status,
                             prefixIcon: Icon(
