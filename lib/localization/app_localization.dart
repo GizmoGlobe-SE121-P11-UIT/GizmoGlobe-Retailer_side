@@ -187,6 +187,7 @@ class AppLocalizations {
     'addManufacturer': 'Add Manufacturer',
     'findManufacturers': 'Find manufacturers...',
     'noMatchingManufacturersFound': 'No matching manufacturers found',
+    'manufacturerAddedSuccessfully': 'Manufacturer added successfully',
     'deactivateManufacturerConfirmName':
         'Are you sure you want to deactivate {name}?',
     'activateManufacturerConfirmName':
@@ -589,6 +590,7 @@ class AppLocalizations {
     'addManufacturer': 'Thêm nhà sản xuất',
     'findManufacturers': 'Tìm kiếm nhà sản xuất...',
     'noMatchingManufacturersFound': 'Không tìm thấy nhà sản xuất nào phù hợp',
+    'manufacturerAddedSuccessfully': 'Thêm nhà sản xuất thành công',
     'deactivateManufacturerConfirmName':
         'Bạn có chắc chắn muốn vô hiệu hóa {name}?',
     'activateManufacturerConfirmName':
@@ -1263,6 +1265,9 @@ class AppLocalizations {
       _getTranslation('selectField').replaceAll('{field}', field);
   String enterField(String field) =>
       _getTranslation('enterField').replaceAll('{field}', field);
+  String manufacturerAddedSuccessfully(String name) =>
+      _getTranslation('manufacturerAddedSuccessfully')
+          .replaceAll('{name}', name);
 
   String _getTranslation(String key) {
     final translations = locale.languageCode == 'vi' ? _vi : _en;

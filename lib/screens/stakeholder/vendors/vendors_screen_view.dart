@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_add/vendor_add_view.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_detail/vendor_detail_view.dart';
@@ -29,8 +30,16 @@ class _VendorsScreenState extends State<VendorsScreen> {
 
   VendorsScreenCubit get cubit => context.read<VendorsScreenCubit>();
 
-  void _showAddManufacturerModal() {
-    VendorAddScreen.showModal(context);
+  void _showAddManufacturerModal() async {
+    final result = await VendorAddScreen.showModal(context);
+    if (result == true) {
+      // Show success snackbar
+      _showSnackBar(
+        title: S.of(context).success,
+        message: S.of(context).manufacturerAddedSuccessfully(""),
+        contentType: ContentType.success,
+      );
+    }
   }
 
   @override
@@ -182,6 +191,15 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                   await cubit
                                                       .updateManufacturer(
                                                           updatedManufacturer);
+                                                  // Show success snackbar
+                                                  _showSnackBar(
+                                                    title:
+                                                        S.of(context).success,
+                                                    message:
+                                                        "Manufacturer updated successfully.",
+                                                    contentType:
+                                                        ContentType.success,
+                                                  );
                                                 }
                                               },
                                             ),
@@ -377,5 +395,26 @@ class _VendorsScreenState extends State<VendorsScreen> {
         );
       },
     );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

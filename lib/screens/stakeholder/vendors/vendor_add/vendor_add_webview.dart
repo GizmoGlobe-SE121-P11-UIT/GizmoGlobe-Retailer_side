@@ -39,12 +39,8 @@ class _VendorAddWebViewState extends State<VendorAddWebView> {
     return BlocBuilder<VendorsScreenCubit, VendorsScreenState>(
       builder: (context, state) {
         return Container(
-          width: MediaQuery.of(context).size.width * 0.35,
-          height: MediaQuery.of(context).size.height * 0.4,
-          constraints: const BoxConstraints(
-            maxWidth: 450,
-            maxHeight: 350,
-          ),
+          width: MediaQuery.of(context).size.width * 0.3,
+          height: MediaQuery.of(context).size.height * 0.275,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
@@ -84,9 +80,9 @@ class _VendorAddWebViewState extends State<VendorAddWebView> {
                           GradientText(text: S.of(context).addNewManufacturer),
                     ),
                     IconButton(
-                      onPressed: () async {
+                      onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          await _addManufacturer();
+                          _addManufacturer();
                         }
                       },
                       icon: const Icon(Icons.check),
@@ -127,25 +123,6 @@ class _VendorAddWebViewState extends State<VendorAddWebView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.business_outlined,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      size: 20,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      S.of(context).manufacturerInformation,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8),
                                 TextFormField(
                                   controller: _nameController,
                                   decoration: InputDecoration(
@@ -202,7 +179,7 @@ class _VendorAddWebViewState extends State<VendorAddWebView> {
                                     return null;
                                   },
                                 ),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: 16),
                                 DropdownButtonFormField<ManufacturerStatus>(
                                   value: selectedStatus,
                                   decoration: InputDecoration(
@@ -269,7 +246,7 @@ class _VendorAddWebViewState extends State<VendorAddWebView> {
                                     );
                                   }).toList(),
                                   onChanged: (newValue) {
-                                    if (newValue != null) {
+                                    if (newValue != null && mounted) {
                                       setState(() {
                                         selectedStatus = newValue;
                                       });
@@ -312,14 +289,6 @@ class _VendorAddWebViewState extends State<VendorAddWebView> {
     } else {
       if (mounted) {
         Navigator.of(context).pop(true);
-        showDialog(
-          context: context,
-          builder: (context) => InformationDialog(
-            title: S.of(context).success,
-            content: S.of(context).addManufacturer,
-            buttonText: S.of(context).confirm,
-          ),
-        );
       }
     }
   }

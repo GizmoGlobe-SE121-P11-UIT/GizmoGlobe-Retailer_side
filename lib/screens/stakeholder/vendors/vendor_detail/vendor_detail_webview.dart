@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
@@ -143,7 +144,8 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
 
                                 if (updatedManufacturer != null) {
                                   cubit.updateManufacturer(updatedManufacturer);
-                                  Navigator.of(context).pop(true);
+                                  Navigator.of(context)
+                                      .pop(updatedManufacturer);
                                 }
                               },
                               icon: Icon(
@@ -402,9 +404,29 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
           TextButton(
             onPressed: () async {
               Navigator.pop(dialogContext);
-              await cubit.toggleManufacturerStatus();
-              if (mounted) {
-                Navigator.pop(context);
+              try {
+                await cubit.toggleManufacturerStatus();
+                if (mounted) {
+                  // Show success snackbar before closing
+                  _showSnackBar(
+                    title: S.of(context).success,
+                    message:
+                        state.manufacturer.status == ManufacturerStatus.active
+                            ? "Manufacturer deactivated successfully."
+                            : "Manufacturer activated successfully.",
+                    contentType: ContentType.success,
+                  );
+
+                  // Small delay to show snackbar before closing
+                  await Future.delayed(const Duration(milliseconds: 100));
+
+                  Navigator.pop(context);
+                }
+              } catch (e) {
+                if (mounted) {
+                  _showErrorDialog(
+                      "Failed to toggle manufacturer status: ${e.toString()}");
+                }
               }
             },
             child: Text(
@@ -417,6 +439,45 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
                     : Theme.of(context).colorScheme.tertiary,
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showErrorDialog(String errorMessage) {
+    if (!mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(S.of(context).errorOccurred),
+        content: Text(errorMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(S.of(context).confirm),
           ),
         ],
       ),

@@ -16,7 +16,9 @@ class VendorDetailCubit extends Cubit<VendorDetailState> {
   Future<void> _loadUserRole() async {
     try {
       final userRole = await _firebase.getUserRole();
-      emit(state.copyWith(userRole: userRole));
+      if (!isClosed) {
+        emit(state.copyWith(userRole: userRole));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error loading user role: $e');
@@ -35,12 +37,15 @@ class VendorDetailCubit extends Cubit<VendorDetailState> {
   }
 
   Future<void> deactivateManufacturer() async {
+    if (isClosed) return;
     try {
       final updatedManufacturer = state.manufacturer.copyWith(
         status: ManufacturerStatus.inactive,
       );
       await _firebase.updateManufacturer(updatedManufacturer);
-      emit(state.copyWith(manufacturer: updatedManufacturer));
+      if (!isClosed) {
+        emit(state.copyWith(manufacturer: updatedManufacturer));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error deactivating manufacturer: $e');
@@ -49,15 +54,19 @@ class VendorDetailCubit extends Cubit<VendorDetailState> {
   }
 
   Future<void> toggleManufacturerStatus() async {
+    if (isClosed) return;
     try {
       final newStatus = state.manufacturer.status == ManufacturerStatus.active
-        ? ManufacturerStatus.inactive
-        : ManufacturerStatus.active;
-        
+          ? ManufacturerStatus.inactive
+          : ManufacturerStatus.active;
+
       final updatedManufacturer = state.manufacturer.copyWith(
         status: newStatus,
       );
       await _firebase.updateManufacturerAndProducts(updatedManufacturer);
+      if (!isClosed) {
+        emit(state.copyWith(manufacturer: updatedManufacturer));
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error toggling manufacturer status: $e');

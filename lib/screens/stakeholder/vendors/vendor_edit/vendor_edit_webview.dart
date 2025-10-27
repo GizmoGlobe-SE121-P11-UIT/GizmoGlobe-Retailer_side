@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 import '../../../../enums/stakeholders/manufacturer_status.dart';
@@ -83,12 +85,32 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                 IconButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      final updatedManufacturer = Manufacturer(
-                        manufacturerID: widget.manufacturer.manufacturerID,
-                        manufacturerName: manufacturerName,
-                        status: status,
-                      );
-                      Navigator.of(context).pop(updatedManufacturer);
+                      try {
+                        final updatedManufacturer = Manufacturer(
+                          manufacturerID: widget.manufacturer.manufacturerID,
+                          manufacturerName: manufacturerName,
+                          status: status,
+                        );
+
+                        // Show success snackbar before closing
+                        _showSnackBar(
+                          title: S.of(context).success,
+                          message: "Manufacturer updated successfully.",
+                          contentType: ContentType.success,
+                        );
+
+                        // Small delay to show snackbar before closing
+                        await Future.delayed(const Duration(milliseconds: 100));
+
+                        if (mounted) {
+                          Navigator.of(context).pop(updatedManufacturer);
+                        }
+                      } catch (e) {
+                        if (mounted) {
+                          _showErrorDialog(
+                              "Failed to update manufacturer: ${e.toString()}");
+                        }
+                      }
                     }
                   },
                   icon: const Icon(Icons.check),
@@ -188,7 +210,11 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                   ),
                                 ),
                               ),
-                              onChanged: (value) => manufacturerName = value,
+                              onChanged: (value) {
+                                if (mounted) {
+                                  manufacturerName = value;
+                                }
+                              },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return S.of(context).pleaseEnterName;
@@ -255,7 +281,7 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                 );
                               }).toList(),
                               onChanged: (newValue) {
-                                if (newValue != null) {
+                                if (newValue != null && mounted) {
                                   setState(() {
                                     status = newValue;
                                   });
@@ -272,6 +298,40 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showErrorDialog(String errorMessage) {
+    if (!mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (context) => InformationDialog(
+        title: S.of(context).errorOccurred,
+        content: errorMessage,
+        buttonText: S.of(context).confirm,
       ),
     );
   }
