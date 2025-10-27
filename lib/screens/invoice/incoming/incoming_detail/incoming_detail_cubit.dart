@@ -11,13 +11,14 @@ import 'incoming_detail_state.dart';
 import 'incoming_detail_pdf_service.dart';
 
 // Import for web platform
-import 'dart:html' as html show Blob, Url, AnchorElement;
+import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 
 class IncomingDetailCubit extends Cubit<IncomingDetailState> {
   final _firebase = Firebase();
   final IncomingInvoice invoice;
 
-  IncomingDetailCubit(this.invoice) : super(IncomingDetailState(invoice: invoice)) {
+  IncomingDetailCubit(this.invoice)
+      : super(IncomingDetailState(invoice: invoice)) {
     loadDetails();
     _loadUserRole();
   }
@@ -30,7 +31,9 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
       }
     } catch (e) {
       if (!isClosed) {
-        emit(state.copyWith(errorMessage: 'Error loading user role: $e')); // Lỗi khi load user role
+        emit(state.copyWith(
+            errorMessage:
+                'Error loading user role: $e')); // Lỗi khi load user role
       }
     }
   }
@@ -41,16 +44,18 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
 
     try {
       // Load manufacturer
-      final manufacturer = await _firebase.getManufacturerById(invoice.manufacturerID);
-      
+      final manufacturer =
+          await _firebase.getManufacturerById(invoice.manufacturerID);
+
       // Load all products referenced in details
       final Map<String, Product> products = {};
       final allProducts = await _firebase.getProducts();
-      
+
       for (var detail in invoice.details) {
         final product = allProducts.firstWhere(
           (p) => p.productID == detail.productID,
-          orElse: () => throw Exception('Product not found: ${detail.productID}'), // Không tìm thấy sản phẩm
+          orElse: () => throw Exception(
+              'Product not found: ${detail.productID}'), // Không tìm thấy sản phẩm
         );
         products[detail.productID] = product;
       }
@@ -65,7 +70,8 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
     } catch (e) {
       if (!isClosed) {
         emit(state.copyWith(
-          errorMessage: 'Error loading details: $e', // Lỗi khi load chi tiết sản phẩm
+          errorMessage:
+              'Error loading details: $e', // Lỗi khi load chi tiết sản phẩm
           isLoading: false,
         ));
       }
@@ -95,7 +101,9 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
       }
     } catch (e) {
       if (!isClosed) {
-        emit(state.copyWith(errorMessage: 'Error updating payment status: $e')); // Lỗi khi cập nhật trạng thái thanh toán
+        emit(state.copyWith(
+            errorMessage:
+                'Error updating payment status: $e')); // Lỗi khi cập nhật trạng thái thanh toán
       }
     }
   }
@@ -122,12 +130,8 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
 
       // Download PDF
       final bytes = await pdf.save();
-      final blob = html.Blob([bytes]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
-      final anchor = html.AnchorElement(href: url)
-        ..setAttribute('download', 'Invoice_${state.invoice.incomingInvoiceID}.pdf')
-        ..click();
-      html.Url.revokeObjectUrl(url);
+      await PlatformSpecificUtils.downloadFile(
+          bytes, 'Invoice_${state.invoice.incomingInvoiceID}.pdf');
     } catch (e) {
       if (kDebugMode) {
         print('Error downloading invoice: $e');
@@ -149,12 +153,8 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
 
       // Download PDF (web doesn't support share API)
       final bytes = await pdf.save();
-      final blob = html.Blob([bytes]);
-      final url = html.Url.createObjectUrlFromBlob(blob);
-      final anchor = html.AnchorElement(href: url)
-        ..setAttribute('download', 'Invoice_${state.invoice.incomingInvoiceID}.pdf')
-        ..click();
-      html.Url.revokeObjectUrl(url);
+      await PlatformSpecificUtils.downloadFile(
+          bytes, 'Invoice_${state.invoice.incomingInvoiceID}.pdf');
     } catch (e) {
       if (kDebugMode) {
         print('Error downloading invoice: $e');

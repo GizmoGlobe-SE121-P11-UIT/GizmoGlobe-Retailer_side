@@ -1,4 +1,4 @@
-import 'dart:html' as html show window, Event;
+import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'dart:async';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -252,13 +252,19 @@ class MyApp extends StatelessWidget {
                 '/chat': (context) => const ChatRouteHandler(),
                 '/invoices': (context) => const InvoiceRouteHandler(),
                 '/stakeholders': (context) => const StakeholderRouteHandler(),
+                '/stakeholders/customers': (context) =>
+                    const StakeholderRouteHandler(),
+                '/stakeholders/employees': (context) =>
+                    const StakeholderRouteHandler(),
+                '/stakeholders/vendors': (context) =>
+                    const StakeholderRouteHandler(),
                 '/vouchers': (context) => const VoucherRouteHandler(),
               },
               onGenerateRoute: (settings) {
                 // Handle routes with query parameters
                 final uri = Uri.parse(settings.name ?? '/');
                 final path = uri.path;
-                
+
                 // Strip query parameters from route name
                 if (settings.name?.contains('?') ?? false) {
                   return MaterialPageRoute(
@@ -274,6 +280,9 @@ class MyApp extends StatelessWidget {
                         case '/chat':
                           return const ChatRouteHandler();
                         case '/stakeholders':
+                        case '/stakeholders/customers':
+                        case '/stakeholders/employees':
+                        case '/stakeholders/vendors':
                           return const StakeholderRouteHandler();
                         case '/vouchers':
                           return const VoucherRouteHandler();
@@ -291,7 +300,7 @@ class MyApp extends StatelessWidget {
                     },
                   );
                 }
-                
+
                 // Default routing
                 return null;
               },
@@ -375,7 +384,11 @@ class AuthWrapper extends StatelessWidget {
           return const ChatRouteHandler();
         } else if (currentRoute == '/invoices' && isAuthenticated) {
           return const InvoiceRouteHandler();
-        } else if (currentRoute == '/stakeholders' && isAuthenticated) {
+        } else if ((currentRoute == '/stakeholders' ||
+                currentRoute == '/stakeholders/customers' ||
+                currentRoute == '/stakeholders/employees' ||
+                currentRoute == '/stakeholders/vendors') &&
+            isAuthenticated) {
           return const StakeholderRouteHandler();
         } else if (currentRoute == '/vouchers' && isAuthenticated) {
           return const VoucherRouteHandler();
@@ -424,7 +437,7 @@ class _ChatRouteHandlerState extends State<ChatRouteHandler> {
   void _parseUrlParameters() {
     if (kIsWeb) {
       // Parse URL parameters for web
-      final uri = Uri.parse(html.window.location.href);
+      final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
       selectedChatId = uri.queryParameters['id'];
     }
   }
@@ -512,7 +525,7 @@ class MainRouteHandler extends StatefulWidget {
 
 class _MainRouteHandlerState extends State<MainRouteHandler> {
   int? initialIndex;
-  StreamSubscription<html.Event>? _hashChangeSubscription;
+  StreamSubscription<dynamic>? _hashChangeSubscription;
 
   @override
   void initState() {
@@ -521,7 +534,8 @@ class _MainRouteHandlerState extends State<MainRouteHandler> {
 
     // Listen to URL changes on web
     if (kIsWeb) {
-      _hashChangeSubscription = html.window.onHashChange.listen((event) {
+      _hashChangeSubscription =
+          PlatformSpecificUtils.onHashChange.listen((event) {
         if (mounted) {
           _parseUrlParameters();
           setState(() {});
@@ -539,7 +553,7 @@ class _MainRouteHandlerState extends State<MainRouteHandler> {
   void _parseUrlParameters() {
     if (kIsWeb) {
       // Parse URL parameters for web
-      final uri = Uri.parse(html.window.location.href);
+      final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
       final indexParam = uri.queryParameters['index'];
       if (indexParam != null) {
         initialIndex = int.tryParse(indexParam);
@@ -574,7 +588,7 @@ class InvoiceRouteHandler extends StatefulWidget {
 
 class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
   int? initialTabIndex;
-  StreamSubscription<html.Event>? _hashChangeSubscription;
+  StreamSubscription<dynamic>? _hashChangeSubscription;
 
   @override
   void initState() {
@@ -583,7 +597,8 @@ class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
 
     // Listen to URL changes on web
     if (kIsWeb) {
-      _hashChangeSubscription = html.window.onHashChange.listen((event) {
+      _hashChangeSubscription =
+          PlatformSpecificUtils.onHashChange.listen((event) {
         if (mounted) {
           _parseUrlParameters();
           setState(() {});
@@ -601,7 +616,7 @@ class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
   void _parseUrlParameters() {
     if (kIsWeb) {
       // Parse URL parameters for web
-      final uri = Uri.parse(html.window.location.href);
+      final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
       final tabsParam = uri.queryParameters['tabs'];
 
       if (tabsParam != null) {
@@ -639,7 +654,7 @@ class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
   }
 }
 
-// Stakeholder route handler for /#/stakeholders and /#/stakeholders?tabs=customers/employees/vendors
+// Stakeholder route handler for /#/stakeholders, /#/stakeholders/customers, /#/stakeholders/employees, /#/stakeholders/vendors
 class StakeholderRouteHandler extends StatefulWidget {
   const StakeholderRouteHandler({super.key});
 
@@ -650,40 +665,60 @@ class StakeholderRouteHandler extends StatefulWidget {
 
 class _StakeholderRouteHandlerState extends State<StakeholderRouteHandler> {
   int? initialTabIndex;
+  StreamSubscription<dynamic>? _hashChangeSubscription;
 
   @override
   void initState() {
     super.initState();
     _parseUrlParameters();
+
+    // Listen to URL changes on web
+    if (kIsWeb) {
+      _hashChangeSubscription =
+          PlatformSpecificUtils.onHashChange.listen((event) {
+        if (mounted) {
+          _parseUrlParameters();
+          setState(() {});
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
+    _hashChangeSubscription?.cancel();
     super.dispose();
   }
 
   void _parseUrlParameters() {
     if (kIsWeb) {
-      // Parse URL parameters for web
-      final uri = Uri.parse(html.window.location.href);
-      final tabsParam = uri.queryParameters['tabs'];
+      // Parse hash for web routing
+      final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
+      final hash = uri.fragment;
 
-      if (tabsParam != null) {
-        switch (tabsParam.toLowerCase()) {
-          case 'customers':
-            initialTabIndex = 0; // Customers tab index
-            break;
-          case 'employees':
-            initialTabIndex = 1; // Employees tab index
-            break;
-          case 'vendors':
-            initialTabIndex = 2; // Vendors tab index
-            break;
-          default:
-            initialTabIndex = 0; // Default to customers
+      // Parse hash like /#/stakeholders/customers, /#/stakeholders/employees, /#/stakeholders/vendors
+      if (hash.startsWith('/stakeholders/')) {
+        final pathSegments = hash.split('/');
+        if (pathSegments.length >= 3) {
+          final tabName = pathSegments[2].toLowerCase();
+          switch (tabName) {
+            case 'customers':
+              initialTabIndex = 0;
+              break;
+            case 'employees':
+              initialTabIndex = 1;
+              break;
+            case 'vendors':
+              initialTabIndex = 2;
+              break;
+            default:
+              initialTabIndex = 0; // Default to customers
+          }
+        } else {
+          initialTabIndex = 0; // Default to customers if no specific tab
         }
       } else {
-        initialTabIndex = 0; // Default to customers tab if no tab specified
+        initialTabIndex = 0; // Default to customers tab
       }
     }
   }
@@ -729,7 +764,7 @@ class _VoucherRouteHandlerState extends State<VoucherRouteHandler> {
   void _parseUrlParameters() {
     if (kIsWeb) {
       // Parse URL parameters for web
-      final uri = Uri.parse(html.window.location.href);
+      final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
       final tabsParam = uri.queryParameters['tabs'];
 
       if (tabsParam != null) {

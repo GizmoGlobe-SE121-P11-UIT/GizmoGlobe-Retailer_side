@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,10 +58,10 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
     if (kIsWeb) {
       if (chatId != null) {
         // Update URL with chat ID
-        html.window.history.pushState(null, '', '/#/chat?id=$chatId');
+        PlatformSpecificUtils.pushState('/#/chat?id=$chatId');
       } else {
         // Update URL without chat ID
-        html.window.history.pushState(null, '', '/#/chat');
+        PlatformSpecificUtils.pushState('/#/chat');
       }
     }
   }
@@ -335,7 +335,7 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
                         if (index == 0) {
                           // Home - navigate to main screen
                           if (kIsWeb) {
-                            html.window.location.replace('/#/main');
+                            PlatformSpecificUtils.replaceState('/#/main');
                           } else {
                             Navigator.pushNamedAndRemoveUntil(
                               context,
@@ -346,7 +346,7 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
                         } else if (index == 2) {
                           // Invoices - navigate to invoices screen
                           if (kIsWeb) {
-                            html.window.location.replace('/#/invoices');
+                            PlatformSpecificUtils.replaceState('/#/invoices');
                           } else {
                             Navigator.pushNamedAndRemoveUntil(
                               context,
@@ -357,7 +357,8 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
                         } else if (index == 3) {
                           // Stakeholders - navigate to stakeholders screen
                           if (kIsWeb) {
-                            html.window.location.replace('/#/stakeholders');
+                            PlatformSpecificUtils.replaceState(
+                                '/#/stakeholders');
                           } else {
                             Navigator.pushNamedAndRemoveUntil(
                               context,
@@ -368,7 +369,7 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
                         } else if (index == 4) {
                           // Vouchers - navigate to vouchers screen
                           if (kIsWeb) {
-                            html.window.location.replace('/#/vouchers');
+                            PlatformSpecificUtils.replaceState('/#/vouchers');
                           } else {
                             Navigator.pushNamedAndRemoveUntil(
                               context,

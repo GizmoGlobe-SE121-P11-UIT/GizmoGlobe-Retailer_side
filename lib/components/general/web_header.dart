@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'dart:html' as html show window;
+import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 
 class WebHeader extends StatelessWidget {
   final int unreadChats;

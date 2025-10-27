@@ -1,4 +1,5 @@
-import 'dart:html' as html;
+import 'dart:async';
+import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +33,63 @@ class StakeholderScreen extends StatefulWidget {
 }
 
 class _StakeholderScreenState extends State<StakeholderScreen> {
+  StreamSubscription<dynamic>? _hashChangeSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen to URL changes on web for hash routing
+    if (kIsWeb) {
+      _hashChangeSubscription =
+          PlatformSpecificUtils.onHashChange.listen((event) {
+        if (mounted) {
+          _handleHashChange();
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _hashChangeSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _handleHashChange() {
+    if (kIsWeb) {
+      final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
+      final hash = uri.fragment;
+
+      // Parse hash like /#/stakeholders/customers, /#/stakeholders/employees, /#/stakeholders/vendors
+      if (hash.startsWith('/stakeholders/')) {
+        final pathSegments = hash.split('/');
+        if (pathSegments.length >= 3) {
+          final tabName = pathSegments[2].toLowerCase();
+          int tabIndex;
+          switch (tabName) {
+            case 'customers':
+              tabIndex = 0;
+              break;
+            case 'employees':
+              tabIndex = 1;
+              break;
+            case 'vendors':
+              tabIndex = 2;
+              break;
+            default:
+              tabIndex = 0; // Default to customers
+          }
+
+          // Update tab if it's different from current
+          if (context.read<StakeholderScreenCubit>().state.selectedTabIndex !=
+              tabIndex) {
+            context.read<StakeholderScreenCubit>().changeTab(tabIndex);
+          }
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<StakeholderScreenCubit, StakeholderScreenState>(
@@ -51,7 +109,7 @@ class _StakeholderScreenState extends State<StakeholderScreen> {
                   onTap: (index) {
                     context.read<StakeholderScreenCubit>().changeTab(index);
 
-                    // Update URL for web navigation
+                    // Update URL for web navigation using hash routing
                     if (kIsWeb) {
                       String tabName;
                       switch (index) {
@@ -67,8 +125,8 @@ class _StakeholderScreenState extends State<StakeholderScreen> {
                         default:
                           tabName = 'customers';
                       }
-                      html.window.history
-                          .pushState(null, '', '/#/stakeholders?tabs=$tabName');
+                      PlatformSpecificUtils.pushState(
+                          '/#/stakeholders/$tabName');
                     }
                   },
                   labelColor: Theme.of(context).colorScheme.primary,

@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,8 +66,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         default:
                           tabName = 'sales';
                       }
-                      html.window.history
-                          .pushState(null, '', '/#/invoices?tabs=$tabName');
+                      PlatformSpecificUtils.pushState(
+                          '/#/invoices?tabs=$tabName');
                     }
                   },
                   labelColor: Theme.of(context).colorScheme.primary,

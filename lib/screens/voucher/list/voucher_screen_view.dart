@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -161,8 +161,7 @@ class _VoucherScreenState extends State<VoucherScreen>
                     default:
                       tabName = 'all';
                   }
-                  html.window.history
-                      .pushState(null, '', '/#/vouchers?tabs=$tabName');
+                  PlatformSpecificUtils.pushState('/#/vouchers?tabs=$tabName');
                 }
               },
               tabs: [

@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -201,8 +201,8 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                           tabName = 'all';
                       }
                       try {
-                        html.window.history
-                            .pushState(null, '', '/#/vouchers?tabs=$tabName');
+                        PlatformSpecificUtils.pushState(
+                            '/#/vouchers?tabs=$tabName');
                       } catch (e) {
                         // Silently handle error
                       }
