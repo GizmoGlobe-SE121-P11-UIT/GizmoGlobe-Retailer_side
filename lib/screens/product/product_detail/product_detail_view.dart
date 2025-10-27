@@ -13,6 +13,7 @@ import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/product_status_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
 import '../../../enums/stakeholders/manufacturer_status.dart';
+import '../../../functions/helper.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../data/database/database.dart';
@@ -573,7 +574,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
           if (discount > 0) ...[
             Text(
-              ': ${Converter.toMoneyWithCurrency(sellingPrice)}',
+              ': ${Helper.toCurrencyFormat(sellingPrice)}',
               style: TextStyle(
                 color: colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w400,
@@ -583,7 +584,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              Converter.toMoneyWithCurrency(discountedPrice),
+              Helper.toCurrencyFormat(discountedPrice),
               style: TextStyle(
                 color: colorScheme.tertiary,
                 fontWeight: FontWeight.bold,
@@ -608,7 +609,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ] else
             Text(
-              Converter.toMoneyWithCurrency(sellingPrice),
+              Helper.toCurrencyFormat(sellingPrice),
               style: TextStyle(
                 color: colorScheme.onSurface,
                 fontWeight: FontWeight.w400,
