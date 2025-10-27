@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 class CustomerEditWebView extends StatefulWidget {
@@ -49,11 +51,11 @@ class _CustomerEditWebViewState extends State<CustomerEditWebView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.35,
-      height: MediaQuery.of(context).size.height * 0.4,
+      width: MediaQuery.of(context).size.width * 0.3,
+      height: MediaQuery.of(context).size.height * 0.3,
       constraints: const BoxConstraints(
-        maxWidth: 450,
-        maxHeight: 350,
+        maxWidth: 400,
+        maxHeight: 300,
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -93,11 +95,31 @@ class _CustomerEditWebViewState extends State<CustomerEditWebView> {
                 IconButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      final updatedCustomer = widget.customer.copyWith(
-                        customerName: customerName.trim(),
-                        phoneNumber: phoneNumber.trim(),
-                      );
-                      Navigator.of(context).pop(updatedCustomer);
+                      try {
+                        final updatedCustomer = widget.customer.copyWith(
+                          customerName: customerName.trim(),
+                          phoneNumber: phoneNumber.trim(),
+                        );
+
+                        // Show success snackbar before closing
+                        _showSnackBar(
+                          title: S.of(context).success,
+                          message: "Customer updated successfully.",
+                          contentType: ContentType.success,
+                        );
+
+                        // Small delay to show snackbar before closing
+                        await Future.delayed(const Duration(milliseconds: 100));
+
+                        if (mounted) {
+                          Navigator.of(context).pop(updatedCustomer);
+                        }
+                      } catch (e) {
+                        if (mounted) {
+                          _showErrorDialog(
+                              "Failed to update customer: ${e.toString()}");
+                        }
+                      }
                     }
                   },
                   icon: const Icon(Icons.check),
@@ -199,9 +221,13 @@ class _CustomerEditWebViewState extends State<CustomerEditWebView> {
                                 ),
                               ),
                               textInputAction: TextInputAction.next,
-                              onChanged: (value) => setState(() {
-                                customerName = value;
-                              }),
+                              onChanged: (value) {
+                                if (mounted) {
+                                  setState(() {
+                                    customerName = value;
+                                  });
+                                }
+                              },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return S.of(context).nameIsRequired;
@@ -262,9 +288,13 @@ class _CustomerEditWebViewState extends State<CustomerEditWebView> {
                                   RegExp(r'[\d\s+-]'),
                                 ),
                               ],
-                              onChanged: (value) => setState(() {
-                                phoneNumber = value;
-                              }),
+                              onChanged: (value) {
+                                if (mounted) {
+                                  setState(() {
+                                    phoneNumber = value;
+                                  });
+                                }
+                              },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return S.of(context).phoneNumberIsRequired;
@@ -287,6 +317,40 @@ class _CustomerEditWebViewState extends State<CustomerEditWebView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showErrorDialog(String errorMessage) {
+    if (!mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (context) => InformationDialog(
+        title: S.of(context).errorOccurred,
+        content: errorMessage,
+        buttonText: S.of(context).confirm,
       ),
     );
   }

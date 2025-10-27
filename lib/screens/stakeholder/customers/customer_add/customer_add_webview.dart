@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
@@ -378,16 +379,39 @@ class _CustomerAddWebViewState extends State<CustomerAddWebView> {
       }
     } else {
       if (mounted) {
-        Navigator.of(context).pop(true);
-        showDialog(
-          context: context,
-          builder: (context) => InformationDialog(
-            title: S.of(context).success,
-            content: S.of(context).customerAddedSuccessfully,
-            buttonText: S.of(context).confirm,
-          ),
+        // Show success snackbar before closing
+        _showSnackBar(
+          title: S.of(context).success,
+          message: S.of(context).customerAddedSuccessfully,
+          contentType: ContentType.success,
         );
+
+        // Small delay to show snackbar before closing
+        await Future.delayed(const Duration(milliseconds: 100));
+
+        Navigator.of(context).pop(true);
       }
     }
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

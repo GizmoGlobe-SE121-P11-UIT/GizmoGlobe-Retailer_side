@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/customers/permissions/customer_permissions.dart';
@@ -632,16 +633,37 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: () async {
-                                final updatedCustomer =
-                                    await CustomerEditScreen.showModal(
-                                  context,
-                                  state.customer,
-                                );
+                                try {
+                                  final updatedCustomer =
+                                      await CustomerEditScreen.showModal(
+                                    context,
+                                    state.customer,
+                                  );
 
-                                if (updatedCustomer != null) {
-                                  // Update the customer in Firebase
-                                  cubit.updateCustomer(updatedCustomer);
-                                  Navigator.of(context).pop(true);
+                                  if (updatedCustomer != null) {
+                                    // Update the customer in Firebase
+                                    cubit.updateCustomer(updatedCustomer);
+
+                                    // Show success snackbar before closing
+                                    _showSnackBar(
+                                      title: S.of(context).success,
+                                      message: "Customer updated successfully.",
+                                      contentType: ContentType.success,
+                                    );
+
+                                    // Small delay to show snackbar before closing
+                                    await Future.delayed(
+                                        const Duration(milliseconds: 100));
+
+                                    if (mounted) {
+                                      Navigator.of(context).pop(true);
+                                    }
+                                  }
+                                } catch (e) {
+                                  if (mounted) {
+                                    _showErrorDialog(
+                                        "Failed to update customer: ${e.toString()}");
+                                  }
                                 }
                               },
                               icon: Icon(
@@ -932,6 +954,45 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showErrorDialog(String errorMessage) {
+    if (!mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(S.of(context).errorOccurred),
+        content: Text(errorMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(S.of(context).confirm),
+          ),
+        ],
       ),
     );
   }
