@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
@@ -44,11 +45,7 @@ class _EmployeeAddWebViewState extends State<EmployeeAddWebView> {
       builder: (context, state) {
         return Container(
           width: MediaQuery.of(context).size.width * 0.45,
-          height: MediaQuery.of(context).size.height * 0.6,
-          constraints: const BoxConstraints(
-            maxWidth: 600,
-            maxHeight: 550,
-          ),
+          height: MediaQuery.of(context).size.height * 0.5,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
@@ -130,25 +127,6 @@ class _EmployeeAddWebViewState extends State<EmployeeAddWebView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.person_outline,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      size: 20,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      S.of(context).employeeInformation,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16),
                                 TextFormField(
                                   controller: _nameController,
                                   decoration: InputDecoration(
@@ -423,16 +401,39 @@ class _EmployeeAddWebViewState extends State<EmployeeAddWebView> {
       }
     } else {
       if (mounted) {
-        Navigator.of(context).pop(true);
-        showDialog(
-          context: context,
-          builder: (context) => InformationDialog(
-            title: S.of(context).success,
-            content: S.of(context).employeeAddedSuccessfully,
-            buttonText: S.of(context).confirm,
-          ),
+        // Show success snackbar before closing
+        _showSnackBar(
+          title: S.of(context).success,
+          message: S.of(context).employeeAddedSuccessfully,
+          contentType: ContentType.success,
         );
+
+        // Small delay to show snackbar before closing
+        await Future.delayed(const Duration(milliseconds: 100));
+
+        Navigator.of(context).pop(true);
       }
     }
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

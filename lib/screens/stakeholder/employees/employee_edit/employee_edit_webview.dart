@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 import '../permissions/employee_permissions.dart';
@@ -56,12 +58,8 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.35,
-      height: MediaQuery.of(context).size.height * 0.4,
-      constraints: const BoxConstraints(
-        maxWidth: 450,
-        maxHeight: 350,
-      ),
+      width: MediaQuery.of(context).size.width * 0.4,
+      height: MediaQuery.of(context).size.height * 0.35,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
@@ -100,12 +98,32 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                 IconButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      final updatedEmployee = widget.employee.copyWith(
-                        employeeName: employeeName.trim(),
-                        phoneNumber: phoneNumber.trim(),
-                        role: role,
-                      );
-                      Navigator.of(context).pop(updatedEmployee);
+                      try {
+                        final updatedEmployee = widget.employee.copyWith(
+                          employeeName: employeeName.trim(),
+                          phoneNumber: phoneNumber.trim(),
+                          role: role,
+                        );
+
+                        // Show success snackbar before closing
+                        _showSnackBar(
+                          title: S.of(context).success,
+                          message: "Employee updated successfully.",
+                          contentType: ContentType.success,
+                        );
+
+                        // Small delay to show snackbar before closing
+                        await Future.delayed(const Duration(milliseconds: 100));
+
+                        if (mounted) {
+                          Navigator.of(context).pop(updatedEmployee);
+                        }
+                      } catch (e) {
+                        if (mounted) {
+                          _showErrorDialog(
+                              "Failed to update employee: ${e.toString()}");
+                        }
+                      }
                     }
                   },
                   icon: const Icon(Icons.check),
@@ -146,24 +164,6 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.person_outline,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  S.of(context).employeeInformation,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
                             TextFormField(
                               focusNode: _nameFocusNode,
                               initialValue: employeeName,
@@ -207,9 +207,13 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                                 ),
                               ),
                               textInputAction: TextInputAction.next,
-                              onChanged: (value) => setState(() {
-                                employeeName = value;
-                              }),
+                              onChanged: (value) {
+                                if (mounted) {
+                                  setState(() {
+                                    employeeName = value;
+                                  });
+                                }
+                              },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return S.of(context).pleaseEnterName;
@@ -217,7 +221,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 16),
                             TextFormField(
                               focusNode: _phoneFocusNode,
                               initialValue: phoneNumber,
@@ -262,9 +266,13 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                                 hintText: '+84 xxx xxx xxx',
                               ),
                               keyboardType: TextInputType.phone,
-                              onChanged: (value) => setState(() {
-                                phoneNumber = value;
-                              }),
+                              onChanged: (value) {
+                                if (mounted) {
+                                  setState(() {
+                                    phoneNumber = value;
+                                  });
+                                }
+                              },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return S.of(context).pleaseEnterPhoneNumber;
@@ -272,7 +280,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 16),
                             DropdownButtonFormField<RoleEnum>(
                               value: role,
                               decoration: InputDecoration(
@@ -343,7 +351,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                                   EmployeePermissions.canEditEmployeeRole(
                                           widget.userRole, widget.employee)
                                       ? (RoleEnum? value) {
-                                          if (value != null) {
+                                          if (value != null && mounted) {
                                             setState(() => role = value);
                                           }
                                         }
@@ -365,6 +373,40 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showErrorDialog(String errorMessage) {
+    if (!mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (context) => InformationDialog(
+        title: S.of(context).errorOccurred,
+        content: errorMessage,
+        buttonText: S.of(context).confirm,
       ),
     );
   }

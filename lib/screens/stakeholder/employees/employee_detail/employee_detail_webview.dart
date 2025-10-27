@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
@@ -44,12 +45,8 @@ class _EmployeeDetailWebViewState extends State<EmployeeDetailWebView> {
       builder: (context, state) {
         if (state.isLoading) {
           return Container(
-            width: 600,
-            height: 500,
-            constraints: const BoxConstraints(
-              maxWidth: 800,
-              maxHeight: 600,
-            ),
+            width: MediaQuery.of(context).size.width * 0.6,
+            height: MediaQuery.of(context).size.height * 0.8,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
@@ -131,7 +128,6 @@ class _EmployeeDetailWebViewState extends State<EmployeeDetailWebView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildHeaderSection(context, state),
-                        const SizedBox(height: 16),
                         _buildInfoSection(context, state),
                       ],
                     ),
@@ -159,16 +155,38 @@ class _EmployeeDetailWebViewState extends State<EmployeeDetailWebView> {
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: () async {
-                                final updatedEmployee =
-                                    await EmployeeEditScreen.showModal(
-                                  context,
-                                  state.employee,
-                                  state.userRole,
-                                );
+                                try {
+                                  final updatedEmployee =
+                                      await EmployeeEditScreen.showModal(
+                                    context,
+                                    state.employee,
+                                    state.userRole,
+                                  );
 
-                                if (updatedEmployee != null) {
-                                  cubit.updateEmployee(updatedEmployee);
-                                  Navigator.of(context).pop(true);
+                                  if (updatedEmployee != null) {
+                                    cubit.updateEmployee(updatedEmployee);
+
+                                    // Show success snackbar before closing
+                                    _showSnackBar(
+                                      title: S.of(context).success,
+                                      message: "Employee updated successfully.",
+                                      contentType: ContentType.success,
+                                    );
+
+                                    // Small delay to show snackbar before closing
+                                    await Future.delayed(
+                                        const Duration(milliseconds: 100));
+
+                                    if (mounted) {
+                                      Navigator.of(context)
+                                          .pop(updatedEmployee);
+                                    }
+                                  }
+                                } catch (e) {
+                                  if (mounted) {
+                                    _showErrorDialog(
+                                        "Failed to update employee: ${e.toString()}");
+                                  }
                                 }
                               },
                               icon: Icon(
@@ -258,7 +276,7 @@ class _EmployeeDetailWebViewState extends State<EmployeeDetailWebView> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           Text(
             state.employee.employeeName,
             style: const TextStyle(
@@ -303,25 +321,6 @@ class _EmployeeDetailWebViewState extends State<EmployeeDetailWebView> {
           padding: const EdgeInsets.all(12),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.info_outline,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    S.of(context).employeeInformation,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
               _buildInfoRow(S.of(context).email, state.employee.email),
               _buildInfoRow(S.of(context).phone, state.employee.phoneNumber),
               _buildInfoRow(S.of(context).role,
@@ -375,15 +374,71 @@ class _EmployeeDetailWebViewState extends State<EmployeeDetailWebView> {
           TextButton(
             onPressed: () async {
               Navigator.pop(dialogContext);
-              await cubit.deleteEmployee();
-              if (mounted) {
-                Navigator.pop(context);
+              try {
+                await cubit.deleteEmployee();
+                if (mounted) {
+                  // Show success snackbar before closing
+                  _showSnackBar(
+                    title: S.of(context).success,
+                    message: "Employee deleted successfully.",
+                    contentType: ContentType.success,
+                  );
+
+                  // Small delay to show snackbar before closing
+                  await Future.delayed(const Duration(milliseconds: 100));
+
+                  Navigator.pop(context);
+                }
+              } catch (e) {
+                if (mounted) {
+                  _showErrorDialog(
+                      "Failed to delete employee: ${e.toString()}");
+                }
               }
             },
             child: Text(
               S.of(context).delete,
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showErrorDialog(String errorMessage) {
+    if (!mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(S.of(context).errorOccurred),
+        content: Text(errorMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(S.of(context).confirm),
           ),
         ],
       ),
