@@ -1,51 +1,48 @@
 // Platform-specific utilities
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
+import 'package:gizmoglobe_client/utils/web_utils.dart';
+import 'package:gizmoglobe_client/utils/mobile_utils.dart';
 
 class PlatformSpecificUtils {
   static void pushState(String url) {
     if (kIsWeb) {
-      // For web, we'll use a no-op since URL routing is handled by Flutter
-      // In a real implementation, you might want to use the web package
+      WebUtils.pushState(url);
+    } else {
+      MobileUtils.pushState(url);
     }
-    // For mobile, this is a no-op since URL routing is handled by Flutter navigation
   }
 
   static void replaceState(String url) {
     if (kIsWeb) {
-      // For web, we'll use a no-op since URL routing is handled by Flutter
-      // In a real implementation, you might want to use the web package
+      WebUtils.replaceState(url);
+    } else {
+      MobileUtils.replaceState(url);
     }
-    // For mobile, this is a no-op since URL routing is handled by Flutter navigation
   }
 
   static String getCurrentUrl() {
     if (kIsWeb) {
-      // For web, return a default URL
-      return '/';
+      return WebUtils.getCurrentUrl();
     } else {
-      // For mobile, return a default URL
-      return '/';
+      return MobileUtils.getCurrentUrl();
     }
   }
 
   static Stream<dynamic> get onHashChange {
     if (kIsWeb) {
-      // For web, return an empty stream
-      return const Stream.empty();
+      return WebUtils.onHashChange as Stream<dynamic>;
     } else {
-      // For mobile, return an empty stream
-      return const Stream.empty();
+      return MobileUtils.onHashChange;
     }
   }
 
   static Future<void> downloadFile(Uint8List bytes, String filename) async {
     if (kIsWeb) {
-      // For web, we'll use a no-op since file download is handled by the web package
-      // In a real implementation, you might want to use the web package
+      WebUtils.downloadFile(bytes, filename);
     } else {
-      // For mobile, we'll use a no-op since file download is handled by the mobile package
-      // In a real implementation, you might want to use path_provider
+      await MobileUtils.downloadFile(bytes, filename);
     }
   }
 }

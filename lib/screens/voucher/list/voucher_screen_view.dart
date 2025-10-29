@@ -161,7 +161,7 @@ class _VoucherScreenState extends State<VoucherScreen>
                     default:
                       tabName = 'all';
                   }
-                  PlatformSpecificUtils.pushState('/#/vouchers?tabs=$tabName');
+                  PlatformSpecificUtils.pushState('/#/vouchers/$tabName');
                 }
               },
               tabs: [

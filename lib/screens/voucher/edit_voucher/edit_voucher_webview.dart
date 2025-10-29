@@ -8,6 +8,7 @@ import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:gizmoglobe_client/widgets/general/multi_field_with_icon.dart';
 import 'package:intl/intl.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
@@ -113,35 +114,26 @@ class _EditVoucherWebViewState extends State<EditVoucherWebView> {
                   state.voucherArgument?.enDescription ?? '';
               viDescriptionController.text =
                   state.voucherArgument?.viDescription ?? '';
-
-              showDialog(
-                context: context,
-                builder: (context) => InformationDialog(
-                  title: state.dialogName.getLocalizedName(context),
-                  content: state.notifyMessage.getLocalizedMessage(context),
-                  onPressed: () {
-                    if (mounted) {
-                      cubit.toIdle();
-                    }
-                  },
-                ),
+              _showSnackBar(
+                title: state.dialogName.getLocalizedName(context),
+                message: state.notifyMessage.getLocalizedMessage(context),
+                contentType: ContentType.success,
               );
+              cubit.toIdle();
             }
           } else {
             if (mounted) {
-              showDialog(
-                context: context,
-                builder: (context) => InformationDialog(
-                  title: state.dialogName.getLocalizedName(context),
-                  content: state.notifyMessage.getLocalizedMessage(context),
-                  onPressed: () {
-                    if (mounted) {
-                      Navigator.pop(
-                          context, state.processState == ProcessState.success);
-                    }
-                  },
-                ),
+              _showSnackBar(
+                title: state.dialogName.getLocalizedName(context),
+                message: state.notifyMessage.getLocalizedMessage(context),
+                contentType: ContentType.success,
               );
+              Future.delayed(const Duration(milliseconds: 100), () {
+                if (mounted) {
+                  Navigator.pop(
+                      context, state.processState == ProcessState.success);
+                }
+              });
             }
           }
         } else if (state.processState == ProcessState.failure) {
@@ -854,5 +846,26 @@ class _EditVoucherWebViewState extends State<EditVoucherWebView> {
         }
       },
     );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

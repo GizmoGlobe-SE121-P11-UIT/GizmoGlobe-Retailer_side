@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:gizmoglobe_client/data/database/database.dart';
 import 'package:gizmoglobe_client/firebase_options.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
@@ -32,6 +33,8 @@ void main() async {
 
   // Initialize error handling for web
   if (kIsWeb) {
+    // Use native hash-based navigation for Flutter web
+    setUrlStrategy(const HashUrlStrategy());
     // Set up error handling for web platform
     FlutterError.onError = (FlutterErrorDetails details) {
       if (kDebugMode) {
@@ -739,7 +742,7 @@ class _StakeholderRouteHandlerState extends State<StakeholderRouteHandler> {
   }
 }
 
-// Voucher route handler for /#/vouchers and /#/vouchers?tabs=all/ongoing/upcoming/inactive
+// Voucher route handler for /#/vouchers and /#/vouchers/{all|ongoing|upcoming|inactive}
 class VoucherRouteHandler extends StatefulWidget {
   const VoucherRouteHandler({super.key});
 
@@ -749,43 +752,65 @@ class VoucherRouteHandler extends StatefulWidget {
 
 class _VoucherRouteHandlerState extends State<VoucherRouteHandler> {
   int? initialTabIndex;
+  StreamSubscription<dynamic>? _hashChangeSubscription;
 
   @override
   void initState() {
     super.initState();
     _parseUrlParameters();
+
+    // Listen to URL changes on web
+    if (kIsWeb) {
+      _hashChangeSubscription =
+          PlatformSpecificUtils.onHashChange.listen((event) {
+        if (mounted) {
+          _parseUrlParameters();
+          setState(() {});
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
+    _hashChangeSubscription?.cancel();
     super.dispose();
   }
 
   void _parseUrlParameters() {
     if (kIsWeb) {
-      // Parse URL parameters for web
+      // Parse hash for web routing
       final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
-      final tabsParam = uri.queryParameters['tabs'];
+      final hash = uri.fragment;
 
-      if (tabsParam != null) {
-        switch (tabsParam.toLowerCase()) {
-          case 'all':
-            initialTabIndex = 0; // All tab index
-            break;
-          case 'ongoing':
-            initialTabIndex = 1; // Ongoing tab index
-            break;
-          case 'upcoming':
-            initialTabIndex = 2; // Upcoming tab index
-            break;
-          case 'inactive':
-            initialTabIndex = 3; // Inactive tab index
-            break;
-          default:
-            initialTabIndex = 0; // Default to all
+      // Expected formats:
+      //  - /#/vouchers
+      //  - /#/vouchers/{all|ongoing|upcoming|inactive}
+      if (hash.startsWith('/vouchers')) {
+        final pathSegments = hash.split('/');
+        if (pathSegments.length >= 3 && pathSegments[2].isNotEmpty) {
+          final tabName = pathSegments[2].toLowerCase();
+          switch (tabName) {
+            case 'all':
+              initialTabIndex = 0;
+              break;
+            case 'ongoing':
+              initialTabIndex = 1;
+              break;
+            case 'upcoming':
+              initialTabIndex = 2;
+              break;
+            case 'inactive':
+              initialTabIndex = 3;
+              break;
+            default:
+              initialTabIndex = 0;
+          }
+        } else {
+          initialTabIndex = 0; // Default to all
         }
       } else {
-        initialTabIndex = 0; // Default to all tab if no tab specified
+        initialTabIndex = 0; // Default to all tab
       }
     }
   }

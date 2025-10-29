@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
@@ -85,33 +86,25 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
               viDescriptionController.text =
                   state.voucherArgument?.viDescription ?? '';
 
-              showDialog(
-                context: context,
-                builder: (context) => InformationDialog(
-                  title: state.dialogName.getLocalizedName(context),
-                  content: state.notifyMessage.getLocalizedMessage(context),
-                  onPressed: () {
-                    if (mounted) {
-                      cubit.toIdle();
-                    }
-                  },
-                ),
+              _showSnackBar(
+                title: state.dialogName.getLocalizedName(context),
+                message: state.notifyMessage.getLocalizedMessage(context),
+                contentType: ContentType.success,
               );
+              cubit.toIdle();
             }
           } else {
             if (mounted) {
-              showDialog(
-                context: context,
-                builder: (context) => InformationDialog(
-                  title: state.dialogName.getLocalizedName(context),
-                  content: state.notifyMessage.getLocalizedMessage(context),
-                  onPressed: () {
-                    if (mounted) {
-                      Navigator.pop(context, state.processState);
-                    }
-                  },
-                ),
+              _showSnackBar(
+                title: state.dialogName.getLocalizedName(context),
+                message: state.notifyMessage.getLocalizedMessage(context),
+                contentType: ContentType.success,
               );
+              Future.delayed(const Duration(milliseconds: 100), () {
+                if (mounted) {
+                  Navigator.pop(context, true);
+                }
+              });
             }
           }
         } else if (state.processState == ProcessState.failure) {
@@ -823,5 +816,26 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
         }
       },
     );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    if (!mounted) return;
+
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: title,
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

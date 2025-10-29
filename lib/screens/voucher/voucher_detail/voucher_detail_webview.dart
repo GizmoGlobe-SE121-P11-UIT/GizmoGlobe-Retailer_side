@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/objects/voucher_related/limited_interface.dart
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_state.dart';
 import 'package:intl/intl.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
@@ -42,16 +43,23 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
     return BlocConsumer<VoucherDetailCubit, VoucherDetailState>(
       listener: (context, state) {
         if (state.processState == ProcessState.success) {
-          showDialog(
-            context: context,
-            builder: (context) => InformationDialog(
+          final snackBar = SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: AwesomeSnackbarContent(
               title: state.dialogName.getLocalizedName(context),
-              content: state.notifyMessage.getLocalizedMessage(context),
-              onPressed: () {
-                cubit.toIdle();
-              },
+              message: state.notifyMessage.getLocalizedMessage(context),
+              contentType: ContentType.success,
             ),
           );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          cubit.toIdle();
+          Future.delayed(const Duration(milliseconds: 100), () {
+            if (mounted) {
+              Navigator.of(context).pop(true);
+            }
+          });
         } else if (state.processState == ProcessState.failure) {
           showDialog(
             context: context,

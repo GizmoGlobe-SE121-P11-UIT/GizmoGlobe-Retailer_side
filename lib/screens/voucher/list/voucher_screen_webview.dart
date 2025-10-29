@@ -201,8 +201,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                           tabName = 'all';
                       }
                       try {
-                        PlatformSpecificUtils.pushState(
-                            '/#/vouchers?tabs=$tabName');
+                        PlatformSpecificUtils.pushState('/#/vouchers/$tabName');
                       } catch (e) {
                         // Silently handle error
                       }

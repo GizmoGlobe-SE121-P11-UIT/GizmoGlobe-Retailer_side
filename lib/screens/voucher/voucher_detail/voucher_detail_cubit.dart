@@ -14,10 +14,12 @@ class VoucherDetailCubit extends Cubit<VoucherDetailState> {
       : super(VoucherDetailState(voucher: voucher));
 
   void toLoading() {
+    if (isClosed) return;
     emit(state.copyWith(processState: ProcessState.loading));
   }
 
   void toIdle() {
+    if (isClosed) return;
     emit(state.copyWith(processState: ProcessState.idle));
   }
 
@@ -28,12 +30,23 @@ class VoucherDetailCubit extends Cubit<VoucherDetailState> {
       await Firebase().changeVoucherStatus(state.voucher.voucherID!, status);
 
       final updatedVoucher = state.voucher.copyWith(isEnabled: status);
-      emit(state.copyWith(voucher: updatedVoucher, processState: ProcessState.success, notifyMessage: NotifyMessage.msg24, dialogName: DialogName.success));
+      if (!isClosed) {
+        emit(state.copyWith(
+            voucher: updatedVoucher,
+            processState: ProcessState.success,
+            notifyMessage: NotifyMessage.msg24,
+            dialogName: DialogName.success));
+      }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      emit(state.copyWith(processState: ProcessState.failure, notifyMessage: NotifyMessage.msg25, dialogName: DialogName.failure));
+      if (!isClosed) {
+        emit(state.copyWith(
+            processState: ProcessState.failure,
+            notifyMessage: NotifyMessage.msg25,
+            dialogName: DialogName.failure));
+      }
     }
   }
 
@@ -46,7 +59,9 @@ class VoucherDetailCubit extends Cubit<VoucherDetailState> {
       (v) => v.voucherID == voucherID,
       orElse: () => state.voucher,
     );
-    emit(state.copyWith(voucher: updated));
+    if (!isClosed) {
+      emit(state.copyWith(voucher: updated));
+    }
   }
 
   // void updateProduct() {
