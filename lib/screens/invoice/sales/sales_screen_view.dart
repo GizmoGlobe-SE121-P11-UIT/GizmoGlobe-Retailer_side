@@ -8,6 +8,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 import '../../../data/firebase/firebase.dart';
 import '../../../functions/helper.dart';
@@ -74,10 +75,23 @@ class _SalesScreenState extends State<SalesScreen> {
                       iconSize: 32,
                       onPressed: () async {
                         final result = await SalesAddScreen.showModal(context);
-
-                        // Refresh list if new invoice was created
-                        if (result != null && mounted) {
-                          context.read<SalesScreenCubit>().loadInvoices();
+                        if (result == true && mounted) {
+                          Future.microtask(() {
+                            if (!mounted) return;
+                            final snackBar = SnackBar(
+                              elevation: 0,
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Colors.transparent,
+                              content: AwesomeSnackbarContent(
+                                title: S.of(context).success,
+                                message: S.of(context).createInvoiceSuccess,
+                                contentType: ContentType.success,
+                              ),
+                            );
+                            ScaffoldMessenger.maybeOf(context)
+                                ?.showSnackBar(snackBar);
+                            context.read<SalesScreenCubit>().loadInvoices();
+                          });
                         }
                       },
                     )
@@ -106,15 +120,35 @@ class _SalesScreenState extends State<SalesScreen> {
                                 // final isSelected = state.selectedIndex == index;
 
                                 return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SalesDetailScreen(
-                                          invoice: invoice,
-                                        ),
-                                      ),
-                                    );
+                                  splashColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  overlayColor: const WidgetStatePropertyAll(
+                                      Colors.transparent),
+                                  onTap: () async {
+                                    final result =
+                                        await SalesDetailScreen.showModal(
+                                            context, invoice);
+                                    if (result == true && context.mounted) {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        if (!context.mounted) return;
+                                        final snackBar = SnackBar(
+                                          elevation: 0,
+                                          behavior: SnackBarBehavior.floating,
+                                          backgroundColor: Colors.transparent,
+                                          content: AwesomeSnackbarContent(
+                                            title: S.of(context).success,
+                                            message: S
+                                                .of(context)
+                                                .editInvoiceSuccess,
+                                            contentType: ContentType.success,
+                                          ),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      });
+                                    }
                                   },
                                   onLongPress: () {
                                     if (!mounted) return;
@@ -269,7 +303,8 @@ class _SalesScreenState extends State<SalesScreen> {
                                             ),
                                             const SizedBox(width: 8),
                                             Text(
-                                              Helper.toCurrencyFormat(invoice.totalPrice),
+                                              Helper.toCurrencyFormat(
+                                                  invoice.totalPrice),
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
@@ -474,15 +509,8 @@ class _SalesScreenState extends State<SalesScreen> {
       // Close loading dialog
       Navigator.pop(context);
 
-      // Navigate to detail screen with full invoice
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SalesDetailScreen(
-            invoice: invoice,
-          ),
-        ),
-      );
+      // Navigate to detail screen with full invoice (web uses dialog)
+      await SalesDetailScreen.showModal(context, invoice);
     } catch (e) {
       if (!mounted) return;
       // Close loading dialog

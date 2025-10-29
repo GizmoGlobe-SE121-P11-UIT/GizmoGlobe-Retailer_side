@@ -28,7 +28,7 @@ class SalesAddScreen extends StatelessWidget {
     if (kIsWeb) {
       return showDialog<bool>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (context) => Dialog(
           backgroundColor: Colors.transparent,
           child: SalesAddWebView.newInstance(),
@@ -80,7 +80,7 @@ class _SalesAddViewState extends State<_SalesAddView> {
         context: context,
         builder: (context) => InformationDialog(
           title: S.of(context).success,
-          content: S.of(context).createInvoice,
+          content: S.of(context).createInvoiceSuccess,
           buttonText: 'OK',
           onPressed: () {
             Navigator.pop(context);

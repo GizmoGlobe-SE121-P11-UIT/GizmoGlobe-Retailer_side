@@ -697,6 +697,19 @@ class Firebase {
       }
 
       await batch.commit();
+      // After creating the invoice and its details, update product stock and sales
+      // We do this after the batch commit to avoid mixing counters with set/delete ops
+      for (final detail in invoice.details) {
+        try {
+          // stock decreases by quantity; sales increases by quantity
+          await updateProductStockAndSales(
+              detail.productID, -detail.quantity, detail.quantity);
+        } catch (_) {
+          // ignore single product failures here; overall invoice is created
+          // and any failed product updates can be corrected separately
+        }
+      }
+
       return invoice;
     } catch (e) {
       if (kDebugMode) {
@@ -1741,6 +1754,25 @@ class Firebase {
 
   Future<void> updateSalesInvoice(SalesInvoice invoice) async {
     try {
+      // Load previous status and existing details to support stock/sales reconciliation
+      final prevDoc = await FirebaseFirestore.instance
+          .collection('sales_invoices')
+          .doc(invoice.salesInvoiceID)
+          .get();
+
+      final String prevStatusName =
+          (prevDoc.data()?['salesStatus'] as String?) ?? '';
+      SalesStatus? prevStatus;
+      try {
+        prevStatus = SalesStatusExtension.fromName(prevStatusName);
+      } catch (_) {
+        prevStatus = null;
+      }
+
+      final existingDetailsSnapshot = await FirebaseFirestore.instance
+          .collection('sales_invoice_details')
+          .where('salesInvoiceID', isEqualTo: invoice.salesInvoiceID)
+          .get();
       final batch = FirebaseFirestore.instance.batch();
 
       final docRef = FirebaseFirestore.instance
@@ -1759,12 +1791,7 @@ class Firebase {
       });
 
       // Update details...
-      final existingDetails = await FirebaseFirestore.instance
-          .collection('sales_invoice_details')
-          .where('salesInvoiceID', isEqualTo: invoice.salesInvoiceID)
-          .get();
-
-      for (var doc in existingDetails.docs) {
+      for (var doc in existingDetailsSnapshot.docs) {
         batch.delete(doc.reference);
       }
 
@@ -1785,6 +1812,21 @@ class Firebase {
       }
 
       await batch.commit();
+
+      // If status edited to cancelled from a non-cancelled state, return stock and sales
+      if (invoice.salesStatus == SalesStatus.cancelled &&
+          prevStatus != SalesStatus.cancelled) {
+        for (final doc in existingDetailsSnapshot.docs) {
+          final data = doc.data();
+          final String productID = data['productID'] as String;
+          final int qty = (data['quantity'] as num?)?.toInt() ?? 0;
+          try {
+            await updateProductStockAndSales(productID, qty, -qty);
+          } catch (_) {
+            // continue other items even if one fails
+          }
+        }
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error updating sales invoice: $e');

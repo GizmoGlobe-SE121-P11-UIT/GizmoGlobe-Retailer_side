@@ -7,7 +7,7 @@ import 'sales_detail_state.dart';
 class SalesDetailCubit extends Cubit<SalesDetailState> {
   final Firebase _firebase = Firebase();
 
-  SalesDetailCubit(SalesInvoice invoice) 
+  SalesDetailCubit(SalesInvoice invoice)
       : super(SalesDetailState(invoice: invoice)) {
     _init();
     _loadInvoiceDetails();
@@ -15,53 +15,59 @@ class SalesDetailCubit extends Cubit<SalesDetailState> {
 
   Future<void> _init() async {
     final userRole = await _firebase.getCurrentUserRole();
-    emit(state.copyWith(userRole: userRole));
+    if (!isClosed) emit(state.copyWith(userRole: userRole));
   }
 
   Future<Product?> getProduct(String productId) async {
     try {
-      emit(state.copyWith(isLoading: true));
+      if (!isClosed) emit(state.copyWith(isLoading: true));
       final product = await _firebase.getProduct(productId);
-      emit(state.copyWith(isLoading: false));
+      if (!isClosed) emit(state.copyWith(isLoading: false));
       return product;
     } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        error: 'Error loading product: $e', // Lỗi khi load sản phẩm
-      ));
+      if (!isClosed)
+        emit(state.copyWith(
+          isLoading: false,
+          error: 'Error loading product: $e', // Lỗi khi load sản phẩm
+        ));
       return null;
     }
   }
 
   Future<void> _loadInvoiceDetails() async {
-    emit(state.copyWith(isLoading: true));
+    if (!isClosed) emit(state.copyWith(isLoading: true));
     try {
-      final updatedInvoice = await _firebase.getSalesInvoiceWithDetails(state.invoice.salesInvoiceID);
-      emit(state.copyWith(
-        invoice: updatedInvoice,
-        isLoading: false,
-      ));
+      final updatedInvoice = await _firebase
+          .getSalesInvoiceWithDetails(state.invoice.salesInvoiceID);
+      if (!isClosed)
+        emit(state.copyWith(
+          invoice: updatedInvoice,
+          isLoading: false,
+        ));
     } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
+      if (!isClosed)
+        emit(state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        ));
     }
   }
 
   Future<void> updateSalesInvoice(SalesInvoice updatedInvoice) async {
-    emit(state.copyWith(isLoading: true));
+    if (!isClosed) emit(state.copyWith(isLoading: true));
     try {
       await _firebase.updateSalesInvoice(updatedInvoice);
-      emit(state.copyWith(
-        invoice: updatedInvoice,
-        isLoading: false,
-      ));
+      if (!isClosed)
+        emit(state.copyWith(
+          invoice: updatedInvoice,
+          isLoading: false,
+        ));
     } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      ));
+      if (!isClosed)
+        emit(state.copyWith(
+          isLoading: false,
+          error: e.toString(),
+        ));
     }
   }
 }

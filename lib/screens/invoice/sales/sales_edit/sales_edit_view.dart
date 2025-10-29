@@ -32,7 +32,7 @@ class SalesEditScreen extends StatefulWidget {
     if (kIsWeb) {
       return showDialog<SalesInvoice>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (context) => Dialog(
           backgroundColor: Colors.transparent,
           child: SalesEditWebView.newInstance(invoice),

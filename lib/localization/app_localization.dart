@@ -37,6 +37,8 @@ class AppLocalizations {
     'add': 'Add',
     'editProductDetail': 'Edit Product Detail',
     'update': 'Update',
+    'createInvoiceSuccess': 'Invoice created successfully.',
+    'editInvoiceSuccess': 'Invoice edited successfully.',
     'searchIncomingInvoices': 'Find incoming invoices...',
     'noIncomingInvoicesFound': 'No incoming invoices found',
     'view': 'View',
@@ -441,6 +443,8 @@ class AppLocalizations {
     'add': 'Thêm',
     'editProductDetail': 'Chỉnh sửa chi tiết sản phẩm',
     'update': 'Cập nhật',
+    'createInvoiceSuccess': 'Tạo hóa đơn thành công.',
+    'editInvoiceSuccess': 'Chỉnh sửa hóa đơn thành công.',
     'searchIncomingInvoices': 'Tìm hóa đơn nhập...',
     'noIncomingInvoicesFound': 'Không tìm thấy hóa đơn nhập',
     'view': 'Xem',
@@ -917,6 +921,8 @@ class AppLocalizations {
   String get loading => _getTranslation('loading');
   String get category => _getTranslation('category');
   String get enterAddress => _getTranslation('enterAddress');
+  String get createInvoiceSuccess => _getTranslation('createInvoiceSuccess');
+  String get editInvoiceSuccess => _getTranslation('editInvoiceSuccess');
   String get findWarrantyInvoices => _getTranslation('findWarrantyInvoices');
   String get noWarrantyInvoicesFound =>
       _getTranslation('noWarrantyInvoicesFound');

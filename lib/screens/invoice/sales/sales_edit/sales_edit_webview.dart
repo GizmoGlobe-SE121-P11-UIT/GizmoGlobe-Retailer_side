@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
-import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
+import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
+import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 
 import '../../../../enums/invoice_related/payment_status.dart';
 import '../../../../enums/invoice_related/sales_status.dart';
@@ -34,6 +36,21 @@ class SalesEditWebView extends StatefulWidget {
 
 class _SalesEditWebViewState extends State<SalesEditWebView> {
   late final SalesEditCubit cubit;
+  bool _isClosing = false;
+  late final bool _lockPaymentOnInit;
+  late final bool _lockSalesOnInit;
+
+  void _safeClose(dynamic result) {
+    if (_isClosing || !mounted) return;
+    _isClosing = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Navigator.of(context, rootNavigator: true).pop(result);
+      }
+    });
+  }
+
+  // no-op; success snackbar is shown by the caller (detail modal) before closing
 
   @override
   void initState() {
@@ -53,6 +70,11 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
     );
 
     cubit = SalesEditCubit(invoiceCopy);
+
+    // Lock snapshot based on initial invoice when opening modal
+    _lockPaymentOnInit = widget.invoice.paymentStatus == PaymentStatus.paid;
+    _lockSalesOnInit = widget.invoice.salesStatus == SalesStatus.completed ||
+        widget.invoice.salesStatus == SalesStatus.cancelled;
   }
 
   @override
@@ -87,11 +109,14 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
             ),
             child: Column(
               children: [
-                // Header with close and save buttons
+                // Header (match SalesAddWebView style)
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.1),
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
@@ -99,45 +124,39 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                   ),
                   child: Row(
                     children: [
+                      Icon(
+                        Icons.receipt_long,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 28,
+                      ),
+                      const SizedBox(width: 12),
                       Expanded(
                         child:
                             GradientText(text: S.of(context).editProductDetail),
                       ),
                       if (state.isLoading)
                         const SizedBox(
-                          width: 36,
-                          height: 36,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
-                          ),
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       else
-                        IconButton(
+                        GradientIconButton(
+                          icon: Icons.check,
                           onPressed: () async {
                             final cubit = context.read<SalesEditCubit>();
                             final updatedInvoice = await cubit.saveChanges();
                             if (updatedInvoice != null && mounted) {
-                              Navigator.of(context).pop(updatedInvoice);
+                              _safeClose(updatedInvoice);
                             }
                           },
-                          icon: const Icon(Icons.check),
-                          style: IconButton.styleFrom(
-                            backgroundColor:
-                                Colors.green.withValues(alpha: 0.1),
-                            foregroundColor: Colors.green,
-                          ),
+                          fillColor: Colors.transparent,
                         ),
                       const SizedBox(width: 8),
-                      IconButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        icon: const Icon(Icons.close),
-                        style: IconButton.styleFrom(
-                          backgroundColor: Colors.red.withValues(alpha: 0.1),
-                          foregroundColor: Colors.red,
-                        ),
+                      GradientIconButton(
+                        icon: Icons.close,
+                        onPressed: () => _safeClose(null),
+                        fillColor: Colors.transparent,
                       ),
                     ],
                   ),
@@ -327,9 +346,11 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          SalesInvoicePermissions.canEditPaymentStatus(
-                                  state.userRole, state.invoice)
-                              ? _buildStatusDropdown<PaymentStatus>(
+                          (_lockPaymentOnInit)
+                              ? StatusBadge(
+                                  status: state.invoice.paymentStatus,
+                                )
+                              : _buildStatusDropdown<PaymentStatus>(
                                   value: state.selectedPaymentStatus,
                                   items: PaymentStatus.values,
                                   onChanged: (status) {
@@ -339,9 +360,7 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                           .updatePaymentStatus(status);
                                     }
                                   },
-                                )
-                              : StatusBadge(
-                                  status: state.selectedPaymentStatus),
+                                ),
 
                           const SizedBox(height: 24),
 
@@ -354,9 +373,9 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          SalesInvoicePermissions.canEditSalesStatus(
-                                  state.userRole, state.invoice)
-                              ? _buildStatusDropdown<SalesStatus>(
+                          (_lockSalesOnInit)
+                              ? StatusBadge(status: state.invoice.salesStatus)
+                              : _buildStatusDropdown<SalesStatus>(
                                   value: state.selectedSalesStatus,
                                   items: SalesStatus.values,
                                   onChanged: (status) {
@@ -366,8 +385,7 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                           .updateSalesStatus(status);
                                     }
                                   },
-                                )
-                              : StatusBadge(status: state.selectedSalesStatus),
+                                ),
 
                           // Products List
                           const SizedBox(height: 16),
@@ -438,7 +456,7 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                       ),
                                     ),
                                     Text(
-                                      '\$${detail.subtotal.toStringAsFixed(2)}',
+                                      Helper.toCurrencyFormat(detail.subtotal),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -479,7 +497,8 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                   ),
                                 ),
                                 Text(
-                                  '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
+                                  Helper.toCurrencyFormat(
+                                      state.invoice.totalPrice),
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -504,16 +523,69 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
   }
 
   IconData _getCategoryIcon(String? category) {
-    if (category == null) return Icons.device_unknown;
-
-    CategoryEnum? categoryEnum;
-    try {
-      categoryEnum = CategoryEnum.getValues().firstWhere(
-          (e) => e.getName().toLowerCase() == category.toLowerCase());
-    } catch (e) {
+    if (category == null || category.trim().isEmpty) {
       return Icons.device_unknown;
     }
 
+    // Quick path: if it's already an enum key or known alias, use extension
+    try {
+      final fromName = CategoryEnumExtension.fromName(category);
+      return _iconForEnum(fromName);
+    } catch (_) {}
+
+    // Normalize: lowercase, remove enum prefix and non-alphanumerics
+    String c = category.toLowerCase().trim();
+    if (c.contains('categoryenum.')) {
+      c = c.split('categoryenum.').last;
+    }
+    final norm = c.replaceAll(RegExp(r'[^a-z0-9]'), '');
+
+    // 1) Try matching by localized/display name (normalized)
+    try {
+      final byDisplay = CategoryEnum.getValues().firstWhere((e) =>
+          e.getName().toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '') ==
+          norm);
+      return _iconForEnum(byDisplay);
+    } catch (_) {}
+
+    // 2) Try matching by enum key/name (normalized)
+    try {
+      final byKey = CategoryEnum.getValues()
+          .firstWhere((e) => e.name.toLowerCase() == norm);
+      return _iconForEnum(byKey);
+    } catch (_) {}
+
+    // 3) Heuristics for common aliases
+    if (norm.contains('ram') || norm.contains('memory')) return Icons.memory;
+    if (norm.contains('cpu') || norm.contains('processor'))
+      return Icons.computer;
+    if (norm.contains('psu') ||
+        norm.contains('powersupply') ||
+        norm.contains('power')) {
+      return Icons.power;
+    }
+    if (norm.contains('gpu') ||
+        norm.contains('vga') ||
+        norm.contains('graphics') ||
+        norm.contains('graphiccard')) {
+      return Icons.videogame_asset;
+    }
+    if (norm.contains('ssd') ||
+        norm.contains('hdd') ||
+        norm.contains('drive') ||
+        norm.contains('storage')) {
+      return Icons.storage;
+    }
+    if (norm.contains('mainboard') ||
+        norm.contains('motherboard') ||
+        norm.contains('mb')) {
+      return Icons.developer_board;
+    }
+
+    return Icons.device_unknown;
+  }
+
+  IconData _iconForEnum(CategoryEnum categoryEnum) {
     switch (categoryEnum) {
       case CategoryEnum.ram:
         return Icons.memory;
@@ -607,9 +679,10 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                   children: [
                     Text(
                       S.of(context).enterAddress,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     IconButton(
@@ -641,7 +714,10 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                             side: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.1),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.1),
                             ),
                           ),
                           child: ListTile(
@@ -651,15 +727,18 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                             ),
                             title: Text(
                               address.receiverName,
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             subtitle: Text(
                               address.toString(),
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.7),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.7),
                               ),
                             ),
                             trailing:

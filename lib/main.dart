@@ -264,48 +264,52 @@ class MyApp extends StatelessWidget {
                 '/vouchers': (context) => const VoucherRouteHandler(),
               },
               onGenerateRoute: (settings) {
-                // Handle routes with query parameters
-                final uri = Uri.parse(settings.name ?? '/');
+                // Robust route handling for both query params and hash-like nested paths
+                final name = settings.name ?? '/';
+                final uri = Uri.parse(name);
                 final path = uri.path;
 
-                // Strip query parameters from route name
-                if (settings.name?.contains('?') ?? false) {
-                  return MaterialPageRoute(
-                    settings: RouteSettings(
-                      name: path,
-                      arguments: settings.arguments,
-                    ),
-                    builder: (context) {
-                      // Handle each route
-                      switch (path) {
-                        case '/invoices':
-                          return const InvoiceRouteHandler();
-                        case '/chat':
-                          return const ChatRouteHandler();
-                        case '/stakeholders':
-                        case '/stakeholders/customers':
-                        case '/stakeholders/employees':
-                        case '/stakeholders/vendors':
-                          return const StakeholderRouteHandler();
-                        case '/vouchers':
-                          return const VoucherRouteHandler();
-                        case '/main':
-                          return const MainRouteHandler();
-                        case '/sign-in':
-                          return SignInScreen.newInstance();
-                        case '/sign-up':
-                          return SignUpScreen.newInstance();
-                        case '/forget-password':
-                          return ForgetPasswordScreen.newInstance();
-                        default:
-                          return const AuthWrapper();
-                      }
-                    },
-                  );
+                // Normalize common nested web paths to their base handlers
+                String normalized = path;
+                if (path.startsWith('/invoices')) {
+                  normalized = '/invoices';
+                } else if (path.startsWith('/vouchers')) {
+                  normalized = '/vouchers';
+                } else if (path.startsWith('/stakeholders')) {
+                  normalized = '/stakeholders';
                 }
 
-                // Default routing
-                return null;
+                return MaterialPageRoute(
+                  settings: RouteSettings(
+                    name: normalized,
+                    arguments: settings.arguments,
+                  ),
+                  builder: (context) {
+                    switch (normalized) {
+                      case '/invoices':
+                        return const InvoiceRouteHandler();
+                      case '/chat':
+                        return const ChatRouteHandler();
+                      case '/stakeholders':
+                      case '/stakeholders/customers':
+                      case '/stakeholders/employees':
+                      case '/stakeholders/vendors':
+                        return const StakeholderRouteHandler();
+                      case '/vouchers':
+                        return const VoucherRouteHandler();
+                      case '/main':
+                        return const MainRouteHandler();
+                      case '/sign-in':
+                        return SignInScreen.newInstance();
+                      case '/sign-up':
+                        return SignUpScreen.newInstance();
+                      case '/forget-password':
+                        return ForgetPasswordScreen.newInstance();
+                      default:
+                        return const AuthWrapper();
+                    }
+                  },
+                );
               },
               home: const AuthWrapper(),
             ),
@@ -581,7 +585,7 @@ class _MainRouteHandlerState extends State<MainRouteHandler> {
   }
 }
 
-// Invoice route handler for /#/invoices and /#/invoices?tabs=incoming/sales/warranty
+// Invoice route handler for /#/invoices and /#/invoices/{sales|incoming|warranty}
 class InvoiceRouteHandler extends StatefulWidget {
   const InvoiceRouteHandler({super.key});
 
@@ -618,26 +622,35 @@ class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
 
   void _parseUrlParameters() {
     if (kIsWeb) {
-      // Parse URL parameters for web
+      // Parse hash for web routing
       final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
-      final tabsParam = uri.queryParameters['tabs'];
+      final hash = uri.fragment;
 
-      if (tabsParam != null) {
-        switch (tabsParam.toLowerCase()) {
-          case 'incoming':
-            initialTabIndex = 1; // Incoming tab index
-            break;
-          case 'sales':
-            initialTabIndex = 0; // Sales tab index
-            break;
-          case 'warranty':
-            initialTabIndex = 2; // Warranty tab index
-            break;
-          default:
-            initialTabIndex = 0; // Default to sales
+      // Expected formats:
+      //  - /#/invoices
+      //  - /#/invoices/{sales|incoming|warranty}
+      if (hash.startsWith('/invoices')) {
+        final pathSegments = hash.split('/');
+        if (pathSegments.length >= 3 && pathSegments[2].isNotEmpty) {
+          final tabName = pathSegments[2].toLowerCase();
+          switch (tabName) {
+            case 'sales':
+              initialTabIndex = 0;
+              break;
+            case 'incoming':
+              initialTabIndex = 1;
+              break;
+            case 'warranty':
+              initialTabIndex = 2;
+              break;
+            default:
+              initialTabIndex = 0;
+          }
+        } else {
+          initialTabIndex = 0; // Default to sales
         }
       } else {
-        initialTabIndex = 0; // Default to sales tab if no tab specified
+        initialTabIndex = 0; // Default to sales
       }
     }
   }

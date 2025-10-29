@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
@@ -28,26 +29,28 @@ class SalesAddWebView extends StatefulWidget {
 class _SalesAddWebViewState extends State<SalesAddWebView> {
   final _formKey = GlobalKey<FormState>();
   final _addressController = TextEditingController();
+  bool _isClosing = false;
 
   SalesAddCubit get cubit => context.read<SalesAddCubit>();
+
+  void _safeClose(dynamic result) {
+    if (_isClosing || !mounted) return;
+    _isClosing = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Navigator.of(context, rootNavigator: true).pop(result);
+      }
+    });
+  }
 
   Future<void> _saveInvoice(SalesAddState state) async {
     if (!_formKey.currentState!.validate()) return;
 
     final invoice = await cubit.createInvoice();
     if (invoice != null && mounted) {
-      showDialog(
-        context: context,
-        builder: (context) => InformationDialog(
-          title: S.of(context).success,
-          content: S.of(context).createInvoice,
-          buttonText: 'OK',
-          onPressed: () {
-            Navigator.pop(context);
-            Navigator.of(context).pop(true);
-          },
-        ),
-      );
+      // Defer success feedback to the caller (sales_screen_view) to avoid
+      // rendering a snackbar from a soon-to-be-disposed dialog context on web.
+      _safeClose(true);
     } else if (mounted) {
       showDialog(
         context: context,
@@ -70,156 +73,166 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
         child: BlocBuilder<SalesAddCubit, SalesAddState>(
           builder: (context, state) {
             return AlertDialog(
+              contentPadding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+              actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
               title: Text(
                 S.of(context).addProduct,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-              content: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    DropdownButtonFormField<Product>(
-                      initialValue: state.selectedModalProduct,
-                      onChanged: (product) {
-                        context
-                            .read<SalesAddCubit>()
-                            .updateSelectedModalProduct(product);
-                      },
-                      decoration: InputDecoration(
-                        labelText: S.of(context).product,
-                        hintText: S.of(context).selectProduct,
-                        labelStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        hintStyle: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.7),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
+              content: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 480,
+                  maxWidth: MediaQuery.of(context).size.width * 0.7,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      DropdownButtonFormField<Product>(
+                        initialValue: state.selectedModalProduct,
+                        onChanged: (product) {
+                          context
+                              .read<SalesAddCubit>()
+                              .updateSelectedModalProduct(product);
+                        },
+                        decoration: InputDecoration(
+                          labelText: S.of(context).product,
+                          hintText: S.of(context).selectProduct,
+                          labelStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          hintStyle: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
-                                .withValues(alpha: 0.5),
+                                .withValues(alpha: 0.7),
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        ),
-                      ),
-                      hint: Text(
-                        S.of(context).selectProduct,
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.7),
-                        ),
-                      ),
-                      items: state.products
-                          .where((product) => product.stock > 0)
-                          .map((product) {
-                        return DropdownMenuItem<Product>(
-                          value: product,
-                          child: Container(
-                            constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * 0.4,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.5),
                             ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    product.productName,
-                                    overflow: TextOverflow.ellipsis,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                        hint: Text(
+                          S.of(context).selectProduct,
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.7),
+                          ),
+                        ),
+                        items: state.products
+                            .where((product) => product.stock > 0)
+                            .map((product) {
+                          return DropdownMenuItem<Product>(
+                            value: product,
+                            child: Container(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.4,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      product.productName,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    '(${Helper.toCurrencyFormat(product.sellingPrice)})',
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSurface,
+                                          .tertiary,
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  '(\$${product.sellingPrice.toStringAsFixed(2)})',
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.tertiary,
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '[${product.stock}]',
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.7),
+                                      fontSize: 12,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '[${product.stock}]',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withValues(alpha: 0.7),
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                      dropdownColor: Theme.of(context).colorScheme.surface,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      isExpanded: true,
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: quantityController,
-                      decoration: InputDecoration(
-                        labelText: 'Quantity',
-                        hintText: 'Enter quantity',
-                        labelStyle: TextStyle(
+                          );
+                        }).toList(),
+                        dropdownColor: Theme.of(context).colorScheme.surface,
+                        style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
-                        hintStyle: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.7),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
+                        isExpanded: true,
+                        menuMaxHeight: MediaQuery.of(context).size.height * 0.5,
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: quantityController,
+                        decoration: InputDecoration(
+                          labelText: 'Quantity',
+                          hintText: 'Enter quantity',
+                          labelStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          hintStyle: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
-                                .withValues(alpha: 0.5),
+                                .withValues(alpha: 0.7),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withValues(alpha: 0.5),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
-                      keyboardType: TextInputType.number,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               actions: [
@@ -411,7 +424,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                                 .withValues(alpha: 0.7),
                           ),
                         ),
-                        trailing: address.hidden
+                        trailing: state.address?.addressID == address.addressID
                             ? Icon(
                                 Icons.check_circle,
                                 color: Theme.of(context).colorScheme.primary,
@@ -527,7 +540,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
           const SizedBox(width: 8),
           GradientIconButton(
             icon: Icons.close,
-            onPressed: () => Navigator.of(context).pop(false),
+            onPressed: () => _safeClose(null),
             fillColor: Colors.transparent,
           ),
         ],
@@ -871,7 +884,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                     ],
                   ),
                   Text(
-                    '\$${state.totalPrice.toStringAsFixed(2)}',
+                    Helper.toCurrencyFormat(state.totalPrice),
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -1035,7 +1048,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Text(
-                                '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
+                                '${S.of(context).price}: ${Helper.toCurrencyFormat(detail.sellingPrice)}',
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -1099,7 +1112,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                                 ],
                               ),
                               Text(
-                                '\$${detail.subtotal.toStringAsFixed(2)}',
+                                Helper.toCurrencyFormat(detail.subtotal),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,

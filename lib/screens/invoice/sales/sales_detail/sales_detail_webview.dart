@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
+import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
+import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 
 import '../../../../enums/product_related/category_enum.dart';
+import '../../../../enums/invoice_related/payment_status.dart';
+import '../../../../enums/invoice_related/sales_status.dart';
 import '../permissions/sales_invoice_permissions.dart';
 import '../sales_edit/sales_edit_view.dart';
 import 'sales_detail_cubit.dart';
@@ -31,6 +36,18 @@ class SalesDetailWebView extends StatefulWidget {
 }
 
 class _SalesDetailWebViewState extends State<SalesDetailWebView> {
+  bool _isClosing = false;
+
+  void _safeClose(dynamic result) {
+    if (_isClosing || !mounted) return;
+    _isClosing = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Navigator.of(context, rootNavigator: true).pop(result);
+      }
+    });
+  }
+
   IconData _getCategoryIcon(String? category) {
     if (category == null) return Icons.device_unknown;
 
@@ -125,11 +142,14 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
           ),
           child: Column(
             children: [
-              // Header with close button
+              // Header (match SalesAddWebView style)
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primaryContainer,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.1),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(16),
                     topRight: Radius.circular(16),
@@ -137,24 +157,23 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                 ),
                 child: Row(
                   children: [
+                    Icon(
+                      Icons.receipt_long,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 28,
+                    ),
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: Text(
-                        '${S.of(context).invoiceDetails} #${state.invoice.salesInvoiceID}',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
+                      child: GradientText(
+                        text:
+                            '${S.of(context).invoiceDetails} #${state.invoice.salesInvoiceID}',
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      icon: const Icon(Icons.close),
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.red.withValues(alpha: 0.1),
-                        foregroundColor: Colors.red,
-                      ),
+                    const SizedBox(width: 8),
+                    GradientIconButton(
+                      icon: Icons.close,
+                      onPressed: () => _safeClose(false),
+                      fillColor: Colors.transparent,
                     ),
                   ],
                 ),
@@ -239,7 +258,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                         const SizedBox(height: 16),
                         _buildTotalPriceRow(
                           S.of(context).totalPrice,
-                          '\$${state.invoice.totalPrice.toStringAsFixed(2)}',
+                          Helper.toCurrencyFormat(state.invoice.totalPrice),
                         ),
 
                         const SizedBox(height: 32),
@@ -320,7 +339,11 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  '${S.of(context).products} #${detail.productID}',
+                                                  (detail.productName != null &&
+                                                          detail.productName!
+                                                              .isNotEmpty)
+                                                      ? detail.productName!
+                                                      : '${S.of(context).products} #${detail.productID}',
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 16,
@@ -331,7 +354,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                                                 ),
                                                 const SizedBox(height: 4),
                                                 Text(
-                                                  '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
+                                                  '${S.of(context).price}: ${Helper.toCurrencyFormat(detail.sellingPrice)}',
                                                   style: TextStyle(
                                                     color: Theme.of(context)
                                                         .colorScheme
@@ -341,7 +364,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                                                 ),
                                                 const SizedBox(height: 4),
                                                 Text(
-                                                  '${S.of(context).subtotal}: \$${detail.subtotal.toStringAsFixed(2)}',
+                                                  '${S.of(context).subtotal}: ${Helper.toCurrencyFormat(detail.subtotal)}',
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16,
@@ -408,24 +431,23 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                 child: Row(
                   children: [
                     if (SalesInvoicePermissions.canEditInvoice(
-                        state.userRole, state.invoice))
+                            state.userRole, state.invoice) &&
+                        state.invoice.paymentStatus != PaymentStatus.paid &&
+                        state.invoice.salesStatus != SalesStatus.completed &&
+                        state.invoice.salesStatus != SalesStatus.cancelled)
                       Expanded(
                         child: ElevatedButton.icon(
                           onPressed: () async {
-                            final updatedInvoice = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SalesEditScreen(
-                                  invoice: state.invoice,
-                                ),
-                              ),
-                            );
+                            final updatedInvoice =
+                                await SalesEditScreen.showModal(
+                                    context, state.invoice);
 
                             if (updatedInvoice != null) {
                               final cubit = context.read<SalesDetailCubit>();
                               cubit.updateSalesInvoice(updatedInvoice);
-                              // Return true to indicate successful edit
-                              Navigator.of(context).pop(true);
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (mounted) _safeClose(true);
+                              });
                             }
                           },
                           icon: const Icon(

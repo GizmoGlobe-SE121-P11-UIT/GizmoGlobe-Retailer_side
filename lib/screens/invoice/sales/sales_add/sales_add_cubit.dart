@@ -58,28 +58,28 @@ class SalesAddCubit extends Cubit<SalesAddState> {
 
   void addInvoiceDetail(Product product, int quantity) {
     final details = List<SalesInvoiceDetail>.from(state.invoiceDetails);
-    
+
     // Try to find existing detail with the same product
-    final existingIndex = details.indexWhere(
-      (detail) => detail.productID == product.productID
-    );
+    final existingIndex =
+        details.indexWhere((detail) => detail.productID == product.productID);
 
     if (existingIndex >= 0) {
       // Product already exists, update quantity
       final existingDetail = details[existingIndex];
       final newQuantity = existingDetail.quantity + quantity;
-      
+
       // Check if new quantity exceeds available stock
       if (newQuantity > product.stock) {
         emit(state.copyWith(
-          error: 'Not enough stock available' // Không đủ hàng trong kho
-        ));
+            error: 'Not enough stock available' // Không đủ hàng trong kho
+            ));
         return;
       }
 
       details[existingIndex] = SalesInvoiceDetail(
         productID: existingDetail.productID,
         productName: existingDetail.productName ?? '',
+        category: existingDetail.category,
         quantity: newQuantity,
         sellingPrice: existingDetail.sellingPrice,
         subtotal: (existingDetail.sellingPrice * newQuantity).toDouble(),
@@ -90,6 +90,7 @@ class SalesAddCubit extends Cubit<SalesAddState> {
       details.add(SalesInvoiceDetail(
         productID: product.productID ?? '',
         productName: product.productName,
+        category: product.category.name,
         quantity: quantity,
         sellingPrice: product.sellingPrice,
         subtotal: (product.sellingPrice * quantity).toDouble(),
@@ -109,6 +110,7 @@ class SalesAddCubit extends Cubit<SalesAddState> {
     details[index] = SalesInvoiceDetail(
       productID: detail.productID,
       productName: detail.productName ?? '',
+      category: detail.category,
       quantity: newQuantity,
       sellingPrice: detail.sellingPrice,
       subtotal: (detail.sellingPrice * newQuantity).toDouble(),
@@ -126,17 +128,20 @@ class SalesAddCubit extends Cubit<SalesAddState> {
   Future<SalesInvoice?> createInvoice() async {
     try {
       emit(state.copyWith(isLoading: true));
-      
+
       if (state.selectedCustomer == null || state.address == null) {
-        throw Exception('Customer and address are required'); // Khách hàng và địa chỉ là bắt buộc
+        throw Exception(
+            'Customer and address are required'); // Khách hàng và địa chỉ là bắt buộc
       }
 
       if (state.invoiceDetails.isEmpty) {
-        throw Exception('At least one product is required'); // Ít nhất một sản phẩm là bắt buộc
+        throw Exception(
+            'At least one product is required'); // Ít nhất một sản phẩm là bắt buộc
       }
 
       // Generate a new document ID
-      final docRef = FirebaseFirestore.instance.collection('salesInvoices').doc();
+      final docRef =
+          FirebaseFirestore.instance.collection('salesInvoices').doc();
       final invoiceID = docRef.id;
 
       // Create invoice with the generated ID
@@ -146,16 +151,18 @@ class SalesAddCubit extends Cubit<SalesAddState> {
         customerName: state.selectedCustomer!.customerName,
         address: state.address!,
         loyaltyPoints: 0,
-        details: state.invoiceDetails.map((detail) => 
-          SalesInvoiceDetail(
-            salesInvoiceID: invoiceID, // Set the invoice ID for each detail
-            productID: detail.productID,
-            productName: detail.productName ?? '',
-            quantity: detail.quantity,
-            sellingPrice: detail.sellingPrice,
-            subtotal: detail.subtotal,
-          )
-        ).toList(),
+        details: state.invoiceDetails
+            .map((detail) => SalesInvoiceDetail(
+                  salesInvoiceID:
+                      invoiceID, // Set the invoice ID for each detail
+                  productID: detail.productID,
+                  productName: detail.productName ?? '',
+                  category: detail.category,
+                  quantity: detail.quantity,
+                  sellingPrice: detail.sellingPrice,
+                  subtotal: detail.subtotal,
+                ))
+            .toList(),
         paymentStatus: state.paymentStatus,
         salesStatus: state.salesStatus,
         totalPrice: state.totalPrice,
@@ -173,4 +180,4 @@ class SalesAddCubit extends Cubit<SalesAddState> {
       return null;
     }
   }
-} 
+}

@@ -66,8 +66,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         default:
                           tabName = 'sales';
                       }
-                      PlatformSpecificUtils.pushState(
-                          '/#/invoices?tabs=$tabName');
+                      PlatformSpecificUtils.pushState('/#/invoices/$tabName');
                     }
                   },
                   labelColor: Theme.of(context).colorScheme.primary,

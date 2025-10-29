@@ -1,6 +1,5 @@
 // Platform-specific utilities
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/utils/web_utils.dart';
 import 'package:gizmoglobe_client/utils/mobile_utils.dart';

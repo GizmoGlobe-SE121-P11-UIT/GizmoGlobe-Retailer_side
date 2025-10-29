@@ -13,6 +13,8 @@ import 'sales_detail_webview.dart';
 import '../../../../enums/product_related/category_enum.dart';
 import '../../../../functions/helper.dart';
 import '../permissions/sales_invoice_permissions.dart';
+import '../../../../enums/invoice_related/payment_status.dart';
+import '../../../../enums/invoice_related/sales_status.dart';
 import '../sales_edit/sales_edit_view.dart';
 import 'sales_detail_cubit.dart';
 import 'sales_detail_state.dart';
@@ -30,7 +32,7 @@ class SalesDetailScreen extends StatefulWidget {
     if (kIsWeb) {
       return showDialog<bool>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (context) => Dialog(
           backgroundColor: Colors.transparent,
           child: SalesDetailWebView.newInstance(invoice),
@@ -347,7 +349,12 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    '${S.of(context).products} #${detail.productID}',
+                                                    (detail.productName !=
+                                                                null &&
+                                                            detail.productName!
+                                                                .isNotEmpty)
+                                                        ? detail.productName!
+                                                        : '${S.of(context).products} #${detail.productID}',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,
@@ -437,7 +444,10 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                   child: Row(
                     children: [
                       if (SalesInvoicePermissions.canEditInvoice(
-                          state.userRole, state.invoice))
+                              state.userRole, state.invoice) &&
+                          state.invoice.paymentStatus != PaymentStatus.paid &&
+                          state.invoice.salesStatus != SalesStatus.completed &&
+                          state.invoice.salesStatus != SalesStatus.cancelled)
                         Expanded(
                           child: ElevatedButton.icon(
                             onPressed: () async {
