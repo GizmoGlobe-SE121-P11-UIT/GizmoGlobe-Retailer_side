@@ -48,8 +48,6 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
 
     final invoice = await cubit.createInvoice();
     if (invoice != null && mounted) {
-      // Defer success feedback to the caller (sales_screen_view) to avoid
-      // rendering a snackbar from a soon-to-be-disposed dialog context on web.
       _safeClose(true);
     } else if (mounted) {
       showDialog(
