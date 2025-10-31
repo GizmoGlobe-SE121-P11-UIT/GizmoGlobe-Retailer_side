@@ -407,53 +407,37 @@ class _WarrantyDetailWebViewState extends State<WarrantyDetailWebView> {
                                                                       S
                                                                           .of(context)
                                                                           .confirmStatusUpdate,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Theme.of(context)
-                                                                            .colorScheme
-                                                                            .onSurface,
-                                                                      ),
+                                                                      style: TextStyle(
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .onSurface),
                                                                     ),
                                                                     content:
                                                                         Text(
                                                                       S.of(context).areYouSureChangeStatus(
                                                                           selectedStatus!
                                                                               .localized(context)),
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Theme.of(context)
-                                                                            .colorScheme
-                                                                            .onSurface,
-                                                                      ),
+                                                                      style: TextStyle(
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .onSurface),
                                                                     ),
                                                                     actions: [
                                                                       TextButton(
-                                                                        onPressed: () => Navigator.pop(
-                                                                            confirmContext,
-                                                                            false),
-                                                                        child:
-                                                                            Text(
-                                                                          S.of(context).cancel,
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Theme.of(context).colorScheme.primary,
-                                                                          ),
-                                                                        ),
+                                                                        onPressed:
+                                                                            () =>
+                                                                                Navigator.of(confirmContext, rootNavigator: true).pop(false),
+                                                                        child: Text(
+                                                                            S.of(context).cancel,
+                                                                            style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                                                                       ),
                                                                       TextButton(
-                                                                        onPressed: () => Navigator.pop(
-                                                                            confirmContext,
-                                                                            true),
-                                                                        child:
-                                                                            Text(
-                                                                          S.of(context).confirm,
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Theme.of(context).colorScheme.primary,
-                                                                          ),
-                                                                        ),
+                                                                        onPressed:
+                                                                            () =>
+                                                                                Navigator.of(confirmContext, rootNavigator: true).pop(true),
+                                                                        child: Text(
+                                                                            S.of(context).confirm,
+                                                                            style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                                                                       ),
                                                                     ],
                                                                   );
@@ -462,13 +446,26 @@ class _WarrantyDetailWebViewState extends State<WarrantyDetailWebView> {
 
                                                               if (confirmed ==
                                                                   true) {
-                                                                Navigator.pop(
-                                                                    dialogContext);
-                                                                cubit.updateWarrantyStatus(
-                                                                    selectedStatus!);
+                                                                // Close the status selection dialog first
                                                                 Navigator.of(
-                                                                        context)
-                                                                    .pop(true);
+                                                                        dialogContext,
+                                                                        rootNavigator:
+                                                                            true)
+                                                                    .pop();
+                                                                // Capture navigator before awaiting to avoid null after tree changes
+                                                                final NavigatorState?
+                                                                    navigator =
+                                                                    Navigator.maybeOf(
+                                                                            context,
+                                                                            rootNavigator:
+                                                                                true) ??
+                                                                        Navigator.maybeOf(
+                                                                            context);
+                                                                await cubit
+                                                                    .updateWarrantyStatus(
+                                                                        selectedStatus!);
+                                                                navigator
+                                                                    ?.pop(true);
                                                               }
                                                             },
                                                   child: Text(

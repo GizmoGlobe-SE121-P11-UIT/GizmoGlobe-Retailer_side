@@ -16,6 +16,7 @@ import 'package:gizmoglobe_client/widgets/voucher/voucher_card.dart';
 import 'package:gizmoglobe_client/components/general/web_header.dart';
 import 'package:gizmoglobe_client/components/general/web_sidebar.dart';
 import 'voucher_screen_webview.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 
 import '../../../../enums/processing/process_state_enum.dart';
 
@@ -89,16 +90,12 @@ class _VoucherScreenState extends State<VoucherScreen>
     return BlocConsumer<VoucherScreenCubit, VoucherScreenState>(
       listener: (context, state) {
         if (state.processState == ProcessState.success) {
-          showDialog(
-            context: context,
-            builder: (context) => InformationDialog(
-              title: state.dialogName.getLocalizedName(context),
-              content: state.notifyMessage.getLocalizedMessage(context),
-              onPressed: () {
-                cubit.toIdle();
-              },
-            ),
+          SnackbarService.showSuccess(
+            context,
+            state.dialogName.getLocalizedName(context),
+            state.notifyMessage.getLocalizedMessage(context),
           );
+          cubit.toIdle();
         } else if (state.processState == ProcessState.failure) {
           showDialog(
             context: context,
@@ -124,14 +121,34 @@ class _VoucherScreenState extends State<VoucherScreen>
                   icon: Icons.add,
                   onPressed: () async {
                     if (kIsWeb) {
-                      await AddVoucherScreen.showModal(context);
+                      final result = await AddVoucherScreen.showModal(context);
+                      if (result == true && mounted) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (!mounted) return;
+                          SnackbarService.showSuccess(
+                            context,
+                            S.of(context).success,
+                            S.of(context).voucherAddedSuccess,
+                          );
+                        });
+                      }
                     } else {
-                      await Navigator.push(
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => AddVoucherScreen.newInstance(),
                         ),
                       );
+                      if (result == true && mounted) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (!mounted) return;
+                          SnackbarService.showSuccess(
+                            context,
+                            S.of(context).success,
+                            S.of(context).voucherAddedSuccess,
+                          );
+                        });
+                      }
                     }
                     cubit.initialize(); // Refresh the list after adding
                   },

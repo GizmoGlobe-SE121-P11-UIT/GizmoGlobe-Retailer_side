@@ -5,7 +5,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
-import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 
 import 'home_screen_cubit.dart';
 
@@ -24,12 +24,117 @@ class HomeScreenWebView extends StatefulWidget {
 class _HomeScreenWebViewState extends State<HomeScreenWebView> {
   HomeScreenCubit get cubit => context.read<HomeScreenCubit>();
 
+  String _selectedChartInterval = '';
+  int? _selectedYear;
+  int? _selectedMonth;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_selectedChartInterval.isEmpty) {
+      _selectedChartInterval = S.of(context).yearMonthly;
+    }
+  }
+
+  Future<void> _showYearPicker(BuildContext context) async {
+    final now = DateTime.now();
+    const int firstYear = 2000;
+    final picked = await showDialog<int>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: SizedBox(
+            width: 300,
+            height: 400,
+            child: YearPicker(
+              firstDate: DateTime(firstYear),
+              lastDate: DateTime(now.year),
+              selectedDate: DateTime(_selectedYear ?? now.year),
+              onChanged: (date) {
+                Navigator.of(context).pop(date.year);
+              },
+            ),
+          ),
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedYear = picked;
+      });
+    }
+  }
+
+  Future<void> _showMonthPicker(BuildContext context) async {
+    final picked = await showDialog<int>(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text(S.of(context).selectMonth),
+          children: List<Widget>.generate(12, (index) {
+            return SimpleDialogOption(
+              child: Text(DateFormat.MMMM().format(DateTime(0, index + 1))),
+              onPressed: () {
+                Navigator.of(context).pop(index + 1);
+              },
+            );
+          }),
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedMonth = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
-        final currencyFormat =
-            NumberFormat.currency(locale: 'en_US', symbol: '\$');
+        final allSales = state.monthlySales;
+        final now = DateTime.now();
+        _selectedYear ??= now.year;
+        _selectedMonth ??= now.month;
+        List<SalesData> displaySales;
+        String chartTitle;
+        if (_selectedChartInterval == S.of(context).monthDaily) {
+          // Build 30/31/28/29 days blank list for full x-axis then fill in with sales data if present
+          final daysInMonth =
+              DateUtils.getDaysInMonth(_selectedYear!, _selectedMonth!);
+          List<double> dayAmounts = List.filled(daysInMonth, 0.0);
+          for (final s in allSales.where((s) =>
+              s.date.year == _selectedYear && s.date.month == _selectedMonth)) {
+            final day = s.date.day;
+            dayAmounts[day - 1] = s.amount;
+          }
+          displaySales = List.generate(
+              daysInMonth,
+              (i) => SalesData(DateTime(_selectedYear!, _selectedMonth!, i + 1),
+                  dayAmounts[i]));
+          chartTitle =
+              '${S.of(context).monthlySales} ($_selectedYear-${_selectedMonth.toString().padLeft(2, '0')})';
+        } else {
+          // Aggregate sales for each month in the year
+          Map<int, double> monthSums = {};
+          for (var m = 1; m <= 12; ++m) {
+            monthSums[m] = 0;
+          }
+          for (final s in allSales.where((s) => s.date.year == _selectedYear)) {
+            monthSums[s.date.month] = (monthSums[s.date.month] ?? 0) + s.amount;
+          }
+          displaySales = List.generate(
+              12,
+              (i) => SalesData(
+                  DateTime(_selectedYear!, i + 1), monthSums[i + 1]!));
+          chartTitle = '${S.of(context).monthlySales} ($_selectedYear)';
+        }
         return Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(24),
@@ -106,14 +211,14 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                         context,
                         icon: Icons.payments_rounded,
                         title: S.of(context).revenue,
-                        value: currencyFormat.format(state.totalRevenue),
+                        value: Helper.toCurrencyFormat(state.totalRevenue),
                         color: Colors.orange,
                       ),
                       _buildStatsCard(
                         context,
                         icon: Icons.trending_up_rounded,
                         title: S.of(context).avgIncome,
-                        value: currencyFormat.format(state.totalOrders > 0
+                        value: Helper.toCurrencyFormat(state.totalOrders > 0
                             ? state.totalRevenue / state.totalOrders
                             : 0),
                         color: Colors.purple,
@@ -139,88 +244,74 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            S.of(context).monthlySales,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                          Row(
+                            children: [
+                              Text(
+                                chartTitle,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(width: 32),
+                              DropdownButton<String>(
+                                value: _selectedChartInterval,
+                                items: [
+                                  DropdownMenuItem(
+                                      value: S.of(context).yearMonthly,
+                                      child: Text(S.of(context).yearMonthly)),
+                                  DropdownMenuItem(
+                                      value: S.of(context).monthDaily,
+                                      child: Text(S.of(context).monthDaily)),
+                                ],
+                                onChanged: (val) {
+                                  setState(() {
+                                    _selectedChartInterval =
+                                        val ?? S.of(context).yearMonthly;
+                                  });
+                                },
+                              ),
+                              if (_selectedChartInterval ==
+                                  S.of(context).yearMonthly) ...[
+                                const SizedBox(width: 12),
+                                ElevatedButton(
+                                  onPressed: () => _showYearPicker(context),
+                                  child: Text(S.of(context).chooseYear),
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text('${_selectedYear ?? now.year}'),
+                                ),
+                              ] else ...[
+                                const SizedBox(width: 12),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    await _showYearPicker(context);
+                                    await _showMonthPicker(context);
+                                  },
+                                  child: Text(S.of(context).chooseMonth),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(_selectedYear != null &&
+                                          _selectedMonth != null
+                                      ? '${_selectedYear!}-${_selectedMonth!.toString().padLeft(2, '0')}'
+                                      : ''),
+                                ),
+                              ],
+                            ],
                           ),
                           const SizedBox(height: 24),
                           SizedBox(
                             height: 300,
-                            child: _buildSalesChart(state.monthlySales),
+                            child: _OptimizedSalesChartWidget(
+                                sales: displaySales,
+                                isMonthly: _selectedChartInterval ==
+                                    S.of(context).yearMonthly),
                           ),
                         ],
                       ),
                     ),
-                  ),
-
-                  const SizedBox(height: 32),
-                  // Recent Orders and Top Products Row
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Recent Orders
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Recent Orders',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text('View All'),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            _buildRecentOrdersList(context),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 24),
-                      // Top Products
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Top Products',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text('View All'),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            _buildTopProductsList(context),
-                          ],
-                        ),
-                      ),
-                    ],
                   ),
 
                   const SizedBox(height: 24),
@@ -285,23 +376,22 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
       ),
     );
   }
+}
 
-  Widget _buildSalesChart(List<SalesData> sales) {
+class _OptimizedSalesChartWidget extends StatelessWidget {
+  final List<SalesData> sales;
+  final bool isMonthly;
+  const _OptimizedSalesChartWidget(
+      {required this.sales, this.isMonthly = true});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: LineChart(
         LineChartData(
-          gridData: FlGridData(
-            show: true,
-            drawVerticalLine: false,
-            horizontalInterval: 1,
-            getDrawingHorizontalLine: (value) {
-              return FlLine(
-                color: Theme.of(context).colorScheme.surface,
-                strokeWidth: 1,
-              );
-            },
-          ),
+          gridData:
+              const FlGridData(show: false), // Hide all grid for performance
           titlesData: FlTitlesData(
             rightTitles:
                 const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -313,18 +403,27 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                 interval: 1,
                 getTitlesWidget: (value, meta) {
                   if (value.toInt() >= 0 && value.toInt() < sales.length) {
-                    final monthLabel =
-                        DateFormat('MMM').format(sales[value.toInt()].date);
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        monthLabel,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
+                    final SalesData s = sales[value.toInt()];
+                    if (isMonthly) {
+                      final label = DateFormat('MMM').format(s.date);
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          label,
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.grey),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          '${s.date.day}',
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      );
+                    }
                   }
                   return const Text('');
                 },
@@ -368,261 +467,6 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildRecentOrdersList(BuildContext context) {
-    return BlocBuilder<HomeScreenCubit, HomeScreenState>(
-      builder: (context, state) {
-        final currencyFormat =
-            NumberFormat.currency(locale: 'en_US', symbol: '\$');
-
-        if (state.recentOrders.isEmpty) {
-          return Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: BorderSide(
-                color: Theme.of(context)
-                    .colorScheme
-                    .outline
-                    .withValues(alpha: 0.2),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.receipt_long_outlined,
-                      size: 48,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'No recent orders',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }
-
-        return Column(
-          children: state.recentOrders.map((order) {
-            final statusColor = _getStatusColor(order.salesStatus);
-            final statusText = _getStatusText(order.salesStatus);
-
-            return Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .outline
-                      .withValues(alpha: 0.2),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            order.salesInvoiceID,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            order.customerName,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          currencyFormat.format(order.totalPrice),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: statusColor.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            statusText,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: statusColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
-        );
-      },
-    );
-  }
-
-  Color _getStatusColor(SalesStatus status) {
-    switch (status) {
-      case SalesStatus.completed:
-        return Colors.green;
-      case SalesStatus.preparing:
-        return Colors.orange;
-      case SalesStatus.shipping:
-        return Colors.blue;
-      case SalesStatus.shipped:
-        return Colors.blue;
-      case SalesStatus.pending:
-        return Colors.grey;
-      case SalesStatus.cancelled:
-        return Colors.red;
-    }
-  }
-
-  String _getStatusText(SalesStatus status) {
-    switch (status) {
-      case SalesStatus.completed:
-        return 'Completed';
-      case SalesStatus.preparing:
-        return 'Preparing';
-      case SalesStatus.shipping:
-        return 'Shipping';
-      case SalesStatus.shipped:
-        return 'Shipped';
-      case SalesStatus.pending:
-        return 'Pending';
-      case SalesStatus.cancelled:
-        return 'Cancelled';
-    }
-  }
-
-  Widget _buildTopProductsList(BuildContext context) {
-    return BlocBuilder<HomeScreenCubit, HomeScreenState>(
-      builder: (context, state) {
-        final currencyFormat =
-            NumberFormat.currency(locale: 'en_US', symbol: '\$');
-
-        if (state.topProducts.isEmpty) {
-          return Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: BorderSide(
-                color: Theme.of(context)
-                    .colorScheme
-                    .outline
-                    .withValues(alpha: 0.2),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Center(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.inventory_2_outlined,
-                      size: 48,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'No sales data available',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }
-
-        return Column(
-          children: state.topProducts.map((product) {
-            return Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .outline
-                      .withValues(alpha: 0.2),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product.productName,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Sales: ${product.totalSales}',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      currencyFormat.format(product.totalRevenue),
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
-        );
-      },
     );
   }
 }

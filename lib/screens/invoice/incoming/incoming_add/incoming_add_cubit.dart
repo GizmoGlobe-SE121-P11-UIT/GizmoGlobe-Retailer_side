@@ -190,7 +190,11 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
         final Map<String, dynamic> productProps = {
           'productID': product.productID!,
           'productName': product.productName,
-          'manufacturer': product.manufacturer.manufacturerID,
+          'manufacturer': {
+            'manufacturerID': product.manufacturer.manufacturerID,
+            'manufacturerName': product.manufacturer.manufacturerName,
+            'status': product.manufacturer.status.name,
+          }, // Use Map not String!
           'category': product.category.name,
           'importPrice': detail.importPrice, // Use new import price from detail
           'sellingPrice': product.sellingPrice,

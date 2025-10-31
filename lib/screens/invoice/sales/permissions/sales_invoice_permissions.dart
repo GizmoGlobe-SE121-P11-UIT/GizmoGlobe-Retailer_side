@@ -5,15 +5,16 @@ import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 class SalesInvoicePermissions {
   static bool canEditInvoice(String userRole, SalesInvoice invoice) {
     if ((invoice.salesStatus == SalesStatus.completed ||
-        invoice.salesStatus == SalesStatus.shipping ||
-        invoice.salesStatus == SalesStatus.shipped) &&
+            invoice.salesStatus == SalesStatus.cancelled ||
+            //invoice.salesStatus == SalesStatus.shipping ||
+            invoice.salesStatus == SalesStatus.shipped) &&
         invoice.paymentStatus == PaymentStatus.paid) {
       return false;
     }
     return userRole == 'admin';
   }
 
-  static bool canEditPaymentStatus(String userRole, SalesInvoice invoice) {    
+  static bool canEditPaymentStatus(String userRole, SalesInvoice invoice) {
     if (invoice.paymentStatus == PaymentStatus.paid) {
       return false;
     }
@@ -21,8 +22,9 @@ class SalesInvoicePermissions {
   }
 
   static bool canEditSalesStatus(String userRole, SalesInvoice invoice) {
-    if (invoice.salesStatus == SalesStatus.completed || 
-        invoice.salesStatus == SalesStatus.shipping ||
+    if (invoice.salesStatus == SalesStatus.completed ||
+        invoice.salesStatus == SalesStatus.cancelled ||
+        //invoice.salesStatus == SalesStatus.shipping ||
         invoice.salesStatus == SalesStatus.shipped) {
       return false;
     }
@@ -30,10 +32,12 @@ class SalesInvoicePermissions {
   }
 
   static bool canEditAddress(String userRole, SalesInvoice invoice) {
-    if (invoice.salesStatus == SalesStatus.completed || 
-        invoice.salesStatus == SalesStatus.shipping) {
+    if (invoice.salesStatus == SalesStatus.completed ||
+        invoice.salesStatus == SalesStatus.cancelled ||
+        invoice.salesStatus == SalesStatus.shipping ||
+        invoice.salesStatus == SalesStatus.shipped) {
       return false;
     }
     return userRole == 'admin';
   }
-} 
+}

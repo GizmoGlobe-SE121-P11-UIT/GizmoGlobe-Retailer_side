@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
@@ -16,6 +15,8 @@ import '../../../objects/invoice_related/warranty_invoice.dart';
 import '../../../widgets/general/status_badge.dart';
 import 'warranty_screen_cubit.dart';
 import 'warranty_screen_state.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
+import 'package:flutter/foundation.dart';
 
 class WarrantyScreen extends StatefulWidget {
   const WarrantyScreen({super.key});
@@ -70,12 +71,30 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                       iconSize: 32,
                       onPressed: () async {
                         final result = await WarrantyAddView.showModal(context);
-
-                        if (result == true) {
-                          if (kDebugMode) {
-                            print('Warranty invoice created, refreshing list');
-                          } // Hóa đơn bảo hành được tạo, làm mới danh sách
-                          cubit.loadInvoices();
+                        if (result == true && mounted) {
+                          if (kIsWeb) {
+                            Future.microtask(() {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (!mounted) return;
+                                SnackbarService.showSuccess(
+                                  context,
+                                  S.of(context).success,
+                                  S.of(context).warrantyInvoiceCreated,
+                                );
+                                cubit.loadInvoices();
+                              });
+                            });
+                          } else {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (!mounted) return;
+                              SnackbarService.showSuccess(
+                                context,
+                                S.of(context).success,
+                                S.of(context).warrantyInvoiceCreated,
+                              );
+                              cubit.loadInvoices();
+                            });
+                          }
                         }
                       },
                     )
@@ -314,10 +333,35 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
       Navigator.of(dialogContext).pop();
 
       if (!mounted) return;
-      await WarrantyDetailView.showModal(
+      final result = await WarrantyDetailView.showModal(
         dialogContext,
         detailedInvoice,
       );
+      if (result == true && mounted) {
+        if (kIsWeb) {
+          Future.microtask(() {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!mounted) return;
+              SnackbarService.showSuccess(
+                context,
+                S.of(context).success,
+                S.of(context).warrantyInvoiceUpdatedSuccess,
+              );
+              cubit.loadInvoices();
+            });
+          });
+        } else {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            SnackbarService.showSuccess(
+              context,
+              S.of(context).success,
+              S.of(context).warrantyInvoiceUpdatedSuccess,
+            );
+            cubit.loadInvoices();
+          });
+        }
+      }
     } catch (e) {
       if (!mounted) return;
       Navigator.of(dialogContext).pop();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
@@ -86,24 +86,22 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
               viDescriptionController.text =
                   state.voucherArgument?.viDescription ?? '';
 
-              _showSnackBar(
-                title: state.dialogName.getLocalizedName(context),
-                message: state.notifyMessage.getLocalizedMessage(context),
-                contentType: ContentType.success,
+              SnackbarService.showSuccess(
+                context,
+                state.dialogName.getLocalizedName(context),
+                state.notifyMessage.getLocalizedMessage(context),
               );
               cubit.toIdle();
             }
           } else {
             if (mounted) {
-              _showSnackBar(
-                title: state.dialogName.getLocalizedName(context),
-                message: state.notifyMessage.getLocalizedMessage(context),
-                contentType: ContentType.success,
+              SnackbarService.showSuccess(
+                context,
+                state.dialogName.getLocalizedName(context),
+                state.notifyMessage.getLocalizedMessage(context),
               );
-              Future.delayed(const Duration(milliseconds: 100), () {
-                if (mounted) {
-                  Navigator.pop(context, true);
-                }
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) Navigator.pop(context, true);
               });
             }
           }
@@ -818,24 +816,5 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
     );
   }
 
-  void _showSnackBar({
-    required String title,
-    required String message,
-    required ContentType contentType,
-  }) {
-    if (!mounted) return;
-
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: title,
-        message: message,
-        contentType: contentType,
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+  // Snackbar handled by SnackbarService
 }

@@ -11,12 +11,13 @@ import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 
 import '../../../../enums/product_related/category_enum.dart';
-import '../../../../enums/invoice_related/payment_status.dart';
-import '../../../../enums/invoice_related/sales_status.dart';
 import '../permissions/sales_invoice_permissions.dart';
 import '../sales_edit/sales_edit_view.dart';
 import 'sales_detail_cubit.dart';
 import 'sales_detail_state.dart';
+import 'package:printing/printing.dart';
+import 'package:gizmoglobe_client/services/invoices/sales/sales_detail_pdf_service.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 class SalesDetailWebView extends StatefulWidget {
   final SalesInvoice invoice;
@@ -37,6 +38,37 @@ class SalesDetailWebView extends StatefulWidget {
 
 class _SalesDetailWebViewState extends State<SalesDetailWebView> {
   bool _isClosing = false;
+  bool _isDownloading = false;
+
+  Future<void> _downloadPdf(BuildContext context, SalesInvoice invoice) async {
+    setState(() {
+      _isDownloading = true;
+    });
+    try {
+      final productsMap =
+          await context.read<SalesDetailCubit>().getProductsMapForInvoice();
+      final pdfDoc = await SalesInvoicePdfService.generatePdf(
+          invoice: invoice, products: productsMap);
+      final fileName = 'Sales_Invoice_${invoice.salesInvoiceID}.pdf';
+      await Printing.sharePdf(bytes: await pdfDoc.save(), filename: fileName);
+    } catch (e) {
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => InformationDialog(
+            title: 'Error',
+            content: 'Error downloading invoice PDF: $e',
+            buttonText: 'OK',
+          ),
+        );
+      }
+    } finally {
+      if (mounted)
+        setState(() {
+          _isDownloading = false;
+        });
+    }
+  }
 
   void _safeClose(dynamic result) {
     if (_isClosing || !mounted) return;
@@ -169,6 +201,18 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                             '${S.of(context).invoiceDetails} #${state.invoice.salesInvoiceID}',
                       ),
                     ),
+                    const SizedBox(width: 8),
+                    if (_isDownloading)
+                      const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2)),
+                    if (!_isDownloading)
+                      GradientIconButton(
+                        icon: Icons.download,
+                        onPressed: () => _downloadPdf(context, state.invoice),
+                        fillColor: Colors.transparent,
+                      ),
                     const SizedBox(width: 8),
                     GradientIconButton(
                       icon: Icons.close,
@@ -431,10 +475,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                 child: Row(
                   children: [
                     if (SalesInvoicePermissions.canEditInvoice(
-                            state.userRole, state.invoice) &&
-                        state.invoice.paymentStatus != PaymentStatus.paid &&
-                        state.invoice.salesStatus != SalesStatus.completed &&
-                        state.invoice.salesStatus != SalesStatus.cancelled)
+                        state.userRole, state.invoice))
                       Expanded(
                         child: ElevatedButton.icon(
                           onPressed: () async {

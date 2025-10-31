@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
+import 'package:gizmoglobe_client/enums/stakeholders/manufacturer_status.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart';
+import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import '../../../enums/invoice_related/payment_status.dart';
 import 'incoming_screen_state.dart';
 
@@ -10,10 +12,12 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
   final _firebase = Firebase();
   late final Stream<List<IncomingInvoice>> _invoicesStream;
   StreamSubscription<List<IncomingInvoice>>? _subscription;
+  List<Manufacturer> _manufacturers = [];
 
   IncomingScreenCubit() : super(const IncomingScreenState()) {
     _invoicesStream = _firebase.incomingInvoicesStream();
     _listenToInvoices();
+    loadManufacturers();
     loadInvoices();
     _loadUserRole();
   }
@@ -70,10 +74,32 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
     }
   }
 
+  Future<void> loadManufacturers() async {
+    try {
+      _manufacturers = await _firebase.getManufacturers();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading manufacturers: $e');
+      }
+    }
+  }
+
+  String? getManufacturerName(String id) {
+    return _manufacturers
+        .firstWhere(
+          (m) => m.manufacturerID == id,
+          orElse: () => Manufacturer(
+              manufacturerID: '',
+              manufacturerName: '',
+              status: ManufacturerStatus.active),
+        )
+        .manufacturerName;
+  }
+
   void searchInvoices(String query) {
     if (isClosed) return;
     emit(state.copyWith(searchQuery: query));
-    
+
     if (query.isEmpty) {
       loadInvoices();
       return;
@@ -139,9 +165,11 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
     }
   }
 
-  Future<void> quickUpdatePaymentStatus(String invoiceId, PaymentStatus newStatus) async {
+  Future<void> quickUpdatePaymentStatus(
+      String invoiceId, PaymentStatus newStatus) async {
     try {
-      final invoice = state.invoices.firstWhere((inv) => inv.incomingInvoiceID == invoiceId);
+      final invoice = state.invoices
+          .firstWhere((inv) => inv.incomingInvoiceID == invoiceId);
       final updatedInvoice = IncomingInvoice(
         incomingInvoiceID: invoice.incomingInvoiceID,
         manufacturerID: invoice.manufacturerID,
@@ -162,11 +190,13 @@ class IncomingScreenCubit extends Cubit<IncomingScreenState> {
 
   void sortInvoices(SortField field, [SortOrder? order]) {
     if (isClosed) return;
-    
-    final currentOrder = order ?? 
-      (state.sortField == field ? 
-        (state.sortOrder == SortOrder.ascending ? SortOrder.descending : SortOrder.ascending)
-        : SortOrder.descending);
+
+    final currentOrder = order ??
+        (state.sortField == field
+            ? (state.sortOrder == SortOrder.ascending
+                ? SortOrder.descending
+                : SortOrder.ascending)
+            : SortOrder.descending);
 
     final sortedInvoices = List<IncomingInvoice>.from(state.invoices);
 

@@ -8,6 +8,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 
 import '../../../enums/invoice_related/payment_status.dart';
 import '../../../functions/helper.dart';
@@ -77,10 +78,25 @@ class _IncomingScreenState extends State<IncomingScreen> {
                         icon: Icons.add,
                         iconSize: 32,
                         onPressed: () async {
+                          final successText = S.of(context).success;
+                          final invoiceAddedText =
+                              S.of(context).createIncomingInvoiceSuccess;
                           final result =
                               await IncomingAddScreen.showModal(context);
-
-                          if (result != null && mounted) {
+                          if (result == true && mounted && kIsWeb) {
+                            Future.microtask(() {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (mounted) {
+                                  SnackbarService.showSuccess(
+                                    context,
+                                    successText,
+                                    invoiceAddedText,
+                                  );
+                                }
+                              });
+                            });
+                          }
+                          if (result == true && mounted) {
                             context.read<IncomingScreenCubit>().loadInvoices();
                           }
                         },
@@ -137,10 +153,36 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                       if (!mounted) return;
 
                                       Navigator.pop(context);
-                                      await IncomingDetailScreen.showModal(
+                                      final successText = S.of(context).success;
+                                      final invoicePaidText = S
+                                          .of(context)
+                                          .updateIncomingInvoiceSuccess;
+                                      final detailResult =
+                                          await IncomingDetailScreen.showModal(
                                         context,
                                         detailedInvoice,
                                       );
+                                      if (detailResult == true &&
+                                          mounted &&
+                                          kIsWeb) {
+                                        Future.microtask(() {
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback((_) {
+                                            if (mounted) {
+                                              SnackbarService.showSuccess(
+                                                context,
+                                                successText,
+                                                invoicePaidText,
+                                              );
+                                            }
+                                          });
+                                        });
+                                      }
+                                      if (detailResult == true && mounted) {
+                                        context
+                                            .read<IncomingScreenCubit>()
+                                            .loadInvoices();
+                                      }
                                     } catch (e) {
                                       Navigator.pop(context);
                                       showDialog(
@@ -154,83 +196,97 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                       );
                                     }
                                   },
-                                  onLongPress: kIsWeb ? null : () {
-                                    if (!mounted) return;
-                                    cubit.setSelectedIndex(index);
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: true,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          backgroundColor: Colors.transparent,
-                                          contentPadding: EdgeInsets.zero,
-                                          content: Container(
-                                            width: 120,
-                                            decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .surface,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                ListTile(
-                                                  dense: true,
-                                                  leading: Icon(
-                                                    Icons.visibility_outlined,
-                                                    size: 20,
+                                  onLongPress: kIsWeb
+                                      ? null
+                                      : () {
+                                          if (!mounted) return;
+                                          cubit.setSelectedIndex(index);
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: true,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                contentPadding: EdgeInsets.zero,
+                                                content: Container(
+                                                  width: 120,
+                                                  decoration: BoxDecoration(
                                                     color: Theme.of(context)
                                                         .colorScheme
-                                                        .onSurface,
+                                                        .surface,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
                                                   ),
-                                                  title: Text(
-                                                    S.of(context).view,
-                                                    style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurface,
-                                                    ),
-                                                  ),
-                                                  onTap: () =>
-                                                      _handleViewInvoice(
-                                                          context, invoice),
-                                                ),
-                                                if (IncomingInvoicePermissions
-                                                    .canEditPaymentStatus(
-                                                        state.userRole,
-                                                        invoice))
-                                                  ListTile(
-                                                    dense: true,
-                                                    leading: Icon(
-                                                      Icons.edit_outlined,
-                                                      size: 20,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurface,
-                                                    ),
-                                                    title: Text(
-                                                      S.of(context).editPayment,
-                                                      style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onSurface,
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      ListTile(
+                                                        dense: true,
+                                                        leading: Icon(
+                                                          Icons
+                                                              .visibility_outlined,
+                                                          size: 20,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onSurface,
+                                                        ),
+                                                        title: Text(
+                                                          S.of(context).view,
+                                                          style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onSurface,
+                                                          ),
+                                                        ),
+                                                        onTap: () =>
+                                                            _handleViewInvoice(
+                                                                context,
+                                                                invoice),
                                                       ),
-                                                    ),
-                                                    onTap: () =>
-                                                        _handleEditInvoice(
-                                                            context, invoice),
+                                                      if (IncomingInvoicePermissions
+                                                          .canEditPaymentStatus(
+                                                              state.userRole,
+                                                              invoice))
+                                                        ListTile(
+                                                          dense: true,
+                                                          leading: Icon(
+                                                            Icons.edit_outlined,
+                                                            size: 20,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onSurface,
+                                                          ),
+                                                          title: Text(
+                                                            S
+                                                                .of(context)
+                                                                .editPayment,
+                                                            style: TextStyle(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .onSurface,
+                                                            ),
+                                                          ),
+                                                          onTap: () =>
+                                                              _handleEditInvoice(
+                                                                  context,
+                                                                  invoice),
+                                                        ),
+                                                    ],
                                                   ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ).then((_) {
-                                      cubit.setSelectedIndex(null);
-                                    });
-                                  },
+                                                ),
+                                              );
+                                            },
+                                          ).then((_) {
+                                            cubit.setSelectedIndex(null);
+                                          });
+                                        },
                                   child: AnimatedOpacity(
                                     duration: const Duration(milliseconds: 200),
                                     opacity: state.selectedIndex == null ||
@@ -250,104 +306,90 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                 .surface,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
-                                                                             child: Padding(
-                                         padding: const EdgeInsets.symmetric(
-                                           horizontal: 16,
-                                           vertical: 12,
-                                         ),
-                                         child: Row(
-                                           children: [
-                                             CircleAvatar(
-                                               backgroundColor: Theme.of(context)
-                                                   .colorScheme
-                                                   .primaryContainer,
-                                               child: Icon(
-                                                 Icons.inventory,
-                                                 color: Theme.of(context)
-                                                     .colorScheme
-                                                     .primary,
-                                               ),
-                                             ),
-                                             const SizedBox(width: 16),
-                                             Expanded(
-                                               child: Column(
-                                                 crossAxisAlignment:
-                                                     CrossAxisAlignment.start,
-                                                 children: [
-                                                   Text(
-                                                     '${S.of(context).invoiceDetails} #${invoice.incomingInvoiceID}',
-                                                     style: TextStyle(
-                                                       fontWeight:
-                                                           FontWeight.bold,
-                                                       fontSize: 16,
-                                                       color: Theme.of(context)
-                                                           .colorScheme
-                                                           .onSurface,
-                                                     ),
-                                                     maxLines: 1,
-                                                     overflow:
-                                                         TextOverflow.ellipsis,
-                                                   ),
-                                                   const SizedBox(height: 4),
-                                                   Text(
-                                                     invoice.manufacturerID,
-                                                     style: TextStyle(
-                                                       color: Theme.of(context)
-                                                           .colorScheme
-                                                           .onSurface
-                                                           .withValues(
-                                                               alpha: 0.6),
-                                                     ),
-                                                     maxLines: 1,
-                                                     overflow:
-                                                         TextOverflow.ellipsis,
-                                                   ),
-                                                   const SizedBox(height: 8),
-                                                   Wrap(
-                                                     spacing: 8,
-                                                     runSpacing: 4,
-                                                     crossAxisAlignment:
-                                                         WrapCrossAlignment
-                                                             .center,
-                                                     children: [
-                                                       StatusBadge(
-                                                           status:
-                                                               invoice.status),
-                                                       Text(
-                                                         DateFormat('dd/MM/yyyy')
-                                                             .format(
-                                                                 invoice.date),
-                                                         style: TextStyle(
-                                                           fontSize: 12,
-                                                           color:
-                                                               Theme.of(context)
-                                                                   .colorScheme
-                                                                   .onSurface
-                                                                   .withValues(
-                                                                       alpha:
-                                                                           0.6),
-                                                         ),
-                                                       ),
-                                                     ],
-                                                   ),
-                                                 ],
-                                               ),
-                                             ),
-                                             const SizedBox(width: 8),
-                                             Text(
-                                               Helper.toCurrencyFormat(
-                                                   invoice.totalPrice),
-                                               style: TextStyle(
-                                                 fontWeight: FontWeight.bold,
-                                                 fontSize: 16,
-                                                 color: Theme.of(context)
-                                                     .colorScheme
-                                                     .error,
-                                               ),
-                                             ),
-                                           ],
-                                         ),
-                                       ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 12,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .primaryContainer,
+                                              child: Icon(
+                                                Icons.inventory,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${S.of(context).invoiceDetails} #${invoice.incomingInvoiceID}',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Wrap(
+                                                    spacing: 8,
+                                                    runSpacing: 4,
+                                                    crossAxisAlignment:
+                                                        WrapCrossAlignment
+                                                            .center,
+                                                    children: [
+                                                      StatusBadge(
+                                                          status:
+                                                              invoice.status),
+                                                      Text(
+                                                        DateFormat('dd/MM/yyyy')
+                                                            .format(
+                                                                invoice.date),
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onSurface
+                                                                  .withValues(
+                                                                      alpha:
+                                                                          0.6),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              Helper.toCurrencyFormat(
+                                                  invoice.totalPrice),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .error,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 );

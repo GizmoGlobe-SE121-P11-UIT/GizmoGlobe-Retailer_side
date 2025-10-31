@@ -8,7 +8,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 
 import '../../../data/firebase/firebase.dart';
 import '../../../functions/helper.dart';
@@ -76,20 +76,13 @@ class _SalesScreenState extends State<SalesScreen> {
                       onPressed: () async {
                         final result = await SalesAddScreen.showModal(context);
                         if (result == true && mounted) {
-                          Future.microtask(() {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
                             if (!mounted) return;
-                            final snackBar = SnackBar(
-                              elevation: 0,
-                              behavior: SnackBarBehavior.floating,
-                              backgroundColor: Colors.transparent,
-                              content: AwesomeSnackbarContent(
-                                title: S.of(context).success,
-                                message: S.of(context).createInvoiceSuccess,
-                                contentType: ContentType.success,
-                              ),
+                            SnackbarService.showSuccess(
+                              context,
+                              S.of(context).success,
+                              S.of(context).createInvoiceSuccess,
                             );
-                            ScaffoldMessenger.maybeOf(context)
-                                ?.showSnackBar(snackBar);
                             context.read<SalesScreenCubit>().loadInvoices();
                           });
                         }
@@ -133,20 +126,11 @@ class _SalesScreenState extends State<SalesScreen> {
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
                                         if (!context.mounted) return;
-                                        final snackBar = SnackBar(
-                                          elevation: 0,
-                                          behavior: SnackBarBehavior.floating,
-                                          backgroundColor: Colors.transparent,
-                                          content: AwesomeSnackbarContent(
-                                            title: S.of(context).success,
-                                            message: S
-                                                .of(context)
-                                                .editInvoiceSuccess,
-                                            contentType: ContentType.success,
-                                          ),
+                                        SnackbarService.showSuccess(
+                                          context,
+                                          S.of(context).success,
+                                          S.of(context).editInvoiceSuccess,
                                         );
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
                                       });
                                     }
                                   },

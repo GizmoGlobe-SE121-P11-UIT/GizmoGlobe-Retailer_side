@@ -11,3 +11,17 @@ enum ManufacturerStatus {
     }
   }
 } 
+
+extension ManufacturerStatusExtension on ManufacturerStatus {
+  static ManufacturerStatus fromName(String? name) {
+    if (name == null) return ManufacturerStatus.active;
+    switch (name.toLowerCase()) {
+      case 'active':
+        return ManufacturerStatus.active;
+      case 'inactive':
+        return ManufacturerStatus.inactive;
+      default:
+        return ManufacturerStatus.active;
+    }
+  }
+} 

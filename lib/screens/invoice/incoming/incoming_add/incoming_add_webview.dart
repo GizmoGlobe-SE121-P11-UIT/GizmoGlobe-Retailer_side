@@ -10,7 +10,6 @@ import '../../../../widgets/general/gradient_icon_button.dart';
 import 'incoming_add_cubit.dart';
 import 'incoming_add_state.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
-import '../../../../widgets/dialog/information_dialog.dart';
 
 class IncomingAddWebView extends StatefulWidget {
   const IncomingAddWebView({super.key});
@@ -29,22 +28,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<IncomingAddCubit, IncomingAddState>(
-      listener: (context, state) {
-        if (state.errorMessage != null) {
-          showDialog(
-            context: context,
-            builder: (context) => InformationDialog(
-              title: S.of(context).errorOccurred,
-              content: state.errorMessage!,
-              buttonText: 'OK',
-              onPressed: () {
-                cubit.clearError();
-              },
-            ),
-          );
-        }
-      },
+    return BlocBuilder<IncomingAddCubit, IncomingAddState>(
       builder: (context, state) {
         return Container(
           width: MediaQuery.of(context).size.width * 0.8,
@@ -66,142 +50,255 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
           ),
           child: Column(
             children: [
-              _buildHeader(),
+              // Header (match sales add)
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.1),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.receipt_long,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 28,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: GradientText(
+                        text: S.of(context).newIncomingInvoice,
+                      ),
+                    ),
+                    state.isSubmitting
+                        ? SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          )
+                        : GradientIconButton(
+                            icon: Icons.check,
+                            onPressed: () async {
+                              final success = await cubit.submitInvoice();
+                              if (success && mounted) {
+                                Navigator.of(context).pop(true);
+                              }
+                            },
+                            fillColor: Colors.transparent,
+                          ),
+                    const SizedBox(width: 8),
+                    GradientIconButton(
+                      icon: Icons.close,
+                      onPressed: () => Navigator.of(context).pop(false),
+                      fillColor: Colors.transparent,
+                    ),
+                  ],
+                ),
+              ),
+              // Main Content Sections
               Expanded(
-                child: state.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : _buildContent(state),
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Manufacturer
+                        Card(
+                          elevation: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.business,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      S.of(context).selectManufacturer,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                DropdownButtonFormField<Manufacturer>(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 12,
+                                    ),
+                                    labelStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withValues(alpha: 0.8),
+                                    ),
+                                  ),
+                                  value: state.selectedManufacturer,
+                                  items:
+                                      state.manufacturers.map((manufacturer) {
+                                    return DropdownMenuItem(
+                                      value: manufacturer,
+                                      child: Text(
+                                        manufacturer.manufacturerName,
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (manufacturer) {
+                                    if (manufacturer != null) {
+                                      cubit.selectManufacturer(manufacturer);
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        // Product select/add
+                        if (state.selectedManufacturer != null) ...[
+                          _buildProductsSection(state),
+                          const SizedBox(height: 24),
+                          _buildDetailsSection(state),
+                          const SizedBox(height: 24),
+                          // Summary
+                          Card(
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.calculate,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        S.of(context).totalPrice,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    Helper.toCurrencyFormat(state.totalPrice),
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          // Payment status
+                          Card(
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.payment,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        S.of(context).paymentStatus,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  DropdownButtonFormField<PaymentStatus>(
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 12,
+                                      ),
+                                      labelStyle: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .withValues(alpha: 0.8),
+                                      ),
+                                    ),
+                                    value: state.paymentStatus,
+                                    items: PaymentStatus.values.map((status) {
+                                      return DropdownMenuItem(
+                                        value: status,
+                                        child: Text(
+                                          status.getLocalizedName(context),
+                                          style: const TextStyle(fontSize: 16),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (status) {
+                                      if (status != null) {
+                                        cubit.updatePaymentStatus(status);
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ]
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
         );
       },
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.receipt_long,
-            color: Theme.of(context).colorScheme.primary,
-            size: 28,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: GradientText(
-              text: S.of(context).newIncomingInvoice,
-            ),
-          ),
-          GradientIconButton(
-            icon: Icons.close,
-            onPressed: () => Navigator.of(context).pop(false),
-            fillColor: Colors.transparent,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContent(IncomingAddState state) {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildManufacturerSection(state),
-            const SizedBox(height: 24),
-            if (state.selectedManufacturer != null) ...[
-              _buildProductsSection(state),
-              const SizedBox(height: 24),
-              _buildDetailsSection(state),
-              const SizedBox(height: 24),
-              _buildSummarySection(state),
-              const SizedBox(height: 24),
-              _buildPaymentSection(state),
-              const SizedBox(height: 32),
-              _buildActionButtons(state),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildManufacturerSection(IncomingAddState state) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.business,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  S.of(context).selectManufacturer,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<Manufacturer>(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                labelStyle: TextStyle(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.8),
-                ),
-                floatingLabelStyle: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-              initialValue: state.selectedManufacturer,
-              items: state.manufacturers.map((manufacturer) {
-                return DropdownMenuItem(
-                  value: manufacturer,
-                  child: Text(
-                    manufacturer.manufacturerName,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                );
-              }).toList(),
-              onChanged: (manufacturer) {
-                if (manufacturer != null) {
-                  cubit.selectManufacturer(manufacturer);
-                }
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -587,169 +684,6 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildSummarySection(IncomingAddState state) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.calculate,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  S.of(context).totalPrice,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            Text(
-              Helper.toCurrencyFormat(state.totalPrice),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPaymentSection(IncomingAddState state) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.payment,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  S.of(context).paymentStatus,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<PaymentStatus>(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                labelStyle: TextStyle(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.8),
-                ),
-                floatingLabelStyle: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-              initialValue: state.paymentStatus,
-              items: PaymentStatus.values.map((status) {
-                return DropdownMenuItem(
-                  value: status,
-                  child: Text(
-                    status.getLocalizedName(context),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                );
-              }).toList(),
-              onChanged: (status) {
-                if (status != null) {
-                  cubit.updatePaymentStatus(status);
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButtons(IncomingAddState state) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          ),
-          child: Text(
-            S.of(context).cancel,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.error,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        const SizedBox(width: 16),
-        ElevatedButton(
-          onPressed: state.isSubmitting
-              ? null
-              : () async {
-                  final success = await cubit.submitInvoice();
-                  if (success && mounted) {
-                    Navigator.of(context).pop(true);
-                  }
-                },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: state.isSubmitting
-              ? const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2,
-                  ),
-                )
-              : Text(
-                  S.of(context).createInvoice,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-        ),
-      ],
     );
   }
 

@@ -35,17 +35,35 @@ class WarrantyInvoice {
   }
 
   static WarrantyInvoice fromMap(String id, Map<String, dynamic> map) {
+    // Ensure we have a real Dart Map (not a JS interop proxy on web)
+    final Map<String, dynamic> m = Map<String, dynamic>.from(map);
+
+    final dynamic rawDate = m['date'];
+    DateTime parsedDate;
+    if (rawDate is Timestamp) {
+      parsedDate = rawDate.toDate();
+    } else if (rawDate is DateTime) {
+      parsedDate = rawDate;
+    } else if (rawDate is String) {
+      parsedDate = DateTime.tryParse(rawDate) ?? DateTime.now();
+    } else {
+      parsedDate = DateTime.now();
+    }
+
+    final String statusString = (m['status'] as String? ?? 'pending');
+    final WarrantyStatus parsedStatus = WarrantyStatus.values.firstWhere(
+      (e) => e.getName().toLowerCase() == statusString.toLowerCase(),
+      orElse: () => WarrantyStatus.pending,
+    );
+
     return WarrantyInvoice(
       warrantyInvoiceID: id,
-      customerID: map['customerID'] ?? '',
-      salesInvoiceID: map['salesInvoiceID'] ?? '',
-      date: (map['date'] as Timestamp).toDate(),
-      status: WarrantyStatus.values.firstWhere(
-        (e) => e.getName().toLowerCase() == (map['status'] as String? ?? 'pending').toLowerCase(),
-        orElse: () => WarrantyStatus.pending,
-      ),
-      reason: map['reason'] ?? '',
-      customerName: map['customerName'],
+      customerID: (m['customerID'] as String?) ?? '',
+      salesInvoiceID: (m['salesInvoiceID'] as String?) ?? '',
+      date: parsedDate,
+      status: parsedStatus,
+      reason: (m['reason'] as String?) ?? '',
+      customerName: m['customerName'] as String?,
     );
   }
 
@@ -70,4 +88,4 @@ class WarrantyInvoice {
       details: details ?? this.details,
     );
   }
-} 
+}

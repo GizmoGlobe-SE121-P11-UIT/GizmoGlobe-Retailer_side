@@ -15,6 +15,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:gizmoglobe_client/widgets/voucher/voucher_card.dart';
 import 'package:gizmoglobe_client/components/general/web_header.dart';
 import 'package:gizmoglobe_client/components/general/web_sidebar.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 
 import '../../../../enums/processing/process_state_enum.dart';
 
@@ -89,20 +90,12 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
             if (!mounted) return;
 
             if (state.processState == ProcessState.success) {
-              if (mounted) {
-                showDialog(
-                  context: context,
-                  builder: (context) => InformationDialog(
-                    title: state.dialogName.getLocalizedName(context),
-                    content: state.notifyMessage.getLocalizedMessage(context),
-                    onPressed: () {
-                      if (mounted) {
-                        cubit.toIdle();
-                      }
-                    },
-                  ),
-                );
-              }
+              SnackbarService.showSuccess(
+                context,
+                state.dialogName.getLocalizedName(context),
+                state.notifyMessage.getLocalizedMessage(context),
+              );
+              cubit.toIdle();
             } else if (state.processState == ProcessState.failure) {
               if (mounted) {
                 showDialog(
@@ -225,8 +218,12 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                             await AddVoucherScreen.showModal(context);
                         if (mounted) {
                           if (result == true) {
-                            await cubit
-                                .refresh(); // Refresh the list after adding
+                            SnackbarService.showSuccess(
+                              context,
+                              S.of(context).success,
+                              S.of(context).voucherAddedSuccess,
+                            );
+                            await cubit.refresh();
                           }
                         }
                       }

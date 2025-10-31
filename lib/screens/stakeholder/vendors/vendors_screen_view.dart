@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_add/vendor_add_view.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_detail/vendor_detail_view.dart';
@@ -8,6 +7,8 @@ import 'package:gizmoglobe_client/screens/stakeholder/vendors/vendor_edit/vendor
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../enums/stakeholders/manufacturer_status.dart';
 import 'vendors_screen_cubit.dart';
@@ -32,13 +33,16 @@ class _VendorsScreenState extends State<VendorsScreen> {
 
   void _showAddManufacturerModal() async {
     final result = await VendorAddScreen.showModal(context);
-    if (result == true) {
-      // Show success snackbar
-      _showSnackBar(
-        title: S.of(context).success,
-        message: S.of(context).manufacturerAddedSuccessfully(""),
-        contentType: ContentType.success,
-      );
+    if (result == true && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        SnackbarService.showSuccess(
+          context,
+          S.of(context).success,
+          S.of(context).manufacturerAddedSuccessfully(""),
+        );
+        cubit.loadManufacturers();
+      });
     }
   }
 
@@ -186,20 +190,31 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                   manufacturer,
                                                 );
 
-                                                if (updatedManufacturer !=
-                                                    null) {
-                                                  await cubit
-                                                      .updateManufacturer(
-                                                          updatedManufacturer);
-                                                  // Show success snackbar
-                                                  _showSnackBar(
-                                                    title:
-                                                        S.of(context).success,
-                                                    message:
-                                                        "Manufacturer updated successfully.",
-                                                    contentType:
-                                                        ContentType.success,
-                                                  );
+                                                if (updatedManufacturer != null) {
+                                                  try {
+                                                    await cubit.updateManufacturer(updatedManufacturer);
+                                                    if (mounted) {
+                                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                        if (!mounted) return;
+                                                        SnackbarService.showSuccess(
+                                                          context,
+                                                          S.of(context).success,
+                                                          "Manufacturer updated successfully.",
+                                                        );
+                                                      });
+                                                    }
+                                                  } catch (e) {
+                                                    if (mounted) {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) => InformationDialog(
+                                                          title: S.of(context).failure,
+                                                          content: e.toString(),
+                                                          buttonText: 'OK',
+                                                        ),
+                                                      );
+                                                    }
+                                                  }
                                                 }
                                               },
                                             ),
@@ -282,11 +297,33 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                         ),
                                                         TextButton(
                                                           onPressed: () async {
-                                                            Navigator.pop(
-                                                                context);
-                                                            await cubit
-                                                                .toggleManufacturerStatus(
-                                                                    manufacturer);
+                                                            Navigator.pop(context);
+                                                            try {
+                                                              await cubit.toggleManufacturerStatus(manufacturer);
+                                                              if (mounted) {
+                                                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                                  if (!mounted) return;
+                                                                  SnackbarService.showSuccess(
+                                                                    context,
+                                                                    S.of(context).success,
+                                                                    manufacturer.status == ManufacturerStatus.active
+                                                                        ? S.of(context).deactivate
+                                                                        : S.of(context).activate,
+                                                                  );
+                                                                });
+                                                              }
+                                                            } catch (e) {
+                                                              if (mounted) {
+                                                                showDialog(
+                                                                  context: context,
+                                                                  builder: (context) => InformationDialog(
+                                                                    title: S.of(context).failure,
+                                                                    content: e.toString(),
+                                                                    buttonText: 'OK',
+                                                                  ),
+                                                                );
+                                                              }
+                                                            }
                                                           },
                                                           child: Text(
                                                             manufacturer.status ==
@@ -397,24 +434,5 @@ class _VendorsScreenState extends State<VendorsScreen> {
     );
   }
 
-  void _showSnackBar({
-    required String title,
-    required String message,
-    required ContentType contentType,
-  }) {
-    if (!mounted) return;
-
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: title,
-        message: message,
-        contentType: contentType,
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+  // Removed custom snackbar in favor of SnackbarService
 }

@@ -28,7 +28,7 @@ class WarrantyDetailView extends StatelessWidget {
     if (kIsWeb) {
       return showDialog<bool>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (context) => Dialog(
           backgroundColor: Colors.transparent,
           child: WarrantyDetailWebView.newInstance(invoice),

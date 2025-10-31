@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import 'customer_add/customer_add_view.dart';
 import 'customer_detail/customer_detail_view.dart';
@@ -69,7 +71,19 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         icon: Icons.person_add,
                         iconSize: 32,
                         onPressed: () async {
-                          await CustomerAddScreen.showModal(context);
+                          final result =
+                              await CustomerAddScreen.showModal(context);
+                          if (result == true && mounted) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (!mounted) return;
+                              SnackbarService.showSuccess(
+                                context,
+                                S.of(context).success,
+                                S.of(context).customerAddedSuccessfully,
+                              );
+                              cubit.loadCustomers();
+                            });
+                          }
                         },
                       ),
                     ],
@@ -98,12 +112,24 @@ class _CustomersScreenState extends State<CustomersScreen> {
 
                           return GestureDetector(
                             onTap: () async {
-                              await CustomerDetailScreen.showModal(
+                              final result =
+                                  await CustomerDetailScreen.showModal(
                                 context,
                                 customer,
                                 readOnly: !CustomerPermissions.canEditCustomers(
                                     state.userRole),
                               );
+                              if (result == true && mounted) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  if (!mounted) return;
+                                  SnackbarService.showSuccess(
+                                    context,
+                                    S.of(context).success,
+                                    S.of(context).updateProfileSuccess,
+                                  );
+                                });
+                              }
                             },
                             onLongPress: () {
                               cubit.setSelectedIndex(index);
@@ -166,8 +192,39 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                                 );
 
                                                 if (updatedCustomer != null) {
-                                                  await cubit.updateCustomer(
-                                                      updatedCustomer);
+                                                  try {
+                                                    await cubit.updateCustomer(
+                                                        updatedCustomer);
+                                                    if (mounted) {
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) {
+                                                        if (!mounted) return;
+                                                        SnackbarService
+                                                            .showSuccess(
+                                                          context,
+                                                          S.of(context).success,
+                                                          S
+                                                              .of(context)
+                                                              .updateProfileSuccess,
+                                                        );
+                                                      });
+                                                    }
+                                                  } catch (e) {
+                                                    if (mounted) {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            InformationDialog(
+                                                          title: S
+                                                              .of(context)
+                                                              .failure,
+                                                          content: e.toString(),
+                                                          buttonText: 'OK',
+                                                        ),
+                                                      );
+                                                    }
+                                                  }
                                                 }
                                               },
                                             )

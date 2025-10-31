@@ -10,32 +10,35 @@ class WarrantyDetailCubit extends Cubit<WarrantyDetailState> {
   final Firebase _firebase = Firebase();
   bool _isClosed = false;
 
-  WarrantyDetailCubit(WarrantyInvoice invoice) 
+  WarrantyDetailCubit(WarrantyInvoice invoice)
       : super(WarrantyDetailState(invoice: invoice)) {
     _loadInvoiceDetails();
     _loadUserRole();
   }
 
   Future<void> _loadInvoiceDetails() async {
-    if (_isClosed) return;  // Check if cubit is closed
+    if (_isClosed) return; // Check if cubit is closed
     emit(state.copyWith(isLoading: true));
-    
+
     try {
-      final updatedInvoice = await _firebase.getWarrantyInvoiceWithDetails(state.invoice.warrantyInvoiceID!);
-      
+      final updatedInvoice = await _firebase
+          .getWarrantyInvoiceWithDetails(state.invoice.warrantyInvoiceID!);
+
       // Load all products referenced in details
       final Map<String, Product> products = {};
       final allProducts = await _firebase.getProducts();
-      
+
       for (var detail in updatedInvoice.details) {
         final product = allProducts.firstWhere(
           (p) => p.productID == detail.productID,
-          orElse: () => throw Exception('Product not found: ${detail.productID}'), // Không tìm thấy sản phẩm
+          orElse: () => throw Exception(
+              'Product not found: ${detail.productID}'), // Không tìm thấy sản phẩm
         );
         products[detail.productID] = product;
       }
 
-      if (!_isClosed) {  // Check again before final emit
+      if (!_isClosed) {
+        // Check again before final emit
         emit(state.copyWith(
           invoice: updatedInvoice,
           products: products,
@@ -43,7 +46,8 @@ class WarrantyDetailCubit extends Cubit<WarrantyDetailState> {
         ));
       }
     } catch (e) {
-      if (!_isClosed) {  // Check before error emit
+      if (!_isClosed) {
+        // Check before error emit
         emit(state.copyWith(
           isLoading: false,
           error: e.toString(),
@@ -69,9 +73,13 @@ class WarrantyDetailCubit extends Cubit<WarrantyDetailState> {
     try {
       final updatedInvoice = state.invoice.copyWith(status: newStatus);
       await _firebase.updateWarrantyInvoice(updatedInvoice);
-      emit(state.copyWith(invoice: updatedInvoice));
+      if (!_isClosed) {
+        emit(state.copyWith(invoice: updatedInvoice));
+      }
     } catch (e) {
-      emit(state.copyWith(error: 'Error updating warranty status: $e')); // Lỗi khi cập nhật trạng thái bảo hành
+      if (!_isClosed) {
+        emit(state.copyWith(error: 'Error updating warranty status: $e'));
+      }
     }
   }
 

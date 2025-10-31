@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart'
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/functions/helper.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class IncomingInvoicePdfService {
   static Future<pw.Document> generatePdf({
@@ -12,25 +13,40 @@ class IncomingInvoicePdfService {
     required Manufacturer? manufacturer,
     required Map<String, Product> products,
   }) async {
+    // Load the NotoSans font
+    final notoSansRegular = await pw.Font.ttf(
+      await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'),
+    );
+    final notoSansBold = await pw.Font.ttf(
+      await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'),
+    );
+
     final pdf = pw.Document();
 
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              pw.SizedBox(height: 40),
-              _buildCompanyInfo(manufacturer),
-              pw.SizedBox(height: 30),
-              _buildInvoiceInfo(invoice),
-              pw.SizedBox(height: 20),
-              _buildProductsTable(invoice, products),
-              pw.SizedBox(height: 20),
-              _buildFooter(invoice),
-            ],
+          return pw.Theme(
+            data: pw.ThemeData.withFont(
+              base: notoSansRegular,
+              bold: notoSansBold,
+            ),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                _buildHeader(notoSansRegular, notoSansBold),
+                pw.SizedBox(height: 40),
+                _buildCompanyInfo(manufacturer, notoSansRegular, notoSansBold),
+                pw.SizedBox(height: 30),
+                _buildInvoiceInfo(invoice, notoSansRegular, notoSansBold),
+                pw.SizedBox(height: 20),
+                _buildProductsTable(
+                    invoice, products, notoSansRegular, notoSansBold),
+                pw.SizedBox(height: 20),
+                _buildFooter(invoice, notoSansRegular, notoSansBold),
+              ],
+            ),
           );
         },
       ),
@@ -39,7 +55,7 @@ class IncomingInvoicePdfService {
     return pdf;
   }
 
-  static pw.Widget _buildHeader() {
+  static pw.Widget _buildHeader(pw.Font notoSansRegular, pw.Font notoSansBold) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(20),
       decoration: const pw.BoxDecoration(
@@ -55,6 +71,7 @@ class IncomingInvoicePdfService {
               pw.Text(
                 'GIZMOGLOBE',
                 style: pw.TextStyle(
+                  font: notoSansBold,
                   color: PdfColors.white,
                   fontSize: 28,
                   fontWeight: pw.FontWeight.bold,
@@ -62,7 +79,8 @@ class IncomingInvoicePdfService {
               ),
               pw.Text(
                 'Retailer Management System',
-                style: const pw.TextStyle(
+                style: pw.TextStyle(
+                  font: notoSansRegular,
                   color: PdfColors.white,
                   fontSize: 12,
                 ),
@@ -72,6 +90,7 @@ class IncomingInvoicePdfService {
           pw.Text(
             'INCOMING INVOICE',
             style: pw.TextStyle(
+              font: notoSansBold,
               color: PdfColors.white,
               fontSize: 20,
               fontWeight: pw.FontWeight.bold,
@@ -82,7 +101,8 @@ class IncomingInvoicePdfService {
     );
   }
 
-  static pw.Widget _buildCompanyInfo(Manufacturer? manufacturer) {
+  static pw.Widget _buildCompanyInfo(Manufacturer? manufacturer,
+      pw.Font notoSansRegular, pw.Font notoSansBold) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(20),
       decoration: pw.BoxDecoration(
@@ -96,6 +116,7 @@ class IncomingInvoicePdfService {
           pw.Text(
             'Manufacturer Information',
             style: pw.TextStyle(
+              font: notoSansBold,
               fontSize: 16,
               fontWeight: pw.FontWeight.bold,
               color: PdfColors.blue700,
@@ -104,14 +125,15 @@ class IncomingInvoicePdfService {
           pw.SizedBox(height: 12),
           pw.Text(
             'Name: ${manufacturer?.manufacturerName ?? 'Unknown'}',
-            style: const pw.TextStyle(fontSize: 12),
+            style: pw.TextStyle(font: notoSansRegular, fontSize: 12),
           ),
         ],
       ),
     );
   }
 
-  static pw.Widget _buildInvoiceInfo(IncomingInvoice invoice) {
+  static pw.Widget _buildInvoiceInfo(
+      IncomingInvoice invoice, pw.Font notoSansRegular, pw.Font notoSansBold) {
     final dateFormat = DateFormat('dd/MM/yyyy');
 
     return pw.Row(
@@ -120,27 +142,32 @@ class IncomingInvoicePdfService {
         pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            _buildInfoRow('Invoice ID:', invoice.incomingInvoiceID ?? 'N/A'),
+            _buildInfoRow('Invoice ID:', invoice.incomingInvoiceID ?? 'N/A',
+                notoSansBold, notoSansRegular),
             pw.SizedBox(height: 8),
-            _buildInfoRow('Date:', dateFormat.format(invoice.date)),
+            _buildInfoRow('Date:', dateFormat.format(invoice.date),
+                notoSansBold, notoSansRegular),
           ],
         ),
         pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.end,
           children: [
-            _buildInfoRow('Status:', invoice.status.getName().toUpperCase()),
+            _buildInfoRow('Status:', invoice.status.getName().toUpperCase(),
+                notoSansBold, notoSansRegular),
           ],
         ),
       ],
     );
   }
 
-  static pw.Widget _buildInfoRow(String label, String value) {
+  static pw.Widget _buildInfoRow(
+      String label, String value, pw.Font boldFont, pw.Font regularFont) {
     return pw.Row(
       children: [
         pw.Text(
           label,
           style: pw.TextStyle(
+            font: boldFont,
             fontSize: 12,
             fontWeight: pw.FontWeight.bold,
           ),
@@ -148,7 +175,7 @@ class IncomingInvoicePdfService {
         pw.SizedBox(width: 8),
         pw.Text(
           value,
-          style: const pw.TextStyle(fontSize: 12),
+          style: pw.TextStyle(font: regularFont, fontSize: 12),
         ),
       ],
     );
@@ -157,6 +184,8 @@ class IncomingInvoicePdfService {
   static pw.Widget _buildProductsTable(
     IncomingInvoice invoice,
     Map<String, Product> products,
+    pw.Font notoSansRegular,
+    pw.Font notoSansBold,
   ) {
     final tableHeaders = [
       'Product',
@@ -168,6 +197,13 @@ class IncomingInvoicePdfService {
 
     return pw.Table(
       border: pw.TableBorder.all(color: PdfColors.grey400, width: 1),
+      columnWidths: {
+        0: const pw.FlexColumnWidth(3), // Product
+        1: const pw.FlexColumnWidth(2), // Product ID
+        2: const pw.FlexColumnWidth(1), // Quantity
+        3: const pw.FlexColumnWidth(2), // Unit Price
+        4: const pw.FlexColumnWidth(2), // Subtotal
+      },
       children: [
         // Header row
         pw.TableRow(
@@ -178,6 +214,7 @@ class IncomingInvoicePdfService {
               child: pw.Text(
                 header,
                 style: pw.TextStyle(
+                  font: notoSansBold,
                   color: PdfColors.white,
                   fontSize: 11,
                   fontWeight: pw.FontWeight.bold,
@@ -198,35 +235,35 @@ class IncomingInvoicePdfService {
                 padding: const pw.EdgeInsets.all(8),
                 child: pw.Text(
                   product?.productName ?? 'N/A',
-                  style: const pw.TextStyle(fontSize: 10),
+                  style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
                 ),
               ),
               pw.Padding(
                 padding: const pw.EdgeInsets.all(8),
                 child: pw.Text(
                   detail.productID,
-                  style: const pw.TextStyle(fontSize: 10),
+                  style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
                 ),
               ),
               pw.Padding(
                 padding: const pw.EdgeInsets.all(8),
                 child: pw.Text(
                   '${detail.quantity}',
-                  style: const pw.TextStyle(fontSize: 10),
+                  style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
                 ),
               ),
               pw.Padding(
                 padding: const pw.EdgeInsets.all(8),
                 child: pw.Text(
                   Helper.toCurrencyFormat(unitPrice),
-                  style: const pw.TextStyle(fontSize: 10),
+                  style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
                 ),
               ),
               pw.Padding(
                 padding: const pw.EdgeInsets.all(8),
                 child: pw.Text(
                   Helper.toCurrencyFormat(subtotal),
-                  style: const pw.TextStyle(fontSize: 10),
+                  style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
                 ),
               ),
             ],
@@ -236,7 +273,11 @@ class IncomingInvoicePdfService {
     );
   }
 
-  static pw.Widget _buildFooter(IncomingInvoice invoice) {
+  static pw.Widget _buildFooter(
+    IncomingInvoice invoice,
+    pw.Font notoSansRegular,
+    pw.Font notoSansBold,
+  ) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(20),
       decoration: pw.BoxDecoration(
@@ -250,6 +291,7 @@ class IncomingInvoicePdfService {
           pw.Text(
             'TOTAL AMOUNT:',
             style: pw.TextStyle(
+              font: notoSansBold,
               fontSize: 16,
               fontWeight: pw.FontWeight.bold,
               color: PdfColors.blue900,
@@ -258,6 +300,7 @@ class IncomingInvoicePdfService {
           pw.Text(
             Helper.toCurrencyFormat(invoice.totalPrice),
             style: pw.TextStyle(
+              font: notoSansBold,
               fontSize: 20,
               fontWeight: pw.FontWeight.bold,
               color: PdfColors.blue900,

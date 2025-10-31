@@ -64,6 +64,7 @@ dependencies:
   awesome_snackbar_content: ^0.1.8
   web: ^1.1.1
   path_provider: ^2.1.4
+  google_fonts: ^6.3.2
 
 
 dev_dependencies:
@@ -93,6 +94,15 @@ flutter:
     - lib/GIzmoGlobe.png
     - lib/data/database/full_json_generated_data_vn_units.json
     - .env
+    - assets/fonts/NotoSans-Regular.ttf
+    - assets/fonts/NotoSans-Bold.ttf
+    - assets/
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/NotoSans-Regular.ttf
+        - asset: assets/fonts/NotoSans-Bold.ttf
+          weight: 700
 
   # To add assets to your application, add an assets section, like this:
   # assets:

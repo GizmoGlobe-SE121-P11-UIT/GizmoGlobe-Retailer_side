@@ -682,14 +682,7 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
     await Future.delayed(const Duration(milliseconds: 100));
 
     if (!_formKey.currentState!.validate()) {
-      if (kDebugMode) {
-        print('Form validation failed');
-      }
       return;
-    }
-
-    if (kDebugMode) {
-      print('Starting save process');
     }
 
     // Store context before async operation
@@ -720,29 +713,10 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
       }
 
       if (invoice != null) {
-        if (kDebugMode) {
-          print(
-              'Invoice created successfully, force navigating back to warranty screen');
+        if (mounted) {
+          Navigator.of(context).pop(true);
         }
-
-        // Show success message using root context
-        showDialog(
-          context: context,
-          builder: (context) => InformationDialog(
-            title: S.of(context).success,
-            content: S.of(context).warrantyInvoiceCreated,
-            buttonText: 'OK',
-            onPressed: () {
-              if (mounted) {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              }
-            },
-          ),
-        );
       } else if (state.errorMessage != null) {
-        if (kDebugMode) {
-          print('Error creating invoice: ${state.errorMessage}');
-        }
         showDialog(
           context: dialogContext,
           builder: (context) => InformationDialog(
@@ -753,9 +727,6 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
         );
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error during save process: $e');
-      }
       if (!mounted) return;
 
       // Hide loading indicator if still showing

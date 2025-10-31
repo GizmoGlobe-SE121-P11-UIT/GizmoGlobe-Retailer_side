@@ -14,6 +14,7 @@ import 'mainboard_related/mainboard.dart';
 // helpers imports
 import '../../objects/manufacturer.dart';
 import '../../enums/product_related/product_status_enum.dart';
+import '../../enums/stakeholders/manufacturer_status.dart';
 import '../../enums/product_related/ram_enums/ram_type.dart';
 import '../../enums/product_related/gpu_enums/gpu_series.dart';
 import '../../enums/product_related/gpu_enums/gpu_version.dart';
@@ -34,7 +35,8 @@ import 'psu_related/connector.dart';
 class ProductFactory {
   static Product createProduct(Map<String, dynamic> properties) {
     dynamic getAttr(String path) => getByPath(properties, path);
-    CategoryEnum category = CategoryEnumExtension.fromName(properties['category'].toString());
+    CategoryEnum category =
+        CategoryEnumExtension.fromName(properties['category'].toString());
 
     switch (category) {
       case CategoryEnum.ram:
@@ -52,12 +54,13 @@ class ProductFactory {
           imageUrl: properties['imageUrl']?.toString(),
           enDescription: properties['enDescription']?.toString(),
           viDescription: properties['viDescription']?.toString(),
-
           type: parseRamType(getAttr('attributes.type')),
           bus: toInt(getAttr('attributes.bus')),
           clLatency: toInt(getAttr('attributes.clLatency')),
-          kitStickCount: toInt(getAttr('attributes.kitConfiguration.stickCount')),
-          capacityPerStickGb: toInt(getAttr('attributes.kitConfiguration.capacityPerStickGb')),
+          kitStickCount:
+              toInt(getAttr('attributes.kitConfiguration.stickCount')),
+          capacityPerStickGb:
+              toInt(getAttr('attributes.kitConfiguration.capacityPerStickGb')),
         )..productID = properties['productID']?.toString();
       case CategoryEnum.cpu:
         final attrs = getAttr('attributes') as Map<String, dynamic>? ?? {};
@@ -75,7 +78,6 @@ class ProductFactory {
           imageUrl: properties['imageUrl']?.toString(),
           enDescription: properties['enDescription']?.toString(),
           viDescription: properties['viDescription']?.toString(),
-
           series: parseCPUSeries(attrs['series']),
           socket: parseSocket(attrs['socket']),
           core: toInt(attrs['core']),
@@ -94,14 +96,16 @@ class ProductFactory {
           sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
-
           maxWattage: toInt(attrs['maxWattage']),
           efficiency: parsePSUEfficiency(attrs['efficiency']),
-          modularity: parsePSUModular(attrs['modularity'] ?? attrs['modularityity'] ?? attrs['modular']),
+          modularity: parsePSUModular(attrs['modularity'] ??
+              attrs['modularityity'] ??
+              attrs['modular']),
           connectors: (attrs['connectors'] is Iterable)
-              ? (attrs['connectors'] as Iterable).map((e) => Connector.fromJson(e as Map<String, dynamic>)).toList()
+              ? (attrs['connectors'] as Iterable)
+                  .map((e) => Connector.fromJson(e as Map<String, dynamic>))
+                  .toList()
               : <Connector>[],
-
           stock: toInt(properties['stock']),
           sales: toInt(properties['sales']),
           status: parseStatus(properties['status']),
@@ -119,16 +123,16 @@ class ProductFactory {
           sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
-
           series: parseGPUSeries(attrs['series']),
           version: parseGPUVersion(attrs['vramVersion'] ?? attrs['vram']),
           memory: toInt(attrs['memory']),
           boostClock: toDouble(attrs['boostClock']),
           tdp: toInt(attrs['tdp']),
           ports: (attrs['ports'] is Iterable)
-              ? (attrs['ports'] as Iterable).map((e) => IOPort.fromJson(e as Map<String, dynamic>)).toList()
+              ? (attrs['ports'] as Iterable)
+                  .map((e) => IOPort.fromJson(e as Map<String, dynamic>))
+                  .toList()
               : <IOPort>[],
-
           stock: toInt(properties['stock']),
           sales: toInt(properties['sales']),
           status: parseStatus(properties['status']),
@@ -146,25 +150,29 @@ class ProductFactory {
           sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
-
           chipsetCode: attrs['chipsetCode']?.toString() ?? '',
           socket: parseSocket(attrs['socket']),
           formFactor: (attrs['formFactor'] != null)
-              ? MainboardFormFactorExtension.fromName(attrs['formFactor'].toString())
+              ? MainboardFormFactorExtension.fromName(
+                  attrs['formFactor'].toString())
               : MainboardFormFactor.atx,
           ramSpec: (attrs['ramSpec'] is Map<String, dynamic>)
               ? RamSpec.fromJson(attrs['ramSpec'] as Map<String, dynamic>)
               : RamSpec(type: RAMType.unknown, slots: 0, maxSingleDimmGb: 0),
           pcieSlots: (attrs['pcieSlots'] is Iterable)
-              ? (attrs['pcieSlots'] as Iterable).map((e) => PCIeSlot.fromJson(e as Map<String, dynamic>)).toList()
+              ? (attrs['pcieSlots'] as Iterable)
+                  .map((e) => PCIeSlot.fromJson(e as Map<String, dynamic>))
+                  .toList()
               : <PCIeSlot>[],
           storageSlot: (attrs['storageSlots'] is Map<String, dynamic>)
-              ? StorageSlot.fromJson(attrs['storageSlots'] as Map<String, dynamic>)
+              ? StorageSlot.fromJson(
+                  attrs['storageSlots'] as Map<String, dynamic>)
               : StorageSlot(m2Slots: 0, sataPorts: 0),
           ioPorts: (attrs['ioPorts'] is Iterable)
-              ? (attrs['ioPorts'] as Iterable).map((e) => IOPort.fromJson(e as Map<String, dynamic>)).toList()
+              ? (attrs['ioPorts'] as Iterable)
+                  .map((e) => IOPort.fromJson(e as Map<String, dynamic>))
+                  .toList()
               : <IOPort>[],
-
           stock: toInt(properties['stock']),
           sales: toInt(properties['sales']),
           status: parseStatus(properties['status']),
@@ -183,14 +191,13 @@ class ProductFactory {
           sellingPrice: toInt(properties['sellingPrice']),
           discount: toDouble(properties['discount']),
           release: parseDate(properties['release']),
-
           gen: DriveGen.fromJson(toInt(attrs['gen'])),
           memoryGb: toInt(attrs['memoryGb']),
           interfaceType: parseInterfaceType(attrs['interfaceType']),
-          speed: Speed.fromJson(attrs['speed'] is Map<String, dynamic> ? speed : {}),
+          speed: Speed.fromJson(
+              attrs['speed'] is Map<String, dynamic> ? speed : {}),
           formFactor: DriveFormFactorExtension.fromName(attrs['formFactor']),
           driveType: parseDriveType(attrs['driveType']),
-
           sales: toInt(properties['sales']),
           stock: toInt(properties['stock']),
           status: parseStatus(properties['status']),
@@ -202,7 +209,6 @@ class ProductFactory {
         throw Exception('Invalid product category');
     }
   }
-
 }
 
 dynamic getByPath(Map<String, dynamic> map, String path) {
@@ -217,13 +223,22 @@ dynamic getByPath(Map<String, dynamic> map, String path) {
   return cur;
 }
 
-Manufacturer parseManufacturer(String? v) {
+Manufacturer parseManufacturer(dynamic v) {
   if (v == null) return Manufacturer.nullManufacturer;
-
-  return Database().manufacturerList.firstWhere(
+  if (v is String) {
+    return Database().manufacturerList.firstWhere(
         (m) => m.manufacturerID == v.toString(),
-    orElse: () => Manufacturer.nullManufacturer
-  );
+        orElse: () => Manufacturer.nullManufacturer);
+  }
+  if (v is Map<String, dynamic>) {
+    return Manufacturer(
+      manufacturerID: v['manufacturerID'] as String?,
+      manufacturerName: v['manufacturerName'] as String? ?? '',
+      status: ManufacturerStatusExtension.fromName(
+          v['status']?.toString() ?? 'active'),
+    );
+  }
+  return Manufacturer.nullManufacturer;
 }
 
 double toDouble(dynamic v) {
@@ -245,7 +260,8 @@ DateTime parseDate(dynamic v) {
   if (v is num) return DateTime.fromMillisecondsSinceEpoch((v).toInt() * 1000);
   final parsed = int.tryParse(v.toString());
   if (parsed != null) return DateTime.fromMillisecondsSinceEpoch(parsed * 1000);
-  return DateTime.tryParse(v.toString()) ?? DateTime.fromMillisecondsSinceEpoch(0);
+  return DateTime.tryParse(v.toString()) ??
+      DateTime.fromMillisecondsSinceEpoch(0);
 }
 
 ProductStatusEnum parseStatus(dynamic v) {

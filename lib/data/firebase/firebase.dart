@@ -1441,8 +1441,9 @@ class Firebase {
           .get();
 
       return snapshot.docs.map((doc) {
-        return WarrantyInvoice.fromMap(
-            doc.id, doc.data() as Map<String, dynamic>);
+        final Map<String, dynamic> data =
+            Map<String, dynamic>.from(doc.data() as Map);
+        return WarrantyInvoice.fromMap(doc.id, data);
       }).toList();
     } catch (e) {
       if (kDebugMode) {
@@ -1465,10 +1466,10 @@ class Firebase {
       }
 
       // Create invoice object
-      WarrantyInvoice invoice = WarrantyInvoice.fromMap(
-        invoiceDoc.id,
-        invoiceDoc.data() as Map<String, dynamic>,
-      );
+      final Map<String, dynamic> invoiceData =
+          Map<String, dynamic>.from(invoiceDoc.data() as Map);
+      WarrantyInvoice invoice =
+          WarrantyInvoice.fromMap(invoiceDoc.id, invoiceData);
 
       // Get invoice details
       final QuerySnapshot detailsSnapshot = await _firestore
@@ -1499,7 +1500,9 @@ class Firebase {
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
-        return WarrantyInvoice.fromMap(doc.id, doc.data());
+        final Map<String, dynamic> data =
+            Map<String, dynamic>.from(doc.data() as Map);
+        return WarrantyInvoice.fromMap(doc.id, data);
       }).toList();
     });
   }
@@ -1520,18 +1523,14 @@ class Firebase {
 
   Future<String?> createWarrantyInvoice(WarrantyInvoice invoice) async {
     try {
-      if (kDebugMode) {
-        print('Starting warranty invoice creation in Firebase');
-      } // Bắt đầu tạo hóa đơn bảo hành trong Firebase
-
       // Create warranty invoice document
       final docRef = await _firestore.collection('warranty_invoices').add({
         'warrantyInvoiceID': '', // Temporary placeholder
         'salesInvoiceID': invoice.salesInvoiceID,
         'customerName': invoice.customerName,
         'customerID': invoice.customerID,
-        'date': invoice.date,
-        'status': invoice.status.toString(),
+        'date': Timestamp.fromDate(invoice.date),
+        'status': invoice.status.getName(),
         'reason': invoice.reason,
       });
 
@@ -1540,18 +1539,10 @@ class Firebase {
         'warrantyInvoiceID': docRef.id,
       });
 
-      if (kDebugMode) {
-        print('Created warranty invoice document with ID: ${docRef.id}');
-      } // Đã tạo hóa đơn bảo hành với ID
-
       // Create warranty details
       final batch = _firestore.batch();
 
       for (var detail in invoice.details) {
-        if (kDebugMode) {
-          print('Processing detail: ${detail.toJson()}');
-        }
-
         final detailRef =
             _firestore.collection('warranty_invoice_details').doc();
         batch.set(detailRef, {
@@ -1563,10 +1554,6 @@ class Firebase {
       }
 
       await batch.commit();
-      if (kDebugMode) {
-        print(
-            'Successfully created warranty invoice and ${invoice.details.length} details');
-      } // Đã tạo hóa đơn bảo hành và chi tiết
 
       return docRef.id;
     } catch (e) {

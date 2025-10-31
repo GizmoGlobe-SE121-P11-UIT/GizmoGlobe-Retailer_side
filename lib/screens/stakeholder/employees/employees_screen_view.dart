@@ -4,6 +4,8 @@ import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
+import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import 'employee_add/employee_add_view.dart';
 import 'employee_detail/employee_detail_view.dart';
@@ -28,8 +30,20 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
   final TextEditingController searchController = TextEditingController();
   EmployeesScreenCubit get cubit => context.read<EmployeesScreenCubit>();
 
-  void _showAddEmployeeDialog() {
-    EmployeeAddScreen.showModal(context);
+  void _showAddEmployeeDialog() async {
+    final result = await EmployeeAddScreen.showModal(context);
+    if (!mounted) return;
+    if (result == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        SnackbarService.showSuccess(
+          context,
+          S.of(context).success,
+          S.of(context).employeeAddedSuccessfully,
+        );
+        cubit.loadEmployees();
+      });
+    }
   }
 
   void _showFilterDialog() {
@@ -176,11 +190,23 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                         itemBuilder: (context, index) {
                           final employee = state.employees[index];
                           return GestureDetector(
-                            onTap: () {
-                              EmployeeDetailScreen.showModal(
+                            onTap: () async {
+                              final result =
+                                  await EmployeeDetailScreen.showModal(
                                 context,
                                 employee,
                               );
+                              if (result == true && mounted) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  if (!mounted) return;
+                                  SnackbarService.showSuccess(
+                                    context,
+                                    S.of(context).success,
+                                    S.of(context).updateProfileSuccess,
+                                  );
+                                });
+                              }
                             },
                             onLongPress: () {
                               cubit.setSelectedIndex(index);
@@ -262,8 +288,39 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                 );
 
                                                 if (updatedEmployee != null) {
-                                                  await cubit.updateEmployee(
-                                                      updatedEmployee);
+                                                  try {
+                                                    await cubit.updateEmployee(
+                                                        updatedEmployee);
+                                                    if (mounted) {
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) {
+                                                        if (!mounted) return;
+                                                        SnackbarService
+                                                            .showSuccess(
+                                                          context,
+                                                          S.of(context).success,
+                                                          S
+                                                              .of(context)
+                                                              .updateProfileSuccess,
+                                                        );
+                                                      });
+                                                    }
+                                                  } catch (e) {
+                                                    if (mounted) {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            InformationDialog(
+                                                          title: S
+                                                              .of(context)
+                                                              .failure,
+                                                          content: e.toString(),
+                                                          buttonText: 'OK',
+                                                        ),
+                                                      );
+                                                    }
+                                                  }
                                                 }
                                               },
                                             ),
@@ -321,10 +378,49 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                           onPressed: () async {
                                                             Navigator.pop(
                                                                 context);
-                                                            await cubit
-                                                                .deleteEmployee(
-                                                                    employee
-                                                                        .employeeID!);
+                                                            try {
+                                                              await cubit
+                                                                  .deleteEmployee(
+                                                                      employee
+                                                                          .employeeID!);
+                                                              if (mounted) {
+                                                                WidgetsBinding
+                                                                    .instance
+                                                                    .addPostFrameCallback(
+                                                                        (_) {
+                                                                  if (!mounted)
+                                                                    return;
+                                                                  SnackbarService
+                                                                      .showSuccess(
+                                                                    context,
+                                                                    S
+                                                                        .of(context)
+                                                                        .success,
+                                                                    S
+                                                                        .of(context)
+                                                                        .editInvoiceSuccess,
+                                                                  );
+                                                                });
+                                                              }
+                                                            } catch (e) {
+                                                              if (mounted) {
+                                                                showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (context) =>
+                                                                          InformationDialog(
+                                                                    title: S
+                                                                        .of(context)
+                                                                        .failure,
+                                                                    content: e
+                                                                        .toString(),
+                                                                    buttonText:
+                                                                        'OK',
+                                                                  ),
+                                                                );
+                                                              }
+                                                            }
                                                           },
                                                           child: Text(
                                                             S

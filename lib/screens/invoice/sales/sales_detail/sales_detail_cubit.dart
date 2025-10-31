@@ -34,6 +34,19 @@ class SalesDetailCubit extends Cubit<SalesDetailState> {
     }
   }
 
+  Future<Map<String, Product>> getProductsMapForInvoice() async {
+    final map = <String, Product>{};
+    for (final detail in state.invoice.details) {
+      if (!map.containsKey(detail.productID)) {
+        final product = await _firebase.getProduct(detail.productID);
+        if (product != null) {
+          map[detail.productID] = product;
+        }
+      }
+    }
+    return map;
+  }
+
   Future<void> _loadInvoiceDetails() async {
     if (!isClosed) emit(state.copyWith(isLoading: true));
     try {

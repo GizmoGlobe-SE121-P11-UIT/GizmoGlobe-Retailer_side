@@ -5,7 +5,7 @@ import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart'
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import '../../../../enums/invoice_related/payment_status.dart';
 import 'incoming_detail_state.dart';
-import 'incoming_detail_pdf_service.dart';
+import '../../../../services/invoices/incoming/incoming_detail_pdf_service.dart';
 
 // Import for web platform
 import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
@@ -128,7 +128,7 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
       // Download PDF
       final bytes = await pdf.save();
       await PlatformSpecificUtils.downloadFile(
-          bytes, 'Invoice_${state.invoice.incomingInvoiceID}.pdf');
+          bytes, 'Incoming_Invoice_${state.invoice.incomingInvoiceID}.pdf');
     } catch (e) {
       if (kDebugMode) {
         print('Error downloading invoice: $e');

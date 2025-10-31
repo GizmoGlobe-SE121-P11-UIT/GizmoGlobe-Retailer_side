@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
@@ -520,7 +520,7 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                                                   .circular(12),
                                                         ),
                                                         child: Text(
-                                                          '${S.of(context).price}: \$${detail.sellingPrice.toStringAsFixed(2)}',
+                                                          '${S.of(context).price}: ${Helper.toCurrencyFormat(detail.sellingPrice)}',
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.green,
@@ -745,14 +745,7 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
     await Future.delayed(const Duration(milliseconds: 100));
 
     if (!_formKey.currentState!.validate()) {
-      if (kDebugMode) {
-        print('Form validation failed');
-      }
       return;
-    }
-
-    if (kDebugMode) {
-      print('Starting save process');
     }
 
     // Store context before async operation
@@ -783,29 +776,10 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
       }
 
       if (invoice != null) {
-        if (kDebugMode) {
-          print(
-              'Invoice created successfully, force navigating back to warranty screen');
+        if (mounted) {
+          Navigator.of(context).pop(true);
         }
-
-        // Show success message using root context
-        showDialog(
-          context: context,
-          builder: (context) => InformationDialog(
-            title: S.of(context).success,
-            content: S.of(context).warrantyInvoiceCreated,
-            buttonText: 'OK',
-            onPressed: () {
-              if (mounted) {
-                Navigator.of(context).pop(true);
-              }
-            },
-          ),
-        );
       } else if (state.errorMessage != null) {
-        if (kDebugMode) {
-          print('Error creating invoice: ${state.errorMessage}');
-        }
         showDialog(
           context: dialogContext,
           builder: (context) => InformationDialog(
@@ -816,9 +790,6 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
         );
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error during save process: $e');
-      }
       if (!mounted) return;
 
       // Hide loading indicator if still showing

@@ -26,7 +26,7 @@ class IncomingAddScreen extends StatefulWidget {
     if (kIsWeb) {
       return showDialog<bool>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true, // allow outside dismiss
         builder: (context) => Dialog(
           backgroundColor: Colors.transparent,
           child: IncomingAddWebView.newInstance(),
