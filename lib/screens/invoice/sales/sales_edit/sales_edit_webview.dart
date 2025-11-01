@@ -557,8 +557,9 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
 
     // 3) Heuristics for common aliases
     if (norm.contains('ram') || norm.contains('memory')) return Icons.memory;
-    if (norm.contains('cpu') || norm.contains('processor'))
+    if (norm.contains('cpu') || norm.contains('processor')) {
       return Icons.computer;
+    }
     if (norm.contains('psu') ||
         norm.contains('powersupply') ||
         norm.contains('power')) {

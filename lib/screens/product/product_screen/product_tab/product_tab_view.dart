@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/manufacturer_status.dart';
 import 'package:gizmoglobe_client/widgets/product/product_card.dart';
@@ -11,10 +12,14 @@ import '../../../../enums/product_related/product_status_enum.dart';
 import '../../../../objects/product_related/filter_argument.dart';
 import '../../../../objects/product_related/product.dart';
 import '../../../../widgets/general/app_text_style.dart';
+import '../../../../widgets/snackbar/snackbar_service.dart';
 import '../../add_product/add_product_view.dart';
 import '../../filter/filter_screen/filter_screen_view.dart';
+import '../../filter/filter_screen/filter_screen_webview.dart';
 import '../../mixin/product_tab_mixin.dart';
 import '../../product_detail/product_detail_view.dart';
+import 'package:flutter/foundation.dart';
+import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'product_tab_cubit.dart';
 import 'product_tab_state.dart';
 
@@ -181,15 +186,29 @@ class _ProductTabState extends State<ProductTab>
                                 .filterArgument
                                 .copy(filter: state.filterArgument);
 
-                            final result = await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => FilterScreen.newInstance(
-                                  arguments: arguments,
-                                  selectedTabIndex: cubit.getIndex(),
-                                  manufacturerList: cubit.getManufacturerList(),
-                                ),
-                              ),
-                            );
+                            final result = kIsWeb
+                                ? await showDialog<FilterArgument?>(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (context) =>
+                                        FilterScreenWebView.newInstance(
+                                      arguments: arguments,
+                                      selectedTabIndex: cubit.getIndex(),
+                                      manufacturerList:
+                                          cubit.getManufacturerList(),
+                                    ),
+                                  )
+                                : await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          FilterScreen.newInstance(
+                                        arguments: arguments,
+                                        selectedTabIndex: cubit.getIndex(),
+                                        manufacturerList:
+                                            cubit.getManufacturerList(),
+                                      ),
+                                    ),
+                                  );
 
                             if (result is FilterArgument) {
                               cubit.updateFilter(
@@ -233,16 +252,49 @@ class _ProductTabState extends State<ProductTab>
                             isSelected: isSelected,
                             onTap: () async {
                               cubit.setSelectedProduct(null);
-                              ProcessState result =
-                                  await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProductDetailScreen.newInstance(product),
-                                ),
-                              );
-
-                              if (result == ProcessState.success) {
-                                await cubit.reloadProducts();
+                              if (kIsWeb) {
+                                String tab;
+                                switch (product.category) {
+                                  case CategoryEnum.ram:
+                                    tab = 'ram';
+                                    break;
+                                  case CategoryEnum.cpu:
+                                    tab = 'cpu';
+                                    break;
+                                  case CategoryEnum.psu:
+                                    tab = 'psu';
+                                    break;
+                                  case CategoryEnum.gpu:
+                                    tab = 'gpu';
+                                    break;
+                                  case CategoryEnum.drive:
+                                    tab = 'drive';
+                                    break;
+                                  case CategoryEnum.mainboard:
+                                    tab = 'mainboard';
+                                    break;
+                                  default:
+                                    tab = 'all';
+                                }
+                                if (product.productID != null) {
+                                  PlatformSpecificUtils.pushState(
+                                      '/#/product/$tab/${product.productID}');
+                                  // Force route rebuild so ProductRouteHandler can render detail immediately
+                                  Navigator.pushReplacementNamed(
+                                      context, '/product');
+                                }
+                              } else {
+                                ProcessState result =
+                                    await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProductDetailScreen.newInstance(
+                                            product),
+                                  ),
+                                );
+                                if (result == ProcessState.success) {
+                                  await cubit.reloadProducts();
+                                }
                               }
                             },
                             onLongPress: () async {
@@ -316,7 +368,7 @@ class _ProductTabState extends State<ProductTab>
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 cubit.setSelectedProduct(null);
-                                                ProcessState processState =
+                                                final result =
                                                     await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -327,8 +379,19 @@ class _ProductTabState extends State<ProductTab>
                                                   ),
                                                 );
 
-                                                if (processState ==
-                                                    ProcessState.success) {
+                                                if (result == true && mounted) {
+                                                  WidgetsBinding.instance
+                                                      .addPostFrameCallback(
+                                                          (_) {
+                                                    if (!mounted) return;
+                                                    SnackbarService.showSuccess(
+                                                      context,
+                                                      S.of(context).success,
+                                                      S
+                                                          .of(context)
+                                                          .productUpdatedSuccess,
+                                                    );
+                                                  });
                                                   await cubit.reloadProducts();
                                                 }
                                               },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/product_related/cpu_enums/cpu_series.dart';
@@ -42,21 +43,51 @@ import '../../../widgets/general/gradient_dropdown.dart';
 import '../../../widgets/general/multi_field_with_icon.dart';
 import 'add_product_state.dart';
 import 'add_product_cubit.dart';
+import 'add_product_webview.dart';
 
 class AddProductScreen extends StatefulWidget {
   final Product? product;
 
   const AddProductScreen({super.key, this.product});
 
-  static Widget addInstance() => BlocProvider(
-        create: (context) => AddProductCubit(),
-        child: const AddProductScreen(),
+  static Future<bool?> showModal(BuildContext context,
+      {Product? product}) async {
+    if (kIsWeb) {
+      return showDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: product != null
+              ? AddProductWebView.editInstance(product)
+              : AddProductWebView.addInstance(),
+        ),
       );
+    } else {
+      return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => product != null
+              ? AddProductScreen.editInstance(product)
+              : AddProductScreen.addInstance(),
+        ),
+      );
+    }
+  }
 
-  static Widget editInstance(Product product) => BlocProvider(
-        create: (context) => AddProductCubit(),
-        child: AddProductScreen(product: product),
-      );
+  static Widget addInstance() {
+    return BlocProvider(
+      create: (context) => AddProductCubit(),
+      child: const AddProductScreen(),
+    );
+  }
+
+  static Widget editInstance(Product product) {
+    return BlocProvider(
+      create: (context) => AddProductCubit(product: product),
+      child: AddProductScreen(product: product),
+    );
+  }
 
   @override
   State<AddProductScreen> createState() => _AddProductState();
@@ -444,7 +475,7 @@ class _AddProductState extends State<AddProductScreen> {
             state.productArgument?.tdp,
             (value) {
               cubit.updateProductArgument(
-                  state.productArgument!.copyWith(maxWattage: value));
+                  state.productArgument!.copyWith(tdp: value));
             },
             null,
           ),
@@ -968,9 +999,10 @@ class _AddProductState extends State<AddProductScreen> {
           onPressed: () => Navigator.pop(context, ProcessState.idle),
           fillColor: Colors.transparent,
         ),
-        title: widget.product == null
-            ? GradientText(text: S.of(context).addProduct)
-            : const GradientText(text: "S.of(context).editProduct"),
+        title: GradientText(
+            text: widget.product == null
+                ? S.of(context).addProduct
+                : S.of(context).editProduct),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
@@ -1000,6 +1032,7 @@ class _AddProductState extends State<AddProductScreen> {
         listener: (context, state) {
           if (state.processState == ProcessState.success) {
             if (state.notifyMessage == NotifyMessage.msg21) {
+              // Description generation - show dialog to notify
               enDescriptionController.text =
                   state.productArgument?.enDescription ?? '';
               viDescriptionController.text =
@@ -1012,23 +1045,15 @@ class _AddProductState extends State<AddProductScreen> {
                   content: state.notifyMessage.getLocalizedMessage(context),
                   onPressed: () {
                     cubit.toIdle();
-                    //Navigator.pop(context);
                   },
                 ),
               );
             } else {
-              showDialog(
-                context: context,
-                builder: (context) => InformationDialog(
-                  title: state.dialogName.getLocalizedName(context),
-                  content: state.notifyMessage.getLocalizedMessage(context),
-                  onPressed: () {
-                    Navigator.pop(context, state.processState);
-                  },
-                ),
-              );
+              // Product add/edit success - close and let parent show snackbar
+              Navigator.pop(context, true);
             }
           } else if (state.processState == ProcessState.failure) {
+            // Show error dialog
             showDialog(
               context: context,
               builder: (context) => InformationDialog(

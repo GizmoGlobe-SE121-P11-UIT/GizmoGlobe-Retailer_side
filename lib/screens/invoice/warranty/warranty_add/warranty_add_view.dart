@@ -713,9 +713,9 @@ class _WarrantyAddViewState extends State<WarrantyAddView> {
       }
 
       if (invoice != null) {
-        if (mounted) {
+              if (mounted) {
           Navigator.of(context).pop(true);
-        }
+              }
       } else if (state.errorMessage != null) {
         showDialog(
           context: dialogContext,

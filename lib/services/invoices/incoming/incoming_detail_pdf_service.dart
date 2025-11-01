@@ -14,10 +14,10 @@ class IncomingInvoicePdfService {
     required Map<String, Product> products,
   }) async {
     // Load the NotoSans font
-    final notoSansRegular = await pw.Font.ttf(
+    final notoSansRegular = pw.Font.ttf(
       await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'),
     );
-    final notoSansBold = await pw.Font.ttf(
+    final notoSansBold = pw.Font.ttf(
       await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'),
     );
 

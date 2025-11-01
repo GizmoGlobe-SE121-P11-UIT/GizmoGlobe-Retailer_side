@@ -17,12 +17,9 @@ String _enumName(dynamic e) {
   }
 }
 
-Map<String, dynamic> _manufacturerToJson(Manufacturer? m) {
-  if (m == null) return {};
-  return {
-    'manufacturerID': m.manufacturerID,
-    'manufacturerName': m.manufacturerName,
-  };
+dynamic _manufacturerToJson(Manufacturer? m) {
+  if (m == null) return null;
+  return m.manufacturerID;
 }
 
 dynamic _maybeToJson(dynamic o) {

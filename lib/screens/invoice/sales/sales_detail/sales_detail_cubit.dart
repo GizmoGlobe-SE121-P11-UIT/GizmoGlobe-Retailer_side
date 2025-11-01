@@ -25,11 +25,12 @@ class SalesDetailCubit extends Cubit<SalesDetailState> {
       if (!isClosed) emit(state.copyWith(isLoading: false));
       return product;
     } catch (e) {
-      if (!isClosed)
+      if (!isClosed) {
         emit(state.copyWith(
           isLoading: false,
           error: 'Error loading product: $e', // Lỗi khi load sản phẩm
         ));
+      }
       return null;
     }
   }
@@ -52,17 +53,19 @@ class SalesDetailCubit extends Cubit<SalesDetailState> {
     try {
       final updatedInvoice = await _firebase
           .getSalesInvoiceWithDetails(state.invoice.salesInvoiceID);
-      if (!isClosed)
+      if (!isClosed) {
         emit(state.copyWith(
           invoice: updatedInvoice,
           isLoading: false,
         ));
+      }
     } catch (e) {
-      if (!isClosed)
+      if (!isClosed) {
         emit(state.copyWith(
           isLoading: false,
           error: e.toString(),
         ));
+      }
     }
   }
 
@@ -70,17 +73,19 @@ class SalesDetailCubit extends Cubit<SalesDetailState> {
     if (!isClosed) emit(state.copyWith(isLoading: true));
     try {
       await _firebase.updateSalesInvoice(updatedInvoice);
-      if (!isClosed)
+      if (!isClosed) {
         emit(state.copyWith(
           invoice: updatedInvoice,
           isLoading: false,
         ));
+      }
     } catch (e) {
-      if (!isClosed)
+      if (!isClosed) {
         emit(state.copyWith(
           isLoading: false,
           error: e.toString(),
         ));
+      }
     }
   }
 }

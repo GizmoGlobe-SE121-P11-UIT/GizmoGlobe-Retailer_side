@@ -8,11 +8,6 @@ import 'package:gizmoglobe_client/screens/chat/conversation/conversation_screen_
 import 'package:gizmoglobe_client/screens/chat/conversation/conversation_screen_cubit.dart';
 import 'package:gizmoglobe_client/components/general/web_header.dart';
 import 'package:gizmoglobe_client/components/general/web_sidebar.dart';
-import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
-import 'package:gizmoglobe_client/screens/invoice/invoice_screen_view.dart';
-import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_view.dart';
-import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_view.dart';
-import 'package:gizmoglobe_client/screens/user/user_screen/user_screen_view.dart';
 import 'chat_list_screen_cubit.dart';
 import 'chat_list_screen_state.dart';
 
@@ -34,7 +29,7 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
   bool isSidebarCompact = true; // Start compact by default for chat
   String? selectedChatId;
   String? selectedChatName;
-  int mainSidebarIndex = 0; // Track main sidebar selection
+  int mainSidebarIndex = 0; // Track main sidebar selection (no-op navigation)
 
   @override
   void initState() {
@@ -67,20 +62,8 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
   }
 
   Widget _getMainContentWidget() {
-    switch (mainSidebarIndex) {
-      case 1:
-        return ProductScreen.newInstance();
-      case 2:
-        return InvoiceScreen.newInstance();
-      case 3:
-        return StakeholderScreen.newInstance();
-      case 4:
-        return VoucherScreen.newInstance();
-      case 5:
-        return UserScreen.newInstance();
-      default:
-        return Container(); // This should not be reached
-    }
+    // Always show chat interface in this screen; cross-section navigation is handled by WebSidebarModes
+    return _buildChatInterface(context.read<ChatListScreenCubit>().state);
   }
 
   Widget _buildChatInterface(ChatListScreenState state) {
@@ -332,58 +315,10 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
                       initialCompactMode:
                           true, // Start compact for chat interface
                       onItemSelected: (index) {
-                        // Handle sidebar navigation
-                        if (index == 0) {
-                          // Home - navigate to main screen
-                          if (kIsWeb) {
-                            PlatformSpecificUtils.replaceState('/#/main');
-                          } else {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              '/main',
-                              (route) => false,
-                            );
-                          }
-                        } else if (index == 2) {
-                          // Invoices - navigate to invoices screen
-                          if (kIsWeb) {
-                            PlatformSpecificUtils.replaceState('/#/invoices');
-                          } else {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              '/invoices',
-                              (route) => false,
-                            );
-                          }
-                        } else if (index == 3) {
-                          // Stakeholders - navigate to stakeholders screen
-                          if (kIsWeb) {
-                            PlatformSpecificUtils.replaceState(
-                                '/#/stakeholders');
-                          } else {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              '/stakeholders',
-                              (route) => false,
-                            );
-                          }
-                        } else if (index == 4) {
-                          // Vouchers - navigate to vouchers screen
-                          if (kIsWeb) {
-                            PlatformSpecificUtils.replaceState('/#/vouchers');
-                          } else {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              '/vouchers',
-                              (route) => false,
-                            );
-                          }
-                        } else {
-                          // Other sections - handle natively within chat screen
-                          setState(() {
-                            mainSidebarIndex = index;
-                          });
-                        }
+                        // Navigation handled inside WebSidebarModes; avoid duplicates
+                        setState(() {
+                          mainSidebarIndex = index;
+                        });
                       },
                       items: buildDefaultSidebarItems(
                         home: S.of(context).home,

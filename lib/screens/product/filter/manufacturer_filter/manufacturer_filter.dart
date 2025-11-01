@@ -8,16 +8,21 @@ class ManufacturerFilter extends StatelessWidget {
   final List<Manufacturer> selectedManufacturers;
   final List<Manufacturer> manufacturerList;
   final void Function(Manufacturer manufacturer) onToggleSelection;
+  final double?
+      availableWidth; // when provided, used to compute 2-col width (e.g., web modal)
 
   const ManufacturerFilter({
     super.key,
     required this.selectedManufacturers,
     required this.manufacturerList,
     required this.onToggleSelection,
+    this.availableWidth,
   });
 
   @override
   Widget build(BuildContext context) {
+    final double baseWidth =
+        availableWidth ?? MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -32,7 +37,7 @@ class ManufacturerFilter extends StatelessWidget {
           runSpacing: 16.0,
           children: manufacturerList.map((manufacturer) {
             return SizedBox(
-              width: (MediaQuery.of(context).size.width - 48) / 2,
+              width: (baseWidth - 48) / 2,
               child: CheckboxButton(
                 text: manufacturer.manufacturerName,
                 isSelected: selectedManufacturers.contains(manufacturer),

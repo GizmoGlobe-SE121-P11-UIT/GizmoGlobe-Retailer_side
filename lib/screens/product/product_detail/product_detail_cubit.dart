@@ -18,7 +18,8 @@ import '../../../objects/product_related/psu_related/psu.dart';
 import '../../../objects/product_related/ram_related/ram.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
-  ProductDetailCubit(Product product) : super(ProductDetailState(product: product)) {
+  ProductDetailCubit(Product product)
+      : super(ProductDetailState(product: product)) {
     _initializeTechnicalSpecs();
   }
 
@@ -68,9 +69,11 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
           'Socket': mainboard.socket.toString(),
           'Form Factor': mainboard.formFactor.toString(),
           'RAM Spec': mainboard.ramSpec.toString(),
-          'Storage:' : mainboard.storageSlot.toString(),
-          'PCIe Slots:': mainboard.pcieSlots.map((slot) => slot.toString()).join('\n'),
-          'I/O Ports:': mainboard.ioPorts.map((port) => port.toString()).join('\n'),
+          'Storage:': mainboard.storageSlot.toString(),
+          'PCIe Slots:':
+              mainboard.pcieSlots.map((slot) => slot.toString()).join('\n'),
+          'I/O Ports:':
+              mainboard.ioPorts.map((port) => port.toString()).join('\n'),
         });
         break;
 
@@ -93,7 +96,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
           'Wattage': '${psu.maxWattage} W',
           'Efficiency Rating': psu.efficiency.toString(),
           'Modularity': psu.modularity.toString(),
-          'Connectors': psu.connectors.map((type) => type.toString()).join('\n'),
+          'Connectors':
+              psu.connectors.map((type) => type.toString()).join('\n'),
         });
         break;
 
@@ -129,17 +133,25 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       product.updateProduct(status: status);
       emit(state.copyWith(product: product));
 
-      emit(state.copyWith(processState: ProcessState.success, notifyMessage: NotifyMessage.msg15, dialogName: DialogName.success));
+      emit(state.copyWith(
+          processState: ProcessState.success,
+          notifyMessage: NotifyMessage.msg15,
+          dialogName: DialogName.success));
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
-      emit(state.copyWith(processState: ProcessState.failure, notifyMessage: NotifyMessage.msg16, dialogName: DialogName.failure));
+      emit(state.copyWith(
+          processState: ProcessState.failure,
+          notifyMessage: NotifyMessage.msg16,
+          dialogName: DialogName.failure));
     }
   }
-  
+
   void updateProduct() {
-    Product product = Database().productList.firstWhere((element) => element.productID == state.product.productID);
+    Product product = Database()
+        .productList
+        .firstWhere((element) => element.productID == state.product.productID);
     emit(state.copyWith(product: product));
     _initializeTechnicalSpecs();
   }

@@ -130,7 +130,9 @@ abstract class TabCubit extends Cubit<TabState> {
 
       // Search
       if (applySearch &&
-          !product.productName.toLowerCase().contains(queryLower)) continue;
+          !product.productName.toLowerCase().contains(queryLower)) {
+        continue;
+      }
 
       // Manufacturer
       if (applyManufacturer) {

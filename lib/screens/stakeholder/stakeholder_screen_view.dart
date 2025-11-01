@@ -184,21 +184,7 @@ class _StakeholderScreenState extends State<StakeholderScreen> {
                       WebSidebarModes(
                         currentIndex: 3, // Stakeholder index
                         onItemSelected: (value) {
-                          // Handle sidebar navigation using Navigator
-                          if (value == 0) {
-                            Navigator.pushReplacementNamed(context, '/main');
-                          } else if (value == 1) {
-                            Navigator.pushReplacementNamed(context, '/main');
-                          } else if (value == 2) {
-                            Navigator.pushReplacementNamed(
-                                context, '/invoices');
-                          } else if (value == 4) {
-                            Navigator.pushReplacementNamed(
-                                context, '/vouchers');
-                          } else if (value == 5) {
-                            Navigator.pushReplacementNamed(context, '/main');
-                          }
-                          // value == 3 (Stakeholder) is handled by staying in current screen
+                          // Navigation is handled inside WebSidebarModes to avoid duplicates
                         },
                         items: items,
                         onCompactModeChanged: (isCompact) {

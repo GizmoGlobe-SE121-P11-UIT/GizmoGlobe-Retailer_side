@@ -439,6 +439,7 @@ class AppLocalizations {
   String get voucherUpdatedSuccess => _getTranslation('voucherUpdatedSuccess');
   String get warrantyInvoiceUpdatedSuccess =>
       _getTranslation('warrantyInvoiceUpdatedSuccess');
+  String get editProduct => _getTranslation('editProduct');
 
   // Methods with parameters
   String warrantyReceipt(String id) =>

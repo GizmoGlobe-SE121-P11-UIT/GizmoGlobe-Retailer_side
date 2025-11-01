@@ -95,7 +95,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                 state.dialogName.getLocalizedName(context),
                 state.notifyMessage.getLocalizedMessage(context),
               );
-              cubit.toIdle();
+                        cubit.toIdle();
             } else if (state.processState == ProcessState.failure) {
               if (mounted) {
                 showDialog(

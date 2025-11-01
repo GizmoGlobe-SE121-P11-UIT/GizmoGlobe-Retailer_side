@@ -124,21 +124,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                       WebSidebarModes(
                         currentIndex: 2, // Invoice index
                         onItemSelected: (value) {
-                          // Handle sidebar navigation using Navigator
-                          if (value == 0) {
-                            Navigator.pushReplacementNamed(context, '/main');
-                          } else if (value == 1) {
-                            Navigator.pushReplacementNamed(context, '/main');
-                          } else if (value == 3) {
-                            Navigator.pushReplacementNamed(
-                                context, '/stakeholders');
-                          } else if (value == 4) {
-                            Navigator.pushReplacementNamed(
-                                context, '/vouchers');
-                          } else if (value == 5) {
-                            Navigator.pushReplacementNamed(context, '/main');
-                          }
-                          // value == 2 (Invoice) is handled by staying in current screen
+                          // Navigation is handled inside WebSidebarModes to avoid duplicates
                         },
                         items: items,
                         onCompactModeChanged: (isCompact) {

@@ -409,4 +409,5 @@ const Map<String, String> en = {
   'monthDaily': 'Month (daily)',
   'voucherUpdatedSuccess': 'Voucher updated successfully.',
   'warrantyInvoiceUpdatedSuccess': 'Warranty invoice updated successfully.',
+  'editProduct': 'Edit Product',
 };

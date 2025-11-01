@@ -48,13 +48,13 @@ class RangeFilter extends StatelessWidget {
                     ),
                   ),
                   FieldWithIcon(
+                    prefixIcon: const Icon(Icons.attach_money),
                     controller: fromController,
                     fillColor: Theme.of(context).colorScheme.surface,
                     hintText: S.of(context).min,
                     onChanged: onFromValueChanged,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-
                   ),
                 ],
               ),
@@ -71,6 +71,7 @@ class RangeFilter extends StatelessWidget {
                     ),
                   ),
                   FieldWithIcon(
+                    prefixIcon: const Icon(Icons.attach_money),
                     controller: toController,
                     fillColor: Theme.of(context).colorScheme.surface,
                     hintText: S.of(context).max,

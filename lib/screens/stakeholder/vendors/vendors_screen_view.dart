@@ -198,8 +198,8 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                         if (!mounted) return;
                                                         SnackbarService.showSuccess(
                                                           context,
-                                                          S.of(context).success,
-                                                          "Manufacturer updated successfully.",
+                                                        S.of(context).success,
+                                                        "Manufacturer updated successfully.",
                                                         );
                                                       });
                                                     }
@@ -212,7 +212,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                           content: e.toString(),
                                                           buttonText: 'OK',
                                                         ),
-                                                      );
+                                                  );
                                                     }
                                                   }
                                                 }

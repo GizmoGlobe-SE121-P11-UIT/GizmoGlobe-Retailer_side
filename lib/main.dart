@@ -27,6 +27,11 @@ import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_view.da
 import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
+import 'package:gizmoglobe_client/components/general/web_sidebar.dart';
+import 'package:gizmoglobe_client/components/general/web_header.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_webview.dart';
+import 'package:gizmoglobe_client/objects/product_related/product.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -288,6 +293,8 @@ class MyApp extends StatelessWidget {
                     switch (normalized) {
                       case '/invoices':
                         return const InvoiceRouteHandler();
+                      case '/product':
+                        return const ProductRouteHandler();
                       case '/chat':
                         return const ChatRouteHandler();
                       case '/stakeholders':
@@ -399,6 +406,13 @@ class AuthWrapper extends StatelessWidget {
           return const StakeholderRouteHandler();
         } else if (currentRoute == '/vouchers' && isAuthenticated) {
           return const VoucherRouteHandler();
+        } else if (kIsWeb && isAuthenticated) {
+          // Handle deep links via hash for web: /#/product and nested paths
+          final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
+          final hash = uri.fragment;
+          if (hash.startsWith('/product')) {
+            return const ProductRouteHandler();
+          }
         } else if (currentRoute == '/sign-in') {
           return SignInScreen.newInstance();
         }
@@ -848,5 +862,171 @@ class _VoucherRouteHandlerState extends State<VoucherRouteHandler> {
       // Fallback to basic voucher screen
       return VoucherScreen.newInstance();
     }
+  }
+}
+
+// Product route handler for /#/product and /#/product/{all|ram|cpu|psu|gpu|drive|mainboard}
+class ProductRouteHandler extends StatefulWidget {
+  const ProductRouteHandler({super.key});
+
+  @override
+  State<ProductRouteHandler> createState() => _ProductRouteHandlerState();
+}
+
+class _ProductRouteHandlerState extends State<ProductRouteHandler> {
+  int? initialTabIndex;
+  StreamSubscription<dynamic>? _hashChangeSubscription;
+  String? selectedProductId;
+  Product? selectedProduct;
+
+  @override
+  void initState() {
+    super.initState();
+    _parseUrlParameters();
+
+    if (kIsWeb) {
+      _hashChangeSubscription =
+          PlatformSpecificUtils.onHashChange.listen((event) {
+        if (mounted) {
+          _parseUrlParameters();
+          setState(() {});
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _hashChangeSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _parseUrlParameters() {
+    if (kIsWeb) {
+      final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
+      final hash = uri.fragment;
+
+      // Expected: /#/product or /#/product/{tab}
+      if (hash.startsWith('/product')) {
+        final segments = hash.split('/');
+        String tab = segments.length >= 3 ? segments[2].toLowerCase() : 'all';
+        selectedProductId =
+            segments.length >= 4 && segments[3].isNotEmpty ? segments[3] : null;
+        switch (tab) {
+          case 'all':
+            initialTabIndex = 0;
+            break;
+          case 'ram':
+            initialTabIndex = 1;
+            break;
+          case 'cpu':
+            initialTabIndex = 2;
+            break;
+          case 'psu':
+            initialTabIndex = 3;
+            break;
+          case 'gpu':
+            initialTabIndex = 4;
+            break;
+          case 'drive':
+            initialTabIndex = 5;
+            break;
+          case 'mainboard':
+            initialTabIndex = 6;
+            break;
+          default:
+            initialTabIndex = 0;
+            break;
+        }
+
+        // Resolve product if present
+        if (selectedProductId != null) {
+          try {
+            selectedProduct = Database()
+                .productList
+                .firstWhere((p) => p.productID == selectedProductId);
+          } catch (_) {
+            selectedProduct = null;
+          }
+        } else {
+          selectedProduct = null;
+        }
+      } else {
+        initialTabIndex = 0;
+        selectedProductId = null;
+        selectedProduct = null;
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final isAuthenticated = user != null;
+    if (!isAuthenticated) {
+      return SignInScreen.newInstance();
+    }
+    if (!kIsWeb) {
+      return ProductScreen.newInstanceWithTab(initialTabIndex: initialTabIndex);
+    }
+
+    // Late resolve product if ID present but product not yet found
+    if (selectedProductId != null && selectedProduct == null) {
+      try {
+        selectedProduct = Database()
+            .productList
+            .firstWhere((p) => p.productID == selectedProductId);
+      } catch (_) {
+        // keep null
+      }
+    }
+
+    final items = buildDefaultSidebarItems(
+      home: AppLocalizations.of(context).home,
+      product: AppLocalizations.of(context).product,
+      invoice: AppLocalizations.of(context).invoice,
+      stakeholder: AppLocalizations.of(context).stakeholder,
+      voucher: AppLocalizations.of(context).voucher,
+      profile: AppLocalizations.of(context).profile,
+    );
+
+    return Scaffold(
+      body: Column(
+        children: [
+          const WebHeader(
+            unreadChats: 0,
+            isSidebarCompact: false,
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                WebSidebarModes(
+                  currentIndex: 1, // Product index
+                  onItemSelected: (value) {
+                    // Navigation handled inside sidebar; no-op here
+                  },
+                  items: items,
+                  onCompactModeChanged: (isCompact) {},
+                ),
+                const VerticalDivider(width: 1),
+                Expanded(
+                  child: selectedProductId != null && selectedProduct == null
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        )
+                      : selectedProduct != null
+                          ? ProductDetailWebView.newInstance(selectedProduct!)
+                          : ProductScreen.newInstanceWithTab(
+                              initialTabIndex: initialTabIndex,
+                            ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

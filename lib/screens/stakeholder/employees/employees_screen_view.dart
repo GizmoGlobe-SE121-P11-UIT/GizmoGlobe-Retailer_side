@@ -388,8 +388,9 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                                                     .instance
                                                                     .addPostFrameCallback(
                                                                         (_) {
-                                                                  if (!mounted)
+                                                                  if (!mounted) {
                                                                     return;
+                                                                  }
                                                                   SnackbarService
                                                                       .showSuccess(
                                                                     context,

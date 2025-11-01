@@ -7,6 +7,7 @@ class OptionFilter<T> extends StatelessWidget {
   final List<T> enumValues;
   final List<T> selectedValues;
   final void Function(T value) onToggleSelection;
+  final double? availableWidth; // when provided, used to compute 2-col width
 
   const OptionFilter({
     super.key,
@@ -14,11 +15,13 @@ class OptionFilter<T> extends StatelessWidget {
     required this.enumValues,
     required this.selectedValues,
     required this.onToggleSelection,
+    this.availableWidth,
   });
 
   @override
   Widget build(BuildContext context) {
     final int itemCount = enumValues.length;
+    final double baseWidth = availableWidth ?? MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,7 +37,7 @@ class OptionFilter<T> extends StatelessWidget {
           children: List.generate(itemCount + (itemCount % 2), (index) {
             if (index < itemCount) {
               return SizedBox(
-                width: (MediaQuery.of(context).size.width - 48) / 2,
+                width: (baseWidth - 48) / 2,
                 child: CheckboxButton(
                   text: enumValues[index].toString(),
                   isSelected: selectedValues.contains(enumValues[index]),
@@ -45,7 +48,7 @@ class OptionFilter<T> extends StatelessWidget {
               );
             } else {
               return SizedBox(
-                width: (MediaQuery.of(context).size.width - 48) / 2,
+                width: (baseWidth - 48) / 2,
               );
             }
           }),

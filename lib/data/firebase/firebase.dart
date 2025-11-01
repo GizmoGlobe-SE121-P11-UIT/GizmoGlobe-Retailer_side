@@ -901,14 +901,6 @@ class Firebase {
       // Update the detail document
       await detailRef.set(detail.toJson());
 
-      // Update product stock
-      final productDoc =
-          await _firestore.collection('products').doc(detail.productID).get();
-
-      if (!productDoc.exists) {
-        throw Exception('Product not found'); // Không tìm thấy sản phẩm
-      }
-
       // Get the old detail to calculate stock difference
       final oldDetailQuery = await _firestore
           .collection('sales_invoice_details')
@@ -963,19 +955,23 @@ class Firebase {
 
   Future<void> updateProductStock(String productID, int stockChange) async {
     try {
-      final doc = await FirebaseFirestore.instance
+      // Find the document by productID attribute
+      final querySnapshot = await FirebaseFirestore.instance
           .collection('products')
-          .doc(productID)
+          .where('productID', isEqualTo: productID)
           .get();
 
-      if (!doc.exists) {
+      if (querySnapshot.docs.isEmpty) {
         throw Exception('Product not found'); // Không tìm thấy sản phẩm
       }
 
-      // Đảm bảo currentStock không null
-      final currentStock = doc.data()?['stock'] as int? ?? 0;
+      final docRef = querySnapshot.docs.first.reference;
+      final doc = querySnapshot.docs.first;
 
-      await doc.reference.update({'stock': currentStock + stockChange});
+      // Đảm bảo currentStock không null
+      final currentStock = doc.data()['stock'] as int? ?? 0;
+
+      await docRef.update({'stock': currentStock + stockChange});
     } catch (e) {
       if (kDebugMode) {
         print('Error updating product stock: $e');
@@ -1004,10 +1000,18 @@ class Firebase {
   Future<void> changeProductStatus(
       String productId, ProductStatusEnum status) async {
     try {
-      await FirebaseFirestore.instance
+      // Find the document by productID attribute
+      final querySnapshot = await FirebaseFirestore.instance
           .collection('products')
-          .doc(productId)
-          .update({'status': status.getName()});
+          .where('productID', isEqualTo: productId)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        throw Exception('Product not found with productID: $productId');
+      }
+
+      final docRef = querySnapshot.docs.first.reference;
+      await docRef.update({'status': status.getName()});
 
       List<Product> products = await getProducts();
       Database().updateProductList(products);
@@ -1047,9 +1051,9 @@ class Firebase {
 
   Future<void> addProduct(Product product) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('products')
-          .add(productToJson(product));
+      final collectionRef = _firestore.collection('products');
+      final docRef = await collectionRef.add(productToJson(product));
+      await docRef.update({'productID': docRef.id});
       List<Product> products = await getProducts();
       Database().updateProductList(products);
     } catch (e) {
@@ -1063,21 +1067,25 @@ class Firebase {
   Future<void> updateProductStockAndSales(
       String productID, int stockChange, int salesChange) async {
     try {
-      final doc = await FirebaseFirestore.instance
+      // Find the document by productID attribute
+      final querySnapshot = await FirebaseFirestore.instance
           .collection('products')
-          .doc(productID)
+          .where('productID', isEqualTo: productID)
           .get();
 
-      if (!doc.exists) {
+      if (querySnapshot.docs.isEmpty) {
         throw Exception('Product not found'); // Không tìm thấy sản phẩm
       }
 
+      final docRef = querySnapshot.docs.first.reference;
+      final doc = querySnapshot.docs.first;
+
       // Đảm bảo các giá trị không null
-      final currentStock = doc.data()?['stock'] as int? ?? 0;
-      final currentSales = doc.data()?['sales'] as int? ?? 0;
+      final currentStock = doc.data()['stock'] as int? ?? 0;
+      final currentSales = doc.data()['sales'] as int? ?? 0;
 
       // Cập nhật cả stock và sales
-      await doc.reference.update({
+      await docRef.update({
         'stock': currentStock + stockChange,
         'sales': currentSales + salesChange
       });

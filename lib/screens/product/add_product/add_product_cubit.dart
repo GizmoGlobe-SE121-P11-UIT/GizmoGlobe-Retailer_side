@@ -24,25 +24,38 @@ class AddProductCubit extends Cubit<AddProductState> {
   final ImagePicker _picker = ImagePicker();
   final Firebase _firebase = Firebase();
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  final Product? _editingProduct;
 
-  AddProductCubit() : super(const AddProductState()) {
+  AddProductCubit({Product? product})
+      : _editingProduct = product,
+        super(const AddProductState()) {
     initialize();
   }
 
   void initialize() {
-    // Provide safe defaults for basic fields. Category-specific fields remain null until user inputs them.
-    emit(state.copyWith(
-        productArgument: ProductArgument(
-      sales: 0,
-      release: DateTime.now(),
-      importPrice: 0,
-      sellingPrice: 0,
-      discount: 0.0,
-      stock: 0,
-      category: CategoryEnum.cpu,
-      status: ProductStatusEnum.outOfStock,
-      // manufacturer left null until selected by user from UI
-    )));
+    final editingProduct = _editingProduct;
+    if (editingProduct != null) {
+      // Initialize from existing product for edit mode
+      final productArg = ProductArgument.fromProduct(editingProduct);
+      emit(state.copyWith(
+        productArgument: productArg,
+        imageUrl: editingProduct.imageUrl,
+      ));
+    } else {
+      // Provide safe defaults for basic fields. Category-specific fields remain null until user inputs them.
+      emit(state.copyWith(
+          productArgument: ProductArgument(
+        sales: 0,
+        release: DateTime.now(),
+        importPrice: 0,
+        sellingPrice: 0,
+        discount: 0.0,
+        stock: 0,
+        category: CategoryEnum.cpu,
+        status: ProductStatusEnum.outOfStock,
+        // manufacturer left null until selected by user from UI
+      )));
+    }
   }
 
   // Existing generic update function
@@ -410,7 +423,12 @@ class AddProductCubit extends Cubit<AddProductState> {
         product.imageUrl = state.imageUrl;
       }
 
-      await _firebase.addProduct(product);
+      // Use updateProduct if editing, addProduct if creating new
+      if (_editingProduct != null) {
+        await _firebase.updateProduct(product);
+      } else {
+        await _firebase.addProduct(product);
+      }
 
       emit(state.copyWith(
           processState: ProcessState.success,
@@ -592,61 +610,61 @@ Future<String> generateDescription(ProductArgument inputProduct) async {
     final promptDetails = [
       'Product Name: ${productInfo.productName}',
       'Category: ${productInfo.category}',
-      'Manufacturer: ${productInfo.manufacturer}',
+      'Manufacturer: ${productInfo.manufacturer?.manufacturerName ?? "Unknown"}',
       if (productInfo.category == CategoryEnum.ram)
         {
-          'RAM type: ${productInfo.type.toString()}',
-          'RAM bus: ${productInfo.bus} MHz',
-          'RAM capacity: ${productInfo.capacity} GB',
-          'Number of sticks: ${productInfo.stickCount}',
+          'RAM type: ${productInfo.type?.toString() ?? "Unknown"}',
+          'RAM bus: ${productInfo.bus ?? 0} MHz',
+          'RAM capacity: ${productInfo.capacity ?? 0} GB',
+          'Number of sticks: ${productInfo.stickCount ?? 0}',
         }
       else if (productInfo.category == CategoryEnum.cpu)
         {
-          'CPU series: ${productInfo.cpuSeries}',
-          'Cores: ${productInfo.core}',
-          'Threads: ${productInfo.thread}',
-          'Base clock: ${productInfo.baseClock} GHz',
-          'Turbo clock: ${productInfo.turboClock} GHz',
-          'Socket: ${productInfo.socket}',
-          'TDP: ${productInfo.tdp} W',
+          'CPU series: ${productInfo.cpuSeries?.toString() ?? "Unknown"}',
+          'Cores: ${productInfo.core ?? 0}',
+          'Threads: ${productInfo.thread ?? 0}',
+          'Base clock: ${productInfo.baseClock ?? 0} GHz',
+          'Turbo clock: ${productInfo.turboClock ?? 0} GHz',
+          'Socket: ${productInfo.socket?.toString() ?? "Unknown"}',
+          'TDP: ${productInfo.tdp ?? 0} W',
         }
       else if (productInfo.category == CategoryEnum.psu)
         {
-          'PSU wattage: ${productInfo.tdp} W',
-          'PSU efficiency: ${productInfo.efficiency}',
-          'PSU modularity: ${productInfo.modularity}',
-          'PSU connectors: ${productInfo.connectors!.join(', ')}',
+          'PSU wattage: ${productInfo.tdp ?? 0} W',
+          'PSU efficiency: ${productInfo.efficiency?.toString() ?? "Unknown"}',
+          'PSU modularity: ${productInfo.modularity?.toString() ?? "Unknown"}',
+          'PSU connectors: ${productInfo.connectors?.map((c) => c.toString()).join(', ') ?? "None"}',
         }
       else if (productInfo.category == CategoryEnum.gpu)
         {
-          'GPU series: ${productInfo.gpuSeries}',
-          'GPU version: ${productInfo.gpuVersion}',
-          'GPU capacity: ${productInfo.capacity} GB',
-          'GPU boost clock: ${productInfo.turboClock} MHz',
-          'GPU TDP: ${productInfo.tdp} W',
-          'GPU I/O ports: ${productInfo.ioPorts!.join(', ')}',
+          'GPU series: ${productInfo.gpuSeries?.toString() ?? "Unknown"}',
+          'GPU version: ${productInfo.gpuVersion?.toString() ?? "Unknown"}',
+          'GPU capacity: ${productInfo.capacity ?? 0} GB',
+          'GPU boost clock: ${productInfo.turboClock ?? 0} MHz',
+          'GPU TDP: ${productInfo.tdp ?? 0} W',
+          'GPU I/O ports: ${productInfo.ioPorts?.map((p) => p.toString()).join(', ') ?? "None"}',
         }
       else if (productInfo.category == CategoryEnum.mainboard)
         {
-          'Chipset code: ${productInfo.chipsetCode}',
-          'Socket: ${productInfo.socket}',
-          'Form factor: ${productInfo.mainboardFormFactor}',
-          'RAM type: ${productInfo.type}',
-          'RAM capacity: ${productInfo.capacity} GB',
-          'Number of RAM sticks: ${productInfo.stickCount}',
-          'Storage slots: ${productInfo.storageSlot}',
-          'PCIe slots: ${productInfo.pcieSlots!.join(', ')}',
-          'I/O ports: ${productInfo.ioPorts!.join(', ')}',
+          'Chipset code: ${productInfo.chipsetCode ?? "Unknown"}',
+          'Socket: ${productInfo.socket?.toString() ?? "Unknown"}',
+          'Form factor: ${productInfo.mainboardFormFactor?.toString() ?? "Unknown"}',
+          'RAM type: ${productInfo.type?.toString() ?? "Unknown"}',
+          'RAM capacity: ${productInfo.capacity ?? 0} GB',
+          'Number of RAM sticks: ${productInfo.stickCount ?? 0}',
+          'Storage slots: ${productInfo.storageSlot?.toString() ?? "None"}',
+          'PCIe slots: ${productInfo.pcieSlots?.map((s) => s.toString()).join(', ') ?? "None"}',
+          'I/O ports: ${productInfo.ioPorts?.map((p) => p.toString()).join(', ') ?? "None"}',
         }
       else if (productInfo.category == CategoryEnum.drive)
         {
-          'Drive type: ${productInfo.driveType}',
-          'Generation: ${productInfo.gen}',
-          'Capacity: ${productInfo.capacity} GB',
-          'Interface: ${productInfo.interfaceType}',
-          'Form factor: ${productInfo.driveFormFactor}',
-          'Read speed: ${productInfo.readMbps} MB/s',
-          'Write speed: ${productInfo.writeMbps} MB/s',
+          'Drive type: ${productInfo.driveType?.toString() ?? "Unknown"}',
+          'Generation: ${productInfo.gen?.toString() ?? "Unknown"}',
+          'Capacity: ${productInfo.capacity ?? 0} GB',
+          'Interface: ${productInfo.interfaceType?.toString() ?? "Unknown"}',
+          'Form factor: ${productInfo.driveFormFactor?.toString() ?? "Unknown"}',
+          'Read speed: ${productInfo.readMbps ?? 0} MB/s',
+          'Write speed: ${productInfo.writeMbps ?? 0} MB/s',
         }
     ].join('\n');
     final response = await dio.post(

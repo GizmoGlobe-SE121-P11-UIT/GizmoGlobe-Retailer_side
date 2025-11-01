@@ -411,4 +411,5 @@ const Map<String, String> vi = {
   'voucherUpdatedSuccess': 'Phiếu giảm giá đã được cập nhật thành công.',
   'warrantyInvoiceUpdatedSuccess':
       'Hóa đơn bảo hành đã được cập nhật thành công.',
+  'editProduct': 'Chỉnh sửa sản phẩm',
 };

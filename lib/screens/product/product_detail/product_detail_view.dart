@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_state.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/objects/product_related/product_extensions.dart';
+import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_webview.dart';
 
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/product_status_enum.dart';
@@ -25,7 +26,9 @@ class ProductDetailScreen extends StatefulWidget {
 
   static Widget newInstance(Product product) => BlocProvider(
         create: (context) => ProductDetailCubit(product),
-        child: ProductDetailScreen(product: product),
+        child: kIsWeb
+            ? ProductDetailWebView.newInstance(product)
+            : ProductDetailScreen(product: product),
       );
 
   @override

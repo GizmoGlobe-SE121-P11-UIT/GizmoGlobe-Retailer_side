@@ -74,7 +74,32 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
                   item: item,
                   isSelected: isSelected,
                   isCompact: isCompactMode,
-                  onTap: () => widget.onItemSelected(index),
+                  onTap: () {
+                    widget.onItemSelected(index);
+                    String target = '/main';
+                    switch (index) {
+                      case 0:
+                        target = '/main';
+                        break;
+                      case 1:
+                        target = '/product';
+                        break;
+                      case 2:
+                        target = '/invoices';
+                        break;
+                      case 3:
+                        target = '/stakeholders';
+                        break;
+                      case 4:
+                        target = '/vouchers';
+                        break;
+                    }
+                    // Only navigate if different to reduce redundant pushes
+                    final current = ModalRoute.of(context)?.settings.name;
+                    if (current != target) {
+                      Navigator.pushReplacementNamed(context, target);
+                    }
+                  },
                 );
               },
             ),

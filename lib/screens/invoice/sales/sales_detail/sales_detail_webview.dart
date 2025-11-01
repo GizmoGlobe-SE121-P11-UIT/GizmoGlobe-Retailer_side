@@ -63,10 +63,11 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
         );
       }
     } finally {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _isDownloading = false;
         });
+      }
     }
   }
 

@@ -155,7 +155,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                                           .withValues(alpha: 0.8),
                                     ),
                                   ),
-                                  value: state.selectedManufacturer,
+                                  initialValue: state.selectedManufacturer,
                                   items:
                                       state.manufacturers.map((manufacturer) {
                                     return DropdownMenuItem(
@@ -269,7 +269,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                                             .withValues(alpha: 0.8),
                                       ),
                                     ),
-                                    value: state.paymentStatus,
+                                    initialValue: state.paymentStatus,
                                     items: PaymentStatus.values.map((status) {
                                       return DropdownMenuItem(
                                         value: status,
