@@ -21,7 +21,10 @@ class WebUtils {
   }
 
   static void downloadFile(Uint8List bytes, String filename) {
-    final blob = web.Blob([bytes.toJS].toJS);
+    // Convert Uint8List to JSArray<JSNumber> for Blob
+    final jsArray = bytes.map((b) => b.toJS).toList().toJS;
+    final blobParts = [jsArray as web.BlobPart].toJS;
+    final blob = web.Blob(blobParts);
     final url = web.URL.createObjectURL(blob);
     final anchor = web.HTMLAnchorElement()
       ..href = url

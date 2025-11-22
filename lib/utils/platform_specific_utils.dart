@@ -1,7 +1,7 @@
 // Platform-specific utilities
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:gizmoglobe_client/utils/web_utils.dart';
+import 'package:gizmoglobe_client/utils/web_utils.dart' if (dart.library.io) 'package:gizmoglobe_client/utils/web_utils_stub.dart';
 import 'package:gizmoglobe_client/utils/mobile_utils.dart';
 
 class PlatformSpecificUtils {
