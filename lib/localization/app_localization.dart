@@ -440,8 +440,95 @@ class AppLocalizations {
   String get warrantyInvoiceUpdatedSuccess =>
       _getTranslation('warrantyInvoiceUpdatedSuccess');
   String get editProduct => _getTranslation('editProduct');
+  // Business Report
+  String get businessReport => _getTranslation('businessReport');
+  String get selectReportPeriod => _getTranslation('selectReportPeriod');
+  String get period => _getTranslation('period');
+  String get today => _getTranslation('today');
+  String get thisWeek => _getTranslation('thisWeek');
+  String get thisMonth => _getTranslation('thisMonth');
+  String get thisYear => _getTranslation('thisYear');
+  String get custom => _getTranslation('custom');
+  String get startDate => _getTranslation('startDate');
+  String get endDate => _getTranslation('endDate');
+  String get selectStartDate => _getTranslation('selectStartDate');
+  String get selectEndDate => _getTranslation('selectEndDate');
+  String get selectedPeriod => _getTranslation('selectedPeriod');
+  String get createReport => _getTranslation('createReport');
+  String get generatingReport => _getTranslation('generatingReport');
+  String get thisMayTakeFewMoments => _getTranslation('thisMayTakeFewMoments');
+  String get reportGeneratedSuccess =>
+      _getTranslation('reportGeneratedSuccess');
+  String get errorGeneratingReport => _getTranslation('errorGeneratingReport');
+  String get pleaseSelectValidDateRange =>
+      _getTranslation('pleaseSelectValidDateRange');
+  String get reportPeriod => _getTranslation('reportPeriod');
+  String get executiveSummary => _getTranslation('executiveSummary');
+  String get totalRevenue => _getTranslation('totalRevenue');
+  String get totalCosts => _getTranslation('totalCosts');
+  String get grossProfit => _getTranslation('grossProfit');
+  String get profitMargin => _getTranslation('profitMargin');
+  String get totalOrders => _getTranslation('totalOrders');
+  String get averageOrderValue => _getTranslation('averageOrderValue');
+  String get financialOverview => _getTranslation('financialOverview');
+  String get revenueMetrics => _getTranslation('revenueMetrics');
+  String get costMetrics => _getTranslation('costMetrics');
+  String get salesAnalysis => _getTranslation('salesAnalysis');
+  String get totalProducts => _getTranslation('totalProducts');
+  String get totalCustomers => _getTranslation('totalCustomers');
+  String get totalSalesInvoices => _getTranslation('totalSalesInvoices');
+  String get totalIncomingInvoices => _getTranslation('totalIncomingInvoices');
+  String get topProducts => _getTranslation('topProducts');
+  String get productId => _getTranslation('productId');
+  String get quantitySold => _getTranslation('quantitySold');
+  String get salesByCategory => _getTranslation('salesByCategory');
+  String get revenueBreakdown => _getTranslation('revenueBreakdown');
+  String get revenueByCategory => _getTranslation('revenueByCategory');
+  String get monthlyRevenue => _getTranslation('monthlyRevenue');
+  String get costBreakdown => _getTranslation('costBreakdown');
+  String get costOfGoodsSold => _getTranslation('costOfGoodsSold');
+  String get operatingExpenses => _getTranslation('operatingExpenses');
+  String get customerInsights => _getTranslation('customerInsights');
+  String get newCustomers => _getTranslation('newCustomers');
+  String get returningCustomers => _getTranslation('returningCustomers');
+  String get customerRetentionRate => _getTranslation('customerRetentionRate');
+  String get topCustomersBySpending =>
+      _getTranslation('topCustomersBySpending');
+  String get orders => _getTranslation('orders');
+  String get totalSpending => _getTranslation('totalSpending');
+  String get bestSellingProducts => _getTranslation('bestSellingProducts');
+  String get topProductsByQuantity => _getTranslation('topProductsByQuantity');
+  String get inventoryInsights => _getTranslation('inventoryInsights');
+  String get totalStockValue => _getTranslation('totalStockValue');
+  String get lowStockItems => _getTranslation('lowStockItems');
+  String get currentStock => _getTranslation('currentStock');
+  String get inventoryTurnoverRate => _getTranslation('inventoryTurnoverRate');
+  String get salesTrends => _getTranslation('salesTrends');
+  String get monthlySalesTrend => _getTranslation('monthlySalesTrend');
+  String get month => _getTranslation('month');
+  String get costs => _getTranslation('costs');
+  String get profit => _getTranslation('profit');
+  String get businessKPIs => _getTranslation('businessKPIs');
+  String get averageItemsPerOrder => _getTranslation('averageItemsPerOrder');
+  String get totalItemsSold => _getTranslation('totalItemsSold');
+  String get conclusionInsights => _getTranslation('conclusionInsights');
+  String get noSpecificInsights => _getTranslation('noSpecificInsights');
+  String get strongProfitMargin => _getTranslation('strongProfitMargin');
+  String get lowProfitMargin => _getTranslation('lowProfitMargin');
+  String get goodCustomerRetention => _getTranslation('goodCustomerRetention');
+  String get improveCustomerRetention =>
+      _getTranslation('improveCustomerRetention');
+  String get consistentRevenue => _getTranslation('consistentRevenue');
+  String get reportGeneratedBy => _getTranslation('reportGeneratedBy');
+  String get generatedOn => _getTranslation('generatedOn');
 
   // Methods with parameters
+  String lowStockAlert(int count) =>
+      _getTranslation('lowStockAlert').replaceAll('{count}', count.toString());
+  String consistentRevenueWithOrders(int orders) =>
+      _getTranslation('consistentRevenue')
+          .replaceAll('{orders}', orders.toString());
+
   String warrantyReceipt(String id) =>
       _getTranslation('warrantyReceipt').replaceAll('{id}', id);
   String areYouSureChangeStatus(String status) =>

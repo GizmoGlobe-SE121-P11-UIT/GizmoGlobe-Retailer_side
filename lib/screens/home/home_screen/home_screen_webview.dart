@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/functions/helper.dart';
+import 'package:gizmoglobe_client/widgets/dialog/business_report_dialog.dart';
 
 import 'home_screen_cubit.dart';
 
@@ -94,6 +95,10 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
     }
   }
 
+  Future<void> _handleGenerateReport() async {
+    await BusinessReportDialog.show(context, cubit);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
@@ -157,20 +162,32 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                         ),
                       ],
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        GradientText(text: S.of(context).welcomeBack),
-                        const SizedBox(height: 8),
-                        Text(
-                          state.username,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.secondary,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GradientText(text: S.of(context).welcomeBack),
+                              const SizedBox(height: 8),
+                              Text(
+                                state.username,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.secondary,
+                                    ),
                               ),
+                            ],
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.assessment),
+                          tooltip: 'Generate Business Report',
+                          onPressed: _handleGenerateReport,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
