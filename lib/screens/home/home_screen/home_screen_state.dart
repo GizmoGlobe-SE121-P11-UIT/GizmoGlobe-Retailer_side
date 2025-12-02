@@ -12,6 +12,9 @@ class HomeScreenState extends Equatable {
   final int unreadChats;
   final List<SalesInvoice> recentOrders;
   final List<TopProduct> topProducts;
+  final bool isLoadingUsername;
+  final bool isLoadingOverview;
+  final bool isLoadingChart;
 
   const HomeScreenState({
     this.username = '',
@@ -24,6 +27,9 @@ class HomeScreenState extends Equatable {
     this.unreadChats = 0,
     this.recentOrders = const [],
     this.topProducts = const [],
+    this.isLoadingUsername = true,
+    this.isLoadingOverview = true,
+    this.isLoadingChart = true,
   });
 
   @override
@@ -38,6 +44,9 @@ class HomeScreenState extends Equatable {
         unreadChats,
         recentOrders,
         topProducts,
+        isLoadingUsername,
+        isLoadingOverview,
+        isLoadingChart,
       ];
 
   HomeScreenState copyWith({
@@ -51,6 +60,9 @@ class HomeScreenState extends Equatable {
     int? unreadChats,
     List<SalesInvoice>? recentOrders,
     List<TopProduct>? topProducts,
+    bool? isLoadingUsername,
+    bool? isLoadingOverview,
+    bool? isLoadingChart,
   }) {
     return HomeScreenState(
       username: username ?? this.username,
@@ -63,6 +75,9 @@ class HomeScreenState extends Equatable {
       unreadChats: unreadChats ?? this.unreadChats,
       recentOrders: recentOrders ?? this.recentOrders,
       topProducts: topProducts ?? this.topProducts,
+      isLoadingUsername: isLoadingUsername ?? this.isLoadingUsername,
+      isLoadingOverview: isLoadingOverview ?? this.isLoadingOverview,
+      isLoadingChart: isLoadingChart ?? this.isLoadingChart,
     );
   }
 }

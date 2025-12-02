@@ -33,7 +33,16 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       // Đợi database khởi tạo xong
       await db.initialize();
 
-      // Lấy danh sách sales invoices từ Firestore
+      // Step 1: Load username first
+      await db.getUser();
+      if (!isClosed) {
+        emit(state.copyWith(
+          username: db.username ?? '',
+          isLoadingUsername: false,
+        ));
+      }
+
+      // Step 2: Load overview data (revenue, orders, products, customers, etc.)
       final salesInvoices = await Firebase().getSalesInvoices();
 
       // Tính tổng doanh thu từ các hóa đơn đã thanh toán
@@ -62,24 +71,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
                 (salesByCategory[category] ?? 0) + revenue;
           }
         }
-      }
-
-      // Tính doanh thu theo tháng
-      final List<SalesData> monthlySales = [];
-      final now = DateTime.now();
-      for (var i = 11; i >= 0; i--) {
-        final month = DateTime(now.year, now.month - i, 1);
-        double salesInMonth = 0.0;
-
-        for (var invoice in salesInvoices) {
-          if (invoice.paymentStatus == PaymentStatus.paid &&
-              invoice.date.year == month.year &&
-              invoice.date.month == month.month) {
-            salesInMonth += invoice.totalPrice;
-          }
-        }
-
-        monthlySales.add(SalesData(month, salesInMonth));
       }
 
       // Get unread chats count
@@ -137,20 +128,56 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       // Take top 3 products
       final topProducts = topProductsList.take(3).toList();
 
-      await db.getUser();
-      // Emit new state with loaded data - check if cubit is still open
+      // Emit overview data
       if (!isClosed) {
         emit(state.copyWith(
-          username: db.username ?? '',
           totalProducts: db.productList.length,
           totalCustomers: db.customerList.length,
           totalRevenue: totalRevenue,
           totalOrders: totalPaidOrders,
           salesByCategory: salesByCategory,
-          monthlySales: monthlySales,
           unreadChats: unreadChats,
           recentOrders: recentOrdersList,
           topProducts: topProducts,
+          isLoadingOverview: false,
+        ));
+      }
+
+      // Step 3: Load chart data (monthly sales)
+      // Tính doanh thu theo ngày (lưu tất cả các ngày có dữ liệu để có thể hiển thị theo ngày hoặc tổng hợp theo tháng)
+      final List<SalesData> monthlySales = [];
+      final Map<String, double> dailySalesMap = <String, double>{};
+
+      // Lưu tất cả các ngày có doanh thu
+      for (var invoice in salesInvoices) {
+        if (invoice.paymentStatus == PaymentStatus.paid) {
+          final dayKey =
+              '${invoice.date.year}-${invoice.date.month.toString().padLeft(2, '0')}-${invoice.date.day.toString().padLeft(2, '0')}';
+          dailySalesMap[dayKey] =
+              (dailySalesMap[dayKey] ?? 0) + invoice.totalPrice;
+        }
+      }
+
+      // Chuyển đổi map thành list SalesData với đầy đủ thông tin ngày
+      // Nhân với 1000 để phù hợp với format VND (theo Helper.toCurrencyFormat)
+      // Làm tròn để tránh lỗi floating point precision
+      for (var entry in dailySalesMap.entries) {
+        final parts = entry.key.split('-');
+        final year = int.parse(parts[0]);
+        final month = int.parse(parts[1]);
+        final day = int.parse(parts[2]);
+        final roundedAmount = (entry.value * 1000).roundToDouble();
+        monthlySales.add(SalesData(DateTime(year, month, day), roundedAmount));
+      }
+
+      // Sắp xếp theo ngày
+      monthlySales.sort((a, b) => a.date.compareTo(b.date));
+
+      // Emit chart data
+      if (!isClosed) {
+        emit(state.copyWith(
+          monthlySales: monthlySales,
+          isLoadingChart: false,
         ));
       }
     } catch (e) {
@@ -158,6 +185,13 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         print('Error initializing dashboard: $e');
       } // Lỗi khởi tạo dashboard
       // Optionally emit error state
+      if (!isClosed) {
+        emit(state.copyWith(
+          isLoadingUsername: false,
+          isLoadingOverview: false,
+          isLoadingChart: false,
+        ));
+      }
     }
   }
 

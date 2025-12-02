@@ -3,14 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
-
-import '../../../../enums/product_related/category_enum.dart';
+import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 import '../permissions/sales_invoice_permissions.dart';
 import '../sales_edit/sales_edit_view.dart';
 import 'sales_detail_cubit.dart';
@@ -322,28 +319,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                           itemCount: state.invoice.details.length,
                           itemBuilder: (context, index) {
                             final detail = state.invoice.details[index];
-                            return InkWell(
-                              onTap: () async {
-                                // Get product details and navigate
-                                final product = await context
-                                    .read<SalesDetailCubit>()
-                                    .getProduct(detail.productID);
-                                if (product != null && context.mounted) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => BlocProvider(
-                                        create: (context) =>
-                                            ProductDetailCubit(product),
-                                        child: ProductDetailScreen(
-                                          product: product,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Container(
+                            return Container(
                                 margin: const EdgeInsets.only(bottom: 8),
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).cardColor,
@@ -451,8 +427,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                                     ),
                                   ],
                                 ),
-                              ),
-                            );
+                              );
                           },
                         ),
                       ],

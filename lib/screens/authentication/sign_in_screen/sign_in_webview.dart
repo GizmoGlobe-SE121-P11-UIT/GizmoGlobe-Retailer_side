@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/localization/app_localization.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../widgets/general/gradient_text.dart';
+import '../../../widgets/snackbar/snackbar_service.dart';
 import '../../../widgets/general/app_logo.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import 'sign_in_cubit.dart';
@@ -137,16 +138,17 @@ class _SignInWebViewState extends State<SignInWebView> {
                           ),
                         );
                       } else if (state.processState == ProcessState.success) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => InformationDialog(
-                            title: state.dialogName.getLocalizedName(context),
-                            content: state.message.getLocalizedMessage(context),
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(context, '/main');
-                            },
-                          ),
+                        SnackbarService.showSuccess(
+                          context,
+                          state.dialogName.getLocalizedName(context),
+                          state.message.getLocalizedMessage(context),
                         );
+                        // Navigate after a short delay to allow snackbar to be visible
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          if (context.mounted) {
+                            Navigator.pushReplacementNamed(context, '/main');
+                          }
+                        });
                       }
                     },
                     builder: (context, state) {

@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/services/reports/business_report_pdf_service.d
 import 'package:printing/printing.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
+import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 
 enum ReportPeriod {
   today,
@@ -160,10 +161,10 @@ class _BusinessReportDialogState extends State<BusinessReportDialog> {
     final localizations = S.of(context);
 
     if (_startDate == null || _endDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(localizations.pleaseSelectValidDateRange),
-        ),
+      SnackbarService.showWarning(
+        context,
+        localizations.errorOccurred,
+        localizations.pleaseSelectValidDateRange,
       );
       return;
     }
@@ -267,11 +268,10 @@ class _BusinessReportDialogState extends State<BusinessReportDialog> {
       // Close dialog on success
       if (mounted) {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(localizations.reportGeneratedSuccess),
-            backgroundColor: Colors.green,
-          ),
+        SnackbarService.showSuccess(
+          context,
+          S.of(context).businessReport,
+          localizations.reportGeneratedSuccess,
         );
       }
     } catch (e) {

@@ -170,16 +170,26 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                             children: [
                               GradientText(text: S.of(context).welcomeBack),
                               const SizedBox(height: 8),
-                              Text(
-                                state.username,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).colorScheme.secondary,
+                              state.isLoadingUsername
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : Text(
+                                      state.username,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
                                     ),
-                              ),
                             ],
                           ),
                         ),
@@ -202,46 +212,54 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                         ),
                   ),
                   const SizedBox(height: 24),
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: 1.2,
-                    children: [
-                      _buildStatsCard(
-                        context,
-                        icon: Icons.inventory_2_rounded,
-                        title: S.of(context).products,
-                        value: state.totalProducts.toString(),
-                        color: Colors.blue,
-                      ),
-                      _buildStatsCard(
-                        context,
-                        icon: Icons.people_alt_rounded,
-                        title: S.of(context).customers,
-                        value: state.totalCustomers.toString(),
-                        color: Colors.green,
-                      ),
-                      _buildStatsCard(
-                        context,
-                        icon: Icons.payments_rounded,
-                        title: S.of(context).revenue,
-                        value: Helper.toCurrencyFormat(state.totalRevenue),
-                        color: Colors.orange,
-                      ),
-                      _buildStatsCard(
-                        context,
-                        icon: Icons.trending_up_rounded,
-                        title: S.of(context).avgIncome,
-                        value: Helper.toCurrencyFormat(state.totalOrders > 0
-                            ? state.totalRevenue / state.totalOrders
-                            : 0),
-                        color: Colors.purple,
-                      ),
-                    ],
-                  ),
+                  state.isLoadingOverview
+                      ? Container(
+                          height: 200,
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(),
+                        )
+                      : GridView.count(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: 1.2,
+                          children: [
+                            _buildStatsCard(
+                              context,
+                              icon: Icons.inventory_2_rounded,
+                              title: S.of(context).products,
+                              value: state.totalProducts.toString(),
+                              color: Colors.blue,
+                            ),
+                            _buildStatsCard(
+                              context,
+                              icon: Icons.people_alt_rounded,
+                              title: S.of(context).customers,
+                              value: state.totalCustomers.toString(),
+                              color: Colors.green,
+                            ),
+                            _buildStatsCard(
+                              context,
+                              icon: Icons.payments_rounded,
+                              title: S.of(context).revenue,
+                              value:
+                                  Helper.toCurrencyFormat(state.totalRevenue),
+                              color: Colors.orange,
+                            ),
+                            _buildStatsCard(
+                              context,
+                              icon: Icons.trending_up_rounded,
+                              title: S.of(context).avgIncome,
+                              value: Helper.toCurrencyFormat(
+                                  state.totalOrders > 0
+                                      ? state.totalRevenue / state.totalOrders
+                                      : 0),
+                              color: Colors.purple,
+                            ),
+                          ],
+                        ),
 
                   const SizedBox(height: 32),
                   // Sales Chart
@@ -321,10 +339,14 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                           const SizedBox(height: 24),
                           SizedBox(
                             height: 300,
-                            child: _OptimizedSalesChartWidget(
-                                sales: displaySales,
-                                isMonthly: _selectedChartInterval ==
-                                    S.of(context).yearMonthly),
+                            child: state.isLoadingChart
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : _OptimizedSalesChartWidget(
+                                    sales: displaySales,
+                                    isMonthly: _selectedChartInterval ==
+                                        S.of(context).yearMonthly),
                           ),
                         ],
                       ),
@@ -401,6 +423,18 @@ class _OptimizedSalesChartWidget extends StatelessWidget {
   const _OptimizedSalesChartWidget(
       {required this.sales, this.isMonthly = true});
 
+  static double _getYAxisInterval(List<SalesData> sales) {
+    if (sales.isEmpty) return 10000000; // 10M in VND (10,000 * 1000)
+    final maxAmount =
+        sales.map((s) => s.amount).reduce((a, b) => a > b ? a : b);
+    // Data is already multiplied by 1000, so intervals should be in thousands
+    if (maxAmount <= 10000000) return 2000000; // 2M VND
+    if (maxAmount <= 50000000) return 10000000; // 10M VND
+    if (maxAmount <= 200000000) return 50000000; // 50M VND
+    if (maxAmount <= 500000000) return 100000000; // 100M VND
+    return 200000000; // 200M VND
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -414,6 +448,27 @@ class _OptimizedSalesChartWidget extends StatelessWidget {
                 const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             topTitles:
                 const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 60,
+                interval: _getYAxisInterval(sales),
+                getTitlesWidget: (value, meta) {
+                  // Data is already multiplied by 1000, but Helper.toMoneyFormat also multiplies by 1000
+                  // So we divide by 1000 to get the original value, then Helper will multiply again
+                  // Round to avoid floating point precision issues
+                  final displayValue = (value / 1000).roundToDouble();
+                  final formatted = Helper.toMoneyFormat(displayValue);
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Text(
+                      formatted,
+                      style: const TextStyle(fontSize: 10, color: Colors.grey),
+                    ),
+                  );
+                },
+              ),
+            ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,

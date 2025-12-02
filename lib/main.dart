@@ -32,6 +32,7 @@ import 'package:gizmoglobe_client/components/general/web_sidebar.dart';
 import 'package:gizmoglobe_client/components/general/web_header.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_webview.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
+import 'package:gizmoglobe_client/data/firebase/firebase.dart' as FirebaseService;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -878,6 +879,7 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
   StreamSubscription<dynamic>? _hashChangeSubscription;
   String? selectedProductId;
   Product? selectedProduct;
+  Future<Product?>? _productFuture;
 
   @override
   void initState() {
@@ -945,11 +947,15 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
             selectedProduct = Database()
                 .productList
                 .firstWhere((p) => p.productID == selectedProductId);
+            _productFuture = null; // Product found locally
           } catch (_) {
             selectedProduct = null;
+            // Product not found locally, fetch from Firebase
+            _productFuture = FirebaseService.Firebase().getProduct(selectedProductId!);
           }
         } else {
           selectedProduct = null;
+          _productFuture = null;
         }
       } else {
         initialTabIndex = 0;
@@ -971,13 +977,14 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
     }
 
     // Late resolve product if ID present but product not yet found
-    if (selectedProductId != null && selectedProduct == null) {
+    if (selectedProductId != null && selectedProduct == null && _productFuture == null) {
       try {
         selectedProduct = Database()
             .productList
             .firstWhere((p) => p.productID == selectedProductId);
       } catch (_) {
-        // keep null
+        // Product not found locally, fetch from Firebase
+        _productFuture = FirebaseService.Firebase().getProduct(selectedProductId!);
       }
     }
 
@@ -1010,17 +1017,46 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
                 ),
                 const VerticalDivider(width: 1),
                 Expanded(
-                  child: selectedProductId != null && selectedProduct == null
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        )
-                      : selectedProduct != null
-                          ? ProductDetailWebView.newInstance(selectedProduct!)
-                          : ProductScreen.newInstanceWithTab(
+                  child: _productFuture != null
+                      ? FutureBuilder<Product?>(
+                          future: _productFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              );
+                            }
+                            if (snapshot.hasData && snapshot.data != null) {
+                              // Update selectedProduct for future renders
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (mounted) {
+                                  setState(() {
+                                    selectedProduct = snapshot.data;
+                                    _productFuture = null;
+                                  });
+                                }
+                              });
+                              return ProductDetailWebView.newInstance(snapshot.data!);
+                            }
+                            // Product not found, show product list
+                            return ProductScreen.newInstanceWithTab(
                               initialTabIndex: initialTabIndex,
-                            ),
+                            );
+                          },
+                        )
+                      : selectedProductId != null && selectedProduct == null
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            )
+                          : selectedProduct != null
+                              ? ProductDetailWebView.newInstance(selectedProduct!)
+                              : ProductScreen.newInstanceWithTab(
+                                  initialTabIndex: initialTabIndex,
+                                ),
                 ),
               ],
             ),

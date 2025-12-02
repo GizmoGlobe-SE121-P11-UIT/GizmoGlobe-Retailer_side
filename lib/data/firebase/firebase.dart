@@ -734,9 +734,9 @@ class Firebase {
           salesInvoiceID: data['salesInvoiceID'] ?? '',
           productID: data['productID'] ?? '',
           productName: data['productName'] ?? '',
-          quantity: data['quantity'] ?? 0,
-          sellingPrice: (data['sellingPrice'] ?? 0).toDouble(),
-          subtotal: (data['subtotal'] ?? 0).toDouble(),
+          quantity: (data['quantity'] as num?)?.toInt() ?? 0,
+          sellingPrice: (data['sellingPrice'] as num?)?.toInt() ?? 0,
+          subtotal: (data['subtotal'] as num?)?.toDouble() ?? 0.0,
         );
       }).toList();
     } catch (e) {
@@ -877,9 +877,9 @@ class Firebase {
           productID: detailData['productID'] as String,
           productName: productDetails['productName'],
           category: productDetails['category'],
-          quantity: detailData['quantity'] as int,
-          sellingPrice: (detailData['sellingPrice'] as num).toInt(),
-          subtotal: (detailData['subtotal'] as num).toDouble(),
+          quantity: (detailData['quantity'] as num?)?.toInt() ?? 0,
+          sellingPrice: (detailData['sellingPrice'] as num?)?.toInt() ?? 0,
+          subtotal: (detailData['subtotal'] as num?)?.toDouble() ?? 0.0,
         ));
       }
 

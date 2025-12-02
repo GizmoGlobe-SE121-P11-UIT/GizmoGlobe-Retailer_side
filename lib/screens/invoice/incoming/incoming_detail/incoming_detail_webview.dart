@@ -8,8 +8,6 @@ import 'incoming_detail_cubit.dart';
 import 'incoming_detail_state.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
 import '../permissions/incoming_invoice_permissions.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_cubit.dart';
-import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_view.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
@@ -228,135 +226,112 @@ class _IncomingDetailWebViewState extends State<IncomingDetailWebView> {
                           itemBuilder: (context, index) {
                             final detail = state.invoice.details[index];
                             final product = state.products[detail.productID];
-                            return InkWell(
-                              onTap: () async {
-                                // Get product details and navigate
-                                final product = await context
-                                    .read<IncomingDetailCubit>()
-                                    .getProduct(detail.productID);
-                                if (product != null && context.mounted) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => BlocProvider(
-                                        create: (context) =>
-                                            ProductDetailCubit(product),
-                                        child: ProductDetailScreen(
-                                            product: product),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          // Product Image/Icon
-                                          Container(
-                                            width: 60,
-                                            height: 60,
-                                            decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryContainer,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: Icon(
-                                              Icons.inventory,
-                                              size: 30,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          // Product Details
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  (product?.productName !=
-                                                              null &&
-                                                          product!.productName
-                                                              .isNotEmpty)
-                                                      ? product.productName
-                                                      : '${S.of(context).products} #${detail.productID}',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onSurface,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  '${S.of(context).importPrice}: ${Helper.toCurrencyFormat(detail.importPrice)}',
-                                                  style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onSurface
-                                                        .withValues(alpha: 0.6),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  '${S.of(context).subtotal}: ${Helper.toCurrencyFormat(detail.importPrice * detail.quantity)}',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onSurface,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    // Quantity Badge
-                                    Positioned(
-                                      top: 8,
-                                      right: 8,
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 4),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: Text(
-                                          'x${detail.quantity}',
-                                          style: TextStyle(
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).cardColor,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Product Image/Icon
+                                        Container(
+                                          width: 60,
+                                          height: 60,
+                                          decoration: BoxDecoration(
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .onPrimary,
-                                            fontWeight: FontWeight.bold,
+                                                .primaryContainer,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
+                                          child: Icon(
+                                            Icons.inventory,
+                                            size: 30,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        // Product Details
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                (product?.productName != null &&
+                                                        product!.productName
+                                                            .isNotEmpty)
+                                                    ? product.productName
+                                                    : '${S.of(context).products} #${detail.productID}',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                '${S.of(context).importPrice}: ${Helper.toCurrencyFormat(detail.importPrice)}',
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface
+                                                      .withValues(alpha: 0.6),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                '${S.of(context).subtotal}: ${Helper.toCurrencyFormat(detail.importPrice * detail.quantity)}',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  // Quantity Badge
+                                  Positioned(
+                                    top: 8,
+                                    right: 8,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        'x${detail.quantity}',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             );
                           },
