@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -107,6 +108,7 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
           Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: _UserProfileSection(
+              key: const ValueKey('user_profile_section'),
               selected: widget.currentIndex == profileIndex,
               isCompact: isCompactMode,
               onTap: () {
@@ -152,6 +154,7 @@ class _UserProfileSection extends StatefulWidget {
   final VoidCallback onTap;
 
   const _UserProfileSection({
+    super.key,
     required this.selected,
     required this.isCompact,
     required this.onTap,
@@ -161,24 +164,51 @@ class _UserProfileSection extends StatefulWidget {
   State<_UserProfileSection> createState() => _UserProfileSectionState();
 }
 
-class _UserProfileSectionState extends State<_UserProfileSection> {
-  Stream<DocumentSnapshot>? _userStream;
+// Static cache that persists across widget recreations
+class _UserProfileCache {
+  static DocumentSnapshot? _cachedSnapshot;
+  static StreamSubscription<DocumentSnapshot>? _subscription;
+  static bool _isInitialized = false;
 
+  static void initialize() {
+    if (_isInitialized) return;
+    _isInitialized = true;
+
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    _subscription = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .snapshots()
+        .listen((snapshot) {
+      _cachedSnapshot = snapshot;
+    });
+  }
+
+  static DocumentSnapshot? get snapshot => _cachedSnapshot;
+
+  static void dispose() {
+    _subscription?.cancel();
+    _subscription = null;
+    _isInitialized = false;
+  }
+}
+
+class _UserProfileSectionState extends State<_UserProfileSection> {
   @override
   void initState() {
     super.initState();
-    // Cache the stream to prevent recreation on every rebuild
-    _userStream = FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
-        .snapshots();
+    // Initialize static cache if not already done
+    _UserProfileCache.initialize();
   }
 
   @override
   void didUpdateWidget(_UserProfileSection oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Only rebuild if the compact mode actually changed
-    if (oldWidget.isCompact != widget.isCompact) {
+    if (oldWidget.isCompact != widget.isCompact ||
+        oldWidget.selected != widget.selected) {
       setState(() {});
     }
   }
@@ -192,37 +222,31 @@ class _UserProfileSectionState extends State<_UserProfileSection> {
     final Color fg =
         widget.selected ? colorScheme.primary : colorScheme.onSurface;
 
-    return StreamBuilder<DocumentSnapshot>(
-      stream: _userStream,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return _buildLoadingProfile(context, bg, fg);
-        }
+    // Always render from static cached data - never show loading once we have data
+    final cachedSnapshot = _UserProfileCache.snapshot;
+    if (cachedSnapshot != null && cachedSnapshot.exists) {
+      final userData = cachedSnapshot.data() as Map<String, dynamic>;
+      final username = userData['username'] ?? 'User';
+      final email =
+          userData['email'] ?? FirebaseAuth.instance.currentUser?.email ?? '';
 
-        if (!snapshot.hasData || !snapshot.data!.exists) {
-          return _buildErrorProfile(context, bg, fg);
-        }
-
-        final userData = snapshot.data!.data() as Map<String, dynamic>;
-        final username = userData['username'] ?? 'User';
-        final email =
-            userData['email'] ?? FirebaseAuth.instance.currentUser?.email ?? '';
-
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(24),
-            onTap: widget.onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: widget.isCompact
-                  ? _buildCompactProfile(context, username, bg, fg)
-                  : _buildFullProfile(context, username, email, bg, fg),
-            ),
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(24),
+          onTap: widget.onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: widget.isCompact
+                ? _buildCompactProfile(context, username, bg, fg)
+                : _buildFullProfile(context, username, email, bg, fg),
           ),
-        );
-      },
-    );
+        ),
+      );
+    }
+
+    // Show loading only on initial load when we truly have no data
+    return _buildLoadingProfile(context, bg, fg);
   }
 
   Widget _buildLoadingProfile(BuildContext context, Color bg, Color fg) {

@@ -21,6 +21,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit(Product product)
       : super(ProductDetailState(product: product)) {
     _initializeTechnicalSpecs();
+    _loadImages();
   }
 
   void _initializeTechnicalSpecs() {
@@ -112,6 +113,19 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
   void toLoading() {
     emit(state.copyWith(processState: ProcessState.loading));
+  }
+
+  Future<void> _loadImages() async {
+    final productId = state.product.productID;
+    if (productId == null) return;
+    try {
+      final urls = await Firebase().getProductImages(productId);
+      emit(state.copyWith(imageUrls: urls));
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading product images: $e');
+      }
+    }
   }
 
   Future<void> changeProductStatus() async {

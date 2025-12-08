@@ -6,10 +6,14 @@ import 'dart:js_interop';
 class WebUtils {
   static void pushState(String url) {
     web.window.history.pushState(null, '', url);
+    // Manually dispatch popstate so listeners react immediately to programmatic navigation
+    web.window.dispatchEvent(web.PopStateEvent('popstate'));
   }
 
   static void replaceState(String url) {
-    web.window.location.replace(url);
+    web.window.history.replaceState(null, '', url);
+    // Dispatch popstate so listeners react immediately to programmatic navigation
+    web.window.dispatchEvent(web.PopStateEvent('popstate'));
   }
 
   static String getCurrentUrl() {

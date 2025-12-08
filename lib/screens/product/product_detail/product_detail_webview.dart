@@ -35,7 +35,15 @@ class ProductDetailWebView extends StatefulWidget {
 }
 
 class _ProductDetailWebViewState extends State<ProductDetailWebView> {
+  final PageController _imagePageController = PageController();
+  int _currentImageIndex = 0;
   ProductDetailCubit get cubit => context.read<ProductDetailCubit>();
+
+  @override
+  void dispose() {
+    _imagePageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,6 +176,8 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          _buildBreadcrumbs(context, state),
+                          const SizedBox(height: 12),
                           _buildHeading(
                               context, S.of(context).basicInformation),
                           const SizedBox(height: 8),
@@ -279,6 +289,11 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                child: _buildBreadcrumbs(context, state),
+              ),
               Container(
                 height: MediaQuery.of(context).size.height * 0.25,
                 width: double.infinity,
@@ -390,50 +405,96 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
 
   Widget _buildProductImage(BuildContext context, ProductDetailState state) {
     final colorScheme = Theme.of(context).colorScheme;
-    final imageUrl = state.product.imageUrl;
-    if (imageUrl != null && imageUrl.isNotEmpty) {
-      return Image.network(
-        imageUrl,
-        fit: BoxFit.contain,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return Stack(
-            children: [
-              Center(child: child),
-              Positioned.fill(
-                child: Container(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: colorScheme.primary,
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-        errorBuilder: (context, error, stackTrace) {
-          return Center(
-            child: Icon(
-              _getCategoryIcon(state.product.category),
-              size: 64,
-              color: colorScheme.onSurfaceVariant,
-            ),
-          );
-        },
+    final images = state.imageUrls.isNotEmpty
+        ? state.imageUrls
+        : (state.product.imageUrl?.isNotEmpty == true
+            ? [state.product.imageUrl!]
+            : <String>[]);
+
+    if (images.isEmpty) {
+      return Center(
+        child: Icon(
+          _getCategoryIcon(state.product.category),
+          size: 64,
+          color: colorScheme.onSurfaceVariant,
+        ),
       );
     }
-    return Center(
-      child: Icon(
-        _getCategoryIcon(state.product.category),
-        size: 64,
-        color: colorScheme.onSurfaceVariant,
-      ),
+
+    return Stack(
+      children: [
+        PageView.builder(
+          controller: _imagePageController,
+          itemCount: images.length,
+          onPageChanged: (index) {
+            setState(() {
+              _currentImageIndex = index;
+            });
+          },
+          itemBuilder: (context, index) {
+            final imageUrl = images[index];
+            return Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Stack(
+                  children: [
+                    Center(child: child),
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: colorScheme.primary,
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Center(
+                  child: Icon(
+                    _getCategoryIcon(state.product.category),
+                    size: 64,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                );
+              },
+            );
+          },
+        ),
+        if (images.length > 1)
+          Positioned(
+            bottom: 12,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(images.length, (index) {
+                final isActive = index == _currentImageIndex;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  height: 8,
+                  width: isActive ? 18 : 8,
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? colorScheme.primary
+                        : colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                );
+              }),
+            ),
+          ),
+      ],
     );
   }
 
@@ -818,6 +879,68 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
         return Icons.developer_board;
       default:
         return Icons.device_unknown;
+    }
+  }
+
+  Widget _buildBreadcrumbs(BuildContext context, ProductDetailState state) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final tab = _getCategoryTab(state.product.category);
+
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 4,
+      children: [
+        TextButton(
+          onPressed: () {
+            // Replace hash to point to “all” so URL matches the product list
+            PlatformSpecificUtils.replaceState('/#/product/');
+            Navigator.pushReplacementNamed(context, '/product');
+          },
+          child: Text(
+            S.of(context).products,
+            style: TextStyle(color: colorScheme.primary),
+          ),
+        ),
+        Icon(Icons.chevron_right,
+            size: 18, color: colorScheme.onSurfaceVariant),
+        TextButton(
+          onPressed: () {
+            PlatformSpecificUtils.pushState('/#/product/$tab');
+          },
+          child: Text(
+            _getLocalizedCategory(context, state.product.category),
+            style: TextStyle(color: colorScheme.primary),
+          ),
+        ),
+        Icon(Icons.chevron_right,
+            size: 18, color: colorScheme.onSurfaceVariant),
+        Text(
+          state.product.productName,
+          style: TextStyle(
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _getCategoryTab(CategoryEnum category) {
+    switch (category) {
+      case CategoryEnum.ram:
+        return 'ram';
+      case CategoryEnum.cpu:
+        return 'cpu';
+      case CategoryEnum.psu:
+        return 'psu';
+      case CategoryEnum.gpu:
+        return 'gpu';
+      case CategoryEnum.drive:
+        return 'drive';
+      case CategoryEnum.mainboard:
+        return 'mainboard';
+      default:
+        return 'all';
     }
   }
 

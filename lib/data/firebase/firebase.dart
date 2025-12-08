@@ -839,6 +839,34 @@ class Firebase {
     }
   }
 
+  Future<List<String>> getProductImages(String productID) async {
+    try {
+      final snapshot = await _firestore
+          .collection('products')
+          .doc(productID)
+          .collection('images')
+          .orderBy('position')
+          .get();
+
+      return snapshot.docs
+          .map((doc) {
+            final data = doc.data();
+            final url = data['url'];
+            if (url == null) return null;
+            if (url is String) return url;
+            return url.toString();
+          })
+          .whereType<String>()
+          .where((url) => url.isNotEmpty)
+          .toList();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting product images for $productID: $e');
+      }
+      return [];
+    }
+  }
+
   Future<SalesInvoice> getSalesInvoiceWithDetails(String invoiceID) async {
     try {
       // Get the invoice document

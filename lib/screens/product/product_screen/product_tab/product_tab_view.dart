@@ -279,9 +279,6 @@ class _ProductTabState extends State<ProductTab>
                                 if (product.productID != null) {
                                   PlatformSpecificUtils.pushState(
                                       '/#/product/$tab/${product.productID}');
-                                  // Force route rebuild so ProductRouteHandler can render detail immediately
-                                  Navigator.pushReplacementNamed(
-                                      context, '/product');
                                 }
                               } else {
                                 ProcessState result =

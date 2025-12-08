@@ -29,29 +29,93 @@ class VoucherScreenWebView extends StatefulWidget {
         child: VoucherScreenWebView(initialTabIndex: initialTabIndex),
       );
 
+  static int get lastSelectedTabIndex =>
+      _VoucherScreenWebViewState._lastSelectedTabIndex;
+
   @override
   State<VoucherScreenWebView> createState() => _VoucherScreenWebViewState();
 }
 
 class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
     with SingleTickerProviderStateMixin {
+  static int _lastSelectedTabIndex = 0;
+  bool _isChangingTab = false;
+
   VoucherScreenCubit get cubit => context.read<VoucherScreenCubit>();
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    // Use initialTabIndex if provided, otherwise use last selected tab
+    final initialIndex = widget.initialTabIndex ?? _lastSelectedTabIndex;
+    _tabController =
+        TabController(length: 4, vsync: this, initialIndex: initialIndex);
 
     // Initialize cubit immediately
     cubit.initialize();
 
-    // Set the initial tab if provided
-    if (widget.initialTabIndex != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          _tabController.animateTo(widget.initialTabIndex!);
-        }
+    // Set the initial tab if provided (or use preserved index)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _tabController.animateTo(initialIndex, duration: Duration.zero);
+      }
+    });
+
+    // Listen to tab changes to preserve the selected tab
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        _lastSelectedTabIndex = _tabController.index;
+      }
+    });
+  }
+
+  Future<void> _handleTabChange(int index) async {
+    if (!mounted) return;
+
+    // Animate tab immediately without transition
+    _tabController.animateTo(index, duration: Duration.zero);
+
+    // Start loading
+    setState(() {
+      _isChangingTab = true;
+    });
+
+    // Wait at least 1 second before hiding loading indicator
+    await Future.delayed(const Duration(seconds: 1));
+
+    // Update URL for web navigation after loading completes
+    // This prevents hash change handlers from interfering
+    if (kIsWeb && mounted) {
+      String tabName;
+      switch (index) {
+        case 0:
+          tabName = 'all';
+          break;
+        case 1:
+          tabName = 'ongoing';
+          break;
+        case 2:
+          tabName = 'upcoming';
+          break;
+        case 3:
+          tabName = 'inactive';
+          break;
+        default:
+          tabName = 'all';
+      }
+      try {
+        // Use replaceState to avoid adding to history during loading
+        PlatformSpecificUtils.replaceState('/#/vouchers/$tabName');
+      } catch (e) {
+        // Silently handle error
+      }
+    }
+
+    // Hide loading indicator after the delay
+    if (mounted) {
+      setState(() {
+        _isChangingTab = false;
       });
     }
   }
@@ -95,7 +159,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                 state.dialogName.getLocalizedName(context),
                 state.notifyMessage.getLocalizedMessage(context),
               );
-                        cubit.toIdle();
+              cubit.toIdle();
             } else if (state.processState == ProcessState.failure) {
               if (mounted) {
                 showDialog(
@@ -173,31 +237,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                     controller: _tabController,
                     dividerColor: Colors.transparent,
                     onTap: (index) {
-                      if (!mounted) return;
-
-                      // Update URL for web navigation
-                      String tabName;
-                      switch (index) {
-                        case 0:
-                          tabName = 'all';
-                          break;
-                        case 1:
-                          tabName = 'ongoing';
-                          break;
-                        case 2:
-                          tabName = 'upcoming';
-                          break;
-                        case 3:
-                          tabName = 'inactive';
-                          break;
-                        default:
-                          tabName = 'all';
-                      }
-                      try {
-                        PlatformSpecificUtils.pushState('/#/vouchers/$tabName');
-                      } catch (e) {
-                        // Silently handle error
-                      }
+                      _handleTabChange(index);
                     },
                     tabs: [
                       Tab(text: S.of(context).all),
@@ -268,40 +308,70 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                           ],
                         ),
                       )
-                    : TabBarView(
-                        controller: _tabController,
+                    : Stack(
                         children: [
-                          // All Vouchers Tab
-                          _buildVoucherList(
-                            context,
-                            state.voucherList,
-                            state.selectedVoucher,
-                            (voucher) => cubit.setSelectedVoucher(voucher),
-                          ),
+                          TabBarView(
+                            controller: _tabController,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            children: [
+                              // All Vouchers Tab
+                              _buildVoucherList(
+                                context,
+                                state.voucherList,
+                                state.selectedVoucher,
+                                (voucher) => cubit.setSelectedVoucher(voucher),
+                              ),
 
-                          // Ongoing Vouchers Tab
-                          _buildVoucherList(
-                            context,
-                            state.ongoingList,
-                            state.selectedVoucher,
-                            (voucher) => cubit.setSelectedVoucher(voucher),
-                          ),
+                              // Ongoing Vouchers Tab
+                              _buildVoucherList(
+                                context,
+                                state.ongoingList,
+                                state.selectedVoucher,
+                                (voucher) => cubit.setSelectedVoucher(voucher),
+                              ),
 
-                          // Upcoming Vouchers Tab
-                          _buildVoucherList(
-                            context,
-                            state.upcomingList,
-                            state.selectedVoucher,
-                            (voucher) => cubit.setSelectedVoucher(voucher),
-                          ),
+                              // Upcoming Vouchers Tab
+                              _buildVoucherList(
+                                context,
+                                state.upcomingList,
+                                state.selectedVoucher,
+                                (voucher) => cubit.setSelectedVoucher(voucher),
+                              ),
 
-                          // Inactive Vouchers Tab
-                          _buildVoucherList(
-                            context,
-                            state.inactiveList,
-                            state.selectedVoucher,
-                            (voucher) => cubit.setSelectedVoucher(voucher),
+                              // Inactive Vouchers Tab
+                              _buildVoucherList(
+                                context,
+                                state.inactiveList,
+                                state.selectedVoucher,
+                                (voucher) => cubit.setSelectedVoucher(voucher),
+                              ),
+                            ],
                           ),
+                          // Show loading indicator overlay during tab change
+                          if (_isChangingTab)
+                            Positioned.fill(
+                              child: IgnorePointer(
+                                child: Container(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  child: Center(
+                                    child: Card(
+                                      elevation: 8,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(24),
+                                        child: CircularProgressIndicator(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
           ),

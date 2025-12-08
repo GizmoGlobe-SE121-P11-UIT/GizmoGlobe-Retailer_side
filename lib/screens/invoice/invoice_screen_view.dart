@@ -22,7 +22,8 @@ class InvoiceScreen extends StatefulWidget {
       );
 
   static Widget newInstanceWithTab({int? initialTabIndex}) => BlocProvider(
-        create: (context) => InvoiceScreenCubit(),
+        create: (context) =>
+            InvoiceScreenCubit(initialTabIndex: initialTabIndex),
         child: InvoiceScreenWithInitialTab(initialTabIndex: initialTabIndex),
       );
 
@@ -30,14 +31,46 @@ class InvoiceScreen extends StatefulWidget {
   State<InvoiceScreen> createState() => _InvoiceScreenState();
 }
 
-class _InvoiceScreenState extends State<InvoiceScreen> {
+class _InvoiceScreenState extends State<InvoiceScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+
+    // Sync TabController with cubit state after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final cubit = context.read<InvoiceScreenCubit>();
+        if (_tabController.index != cubit.state.selectedTabIndex) {
+          _tabController.animateTo(cubit.state.selectedTabIndex,
+              duration: Duration.zero);
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InvoiceScreenCubit, InvoiceScreenState>(
-      builder: (context, state) {
-        final content = DefaultTabController(
-          length: 3,
-          child: GestureDetector(
+    return BlocListener<InvoiceScreenCubit, InvoiceScreenState>(
+      listener: (context, state) {
+        // Sync TabController with state
+        if (_tabController.index != state.selectedTabIndex) {
+          _tabController.animateTo(state.selectedTabIndex,
+              duration: Duration.zero);
+        }
+      },
+      child: BlocBuilder<InvoiceScreenCubit, InvoiceScreenState>(
+        builder: (context, state) {
+          final content = GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
             },
@@ -47,10 +80,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 bottom: TabBar(
-                  onTap: (index) {
-                    context.read<InvoiceScreenCubit>().changeTab(index);
+                  controller: _tabController,
+                  onTap: (index) async {
+                    // Animate tab immediately without transition
+                    _tabController.animateTo(index, duration: Duration.zero);
+                    await context.read<InvoiceScreenCubit>().changeTab(index);
 
                     // Update URL for web navigation
+                    // Do this after loading completes to prevent hash change loop
                     if (kIsWeb) {
                       String tabName;
                       switch (index) {
@@ -66,7 +103,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                         default:
                           tabName = 'sales';
                       }
-                      PlatformSpecificUtils.pushState('/#/invoices/$tabName');
+                      // Use replaceState to avoid adding to history during loading
+                      PlatformSpecificUtils.replaceState(
+                          '/#/invoices/$tabName');
                     }
                   },
                   labelColor: Theme.of(context).colorScheme.primary,
@@ -84,66 +123,94 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 ),
               ),
               body: SafeArea(
-                child: IndexedStack(
-                  index: state.selectedTabIndex,
+                child: Stack(
                   children: [
-                    SalesScreen.newInstance(),
-                    IncomingScreen.newInstance(),
-                    WarrantyScreen.newInstance(),
+                    IndexedStack(
+                      index: state.selectedTabIndex,
+                      children: [
+                        SalesScreen.newInstance(),
+                        IncomingScreen.newInstance(),
+                        WarrantyScreen.newInstance(),
+                      ],
+                    ),
+                    // Show loading indicator overlay during tab change
+                    if (state.isChangingTab)
+                      Positioned.fill(
+                        child: IgnorePointer(
+                          child: Container(
+                            color: Theme.of(context).colorScheme.surface,
+                            child: Center(
+                              child: Card(
+                                elevation: 8,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(24),
+                                  child: CircularProgressIndicator(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
             ),
-          ),
-        );
-
-        // Use web layout for web platform - only show full layout when accessed directly
-        if (kIsWeb && widget.showFullLayout) {
-          final items = buildDefaultSidebarItems(
-            home: S.of(context).home,
-            product: S.of(context).product,
-            invoice: S.of(context).invoice,
-            stakeholder: S.of(context).stakeholder,
-            voucher: S.of(context).voucher,
-            profile: S.of(context).profile,
           );
 
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Column(
-              children: [
-                // Web Header
-                const WebHeader(
-                  unreadChats: 0,
-                  isSidebarCompact: false,
-                ),
-                // Main content with sidebar
-                Expanded(
-                  child: Row(
-                    children: [
-                      WebSidebarModes(
-                        currentIndex: 2, // Invoice index
-                        onItemSelected: (value) {
-                          // Navigation is handled inside WebSidebarModes to avoid duplicates
-                        },
-                        items: items,
-                        onCompactModeChanged: (isCompact) {
-                          // Handle sidebar compact mode if needed
-                        },
-                      ),
-                      const VerticalDivider(width: 1),
-                      Expanded(child: content),
-                    ],
+          // Use web layout for web platform - only show full layout when accessed directly
+          if (kIsWeb && widget.showFullLayout) {
+            final items = buildDefaultSidebarItems(
+              home: S.of(context).home,
+              product: S.of(context).product,
+              invoice: S.of(context).invoice,
+              stakeholder: S.of(context).stakeholder,
+              voucher: S.of(context).voucher,
+              profile: S.of(context).profile,
+            );
+
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: Column(
+                children: [
+                  // Web Header
+                  const WebHeader(
+                    unreadChats: 0,
+                    isSidebarCompact: false,
                   ),
-                ),
-              ],
-            ),
-          );
-        }
+                  // Main content with sidebar
+                  Expanded(
+                    child: Row(
+                      children: [
+                        WebSidebarModes(
+                          currentIndex: 2, // Invoice index
+                          onItemSelected: (value) {
+                            // Navigation is handled inside WebSidebarModes to avoid duplicates
+                          },
+                          items: items,
+                          onCompactModeChanged: (isCompact) {
+                            // Handle sidebar compact mode if needed
+                          },
+                        ),
+                        const VerticalDivider(width: 1),
+                        Expanded(child: content),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
 
-        // Use regular layout for mobile
-        return content;
-      },
+          // Use regular layout for mobile
+          return content;
+        },
+      ),
     );
   }
 }
@@ -168,7 +235,12 @@ class _InvoiceScreenWithInitialTabState
     if (kIsWeb && widget.initialTabIndex != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          context.read<InvoiceScreenCubit>().changeTab(widget.initialTabIndex!);
+          final cubit = context.read<InvoiceScreenCubit>();
+          // Don't update if already changing tabs
+          if (!cubit.state.isChangingTab &&
+              cubit.state.selectedTabIndex != widget.initialTabIndex) {
+            cubit.changeTab(widget.initialTabIndex!);
+          }
         }
       });
     }
@@ -178,11 +250,17 @@ class _InvoiceScreenWithInitialTabState
   void didUpdateWidget(InvoiceScreenWithInitialTab oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Update tab when initialTabIndex changes (e.g., from URL change)
+    // Only update if not already changing tabs to prevent loops
     if (oldWidget.initialTabIndex != widget.initialTabIndex &&
         widget.initialTabIndex != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          context.read<InvoiceScreenCubit>().changeTab(widget.initialTabIndex!);
+          final cubit = context.read<InvoiceScreenCubit>();
+          // Don't update if already changing tabs
+          if (!cubit.state.isChangingTab &&
+              cubit.state.selectedTabIndex != widget.initialTabIndex) {
+            cubit.changeTab(widget.initialTabIndex!);
+          }
         }
       });
     }

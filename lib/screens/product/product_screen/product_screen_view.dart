@@ -47,6 +47,7 @@ class _ProductScreenState extends State<ProductScreen>
   late FocusNode searchFocusNode;
   ProductScreenCubit get cubit => context.read<ProductScreenCubit>();
   late TabController tabController;
+  late PageController pageController;
 
   @override
   void initState() {
@@ -64,10 +65,8 @@ class _ProductScreenState extends State<ProductScreen>
     }
     tabController = TabController(
         length: tabCount, vsync: this, initialIndex: safeInitialIndex);
+    pageController = PageController(initialPage: safeInitialIndex);
     cubit.initialize(widget.initialProducts ?? Database().productList);
-
-    // Listen to tab index changes and push hash for web
-    // (removed: handled via onTap to avoid duplicate navigation)
   }
 
   @override
@@ -75,6 +74,7 @@ class _ProductScreenState extends State<ProductScreen>
     searchController.dispose();
     searchFocusNode.dispose();
     tabController.dispose();
+    pageController.dispose();
     super.dispose();
   }
 
@@ -112,8 +112,11 @@ class _ProductScreenState extends State<ProductScreen>
 
   int getTabCount() => CategoryEnum.getValues().length + 1;
 
-  void onTabChanged(int index) {
-    cubit.updateSelectedTabIndex(index);
+  void onTabChanged(int index) async {
+    // Jump to page instantly without animation
+    pageController.jumpToPage(index);
+    tabController.animateTo(index, duration: Duration.zero);
+    await cubit.updateSelectedTabIndex(index);
     _pushProductHash(index);
   }
 
@@ -205,35 +208,93 @@ class _ProductScreenState extends State<ProductScreen>
             ),
           ),
           body: SafeArea(
-            child: BlocBuilder<ProductScreenCubit, ProductScreenState>(
-              builder: (context, state) {
-                return TabBarView(
-                  controller: tabController,
-                  children: [
-                    ProductTab.newInstance(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newRam(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newCpu(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newPsu(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newGpu(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newDrive(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newMainboard(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                  ],
-                );
+            child: BlocListener<ProductScreenCubit, ProductScreenState>(
+              listener: (context, state) {
+                // Sync pageController and tabController when state changes
+                if (pageController.hasClients) {
+                  final currentPage = pageController.page?.round() ?? -1;
+                  if (currentPage != state.selectedTabIndex) {
+                    // Always sync pageController to match selectedTabIndex
+                    pageController.jumpToPage(state.selectedTabIndex);
+                    tabController.animateTo(state.selectedTabIndex,
+                        duration: Duration.zero);
+                  }
+                } else {
+                  // If pageController doesn't have clients yet, sync tabController
+                  tabController.animateTo(state.selectedTabIndex,
+                      duration: Duration.zero);
+                }
               },
+              child: BlocBuilder<ProductScreenCubit, ProductScreenState>(
+                builder: (context, state) {
+                  // Ensure pageController is positioned correctly
+                  if (pageController.hasClients) {
+                    final currentPage = pageController.page?.round();
+                    if (currentPage != null &&
+                        currentPage != state.selectedTabIndex) {
+                      // Sync immediately
+                      pageController.jumpToPage(state.selectedTabIndex);
+                    }
+                  }
+
+                  // Always show PageView - it changes immediately when tab is clicked
+                  return Stack(
+                    children: [
+                      PageView(
+                        controller: pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          ProductTab.newInstance(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newRam(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newCpu(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newPsu(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newGpu(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newDrive(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newMainboard(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                        ],
+                      ),
+                      // Show loading indicator overlay during tab change
+                      if (state.isChangingTab)
+                        Positioned.fill(
+                          child: IgnorePointer(
+                            child: Container(
+                              color: Theme.of(context).colorScheme.surface,
+                              child: Center(
+                                child: Card(
+                                  elevation: 8,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(24),
+                                    child: CircularProgressIndicator(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ),

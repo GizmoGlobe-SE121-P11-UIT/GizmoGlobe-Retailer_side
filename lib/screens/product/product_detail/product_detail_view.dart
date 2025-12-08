@@ -36,7 +36,15 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  final PageController _imagePageController = PageController();
+  int _currentImageIndex = 0;
   ProductDetailCubit get cubit => context.read<ProductDetailCubit>();
+
+  @override
+  void dispose() {
+    _imagePageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,58 +90,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       decoration: BoxDecoration(
                         color: colorScheme.surface,
                       ),
-                      child: (state.product.imageUrl != null &&
-                              state.product.imageUrl!.isNotEmpty)
-                          ? Image.network(
-                              state.product.imageUrl!,
-                              fit: BoxFit.contain,
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                }
-                                return Stack(
-                                  children: [
-                                    Center(child: child),
-                                    Positioned.fill(
-                                      child: Container(
-                                        color: Colors.black
-                                            .withValues(alpha: 0.05),
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            color: colorScheme.primary,
-                                            value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                    null
-                                                ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Center(
-                                  child: Icon(
-                                    _getCategoryIcon(state.product.category),
-                                    size: 64,
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                                );
-                              },
-                            )
-                          : Center(
-                              child: Icon(
-                                _getCategoryIcon(state.product.category),
-                                size: 64,
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                            ),
+                      child: _buildImageCarousel(context, state),
                     ),
 
                     // Product Info Section
@@ -490,6 +447,103 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       default:
         return Icons.device_unknown;
     }
+  }
+
+  Widget _buildImageCarousel(BuildContext context, ProductDetailState state) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final images = state.imageUrls.isNotEmpty
+        ? state.imageUrls
+        : (state.product.imageUrl?.isNotEmpty == true
+            ? [state.product.imageUrl!]
+            : <String>[]);
+
+    if (images.isEmpty) {
+      return Center(
+        child: Icon(
+          _getCategoryIcon(state.product.category),
+          size: 64,
+          color: colorScheme.onSurfaceVariant,
+        ),
+      );
+    }
+
+    return Stack(
+      children: [
+        PageView.builder(
+          controller: _imagePageController,
+          itemCount: images.length,
+          onPageChanged: (index) {
+            setState(() {
+              _currentImageIndex = index;
+            });
+          },
+          itemBuilder: (context, index) {
+            final imageUrl = images[index];
+            return Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                return Stack(
+                  children: [
+                    Center(child: child),
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: colorScheme.primary,
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Center(
+                  child: Icon(
+                    _getCategoryIcon(state.product.category),
+                    size: 64,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                );
+              },
+            );
+          },
+        ),
+        if (images.length > 1)
+          Positioned(
+            bottom: 12,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(images.length, (index) {
+                final isActive = index == _currentImageIndex;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  height: 8,
+                  width: isActive ? 18 : 8,
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? colorScheme.primary
+                        : colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                );
+              }),
+            ),
+          ),
+      ],
+    );
   }
 
   Widget _buildInfoRow({

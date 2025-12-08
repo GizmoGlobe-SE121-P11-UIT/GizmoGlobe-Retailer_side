@@ -23,8 +23,11 @@ import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_cubit.dar
 import 'package:gizmoglobe_client/screens/main/main_screen/main_screen_view.dart';
 import 'package:gizmoglobe_client/screens/chat/list/chat_list_screen_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_view.dart';
+import 'package:gizmoglobe_client/screens/invoice/invoice_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_view.dart';
+import 'package:gizmoglobe_client/screens/stakeholder/stakeholder_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_view.dart';
+import 'package:gizmoglobe_client/screens/voucher/list/voucher_screen_webview.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_view.dart';
@@ -32,7 +35,8 @@ import 'package:gizmoglobe_client/components/general/web_sidebar.dart';
 import 'package:gizmoglobe_client/components/general/web_header.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_webview.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
-import 'package:gizmoglobe_client/data/firebase/firebase.dart' as FirebaseService;
+import 'package:gizmoglobe_client/data/firebase/firebase.dart'
+    as FirebaseService;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -659,13 +663,14 @@ class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
               initialTabIndex = 2;
               break;
             default:
-              initialTabIndex = 0;
+              initialTabIndex = null; // Don't reset if invalid tab name
           }
         } else {
-          initialTabIndex = 0; // Default to sales
+          initialTabIndex =
+              null; // Don't reset if no tab specified - preserve current state
         }
       } else {
-        initialTabIndex = 0; // Default to sales
+        initialTabIndex = null; // Don't reset if not on invoices route
       }
     }
   }
@@ -678,6 +683,28 @@ class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
 
     if (!isAuthenticated) {
       return SignInScreen.newInstance();
+    }
+
+    // If no tab specified but we have a preserved tab, update URL to reflect it
+    if (kIsWeb && initialTabIndex == null) {
+      final preservedTabIndex = InvoiceScreenCubit.lastSelectedTabIndex;
+      String tabName;
+      switch (preservedTabIndex) {
+        case 0:
+          tabName = 'sales';
+          break;
+        case 1:
+          tabName = 'incoming';
+          break;
+        case 2:
+          tabName = 'warranty';
+          break;
+        default:
+          tabName = 'sales';
+      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        PlatformSpecificUtils.replaceState('/#/invoices/$tabName');
+      });
     }
 
     // Return invoice screen with optional initial tab index
@@ -728,9 +755,9 @@ class _StakeholderRouteHandlerState extends State<StakeholderRouteHandler> {
       final hash = uri.fragment;
 
       // Parse hash like /#/stakeholders/customers, /#/stakeholders/employees, /#/stakeholders/vendors
-      if (hash.startsWith('/stakeholders/')) {
+      if (hash.startsWith('/stakeholders')) {
         final pathSegments = hash.split('/');
-        if (pathSegments.length >= 3) {
+        if (pathSegments.length >= 3 && pathSegments[2].isNotEmpty) {
           final tabName = pathSegments[2].toLowerCase();
           switch (tabName) {
             case 'customers':
@@ -743,13 +770,14 @@ class _StakeholderRouteHandlerState extends State<StakeholderRouteHandler> {
               initialTabIndex = 2;
               break;
             default:
-              initialTabIndex = 0; // Default to customers
+              initialTabIndex = null; // Don't reset if invalid tab name
           }
         } else {
-          initialTabIndex = 0; // Default to customers if no specific tab
+          initialTabIndex =
+              null; // Don't reset if no tab specified - preserve current state
         }
       } else {
-        initialTabIndex = 0; // Default to customers tab
+        initialTabIndex = null; // Don't reset if not on stakeholders route
       }
     }
   }
@@ -762,6 +790,28 @@ class _StakeholderRouteHandlerState extends State<StakeholderRouteHandler> {
 
     if (!isAuthenticated) {
       return SignInScreen.newInstance();
+    }
+
+    // If no tab specified but we have a preserved tab, update URL to reflect it
+    if (kIsWeb && initialTabIndex == null) {
+      final preservedTabIndex = StakeholderScreenCubit.lastSelectedTabIndex;
+      String tabName;
+      switch (preservedTabIndex) {
+        case 0:
+          tabName = 'customers';
+          break;
+        case 1:
+          tabName = 'employees';
+          break;
+        case 2:
+          tabName = 'vendors';
+          break;
+        default:
+          tabName = 'customers';
+      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        PlatformSpecificUtils.replaceState('/#/stakeholders/$tabName');
+      });
     }
 
     // Return stakeholder screen with optional initial tab index
@@ -832,13 +882,14 @@ class _VoucherRouteHandlerState extends State<VoucherRouteHandler> {
               initialTabIndex = 3;
               break;
             default:
-              initialTabIndex = 0;
+              initialTabIndex = null; // Don't reset if invalid tab name
           }
         } else {
-          initialTabIndex = 0; // Default to all
+          initialTabIndex =
+              null; // Don't reset if no tab specified - preserve current state
         }
       } else {
-        initialTabIndex = 0; // Default to all tab
+        initialTabIndex = null; // Don't reset if not on vouchers route
       }
     }
   }
@@ -851,6 +902,31 @@ class _VoucherRouteHandlerState extends State<VoucherRouteHandler> {
 
     if (!isAuthenticated) {
       return SignInScreen.newInstance();
+    }
+
+    // If no tab specified but we have a preserved tab, update URL to reflect it
+    if (kIsWeb && initialTabIndex == null) {
+      final preservedTabIndex = VoucherScreenWebView.lastSelectedTabIndex;
+      String tabName;
+      switch (preservedTabIndex) {
+        case 0:
+          tabName = 'all';
+          break;
+        case 1:
+          tabName = 'ongoing';
+          break;
+        case 2:
+          tabName = 'upcoming';
+          break;
+        case 3:
+          tabName = 'inactive';
+          break;
+        default:
+          tabName = 'all';
+      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        PlatformSpecificUtils.replaceState('/#/vouchers/$tabName');
+      });
     }
 
     // Return voucher screen with optional initial tab index
@@ -951,7 +1027,8 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
           } catch (_) {
             selectedProduct = null;
             // Product not found locally, fetch from Firebase
-            _productFuture = FirebaseService.Firebase().getProduct(selectedProductId!);
+            _productFuture =
+                FirebaseService.Firebase().getProduct(selectedProductId!);
           }
         } else {
           selectedProduct = null;
@@ -977,14 +1054,17 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
     }
 
     // Late resolve product if ID present but product not yet found
-    if (selectedProductId != null && selectedProduct == null && _productFuture == null) {
+    if (selectedProductId != null &&
+        selectedProduct == null &&
+        _productFuture == null) {
       try {
         selectedProduct = Database()
             .productList
             .firstWhere((p) => p.productID == selectedProductId);
       } catch (_) {
         // Product not found locally, fetch from Firebase
-        _productFuture = FirebaseService.Firebase().getProduct(selectedProductId!);
+        _productFuture =
+            FirebaseService.Firebase().getProduct(selectedProductId!);
       }
     }
 
@@ -1021,7 +1101,8 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
                       ? FutureBuilder<Product?>(
                           future: _productFuture,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
                               return Center(
                                 child: CircularProgressIndicator(
                                   color: Theme.of(context).colorScheme.primary,
@@ -1038,7 +1119,8 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
                                   });
                                 }
                               });
-                              return ProductDetailWebView.newInstance(snapshot.data!);
+                              return ProductDetailWebView.newInstance(
+                                  snapshot.data!);
                             }
                             // Product not found, show product list
                             return ProductScreen.newInstanceWithTab(
@@ -1053,7 +1135,8 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
                               ),
                             )
                           : selectedProduct != null
-                              ? ProductDetailWebView.newInstance(selectedProduct!)
+                              ? ProductDetailWebView.newInstance(
+                                  selectedProduct!)
                               : ProductScreen.newInstanceWithTab(
                                   initialTabIndex: initialTabIndex,
                                 ),
