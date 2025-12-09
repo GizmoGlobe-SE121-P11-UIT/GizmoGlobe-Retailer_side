@@ -282,6 +282,7 @@ class AppLocalizations {
   String get preparing => _getTranslation('preparing');
   String get shipping => _getTranslation('shipping');
   String get shipped => _getTranslation('shipped');
+  String get received => _getTranslation('received');
   String get completed => _getTranslation('completed');
   String get cancelled => _getTranslation('cancelled');
   String get warrantyStatusPending => _getTranslation('warrantyStatusPending');

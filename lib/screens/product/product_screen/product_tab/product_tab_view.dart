@@ -143,7 +143,7 @@ class _ProductTabState extends State<ProductTab>
                             switch (value) {
                               case SortEnum.salesHighest:
                                 displayText = S.of(context).salesHighest;
-                                break;
+                                                                                                                                                                             break;
                               case SortEnum.salesLowest:
                                 displayText = S.of(context).salesLowest;
                                 break;

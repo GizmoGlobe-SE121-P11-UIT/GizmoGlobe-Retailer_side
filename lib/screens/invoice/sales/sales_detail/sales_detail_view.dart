@@ -395,7 +395,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                                       ),
                                       // Quantity Badge
                                       Positioned(
-                                        top: 8,
+                                        bottom: 8,
                                         right: 8,
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
@@ -511,8 +511,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          SizedBox(
-            width: maxWidth,
+          Flexible(
             child: Text(
               value,
               style: TextStyle(
@@ -520,8 +519,10 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
               ),
-              textAlign: wrap ? TextAlign.left : TextAlign.right,
-              softWrap: wrap,
+              textAlign: TextAlign.right,
+              softWrap: true,
+              maxLines: wrap ? null : 1,
+              overflow: wrap ? TextOverflow.visible : TextOverflow.ellipsis,
             ),
           ),
         ],
