@@ -6,7 +6,6 @@ class SalesInvoicePermissions {
   static bool canEditInvoice(String userRole, SalesInvoice invoice) {
     if ((invoice.salesStatus == SalesStatus.completed ||
             invoice.salesStatus == SalesStatus.cancelled ||
-            //invoice.salesStatus == SalesStatus.shipping ||
             invoice.salesStatus == SalesStatus.shipped) &&
         invoice.paymentStatus == PaymentStatus.paid) {
       return false;

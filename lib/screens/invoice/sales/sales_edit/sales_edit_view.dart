@@ -336,7 +336,10 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                             state.userRole, state.invoice)
                         ? _buildStatusDropdown<SalesStatus>(
                             value: state.selectedSalesStatus,
-                            items: SalesStatus.values,
+                            items: SalesStatus.values.where((status) =>
+                              status != SalesStatus.completed &&
+                              status != SalesStatus.received
+                            ).toList(),
                             onChanged: (status) {
                               if (status != null) {
                                 context

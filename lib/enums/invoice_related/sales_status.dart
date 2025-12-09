@@ -6,6 +6,7 @@ enum SalesStatus {
   preparing('preparing'),
   shipping('shipping'),
   shipped('shipped'),
+  received('received'),
   completed('completed'),
   cancelled('cancelled');
 
@@ -27,6 +28,8 @@ enum SalesStatus {
         return S.of(context).shipping;
       case SalesStatus.shipped:
         return S.of(context).shipped;
+      case SalesStatus.received:
+        return S.of(context).received;
       case SalesStatus.completed:
         return S.of(context).completed;
       case SalesStatus.cancelled:
