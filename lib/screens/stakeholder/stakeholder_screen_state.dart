@@ -18,7 +18,7 @@ class StakeholderScreenState extends Equatable {
       isChangingTab: isChangingTab ?? this.isChangingTab,
     );
   }
-
+  
   @override
   List<Object?> get props => [selectedTabIndex, isChangingTab];
 }

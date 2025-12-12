@@ -225,8 +225,8 @@ class _ProductScreenState extends State<ProductScreen>
                       duration: Duration.zero);
                 }
               },
-              child: BlocBuilder<ProductScreenCubit, ProductScreenState>(
-                builder: (context, state) {
+            child: BlocBuilder<ProductScreenCubit, ProductScreenState>(
+              builder: (context, state) {
                   // Ensure pageController is positioned correctly
                   if (pageController.hasClients) {
                     final currentPage = pageController.page?.round();
@@ -243,28 +243,28 @@ class _ProductScreenState extends State<ProductScreen>
                       PageView(
                         controller: pageController,
                         physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          ProductTab.newInstance(
-                              searchText: state.searchText,
-                              initialProducts: state.initialProducts),
-                          ProductTab.newRam(
-                              searchText: state.searchText,
-                              initialProducts: state.initialProducts),
-                          ProductTab.newCpu(
-                              searchText: state.searchText,
-                              initialProducts: state.initialProducts),
-                          ProductTab.newPsu(
-                              searchText: state.searchText,
-                              initialProducts: state.initialProducts),
-                          ProductTab.newGpu(
-                              searchText: state.searchText,
-                              initialProducts: state.initialProducts),
-                          ProductTab.newDrive(
-                              searchText: state.searchText,
-                              initialProducts: state.initialProducts),
-                          ProductTab.newMainboard(
-                              searchText: state.searchText,
-                              initialProducts: state.initialProducts),
+                  children: [
+                    ProductTab.newInstance(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newRam(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newCpu(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newPsu(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newGpu(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newDrive(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
+                    ProductTab.newMainboard(
+                        searchText: state.searchText,
+                        initialProducts: state.initialProducts),
                         ],
                       ),
                       // Show loading indicator overlay during tab change
@@ -291,9 +291,9 @@ class _ProductScreenState extends State<ProductScreen>
                             ),
                           ),
                         ),
-                    ],
-                  );
-                },
+                  ],
+                );
+              },
               ),
             ),
           ),

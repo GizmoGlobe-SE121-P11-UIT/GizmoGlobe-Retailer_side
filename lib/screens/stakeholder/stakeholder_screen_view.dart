@@ -123,7 +123,7 @@ class _StakeholderScreenState extends State<StakeholderScreen>
         }
       },
       child: BlocBuilder<StakeholderScreenCubit, StakeholderScreenState>(
-        builder: (context, state) {
+      builder: (context, state) {
           final content = GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
@@ -182,13 +182,13 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                 child: Stack(
                   children: [
                     IndexedStack(
-                      index: state.selectedTabIndex,
-                      children: [
-                        CustomersScreen.newInstance(),
-                        EmployeesScreen.newInstance(),
-                        VendorsScreen.newInstance(),
-                      ],
-                    ),
+                  index: state.selectedTabIndex,
+                  children: [
+                    CustomersScreen.newInstance(),
+                    EmployeesScreen.newInstance(),
+                    VendorsScreen.newInstance(),
+                  ],
+                ),
                     // Show loading indicator overlay during tab change
                     if (state.isChangingTab)
                       Positioned.fill(
@@ -214,58 +214,58 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                         ),
                       ),
                   ],
-                ),
               ),
             ),
+          ),
+        );
+
+        // Use web layout for web platform - only show full layout when accessed directly
+        if (kIsWeb && widget.showFullLayout) {
+          final items = buildDefaultSidebarItems(
+            home: S.of(context).home,
+            product: S.of(context).product,
+            invoice: S.of(context).invoice,
+            stakeholder: S.of(context).stakeholder,
+            voucher: S.of(context).voucher,
+            profile: S.of(context).profile,
           );
 
-          // Use web layout for web platform - only show full layout when accessed directly
-          if (kIsWeb && widget.showFullLayout) {
-            final items = buildDefaultSidebarItems(
-              home: S.of(context).home,
-              product: S.of(context).product,
-              invoice: S.of(context).invoice,
-              stakeholder: S.of(context).stakeholder,
-              voucher: S.of(context).voucher,
-              profile: S.of(context).profile,
-            );
-
-            return Scaffold(
-              resizeToAvoidBottomInset: false,
-              body: Column(
-                children: [
-                  // Web Header
-                  const WebHeader(
-                    unreadChats: 0,
-                    isSidebarCompact: false,
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: Column(
+              children: [
+                // Web Header
+                const WebHeader(
+                  unreadChats: 0,
+                  isSidebarCompact: false,
+                ),
+                // Main content with sidebar
+                Expanded(
+                  child: Row(
+                    children: [
+                      WebSidebarModes(
+                        currentIndex: 3, // Stakeholder index
+                        onItemSelected: (value) {
+                          // Navigation is handled inside WebSidebarModes to avoid duplicates
+                        },
+                        items: items,
+                        onCompactModeChanged: (isCompact) {
+                          // Handle sidebar compact mode if needed
+                        },
+                      ),
+                      const VerticalDivider(width: 1),
+                      Expanded(child: content),
+                    ],
                   ),
-                  // Main content with sidebar
-                  Expanded(
-                    child: Row(
-                      children: [
-                        WebSidebarModes(
-                          currentIndex: 3, // Stakeholder index
-                          onItemSelected: (value) {
-                            // Navigation is handled inside WebSidebarModes to avoid duplicates
-                          },
-                          items: items,
-                          onCompactModeChanged: (isCompact) {
-                            // Handle sidebar compact mode if needed
-                          },
-                        ),
-                        const VerticalDivider(width: 1),
-                        Expanded(child: content),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
+                ),
+              ],
+            ),
+          );
+        }
 
-          // Use regular layout for mobile
-          return content;
-        },
+        // Use regular layout for mobile
+        return content;
+      },
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:printing/printing.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
+import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 
 enum ReportPeriod {
   today,
@@ -33,10 +34,11 @@ class BusinessReportDialog extends StatefulWidget {
 }
 
 class _BusinessReportDialogState extends State<BusinessReportDialog> {
-  ReportPeriod _selectedPeriod = ReportPeriod.thisMonth;
+  ReportPeriod _selectedPeriod = ReportPeriod.thisYear;
   DateTime? _startDate;
   DateTime? _endDate;
   bool _isGenerating = false;
+  CategoryEnum? _selectedCategory;
 
   @override
   void initState() {
@@ -178,6 +180,7 @@ class _BusinessReportDialogState extends State<BusinessReportDialog> {
       final reportData = await widget.cubit.generateBusinessReportData(
         startDate: _startDate!,
         endDate: _endDate!,
+        categoryFilter: _selectedCategory,
       );
 
       // Prepare localizations map for PDF
@@ -258,8 +261,12 @@ class _BusinessReportDialogState extends State<BusinessReportDialog> {
 
       // Download PDF
       final dateFormat = DateFormat('yyyyMMdd');
+      // Sanitize category name for filename (remove spaces, special chars)
+      final categoryName = reportData.selectedCategoryLabel
+          .replaceAll(' ', '_')
+          .replaceAll(RegExp(r'[^\w\s-]'), '');
       final fileName =
-          'Business_Report_${dateFormat.format(_startDate!)}_${dateFormat.format(_endDate!)}.pdf';
+          'Business_Report_${categoryName}_${dateFormat.format(_startDate!)}_${dateFormat.format(_endDate!)}.pdf';
       await Printing.sharePdf(
         bytes: await pdfDoc.save(),
         filename: fileName,
@@ -364,6 +371,42 @@ class _BusinessReportDialogState extends State<BusinessReportDialog> {
                 ),
               ],
               onChanged: _isGenerating ? null : _handlePeriodChange,
+            ),
+            const SizedBox(height: 24),
+            Text(
+              S.of(context).category,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<CategoryEnum?>(
+              value: _selectedCategory,
+              decoration: InputDecoration(
+                labelText: S.of(context).category,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              items: [
+                DropdownMenuItem<CategoryEnum?>(
+                  value: null,
+                  child: Text(S.of(context).all),
+                ),
+                ...CategoryEnum.getValues().map(
+                  (cat) => DropdownMenuItem<CategoryEnum?>(
+                    value: cat,
+                    child: Text(cat.description),
+                  ),
+                ),
+              ],
+              onChanged: _isGenerating
+                  ? null
+                  : (value) {
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    },
             ),
             const SizedBox(height: 24),
             if (_selectedPeriod == ReportPeriod.custom) ...[

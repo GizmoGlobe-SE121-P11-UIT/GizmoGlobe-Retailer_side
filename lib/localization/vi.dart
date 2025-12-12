@@ -263,7 +263,7 @@ const Map<String, String> vi = {
   'preparing': 'Đang chuẩn bị',
   'shipping': 'Đang giao',
   'shipped': 'Đã giao',
-  'reveiced': 'Đã nhận',
+  'received': 'Đã nhận',
   'completed': 'Đã hoàn thành',
   'cancelled': 'Đã hủy',
   'warrantyStatusPending': 'Chờ xử lý',

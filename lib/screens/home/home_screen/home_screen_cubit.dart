@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
+import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 import '../../../data/database/database.dart';
 import '../../../data/firebase/firebase.dart';
 import '../../../services/reports/business_report_pdf_service.dart';
@@ -202,6 +203,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   Future<BusinessReportData> generateBusinessReportData({
     required DateTime startDate,
     required DateTime endDate,
+    CategoryEnum? categoryFilter,
   }) async {
     final firebase = Firebase();
 
@@ -233,8 +235,10 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           invoiceDate.isBefore(endDate.add(const Duration(days: 1)));
     }).toList();
 
-    // Calculate revenue from paid sales invoices
+    // Calculate revenue, costs and product stats (supports category filter)
     double totalRevenue = 0.0;
+    double totalCosts = 0.0;
+    double costOfGoodsSold = 0.0;
     int totalPaidOrders = 0;
     int totalItemsSold = 0;
     final revenueByDay = <String, double>{};
@@ -242,141 +246,190 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     final revenueByMonth = <String, double>{};
     final dailySalesTrend = <DailySalesData>[];
     final monthlySalesMap = <String, MonthlySalesData>{};
+    final dailyCostsMap = <String, double>{};
+    final monthlyCostsMap = <String, double>{};
 
+    final salesByCategory = <String, double>{};
+    final Map<String, TopProductData> productSalesMap = {};
+    final Map<String, int> productCostMap =
+        {}; // Total cost from incoming invoices
+    final Map<String, int> productQuantityMap =
+        {}; // Total quantity from incoming invoices
+    final Set<String> includedProducts = {};
+    final Map<String, double> productCostFromSales =
+        {}; // Cost for sold products
+
+    bool matchesCategory(String? detailCategoryName) {
+      if (categoryFilter == null) return true;
+      final parsed =
+          CategoryEnumExtension.fromName(detailCategoryName ?? 'unknown');
+      return parsed == categoryFilter;
+    }
+
+    // First, process ALL incoming invoices to build cost data (without category filter)
+    // This ensures we have cost data available when processing sales
+    for (var invoice in incomingInvoices) {
+      if (invoice.status != PaymentStatus.paid) continue;
+
+      final invoiceWithDetails = await firebase
+          .getIncomingInvoiceWithDetails(invoice.incomingInvoiceID ?? '');
+
+      for (var detail in invoiceWithDetails.details) {
+        final cost = detail.importPrice * detail.quantity;
+        productCostMap[detail.productID] =
+            (productCostMap[detail.productID] ?? 0) + cost.toInt();
+        productQuantityMap[detail.productID] =
+            (productQuantityMap[detail.productID] ?? 0) + detail.quantity;
+      }
+    }
+
+    // Now process sales invoices (cost data is now available)
+
+    // Now process sales invoices (cost data is now available)
     for (var invoice in salesInvoices) {
-      if (invoice.paymentStatus == PaymentStatus.paid) {
-        totalRevenue += invoice.totalPrice;
-        totalPaidOrders++;
+      if (invoice.paymentStatus != PaymentStatus.paid) continue;
 
-        // Revenue by time period
+      final invoiceWithDetails =
+          await firebase.getSalesInvoiceWithDetails(invoice.salesInvoiceID);
+
+      double invoiceRevenue = 0.0;
+      bool hasMatching = false;
+
+      for (var detail in invoiceWithDetails.details) {
+        if (!matchesCategory(detail.category)) continue;
+        hasMatching = true;
+
+        final catEnum = CategoryEnumExtension.fromName(detail.category ?? '');
+        final categoryName =
+            catEnum == CategoryEnum.empty ? 'Unknown' : catEnum.description;
+        final revenue = detail.quantity * detail.sellingPrice;
+        invoiceRevenue += revenue;
+        totalItemsSold += detail.quantity;
+
+        salesByCategory[categoryName] =
+            (salesByCategory[categoryName] ?? 0) + revenue;
+
+        final productID = detail.productID;
+        final productName = detail.productName ?? 'Unknown Product';
+        final quantity = detail.quantity;
+        final revenue2 = detail.subtotal;
+
+        includedProducts.add(productID);
+
+        // Calculate cost using average cost per unit from incoming invoices
+        // Average cost = total cost from incoming invoices / total quantity purchased
+        final totalCostForProduct =
+            productCostMap[productID]?.toDouble() ?? 0.0;
+        final totalQuantityPurchased = productQuantityMap[productID] ?? 0;
+        final averageCostPerUnit = totalQuantityPurchased > 0
+            ? totalCostForProduct / totalQuantityPurchased
+            : 0.0;
+
+        // If no incoming invoice data, fetch product from database
+        double costPerUnit = averageCostPerUnit;
+        if (costPerUnit == 0) {
+          // First try to find in product list
+          var product =
+              db.productList.where((p) => p.productID == productID).isNotEmpty
+                  ? db.productList.firstWhere((p) => p.productID == productID)
+                  : null;
+
+          // If not found, fetch from database
+          product ??= await firebase.getProduct(productID);
+
+          // Use importPrice from product if available
+          if (product != null && product.importPrice > 0) {
+            costPerUnit = product.importPrice.toDouble();
+          }
+          // If still no cost data, use 0 (product might not have cost info)
+        }
+
+        final costContribution = costPerUnit * quantity;
+        productCostFromSales[productID] =
+            (productCostFromSales[productID] ?? 0) + costContribution;
+
+        // Track costs per day and month for sales trends
         final dayKey =
             '${invoice.date.year}-${invoice.date.month.toString().padLeft(2, '0')}-${invoice.date.day.toString().padLeft(2, '0')}';
-        revenueByDay[dayKey] = (revenueByDay[dayKey] ?? 0) + invoice.totalPrice;
-
-        final weekKey = '${invoice.date.year}-W${_getWeekNumber(invoice.date)}';
-        revenueByWeek[weekKey] =
-            (revenueByWeek[weekKey] ?? 0) + invoice.totalPrice;
+        dailyCostsMap[dayKey] = (dailyCostsMap[dayKey] ?? 0) + costContribution;
 
         final monthKey =
             '${invoice.date.year}-${invoice.date.month.toString().padLeft(2, '0')}';
-        revenueByMonth[monthKey] =
-            (revenueByMonth[monthKey] ?? 0) + invoice.totalPrice;
+        monthlyCostsMap[monthKey] = (monthlyCostsMap[monthKey] ?? 0) + costContribution;
 
-        // Daily sales trend
-        final dayStart =
-            DateTime(invoice.date.year, invoice.date.month, invoice.date.day);
-        final existingDay = dailySalesTrend.firstWhere(
-          (d) =>
-              d.date.year == dayStart.year &&
-              d.date.month == dayStart.month &&
-              d.date.day == dayStart.day,
-          orElse: () =>
-              DailySalesData(date: dayStart, revenue: 0, costs: 0, profit: 0),
-        );
-        if (existingDay.revenue == 0) {
-          dailySalesTrend.add(DailySalesData(
-              date: dayStart,
-              revenue: invoice.totalPrice,
-              costs: 0,
-              profit: invoice.totalPrice));
+        if (productSalesMap.containsKey(productID)) {
+          productSalesMap[productID]!.totalSales += quantity;
+          productSalesMap[productID]!.totalRevenue += revenue2;
         } else {
-          existingDay.revenue += invoice.totalPrice;
-          existingDay.profit += invoice.totalPrice;
-        }
-
-        // Monthly sales trend
-        final monthStart = DateTime(invoice.date.year, invoice.date.month, 1);
-        final monthKey2 = '${monthStart.year}-${monthStart.month}';
-        if (!monthlySalesMap.containsKey(monthKey2)) {
-          monthlySalesMap[monthKey2] = MonthlySalesData(
-              month: monthStart, revenue: 0, costs: 0, profit: 0);
-        }
-        monthlySalesMap[monthKey2]!.revenue += invoice.totalPrice;
-        monthlySalesMap[monthKey2]!.profit += invoice.totalPrice;
-      }
-    }
-
-    // Calculate costs from paid incoming invoices
-    double totalCosts = 0.0;
-    double costOfGoodsSold = 0.0;
-    for (var invoice in incomingInvoices) {
-      if (invoice.status == PaymentStatus.paid) {
-        totalCosts += invoice.totalPrice;
-        costOfGoodsSold +=
-            invoice.totalPrice; // COGS = all incoming invoice costs
-
-        // Update daily and monthly trends with costs
-        final dayStart =
-            DateTime(invoice.date.year, invoice.date.month, invoice.date.day);
-        final dayTrend = dailySalesTrend.firstWhere(
-          (d) =>
-              d.date.year == dayStart.year &&
-              d.date.month == dayStart.month &&
-              d.date.day == dayStart.day,
-          orElse: () =>
-              DailySalesData(date: dayStart, revenue: 0, costs: 0, profit: 0),
-        );
-        dayTrend.costs += invoice.totalPrice;
-        dayTrend.profit -= invoice.totalPrice;
-
-        final monthStart = DateTime(invoice.date.year, invoice.date.month, 1);
-        final monthKey2 = '${monthStart.year}-${monthStart.month}';
-        if (monthlySalesMap.containsKey(monthKey2)) {
-          monthlySalesMap[monthKey2]!.costs += invoice.totalPrice;
-          monthlySalesMap[monthKey2]!.profit -= invoice.totalPrice;
+          productSalesMap[productID] = TopProductData(
+            productID: productID,
+            productName: productName,
+            totalSales: quantity,
+            totalRevenue: revenue2,
+          );
         }
       }
-    }
 
-    // Calculate sales by category and top products
-    final salesByCategory = <String, double>{};
-    final Map<String, TopProductData> productSalesMap = {};
-    final Map<String, int> productCostMap = {}; // For profit margin calculation
+      if (!hasMatching) continue;
 
-    for (var invoice in salesInvoices) {
-      if (invoice.paymentStatus == PaymentStatus.paid) {
-        final invoiceWithDetails =
-            await firebase.getSalesInvoiceWithDetails(invoice.salesInvoiceID);
-        for (var detail in invoiceWithDetails.details) {
-          totalItemsSold += detail.quantity;
+      totalRevenue += invoiceRevenue;
+      totalPaidOrders++;
 
-          final category = detail.category?.toString() ?? 'Unknown';
-          final revenue = detail.quantity * detail.sellingPrice;
-          salesByCategory[category] =
-              (salesByCategory[category] ?? 0) + revenue;
+      // Revenue by time period (using matched revenue)
+      final dayKey =
+          '${invoice.date.year}-${invoice.date.month.toString().padLeft(2, '0')}-${invoice.date.day.toString().padLeft(2, '0')}';
+      revenueByDay[dayKey] = (revenueByDay[dayKey] ?? 0) + invoiceRevenue;
 
-          final productID = detail.productID;
-          final productName = detail.productName ?? 'Unknown Product';
-          final quantity = detail.quantity;
-          final revenue2 = detail.subtotal;
+      final weekKey = '${invoice.date.year}-W${_getWeekNumber(invoice.date)}';
+      revenueByWeek[weekKey] = (revenueByWeek[weekKey] ?? 0) + invoiceRevenue;
 
-          if (productSalesMap.containsKey(productID)) {
-            productSalesMap[productID]!.totalSales += quantity;
-            productSalesMap[productID]!.totalRevenue += revenue2;
-          } else {
-            productSalesMap[productID] = TopProductData(
-              productID: productID,
-              productName: productName,
-              totalSales: quantity,
-              totalRevenue: revenue2,
-            );
-          }
-        }
+      final monthKey =
+          '${invoice.date.year}-${invoice.date.month.toString().padLeft(2, '0')}';
+      revenueByMonth[monthKey] =
+          (revenueByMonth[monthKey] ?? 0) + invoiceRevenue;
+
+      // Daily sales trend
+      final dayStart =
+          DateTime(invoice.date.year, invoice.date.month, invoice.date.day);
+      final existingDay = dailySalesTrend.firstWhere(
+        (d) =>
+            d.date.year == dayStart.year &&
+            d.date.month == dayStart.month &&
+            d.date.day == dayStart.day,
+        orElse: () =>
+            DailySalesData(date: dayStart, revenue: 0, costs: 0, profit: 0),
+      );
+      if (existingDay.revenue == 0) {
+        final dayCost = dailyCostsMap[dayKey] ?? 0.0;
+        dailySalesTrend.add(DailySalesData(
+            date: dayStart,
+            revenue: invoiceRevenue,
+            costs: dayCost,
+            profit: invoiceRevenue - dayCost));
+      } else {
+        existingDay.revenue += invoiceRevenue;
+        final dayCost = dailyCostsMap[dayKey] ?? 0.0;
+        existingDay.costs = dayCost;
+        existingDay.profit = existingDay.revenue - dayCost;
       }
+
+      // Monthly sales trend
+      final monthStart = DateTime(invoice.date.year, invoice.date.month, 1);
+      final monthKey2 = '${monthStart.year}-${monthStart.month}';
+      if (!monthlySalesMap.containsKey(monthKey2)) {
+        monthlySalesMap[monthKey2] = MonthlySalesData(
+            month: monthStart, revenue: 0, costs: 0, profit: 0);
+      }
+      monthlySalesMap[monthKey2]!.revenue += invoiceRevenue;
+      final monthCost = monthlyCostsMap[monthKey] ?? 0.0;
+      monthlySalesMap[monthKey2]!.costs = monthCost;
+      monthlySalesMap[monthKey2]!.profit = monthlySalesMap[monthKey2]!.revenue - monthCost;
     }
 
-    // Get product costs for profit margin calculation
-    for (var invoice in incomingInvoices) {
-      if (invoice.status == PaymentStatus.paid) {
-        final invoiceWithDetails = await firebase
-            .getIncomingInvoiceWithDetails(invoice.incomingInvoiceID ?? '');
-        for (var detail in invoiceWithDetails.details) {
-          productCostMap[detail.productID] =
-              (productCostMap[detail.productID] ?? 0) +
-                  (detail.importPrice * detail.quantity).toInt();
-        }
-      }
-    }
+    // Calculate total costs from sold products
+    totalCosts =
+        productCostFromSales.values.fold(0.0, (sum, cost) => sum + cost);
+    costOfGoodsSold = totalCosts;
 
     final topProducts = productSalesMap.values.toList()
       ..sort((a, b) => b.totalRevenue.compareTo(a.totalRevenue));
@@ -386,22 +439,22 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
     // Calculate top products by profit margin
     final topProductsByProfitMargin = productSalesMap.entries.map((entry) {
+      final cost = productCostFromSales[entry.key] ??
+          productCostMap[entry.key]?.toDouble() ??
+          0.0;
       return BusinessReportTopProductData(
         productID: entry.value.productID,
         productName: entry.value.productName,
         totalSales: entry.value.totalSales,
         totalRevenue: entry.value.totalRevenue,
+        totalCost: cost,
       );
     }).toList()
       ..sort((a, b) {
-        final aCost = productCostMap[a.productID]?.toDouble() ?? 0.0;
-        final bCost = productCostMap[b.productID]?.toDouble() ?? 0.0;
-        final aMargin = a.totalRevenue > 0
-            ? ((a.totalRevenue - aCost) / a.totalRevenue * 100)
-            : 0.0;
-        final bMargin = b.totalRevenue > 0
-            ? ((b.totalRevenue - bCost) / b.totalRevenue * 100)
-            : 0.0;
+        final aMargin =
+            a.totalRevenue > 0 ? ((a.profit) / a.totalRevenue * 100) : 0.0;
+        final bMargin =
+            b.totalRevenue > 0 ? ((b.profit) / b.totalRevenue * 100) : 0.0;
         return bMargin.compareTo(aMargin);
       });
 
@@ -423,8 +476,10 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       }
     }
 
-    int newCustomers = 0;
-    int returningCustomers = 0;
+    // Track unique customers using Sets
+    final Set<String> newCustomerIDs = {};
+    final Set<String> returningCustomerIDs = {};
+    
     for (var invoice in salesInvoices) {
       if (invoice.paymentStatus == PaymentStatus.paid) {
         final firstOrderDate = customerFirstOrderMap[invoice.customerID];
@@ -432,9 +487,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
             firstOrderDate
                 .isAfter(startDate.subtract(const Duration(days: 1))) &&
             firstOrderDate.isBefore(endDate.add(const Duration(days: 1)))) {
-          newCustomers++;
+          newCustomerIDs.add(invoice.customerID);
         } else {
-          returningCustomers++;
+          returningCustomerIDs.add(invoice.customerID);
         }
 
         if (!customerOrderMap.containsKey(invoice.customerID)) {
@@ -467,6 +522,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     final topCustomers = customerOrderMap.values.toList()
       ..sort((a, b) => b.totalSpending.compareTo(a.totalSpending));
 
+    // Use the unique customer counts from Sets
+    final int newCustomers = newCustomerIDs.length;
+    final int returningCustomers = returningCustomerIDs.length;
     final totalCustomersInPeriod = customerOrderMap.length;
     final customerRetentionRate = totalCustomersInPeriod > 0
         ? (returningCustomers / totalCustomersInPeriod * 100)
@@ -492,8 +550,10 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       }
     }
 
-    // Calculate inventory turnover rate (simplified: COGS / Average Inventory)
-    final averageInventory = totalStockValue / 2; // Simplified calculation
+    // Calculate inventory turnover rate: COGS / Average Inventory
+    // Average Inventory = (Beginning Inventory + Ending Inventory) / 2
+    // Since we only have current inventory (ending), we use current value as average
+    final averageInventory = totalStockValue.toDouble();
     final inventoryTurnoverRate =
         averageInventory > 0 ? (costOfGoodsSold / averageInventory) : 0.0;
 
@@ -515,12 +575,14 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       totalProducts: db.productList.length,
       totalCustomers: db.customerList.length,
       salesByCategory: salesByCategory,
+      selectedCategoryLabel: categoryFilter?.description ?? 'All',
       topProducts: topProducts
           .map((data) => BusinessReportTopProductData(
                 productID: data.productID,
                 productName: data.productName,
                 totalSales: data.totalSales,
                 totalRevenue: data.totalRevenue,
+                totalCost: productCostFromSales[data.productID] ?? 0.0,
               ))
           .toList(),
       salesInvoices: salesInvoices,
@@ -543,12 +605,18 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
               ))
           .toList(),
       topProductsByQuantity: topProductsByQuantity
-          .map((data) => BusinessReportTopProductData(
-                productID: data.productID,
-                productName: data.productName,
-                totalSales: data.totalSales,
-                totalRevenue: data.totalRevenue,
-              ))
+          .map((data) {
+            // Try productCostFromSales first (for filtered products), then fall back to productCostMap
+            final cost = productCostFromSales[data.productID] ??
+                (productCostMap[data.productID]?.toDouble() ?? 0.0);
+            return BusinessReportTopProductData(
+              productID: data.productID,
+              productName: data.productName,
+              totalSales: data.totalSales,
+              totalRevenue: data.totalRevenue,
+              totalCost: cost,
+            );
+          })
           .toList(),
       topProductsByProfitMargin: topProductsByProfitMargin,
       totalStockValue: totalStockValue,

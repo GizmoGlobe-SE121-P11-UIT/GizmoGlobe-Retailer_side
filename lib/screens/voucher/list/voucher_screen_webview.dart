@@ -56,8 +56,8 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
     cubit.initialize();
 
     // Set the initial tab if provided (or use preserved index)
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
         _tabController.animateTo(initialIndex, duration: Duration.zero);
       }
     });
@@ -159,7 +159,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                 state.dialogName.getLocalizedName(context),
                 state.notifyMessage.getLocalizedMessage(context),
               );
-              cubit.toIdle();
+                        cubit.toIdle();
             } else if (state.processState == ProcessState.failure) {
               if (mounted) {
                 showDialog(
@@ -311,39 +311,39 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                     : Stack(
                         children: [
                           TabBarView(
-                            controller: _tabController,
+                        controller: _tabController,
                             physics: const AlwaysScrollableScrollPhysics(),
-                            children: [
-                              // All Vouchers Tab
-                              _buildVoucherList(
-                                context,
-                                state.voucherList,
-                                state.selectedVoucher,
-                                (voucher) => cubit.setSelectedVoucher(voucher),
-                              ),
+                        children: [
+                          // All Vouchers Tab
+                          _buildVoucherList(
+                            context,
+                            state.voucherList,
+                            state.selectedVoucher,
+                            (voucher) => cubit.setSelectedVoucher(voucher),
+                          ),
 
-                              // Ongoing Vouchers Tab
-                              _buildVoucherList(
-                                context,
-                                state.ongoingList,
-                                state.selectedVoucher,
-                                (voucher) => cubit.setSelectedVoucher(voucher),
-                              ),
+                          // Ongoing Vouchers Tab
+                          _buildVoucherList(
+                            context,
+                            state.ongoingList,
+                            state.selectedVoucher,
+                            (voucher) => cubit.setSelectedVoucher(voucher),
+                          ),
 
-                              // Upcoming Vouchers Tab
-                              _buildVoucherList(
-                                context,
-                                state.upcomingList,
-                                state.selectedVoucher,
-                                (voucher) => cubit.setSelectedVoucher(voucher),
-                              ),
+                          // Upcoming Vouchers Tab
+                          _buildVoucherList(
+                            context,
+                            state.upcomingList,
+                            state.selectedVoucher,
+                            (voucher) => cubit.setSelectedVoucher(voucher),
+                          ),
 
-                              // Inactive Vouchers Tab
-                              _buildVoucherList(
-                                context,
-                                state.inactiveList,
-                                state.selectedVoucher,
-                                (voucher) => cubit.setSelectedVoucher(voucher),
+                          // Inactive Vouchers Tab
+                          _buildVoucherList(
+                            context,
+                            state.inactiveList,
+                            state.selectedVoucher,
+                            (voucher) => cubit.setSelectedVoucher(voucher),
                               ),
                             ],
                           ),
@@ -371,7 +371,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                                   ),
                                 ),
                               ),
-                            ),
+                          ),
                         ],
                       ),
           ),

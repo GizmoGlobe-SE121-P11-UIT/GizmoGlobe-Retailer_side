@@ -257,6 +257,7 @@ const Map<String, String> en = {
   'min': 'Min',
   'max': 'Max',
   'paid': 'Paid',
+  'received': 'Received',
   'unpaid': 'Unpaid',
   'pending': 'Pending',
   'preparing': 'Preparing',
