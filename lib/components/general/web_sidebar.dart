@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../screens/user/user_screen/user_screen_view.dart';
@@ -167,40 +168,81 @@ class _UserProfileSection extends StatefulWidget {
 // Static cache that persists across widget recreations
 class _UserProfileCache {
   static DocumentSnapshot? _cachedSnapshot;
-  static StreamSubscription<DocumentSnapshot>? _subscription;
   static bool _isInitialized = false;
+  static final _stateController = StreamController<void>.broadcast();
+
+  static Stream<void> get stateStream => _stateController.stream;
 
   static void initialize() {
     if (_isInitialized) return;
     _isInitialized = true;
 
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId == null) return;
+    // Fetch initial user data
+    _fetchUserData();
 
-    _subscription = FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .snapshots()
-        .listen((snapshot) {
-      _cachedSnapshot = snapshot;
+    // Listen to auth state changes to handle initial load and re-auth
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      if (user != null) {
+        _fetchUserData();
+      } else {
+        _cachedSnapshot = null;
+        _stateController.add(null);
+      }
     });
   }
 
-  static DocumentSnapshot? get snapshot => _cachedSnapshot;
+  static Future<void> _fetchUserData() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
 
-  static void dispose() {
-    _subscription?.cancel();
-    _subscription = null;
-    _isInitialized = false;
+        if (userDoc.exists) {
+          _cachedSnapshot = userDoc;
+          _stateController.add(null);
+        } else {
+          _cachedSnapshot = null;
+          _stateController.add(null);
+        }
+      } else {
+        _cachedSnapshot = null;
+        _stateController.add(null);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching user data in sidebar: $e');
+      }
+      _cachedSnapshot = null;
+      _stateController.add(null);
+    }
   }
+
+  static DocumentSnapshot? get snapshot => _cachedSnapshot;
 }
 
 class _UserProfileSectionState extends State<_UserProfileSection> {
+  StreamSubscription<void>? _stateSubscription;
+
   @override
   void initState() {
     super.initState();
     // Initialize static cache if not already done
     _UserProfileCache.initialize();
+    // Listen for cache state changes to trigger rebuild
+    _stateSubscription = _UserProfileCache.stateStream.listen((_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _stateSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -284,45 +326,6 @@ class _UserProfileSectionState extends State<_UserProfileSection> {
                 const SizedBox(height: 8),
                 Text(
                   'Loading...',
-                  style: TextStyle(
-                    color: fg,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-    );
-  }
-
-  Widget _buildErrorProfile(BuildContext context, Color bg, Color fg) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: widget.isCompact
-          ? Container(
-              decoration: BoxDecoration(
-                color: bg,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              padding: const EdgeInsets.all(8),
-              child: Icon(Icons.person, color: fg, size: 24),
-            )
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: bg,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Icon(Icons.person, color: fg, size: 24),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Profile',
                   style: TextStyle(
                     color: fg,
                     fontSize: 14,

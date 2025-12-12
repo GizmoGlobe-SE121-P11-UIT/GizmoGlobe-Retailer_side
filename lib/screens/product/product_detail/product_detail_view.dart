@@ -19,6 +19,7 @@ import '../../../widgets/dialog/information_dialog.dart';
 import '../../../data/database/database.dart';
 import '../../../widgets/general/status_badge.dart';
 import '../../../widgets/general/gradient_text.dart';
+import '../../product/add_product/add_product_view.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -74,9 +75,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
       body: BlocBuilder<ProductDetailCubit, ProductDetailState>(
         builder: (context, state) {
-          if (kDebugMode) {
-            print('Product imageUrl: ${state.product.imageUrl}');
-          }
           return Stack(
             children: [
               SingleChildScrollView(
@@ -145,6 +143,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           // Thêm thông tin về giá và discount
                           _buildPriceSection(
+                            importPrice: state.product.importPrice,
                             sellingPrice: state.product.sellingPrice,
                             discount: state.product.discount,
                           ),
@@ -341,19 +340,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    // ProcessState processState =
-                                    //     await Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         EditProductScreen.newInstance(
-                                    //             state.product),
-                                    //   ),
-                                    // );
-                                    //
-                                    // if (processState == ProcessState.success) {
-                                    //   cubit.updateProduct();
-                                    // }
+                                    final result =
+                                        await AddProductScreen.showModal(
+                                      context,
+                                      product: state.product,
+                                    );
+                                    if (result == true && mounted) {
+                                      cubit.updateProduct();
+                                    }
                                   },
                                   icon: Icon(Icons.edit,
                                       color: Theme.of(context)
@@ -467,62 +461,118 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       );
     }
 
-    return Stack(
+    return Column(
       children: [
-        PageView.builder(
-          controller: _imagePageController,
-          itemCount: images.length,
-          onPageChanged: (index) {
-            setState(() {
-              _currentImageIndex = index;
-            });
-          },
-          itemBuilder: (context, index) {
-            final imageUrl = images[index];
-            return Image.network(
-              imageUrl,
-              fit: BoxFit.contain,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-                return Stack(
-                  children: [
-                    Center(child: child),
-                    Positioned.fill(
-                      child: Container(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: colorScheme.primary,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
+        // Image with arrows
+        Expanded(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              PageView.builder(
+                controller: _imagePageController,
+                itemCount: images.length,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentImageIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final imageUrl = images[index];
+                  return Image.network(
+                    imageUrl,
+                    fit: BoxFit.contain,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return Stack(
+                        children: [
+                          // Category icon as placeholder
+                          Center(
+                            child: Icon(
+                              _getCategoryIcon(state.product.category),
+                              size: 64,
+                              color: colorScheme.onSurfaceVariant
+                                  .withValues(alpha: 0.3),
+                            ),
                           ),
+                          // Loading indicator overlay
+                          Center(
+                            child: CircularProgressIndicator(
+                              color: colorScheme.primary,
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Icon(
+                          _getCategoryIcon(state.product.category),
+                          size: 64,
+                          color: colorScheme.onSurfaceVariant,
                         ),
+                      );
+                    },
+                  );
+                },
+              ),
+              // Left arrow
+              if (_currentImageIndex > 0)
+                Positioned(
+                  left: 8,
+                  child: IconButton(
+                    onPressed: () {
+                      _imagePageController.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface.withValues(alpha: 0.8),
+                        shape: BoxShape.circle,
                       ),
+                      child: Icon(Icons.arrow_back_ios_new,
+                          size: 20, color: colorScheme.onSurface),
                     ),
-                  ],
-                );
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return Center(
-                  child: Icon(
-                    _getCategoryIcon(state.product.category),
-                    size: 64,
-                    color: colorScheme.onSurfaceVariant,
                   ),
-                );
-              },
-            );
-          },
+                ),
+              // Right arrow
+              if (_currentImageIndex < images.length - 1)
+                Positioned(
+                  right: 8,
+                  child: IconButton(
+                    onPressed: () {
+                      _imagePageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    icon: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface.withValues(alpha: 0.8),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.arrow_forward_ios,
+                          size: 20, color: colorScheme.onSurface),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
+        // Indicator dots below image
         if (images.length > 1)
-          Positioned(
-            bottom: 12,
-            left: 0,
-            right: 0,
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(images.length, (index) {
@@ -618,67 +668,109 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget _buildPriceSection({
+    required int importPrice,
     required int sellingPrice,
     required double discount,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
-    final discountedPrice = sellingPrice * (100 - discount) * 10;
+    final discountedPrice = sellingPrice * (100 - discount) / 100;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.attach_money,
-              size: 20, color: colorScheme.onSurfaceVariant),
-          const SizedBox(width: 8),
-          Text(
-            S.of(context).price,
-            style: TextStyle(
-              fontWeight: FontWeight.w900,
-              color: colorScheme.onSurface,
-            ),
-          ),
-          if (discount > 0) ...[
-            Text(
-              ': ${Helper.toCurrencyFormat(sellingPrice)}',
-              style: TextStyle(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w400,
-                decoration: TextDecoration.lineThrough,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              Helper.toCurrencyFormat(discountedPrice),
-              style: TextStyle(
-                color: colorScheme.tertiary,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: colorScheme.error.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                '-${discount.toInt()}%',
+          // Import Price Row
+          Row(
+            children: [
+              Icon(Icons.file_download_outlined,
+                  size: 20, color: colorScheme.onSurfaceVariant),
+              const SizedBox(width: 8),
+              Text(
+                '${S.of(context).importPrice}: ',
                 style: TextStyle(
-                  color: colorScheme.error,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w900,
+                  color: colorScheme.onSurface,
                 ),
               ),
-            ),
-          ] else
-            Text(
-              Helper.toCurrencyFormat(sellingPrice),
-              style: TextStyle(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.w400,
+              Text(
+                Helper.toCurrencyFormat(importPrice),
+                style: TextStyle(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Selling Price Section - split into 2 lines to prevent overflow
+          Row(
+            children: [
+              Icon(Icons.file_upload_outlined,
+                  size: 20, color: colorScheme.primary),
+              const SizedBox(width: 8),
+              Text(
+                '${S.of(context).sellingPrice}: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+              if (discount > 0) ...[
+                Expanded(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: [
+                      Text(
+                        Helper.toCurrencyFormat(sellingPrice),
+                        style: TextStyle(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.lineThrough,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: colorScheme.error.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '-${discount.toInt()}%',
+                          style: TextStyle(
+                            color: colorScheme.error,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ] else
+                Text(
+                  Helper.toCurrencyFormat(sellingPrice),
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+            ],
+          ),
+          // Second line: Discounted price (only show if discount > 0)
+          if (discount > 0)
+            Padding(
+              padding: const EdgeInsets.only(left: 28, top: 4),
+              child: Text(
+                Helper.toCurrencyFormat(discountedPrice),
+                style: TextStyle(
+                  color: colorScheme.tertiary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
             ),
         ],

@@ -168,6 +168,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
         .firstWhere((element) => element.productID == state.product.productID);
     emit(state.copyWith(product: product));
     _initializeTechnicalSpecs();
+    _loadImages(); // Reload images from Firebase
   }
 
   void toIdle() {

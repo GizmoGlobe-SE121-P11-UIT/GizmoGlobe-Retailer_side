@@ -18,6 +18,7 @@ import '../../../widgets/dialog/information_dialog.dart';
 import '../../../widgets/general/gradient_text.dart';
 import '../../../widgets/general/status_badge.dart';
 import '../../../widgets/snackbar/snackbar_service.dart';
+import '../../../functions/helper.dart';
 import '../../product/add_product/add_product_webview.dart';
 
 class ProductDetailWebView extends StatefulWidget {
@@ -196,6 +197,21 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
                             title: S.of(context).manufacturer,
                             value: state.product.manufacturer.manufacturerName,
                           ),
+                          // Import Price
+                          _buildInfoRow(
+                            context,
+                            icon: Icons.file_download_outlined,
+                            title: S.of(context).importPrice,
+                            value: Helper.toCurrencyFormat(
+                                state.product.importPrice),
+                          ),
+                          // Selling Price with discount
+                          _buildPriceSection(
+                            context,
+                            importPrice: state.product.importPrice,
+                            sellingPrice: state.product.sellingPrice,
+                            discount: state.product.discount,
+                          ),
                           const SizedBox(height: 16),
                           _buildHeading(context, S.of(context).overview),
                           const SizedBox(height: 8),
@@ -322,6 +338,20 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
                       title: S.of(context).manufacturer,
                       value: state.product.manufacturer.manufacturerName,
                     ),
+                    // Import Price
+                    _buildInfoRow(
+                      context,
+                      icon: Icons.file_download_outlined,
+                      title: S.of(context).importPrice,
+                      value: Helper.toCurrencyFormat(state.product.importPrice),
+                    ),
+                    // Selling Price with discount
+                    _buildPriceSection(
+                      context,
+                      importPrice: state.product.importPrice,
+                      sellingPrice: state.product.sellingPrice,
+                      discount: state.product.discount,
+                    ),
                     const SizedBox(height: 16),
                     _buildHeading(context, S.of(context).overview),
                     const SizedBox(height: 8),
@@ -421,79 +451,153 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
       );
     }
 
-    return Stack(
+    return Column(
       children: [
-        PageView.builder(
-          controller: _imagePageController,
-          itemCount: images.length,
-          onPageChanged: (index) {
-            setState(() {
-              _currentImageIndex = index;
-            });
-          },
-          itemBuilder: (context, index) {
-            final imageUrl = images[index];
-            return Image.network(
-              imageUrl,
-              fit: BoxFit.contain,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Stack(
-                  children: [
-                    Center(child: child),
-                    Positioned.fill(
-                      child: Container(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: colorScheme.primary,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
+        // Image carousel with arrow navigation
+        Expanded(
+          child: Stack(
+            children: [
+              // PageView with scrolling disabled
+              PageView.builder(
+                controller: _imagePageController,
+                itemCount: images.length,
+                physics: const NeverScrollableScrollPhysics(), // Disable swipe
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentImageIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final imageUrl = images[index];
+                  return Image.network(
+                    imageUrl,
+                    fit: BoxFit.contain,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Stack(
+                        children: [
+                          // Category icon as placeholder
+                          Center(
+                            child: Icon(
+                              _getCategoryIcon(state.product.category),
+                              size: 64,
+                              color: colorScheme.onSurfaceVariant
+                                  .withValues(alpha: 0.3),
+                            ),
+                          ),
+                          // Loading indicator overlay
+                          Center(
+                            child: CircularProgressIndicator(
+                              color: colorScheme.primary,
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Icon(
+                          _getCategoryIcon(state.product.category),
+                          size: 64,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              // Left arrow - hidden if on first image
+              if (images.length > 1 && _currentImageIndex > 0)
+                Positioned(
+                  left: 8,
+                  top: 0,
+                  bottom: 0,
+                  child: Center(
+                    child: Material(
+                      color: colorScheme.surface.withValues(alpha: 0.8),
+                      shape: const CircleBorder(),
+                      elevation: 2,
+                      child: InkWell(
+                        customBorder: const CircleBorder(),
+                        onTap: () {
+                          _imagePageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Icon(
+                            Icons.chevron_left,
+                            size: 28,
+                            color: colorScheme.onSurface,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                );
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return Center(
-                  child: Icon(
-                    _getCategoryIcon(state.product.category),
-                    size: 64,
-                    color: colorScheme.onSurfaceVariant,
                   ),
-                );
-              },
-            );
-          },
-        ),
-        if (images.length > 1)
-          Positioned(
-            bottom: 12,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(images.length, (index) {
-                final isActive = index == _currentImageIndex;
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  height: 8,
-                  width: isActive ? 18 : 8,
-                  decoration: BoxDecoration(
-                    color: isActive
-                        ? colorScheme.primary
-                        : colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
-                    borderRadius: BorderRadius.circular(4),
+                ),
+              // Right arrow - hidden if on last image
+              if (images.length > 1 && _currentImageIndex < images.length - 1)
+                Positioned(
+                  right: 8,
+                  top: 0,
+                  bottom: 0,
+                  child: Center(
+                    child: Material(
+                      color: colorScheme.surface.withValues(alpha: 0.8),
+                      shape: const CircleBorder(),
+                      elevation: 2,
+                      child: InkWell(
+                        customBorder: const CircleBorder(),
+                        onTap: () {
+                          _imagePageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Icon(
+                            Icons.chevron_right,
+                            size: 28,
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                );
-              }),
-            ),
+                ),
+            ],
           ),
+        ),
+        // Indicator dots - below the image with gap
+        if (images.length > 1) ...[
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(images.length, (index) {
+              final isActive = index == _currentImageIndex;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                height: 8,
+                width: isActive ? 18 : 8,
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              );
+            }),
+          ),
+          const SizedBox(height: 8),
+        ],
       ],
     );
   }
@@ -1006,5 +1110,94 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
       default:
         return key;
     }
+  }
+
+  Widget _buildPriceSection(
+    BuildContext context, {
+    required int importPrice,
+    required int sellingPrice,
+    required double discount,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final discountedPrice = sellingPrice * (100 - discount) / 100;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Selling Price Row - First line: crossed price + discount tag
+          Row(
+            children: [
+              Icon(Icons.file_upload_outlined,
+                  size: 20, color: colorScheme.primary),
+              const SizedBox(width: 8),
+              Text(
+                '${S.of(context).sellingPrice}: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+              if (discount > 0) ...[
+                Expanded(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: [
+                      Text(
+                        Helper.toCurrencyFormat(sellingPrice),
+                        style: TextStyle(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.lineThrough,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: colorScheme.error.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '-${discount.toInt()}%',
+                          style: TextStyle(
+                            color: colorScheme.error,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ] else
+                Text(
+                  Helper.toCurrencyFormat(sellingPrice),
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+            ],
+          ),
+          // Second line: Discounted price (only show if discount > 0)
+          if (discount > 0)
+            Padding(
+              padding: const EdgeInsets.only(left: 28, top: 4),
+              child: Text(
+                Helper.toCurrencyFormat(discountedPrice),
+                style: TextStyle(
+                  color: colorScheme.tertiary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }

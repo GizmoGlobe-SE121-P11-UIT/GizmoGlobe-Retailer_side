@@ -148,3 +148,8 @@ firebase_options.dart
 # Node/npm artifacts used in dummy_data_script/
 dummy_data_script/node_modules/
 dummy_data_script/package-lock.json
+
+# Firebase functions
+functions/node_modules/
+functions/package-lock.json
+

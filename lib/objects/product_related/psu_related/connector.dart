@@ -7,9 +7,16 @@ class Connector {
   Connector({required this.type, required this.quantity});
 
   factory Connector.fromJson(Map<String, dynamic> json) => Connector(
-    type: json['type']?.toString() ?? '',
-    quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : int.tryParse(json['quantity']?.toString() ?? '') ?? 0,
-  );
+        type: json['type']?.toString() ?? '',
+        quantity: (json['quantity'] is num)
+            ? (json['quantity'] as num).toInt()
+            : int.tryParse(json['quantity']?.toString() ?? '') ?? 0,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'quantity': quantity,
+      };
 
   @override
   String toString() {

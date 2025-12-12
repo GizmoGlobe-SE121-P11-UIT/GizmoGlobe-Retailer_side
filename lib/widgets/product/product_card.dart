@@ -164,26 +164,59 @@ class ProductCard extends StatelessWidget {
                             ),
                           ),
 
-                          // Price information
+                          // Import price with download icon
                           Expanded(
                             flex: 3,
                             child: Row(
                               children: [
                                 Icon(
-                                  Icons.monetization_on_outlined,
+                                  Icons.file_download_outlined,
                                   size: 14,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onSurfaceVariant,
                                 ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  Helper.toCurrencyFormat(product.sellingPrice),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.w600,
+                                const SizedBox(width: 2),
+                                Flexible(
+                                  child: Text(
+                                    Helper.toCurrencyFormat(
+                                        product.importPrice),
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // Selling price with upload icon
+                          Expanded(
+                            flex: 3,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.file_upload_outlined,
+                                  size: 14,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(width: 2),
+                                Flexible(
+                                  child: Text(
+                                    Helper.toCurrencyFormat(
+                                        product.sellingPrice),
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],

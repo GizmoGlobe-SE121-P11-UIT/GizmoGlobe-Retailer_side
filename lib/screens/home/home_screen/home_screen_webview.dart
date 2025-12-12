@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/functions/helper.dart';
 import 'package:gizmoglobe_client/widgets/dialog/business_report_dialog.dart';
+import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 
 import 'home_screen_cubit.dart';
 
@@ -103,41 +104,63 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
-        final allSales = state.monthlySales;
+        final monthlyCategorySalesData = state.monthlyCategorySales;
+        final dailyCategorySalesData = state.dailyCategorySales;
         final now = DateTime.now();
         _selectedYear ??= now.year;
         _selectedMonth ??= now.month;
-        List<SalesData> displaySales;
+        List<CategorySalesData> displayCategorySales;
         String chartTitle;
+        bool isDaily = false;
+
         if (_selectedChartInterval == S.of(context).monthDaily) {
-          // Build 30/31/28/29 days blank list for full x-axis then fill in with sales data if present
+          // Daily mode: filter dailyCategorySales for selected year and month
+          isDaily = true;
           final daysInMonth =
               DateUtils.getDaysInMonth(_selectedYear!, _selectedMonth!);
-          List<double> dayAmounts = List.filled(daysInMonth, 0.0);
-          for (final s in allSales.where((s) =>
+          displayCategorySales = [];
+
+          // Create a map for all days in the month
+          final Map<int, Map<String, double>> dayCategoryMap = {};
+          for (int day = 1; day <= daysInMonth; day++) {
+            dayCategoryMap[day] = {};
+          }
+
+          // Fill in actual data
+          for (final s in dailyCategorySalesData.where((s) =>
               s.date.year == _selectedYear && s.date.month == _selectedMonth)) {
             final day = s.date.day;
-            dayAmounts[day - 1] = s.amount;
+            if (day >= 1 && day <= daysInMonth) {
+              dayCategoryMap[day] = Map<String, double>.from(s.categoryAmounts);
+            }
           }
-          displaySales = List.generate(
+
+          // Convert to CategorySalesData list
+          displayCategorySales = List.generate(
               daysInMonth,
-              (i) => SalesData(DateTime(_selectedYear!, _selectedMonth!, i + 1),
-                  dayAmounts[i]));
+              (i) => CategorySalesData(
+                  DateTime(_selectedYear!, _selectedMonth!, i + 1),
+                  dayCategoryMap[i + 1] ?? {}));
           chartTitle =
               '${S.of(context).monthlySales} ($_selectedYear-${_selectedMonth.toString().padLeft(2, '0')})';
         } else {
-          // Aggregate sales for each month in the year
-          Map<int, double> monthSums = {};
+          // Monthly mode: filter monthlyCategorySales for selected year
+          isDaily = false;
+          final Map<int, Map<String, double>> monthCategoryMap = {};
           for (var m = 1; m <= 12; ++m) {
-            monthSums[m] = 0;
+            monthCategoryMap[m] = {};
           }
-          for (final s in allSales.where((s) => s.date.year == _selectedYear)) {
-            monthSums[s.date.month] = (monthSums[s.date.month] ?? 0) + s.amount;
+
+          for (final s in monthlyCategorySalesData
+              .where((s) => s.date.year == _selectedYear)) {
+            monthCategoryMap[s.date.month] =
+                Map<String, double>.from(s.categoryAmounts);
           }
-          displaySales = List.generate(
+
+          displayCategorySales = List.generate(
               12,
-              (i) => SalesData(
-                  DateTime(_selectedYear!, i + 1), monthSums[i + 1]!));
+              (i) => CategorySalesData(DateTime(_selectedYear!, i + 1),
+                  monthCategoryMap[i + 1] ?? {}));
           chartTitle = '${S.of(context).monthlySales} ($_selectedYear)';
         }
         return Scaffold(
@@ -195,7 +218,7 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.assessment),
-                          tooltip: 'Generate Business Report',
+                          tooltip: S.of(context).generateBusinessReport,
                           onPressed: _handleGenerateReport,
                           color: Theme.of(context).colorScheme.primary,
                         ),
@@ -218,45 +241,83 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                           alignment: Alignment.center,
                           child: const CircularProgressIndicator(),
                         )
-                      : GridView.count(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          crossAxisCount: 4,
-                          mainAxisSpacing: 20,
-                          crossAxisSpacing: 20,
-                          childAspectRatio: 1.2,
+                      : Column(
                           children: [
-                            _buildStatsCard(
-                              context,
-                              icon: Icons.inventory_2_rounded,
-                              title: S.of(context).products,
-                              value: state.totalProducts.toString(),
-                              color: Colors.blue,
+                            // Row 1: Products, Customers, Orders, Manufacturers, Employees (5 tiles)
+                            GridView.count(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              crossAxisCount: 5,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16,
+                              childAspectRatio: 1.3,
+                              children: [
+                                _buildStatsCard(
+                                  context,
+                                  icon: Icons.inventory_2_rounded,
+                                  title: S.of(context).products,
+                                  value: state.totalProducts.toString(),
+                                  color: Colors.blue,
+                                ),
+                                _buildStatsCard(
+                                  context,
+                                  icon: Icons.people_alt_rounded,
+                                  title: S.of(context).customers,
+                                  value: state.totalCustomers.toString(),
+                                  color: Colors.green,
+                                ),
+                                _buildStatsCard(
+                                  context,
+                                  icon: Icons.receipt_long_rounded,
+                                  title: S.of(context).orders,
+                                  value: state.totalOrders.toString(),
+                                  color: Colors.amber,
+                                ),
+                                _buildStatsCard(
+                                  context,
+                                  icon: Icons.factory_rounded,
+                                  title: S.of(context).manufacturer,
+                                  value: state.totalManufacturers.toString(),
+                                  color: Colors.teal,
+                                ),
+                                _buildStatsCard(
+                                  context,
+                                  icon: Icons.badge_rounded,
+                                  title: S.of(context).employees,
+                                  value: state.totalEmployees.toString(),
+                                  color: Colors.indigo,
+                                ),
+                              ],
                             ),
-                            _buildStatsCard(
-                              context,
-                              icon: Icons.people_alt_rounded,
-                              title: S.of(context).customers,
-                              value: state.totalCustomers.toString(),
-                              color: Colors.green,
-                            ),
-                            _buildStatsCard(
-                              context,
-                              icon: Icons.payments_rounded,
-                              title: S.of(context).revenue,
-                              value:
-                                  Helper.toCurrencyFormat(state.totalRevenue),
-                              color: Colors.orange,
-                            ),
-                            _buildStatsCard(
-                              context,
-                              icon: Icons.trending_up_rounded,
-                              title: S.of(context).avgIncome,
-                              value: Helper.toCurrencyFormat(
-                                  state.totalOrders > 0
-                                      ? state.totalRevenue / state.totalOrders
-                                      : 0),
-                              color: Colors.purple,
+                            const SizedBox(height: 16),
+                            // Row 2: Revenue and Avg Income (2 tiles, span equally)
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _buildStatsCard(
+                                    context,
+                                    icon: Icons.payments_rounded,
+                                    title: S.of(context).revenue,
+                                    value: Helper.toCurrencyFormat(
+                                        state.totalRevenue),
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: _buildStatsCard(
+                                    context,
+                                    icon: Icons.trending_up_rounded,
+                                    title: S.of(context).avgIncome,
+                                    value: Helper.toCurrencyFormat(
+                                        state.totalOrders > 0
+                                            ? state.totalRevenue /
+                                                state.totalOrders
+                                            : 0),
+                                    color: Colors.purple,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -338,15 +399,13 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                           ),
                           const SizedBox(height: 24),
                           SizedBox(
-                            height: 300,
+                            height: 400,
                             child: state.isLoadingChart
                                 ? const Center(
                                     child: CircularProgressIndicator(),
                                   )
-                                : _OptimizedSalesChartWidget(
-                                    sales: displaySales,
-                                    isMonthly: _selectedChartInterval ==
-                                        S.of(context).yearMonthly),
+                                : _buildCategoryLineChart(
+                                    context, displayCategorySales, isDaily),
                           ),
                         ],
                       ),
@@ -415,129 +474,307 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
       ),
     );
   }
-}
 
-class _OptimizedSalesChartWidget extends StatelessWidget {
-  final List<SalesData> sales;
-  final bool isMonthly;
-  const _OptimizedSalesChartWidget(
-      {required this.sales, this.isMonthly = true});
-
-  static double _getYAxisInterval(List<SalesData> sales) {
-    if (sales.isEmpty) return 10000000; // 10M in VND (10,000 * 1000)
-    final maxAmount =
-        sales.map((s) => s.amount).reduce((a, b) => a > b ? a : b);
-    // Data is already multiplied by 1000, so intervals should be in thousands
-    if (maxAmount <= 10000000) return 2000000; // 2M VND
-    if (maxAmount <= 50000000) return 10000000; // 10M VND
-    if (maxAmount <= 200000000) return 50000000; // 50M VND
-    if (maxAmount <= 500000000) return 100000000; // 100M VND
-    return 200000000; // 200M VND
+  // Get category display name from CategoryEnum
+  String _getCategoryDisplayName(String category) {
+    try {
+      final categoryEnum =
+          CategoryEnumExtension.fromName(category.toLowerCase());
+      if (categoryEnum != CategoryEnum.empty) {
+        return categoryEnum.getLocalizedDescription(context);
+      }
+      // Fallback: capitalize first letter
+      return category.isNotEmpty
+          ? category[0].toUpperCase() + category.substring(1).toLowerCase()
+          : category;
+    } catch (e) {
+      // Fallback: capitalize first letter
+      return category.isNotEmpty
+          ? category[0].toUpperCase() + category.substring(1).toLowerCase()
+          : category;
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.surface,
+  // Multi-line chart for category sales
+  Widget _buildCategoryLineChart(
+    BuildContext context,
+    List<CategorySalesData> categorySales,
+    bool isDaily,
+  ) {
+    if (categorySales.isEmpty) {
+      return Center(
+        child: Text(
+          S.of(context).noData,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      );
+    }
+
+    // Collect all unique categories
+    final Set<String> allCategories = {};
+    for (var data in categorySales) {
+      allCategories.addAll(data.categoryAmounts.keys);
+    }
+
+    if (allCategories.isEmpty) {
+      return Center(
+        child: Text(
+          S.of(context).noData,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      );
+    }
+
+    // Generate colors for each category
+    final categoryColors = [
+      Colors.green,
+      Colors.pink,
+      Colors.cyan,
+      Colors.orange,
+      Colors.purple,
+      Colors.blue,
+      Colors.teal,
+      Colors.indigo,
+      Colors.red,
+      Colors.amber,
+    ];
+
+    final categoryList = allCategories.toList();
+    final maxX = (categorySales.length - 1).toDouble();
+
+    // Find max value for scaling
+    double maxY = 0;
+    for (var data in categorySales) {
+      for (var amount in data.categoryAmounts.values) {
+        if (amount > maxY) maxY = amount;
+      }
+    }
+    maxY = maxY * 1.1; // Add 10% padding
+
+    // Build line chart bars data for each category
+    final lineBarsData = <LineChartBarData>[];
+    for (int i = 0; i < categoryList.length; i++) {
+      final category = categoryList[i];
+      final color = categoryColors[i % categoryColors.length];
+
+      final spots = <FlSpot>[];
+      for (int j = 0; j < categorySales.length; j++) {
+        final amount = categorySales[j].categoryAmounts[category] ?? 0.0;
+        spots.add(FlSpot(j.toDouble(), amount));
+      }
+
+      lineBarsData.add(
+        LineChartBarData(
+          isCurved: true,
+          color: color,
+          barWidth: 4,
+          isStrokeCapRound: true,
+          dotData: const FlDotData(show: false),
+          belowBarData: BarAreaData(show: false),
+          spots: spots,
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 16, left: 6),
       child: LineChart(
         LineChartData(
-          gridData:
-              const FlGridData(show: false), // Hide all grid for performance
-          titlesData: FlTitlesData(
-            rightTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles:
-                const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 60,
-                interval: _getYAxisInterval(sales),
-                getTitlesWidget: (value, meta) {
-                  // Data is already multiplied by 1000, but Helper.toMoneyFormat also multiplies by 1000
-                  // So we divide by 1000 to get the original value, then Helper will multiply again
-                  // Round to avoid floating point precision issues
-                  final displayValue = (value / 1000).roundToDouble();
-                  final formatted = Helper.toMoneyFormat(displayValue);
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Text(
-                      formatted,
-                      style: const TextStyle(fontSize: 10, color: Colors.grey),
+          lineTouchData: LineTouchData(
+            handleBuiltInTouches: true,
+            touchTooltipData: LineTouchTooltipData(
+              tooltipRoundedRadius: 8,
+              getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                if (touchedSpots.isEmpty) return [];
+
+                // Get date from first spot (all spots have same date)
+                final date = categorySales[touchedSpots.first.x.toInt()].date;
+                final locale = Localizations.localeOf(context).languageCode;
+                String dateLabel;
+                if (isDaily) {
+                  dateLabel = locale == 'vi'
+                      ? '${date.day}/${date.month}'
+                      : DateFormat('d/M').format(date);
+                } else {
+                  dateLabel = locale == 'vi'
+                      ? 'T${date.month}'
+                      : DateFormat('MMM').format(date);
+                }
+
+                // Build tooltip content with date header and all unique categories
+                // Use TextSpan children to create rich text with different colors
+                final children = <TextSpan>[];
+
+                // Date header (only once)
+                children.add(
+                  TextSpan(
+                    text: '$dateLabel\n',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                );
+
+                // Collect unique categories with their data (avoid duplicates)
+                final categoryDataMap = <String, Map<String, dynamic>>{};
+                for (final spot in touchedSpots) {
+                  final category = categoryList[spot.barIndex];
+                  if (!categoryDataMap.containsKey(category)) {
+                    categoryDataMap[category] = {
+                      'displayName': _getCategoryDisplayName(category),
+                      'price': spot.y,
+                      'color':
+                          categoryColors[spot.barIndex % categoryColors.length],
+                    };
+                  }
+                }
+
+                // Sort categories by price (descending) for better display
+                final sortedCategories = categoryDataMap.entries.toList()
+                  ..sort(
+                      (a, b) => b.value['price'].compareTo(a.value['price']));
+
+                // Add category items (each category only once)
+                for (int i = 0; i < sortedCategories.length; i++) {
+                  final entry = sortedCategories[i];
+                  final displayName = entry.value['displayName'] as String;
+                  // Divide by 1000 because toCurrencyFormat multiplies by 1000,
+                  // and the data is already in full VND (multiplied by 1000 in cubit)
+                  final price = Helper.toCurrencyFormat(
+                      (entry.value['price'] as double) / 1000);
+                  final color = entry.value['color'] as Color;
+
+                  if (i > 0) {
+                    children.add(const TextSpan(text: '\n'));
+                  }
+
+                  children.add(
+                    TextSpan(
+                      text: '$displayName $price',
+                      style: TextStyle(
+                        color: color,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                     ),
                   );
-                },
-              ),
+                }
+
+                // Return one tooltip item per touched spot
+                // First item shows full content, others show empty to avoid duplication
+                return touchedSpots.asMap().entries.map((entry) {
+                  final index = entry.key;
+
+                  // Only the first item shows the full content
+                  if (index == 0) {
+                    return LineTooltipItem(
+                      '',
+                      const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                      children: children,
+                    );
+                  } else {
+                    // Other items are empty (they won't be displayed separately)
+                    return LineTooltipItem(
+                      '',
+                      const TextStyle(
+                        color: Colors.transparent,
+                        fontSize: 0,
+                      ),
+                    );
+                  }
+                }).toList();
+              },
             ),
+          ),
+          gridData: const FlGridData(show: false),
+          titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                interval: 1,
-                getTitlesWidget: (value, meta) {
-                  if (value.toInt() >= 0 && value.toInt() < sales.length) {
-                    final SalesData s = sales[value.toInt()];
-                    if (isMonthly) {
-                      final label = DateFormat('MMM').format(s.date);
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          label,
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
-                        ),
-                      );
+                reservedSize: 32,
+                interval: isDaily ? 5 : 1,
+                getTitlesWidget: (double value, TitleMeta meta) {
+                  if (value.toInt() >= 0 &&
+                      value.toInt() < categorySales.length) {
+                    final date = categorySales[value.toInt()].date;
+                    final locale = Localizations.localeOf(context).languageCode;
+                    String text;
+                    if (isDaily) {
+                      text = locale == 'vi'
+                          ? '${date.day}/${date.month}'
+                          : DateFormat('d/M').format(date);
                     } else {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          '${s.date.day}',
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
-                        ),
-                      );
+                      text = locale == 'vi'
+                          ? 'T${date.month}'
+                          : DateFormat('MMM').format(date);
                     }
+                    return Text(
+                      text,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    );
                   }
                   return const Text('');
                 },
               ),
             ),
-          ),
-          borderData: FlBorderData(show: false),
-          lineBarsData: [
-            LineChartBarData(
-              spots: sales.asMap().entries.map((entry) {
-                return FlSpot(entry.key.toDouble(), entry.value.amount);
-              }).toList(),
-              isCurved: true,
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).colorScheme.primary,
-                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
-                ],
-              ),
-              barWidth: 3,
-              isStrokeCapRound: true,
-              dotData: const FlDotData(show: false),
-              belowBarData: BarAreaData(
-                show: true,
-                gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: 0.2),
-                    Theme.of(context)
-                        .colorScheme
-                        .primary
-                        .withValues(alpha: 0.0),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+            rightTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 60,
+                interval: maxY / 5,
+                getTitlesWidget: (double value, TitleMeta meta) {
+                  final displayValue = (value / 1000).roundToDouble();
+                  final formatted = Helper.toMoneyFormat(displayValue);
+                  return Text(
+                    formatted,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                    textAlign: TextAlign.center,
+                  );
+                },
               ),
             ),
-          ],
+          ),
+          borderData: FlBorderData(
+            show: true,
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.2),
+                width: 2,
+              ),
+              left: const BorderSide(color: Colors.transparent),
+              right: const BorderSide(color: Colors.transparent),
+              top: const BorderSide(color: Colors.transparent),
+            ),
+          ),
+          minX: 0,
+          maxX: maxX,
+          minY: 0,
+          maxY: maxY,
+          lineBarsData: lineBarsData,
         ),
+        duration: const Duration(milliseconds: 250),
       ),
     );
   }

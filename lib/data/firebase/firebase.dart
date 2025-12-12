@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/owned_voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
@@ -24,6 +25,7 @@ import '../../objects/invoice_related/warranty_invoice_detail.dart';
 import '../../objects/manufacturer.dart';
 import '../../objects/product_related/product.dart';
 import '../../objects/product_related/product_factory.dart';
+import '../../objects/product_related/product_image.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
@@ -864,6 +866,65 @@ class Firebase {
         print('Error getting product images for $productID: $e');
       }
       return [];
+    }
+  }
+
+  /// Get product images with document IDs for editing
+  Future<List<ProductImage>> getProductImagesWithDetails(
+      String productID) async {
+    try {
+      final snapshot = await _firestore
+          .collection('products')
+          .doc(productID)
+          .collection('images')
+          .orderBy('position')
+          .get();
+
+      return snapshot.docs
+          .map((doc) => ProductImage.fromMap(doc.id, doc.data()))
+          .where((img) => img.url.isNotEmpty)
+          .toList();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting product images with details for $productID: $e');
+      }
+      return [];
+    }
+  }
+
+  /// Save product images to subcollection (Create, Update, Delete)
+  Future<void> saveProductImages(
+      String productID, List<ProductImage> images) async {
+    try {
+      final batch = _firestore.batch();
+      final imagesRef =
+          _firestore.collection('products').doc(productID).collection('images');
+
+      // Process deletions
+      final imagesToDelete =
+          images.where((img) => img.markedForDeletion && img.id != null);
+      for (final img in imagesToDelete) {
+        batch.delete(imagesRef.doc(img.id));
+      }
+
+      // Process updates and creates
+      final activeImages = images.where((img) => !img.markedForDeletion);
+      for (final img in activeImages) {
+        if (img.id != null) {
+          // Update existing
+          batch.update(imagesRef.doc(img.id), img.toMap());
+        } else {
+          // Create new
+          batch.set(imagesRef.doc(), img.toMap());
+        }
+      }
+
+      await batch.commit();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error saving product images for $productID: $e');
+      }
+      rethrow;
     }
   }
 
@@ -2238,6 +2299,70 @@ class Firebase {
         print('Error getting customer by ID: $e');
       }
       rethrow;
+    }
+  }
+
+  /// Get precomputed dashboard stats from Cloud Functions aggregation.
+  /// Returns a map with: totalRevenue, totalOrders, avgOrderValue, monthlySales.
+  /// Falls back to null if document doesn't exist (Cloud Function not deployed yet).
+  Future<Map<String, dynamic>?> getDashboardStats() async {
+    try {
+      final doc =
+          await _firestore.collection('aggregations').doc('dashboard').get();
+      if (!doc.exists) {
+        if (kDebugMode) {
+          print(
+              'Dashboard stats not found - Cloud Function may not be deployed yet');
+        }
+        return null;
+      }
+      return doc.data();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting dashboard stats: $e');
+      }
+      return null;
+    }
+  }
+
+  /// Manually trigger recalculation of product counts by category.
+  /// This calls the recalculateProductCounts Cloud Function.
+  Future<Map<String, dynamic>> recalculateProductCounts() async {
+    try {
+      final functions = FirebaseFunctions.instance;
+      final callable = functions.httpsCallable('recalculateProductCounts');
+      final result = await callable.call();
+      return result.data as Map<String, dynamic>;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error calling recalculateProductCounts: $e');
+      }
+      rethrow;
+    }
+  }
+
+  /// Get precomputed product counts by category from Cloud Functions aggregation.
+  /// Returns a map with: categoryCounts, totalProducts.
+  /// Falls back to null if document doesn't exist (Cloud Function not deployed yet).
+  Future<Map<String, dynamic>?> getProductCounts() async {
+    try {
+      final doc = await _firestore
+          .collection('aggregations')
+          .doc('productCounts')
+          .get();
+      if (!doc.exists) {
+        if (kDebugMode) {
+          print(
+              'Product counts not found - Cloud Function may not be deployed yet');
+        }
+        return null;
+      }
+      return doc.data();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting product counts: $e');
+      }
+      return null;
     }
   }
 }

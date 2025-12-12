@@ -41,6 +41,8 @@ import '../../../objects/product_related/ram_related/ram.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
 import '../../../widgets/general/multi_field_with_icon.dart';
+import '../../../widgets/dialog/image_manager_modal.dart';
+import '../../../objects/product_related/product_image.dart';
 import 'add_product_state.dart';
 import 'add_product_cubit.dart';
 import 'add_product_webview.dart';
@@ -172,7 +174,8 @@ class _AddProductState extends State<AddProductScreen> {
 
     _selectedCategory = widget.product?.category ?? CategoryEnum.cpu;
 
-    // Initialize category specific controllers
+    // Initialize all category specific controllers (with empty values if not editing)
+    // RAM controllers
     if (widget.product?.category == CategoryEnum.ram && widget.product is RAM) {
       busController =
           TextEditingController(text: (widget.product as RAM).bus.toString());
@@ -184,7 +187,15 @@ class _AddProductState extends State<AddProductScreen> {
           text: (widget.product as RAM).capacityPerStickGb.toString());
       clLatencyController = TextEditingController(
           text: (widget.product as RAM).clLatency.toString());
+    } else {
+      busController = TextEditingController();
+      typeController = TextEditingController();
+      stickCountController = TextEditingController();
+      clLatencyController = TextEditingController();
+      capacityController = TextEditingController();
     }
+
+    // CPU controllers
     if (widget.product?.category == CategoryEnum.cpu && widget.product is CPU) {
       cpuSeriesController = TextEditingController(
           text: (widget.product as CPU).series.toString());
@@ -200,7 +211,17 @@ class _AddProductState extends State<AddProductScreen> {
           text: (widget.product as CPU).turboClock.toString());
       tdpController =
           TextEditingController(text: (widget.product as CPU).tdp.toString());
+    } else {
+      cpuSeriesController = TextEditingController();
+      socketController = TextEditingController();
+      coreController = TextEditingController();
+      threadController = TextEditingController();
+      baseClockController = TextEditingController();
+      turboClockController = TextEditingController();
+      tdpController = TextEditingController();
     }
+
+    // PSU controllers
     if (widget.product?.category == CategoryEnum.psu && widget.product is PSU) {
       maxWattageController = TextEditingController(
           text: (widget.product as PSU).maxWattage.toString());
@@ -220,7 +241,14 @@ class _AddProductState extends State<AddProductScreen> {
       } else {
         connectorControllers = [ConnectorControllers()];
       }
+    } else {
+      maxWattageController = TextEditingController();
+      efficiencyController = TextEditingController();
+      modularityController = TextEditingController();
+      connectorControllers = [ConnectorControllers()];
     }
+
+    // GPU controllers
     if (widget.product?.category == CategoryEnum.gpu && widget.product is GPU) {
       gpuSeriesController =
           TextEditingController(text: (widget.product as GPU).series.name);
@@ -244,7 +272,14 @@ class _AddProductState extends State<AddProductScreen> {
       } else {
         ioPortsControllers = [IOPortControllers()];
       }
+    } else {
+      gpuSeriesController = TextEditingController();
+      gpuVersionController = TextEditingController();
+      tdpController = TextEditingController();
+      ioPortsControllers = [IOPortControllers()];
     }
+
+    // Mainboard controllers
     if (widget.product?.category == CategoryEnum.mainboard &&
         widget.product is Mainboard) {
       mainboardFormFactorController = TextEditingController(
@@ -271,7 +306,18 @@ class _AddProductState extends State<AddProductScreen> {
         m2Slots: storageSlots.m2Slots.toString(),
         sataPorts: storageSlots.sataPorts.toString(),
       );
+    } else {
+      mainboardFormFactorController = TextEditingController();
+      chipsetCodeController = TextEditingController();
+      formFactorController = TextEditingController();
+      pcieSlotsController = [PCIeSlotControllers()];
+      storageSlotControllerSingle = StorageSlotControllers(
+        m2Slots: '0',
+        sataPorts: '0',
+      );
     }
+
+    // Drive controllers
     if (widget.product?.category == CategoryEnum.drive &&
         widget.product is Drive) {
       genController =
@@ -288,6 +334,13 @@ class _AddProductState extends State<AddProductScreen> {
           text: (widget.product as Drive).speed.writeMbps.toString());
       readMbpsController = TextEditingController(
           text: (widget.product as Drive).speed.readMbps.toString());
+    } else {
+      genController = TextEditingController();
+      interfaceTypeController = TextEditingController();
+      writeMbpsController = TextEditingController();
+      readMbpsController = TextEditingController();
+      driveTypeController = TextEditingController();
+      driveFormFactorController = TextEditingController();
     }
   }
 
@@ -299,11 +352,17 @@ class _AddProductState extends State<AddProductScreen> {
     discountController.dispose();
     releaseDateController.dispose();
     stockController.dispose();
+    enDescriptionController.dispose();
+    viDescriptionController.dispose();
+
+    // RAM controllers
     busController.dispose();
     typeController.dispose();
     stickCountController.dispose();
     clLatencyController.dispose();
     capacityController.dispose();
+
+    // CPU controllers
     cpuSeriesController.dispose();
     socketController.dispose();
     coreController.dispose();
@@ -311,21 +370,25 @@ class _AddProductState extends State<AddProductScreen> {
     baseClockController.dispose();
     turboClockController.dispose();
     tdpController.dispose();
+
+    // PSU controllers
     maxWattageController.dispose();
     efficiencyController.dispose();
     modularityController.dispose();
-    enDescriptionController.dispose();
-    viDescriptionController.dispose();
     for (var connectorController in connectorControllers) {
       connectorController.typeController.dispose();
       connectorController.quantityController.dispose();
     }
+
+    // GPU controllers
     gpuSeriesController.dispose();
     gpuVersionController.dispose();
     for (var ioPortController in ioPortsControllers) {
       ioPortController.portController.dispose();
       ioPortController.quantityController.dispose();
     }
+
+    // Mainboard controllers
     mainboardFormFactorController.dispose();
     chipsetCodeController.dispose();
     storageSlotControllerSingle?.m2SlotsController.dispose();
@@ -336,12 +399,15 @@ class _AddProductState extends State<AddProductScreen> {
       pcieSlotController.genController.dispose();
       pcieSlotController.quantityController.dispose();
     }
+
+    // Drive controllers
     genController.dispose();
     interfaceTypeController.dispose();
     writeMbpsController.dispose();
     readMbpsController.dispose();
     driveTypeController.dispose();
     driveFormFactorController.dispose();
+
     super.dispose();
   }
 
@@ -350,15 +416,14 @@ class _AddProductState extends State<AddProductScreen> {
     switch (_selectedCategory) {
       case CategoryEnum.ram:
         return Column(children: [
-          buildInputWidget<RAMType>(
-              'RAM type', TextEditingController(), state.productArgument?.type,
-              (value) {
+          buildInputWidget<RAMType>(S.of(context).ramType,
+              TextEditingController(), state.productArgument?.type, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(type: value));
           }, RAMType.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'RAM bus',
+            S.of(context).ramBus,
             TextEditingController(),
             state.productArgument?.bus,
             (value) {
@@ -369,7 +434,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Capacity per stick (GB)',
+            S.of(context).capacityPerStick,
             TextEditingController(),
             state.productArgument?.capacity,
             (value) {
@@ -380,7 +445,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Kit stick count',
+            S.of(context).kitStickCount,
             TextEditingController(),
             state.productArgument?.stickCount,
             (value) {
@@ -391,7 +456,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'CL Latency',
+            S.of(context).clLatency,
             TextEditingController(),
             state.productArgument?.clLatency,
             (value) {
@@ -405,14 +470,16 @@ class _AddProductState extends State<AddProductScreen> {
 
       case CategoryEnum.cpu:
         return Column(children: [
-          buildInputWidget<CPUSeries>('CPU series', TextEditingController(),
+          buildInputWidget<CPUSeries>(
+              S.of(context).cpuSeries,
+              TextEditingController(),
               state.productArgument?.cpuSeries, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(cpuSeries: value));
           }, CPUSeries.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Number of CPU cores',
+            S.of(context).numberOfCpuCores,
             TextEditingController(),
             state.productArgument?.core,
             (value) {
@@ -423,7 +490,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Number of CPU threads',
+            S.of(context).numberOfCpuThreads,
             TextEditingController(),
             state.productArgument?.thread,
             (value) {
@@ -434,7 +501,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<double>(
-              'CPU base clock speed (GHz)',
+              S.of(context).cpuBaseClock,
               TextEditingController(),
               state.productArgument?.baseClock, (value) {
             cubit.updateProductArgument(
@@ -442,7 +509,7 @@ class _AddProductState extends State<AddProductScreen> {
           }, null),
           const SizedBox(height: 8),
           buildInputWidget<double>(
-              'CPU turbo clock speed (GHz)',
+              S.of(context).cpuTurboClock,
               TextEditingController(),
               state.productArgument?.turboClock, (value) {
             cubit.updateProductArgument(
@@ -450,7 +517,7 @@ class _AddProductState extends State<AddProductScreen> {
           }, null),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'CPU TDP (W)',
+            S.of(context).cpuTdp,
             TextEditingController(),
             state.productArgument?.tdp,
             (value) {
@@ -460,8 +527,8 @@ class _AddProductState extends State<AddProductScreen> {
             null,
           ),
           const SizedBox(height: 8),
-          buildInputWidget<Socket>('CPU socket', TextEditingController(),
-              state.productArgument?.socket, (value) {
+          buildInputWidget<Socket>(S.of(context).cpuSocket,
+              TextEditingController(), state.productArgument?.socket, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(socket: value));
           }, Socket.getValues()),
@@ -470,7 +537,7 @@ class _AddProductState extends State<AddProductScreen> {
       case CategoryEnum.psu:
         return Column(children: [
           buildInputWidget<int>(
-            'Max wattage (W)',
+            S.of(context).maxWattage,
             TextEditingController(),
             state.productArgument?.tdp,
             (value) {
@@ -481,7 +548,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<PSUEfficiency>(
-              'PSU efficiency',
+              S.of(context).psuEfficiency,
               TextEditingController(),
               state.productArgument?.efficiency, (value) {
             cubit.updateProductArgument(
@@ -489,7 +556,7 @@ class _AddProductState extends State<AddProductScreen> {
           }, PSUEfficiency.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<PSUModular>(
-              'PSU modularity',
+              S.of(context).psuModularity,
               TextEditingController(),
               state.productArgument?.modularity, (value) {
             cubit.updateProductArgument(
@@ -502,7 +569,7 @@ class _AddProductState extends State<AddProductScreen> {
               children: [
                 Expanded(
                   child: buildInputWidget<String>(
-                    'Connector type',
+                    S.of(context).connectorType,
                     TextEditingController(),
                     state.productArgument?.connectors != null &&
                             i < state.productArgument!.connectors!.length
@@ -516,7 +583,7 @@ class _AddProductState extends State<AddProductScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: buildInputWidget<int>(
-                    'Quantity',
+                    S.of(context).quantity,
                     TextEditingController(),
                     state.productArgument?.connectors != null &&
                             i < state.productArgument!.connectors!.length
@@ -542,7 +609,7 @@ class _AddProductState extends State<AddProductScreen> {
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
               icon: const Icon(Icons.add),
-              label: const Text('Add Connector'),
+              label: Text(S.of(context).addConnector),
               onPressed: () {
                 setState(() {
                   connectorControllers.add(ConnectorControllers());
@@ -553,20 +620,24 @@ class _AddProductState extends State<AddProductScreen> {
         ]);
       case CategoryEnum.gpu:
         return Column(children: [
-          buildInputWidget<GPUSeries>('GPU series', TextEditingController(),
+          buildInputWidget<GPUSeries>(
+              S.of(context).gpuSeries,
+              TextEditingController(),
               state.productArgument?.gpuSeries, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(gpuSeries: value));
           }, GPUSeries.getValues()),
           const SizedBox(width: 8),
-          buildInputWidget<GPUVersion>('GPU version', TextEditingController(),
+          buildInputWidget<GPUVersion>(
+              S.of(context).gpuVersion,
+              TextEditingController(),
               state.productArgument?.gpuVersion, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(gpuVersion: value));
           }, GPUVersion.getValues()),
           const SizedBox(width: 8),
           buildInputWidget<int>(
-            'GPU memory (GB)',
+            S.of(context).gpuMemory,
             capacityController,
             state.productArgument?.capacity,
             (value) {
@@ -577,7 +648,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           const SizedBox(width: 8),
           buildInputWidget<int>(
-            'GPU TDP (W)',
+            S.of(context).gpuTdp,
             tdpController,
             state.productArgument?.tdp,
             (value) {
@@ -587,7 +658,7 @@ class _AddProductState extends State<AddProductScreen> {
             null,
           ),
           const SizedBox(width: 8),
-          buildInputWidget<double>('GPU boost clock (GHz)',
+          buildInputWidget<double>(S.of(context).gpuBoostClock,
               turboClockController, state.productArgument?.turboClock, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(turboClock: value));
@@ -599,7 +670,7 @@ class _AddProductState extends State<AddProductScreen> {
               children: [
                 Expanded(
                     child: buildInputWidget<String>(
-                  'Port',
+                  S.of(context).port,
                   TextEditingController(),
                   state.productArgument?.ioPorts != null &&
                           i < state.productArgument!.ioPorts!.length
@@ -612,7 +683,7 @@ class _AddProductState extends State<AddProductScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                     child: buildInputWidget<int>(
-                  'Quantity',
+                  S.of(context).quantity,
                   TextEditingController(),
                   state.productArgument?.ioPorts != null &&
                           i < state.productArgument!.ioPorts!.length
@@ -637,7 +708,7 @@ class _AddProductState extends State<AddProductScreen> {
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
               icon: const Icon(Icons.add),
-              label: const Text('Add IO Port'),
+              label: Text(S.of(context).addIoPort),
               onPressed: () {
                 setState(() {
                   ioPortsControllers.add(IOPortControllers());
@@ -648,14 +719,16 @@ class _AddProductState extends State<AddProductScreen> {
         ]);
       case CategoryEnum.mainboard:
         return Column(children: [
-          buildInputWidget<String>('Chipset code', chipsetCodeController,
+          buildInputWidget<String>(
+              S.of(context).chipsetCode,
+              chipsetCodeController,
               state.productArgument?.chipsetCode, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(chipsetCode: value));
           }, null),
           const SizedBox(height: 8),
           buildInputWidget<MainboardFormFactor>(
-              'Mainboard form factor',
+              S.of(context).mainboardFormFactor,
               TextEditingController(),
               state.productArgument?.mainboardFormFactor, (value) {
             cubit.updateProductArgument(
@@ -663,7 +736,7 @@ class _AddProductState extends State<AddProductScreen> {
           }, MainboardFormFactor.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'RAM bus speed (MHz)',
+            S.of(context).ramBusSpeed,
             TextEditingController(),
             state.productArgument?.bus,
             (value) {
@@ -672,14 +745,14 @@ class _AddProductState extends State<AddProductScreen> {
             },
           ),
           const SizedBox(height: 8),
-          buildInputWidget<RAMType>('Supported RAM type',
+          buildInputWidget<RAMType>(S.of(context).supportedRamType,
               TextEditingController(), state.productArgument?.type, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(type: value));
           }, RAMType.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-              'Maximum single RAM capacity (GB)',
+              S.of(context).maximumSingleRamCapacity,
               TextEditingController(),
               state.productArgument?.capacity, (value) {
             cubit.updateProductArgument(
@@ -687,7 +760,7 @@ class _AddProductState extends State<AddProductScreen> {
           }, null),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Number of M.2 slots',
+            S.of(context).numberOfM2Slots,
             TextEditingController(),
             state.productArgument?.storageSlot?.m2Slots,
             (value) {
@@ -698,7 +771,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Number of SATA ports',
+            S.of(context).numberOfSataPorts,
             TextEditingController(),
             state.productArgument?.storageSlot?.sataPorts,
             (value) {
@@ -714,7 +787,7 @@ class _AddProductState extends State<AddProductScreen> {
               children: [
                 Expanded(
                     child: buildInputWidget<String>(
-                  'Port',
+                  S.of(context).port,
                   TextEditingController(),
                   state.productArgument?.ioPorts != null &&
                           i < state.productArgument!.ioPorts!.length
@@ -727,7 +800,7 @@ class _AddProductState extends State<AddProductScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                     child: buildInputWidget<int>(
-                  'Quantity',
+                  S.of(context).quantity,
                   TextEditingController(),
                   state.productArgument?.ioPorts != null &&
                           i < state.productArgument!.ioPorts!.length
@@ -752,7 +825,7 @@ class _AddProductState extends State<AddProductScreen> {
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
               icon: const Icon(Icons.add),
-              label: const Text('Add IO Port'),
+              label: Text(S.of(context).addIoPort),
               onPressed: () {
                 setState(() {
                   ioPortsControllers.add(IOPortControllers());
@@ -768,7 +841,7 @@ class _AddProductState extends State<AddProductScreen> {
               children: [
                 Expanded(
                   child: buildInputWidget<int>(
-                    'Physical size',
+                    S.of(context).physicalSize,
                     controller.physicalSizeController,
                     state.productArgument?.pcieSlots != null &&
                             i < state.productArgument!.pcieSlots!.length
@@ -782,7 +855,7 @@ class _AddProductState extends State<AddProductScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: buildInputWidget<int>(
-                    'Electrical speed',
+                    S.of(context).electricalSpeed,
                     controller.electricalSpeedController,
                     state.productArgument?.pcieSlots != null &&
                             i < state.productArgument!.pcieSlots!.length
@@ -796,7 +869,7 @@ class _AddProductState extends State<AddProductScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: buildInputWidget<int>(
-                    'Generation',
+                    S.of(context).generation,
                     controller.genController,
                     state.productArgument?.pcieSlots != null &&
                             i < state.productArgument!.pcieSlots!.length
@@ -810,7 +883,7 @@ class _AddProductState extends State<AddProductScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: buildInputWidget<int>(
-                    'Quantity',
+                    S.of(context).quantity,
                     controller.quantityController,
                     state.productArgument?.pcieSlots != null &&
                             i < state.productArgument!.pcieSlots!.length
@@ -836,7 +909,7 @@ class _AddProductState extends State<AddProductScreen> {
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
               icon: const Icon(Icons.add),
-              label: const Text('Add PCIe Slot'),
+              label: Text(S.of(context).addPcieSlot),
               onPressed: () {
                 setState(() {
                   pcieSlotsController.add(PCIeSlotControllers());
@@ -847,13 +920,15 @@ class _AddProductState extends State<AddProductScreen> {
         ]);
       case CategoryEnum.drive:
         return Column(children: [
-          buildInputWidget<DriveGen>('Drive generation',
+          buildInputWidget<DriveGen>(S.of(context).driveGeneration,
               TextEditingController(), state.productArgument?.gen, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(gen: value));
           }, DriveGen.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<DriveType>('Drive type', TextEditingController(),
+          buildInputWidget<DriveType>(
+              S.of(context).driveType,
+              TextEditingController(),
               state.productArgument?.driveType, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(driveType: value));
@@ -861,18 +936,19 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           TextFormField(
               controller: capacityController,
-              decoration: const InputDecoration(labelText: 'Capacity (GB)'),
+              decoration: InputDecoration(labelText: S.of(context).capacity),
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               validator: _validateField),
           const SizedBox(height: 8),
           TextFormField(
               controller: interfaceTypeController,
-              decoration: const InputDecoration(labelText: 'Interface type'),
+              decoration:
+                  InputDecoration(labelText: S.of(context).interfaceType),
               validator: _validateField),
           const SizedBox(height: 8),
           buildInputWidget<DriveFormFactor>(
-              'Drive form factor',
+              S.of(context).formFactor,
               TextEditingController(),
               state.productArgument?.driveFormFactor, (value) {
             cubit.updateProductArgument(
@@ -880,7 +956,7 @@ class _AddProductState extends State<AddProductScreen> {
           }, DriveFormFactor.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Read speed (MB/s)',
+            S.of(context).readSpeed,
             readMbpsController,
             state.productArgument?.readMbps,
             (value) {
@@ -891,7 +967,7 @@ class _AddProductState extends State<AddProductScreen> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Write speed (MB/s)',
+            S.of(context).writeSpeed,
             writeMbpsController,
             state.productArgument?.writeMbps,
             (value) {
@@ -909,81 +985,73 @@ class _AddProductState extends State<AddProductScreen> {
 
   String? _validateField(String? value) {
     if (value == null || value.isEmpty) {
-      return 'This field is required';
+      return S.of(context).thisFieldIsRequired;
     }
     return null;
   }
 
-  void _showImagePickerMenu() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: Text(S.of(context).chooseFromGallery),
-                onTap: () {
-                  Navigator.pop(context);
-                  cubit.pickImageFromGallery();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: Text(S.of(context).takePhoto),
-                onTap: () {
-                  Navigator.pop(context);
-                  cubit.pickImageFromCamera();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.link),
-                title: Text(S.of(context).enterUrl),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showUrlInputDialog();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  /// Helper to display ProductImage - handles both pending (memory) and uploaded (network) images
+  Widget _buildImageWidget(
+    ProductImage image, {
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.cover,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-  void _showUrlInputDialog() {
-    final TextEditingController urlController = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(S.of(context).enterImageUrl),
-          content: TextField(
-            controller: urlController,
-            decoration: const InputDecoration(
-              hintText: 'https://example.com/image.jpg',
+    if (image.hasPendingUpload && image.pendingBytes != null) {
+      // Pending image - use memory
+      return Image.memory(
+        image.pendingBytes!,
+        fit: fit,
+        width: width,
+        height: height,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            width: width,
+            height: height,
+            color: colorScheme.errorContainer,
+            child: Icon(
+              Icons.broken_image,
+              color: colorScheme.error,
+              size: width != null ? width / 2 : 48,
             ),
-            keyboardType: TextInputType.url,
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(S.of(context).cancel),
-              onPressed: () => Navigator.pop(context),
+          );
+        },
+      );
+    } else if (image.url.isNotEmpty) {
+      // Uploaded image - use network
+      return Image.network(
+        image.url,
+        fit: fit,
+        width: width,
+        height: height,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            width: width,
+            height: height,
+            color: colorScheme.errorContainer,
+            child: Icon(
+              Icons.broken_image,
+              color: colorScheme.error,
+              size: width != null ? width / 2 : 48,
             ),
-            TextButton(
-              child: Text(S.of(context).confirm),
-              onPressed: () {
-                if (urlController.text.isNotEmpty) {
-                  cubit.pickImageFromUrl(urlController.text);
-                }
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+          );
+        },
+      );
+    } else {
+      // No image data available
+      return Container(
+        width: width,
+        height: height,
+        color: colorScheme.surfaceContainerHighest,
+        child: Icon(
+          Icons.image_not_supported,
+          color: colorScheme.onSurfaceVariant,
+          size: width != null ? width / 2 : 48,
+        ),
+      );
+    }
   }
 
   @override
@@ -996,7 +1064,7 @@ class _AddProductState extends State<AddProductScreen> {
         elevation: 0,
         leading: GradientIconButton(
           icon: Icons.chevron_left,
-          onPressed: () => Navigator.pop(context, ProcessState.idle),
+          onPressed: () => Navigator.pop(context, false),
           fillColor: Colors.transparent,
         ),
         title: GradientText(
@@ -1072,7 +1140,7 @@ class _AddProductState extends State<AddProductScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: _showImagePickerMenu,
+                  onTap: () => ImageManagerModal.show(context),
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.25,
                     width: double.infinity,
@@ -1094,20 +1162,11 @@ class _AddProductState extends State<AddProductScreen> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        if (state.imageUrl != null)
+                        if (state.activeImages.isNotEmpty)
                           Center(
-                            child: Image.network(
-                              state.imageUrl!,
+                            child: _buildImageWidget(
+                              state.activeImages.first,
                               fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Center(
-                                  child: Icon(
-                                    Icons.error_outline,
-                                    color: colorScheme.error,
-                                    size: 48,
-                                  ),
-                                );
-                              },
                             ),
                           )
                         else
@@ -1130,7 +1189,36 @@ class _AddProductState extends State<AddProductScreen> {
                               ],
                             ),
                           ),
-                        if (state.isUploadingImage)
+                        // Image count badge
+                        if (state.activeImages.isNotEmpty)
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: colorScheme.primary,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.photo_library,
+                                      size: 16, color: Colors.white),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${state.activeImages.length}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        if (state.isUploadingImage || state.isLoadingImages)
                           Positioned.fill(
                             child: Container(
                               decoration: const BoxDecoration(

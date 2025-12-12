@@ -49,7 +49,7 @@ Map<String, dynamic> productToJson(Product p) {
     'stock': p.stock,
     'sales': p.sales,
     'status': _enumName(p.status),
-    'imageUrl': p.imageUrl,
+    // imageUrl removed - images now stored in subcollection
     'enDescription': p.enDescription,
     'viDescription': p.viDescription,
   };

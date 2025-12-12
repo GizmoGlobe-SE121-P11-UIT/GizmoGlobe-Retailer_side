@@ -6,6 +6,7 @@ import '../../../data/database/database.dart';
 import '../../../data/firebase/firebase.dart';
 import '../../../services/reports/business_report_pdf_service.dart';
 import '../../../objects/customer.dart';
+import '../../../objects/invoice_related/sales_invoice.dart';
 import 'home_screen_state.dart';
 
 class TopProductData {
@@ -31,9 +32,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   Future<void> _initialize() async {
     try {
-      // Đợi database khởi tạo xong
-      await db.initialize();
-
+      // Database is already initialized in main.dart, just get user data
       // Step 1: Load username first
       await db.getUser();
       if (!isClosed) {
@@ -43,143 +42,418 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         ));
       }
 
-      // Step 2: Load overview data (revenue, orders, products, customers, etc.)
-      final salesInvoices = await Firebase().getSalesInvoices();
+      // On mobile, use precomputed stats from Cloud Functions to prevent OOM crash
+      if (!kIsWeb) {
+        // Try to get precomputed dashboard stats first (lightweight, single doc read)
+        try {
+          final dashboardStats = await Firebase().getDashboardStats();
 
-      // Tính tổng doanh thu từ các hóa đơn đã thanh toán
-      double totalRevenue = 0.0;
-      int totalPaidOrders = 0;
-      for (var invoice in salesInvoices) {
-        if (invoice.paymentStatus == PaymentStatus.paid) {
-          totalRevenue += invoice.totalPrice;
-          totalPaidOrders++;
-        }
-      }
+          if (dashboardStats != null) {
+            // Use precomputed stats
+            final totalRevenue =
+                (dashboardStats['totalRevenue'] as num?)?.toDouble() ?? 0.0;
+            final totalOrders =
+                (dashboardStats['totalOrders'] as num?)?.toInt() ?? 0;
+            final monthlySalesData =
+                dashboardStats['monthlySales'] as List<dynamic>? ?? [];
+            final dailySalesData =
+                dashboardStats['dailySales'] as List<dynamic>? ?? [];
+            final monthlySalesByCategoryData =
+                dashboardStats['monthlySalesByCategory'] as List<dynamic>? ??
+                    [];
+            final dailySalesByCategoryData =
+                dashboardStats['dailySalesByCategory'] as List<dynamic>? ?? [];
 
-      // Thay đổi Map để lưu doanh thu theo category
-      final salesByCategory = <String, double>{};
+            // Convert monthlySales from Cloud Function format to SalesData
+            final List<SalesData> monthlySales = [];
+            for (var item in monthlySalesData) {
+              final month = item['month'] as String; // "2024-01"
+              final amount = (item['amount'] as num?)?.toDouble() ?? 0.0;
+              final parts = month.split('-');
+              if (parts.length == 2) {
+                final year = int.tryParse(parts[0]) ?? 2024;
+                final monthNum = int.tryParse(parts[1]) ?? 1;
+                // Multiply by 1000 to match existing chart format
+                monthlySales
+                    .add(SalesData(DateTime(year, monthNum, 1), amount * 1000));
+              }
+            }
 
-      for (var invoice in salesInvoices) {
-        if (invoice.paymentStatus == PaymentStatus.paid) {
-          // Lấy chi tiết của từng hóa đơn
-          final invoiceWithDetails = await Firebase()
-              .getSalesInvoiceWithDetails(invoice.salesInvoiceID);
-          for (var detail in invoiceWithDetails.details) {
-            final category = detail.category.toString();
-            // Tính doanh thu = số lượng * giá bán
-            final revenue = detail.quantity * detail.sellingPrice;
-            salesByCategory[category] =
-                (salesByCategory[category] ?? 0) + revenue;
+            // Convert dailySales from Cloud Function format to SalesData
+            final List<SalesData> dailySales = [];
+            for (var item in dailySalesData) {
+              final date = item['date'] as String; // "2024-01-15"
+              final amount = (item['amount'] as num?)?.toDouble() ?? 0.0;
+              final parts = date.split('-');
+              if (parts.length == 3) {
+                final year = int.tryParse(parts[0]) ?? 2024;
+                final monthNum = int.tryParse(parts[1]) ?? 1;
+                final day = int.tryParse(parts[2]) ?? 1;
+                // Multiply by 1000 to match existing chart format
+                dailySales.add(
+                    SalesData(DateTime(year, monthNum, day), amount * 1000));
+              }
+            }
+
+            // Convert monthlySalesByCategory from Cloud Function format
+            final List<CategorySalesData> monthlyCategorySales = [];
+            for (var item in monthlySalesByCategoryData) {
+              final month = item['month'] as String; // "2024-01"
+              final categories = item['categories'] as List<dynamic>? ?? [];
+              final parts = month.split('-');
+              if (parts.length == 2) {
+                final year = int.tryParse(parts[0]) ?? 2024;
+                final monthNum = int.tryParse(parts[1]) ?? 1;
+                final categoryMap = <String, double>{};
+                for (var cat in categories) {
+                  final category = cat['category'] as String? ?? 'Unknown';
+                  final amount = (cat['amount'] as num?)?.toDouble() ?? 0.0;
+                  categoryMap[category] = amount * 1000; // Multiply by 1000
+                }
+                monthlyCategorySales.add(CategorySalesData(
+                    DateTime(year, monthNum, 1), categoryMap));
+              }
+            }
+
+            // Convert dailySalesByCategory from Cloud Function format
+            final List<CategorySalesData> dailyCategorySales = [];
+            for (var item in dailySalesByCategoryData) {
+              final date = item['date'] as String; // "2024-01-15"
+              final categories = item['categories'] as List<dynamic>? ?? [];
+              final parts = date.split('-');
+              if (parts.length == 3) {
+                final year = int.tryParse(parts[0]) ?? 2024;
+                final monthNum = int.tryParse(parts[1]) ?? 1;
+                final day = int.tryParse(parts[2]) ?? 1;
+                final categoryMap = <String, double>{};
+                for (var cat in categories) {
+                  final category = cat['category'] as String? ?? 'Unknown';
+                  final amount = (cat['amount'] as num?)?.toDouble() ?? 0.0;
+                  categoryMap[category] = amount * 1000; // Multiply by 1000
+                }
+                dailyCategorySales.add(CategorySalesData(
+                    DateTime(year, monthNum, day), categoryMap));
+              }
+            }
+
+            // Limit to last 12 months
+            final limitedSales = monthlySales.length > 12
+                ? monthlySales.sublist(monthlySales.length - 12)
+                : monthlySales;
+
+            // Limit category sales to last 12 months
+            final limitedCategorySales = monthlyCategorySales.length > 12
+                ? monthlyCategorySales.sublist(monthlyCategorySales.length - 12)
+                : monthlyCategorySales;
+
+            // Load product counts
+            await _loadProductCounts();
+
+            if (!isClosed) {
+              emit(state.copyWith(
+                totalProducts: db.productList.length,
+                totalCustomers: db.customerList.length,
+                totalManufacturers: db.manufacturerList.length,
+                totalEmployees: db.employeeList.length,
+                totalRevenue: totalRevenue,
+                totalOrders: totalOrders,
+                monthlySales: limitedSales,
+                dailySales: dailySales,
+                monthlyCategorySales: limitedCategorySales,
+                dailyCategorySales: dailyCategorySales,
+                isLoadingOverview: false,
+                isLoadingChart: false,
+              ));
+            }
+          } else {
+            // Fallback: Cloud Function not deployed yet, show basic counts only
+            // Still try to load product counts
+            await _loadProductCounts();
+
+            if (!isClosed) {
+              emit(state.copyWith(
+                totalProducts: db.productList.length,
+                totalCustomers: db.customerList.length,
+                totalManufacturers: db.manufacturerList.length,
+                totalEmployees: db.employeeList.length,
+                totalRevenue: 0,
+                totalOrders: 0,
+                isLoadingOverview: false,
+                isLoadingChart: false,
+              ));
+            }
+          }
+        } catch (e) {
+          if (kDebugMode) {
+            print('Error loading dashboard stats: $e');
+          }
+          // Fallback on error
+          if (!isClosed) {
+            emit(state.copyWith(
+              totalProducts: db.productList.length,
+              totalCustomers: db.customerList.length,
+              totalManufacturers: db.manufacturerList.length,
+              totalEmployees: db.employeeList.length,
+              isLoadingOverview: false,
+              isLoadingChart: false,
+            ));
           }
         }
+        return;
       }
 
-      // Get unread chats count
-      final unreadChats = await Firebase().getUnreadChatsCount();
+      // Web: Use Cloud Functions aggregated data (same as mobile)
+      // Declare outside try block so it's accessible for category processing
+      List<SalesInvoice> paidInvoices = [];
+      List<SalesInvoice> recentOrdersList = [];
 
-      // Get recent orders (last 5 orders, sorted by date descending)
-      final recentOrders = salesInvoices
-          .where((invoice) => invoice.paymentStatus == PaymentStatus.paid)
-          .toList()
-        ..sort((a, b) => b.date.compareTo(a.date));
+      try {
+        final dashboardStats = await Firebase().getDashboardStats();
+        final unreadChats = await Firebase().getUnreadChatsCount();
 
-      final recentOrdersList = recentOrders.take(5).toList();
+        // Get recent orders for web (still need invoice list for this)
+        final salesInvoices = await Firebase().getSalesInvoices();
+        paidInvoices = salesInvoices
+            .where((invoice) => invoice.paymentStatus == PaymentStatus.paid)
+            .toList();
+        final sortedInvoices = List<SalesInvoice>.from(paidInvoices);
+        sortedInvoices.sort((a, b) => b.date.compareTo(a.date));
+        recentOrdersList = sortedInvoices.take(5).toList();
 
-      // Calculate top products from sales data
-      final Map<String, TopProductData> productSalesMap = {};
+        if (dashboardStats != null) {
+          // Use precomputed stats from Cloud Functions
+          final totalRevenue =
+              (dashboardStats['totalRevenue'] as num?)?.toDouble() ?? 0.0;
+          final totalOrders =
+              (dashboardStats['totalOrders'] as num?)?.toInt() ?? 0;
+          final monthlySalesData =
+              dashboardStats['monthlySales'] as List<dynamic>? ?? [];
+          final dailySalesData =
+              dashboardStats['dailySales'] as List<dynamic>? ?? [];
+          final monthlySalesByCategoryData =
+              dashboardStats['monthlySalesByCategory'] as List<dynamic>? ?? [];
+          final dailySalesByCategoryData =
+              dashboardStats['dailySalesByCategory'] as List<dynamic>? ?? [];
 
-      for (var invoice in salesInvoices) {
-        if (invoice.paymentStatus == PaymentStatus.paid) {
-          // Get invoice details to access product information
-          final invoiceWithDetails = await Firebase()
-              .getSalesInvoiceWithDetails(invoice.salesInvoiceID);
+          // Convert monthlySales from Cloud Function format to SalesData
+          final List<SalesData> monthlySales = [];
+          for (var item in monthlySalesData) {
+            final month = item['month'] as String; // "2024-01"
+            final amount = (item['amount'] as num?)?.toDouble() ?? 0.0;
+            final parts = month.split('-');
+            if (parts.length == 2) {
+              final year = int.tryParse(parts[0]) ?? 2024;
+              final monthNum = int.tryParse(parts[1]) ?? 1;
+              // Multiply by 1000 to match existing chart format
+              monthlySales
+                  .add(SalesData(DateTime(year, monthNum, 1), amount * 1000));
+            }
+          }
 
-          for (var detail in invoiceWithDetails.details) {
-            final productID = detail.productID;
-            final productName = detail.productName ?? 'Unknown Product';
-            final quantity = detail.quantity;
-            final revenue = detail.subtotal;
+          // Convert dailySales from Cloud Function format to SalesData
+          final List<SalesData> dailySales = [];
+          for (var item in dailySalesData) {
+            final date = item['date'] as String; // "2024-01-15"
+            final amount = (item['amount'] as num?)?.toDouble() ?? 0.0;
+            final parts = date.split('-');
+            if (parts.length == 3) {
+              final year = int.tryParse(parts[0]) ?? 2024;
+              final monthNum = int.tryParse(parts[1]) ?? 1;
+              final day = int.tryParse(parts[2]) ?? 1;
+              // Multiply by 1000 to match existing chart format
+              dailySales
+                  .add(SalesData(DateTime(year, monthNum, day), amount * 1000));
+            }
+          }
 
-            if (productSalesMap.containsKey(productID)) {
-              productSalesMap[productID]!.totalSales += quantity;
-              productSalesMap[productID]!.totalRevenue += revenue;
-            } else {
-              productSalesMap[productID] = TopProductData(
-                productID: productID,
-                productName: productName,
-                totalSales: quantity,
-                totalRevenue: revenue,
-              );
+          // Convert monthlySalesByCategory from Cloud Function format
+          final List<CategorySalesData> monthlyCategorySales = [];
+          for (var item in monthlySalesByCategoryData) {
+            final month = item['month'] as String; // "2024-01"
+            final categories = item['categories'] as List<dynamic>? ?? [];
+            final parts = month.split('-');
+            if (parts.length == 2) {
+              final year = int.tryParse(parts[0]) ?? 2024;
+              final monthNum = int.tryParse(parts[1]) ?? 1;
+              final categoryMap = <String, double>{};
+              for (var cat in categories) {
+                final category = cat['category'] as String? ?? 'Unknown';
+                final amount = (cat['amount'] as num?)?.toDouble() ?? 0.0;
+                categoryMap[category] = amount * 1000; // Multiply by 1000
+              }
+              monthlyCategorySales.add(
+                  CategorySalesData(DateTime(year, monthNum, 1), categoryMap));
+            }
+          }
+
+          // Convert dailySalesByCategory from Cloud Function format
+          final List<CategorySalesData> dailyCategorySales = [];
+          for (var item in dailySalesByCategoryData) {
+            final date = item['date'] as String; // "2024-01-15"
+            final categories = item['categories'] as List<dynamic>? ?? [];
+            final parts = date.split('-');
+            if (parts.length == 3) {
+              final year = int.tryParse(parts[0]) ?? 2024;
+              final monthNum = int.tryParse(parts[1]) ?? 1;
+              final day = int.tryParse(parts[2]) ?? 1;
+              final categoryMap = <String, double>{};
+              for (var cat in categories) {
+                final category = cat['category'] as String? ?? 'Unknown';
+                final amount = (cat['amount'] as num?)?.toDouble() ?? 0.0;
+                categoryMap[category] = amount * 1000; // Multiply by 1000
+              }
+              dailyCategorySales.add(CategorySalesData(
+                  DateTime(year, monthNum, day), categoryMap));
+            }
+          }
+
+          // Load product counts
+          await _loadProductCounts();
+
+          if (!isClosed) {
+            emit(state.copyWith(
+              totalProducts: db.productList.length,
+              totalCustomers: db.customerList.length,
+              totalManufacturers: db.manufacturerList.length,
+              totalEmployees: db.employeeList.length,
+              totalRevenue: totalRevenue,
+              totalOrders: totalOrders,
+              unreadChats: unreadChats,
+              recentOrders: recentOrdersList,
+              monthlySales: monthlySales,
+              dailySales: dailySales,
+              monthlyCategorySales: monthlyCategorySales,
+              dailyCategorySales: dailyCategorySales,
+              isLoadingOverview: false,
+              isLoadingChart: false,
+            ));
+          }
+        } else {
+          // Fallback: Cloud Function not deployed, calculate locally
+          double totalRevenue = 0.0;
+          int totalPaidOrders = 0;
+
+          for (var invoice in paidInvoices) {
+            totalRevenue += invoice.totalPrice;
+            totalPaidOrders++;
+          }
+
+          // Calculate chart data locally
+          final List<SalesData> monthlySales = [];
+          final Map<String, double> monthlyMap = {};
+
+          for (var invoice in paidInvoices) {
+            final monthKey =
+                '${invoice.date.year}-${invoice.date.month.toString().padLeft(2, '0')}';
+            monthlyMap[monthKey] =
+                (monthlyMap[monthKey] ?? 0) + invoice.totalPrice;
+          }
+
+          for (var entry in monthlyMap.entries) {
+            final parts = entry.key.split('-');
+            final year = int.parse(parts[0]);
+            final month = int.parse(parts[1]);
+            final roundedAmount = (entry.value * 1000).roundToDouble();
+            monthlySales
+                .add(SalesData(DateTime(year, month, 1), roundedAmount));
+          }
+
+          monthlySales.sort((a, b) => a.date.compareTo(b.date));
+
+          if (!isClosed) {
+            emit(state.copyWith(
+              totalProducts: db.productList.length,
+              totalCustomers: db.customerList.length,
+              totalManufacturers: db.manufacturerList.length,
+              totalEmployees: db.employeeList.length,
+              totalRevenue: totalRevenue,
+              totalOrders: totalPaidOrders,
+              unreadChats: unreadChats,
+              recentOrders: recentOrdersList,
+              monthlySales: monthlySales,
+              isLoadingOverview: false,
+              isLoadingChart: false,
+            ));
+          }
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error loading web dashboard data: $e');
+        }
+        if (!isClosed) {
+          emit(state.copyWith(
+            totalProducts: db.productList.length,
+            totalCustomers: db.customerList.length,
+            totalManufacturers: db.manufacturerList.length,
+            totalEmployees: db.employeeList.length,
+            isLoadingOverview: false,
+            isLoadingChart: false,
+          ));
+        }
+      }
+
+      // Step 4: Category and top product data DISABLED on mobile due to memory constraints
+      // These require getSalesInvoiceWithDetails for each invoice which causes OOM crash
+      if (kIsWeb) {
+        // Only process on web where memory is not as constrained
+        final invoicesToProcess = paidInvoices.take(20).toList();
+        final salesByCategory = <String, double>{};
+        final Map<String, TopProductData> productSalesMap = {};
+
+        for (var invoice in invoicesToProcess) {
+          if (isClosed) break;
+          try {
+            final invoiceWithDetails = await Firebase()
+                .getSalesInvoiceWithDetails(invoice.salesInvoiceID);
+
+            for (var detail in invoiceWithDetails.details) {
+              final category = detail.category.toString();
+              final revenue = detail.quantity * detail.sellingPrice;
+              salesByCategory[category] =
+                  (salesByCategory[category] ?? 0) + revenue;
+
+              final productID = detail.productID;
+              final productName = detail.productName ?? 'Unknown Product';
+              final quantity = detail.quantity;
+              final productRevenue = detail.subtotal;
+
+              if (productSalesMap.containsKey(productID)) {
+                productSalesMap[productID]!.totalSales += quantity;
+                productSalesMap[productID]!.totalRevenue += productRevenue;
+              } else {
+                productSalesMap[productID] = TopProductData(
+                  productID: productID,
+                  productName: productName,
+                  totalSales: quantity,
+                  totalRevenue: productRevenue,
+                );
+              }
+            }
+          } catch (e) {
+            if (kDebugMode) {
+              print('Error processing invoice ${invoice.salesInvoiceID}: $e');
             }
           }
         }
-      }
 
-      // Convert to TopProduct list and sort by total sales
-      final topProductsList = productSalesMap.values
-          .map((data) => TopProduct(
-                productID: data.productID,
-                productName: data.productName,
-                totalSales: data.totalSales,
-                totalRevenue: data.totalRevenue,
-              ))
-          .toList()
-        ..sort((a, b) => b.totalSales.compareTo(a.totalSales));
+        final topProductsList = productSalesMap.values
+            .map((data) => TopProduct(
+                  productID: data.productID,
+                  productName: data.productName,
+                  totalSales: data.totalSales,
+                  totalRevenue: data.totalRevenue,
+                ))
+            .toList()
+          ..sort((a, b) => b.totalSales.compareTo(a.totalSales));
 
-      // Take top 3 products
-      final topProducts = topProductsList.take(3).toList();
+        final topProducts = topProductsList.take(3).toList();
 
-      // Emit overview data
-      if (!isClosed) {
-        emit(state.copyWith(
-          totalProducts: db.productList.length,
-          totalCustomers: db.customerList.length,
-          totalRevenue: totalRevenue,
-          totalOrders: totalPaidOrders,
-          salesByCategory: salesByCategory,
-          unreadChats: unreadChats,
-          recentOrders: recentOrdersList,
-          topProducts: topProducts,
-          isLoadingOverview: false,
-        ));
-      }
-
-      // Step 3: Load chart data (monthly sales)
-      // Tính doanh thu theo ngày (lưu tất cả các ngày có dữ liệu để có thể hiển thị theo ngày hoặc tổng hợp theo tháng)
-      final List<SalesData> monthlySales = [];
-      final Map<String, double> dailySalesMap = <String, double>{};
-
-      // Lưu tất cả các ngày có doanh thu
-      for (var invoice in salesInvoices) {
-        if (invoice.paymentStatus == PaymentStatus.paid) {
-          final dayKey =
-              '${invoice.date.year}-${invoice.date.month.toString().padLeft(2, '0')}-${invoice.date.day.toString().padLeft(2, '0')}';
-          dailySalesMap[dayKey] =
-              (dailySalesMap[dayKey] ?? 0) + invoice.totalPrice;
+        if (!isClosed) {
+          emit(state.copyWith(
+            salesByCategory: salesByCategory,
+            topProducts: topProducts,
+          ));
         }
-      }
-
-      // Chuyển đổi map thành list SalesData với đầy đủ thông tin ngày
-      // Nhân với 1000 để phù hợp với format VND (theo Helper.toCurrencyFormat)
-      // Làm tròn để tránh lỗi floating point precision
-      for (var entry in dailySalesMap.entries) {
-        final parts = entry.key.split('-');
-        final year = int.parse(parts[0]);
-        final month = int.parse(parts[1]);
-        final day = int.parse(parts[2]);
-        final roundedAmount = (entry.value * 1000).roundToDouble();
-        monthlySales.add(SalesData(DateTime(year, month, day), roundedAmount));
-      }
-
-      // Sắp xếp theo ngày
-      monthlySales.sort((a, b) => a.date.compareTo(b.date));
-
-      // Emit chart data
-      if (!isClosed) {
-        emit(state.copyWith(
-          monthlySales: monthlySales,
-          isLoadingChart: false,
-        ));
       }
     } catch (e) {
       if (kDebugMode) {
@@ -192,6 +466,35 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           isLoadingOverview: false,
           isLoadingChart: false,
         ));
+      }
+    }
+  }
+
+  Future<void> _loadProductCounts() async {
+    try {
+      final productCountsData = await Firebase().getProductCounts();
+      if (productCountsData != null && !isClosed) {
+        final categoryCountsArray =
+            productCountsData['categoryCounts'] as List<dynamic>? ?? [];
+        final productCountsMap = <String, int>{};
+        for (var item in categoryCountsArray) {
+          final category = item['category'] as String? ?? 'Unknown';
+          final count = (item['count'] as num?)?.toInt() ?? 0;
+          productCountsMap[category] = count;
+        }
+        emit(state.copyWith(
+          productCountsByCategory: productCountsMap,
+          isLoadingProductCounts: false,
+        ));
+      } else if (!isClosed) {
+        emit(state.copyWith(isLoadingProductCounts: false));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading product counts: $e');
+      }
+      if (!isClosed) {
+        emit(state.copyWith(isLoadingProductCounts: false));
       }
     }
   }
@@ -355,7 +658,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
         final monthKey =
             '${invoice.date.year}-${invoice.date.month.toString().padLeft(2, '0')}';
-        monthlyCostsMap[monthKey] = (monthlyCostsMap[monthKey] ?? 0) + costContribution;
+        monthlyCostsMap[monthKey] =
+            (monthlyCostsMap[monthKey] ?? 0) + costContribution;
 
         if (productSalesMap.containsKey(productID)) {
           productSalesMap[productID]!.totalSales += quantity;
@@ -423,7 +727,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       monthlySalesMap[monthKey2]!.revenue += invoiceRevenue;
       final monthCost = monthlyCostsMap[monthKey] ?? 0.0;
       monthlySalesMap[monthKey2]!.costs = monthCost;
-      monthlySalesMap[monthKey2]!.profit = monthlySalesMap[monthKey2]!.revenue - monthCost;
+      monthlySalesMap[monthKey2]!.profit =
+          monthlySalesMap[monthKey2]!.revenue - monthCost;
     }
 
     // Calculate total costs from sold products
@@ -479,7 +784,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     // Track unique customers using Sets
     final Set<String> newCustomerIDs = {};
     final Set<String> returningCustomerIDs = {};
-    
+
     for (var invoice in salesInvoices) {
       if (invoice.paymentStatus == PaymentStatus.paid) {
         final firstOrderDate = customerFirstOrderMap[invoice.customerID];
@@ -604,20 +909,18 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
                 orderCount: c.orderCount,
               ))
           .toList(),
-      topProductsByQuantity: topProductsByQuantity
-          .map((data) {
-            // Try productCostFromSales first (for filtered products), then fall back to productCostMap
-            final cost = productCostFromSales[data.productID] ??
-                (productCostMap[data.productID]?.toDouble() ?? 0.0);
-            return BusinessReportTopProductData(
-              productID: data.productID,
-              productName: data.productName,
-              totalSales: data.totalSales,
-              totalRevenue: data.totalRevenue,
-              totalCost: cost,
-            );
-          })
-          .toList(),
+      topProductsByQuantity: topProductsByQuantity.map((data) {
+        // Try productCostFromSales first (for filtered products), then fall back to productCostMap
+        final cost = productCostFromSales[data.productID] ??
+            (productCostMap[data.productID]?.toDouble() ?? 0.0);
+        return BusinessReportTopProductData(
+          productID: data.productID,
+          productName: data.productName,
+          totalSales: data.totalSales,
+          totalRevenue: data.totalRevenue,
+          totalCost: cost,
+        );
+      }).toList(),
       topProductsByProfitMargin: topProductsByProfitMargin,
       totalStockValue: totalStockValue,
       lowStockItemsCount: lowStockItemsCount,

@@ -35,92 +35,92 @@ class Database {
   List<IncomingInvoice> incomingInvoiceList = [];
   List<Voucher> voucherList = [];
 
-  final List<Map<String, dynamic>> voucherDataList = [
-    {
-      'voucherID': 'voucher1',
-      'voucherName': 'Discount 10%',
-      'startTime': DateTime(2025, 5, 1),
-      'discountValue': 10.0,
-      'minimumPurchase': 0.0,
-      'maxUsagePerPerson': 1,
-      'isVisible': true,
-      'isEnabled': true,
-      'description': '',
-      'hasEndTime': true,
-      'endTime': DateTime(2025, 5, 31),
-      'isLimited': true,
-      'maximumUsage': 100,
-      'usageLeft': 0,
-      'isPercentage': true,
-      'maximumDiscountValue': 100.0,
-    },
-    {
-      'voucherID': 'voucher2',
-      'voucherName': 'Discount \$20',
-      'startTime': DateTime(2025, 6, 1),
-      'discountValue': 20.0,
-      'minimumPurchase': 50.0,
-      'maxUsagePerPerson': 1,
-      'isVisible': false,
-      'isEnabled': false,
-      'description': '\$20 off orders over \$50',
-      'hasEndTime': true,
-      'endTime': DateTime(2025, 6, 30),
-      'isLimited': false,
-      'isPercentage': false,
-    },
-    {
-      'voucherID': 'voucher3',
-      'voucherName': 'Discount 30%',
-      'startTime': DateTime(2025, 5, 1),
-      'discountValue': 30.0,
-      'minimumPurchase': 0.0,
-      'maxUsagePerPerson': 1,
-      'isVisible': true,
-      'isEnabled': true,
-      'description': '30% off, up to \$100',
-      'hasEndTime': false,
-      'isLimited': true,
-      'maximumUsage': 50,
-      'usageLeft': 10,
-      'isPercentage': true,
-      'maximumDiscountValue': 100.0,
-    },
-    {
-      'voucherID': 'voucher4',
-      'voucherName': 'Discount \$50',
-      'startTime': DateTime(2025, 6, 1),
-      'discountValue': 50.0,
-      'minimumPurchase': 100.0,
-      'maxUsagePerPerson': 1,
-      'isVisible': false,
-      'isEnabled': true,
-      'description': '\$50 off orders over \$100',
-      'hasEndTime': false,
-      'isLimited': true,
-      'maximumUsage': 5,
-      'usageLeft': 5,
-      'isPercentage': false,
-    },
-    {
-      'voucherID': 'voucher5',
-      'voucherName': 'Discount 15%',
-      'startTime': DateTime(2025, 4, 1),
-      'discountValue': 15.0,
-      'minimumPurchase': 0.0,
-      'maxUsagePerPerson': 1,
-      'isVisible': true,
-      'isEnabled': true,
-      'description': '15% off, up to \$100',
-      'hasEndTime': true,
-      'endTime': DateTime(2025, 4, 30),
-      'isLimited': true,
-      'maximumUsage': 5,
-      'usageLeft': 5,
-      'isPercentage': true,
-      'maximumDiscountValue': 100.0,
-    },
-  ];
+  // final List<Map<String, dynamic>> voucherDataList = [
+  //   {
+  //     'voucherID': 'voucher1',
+  //     'voucherName': 'Discount 10%',
+  //     'startTime': DateTime(2025, 5, 1),
+  //     'discountValue': 10.0,
+  //     'minimumPurchase': 0.0,
+  //     'maxUsagePerPerson': 1,
+  //     'isVisible': true,
+  //     'isEnabled': true,
+  //     'description': '',
+  //     'hasEndTime': true,
+  //     'endTime': DateTime(2025, 5, 31),
+  //     'isLimited': true,
+  //     'maximumUsage': 100,
+  //     'usageLeft': 0,
+  //     'isPercentage': true,
+  //     'maximumDiscountValue': 100.0,
+  //   },
+  //   {
+  //     'voucherID': 'voucher2',
+  //     'voucherName': 'Discount \$20',
+  //     'startTime': DateTime(2025, 6, 1),
+  //     'discountValue': 20.0,
+  //     'minimumPurchase': 50.0,
+  //     'maxUsagePerPerson': 1,
+  //     'isVisible': false,
+  //     'isEnabled': false,
+  //     'description': '\$20 off orders over \$50',
+  //     'hasEndTime': true,
+  //     'endTime': DateTime(2025, 6, 30),
+  //     'isLimited': false,
+  //     'isPercentage': false,
+  //   },
+  //   {
+  //     'voucherID': 'voucher3',
+  //     'voucherName': 'Discount 30%',
+  //     'startTime': DateTime(2025, 5, 1),
+  //     'discountValue': 30.0,
+  //     'minimumPurchase': 0.0,
+  //     'maxUsagePerPerson': 1,
+  //     'isVisible': true,
+  //     'isEnabled': true,
+  //     'description': '30% off, up to \$100',
+  //     'hasEndTime': false,
+  //     'isLimited': true,
+  //     'maximumUsage': 50,
+  //     'usageLeft': 10,
+  //     'isPercentage': true,
+  //     'maximumDiscountValue': 100.0,
+  //   },
+  //   {
+  //     'voucherID': 'voucher4',
+  //     'voucherName': 'Discount \$50',
+  //     'startTime': DateTime(2025, 6, 1),
+  //     'discountValue': 50.0,
+  //     'minimumPurchase': 100.0,
+  //     'maxUsagePerPerson': 1,
+  //     'isVisible': false,
+  //     'isEnabled': true,
+  //     'description': '\$50 off orders over \$100',
+  //     'hasEndTime': false,
+  //     'isLimited': true,
+  //     'maximumUsage': 5,
+  //     'usageLeft': 5,
+  //     'isPercentage': false,
+  //   },
+  //   {
+  //     'voucherID': 'voucher5',
+  //     'voucherName': 'Discount 15%',
+  //     'startTime': DateTime(2025, 4, 1),
+  //     'discountValue': 15.0,
+  //     'minimumPurchase': 0.0,
+  //     'maxUsagePerPerson': 1,
+  //     'isVisible': true,
+  //     'isEnabled': true,
+  //     'description': '15% off, up to \$100',
+  //     'hasEndTime': true,
+  //     'endTime': DateTime(2025, 4, 30),
+  //     'isLimited': true,
+  //     'maximumUsage': 5,
+  //     'usageLeft': 5,
+  //     'isPercentage': true,
+  //     'maximumDiscountValue': 100.0,
+  //   },
+  // ];
 
   factory Database() {
     return _database;
@@ -184,7 +184,9 @@ class Database {
         print('Products: ${productSnapshot.docs.length}');
       }
 
-      final products = (await Future.wait(productSnapshot.docs.map((doc) async {
+      // Process products sequentially to avoid memory pressure on mobile
+      final List<Product> products = [];
+      for (final doc in productSnapshot.docs) {
         try {
           final dynamic raw = doc.data();
           if (raw is! Map<String, dynamic>) {
@@ -192,7 +194,7 @@ class Database {
               print(
                   'Product ${doc.id} has unexpected data type: ${raw.runtimeType}');
             }
-            return null;
+            continue;
           }
 
           // Normalize: parse JSON strings into Map/List where applicable
@@ -216,16 +218,14 @@ class Database {
           // Ensure productID present (some factories expect it)
           data.putIfAbsent('productID', () => doc.id);
 
-          return ProductFactory.createProduct(data);
-        } catch (e, st) {
+          final product = ProductFactory.createProduct(data);
+          products.add(product);
+                } catch (e, st) {
           if (kDebugMode) {
             print('Error processing product ${doc.id}: $e\n$st');
           }
-          return null;
         }
-      })))
-          .whereType<Product>()
-          .toList();
+      }
 
       productList = products;
 
@@ -236,7 +236,14 @@ class Database {
       }
 
       customerList = await Firebase().getCustomers();
+      employeeList = await Firebase().getEmployees();
       voucherList = await Firebase().getVouchers();
+
+      if (kDebugMode) {
+        print('Customers: ${customerList.length}');
+        print('Employees: ${employeeList.length}');
+        print('Vouchers: ${voucherList.length}');
+      }
     } catch (e) {
       if (kDebugMode) {
         print('Error fetching data: $e');
