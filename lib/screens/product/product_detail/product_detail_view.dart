@@ -14,22 +14,24 @@ import '../../../enums/product_related/product_status_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
 import '../../../enums/stakeholders/manufacturer_status.dart';
 import '../../../functions/helper.dart';
+import '../../../objects/invoice_related/rating.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../data/database/database.dart';
 import '../../../widgets/general/status_badge.dart';
 import '../../../widgets/general/gradient_text.dart';
+import '../../../widgets/invoice/rating_card.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
   const ProductDetailScreen({super.key, required this.product});
 
   static Widget newInstance(Product product) => BlocProvider(
-        create: (context) => ProductDetailCubit(product),
-        child: kIsWeb
-            ? ProductDetailWebView.newInstance(product)
-            : ProductDetailScreen(product: product),
-      );
+    create: (context) => ProductDetailCubit(product),
+    child: kIsWeb
+        ? ProductDetailWebView.newInstance(product)
+        : ProductDetailScreen(product: product),
+  );
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -75,7 +77,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Product Image Section
                     Container(
                       height: MediaQuery.of(context).size.height * 0.25,
                       width: double.infinity,
@@ -83,75 +84,75 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         color: colorScheme.surface,
                       ),
                       child: (state.product.imageUrl != null &&
-                              state.product.imageUrl!.isNotEmpty)
+                          state.product.imageUrl!.isNotEmpty)
                           ? Image.network(
-                              state.product.imageUrl!,
-                              fit: BoxFit.contain,
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                }
-                                return Stack(
-                                  children: [
-                                    Center(child: child),
-                                    Positioned.fill(
-                                      child: Container(
-                                        color: Colors.black
-                                            .withValues(alpha: 0.05),
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            color: colorScheme.primary,
-                                            value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                    null
-                                                ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
+                        state.product.imageUrl!,
+                        fit: BoxFit.contain,
+                        loadingBuilder:
+                            (context, child, loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Stack(
+                            children: [
+                              Center(child: child),
+                              Positioned.fill(
+                                child: Container(
+                                  color: Colors.black
+                                      .withValues(alpha: 0.05),
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: colorScheme.primary,
+                                      value: loadingProgress
+                                          .expectedTotalBytes !=
+                                          null
+                                          ? loadingProgress
+                                          .cumulativeBytesLoaded /
+                                          loadingProgress
+                                              .expectedTotalBytes!
+                                          : null,
                                     ),
-                                  ],
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Center(
-                                  child: Icon(
-                                    _getCategoryIcon(state.product.category),
-                                    size: 64,
-                                    color: colorScheme.onSurfaceVariant,
                                   ),
-                                );
-                              },
-                            )
-                          : Center(
-                              child: Icon(
-                                _getCategoryIcon(state.product.category),
-                                size: 64,
-                                color: colorScheme.onSurfaceVariant,
+                                ),
                               ),
+                            ],
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                            child: Icon(
+                              _getCategoryIcon(state.product.category),
+                              size: 64,
+                              color: colorScheme.onSurfaceVariant,
                             ),
+                          );
+                        },
+                      )
+                          : Center(
+                        child: Icon(
+                          _getCategoryIcon(state.product.category),
+                          size: 64,
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
                     ),
 
-                    // Product Info Section
+// Product Info Section
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Basic Information Section
+// Basic Information Section
                           Text(
                             S.of(context).basicInformation,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: colorScheme.primary,
-                                ),
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.primary,
+                            ),
                           ),
                           const SizedBox(height: 16),
                           Row(
@@ -186,22 +187,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             title: S.of(context).manufacturer,
                             value: state.product.manufacturer.manufacturerName,
                           ),
-                          // Thêm thông tin về giá và discount
                           _buildPriceSection(
                             sellingPrice: state.product.sellingPrice,
                             discount: state.product.discount,
                           ),
                           const SizedBox(height: 24),
-                          // Status Information Section
                           Text(
                             S.of(context).overview,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: colorScheme.primary,
-                                ),
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.primary,
+                            ),
                           ),
                           const SizedBox(height: 16),
                           Row(
@@ -246,9 +245,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: colorScheme.primary,
-                                ),
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.primary,
+                            ),
                           ),
 
                           ..._buildProductSpecificDetails(
@@ -261,9 +260,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 .textTheme
                                 .titleLarge
                                 ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: colorScheme.primary,
-                                ),
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.primary,
+                            ),
                           ),
                           const SizedBox(height: 8),
                           if (state.product.enDescription != null &&
@@ -279,15 +278,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         .textTheme
                                         .titleMedium
                                         ?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: colorScheme.onSurfaceVariant,
-                                        ),
+                                      fontWeight: FontWeight.w600,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     state.product.enDescription!,
                                     style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                    Theme.of(context).textTheme.bodyMedium,
                                   ),
                                 ],
                               ),
@@ -307,20 +306,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         .textTheme
                                         .titleMedium
                                         ?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: colorScheme.onSurfaceVariant,
-                                        ),
+                                      fontWeight: FontWeight.w600,
+                                      color: colorScheme.onSurfaceVariant,
+                                    ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     state.product.viDescription!,
                                     style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                    Theme.of(context).textTheme.bodyMedium,
                                   ),
                                 ],
                               ),
                             ),
                           const SizedBox(height: 16),
+
+                          // Ratings section (mobile)
+                          _buildRatingSection(state),
 
                           // Add padding at bottom to prevent content from being hidden behind buttons
                           const SizedBox(
@@ -353,26 +355,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     listener: (context, state) {
                       if (state.processState == ProcessState.success) {
                         showDialog(
-                            context: context,
-                            builder: (context) => InformationDialog(
-                                  title: state.dialogName
-                                      .getLocalizedName(context),
-                                  content: state.notifyMessage
-                                      .getLocalizedMessage(context),
-                                  onPressed: () {},
-                                ));
+                          context: context,
+                          builder: (context) => InformationDialog(
+                            title: state.dialogName.getLocalizedName(context),
+                            content: state.notifyMessage.getLocalizedMessage(context),
+                            onPressed: () {},
+                          ));
                       } else if (state.processState == ProcessState.failure) {
                         showDialog(
-                            context: context,
-                            builder: (context) => InformationDialog(
-                                  title: state.dialogName
-                                      .getLocalizedName(context),
-                                  content: state.notifyMessage
-                                      .getLocalizedMessage(context),
-                                  onPressed: () {
-                                    cubit.toIdle();
-                                  },
-                                ));
+                          context: context,
+                          builder: (context) => InformationDialog(
+                            title: state.dialogName.getLocalizedName(context),
+                            content: state.notifyMessage.getLocalizedMessage(context),
+                            onPressed: () {
+                              cubit.toIdle();
+                            },
+                          ));
                       }
                     },
                     builder: (context, state) => FutureBuilder<bool>(
@@ -384,19 +382,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               Expanded(
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
-                                    // ProcessState processState =
-                                    //     await Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         EditProductScreen.newInstance(
-                                    //             state.product),
-                                    //   ),
-                                    // );
-                                    //
-                                    // if (processState == ProcessState.success) {
-                                    //   cubit.updateProduct();
-                                    // }
+// ProcessState processState =
+//     await Navigator.push(
+//   context,
+//   MaterialPageRoute(
+//     builder: (context) =>
+//         EditProductScreen.newInstance(
+//             state.product),
+//   ),
+// );
+//
+// if (processState == ProcessState.success) {
+//   cubit.updateProduct();
+// }
                                   },
                                   icon: Icon(Icons.edit,
                                       color: Theme.of(context)
@@ -411,15 +409,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
-                                        Theme.of(context).colorScheme.primary,
+                                    Theme.of(context).colorScheme.primary,
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 12),
                                   ),
                                 ),
                               ),
-                              // Only show enable/disable button if manufacturer is active
-                              // If manufacturer is inactive, product will be displayed as discontinued
-                              // and we don't want to allow changing its status
+// Only show enable/disable button if manufacturer is active
+// If manufacturer is inactive, product will be displayed as discontinued
+// and we don't want to allow changing its status
                               if (state.product.manufacturer.status !=
                                   ManufacturerStatus.inactive) ...[
                                 const SizedBox(width: 16),
@@ -431,25 +429,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     },
                                     icon: Icon(
                                       state.product.status ==
-                                              ProductStatusEnum.discontinued
+                                          ProductStatusEnum.discontinued
                                           ? Icons.refresh
                                           : Icons.cancel,
                                       color: Colors.white,
                                     ),
                                     label: Text(
                                       state.product.status ==
-                                              ProductStatusEnum.discontinued
+                                          ProductStatusEnum.discontinued
                                           ? S.of(context).reactivate
                                           : S.of(context).discontinue,
                                       style:
-                                          const TextStyle(color: Colors.white),
+                                      const TextStyle(color: Colors.white),
                                     ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: state.product.status ==
-                                              ProductStatusEnum.discontinued
+                                          ProductStatusEnum.discontinued
                                           ? Theme.of(context)
-                                              .colorScheme
-                                              .tertiary
+                                          .colorScheme
+                                          .tertiary
                                           : Theme.of(context).colorScheme.error,
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 12),
@@ -529,7 +527,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       BuildContext context, Product product, Map<String, String> specs) {
     return specs.entries
         .map((entry) => _buildSpecificationRow(
-            _getLocalizedSpecKey(context, entry.key), entry.value))
+        _getLocalizedSpecKey(context, entry.key), entry.value))
         .toList();
   }
 
@@ -584,49 +582,49 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               color: colorScheme.onSurface,
             ),
           ),
-          if (discount > 0) ...[
-            Text(
-              ': ${Helper.toCurrencyFormat(sellingPrice)}',
-              style: TextStyle(
-                color: colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w400,
-                decoration: TextDecoration.lineThrough,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              Helper.toCurrencyFormat(discountedPrice),
-              style: TextStyle(
-                color: colorScheme.tertiary,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: colorScheme.error.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                '-${discount.toInt()}%',
-                style: TextStyle(
-                  color: colorScheme.error,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ] else
-            Text(
-              Helper.toCurrencyFormat(sellingPrice),
-              style: TextStyle(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+          // if (discount > 0) ...[
+          //   Text(
+          //     ': ${Helper.toCurrencyFormat(sellingPrice)}',
+          //     style: TextStyle(
+          //       color: colorScheme.onSurfaceVariant,
+          //       fontWeight: FontWeight.w400,
+          //       decoration: TextDecoration.lineThrough,
+          //       fontSize: 14,
+          //     ),
+          //   ),
+          //   const SizedBox(width: 8),
+          //   Text(
+          //     Helper.toCurrencyFormat(discountedPrice),
+          //     style: TextStyle(
+          //       color: colorScheme.tertiary,
+          //       fontWeight: FontWeight.bold,
+          //       fontSize: 16,
+          //     ),
+          //   ),
+          //   const SizedBox(width: 8),
+          //   Container(
+          //     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          //     decoration: BoxDecoration(
+          //       color: colorScheme.error.withValues(alpha: 0.1),
+          //       borderRadius: BorderRadius.circular(4),
+          //     ),
+          //     child: Text(
+          //       '-${discount.toInt()}%',
+          //       style: TextStyle(
+          //         color: colorScheme.error,
+          //         fontSize: 12,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ),
+          // ] else
+          //   Text(
+          //     Helper.toCurrencyFormat(sellingPrice),
+          //     style: TextStyle(
+          //       color: colorScheme.onSurface,
+          //       fontWeight: FontWeight.w400,
+          //     ),
+          //   ),
         ],
       ),
     );
@@ -694,5 +692,108 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       default:
         return key;
     }
+  }
+
+// Ratings section for mobile product detail
+  Widget _buildRatingSection(ProductDetailState state) {
+    final ratings = state.ratings;
+    final hasRatings = ratings.isNotEmpty;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Ratings & Reviews',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // Average summary (no highlight)
+        Row(
+          children: [
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    (state.averageRating > 0) ? state.averageRating.toStringAsFixed(1) : '0.0',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    (state.totalRatingsCount > 0) ? '${state.totalRatingsCount} reviews' : 'No ratings yet',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.75),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 12),
+
+        // Individual rating cards
+        if (!hasRatings)
+          const SizedBox()
+        else
+          Column(
+            children: [
+              for (final r in ratings) ...[
+                if (kDebugMode) Text('DEBUG: rating ${r.ratingID} reply=${r.reply != null}'),
+                RatingCard(
+                  rating: r,
+                  onPostReply: (ratingId, comment, {productId}) async {
+                    // delegate to ProductDetailCubit and then pop to signal parent
+                    if (kDebugMode) print('ProductDetailScreen: posting reply for $ratingId');
+                    try {
+                      await cubit.replyToRating(ratingId: ratingId, comment: comment, productId: r.productID);
+                      if (kDebugMode) print('ProductDetailScreen: reply posted, popping with success (scheduled)');
+                      if (context.mounted) {
+                        // schedule the pop to avoid navigator locked assertion during rebuild
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (context.mounted) Navigator.of(context).pop(ProcessState.success);
+                        });
+                      }
+                    } catch (e) {
+                      if (kDebugMode) print('ProductDetailScreen: error posting reply: $e');
+                      rethrow;
+                    }
+                  },
+                ),
+              ],
+            ],
+          ),
+        // Show more button
+        if (state.hasMoreRatings)
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () async {
+                  await cubit.loadMoreRatings();
+                },
+                child: const Text('Show more'),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }

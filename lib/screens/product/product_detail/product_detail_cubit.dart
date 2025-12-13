@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/database/database.dart';
@@ -10,17 +11,25 @@ import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
 import '../../../enums/product_related/product_status_enum.dart';
+import '../../../objects/invoice_related/rating.dart';
+import '../../../objects/invoice_related/reply.dart';
 import '../../../objects/product_related/cpu_related/cpu.dart';
 import '../../../objects/product_related/drive_related/drive.dart';
 import '../../../objects/product_related/gpu_related/gpu.dart';
 import '../../../objects/product_related/mainboard_related/mainboard.dart';
 import '../../../objects/product_related/psu_related/psu.dart';
 import '../../../objects/product_related/ram_related/ram.dart';
+import '../../invoice/sales/rating_reply/rating_reply_cubit.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
+  final Firebase _firebase = Firebase();
+  DocumentSnapshot? _lastRatingsDoc;
+
   ProductDetailCubit(Product product)
       : super(ProductDetailState(product: product)) {
     _initializeTechnicalSpecs();
+    loadRatingsPage();
+    refreshAverage();
   }
 
   void _initializeTechnicalSpecs() {
@@ -158,5 +167,85 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
   void toIdle() {
     emit(state.copyWith(processState: ProcessState.idle));
+  }
+
+  Future<void> loadRatingsPage({int limit = 5}) async {
+    try {
+      final productId = state.product.productID ?? '';
+      if (productId.isEmpty) return;
+      try {
+        final page = await _firebase.getRatingsPageByProduct(productId, limit: limit);
+        _lastRatingsDoc = page.lastDocument;
+        emit(state.copyWith(ratings: page.ratings, hasMoreRatings: page.hasMore));
+      } catch (e) {
+        // Server-side paging may fail due to missing index; fallback to client-side full fetch then local pagination
+        if (kDebugMode) print('Falling back to client-side fetch for ratings: $e');
+        final all = await _firebase.getRatingsByProductWithUsername(productId);
+        final initial = all.take(limit).toList();
+        final hasMore = all.length > initial.length;
+        // note: cannot set a lastDocument for client-side fallback; we'll store current offset
+        _lastRatingsDoc = null;
+        emit(state.copyWith(ratings: initial, hasMoreRatings: hasMore));
+      }
+    } catch (e) {
+      if (kDebugMode) print('Error loading ratings page: $e');
+    }
+  }
+
+  Future<void> refreshAverage() async {
+    try {
+      final productId = state.product.productID ?? '';
+      if (productId.isEmpty) return;
+      final result = await _firebase.getAverageRatingForProduct(productId);
+      final avg = (result['average'] as num?)?.toDouble() ?? 0.0;
+      final count = (result['count'] as int?) ?? (result['count'] as num?)?.toInt() ?? 0;
+      emit(state.copyWith(averageRating: avg, totalRatingsCount: count));
+    } catch (e) {
+      if (kDebugMode) print('Error refreshing average rating: $e');
+    }
+  }
+
+  Future<void> loadMoreRatings({int limit = 5}) async {
+    try {
+      final productId = state.product.productID ?? '';
+      if (productId.isEmpty) return;
+
+      // Try server-side paged fetch if we have a last doc; otherwise use client-side continuation
+      if (_lastRatingsDoc != null) {
+        final page = await _firebase.getRatingsPageByProduct(productId, startAfter: _lastRatingsDoc, limit: limit);
+        _lastRatingsDoc = page.lastDocument;
+        final combined = List<Rating>.from(state.ratings)..addAll(page.ratings);
+        emit(state.copyWith(ratings: combined, hasMoreRatings: page.hasMore));
+        return;
+      }
+
+      // Fallback client-side: fetch all and append next slice
+      final all = await _firebase.getRatingsByProductWithUsername(productId);
+      final current = state.ratings.length;
+      if (current >= all.length) {
+        emit(state.copyWith(hasMoreRatings: false));
+        return;
+      }
+      final next = all.skip(current).take(limit).toList();
+      final combined = List<Rating>.from(state.ratings)..addAll(next);
+      final hasMore = combined.length < all.length;
+      emit(state.copyWith(ratings: combined, hasMoreRatings: hasMore));
+    } catch (e) {
+      if (kDebugMode) print('Error loading more ratings: $e');
+    }
+  }
+
+  /// Post a reply to a rating from the product detail screen
+  Future<void> replyToRating({required String ratingId, required String comment, String? productId}) async {
+    try {
+      final reply = Reply(id: DateTime.now().millisecondsSinceEpoch.toString(), comment: comment, timestamp: DateTime.now());
+      await Database().replyToRating(ratingId: ratingId, reply: reply, productId: productId);
+      // refresh ratings shown in product detail
+      await loadRatingsPage();
+      await refreshAverage();
+    } catch (e) {
+      if (kDebugMode) print('ProductDetailCubit.replyToRating error: $e');
+      rethrow;
+    }
   }
 }

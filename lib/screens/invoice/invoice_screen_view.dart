@@ -1,3 +1,4 @@
+import 'package:gizmoglobe_client/screens/invoice/sales/rating_reply/rating_reply_view.dart';
 import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,17 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               FocusScope.of(context).unfocus();
             },
             child: Scaffold(
+              floatingActionButton: state.selectedTabIndex == 0
+                  ? FloatingActionButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => RatingReplyView.newInstance()),
+                        );
+                      },
+                      tooltip: 'Open ratings',
+                      child: const Icon(Icons.rate_review),
+                    )
+                  : null,
               appBar: AppBar(
                 toolbarHeight: 0,
                 backgroundColor: Colors.transparent,

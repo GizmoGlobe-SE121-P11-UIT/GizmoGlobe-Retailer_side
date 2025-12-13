@@ -4,6 +4,8 @@ import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
 import 'package:gizmoglobe_client/enums/processing/process_state_enum.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 
+import '../../../objects/invoice_related/rating.dart';
+
 
 class ProductDetailState extends Equatable {
   final Product product;
@@ -12,16 +14,35 @@ class ProductDetailState extends Equatable {
   final DialogName dialogName;
   final NotifyMessage notifyMessage;
 
+  final List<Rating> ratings;
+  final double averageRating;
+  final int totalRatingsCount;
+  final bool hasMoreRatings;
+
   const ProductDetailState({
     required this.product,
     this.technicalSpecs = const {},
     this.processState = ProcessState.idle,
     this.dialogName = DialogName.empty,
     this.notifyMessage = NotifyMessage.empty,
+    this.ratings = const [],
+    this.averageRating = 0.0,
+    this.totalRatingsCount = 0,
+    this.hasMoreRatings = false,
   });
 
   @override
-  List<Object?> get props => [product, technicalSpecs, processState, dialogName, notifyMessage];
+  List<Object?> get props => [
+    product,
+    technicalSpecs,
+    processState,
+    dialogName,
+    notifyMessage,
+    ratings,
+    averageRating,
+    totalRatingsCount,
+    hasMoreRatings,
+  ];
 
   ProductDetailState copyWith({
     Product? product,
@@ -29,6 +50,10 @@ class ProductDetailState extends Equatable {
     ProcessState? processState,
     DialogName? dialogName,
     NotifyMessage? notifyMessage,
+    List<Rating>? ratings,
+    double? averageRating,
+    int? totalRatingsCount,
+    bool? hasMoreRatings,
   }) {
     return ProductDetailState(
       product: product ?? this.product,
@@ -36,6 +61,10 @@ class ProductDetailState extends Equatable {
       processState: processState ?? this.processState,
       dialogName: dialogName ?? this.dialogName,
       notifyMessage: notifyMessage ?? this.notifyMessage,
+      ratings: ratings ?? this.ratings,
+      averageRating: averageRating ?? this.averageRating,
+      totalRatingsCount: totalRatingsCount ?? this.totalRatingsCount,
+      hasMoreRatings: hasMoreRatings ?? this.hasMoreRatings,
     );
   }
 }

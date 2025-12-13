@@ -52,6 +52,7 @@ class PSU extends Product {
     List<Connector>? connectors,
     ProductStatusEnum? status,
     String? imageUrl,
+    double? rating,
 
     String? enDescription,
     String? viDescription,

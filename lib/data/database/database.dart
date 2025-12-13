@@ -12,10 +12,18 @@ import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import '../../objects/address_related/address.dart';
 import '../../objects/address_related/province.dart';
 import '../../objects/invoice_related/sales_invoice.dart';
+import '../../objects/product_related/cpu_related/cpu.dart';
+import '../../objects/product_related/drive_related/drive.dart';
+import '../../objects/product_related/gpu_related/gpu.dart';
+import '../../objects/product_related/mainboard_related/mainboard.dart';
 import '../../objects/product_related/product_factory.dart';
+import '../../objects/product_related/psu_related/psu.dart';
+import '../../objects/product_related/ram_related/ram.dart';
 import '../firebase/firebase.dart';
 import '../../objects/invoice_related/warranty_invoice.dart';
 import '../../objects/invoice_related/incoming_invoice.dart';
+import '../../objects/invoice_related/rating.dart';
+import '../../objects/invoice_related/reply.dart';
 
 class Database {
   static final Database _database = Database._internal();
@@ -34,6 +42,14 @@ class Database {
   List<WarrantyInvoice> warrantyInvoiceList = [];
   List<IncomingInvoice> incomingInvoiceList = [];
   List<Voucher> voucherList = [];
+  List<Rating> ratingList = [];
+
+  List<RAM> ramList = [];
+  List<CPU> cpuList = [];
+  List<GPU> gpuList = [];
+  List<PSU> psuList = [];
+  List<Mainboard> mainboardList = [];
+  List<Drive> driveList = [];
 
   final List<Map<String, dynamic>> voucherDataList = [
     {
@@ -128,9 +144,81 @@ class Database {
 
   Database._internal();
 
+  Future<void> getRating() async {
+    ratingList = await Firebase().getRatings();
+    await calculateProductRatings();
+  }
+
+  Future<void> calculateProductRatings({bool refreshRatings = false}) async {
+    try {
+      if (productList.isEmpty) return;
+
+      if (refreshRatings || ratingList.isEmpty) {
+        ratingList = await Firebase().getRatings();
+      }
+
+      final Map<String, List<double>> ratingsMap = {};
+
+      for (final r in ratingList) {
+        final String? pid = (r.productID.isNotEmpty)
+            ? r.productID
+            : null;
+        if (pid == null) continue;
+
+        double value;
+        try {
+          final dynamic raw = r.rating;
+          if (raw is num) {
+            value = raw.toDouble();
+          } else {
+            value = double.tryParse(raw.toString()) ?? 0.0;
+          }
+        } catch (_) {
+          value = 0.0;
+        }
+
+        ratingsMap.putIfAbsent(pid, () => []).add(value);
+      }
+
+      for (final product in productList) {
+        final pid = product.productID;
+        if (pid == null || !ratingsMap.containsKey(pid)) {
+          product.rating = null;
+          continue;
+        }
+        final List<double> values = ratingsMap[pid]!;
+        if (values.isEmpty) {
+          product.rating = null;
+          continue;
+        }
+        final double sum = values.fold(0.0, (a, b) => a + b);
+        final double avg = sum / values.length;
+        final double rounded = (avg * 10).roundToDouble() / 10.0;
+        product.setRating(rounded);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error calculating product ratings: $e');
+      }
+      rethrow;
+    }
+  }
+
+  /// Reply to a rating and refresh the local product rating cache if productId provided
+  Future<void> replyToRating({required String ratingId, required Reply reply, String? productId}) async {
+    try {
+      await Firebase().replyToRating(ratingId: ratingId, reply: reply);
+      if (productId != null && productId.isNotEmpty) {
+        await Firebase().getRatingsPageByProduct(productId);
+      }
+    } catch (e) {
+      if (kDebugMode) print('Error replying to rating $ratingId: $e');
+      rethrow;
+    }
+  }
+
   Future<void> initialize() async {
     provinceList = await fetchProvinces();
-
     try {
       await fetchDataFromFirestore();
     } catch (e) {
@@ -229,6 +317,13 @@ class Database {
 
       productList = products;
 
+      ramList = products.whereType<RAM>().toList();
+      cpuList = products.whereType<CPU>().toList();
+      gpuList = products.whereType<GPU>().toList();
+      psuList = products.whereType<PSU>().toList();
+      mainboardList = products.whereType<Mainboard>().toList();
+      driveList = products.whereType<Drive>().toList();
+
       await fetchAddress();
 
       if (kDebugMode) {
@@ -237,6 +332,7 @@ class Database {
 
       customerList = await Firebase().getCustomers();
       voucherList = await Firebase().getVouchers();
+      getRating();
     } catch (e) {
       if (kDebugMode) {
         print('Error fetching data: $e');

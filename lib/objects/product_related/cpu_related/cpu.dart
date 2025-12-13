@@ -60,6 +60,7 @@ class CPU extends Product {
     double? turboClock,
     ProductStatusEnum? status,
     String? imageUrl,
+    double? rating,
 
     String? enDescription,
     String? viDescription,

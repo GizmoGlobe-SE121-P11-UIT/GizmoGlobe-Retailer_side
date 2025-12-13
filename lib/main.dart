@@ -34,6 +34,8 @@ import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart' as FirebaseService;
 
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -194,6 +196,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => DrawerCubit()),
             ],
             child: MaterialApp(
+              navigatorKey: rootNavigatorKey,
               title: 'GizmoGlobe',
               themeMode: themeProvider.themeMode,
               locale: localeProvider.locale,

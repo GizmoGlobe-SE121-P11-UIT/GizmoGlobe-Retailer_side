@@ -65,7 +65,7 @@ dependencies:
   web: ^1.1.1
   path_provider: ^2.1.4
   google_fonts: ^6.3.2
-
+  video_player: ^2.5.1
 
 dev_dependencies:
   flutter_test:

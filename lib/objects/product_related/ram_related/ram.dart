@@ -53,6 +53,7 @@ class RAM extends Product {
     int? capacityPerStickGb,
     ProductStatusEnum? status,
     String? imageUrl,
+    double? rating,
 
     String? enDescription,
     String? viDescription,

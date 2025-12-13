@@ -60,6 +60,7 @@ class Drive extends Product {
     DriveType? driveType,
     ProductStatusEnum? status,
     String? imageUrl,
+    double? rating,
 
     String? enDescription,
     String? viDescription,

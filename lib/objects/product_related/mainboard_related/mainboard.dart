@@ -64,6 +64,7 @@ class Mainboard extends Product {
     List<IOPort>? ioPorts,
     ProductStatusEnum? status,
     String? imageUrl,
+    double? rating,
 
     String? enDescription,
     String? viDescription,

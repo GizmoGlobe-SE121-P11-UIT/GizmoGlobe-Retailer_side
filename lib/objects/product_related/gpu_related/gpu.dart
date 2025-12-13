@@ -58,6 +58,7 @@ class GPU extends Product {
     List<IOPort>? ports,
     ProductStatusEnum? status,
     String? imageUrl,
+    double? rating,
 
     String? enDescription,
     String? viDescription,

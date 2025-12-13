@@ -17,6 +17,7 @@ abstract class Product {
   Manufacturer manufacturer;
   ProductStatusEnum status;
   String? imageUrl;
+  double? rating;
 
   String? enDescription;
   String? viDescription;
@@ -34,6 +35,7 @@ abstract class Product {
     required this.stock,
     required this.status,
     this.imageUrl,
+    this.rating,
 
     this.enDescription,
     this.viDescription,
@@ -60,6 +62,7 @@ abstract class Product {
     int? stock,
     ProductStatusEnum? status,
     String? imageUrl,
+    double? rating,
 
     String? enDescription,
     String? viDescription,
@@ -75,8 +78,13 @@ abstract class Product {
     this.manufacturer = manufacturer ?? this.manufacturer;
     this.status = status ?? this.status;
     this.imageUrl = imageUrl ?? this.imageUrl;
+    this.rating = rating ?? this.rating;
 
     this.enDescription = enDescription ?? this.enDescription;
     this.viDescription = viDescription ?? this.viDescription;
+  }
+
+  void setRating(double rating) {
+    this.rating = rating;
   }
 }
