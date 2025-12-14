@@ -1,4 +1,5 @@
 import 'package:gizmoglobe_client/screens/invoice/sales/rating_reply/rating_reply_view.dart';
+import 'package:gizmoglobe_client/screens/invoice/sales/rating_reply/rating_reply_webview.dart';
 import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -79,9 +80,19 @@ class _InvoiceScreenState extends State<InvoiceScreen>
               floatingActionButton: state.selectedTabIndex == 0
                   ? FloatingActionButton(
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => RatingReplyView.newInstance()),
-                        );
+                        if (kIsWeb) {
+                          // Show modal on web
+                          showDialog(
+                            context: context,
+                            builder: (_) => RatingReplyWebView.newInstance(),
+                          );
+                        } else {
+                          // Navigate to screen on mobile
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => RatingReplyView.newInstance()),
+                          );
+                        }
                       },
                       tooltip: 'Open ratings',
                       child: const Icon(Icons.rate_review),

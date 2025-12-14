@@ -264,6 +264,14 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                               ],
                             ),
                           ),
+                          // Payment Method Row
+                          _buildInfoRow(
+                            S.of(context).paymentMethod,
+                            state.invoice.paymentMethod.getLocalizedDescription(
+                              Localizations.localeOf(context).languageCode ==
+                                  'vi',
+                            ),
+                          ),
                           const SizedBox(height: 16),
                           _buildTotalPriceRow(
                             S.of(context).totalPrice,

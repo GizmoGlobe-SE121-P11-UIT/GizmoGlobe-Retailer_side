@@ -42,6 +42,7 @@ class AppLocalizations {
   String get quantity => _getTranslation('quantity');
   String get totalPrice => _getTranslation('totalPrice');
   String get paymentStatus => _getTranslation('paymentStatus');
+  String get paymentMethod => _getTranslation('paymentMethod');
   String get createInvoice => _getTranslation('createInvoice');
   String get cancel => _getTranslation('cancel');
   String get add => _getTranslation('add');
@@ -275,6 +276,17 @@ class AppLocalizations {
   String get upcoming => _getTranslation('upcoming');
   String get noVouchersAvailable => _getTranslation('noVouchersAvailable');
   String get filter => _getTranslation('filter');
+  // Rating and Reply related
+  String get reply => _getTranslation('reply');
+  String get postReply => _getTranslation('postReply');
+  String get replyPostedSuccessfully =>
+      _getTranslation('replyPostedSuccessfully');
+  String get loadMore => _getTranslation('loadMore');
+  String get noItems => _getTranslation('noItems');
+  String get newRatings => _getTranslation('newRatings');
+  String get repliedRatings => _getTranslation('repliedRatings');
+  String get ratingsAndReplies => _getTranslation('ratingsAndReplies');
+  String get writeAReply => _getTranslation('writeAReply');
   String get from => _getTranslation('from');
   String get to => _getTranslation('to');
   String get min => _getTranslation('min');
@@ -558,13 +570,15 @@ class AppLocalizations {
   String get port => _getTranslation('port');
   String get thisFieldIsRequired => _getTranslation('thisFieldIsRequired');
   String get ramBusSpeed => _getTranslation('ramBusSpeed');
-  String get maximumSingleRamCapacity => _getTranslation('maximumSingleRamCapacity');
+  String get maximumSingleRamCapacity =>
+      _getTranslation('maximumSingleRamCapacity');
   String get capacity => _getTranslation('capacity');
   String get readSpeed => _getTranslation('readSpeed');
   String get writeSpeed => _getTranslation('writeSpeed');
   String get select => _getTranslation('select');
   String get year => _getTranslation('year');
-  String get generateBusinessReport => _getTranslation('generateBusinessReport');
+  String get generateBusinessReport =>
+      _getTranslation('generateBusinessReport');
   String get noData => _getTranslation('noData');
 
   // Methods with parameters

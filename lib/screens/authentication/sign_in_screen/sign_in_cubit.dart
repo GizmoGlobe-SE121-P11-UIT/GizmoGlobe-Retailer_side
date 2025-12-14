@@ -19,24 +19,30 @@ class SignInCubit extends Cubit<SignInState> {
   SignInCubit() : super(const SignInState());
 
   void emailChanged(String email) {
-    emit(state.copyWith(
-      email: email,
-      processState: ProcessState.idle, // Reset state
-      message: NotifyMessage.empty, // Reset message
-    ));
+    if (!isClosed) {
+      emit(state.copyWith(
+        email: email,
+        processState: ProcessState.idle, // Reset state
+        message: NotifyMessage.empty, // Reset message
+      ));
+    }
   }
 
   void passwordChanged(String password) {
-    emit(state.copyWith(
-      password: password,
-      processState: ProcessState.idle, // Reset state
-      message: NotifyMessage.empty, // Reset message
-    ));
+    if (!isClosed) {
+      emit(state.copyWith(
+        password: password,
+        processState: ProcessState.idle, // Reset state
+        message: NotifyMessage.empty, // Reset message
+      ));
+    }
   }
 
   Future<void> signInWithEmailPassword(BuildContext context) async {
     try {
-      emit(state.copyWith(processState: ProcessState.loading));
+      if (!isClosed) {
+        emit(state.copyWith(processState: ProcessState.loading));
+      }
 
       final UserCredential userCredential =
           await _auth.signInWithEmailAndPassword(
@@ -44,22 +50,28 @@ class SignInCubit extends Cubit<SignInState> {
 
       if (userCredential.user != null) {
         if (!userCredential.user!.emailVerified) {
-          emit(state.copyWith(
-              processState: ProcessState.failure,
-              message: NotifyMessage.msg10,
-              dialogName: DialogName.failure));
+          if (!isClosed) {
+            emit(state.copyWith(
+                processState: ProcessState.failure,
+                message: NotifyMessage.msg10,
+                dialogName: DialogName.failure));
+          }
         } else {
-          emit(state.copyWith(
-              processState: ProcessState.success,
-              message: NotifyMessage.msg1,
-              dialogName: DialogName.success));
+          if (!isClosed) {
+            emit(state.copyWith(
+                processState: ProcessState.success,
+                message: NotifyMessage.msg1,
+                dialogName: DialogName.success));
+          }
         }
       }
     } catch (error) {
-      emit( state.copyWith(
-          processState: ProcessState.failure,
-          message: NotifyMessage.msg2,
-          dialogName: DialogName.failure));
+      if (!isClosed) {
+        emit(state.copyWith(
+            processState: ProcessState.failure,
+            message: NotifyMessage.msg2,
+            dialogName: DialogName.failure));
+      }
     }
   }
 }

@@ -1,8 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
+import 'package:gizmoglobe_client/objects/invoice_related/sales_filter_argument.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_add/sales_add_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_detail/sales_detail_view.dart';
+import 'package:gizmoglobe_client/screens/invoice/sales/filter/sales_filter_view.dart';
+import 'package:gizmoglobe_client/screens/invoice/sales/filter/sales_filter_webview.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/status_badge.dart';
@@ -64,6 +68,14 @@ class _SalesScreenState extends State<SalesScreen> {
                     const SizedBox(width: 8),
                     GradientIconButton(
                       icon: Icons.filter_list,
+                      iconSize: 32,
+                      onPressed: () {
+                        _showFilterDialog(context);
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    GradientIconButton(
+                      icon: Icons.sort,
                       iconSize: 32,
                       onPressed: () {
                         _showSortOptions(context);
@@ -209,13 +221,21 @@ class _SalesScreenState extends State<SalesScreen> {
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(
                                           color: state.selectedIndex == index
-                                              ? Theme.of(context).colorScheme.primary
-                                              : Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
-                                          width: state.selectedIndex == index ? 2 : 1,
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .outline
+                                                  .withValues(alpha: 0.2),
+                                          width: state.selectedIndex == index
+                                              ? 2
+                                              : 1,
                                         ),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black.withValues(alpha: 0.08),
+                                            color: Colors.black
+                                                .withValues(alpha: 0.08),
                                             blurRadius: 8,
                                             offset: const Offset(0, 2),
                                           ),
@@ -224,7 +244,8 @@ class _SalesScreenState extends State<SalesScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(16),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             // Row 1: Invoice ID
                                             Text(
@@ -232,7 +253,9 @@ class _SalesScreenState extends State<SalesScreen> {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
-                                                color: Theme.of(context).colorScheme.onSurface,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
                                               ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -241,11 +264,14 @@ class _SalesScreenState extends State<SalesScreen> {
 
                                             // Row 2: Price
                                             Text(
-                                              Helper.toCurrencyFormat(invoice.totalPrice),
+                                              Helper.toCurrencyFormat(
+                                                  invoice.totalPrice),
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20,
-                                                color: Theme.of(context).colorScheme.tertiary,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .tertiary,
                                               ),
                                             ),
                                             const SizedBox(height: 12),
@@ -253,16 +279,21 @@ class _SalesScreenState extends State<SalesScreen> {
                                             // Row 3: Sales Status and Payment Status
                                             Row(
                                               children: [
-                                                StatusBadge(status: invoice.salesStatus),
+                                                StatusBadge(
+                                                    status:
+                                                        invoice.salesStatus),
                                                 const SizedBox(width: 8),
-                                                StatusBadge(status: invoice.paymentStatus),
+                                                StatusBadge(
+                                                    status:
+                                                        invoice.paymentStatus),
                                               ],
                                             ),
                                             const SizedBox(height: 12),
 
                                             // Row 4: Date
                                             Text(
-                                              DateFormat('dd/MM/yyyy').format(invoice.date),
+                                              DateFormat('dd/MM/yyyy')
+                                                  .format(invoice.date),
                                               style: TextStyle(
                                                 fontSize: 13,
                                                 color: Theme.of(context)
@@ -328,7 +359,7 @@ class _SalesScreenState extends State<SalesScreen> {
                     child: Row(
                       children: [
                         Icon(
-                          Icons.filter_list,
+                          Icons.sort,
                           color: Theme.of(dialogContext).colorScheme.primary,
                         ),
                         const SizedBox(width: 8),
@@ -537,4 +568,30 @@ class _SalesScreenState extends State<SalesScreen> {
   //     );
   //   }
   // }
+
+  Future<void> _showFilterDialog(BuildContext context) async {
+    final SalesFilterArgument? result;
+
+    if (kIsWeb) {
+      result = await showDialog(
+        context: context,
+        builder: (context) => SalesFilterWebView.newInstance(
+          arguments: cubit.state.filterArgument,
+        ),
+      );
+    } else {
+      result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SalesFilterView.newInstance(
+            arguments: cubit.state.filterArgument,
+          ),
+        ),
+      );
+    }
+
+    if (result != null && mounted) {
+      cubit.updateFilterArgument(result);
+    }
+  }
 }

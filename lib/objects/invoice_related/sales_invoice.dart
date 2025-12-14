@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gizmoglobe_client/enums/invoice_related/payment_method.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
 import 'package:gizmoglobe_client/objects/address_related/address.dart';
@@ -14,6 +15,7 @@ class SalesInvoice {
   final DateTime date;
   final PaymentStatus paymentStatus;
   final SalesStatus salesStatus;
+  final PaymentMethod paymentMethod;
   final double totalPrice;
   final double loyaltyPoints;
   List<SalesInvoiceDetail> details;
@@ -26,6 +28,7 @@ class SalesInvoice {
     required this.date,
     required this.paymentStatus,
     required this.salesStatus,
+    required this.paymentMethod,
     required this.totalPrice,
     required this.loyaltyPoints,
     this.details = const [],
@@ -39,6 +42,7 @@ class SalesInvoice {
     DateTime? date,
     PaymentStatus? paymentStatus,
     SalesStatus? salesStatus,
+    PaymentMethod? paymentMethod,
     double? totalPrice,
     double? loyaltyPoints,
     List<SalesInvoiceDetail>? details,
@@ -51,6 +55,7 @@ class SalesInvoice {
       date: date ?? this.date,
       paymentStatus: paymentStatus ?? this.paymentStatus,
       salesStatus: salesStatus ?? this.salesStatus,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
       totalPrice: totalPrice ?? this.totalPrice,
       loyaltyPoints: loyaltyPoints ?? this.loyaltyPoints,
       details: details ?? this.details,
@@ -66,6 +71,7 @@ class SalesInvoice {
       'date': Timestamp.fromDate(date),
       'paymentStatus': paymentStatus.getName(),
       'salesStatus': salesStatus.getName(),
+      'paymentMethod': paymentMethod.getName(),
       'totalPrice': totalPrice,
       'loyaltyPoints': loyaltyPoints,
     };
@@ -104,6 +110,9 @@ class SalesInvoice {
       salesStatus: SalesStatus.values.firstWhere(
         (e) => e.getName() == map['salesStatus'],
         orElse: () => SalesStatus.pending,
+      ),
+      paymentMethod: PaymentMethodExtension.fromName(
+        map['paymentMethod'] as String? ?? 'cod',
       ),
       totalPrice: (map['totalPrice'] as num?)?.toDouble() ?? 0.0,
       loyaltyPoints: (map['loyaltyPoints'] as num?)?.toDouble() ?? 0.0,

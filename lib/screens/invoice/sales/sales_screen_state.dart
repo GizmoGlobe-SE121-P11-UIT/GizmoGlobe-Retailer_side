@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
+import 'package:gizmoglobe_client/objects/invoice_related/sales_filter_argument.dart';
 
 class SalesScreenState extends Equatable {
   final List<SalesInvoice> invoices;
@@ -8,6 +9,7 @@ class SalesScreenState extends Equatable {
   final int? selectedIndex;
   final String searchQuery;
   final String userRole;
+  final SalesFilterArgument filterArgument;
 
   const SalesScreenState({
     this.invoices = const [],
@@ -16,6 +18,7 @@ class SalesScreenState extends Equatable {
     this.selectedIndex,
     this.searchQuery = '',
     this.userRole = '',
+    this.filterArgument = const SalesFilterArgument(),
   });
 
   SalesScreenState copyWith({
@@ -25,6 +28,7 @@ class SalesScreenState extends Equatable {
     int? selectedIndex,
     String? searchQuery,
     String? userRole,
+    SalesFilterArgument? filterArgument,
   }) {
     return SalesScreenState(
       invoices: invoices ?? List.from(this.invoices),
@@ -33,9 +37,18 @@ class SalesScreenState extends Equatable {
       selectedIndex: selectedIndex,
       searchQuery: searchQuery ?? this.searchQuery,
       userRole: userRole ?? this.userRole,
+      filterArgument: filterArgument ?? this.filterArgument,
     );
   }
 
   @override
-  List<Object?> get props => [invoices, isLoading, error, selectedIndex, searchQuery, userRole];
+  List<Object?> get props => [
+        invoices,
+        isLoading,
+        error,
+        selectedIndex,
+        searchQuery,
+        userRole,
+        filterArgument
+      ];
 }

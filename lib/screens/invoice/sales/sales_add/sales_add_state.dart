@@ -1,11 +1,13 @@
+import 'package:equatable/equatable.dart';
+import 'package:gizmoglobe_client/enums/invoice_related/payment_method.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
+import 'package:gizmoglobe_client/objects/address_related/address.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice_detail.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
-import 'package:gizmoglobe_client/objects/address_related/address.dart';
 
-class SalesAddState {
+class SalesAddState extends Equatable {
   final List<Customer> customers;
   final List<Product> products;
   final List<SalesInvoiceDetail> invoiceDetails;
@@ -14,13 +16,10 @@ class SalesAddState {
   final Address? address;
   final PaymentStatus paymentStatus;
   final SalesStatus salesStatus;
+  final PaymentMethod paymentMethod;
+  final double totalPrice;
   final bool isLoading;
   final String? error;
-
-  double get totalPrice => invoiceDetails.fold(
-        0,
-        (sum, detail) => sum + detail.subtotal,
-      );
 
   const SalesAddState({
     this.customers = const [],
@@ -31,6 +30,8 @@ class SalesAddState {
     this.address,
     this.paymentStatus = PaymentStatus.unpaid,
     this.salesStatus = SalesStatus.pending,
+    this.paymentMethod = PaymentMethod.cod,
+    this.totalPrice = 0,
     this.isLoading = false,
     this.error,
   });
@@ -44,6 +45,8 @@ class SalesAddState {
     Address? address,
     PaymentStatus? paymentStatus,
     SalesStatus? salesStatus,
+    PaymentMethod? paymentMethod,
+    double? totalPrice,
     bool? isLoading,
     String? error,
   }) {
@@ -56,8 +59,26 @@ class SalesAddState {
       address: address ?? this.address,
       paymentStatus: paymentStatus ?? this.paymentStatus,
       salesStatus: salesStatus ?? this.salesStatus,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      totalPrice: totalPrice ?? this.totalPrice,
       isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
+      error: error,
     );
   }
-} 
+
+  @override
+  List<Object?> get props => [
+        customers,
+        products,
+        invoiceDetails,
+        selectedCustomer,
+        selectedModalProduct,
+        address,
+        paymentStatus,
+        salesStatus,
+        paymentMethod,
+        totalPrice,
+        isLoading,
+        error,
+      ];
+}

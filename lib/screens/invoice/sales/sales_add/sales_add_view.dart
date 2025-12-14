@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
+import 'package:gizmoglobe_client/enums/invoice_related/payment_method.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
@@ -805,6 +806,27 @@ class _SalesAddViewState extends State<_SalesAddView> {
                               ],
                             ),
                             const SizedBox(height: 16),
+                            Text(
+                              S.of(context).paymentMethod,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.8),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            _buildStatusDropdown<PaymentMethod>(
+                              value: state.paymentMethod,
+                              items: PaymentMethod.values,
+                              onChanged: (method) {
+                                if (method != null) {
+                                  cubit.updatePaymentMethod(method);
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 16),
                             Card(
                               elevation: 4,
                               shape: RoundedRectangleBorder(
@@ -1184,6 +1206,9 @@ class _SalesAddViewState extends State<_SalesAddView> {
             displayText = item.getLocalizedName(context);
           } else if (item is SalesStatus) {
             displayText = item.getLocalizedName(context);
+          } else if (item is PaymentMethod) {
+            displayText = item.getLocalizedDescription(
+                Localizations.localeOf(context).languageCode == 'vi');
           } else {
             displayText = item.toString().split('.').last;
           }

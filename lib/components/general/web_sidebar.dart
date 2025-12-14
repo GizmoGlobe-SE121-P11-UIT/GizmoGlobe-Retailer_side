@@ -98,10 +98,10 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
                     // Only navigate if different to reduce redundant pushes
                     final current = ModalRoute.of(context)?.settings.name;
                     if (current != target) {
-                      Navigator.pushReplacementNamed(context, target).then((_) {
-                        // Update selection after navigation completes
-                        widget.onItemSelected(index);
-                      });
+                      // Call the callback first, before navigation
+                      // This prevents setState after dispose race condition
+                      widget.onItemSelected(index);
+                      Navigator.pushReplacementNamed(context, target);
                     } else {
                       // Still call the callback if we're already on the route
                       widget.onItemSelected(index);

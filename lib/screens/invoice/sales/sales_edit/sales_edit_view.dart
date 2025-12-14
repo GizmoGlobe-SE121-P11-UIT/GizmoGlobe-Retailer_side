@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'sales_edit_webview.dart';
 
 import '../../../../enums/invoice_related/payment_status.dart';
+import '../../../../enums/invoice_related/payment_method.dart';
 import '../../../../enums/invoice_related/sales_status.dart';
 import '../../../../enums/product_related/category_enum.dart';
 import '../../../../functions/helper.dart';
@@ -54,6 +55,8 @@ class SalesEditScreen extends StatefulWidget {
 
 class _SalesEditScreenState extends State<SalesEditScreen> {
   late final SalesEditCubit cubit;
+  late final bool _lockPaymentOnInit;
+  late final bool _lockSalesOnInit;
 
   @override
   void initState() {
@@ -67,6 +70,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
       date: widget.invoice.date,
       paymentStatus: widget.invoice.paymentStatus,
       salesStatus: widget.invoice.salesStatus,
+      paymentMethod: widget.invoice.paymentMethod,
       totalPrice: widget.invoice.totalPrice,
       loyaltyPoints: widget.invoice.loyaltyPoints,
       details: List.from(
@@ -74,6 +78,11 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
     );
 
     cubit = SalesEditCubit(invoiceCopy);
+
+    // Lock snapshot based on initial invoice when opening modal
+    _lockPaymentOnInit = widget.invoice.paymentStatus == PaymentStatus.paid;
+    _lockSalesOnInit = widget.invoice.salesStatus == SalesStatus.completed ||
+        widget.invoice.salesStatus == SalesStatus.cancelled;
   }
 
   @override
@@ -306,9 +315,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    SalesInvoicePermissions.canEditPaymentStatus(
-                            state.userRole, state.invoice)
-                        ? _buildStatusDropdown<PaymentStatus>(
+                    (_lockPaymentOnInit)
+                        ? StatusBadge(status: state.invoice.paymentStatus)
+                        : _buildStatusDropdown<PaymentStatus>(
                             value: state.selectedPaymentStatus,
                             items: PaymentStatus.values,
                             onChanged: (status) {
@@ -318,8 +327,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                     .updatePaymentStatus(status);
                               }
                             },
-                          )
-                        : StatusBadge(status: state.selectedPaymentStatus),
+                          ),
 
                     const SizedBox(height: 24),
 
@@ -332,14 +340,15 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    SalesInvoicePermissions.canEditSalesStatus(
-                            state.userRole, state.invoice)
-                        ? _buildStatusDropdown<SalesStatus>(
+                    (_lockSalesOnInit)
+                        ? StatusBadge(status: state.invoice.salesStatus)
+                        : _buildStatusDropdown<SalesStatus>(
                             value: state.selectedSalesStatus,
-                            items: SalesStatus.values.where((status) =>
-                              status != SalesStatus.completed &&
-                              status != SalesStatus.received
-                            ).toList(),
+                            items: SalesStatus.values
+                                .where((status) =>
+                                    status != SalesStatus.completed &&
+                                    status != SalesStatus.received)
+                                .toList(),
                             onChanged: (status) {
                               if (status != null) {
                                 context
@@ -347,8 +356,60 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                     .updateSalesStatus(status);
                               }
                             },
-                          )
-                        : StatusBadge(status: state.selectedSalesStatus),
+                          ),
+
+                    const SizedBox(height: 24),
+
+                    // Payment Method Section (always disabled)
+                    Text(
+                      S.of(context).paymentMethod,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Opacity(
+                      opacity: 0.6,
+                      child: IgnorePointer(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 14),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest
+                                .withValues(alpha: 0.3),
+                            border: Border.all(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outline
+                                  .withValues(alpha: 0.3),
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  state.invoice.paymentMethod
+                                      .getLocalizedDescription(
+                                          Localizations.localeOf(context)
+                                                  .languageCode ==
+                                              'vi'),
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.7),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
 
                     // Products List
                     const SizedBox(height: 16),
@@ -529,6 +590,9 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
             displayText = item.getLocalizedName(context);
           } else if (item is SalesStatus) {
             displayText = item.getLocalizedName(context);
+          } else if (item is PaymentMethod) {
+            displayText = item.getLocalizedDescription(
+                Localizations.localeOf(context).languageCode == 'vi');
           } else {
             displayText = item.toString().split('.').last;
           }

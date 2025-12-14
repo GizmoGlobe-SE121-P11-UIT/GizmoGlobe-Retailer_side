@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
+import 'package:gizmoglobe_client/enums/invoice_related/payment_method.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
@@ -8,7 +9,6 @@ import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice_detail.d
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/objects/address_related/address.dart';
 import 'sales_add_state.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SalesAddCubit extends Cubit<SalesAddState> {
   SalesAddCubit() : super(const SalesAddState()) {
@@ -98,8 +98,14 @@ class SalesAddCubit extends Cubit<SalesAddState> {
       ));
     }
 
+    final newTotalPrice = details.fold<double>(
+      0,
+      (sum, detail) => sum + detail.subtotal,
+    );
+
     emit(state.copyWith(
       invoiceDetails: details,
+      totalPrice: newTotalPrice,
       error: null, // Clear any previous errors
     ));
   }
@@ -125,24 +131,36 @@ class SalesAddCubit extends Cubit<SalesAddState> {
     emit(state.copyWith(invoiceDetails: details));
   }
 
+  void updatePaymentMethod(PaymentMethod method) {
+    if (!isClosed) {
+      emit(state.copyWith(paymentMethod: method));
+    }
+  }
+
+  // Create invoice
   Future<SalesInvoice?> createInvoice() async {
+    if (state.selectedCustomer == null || state.address == null) {
+      if (!isClosed) {
+        emit(state.copyWith(error: 'Customer and address are required'));
+      }
+      return null;
+    }
+
+    if (state.invoiceDetails.isEmpty) {
+      if (!isClosed) {
+        emit(state.copyWith(error: 'At least one product is required'));
+      }
+      return null;
+    }
+
     try {
-      emit(state.copyWith(isLoading: true));
-
-      if (state.selectedCustomer == null || state.address == null) {
-        throw Exception(
-            'Customer and address are required'); // Khách hàng và địa chỉ là bắt buộc
+      if (!isClosed) {
+        emit(state.copyWith(isLoading: true, error: null));
       }
 
-      if (state.invoiceDetails.isEmpty) {
-        throw Exception(
-            'At least one product is required'); // Ít nhất một sản phẩm là bắt buộc
-      }
-
-      // Generate a new document ID
-      final docRef =
-          FirebaseFirestore.instance.collection('salesInvoices').doc();
-      final invoiceID = docRef.id;
+      // Generate invoice ID using timestamp
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final invoiceID = 'SL$timestamp';
 
       // Create invoice with the generated ID
       final invoice = SalesInvoice(
@@ -165,12 +183,15 @@ class SalesAddCubit extends Cubit<SalesAddState> {
             .toList(),
         paymentStatus: state.paymentStatus,
         salesStatus: state.salesStatus,
+        paymentMethod: state.paymentMethod, // Use selected payment method
         totalPrice: state.totalPrice,
         date: DateTime.now(),
       );
 
       final createdInvoice = await Firebase().createSalesInvoice(invoice);
-      emit(state.copyWith(isLoading: false));
+      if (!isClosed) {
+        emit(state.copyWith(isLoading: false));
+      }
       return createdInvoice;
     } catch (e) {
       emit(state.copyWith(

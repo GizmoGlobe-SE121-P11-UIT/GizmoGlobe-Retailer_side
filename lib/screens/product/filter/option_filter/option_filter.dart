@@ -8,6 +8,7 @@ class OptionFilter<T> extends StatelessWidget {
   final List<T> selectedValues;
   final void Function(T value) onToggleSelection;
   final double? availableWidth; // when provided, used to compute 2-col width
+  final String Function(T value)? labelBuilder; // optional custom label builder
 
   const OptionFilter({
     super.key,
@@ -16,12 +17,14 @@ class OptionFilter<T> extends StatelessWidget {
     required this.selectedValues,
     required this.onToggleSelection,
     this.availableWidth,
+    this.labelBuilder,
   });
 
   @override
   Widget build(BuildContext context) {
     final int itemCount = enumValues.length;
-    final double baseWidth = availableWidth ?? MediaQuery.of(context).size.width;
+    final double baseWidth =
+        availableWidth ?? MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -39,7 +42,9 @@ class OptionFilter<T> extends StatelessWidget {
               return SizedBox(
                 width: (baseWidth - 48) / 2,
                 child: CheckboxButton(
-                  text: enumValues[index].toString(),
+                  text: labelBuilder != null
+                      ? labelBuilder!(enumValues[index])
+                      : enumValues[index].toString(),
                   isSelected: selectedValues.contains(enumValues[index]),
                   onSelected: () {
                     onToggleSelection(enumValues[index]);

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
+import 'package:gizmoglobe_client/objects/invoice_related/sales_filter_argument.dart';
 import 'sales_screen_state.dart';
 
 class SalesScreenCubit extends Cubit<SalesScreenState> {
@@ -149,6 +150,57 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
         isLoading: false,
       ));
     }
+  }
+
+  void updateFilterArgument(SalesFilterArgument filterArgument) {
+    if (!isClosed) {
+      emit(state.copyWith(filterArgument: filterArgument));
+      _applyFiltersAndSort();
+    }
+  }
+
+  void _applyFiltersAndSort() {
+    if (state.invoices.isEmpty) return;
+
+    // Apply filters first
+    final filteredInvoices = _applyFilters(state.invoices);
+
+    // Then apply sorting
+    final sortedInvoices = _applySorting(filteredInvoices);
+
+    if (!isClosed) {
+      emit(state.copyWith(invoices: sortedInvoices));
+    }
+  }
+
+  List<SalesInvoice> _applyFilters(List<SalesInvoice> invoices) {
+    if (!state.filterArgument.hasActiveFilters) {
+      return invoices;
+    }
+
+    return invoices.where((invoice) {
+      // Filter by payment status
+      if (state.filterArgument.paymentStatusList.isNotEmpty &&
+          !state.filterArgument.paymentStatusList
+              .contains(invoice.paymentStatus)) {
+        return false;
+      }
+
+      // Filter by sales status
+      if (state.filterArgument.salesStatusList.isNotEmpty &&
+          !state.filterArgument.salesStatusList.contains(invoice.salesStatus)) {
+        return false;
+      }
+
+      // Filter by payment method
+      if (state.filterArgument.paymentMethodList.isNotEmpty &&
+          !state.filterArgument.paymentMethodList
+              .contains(invoice.paymentMethod)) {
+        return false;
+      }
+
+      return true;
+    }).toList();
   }
 
   List<SalesInvoice> _applySorting(List<SalesInvoice> invoices) {

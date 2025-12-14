@@ -64,6 +64,7 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
       date: widget.invoice.date,
       paymentStatus: widget.invoice.paymentStatus,
       salesStatus: widget.invoice.salesStatus,
+      paymentMethod: widget.invoice.paymentMethod,
       totalPrice: widget.invoice.totalPrice,
       loyaltyPoints: widget.invoice.loyaltyPoints,
       details: List.from(widget.invoice.details),
@@ -386,6 +387,59 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                     }
                                   },
                                 ),
+
+                          const SizedBox(height: 24),
+
+                          // Payment Method Section (always disabled)
+                          Text(
+                            S.of(context).paymentMethod,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Opacity(
+                            opacity: 0.6,
+                            child: IgnorePointer(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 14),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerHighest
+                                      .withValues(alpha: 0.3),
+                                  border: Border.all(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outline
+                                        .withValues(alpha: 0.3),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        state.invoice.paymentMethod
+                                            .getLocalizedDescription(
+                                                Localizations.localeOf(context)
+                                                        .languageCode ==
+                                                    'vi'),
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.7),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
 
                           // Products List
                           const SizedBox(height: 16),

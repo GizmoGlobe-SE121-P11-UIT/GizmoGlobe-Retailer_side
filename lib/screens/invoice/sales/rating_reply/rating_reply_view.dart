@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gizmoglobe_client/localization/app_localization.dart';
 import '../../../../objects/invoice_related/rating.dart';
 import '../../../../widgets/invoice/rating_card.dart';
 import '../../../../data/database/database.dart';
@@ -36,7 +37,8 @@ class _RatingReplyPage extends StatefulWidget {
   State<_RatingReplyPage> createState() => _RatingReplyPageState();
 }
 
-class _RatingReplyPageState extends State<_RatingReplyPage> with SingleTickerProviderStateMixin {
+class _RatingReplyPageState extends State<_RatingReplyPage>
+    with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
   // If no provider is found in the widget tree, we'll create a local cubit and own it.
@@ -86,7 +88,9 @@ class _RatingReplyPageState extends State<_RatingReplyPage> with SingleTickerPro
 
   Widget _buildList(List<Rating> list, {bool replied = false}) {
     final blocState = _effectiveCubit.state;
-    final hasMore = blocState is RatingReplyLoaded ? (replied ? blocState.hasMoreReplied : blocState.hasMoreNew) : false;
+    final hasMore = blocState is RatingReplyLoaded
+        ? (replied ? blocState.hasMoreReplied : blocState.hasMoreNew)
+        : false;
     // If list is empty but server indicates there are more items, show a Load more button
     if (list.isEmpty) {
       if (hasMore) {
@@ -100,11 +104,11 @@ class _RatingReplyPageState extends State<_RatingReplyPage> with SingleTickerPro
               }
               if (mounted) setState(() {});
             },
-            child: const Text('Load more'),
+            child: Text(S.of(context).loadMore),
           ),
         );
       }
-      return const Center(child: Text('No items'));
+      return Center(child: Text(S.of(context).noItems));
     }
 
     final itemCount = list.length + (hasMore ? 1 : 0);
@@ -125,14 +129,16 @@ class _RatingReplyPageState extends State<_RatingReplyPage> with SingleTickerPro
                 }
                 if (mounted) setState(() {});
               },
-              child: const Text('Load more'),
+              child: Text(S.of(context).loadMore),
             ),
           );
         }
         final r = list[index];
         Product? product;
         try {
-          product = Database().productList.firstWhere((p) => p.productID == r.productID);
+          product = Database()
+              .productList
+              .firstWhere((p) => p.productID == r.productID);
         } catch (_) {
           product = null;
         }
@@ -143,7 +149,8 @@ class _RatingReplyPageState extends State<_RatingReplyPage> with SingleTickerPro
           product: product,
           onPostReply: (ratingId, comment, {productId}) async {
             // delegate posting to the cubit
-            await _effectiveCubit.replyToRating(ratingId: ratingId, comment: comment, productId: productId);
+            await _effectiveCubit.replyToRating(
+                ratingId: ratingId, comment: comment, productId: productId);
             // after posting, refresh is handled by cubit; switch to replied tab
             if (mounted) {
               try {
@@ -161,12 +168,19 @@ class _RatingReplyPageState extends State<_RatingReplyPage> with SingleTickerPro
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ratings & Replies'),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            icon: const Icon(Icons.chevron_left),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        title: Text(S.of(context).ratingsAndReplies),
         bottom: TabBar(
           controller: _tabController,
-          tabs: const [
-            Tab(text: 'New'),
-            Tab(text: 'Replied'),
+          tabs: [
+            Tab(text: S.of(context).newRatings),
+            Tab(text: S.of(context).repliedRatings),
           ],
         ),
       ),

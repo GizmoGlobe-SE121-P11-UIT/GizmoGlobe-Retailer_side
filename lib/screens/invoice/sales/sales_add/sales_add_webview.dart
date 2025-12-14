@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
+import 'package:gizmoglobe_client/enums/invoice_related/payment_method.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/sales_status.dart';
 import 'package:gizmoglobe_client/functions/helper.dart';
@@ -839,6 +840,77 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                         },
                       ),
                     ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  S.of(context).paymentMethod,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.8),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<PaymentMethod>(
+                  value: state.paymentMethod,
+                  items: PaymentMethod.values
+                      .map((method) => DropdownMenuItem<PaymentMethod>(
+                            value: method,
+                            child: Text(
+                              method.getLocalizedDescription(
+                                  Localizations.localeOf(context)
+                                          .languageCode ==
+                                      'vi'),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                  onChanged: (method) {
+                    if (method != null) {
+                      cubit.updatePaymentMethod(method);
+                    }
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.5),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
+                  dropdownColor: Theme.of(context).colorScheme.surface,
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.7),
                   ),
                 ),
               ],
