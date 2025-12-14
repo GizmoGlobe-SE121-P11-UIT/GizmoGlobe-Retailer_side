@@ -1,15 +1,19 @@
 class InvoiceScreenState {
   final int selectedTabIndex;
+  final bool isChangingTab;
 
   InvoiceScreenState({
-    this.selectedTabIndex = 0,
+    required this.selectedTabIndex,
+    this.isChangingTab = false,
   });
 
   InvoiceScreenState copyWith({
     int? selectedTabIndex,
+    bool? isChangingTab,
   }) {
     return InvoiceScreenState(
       selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
+      isChangingTab: isChangingTab ?? this.isChangingTab,
     );
   }
 }

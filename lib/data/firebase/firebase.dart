@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/owned_voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
@@ -24,6 +25,7 @@ import '../../objects/invoice_related/warranty_invoice_detail.dart';
 import '../../objects/manufacturer.dart';
 import '../../objects/product_related/product.dart';
 import '../../objects/product_related/product_factory.dart';
+import '../../objects/product_related/product_image.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
@@ -839,6 +841,93 @@ class Firebase {
         'importPrice': 0,
         'sellingPrice': 0,
       };
+    }
+  }
+
+  Future<List<String>> getProductImages(String productID) async {
+    try {
+      final snapshot = await _firestore
+          .collection('products')
+          .doc(productID)
+          .collection('images')
+          .orderBy('position')
+          .get();
+
+      return snapshot.docs
+          .map((doc) {
+            final data = doc.data();
+            final url = data['url'];
+            if (url == null) return null;
+            if (url is String) return url;
+            return url.toString();
+          })
+          .whereType<String>()
+          .where((url) => url.isNotEmpty)
+          .toList();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting product images for $productID: $e');
+      }
+      return [];
+    }
+  }
+
+  /// Get product images with document IDs for editing
+  Future<List<ProductImage>> getProductImagesWithDetails(
+      String productID) async {
+    try {
+      final snapshot = await _firestore
+          .collection('products')
+          .doc(productID)
+          .collection('images')
+          .orderBy('position')
+          .get();
+
+      return snapshot.docs
+          .map((doc) => ProductImage.fromMap(doc.id, doc.data()))
+          .where((img) => img.url.isNotEmpty)
+          .toList();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting product images with details for $productID: $e');
+      }
+      return [];
+    }
+  }
+
+  /// Save product images to subcollection (Create, Update, Delete)
+  Future<void> saveProductImages(
+      String productID, List<ProductImage> images) async {
+    try {
+      final batch = _firestore.batch();
+      final imagesRef =
+          _firestore.collection('products').doc(productID).collection('images');
+
+      // Process deletions
+      final imagesToDelete =
+          images.where((img) => img.markedForDeletion && img.id != null);
+      for (final img in imagesToDelete) {
+        batch.delete(imagesRef.doc(img.id));
+      }
+
+      // Process updates and creates
+      final activeImages = images.where((img) => !img.markedForDeletion);
+      for (final img in activeImages) {
+        if (img.id != null) {
+          // Update existing
+          batch.update(imagesRef.doc(img.id), img.toMap());
+        } else {
+          // Create new
+          batch.set(imagesRef.doc(), img.toMap());
+        }
+      }
+
+      await batch.commit();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error saving product images for $productID: $e');
+      }
+      rethrow;
     }
   }
 
@@ -2218,9 +2307,8 @@ class Firebase {
 
   Future<List<Rating>> getRatings() async {
     try {
-      final QuerySnapshot snapshot = await _firestore
-          .collection('order_ratings')
-          .get();
+      final QuerySnapshot snapshot =
+          await _firestore.collection('order_ratings').get();
 
       return snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
@@ -2267,7 +2355,9 @@ class Firebase {
             }
           }
         } catch (e) {
-          if (kDebugMode) print('Warning: could not fetch username for rating ${rating.ratingID}: $e');
+          if (kDebugMode)
+            print(
+                'Warning: could not fetch username for rating ${rating.ratingID}: $e');
         }
 
         ratings.add(rating);
@@ -2285,11 +2375,15 @@ class Firebase {
     }
   }
 
-  Future<RatingsPage> getRatingsPageByProduct(String productId, {DocumentSnapshot? startAfter, int limit = 5}) async {
+  Future<RatingsPage> getRatingsPageByProduct(String productId,
+      {DocumentSnapshot? startAfter, int limit = 5}) async {
     try {
-      if (productId.isEmpty) return RatingsPage(ratings: [], lastDocument: null, hasMore: false);
+      if (productId.isEmpty)
+        return RatingsPage(ratings: [], lastDocument: null, hasMore: false);
 
-      if (kDebugMode) print('getRatingsPageByProduct: productId=$productId startAfter=${startAfter?.id} limit=$limit');
+      if (kDebugMode)
+        print(
+            'getRatingsPageByProduct: productId=$productId startAfter=${startAfter?.id} limit=$limit');
 
       Query query = _firestore
           .collection('order_ratings')
@@ -2303,7 +2397,9 @@ class Firebase {
 
       if (kDebugMode) {
         print('getRatingsPageByProduct: got ${snapshot.docs.length} docs');
-        if (snapshot.docs.isNotEmpty) print('getRatingsPageByProduct: first doc data=${snapshot.docs.first.data()}');
+        if (snapshot.docs.isNotEmpty)
+          print(
+              'getRatingsPageByProduct: first doc data=${snapshot.docs.first.data()}');
       }
 
       final List<Rating> ratings = [];
@@ -2311,12 +2407,17 @@ class Firebase {
         final data = doc.data() as Map<String, dynamic>;
         final rating = Rating.fromMap(doc.id, data);
 
-        if (kDebugMode) print('Parsed rating (paged) ${doc.id}: productID=${rating.productID} userID=${rating.userID} rating=${rating.rating} time=${rating.timeSent}');
+        if (kDebugMode)
+          print(
+              'Parsed rating (paged) ${doc.id}: productID=${rating.productID} userID=${rating.userID} rating=${rating.rating} time=${rating.timeSent}');
 
         // attach username if possible
         try {
           if (rating.userID.isNotEmpty) {
-            final userDoc = await _firestore.collection('customers').doc(rating.userID).get();
+            final userDoc = await _firestore
+                .collection('customers')
+                .doc(rating.userID)
+                .get();
             if (userDoc.exists) {
               final userData = userDoc.data();
               final customerName = (userData?['customerName'] as String?) ?? '';
@@ -2331,16 +2432,22 @@ class Firebase {
       final lastDoc = snapshot.docs.isNotEmpty ? snapshot.docs.last : null;
       final hasMore = snapshot.docs.length == limit;
 
-      if (kDebugMode) print('getRatingsPageByProduct: returning ${ratings.length} ratings, hasMore=$hasMore');
+      if (kDebugMode)
+        print(
+            'getRatingsPageByProduct: returning ${ratings.length} ratings, hasMore=$hasMore');
 
-      return RatingsPage(ratings: ratings, lastDocument: lastDoc, hasMore: hasMore);
+      return RatingsPage(
+          ratings: ratings, lastDocument: lastDoc, hasMore: hasMore);
     } catch (e) {
       if (kDebugMode) {
         final text = e.toString();
         // Extract firebase console create_composite link if present
-        final match = RegExp(r'https:\/\/console\.firebase\.google\.com\S+create_composite\S+').firstMatch(text);
+        final match = RegExp(
+                r'https:\/\/console\.firebase\.google\.com\S+create_composite\S+')
+            .firstMatch(text);
         if (match != null) {
-          print('Server-side paged query failed and requires a composite index. Create it here: ${match.group(0)}');
+          print(
+              'Server-side paged query failed and requires a composite index. Create it here: ${match.group(0)}');
         } else {
           print('Server-side paged query failed: $e');
         }
@@ -2349,7 +2456,8 @@ class Firebase {
     }
   }
 
-  Future<void> replyToRating({required String ratingId, required Reply reply}) async {
+  Future<void> replyToRating(
+      {required String ratingId, required Reply reply}) async {
     try {
       if (ratingId.isEmpty) throw Exception('ratingId is required');
 
@@ -2365,7 +2473,8 @@ class Firebase {
     }
   }
 
-  Future<Map<String, dynamic>> getAverageRatingForProduct(String productId) async {
+  Future<Map<String, dynamic>> getAverageRatingForProduct(
+      String productId) async {
     try {
       if (productId.isEmpty) return {'average': 0.0, 'count': 0, 'sum': 0};
 
@@ -2380,10 +2489,14 @@ class Firebase {
         final data = doc.data() as Map<String, dynamic>;
         final ratingVal = data['rating'];
         int parsed = 0;
-        if (ratingVal is int) parsed = ratingVal;
-        else if (ratingVal is num) parsed = ratingVal.toInt();
-        else if (ratingVal is String) parsed = int.tryParse(ratingVal) ?? 0;
-        else parsed = 0;
+        if (ratingVal is int)
+          parsed = ratingVal;
+        else if (ratingVal is num)
+          parsed = ratingVal.toInt();
+        else if (ratingVal is String)
+          parsed = int.tryParse(ratingVal) ?? 0;
+        else
+          parsed = 0;
         sum += parsed;
         count += 1;
       }
@@ -2393,6 +2506,70 @@ class Firebase {
     } catch (e) {
       if (kDebugMode) print('Error computing average rating: $e');
       return {'average': 0.0, 'count': 0, 'sum': 0};
+    }
+  }
+
+  /// Get precomputed dashboard stats from Cloud Functions aggregation.
+  /// Returns a map with: totalRevenue, totalOrders, avgOrderValue, monthlySales.
+  /// Falls back to null if document doesn't exist (Cloud Function not deployed yet).
+  Future<Map<String, dynamic>?> getDashboardStats() async {
+    try {
+      final doc =
+          await _firestore.collection('aggregations').doc('dashboard').get();
+      if (!doc.exists) {
+        if (kDebugMode) {
+          print(
+              'Dashboard stats not found - Cloud Function may not be deployed yet');
+        }
+        return null;
+      }
+      return doc.data();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting dashboard stats: $e');
+      }
+      return null;
+    }
+  }
+
+  /// Manually trigger recalculation of product counts by category.
+  /// This calls the recalculateProductCounts Cloud Function.
+  Future<Map<String, dynamic>> recalculateProductCounts() async {
+    try {
+      final functions = FirebaseFunctions.instance;
+      final callable = functions.httpsCallable('recalculateProductCounts');
+      final result = await callable.call();
+      return result.data as Map<String, dynamic>;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error calling recalculateProductCounts: $e');
+      }
+      rethrow;
+    }
+  }
+
+  /// Get precomputed product counts by category from Cloud Functions aggregation.
+  /// Returns a map with: categoryCounts, totalProducts.
+  /// Falls back to null if document doesn't exist (Cloud Function not deployed yet).
+  Future<Map<String, dynamic>?> getProductCounts() async {
+    try {
+      final doc = await _firestore
+          .collection('aggregations')
+          .doc('productCounts')
+          .get();
+      if (!doc.exists) {
+        if (kDebugMode) {
+          print(
+              'Product counts not found - Cloud Function may not be deployed yet');
+        }
+        return null;
+      }
+      return doc.data();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting product counts: $e');
+      }
+      return null;
     }
   }
 }

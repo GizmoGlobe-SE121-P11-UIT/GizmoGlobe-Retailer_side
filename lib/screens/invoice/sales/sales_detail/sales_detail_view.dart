@@ -494,7 +494,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
   }
 
   Widget _buildInfoRow(String label, String value,
-      {Color? valueColor, bool wrap = false, double? maxWidth}) {
+      {Color? valueColor, bool wrap = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(

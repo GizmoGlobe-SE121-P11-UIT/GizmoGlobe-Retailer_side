@@ -18,6 +18,7 @@ import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
 import '../../../objects/product_related/mainboard_related/pcie_slot.dart';
+import '../../../objects/product_related/product_image.dart';
 import 'add_product_state.dart';
 
 class AddProductCubit extends Cubit<AddProductState> {
@@ -39,8 +40,12 @@ class AddProductCubit extends Cubit<AddProductState> {
       final productArg = ProductArgument.fromProduct(editingProduct);
       emit(state.copyWith(
         productArgument: productArg,
-        imageUrl: editingProduct.imageUrl,
       ));
+      // Load existing images from subcollection
+      final productId = editingProduct.productID;
+      if (productId != null && productId.isNotEmpty) {
+        loadProductImages(productId);
+      }
     } else {
       // Provide safe defaults for basic fields. Category-specific fields remain null until user inputs them.
       emit(state.copyWith(
@@ -222,11 +227,320 @@ class AddProductCubit extends Cubit<AddProductState> {
     emit(state.copyWith(processState: ProcessState.idle));
   }
 
+  /// Add image from URL with validation
+  Future<void> addImageFromUrl(String url) async {
+    try {
+      emit(state.copyWith(isUploadingImage: true));
+      // Validate URL
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        throw Exception('Invalid URL format');
+      }
+
+      // Add new image with next position
+      final newPosition = state.activeImages.length;
+      final newImage = ProductImage(
+        url: url,
+        position: newPosition,
+        isNew: true,
+      );
+
+      emit(state.copyWith(
+        images: [...state.images, newImage],
+        isUploadingImage: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        processState: ProcessState.failure,
+        dialogName: DialogName.failure,
+        notifyMessage: NotifyMessage.msg14,
+        isUploadingImage: false,
+      ));
+    }
+  }
+
+  /// Add image file as pending (will be uploaded when modal is saved)
+  Future<void> uploadImageFile(File imageFile) async {
+    try {
+      // Read file bytes
+      final bytes = await imageFile.readAsBytes();
+      final String fileName = imageFile.path.split('/').last;
+
+      // Add as pending image
+      final newPosition = state.activeImages.length;
+      final newImage = ProductImage.pending(
+        bytes: bytes,
+        fileName: fileName,
+        position: newPosition,
+      );
+
+      emit(state.copyWith(
+        images: [...state.images, newImage],
+      ));
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding image file: $e');
+      }
+      emit(state.copyWith(
+        processState: ProcessState.failure,
+        dialogName: DialogName.failure,
+        notifyMessage: NotifyMessage.msg14,
+      ));
+    }
+  }
+
+  /// Add image bytes as pending (for web - will be uploaded when modal is saved)
+  Future<void> uploadImageBytes(Uint8List bytes, String fileName) async {
+    try {
+      // Add as pending image
+      final newPosition = state.activeImages.length;
+      final newImage = ProductImage.pending(
+        bytes: bytes,
+        fileName: fileName,
+        position: newPosition,
+      );
+
+      emit(state.copyWith(
+        images: [...state.images, newImage],
+      ));
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding image bytes: $e');
+      }
+      emit(state.copyWith(
+        processState: ProcessState.failure,
+        dialogName: DialogName.failure,
+        notifyMessage: NotifyMessage.msg14,
+      ));
+    }
+  }
+
+  /// Load images from Firebase subcollection
+  Future<void> loadProductImages(String productId) async {
+    try {
+      emit(state.copyWith(isLoadingImages: true));
+      final images = await _firebase.getProductImagesWithDetails(productId);
+      emit(state.copyWith(
+        images: images,
+        isLoadingImages: false,
+      ));
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading product images: $e');
+      }
+      emit(state.copyWith(isLoadingImages: false));
+    }
+  }
+
+  /// Remove image at index (mark for deletion if existing, remove if new)
+  void removeImage(int index) {
+    final activeImages = state.activeImages;
+    if (index < 0 || index >= activeImages.length) return;
+
+    final imageToRemove = activeImages[index];
+    final updatedImages = state.images
+        .map((img) {
+          if (img == imageToRemove) {
+            if (img.isNew) {
+              // For new images, we'll filter them out
+              return null;
+            } else {
+              // For existing images, mark for deletion
+              return img.copyWith(markedForDeletion: true);
+            }
+          }
+          return img;
+        })
+        .whereType<ProductImage>()
+        .toList();
+
+    // Recalculate positions for remaining active images
+    final reorderedImages = _recalculatePositions(updatedImages);
+    emit(state.copyWith(images: reorderedImages));
+  }
+
+  /// Reorder images (drag and drop)
+  void reorderImages(int oldIndex, int newIndex) {
+    final activeImages = state.activeImages;
+    if (oldIndex < 0 || oldIndex >= activeImages.length) return;
+    if (newIndex < 0 || newIndex > activeImages.length) return;
+
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final movedImage = activeImages[oldIndex];
+    final reorderedActive = List<ProductImage>.from(activeImages)
+      ..removeAt(oldIndex)
+      ..insert(newIndex, movedImage);
+
+    // Update positions
+    final updatedActive = reorderedActive.asMap().entries.map((entry) {
+      return entry.value.copyWith(position: entry.key);
+    }).toList();
+
+    // Merge back with deleted images
+    final deletedImages =
+        state.images.where((img) => img.markedForDeletion).toList();
+    emit(state.copyWith(images: [...updatedActive, ...deletedImages]));
+  }
+
+  List<ProductImage> _recalculatePositions(List<ProductImage> images) {
+    final activeImages = images.where((img) => !img.markedForDeletion).toList()
+      ..sort((a, b) => a.position.compareTo(b.position));
+    final deletedImages = images.where((img) => img.markedForDeletion).toList();
+
+    final reindexed = activeImages.asMap().entries.map((entry) {
+      return entry.value.copyWith(position: entry.key);
+    }).toList();
+
+    return [...reindexed, ...deletedImages];
+  }
+
+  /// Save images from modal - uploads pending files and saves to subcollection
+  /// This is called when user clicks the save button in the image modal
+  Future<void> saveImagesFromModal() async {
+    try {
+      emit(state.copyWith(isUploadingImage: true));
+
+      final productId = state.productArgument?.productID ??
+          DateTime.now().millisecondsSinceEpoch.toString();
+
+      // Process all images - upload pending ones, keep existing ones
+      final List<ProductImage> processedImages = [];
+
+      for (final image in state.images) {
+        if (image.markedForDeletion) {
+          // Keep deleted images for the save operation to delete them
+          processedImages.add(image);
+        } else if (image.hasPendingUpload) {
+          // Upload pending file to Firebase Storage
+          try {
+            final int timestamp = DateTime.now().millisecondsSinceEpoch;
+            final String extension =
+                image.pendingFileName?.split('.').last ?? 'jpg';
+            final String storageName = 'image_$timestamp.$extension';
+            final Reference storageRef =
+                _storage.ref().child('products/$productId/images/$storageName');
+            final UploadTask uploadTask =
+                storageRef.putData(image.pendingBytes!);
+            final TaskSnapshot taskSnapshot = await uploadTask;
+            final String imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+            // Replace pending image with uploaded one
+            processedImages.add(ProductImage(
+              url: imageUrl,
+              position: image.position,
+              isNew: true,
+            ));
+          } catch (e) {
+            if (kDebugMode) {
+              print('Error uploading image: $e');
+            }
+            // Skip failed uploads
+          }
+        } else {
+          // Keep existing images as-is
+          processedImages.add(image);
+        }
+      }
+
+      // Update state with processed images
+      emit(state.copyWith(
+        images: processedImages,
+        isUploadingImage: false,
+      ));
+
+      // Save to Firebase subcollection if we have a real product ID
+      final actualProductId = state.productArgument?.productID;
+      if (actualProductId != null && actualProductId.isNotEmpty) {
+        await _firebase.saveProductImages(actualProductId, processedImages);
+        // Reload to get document IDs
+        await loadProductImages(actualProductId);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error saving images from modal: $e');
+      }
+      emit(state.copyWith(
+        isUploadingImage: false,
+        processState: ProcessState.failure,
+        dialogName: DialogName.failure,
+        notifyMessage: NotifyMessage.msg14,
+      ));
+    }
+  }
+
+  /// Apply local images from modal to cubit state
+  /// Does NOT upload to Firebase - that happens during addProduct
+  void applyLocalImages(List<ProductImage> localImages) {
+    emit(state.copyWith(images: localImages));
+  }
+
+  /// Save images to Firebase - uploads pending files first, then saves to subcollection
+  Future<void> saveProductImages(String productId) async {
+    try {
+      // Process all images - upload pending ones, keep existing ones
+      final List<ProductImage> processedImages = [];
+
+      for (final image in state.images) {
+        if (image.markedForDeletion) {
+          // Keep deleted images for the save operation to delete them
+          processedImages.add(image);
+        } else if (image.hasPendingUpload) {
+          // Upload pending file to Firebase Storage
+          try {
+            final int timestamp = DateTime.now().millisecondsSinceEpoch;
+            final String extension =
+                image.pendingFileName?.split('.').last ?? 'jpg';
+            final String storageName = 'image_$timestamp.$extension';
+            final Reference storageRef =
+                _storage.ref().child('products/$productId/images/$storageName');
+            final UploadTask uploadTask =
+                storageRef.putData(image.pendingBytes!);
+            final TaskSnapshot taskSnapshot = await uploadTask;
+            final String imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+            // Replace pending image with uploaded one
+            processedImages.add(ProductImage(
+              url: imageUrl,
+              position: image.position,
+              isNew: true,
+            ));
+          } catch (e) {
+            if (kDebugMode) {
+              print('Error uploading image: $e');
+            }
+            // Skip failed uploads
+          }
+        } else {
+          // Keep existing images as-is
+          processedImages.add(image);
+        }
+      }
+
+      // Update state with processed images (now with URLs)
+      emit(state.copyWith(images: processedImages));
+
+      // Save to Firebase subcollection
+      await _firebase.saveProductImages(productId, processedImages);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error saving product images: $e');
+      }
+      rethrow;
+    }
+  }
+
+  // Legacy methods for backwards compatibility
+  Future<void> pickImageFromUrl(String url) async {
+    await addImageFromUrl(url);
+  }
+
   Future<void> pickImageFromGallery() async {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
-        await _uploadImage(File(image.path));
+        await uploadImageFile(File(image.path));
       }
     } catch (e) {
       emit(state.copyWith(
@@ -241,63 +555,13 @@ class AddProductCubit extends Cubit<AddProductState> {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.camera);
       if (image != null) {
-        await _uploadImage(File(image.path));
+        await uploadImageFile(File(image.path));
       }
     } catch (e) {
       emit(state.copyWith(
         processState: ProcessState.failure,
         dialogName: DialogName.failure,
         notifyMessage: NotifyMessage.msg14,
-      ));
-    }
-  }
-
-  Future<void> pickImageFromUrl(String url) async {
-    try {
-      emit(state.copyWith(isUploadingImage: true));
-      // Validate URL
-      if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        throw Exception('Invalid URL format');
-      }
-
-      // Store the URL directly in state
-      emit(state.copyWith(
-        imageUrl: url,
-        isUploadingImage: false,
-      ));
-    } catch (e) {
-      emit(state.copyWith(
-        processState: ProcessState.failure,
-        dialogName: DialogName.failure,
-        notifyMessage: NotifyMessage.msg14,
-        isUploadingImage: false,
-      ));
-    }
-  }
-
-  Future<void> _uploadImage(File imageFile) async {
-    try {
-      emit(state.copyWith(isUploadingImage: true));
-      // Get product ID (if available)
-      final productId = state.productArgument?.productID ??
-          DateTime.now().millisecondsSinceEpoch.toString();
-      final String fileExtension = imageFile.path.split('.').last;
-      final String fileName = 'image$fileExtension';
-      final Reference storageRef =
-          _storage.ref().child('products/$productId/$fileName');
-      final UploadTask uploadTask = storageRef.putFile(imageFile);
-      final TaskSnapshot taskSnapshot = await uploadTask;
-      final String imageUrl = await taskSnapshot.ref.getDownloadURL();
-      emit(state.copyWith(
-        imageUrl: imageUrl,
-        isUploadingImage: false,
-      ));
-    } catch (e) {
-      emit(state.copyWith(
-        processState: ProcessState.failure,
-        dialogName: DialogName.failure,
-        notifyMessage: NotifyMessage.msg14,
-        isUploadingImage: false,
       ));
     }
   }
@@ -418,16 +682,23 @@ class AddProductCubit extends Cubit<AddProductState> {
       // All validations passed — build product (buildProduct will still throw if something unexpected)
       Product product = arg.buildProduct();
 
-      // Add imageUrl if present
-      if (state.imageUrl != null) {
-        product.imageUrl = state.imageUrl;
-      }
+      // imageUrl no longer written - images stored in subcollection
 
       // Use updateProduct if editing, addProduct if creating new
       if (_editingProduct != null) {
         await _firebase.updateProduct(product);
+        // Save images to subcollection
+        final productId = product.productID;
+        if (productId != null && productId.isNotEmpty) {
+          await saveProductImages(productId);
+        }
       } else {
         await _firebase.addProduct(product);
+        // Save images to subcollection
+        final productId = product.productID;
+        if (productId != null && productId.isNotEmpty) {
+          await saveProductImages(productId);
+        }
       }
 
       emit(state.copyWith(

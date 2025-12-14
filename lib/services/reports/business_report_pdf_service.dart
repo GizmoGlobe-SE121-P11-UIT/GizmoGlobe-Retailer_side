@@ -19,6 +19,7 @@ class BusinessReportData {
   final List<SalesInvoice> salesInvoices;
   final List<IncomingInvoice> incomingInvoices;
   final String username;
+  final String selectedCategoryLabel;
 
   // Revenue breakdown
   final Map<String, double> revenueByDay;
@@ -67,6 +68,7 @@ class BusinessReportData {
     required this.salesInvoices,
     required this.incomingInvoices,
     required this.username,
+    this.selectedCategoryLabel = 'All',
     this.revenueByDay = const {},
     this.revenueByWeek = const {},
     this.revenueByMonth = const {},
@@ -156,13 +158,16 @@ class BusinessReportTopProductData {
   final String productName;
   final int totalSales;
   final double totalRevenue;
+  final double totalCost;
+  final double profit;
 
   BusinessReportTopProductData({
     required this.productID,
     required this.productName,
     required this.totalSales,
     required this.totalRevenue,
-  });
+    required this.totalCost,
+  }) : profit = totalRevenue - totalCost;
 }
 
 class BusinessReportPdfService {
@@ -243,8 +248,80 @@ class BusinessReportPdfService {
                 _buildBusinessKPIs(
                     reportData, notoSansBold, notoSansRegular, localizations),
                 pw.SizedBox(height: 20),
-                _buildConclusion(
-                    reportData, notoSansBold, notoSansRegular, localizations),
+                _buildFooter(
+                    reportData.username, notoSansRegular, localizations),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+
+    // Page 4: Top Products by Revenue (Top 5)
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(40),
+        build: (pw.Context context) {
+          return pw.Theme(
+            data: pw.ThemeData.withFont(
+              base: notoSansRegular,
+              bold: notoSansBold,
+            ),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                _buildHeader(notoSansRegular, notoSansBold, localizations),
+                pw.SizedBox(height: 20),
+                _buildSectionTitle(
+                    '${localizations['topProducts'] ?? 'Top Products'} - ${localizations['revenue'] ?? 'Revenue'} (Top 5)',
+                    notoSansBold),
+                pw.SizedBox(height: 12),
+                _buildTopProductsTable(
+                  reportData.topProducts.take(5).toList(),
+                  notoSansBold,
+                  notoSansRegular,
+                  localizations,
+                  includeRank: true,
+                ),
+                pw.SizedBox(height: 20),
+                _buildFooter(
+                    reportData.username, notoSansRegular, localizations),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+
+    // Page 5: Best-Selling Products by Quantity (Top 5)
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(40),
+        build: (pw.Context context) {
+          return pw.Theme(
+            data: pw.ThemeData.withFont(
+              base: notoSansRegular,
+              bold: notoSansBold,
+            ),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                _buildHeader(notoSansRegular, notoSansBold, localizations),
+                pw.SizedBox(height: 20),
+                _buildSectionTitle(
+                    '${localizations['bestSellingProducts'] ?? 'Best-Selling Products'} (Top 5)',
+                    notoSansBold),
+                pw.SizedBox(height: 12),
+                _buildTopProductsTable(
+                  reportData.topProductsByQuantity.take(5).toList(),
+                  notoSansBold,
+                  notoSansRegular,
+                  localizations,
+                  includeRank: true,
+                  showQuantityFirst: true,
+                ),
                 pw.SizedBox(height: 20),
                 _buildFooter(
                     reportData.username, notoSansRegular, localizations),
@@ -281,7 +358,8 @@ class BusinessReportPdfService {
                 _buildHeader(notoSansRegular, notoSansBold, localizations),
                 pw.SizedBox(height: 30),
                 _buildReportPeriod(reportData.startDate, reportData.endDate,
-                    dateFormat, notoSansBold, notoSansRegular, localizations),
+                    dateFormat, notoSansBold, notoSansRegular, localizations,
+                    categoryLabel: reportData.selectedCategoryLabel),
                 pw.SizedBox(height: 30),
                 _buildExecutiveSummary(
                     reportData, notoSansBold, notoSansRegular, localizations),
@@ -358,7 +436,8 @@ class BusinessReportPdfService {
       DateFormat dateFormat,
       pw.Font notoSansBold,
       pw.Font notoSansRegular,
-      Map<String, String> localizations) {
+      Map<String, String> localizations,
+      {String categoryLabel = 'All'}) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(15),
       decoration: pw.BoxDecoration(
@@ -384,6 +463,24 @@ class BusinessReportPdfService {
               fontSize: 14,
             ),
           ),
+          if (categoryLabel.isNotEmpty) ...[
+            pw.SizedBox(width: 12),
+            pw.Text(
+              '${localizations['category'] ?? 'Category'}: ',
+              style: pw.TextStyle(
+                font: notoSansBold,
+                fontSize: 14,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.Text(
+              categoryLabel,
+              style: pw.TextStyle(
+                font: notoSansRegular,
+                fontSize: 14,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -668,73 +765,128 @@ class BusinessReportPdfService {
           ),
         ),
         pw.SizedBox(height: 15),
-        pw.Table(
-          border: pw.TableBorder.all(color: PdfColors.green400, width: 1),
-          columnWidths: {
-            0: const pw.FlexColumnWidth(3),
-            1: const pw.FlexColumnWidth(2),
-            2: const pw.FlexColumnWidth(2),
-            3: const pw.FlexColumnWidth(2),
-          },
-          children: [
-            pw.TableRow(
-              decoration: const pw.BoxDecoration(color: PdfColors.green700),
-              children: [
-                localizations['productName'] ?? 'Product Name',
-                localizations['productId'] ?? 'Product ID',
-                localizations['quantitySold'] ?? 'Quantity Sold',
-                localizations['revenue'] ?? 'Revenue',
-              ].map((header) {
-                return pw.Padding(
-                  padding: const pw.EdgeInsets.all(8),
-                  child: pw.Text(
-                    header,
-                    style: pw.TextStyle(
-                      font: notoSansBold,
-                      color: PdfColors.white,
-                      fontSize: 11,
-                      fontWeight: pw.FontWeight.bold,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            ...topProducts.take(10).map((product) {
-              return pw.TableRow(
-                children: [
-                  pw.Padding(
-                    padding: const pw.EdgeInsets.all(8),
-                    child: pw.Text(
-                      product.productName,
-                      style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
-                    ),
-                  ),
-                  pw.Padding(
-                    padding: const pw.EdgeInsets.all(8),
-                    child: pw.Text(
-                      product.productID,
-                      style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
-                    ),
-                  ),
-                  pw.Padding(
-                    padding: const pw.EdgeInsets.all(8),
-                    child: pw.Text(
-                      product.totalSales.toString(),
-                      style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
-                    ),
-                  ),
-                  pw.Padding(
-                    padding: const pw.EdgeInsets.all(8),
-                    child: pw.Text(
-                      Helper.toCurrencyFormat(product.totalRevenue),
-                      style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
-                    ),
-                  ),
-                ],
-              );
-            }),
-          ],
+        _buildTopProductsTable(
+          topProducts.take(10).toList(),
+          notoSansBold,
+          notoSansRegular,
+          localizations,
         ),
+      ],
+    );
+  }
+
+  static pw.Widget _buildTopProductsTable(
+    List<BusinessReportTopProductData> products,
+    pw.Font notoSansBold,
+    pw.Font notoSansRegular,
+    Map<String, String> localizations, {
+    bool includeRank = false,
+    bool showQuantityFirst = false,
+  }) {
+    if (products.isEmpty) {
+      return pw.Text(
+        localizations['noData'] ?? 'No data available for this section.',
+        style: pw.TextStyle(font: notoSansRegular, fontSize: 12),
+      );
+    }
+
+    final headers = <String>[
+      if (includeRank) '#',
+      localizations['productName'] ?? 'Product Name',
+      localizations['revenue'] ?? 'Revenue',
+      localizations['costs'] ?? 'Cost',
+      localizations['profit'] ?? 'Profit',
+      localizations['quantitySold'] ?? 'Quantity Sold',
+    ];
+
+    final columnWidths = <int, pw.TableColumnWidth>{};
+    int colIndex = 0;
+    if (includeRank) {
+      columnWidths[colIndex++] = const pw.FlexColumnWidth(1);
+    }
+    columnWidths[colIndex++] = const pw.FlexColumnWidth(3); // name
+    columnWidths[colIndex++] = const pw.FlexColumnWidth(2); // revenue
+    columnWidths[colIndex++] = const pw.FlexColumnWidth(2); // cost
+    columnWidths[colIndex++] = const pw.FlexColumnWidth(2); // profit
+    columnWidths[colIndex] = const pw.FlexColumnWidth(2); // quantity
+
+    return pw.Table(
+      border: pw.TableBorder.all(color: PdfColors.green400, width: 1),
+      columnWidths: columnWidths,
+      children: [
+        pw.TableRow(
+          decoration: const pw.BoxDecoration(color: PdfColors.green700),
+          children: headers.map((header) {
+            return pw.Padding(
+              padding: const pw.EdgeInsets.all(8),
+              child: pw.Text(
+                header,
+                style: pw.TextStyle(
+                  font: notoSansBold,
+                  color: PdfColors.white,
+                  fontSize: 11,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+        ...products.asMap().entries.map((entry) {
+          final index = entry.key;
+          final product = entry.value;
+          final cells = <pw.Widget>[
+            if (includeRank)
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(8),
+                child: pw.Text(
+                  (index + 1).toString(),
+                  style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
+                ),
+              ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(8),
+              child: pw.Text(
+                product.productName,
+                style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
+              ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(8),
+              child: pw.Text(
+                Helper.toCurrencyFormat(product.totalRevenue),
+                style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
+              ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(8),
+              child: pw.Text(
+                Helper.toCurrencyFormat(product.totalCost),
+                style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
+              ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(8),
+              child: pw.Text(
+                Helper.toCurrencyFormat(product.profit),
+                style: pw.TextStyle(
+                    font: notoSansRegular,
+                    fontSize: 10,
+                    color: product.profit >= 0
+                        ? PdfColors.green800
+                        : PdfColors.red800),
+              ),
+            ),
+            pw.Padding(
+              padding: const pw.EdgeInsets.all(8),
+              child: pw.Text(
+                product.totalSales.toString(),
+                style: pw.TextStyle(font: notoSansRegular, fontSize: 10),
+              ),
+            ),
+          ];
+
+          return pw.TableRow(children: cells);
+        }),
       ],
     );
   }
@@ -874,9 +1026,11 @@ class BusinessReportPdfService {
               if (data.revenueByMonth.isNotEmpty) ...[
                 pw.SizedBox(height: 8),
                 _buildInfoRow(
-                    localizations['monthlyRevenue'] ?? 'Monthly Revenue',
+                    localizations['monthlyRevenue'] ??
+                        'Average Monthly Revenue',
                     Helper.toCurrencyFormat(data.revenueByMonth.values
-                        .fold(0.0, (sum, val) => sum + val)),
+                            .fold(0.0, (sum, val) => sum + val) /
+                        data.revenueByMonth.length),
                     notoSansBold,
                     notoSansRegular),
               ],
@@ -1067,7 +1221,12 @@ class BusinessReportPdfService {
             localizations['bestSellingProducts'] ?? 'Best-Selling Products',
             notoSansBold),
         pw.SizedBox(height: 15),
-        if (data.topProductsByQuantity.isNotEmpty) ...[
+        if (data.topProductsByQuantity.isEmpty)
+          pw.Text(
+            localizations['noData'] ?? 'No data available for this section.',
+            style: pw.TextStyle(font: notoSansRegular, fontSize: 12),
+          )
+        else ...[
           pw.Text(
             localizations['topProductsByQuantity'] ??
                 'Top Products by Quantity Sold',
@@ -1412,82 +1571,6 @@ class BusinessReportPdfService {
     );
   }
 
-  static pw.Widget _buildConclusion(
-      BusinessReportData data,
-      pw.Font notoSansBold,
-      pw.Font notoSansRegular,
-      Map<String, String> localizations) {
-    final insights = <String>[];
-
-    // Generate insights based on data
-    if (data.profitMargin > 20) {
-      insights.add(localizations['strongProfitMargin'] ??
-          '[OK] Strong profit margin indicates healthy business operations');
-    } else if (data.profitMargin < 10) {
-      insights.add(localizations['lowProfitMargin'] ??
-          '[WARNING] Low profit margin - consider reviewing costs and pricing strategy');
-    }
-
-    if (data.customerRetentionRate > 50) {
-      insights.add(localizations['goodCustomerRetention'] ??
-          '[OK] Good customer retention rate shows strong customer loyalty');
-    } else {
-      insights.add(localizations['improveCustomerRetention'] ??
-          '[WARNING] Customer retention could be improved with better engagement strategies');
-    }
-
-    if (data.lowStockItemsCount > 0) {
-      final alert = localizations['lowStockAlert'] ??
-          '[WARNING] {count} items are low in stock - consider restocking';
-      insights
-          .add(alert.replaceAll('{count}', data.lowStockItemsCount.toString()));
-    }
-
-    if (data.totalRevenue > 0 && data.totalOrders > 0) {
-      final revenue = localizations['consistentRevenue'] ??
-          '[OK] Business is generating consistent revenue with {orders} orders';
-      insights.add(revenue.replaceAll('{orders}', data.totalOrders.toString()));
-    }
-
-    return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        _buildSectionTitle(
-            localizations['conclusionInsights'] ?? 'Conclusion & Insights',
-            notoSansBold),
-        pw.SizedBox(height: 15),
-        pw.Container(
-          padding: const pw.EdgeInsets.all(15),
-          decoration: pw.BoxDecoration(
-            color: PdfColors.grey100,
-            borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
-            border: pw.Border.all(color: PdfColors.grey400, width: 1),
-          ),
-          child: pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: insights.isEmpty
-                ? [
-                    pw.Text(
-                      'No specific insights available for this period.',
-                      style: pw.TextStyle(font: notoSansRegular, fontSize: 11),
-                    ),
-                  ]
-                : insights.map((insight) {
-                    return pw.Padding(
-                      padding: const pw.EdgeInsets.only(bottom: 8),
-                      child: pw.Text(
-                        insight,
-                        style:
-                            pw.TextStyle(font: notoSansRegular, fontSize: 11),
-                      ),
-                    );
-                  }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-
   static pw.Widget _buildSectionTitle(String title, pw.Font notoSansBold) {
     return pw.Text(
       title,
@@ -1502,36 +1585,7 @@ class BusinessReportPdfService {
 
   static pw.Widget _buildFooter(String username, pw.Font notoSansRegular,
       Map<String, String> localizations) {
-    final dateFormat = DateFormat('dd/MM/yyyy HH:mm');
-    return pw.Container(
-      padding: const pw.EdgeInsets.all(15),
-      decoration: pw.BoxDecoration(
-        color: PdfColors.grey100,
-        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
-        border: pw.Border.all(color: PdfColors.grey400, width: 1),
-      ),
-      child: pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        children: [
-          pw.Text(
-            '${localizations['reportGeneratedBy'] ?? 'Report Generated By'}: $username',
-            style: pw.TextStyle(
-              font: notoSansRegular,
-              fontSize: 10,
-              color: PdfColors.grey700,
-            ),
-          ),
-          pw.SizedBox(height: 5),
-          pw.Text(
-            '${localizations['generatedOn'] ?? 'Generated On'}: ${dateFormat.format(DateTime.now())}',
-            style: pw.TextStyle(
-              font: notoSansRegular,
-              fontSize: 10,
-              color: PdfColors.grey700,
-            ),
-          ),
-        ],
-      ),
-    );
+    // Footer removed as per user request
+    return pw.SizedBox.shrink();
   }
 }

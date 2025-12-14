@@ -7,9 +7,16 @@ class IOPort {
   IOPort({required this.port, required this.quantity});
 
   factory IOPort.fromJson(Map<String, dynamic> json) => IOPort(
-    port: json['port']?.toString() ?? '',
-    quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : int.tryParse(json['quantity']?.toString() ?? '') ?? 0,
-  );
+        port: json['port']?.toString() ?? '',
+        quantity: (json['quantity'] is num)
+            ? (json['quantity'] as num).toInt()
+            : int.tryParse(json['quantity']?.toString() ?? '') ?? 0,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'port': port,
+        'quantity': quantity,
+      };
 
   @override
   String toString() => '$quantity x $port';

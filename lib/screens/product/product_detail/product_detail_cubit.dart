@@ -30,6 +30,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     _initializeTechnicalSpecs();
     loadRatingsPage();
     refreshAverage();
+    _loadImages();
   }
 
   void _initializeTechnicalSpecs() {
@@ -123,6 +124,19 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     emit(state.copyWith(processState: ProcessState.loading));
   }
 
+  Future<void> _loadImages() async {
+    final productId = state.product.productID;
+    if (productId == null) return;
+    try {
+      final urls = await Firebase().getProductImages(productId);
+      emit(state.copyWith(imageUrls: urls));
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading product images: $e');
+      }
+    }
+  }
+
   Future<void> changeProductStatus() async {
     try {
       ProductStatusEnum status;
@@ -163,6 +177,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
         .firstWhere((element) => element.productID == state.product.productID);
     emit(state.copyWith(product: product));
     _initializeTechnicalSpecs();
+    _loadImages(); // Reload images from Firebase
   }
 
   void toIdle() {
@@ -174,12 +189,15 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       final productId = state.product.productID ?? '';
       if (productId.isEmpty) return;
       try {
-        final page = await _firebase.getRatingsPageByProduct(productId, limit: limit);
+        final page =
+            await _firebase.getRatingsPageByProduct(productId, limit: limit);
         _lastRatingsDoc = page.lastDocument;
-        emit(state.copyWith(ratings: page.ratings, hasMoreRatings: page.hasMore));
+        emit(state.copyWith(
+            ratings: page.ratings, hasMoreRatings: page.hasMore));
       } catch (e) {
         // Server-side paging may fail due to missing index; fallback to client-side full fetch then local pagination
-        if (kDebugMode) print('Falling back to client-side fetch for ratings: $e');
+        if (kDebugMode)
+          print('Falling back to client-side fetch for ratings: $e');
         final all = await _firebase.getRatingsByProductWithUsername(productId);
         final initial = all.take(limit).toList();
         final hasMore = all.length > initial.length;
@@ -198,7 +216,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       if (productId.isEmpty) return;
       final result = await _firebase.getAverageRatingForProduct(productId);
       final avg = (result['average'] as num?)?.toDouble() ?? 0.0;
-      final count = (result['count'] as int?) ?? (result['count'] as num?)?.toInt() ?? 0;
+      final count =
+          (result['count'] as int?) ?? (result['count'] as num?)?.toInt() ?? 0;
       emit(state.copyWith(averageRating: avg, totalRatingsCount: count));
     } catch (e) {
       if (kDebugMode) print('Error refreshing average rating: $e');
@@ -212,7 +231,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
       // Try server-side paged fetch if we have a last doc; otherwise use client-side continuation
       if (_lastRatingsDoc != null) {
-        final page = await _firebase.getRatingsPageByProduct(productId, startAfter: _lastRatingsDoc, limit: limit);
+        final page = await _firebase.getRatingsPageByProduct(productId,
+            startAfter: _lastRatingsDoc, limit: limit);
         _lastRatingsDoc = page.lastDocument;
         final combined = List<Rating>.from(state.ratings)..addAll(page.ratings);
         emit(state.copyWith(ratings: combined, hasMoreRatings: page.hasMore));
@@ -236,10 +256,17 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
   }
 
   /// Post a reply to a rating from the product detail screen
-  Future<void> replyToRating({required String ratingId, required String comment, String? productId}) async {
+  Future<void> replyToRating(
+      {required String ratingId,
+      required String comment,
+      String? productId}) async {
     try {
-      final reply = Reply(id: DateTime.now().millisecondsSinceEpoch.toString(), comment: comment, timestamp: DateTime.now());
-      await Database().replyToRating(ratingId: ratingId, reply: reply, productId: productId);
+      final reply = Reply(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          comment: comment,
+          timestamp: DateTime.now());
+      await Database().replyToRating(
+          ratingId: ratingId, reply: reply, productId: productId);
       // refresh ratings shown in product detail
       await loadRatingsPage();
       await refreshAverage();

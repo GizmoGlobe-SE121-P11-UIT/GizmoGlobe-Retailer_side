@@ -72,6 +72,8 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('paid') ||
         text.toLowerCase().contains('active') ||
         text.toLowerCase().contains('shipped') ||
+        text.toLowerCase().contains('received') ||
+        text.toLowerCase().contains('đã nhận') ||
         text.toLowerCase().contains('available') ||
         text.toLowerCase().contains('visible') ||
         text.toLowerCase().contains('hiển thị') ||
@@ -80,8 +82,7 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('đang hoạt động') ||
         text.toLowerCase().contains('đã giao hàng') ||
         text.toLowerCase().contains('còn hàng') ||
-        text.toLowerCase().contains('đã sử dụng'))
-         {
+        text.toLowerCase().contains('đã sử dụng')) {
       color = theme.colorScheme.tertiary;
       icon = Icons.check_circle;
     } else {
@@ -92,7 +93,7 @@ class StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1), 
+        color: color.withValues(alpha: 0.1),
         border: Border.all(color: color),
         borderRadius: BorderRadius.circular(8),
       ),

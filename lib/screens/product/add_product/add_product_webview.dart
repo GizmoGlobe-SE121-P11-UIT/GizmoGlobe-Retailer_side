@@ -14,7 +14,6 @@ import 'package:gizmoglobe_client/widgets/general/gradient_dropdown.dart';
 import 'package:gizmoglobe_client/widgets/general/multi_field_with_icon.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:intl/intl.dart';
-
 import '../../../data/database/database.dart';
 import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
@@ -30,6 +29,8 @@ import '../../../enums/product_related/psu_enums/psu_modular.dart';
 import '../../../enums/product_related/ram_enums/ram_type.dart';
 import '../../../objects/manufacturer.dart';
 import '../../../objects/product_related/product.dart';
+import '../../../objects/product_related/product_image.dart';
+import '../../../widgets/dialog/image_manager_modal.dart';
 import 'add_product_state.dart';
 import 'add_product_cubit.dart';
 
@@ -138,76 +139,12 @@ class _AddProductWebViewState extends State<AddProductWebView> {
     });
   }
 
-  void _showImagePickerMenu() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: Text(S.of(context).chooseFromGallery),
-                onTap: () {
-                  Navigator.pop(context);
-                  cubit.pickImageFromGallery();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.link),
-                title: Text(S.of(context).enterUrl),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showUrlInputDialog();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showUrlInputDialog() {
-    final TextEditingController urlController = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(S.of(context).enterImageUrl),
-          content: TextField(
-            controller: urlController,
-            decoration: const InputDecoration(
-              hintText: 'https://example.com/image.jpg',
-            ),
-            keyboardType: TextInputType.url,
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(S.of(context).cancel),
-              onPressed: () => Navigator.pop(context),
-            ),
-            TextButton(
-              child: Text(S.of(context).confirm),
-              onPressed: () {
-                if (urlController.text.isNotEmpty) {
-                  cubit.pickImageFromUrl(urlController.text);
-                }
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddProductCubit, AddProductState>(
       buildWhen: (previous, current) =>
           previous.processState != current.processState ||
-          previous.imageUrl != current.imageUrl ||
+          previous.images != current.images ||
           previous.isUploadingImage != current.isUploadingImage ||
           previous.productArgument != current.productArgument,
       listener: (context, state) {
@@ -362,14 +299,17 @@ class _AddProductWebViewState extends State<AddProductWebView> {
 
   Widget _buildImageSection(AddProductState state) {
     final colorScheme = Theme.of(context).colorScheme;
+    final images = state.activeImages;
+    final imageCount = images.length;
 
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      child: GestureDetector(
-        onTap: _showImagePickerMenu,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        onTap: () => ImageManagerModal.show(context),
         child: Container(
           height: 200,
           width: double.infinity,
@@ -380,22 +320,73 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              if (state.imageUrl != null)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
-                    state.imageUrl!,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Center(
-                        child: Icon(
-                          Icons.error_outline,
-                          color: colorScheme.error,
-                          size: 48,
+              if (imageCount > 0)
+                // Show image carousel/grid preview
+                Row(
+                  children: [
+                    // Primary image (larger)
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: _buildImageWidget(
+                            images.first,
+                            height: 180,
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                    // Thumbnails column (if more than 1 image)
+                    if (imageCount > 1)
+                      SizedBox(
+                        width: 100,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 4),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (int i = 1;
+                                  i < (imageCount > 4 ? 3 : imageCount);
+                                  i++)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 4),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: _buildImageWidget(
+                                      images[i],
+                                      width: 80,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              if (imageCount > 3)
+                                Container(
+                                  width: 80,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: colorScheme.surfaceContainerHighest,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '+${imageCount - 3}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: colorScheme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
                 )
               else
                 Center(
@@ -414,10 +405,49 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Click to manage images',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colorScheme.onSurfaceVariant
+                              .withValues(alpha: 0.7),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              if (state.isUploadingImage)
+              // Image count badge
+              if (imageCount > 0)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.photo_library,
+                            size: 16, color: Colors.white),
+                        const SizedBox(width: 4),
+                        Text(
+                          '$imageCount',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              // Loading overlay
+              if (state.isUploadingImage || state.isLoadingImages)
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
@@ -431,11 +461,104 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                     ),
                   ),
                 ),
+              // Edit button
+              Positioned(
+                bottom: 8,
+                right: 8,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface.withValues(alpha: 0.9),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: colorScheme.primary),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.edit, size: 14, color: colorScheme.primary),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Manage',
+                        style: TextStyle(
+                          color: colorScheme.primary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  /// Helper to display ProductImage - handles both pending (memory) and uploaded (network) images
+  Widget _buildImageWidget(
+    ProductImage image, {
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.cover,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    if (image.hasPendingUpload && image.pendingBytes != null) {
+      // Pending image - use memory
+      return Image.memory(
+        image.pendingBytes!,
+        fit: fit,
+        width: width,
+        height: height,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            width: width,
+            height: height,
+            color: colorScheme.errorContainer,
+            child: Icon(
+              Icons.broken_image,
+              color: colorScheme.error,
+              size: width != null ? width / 2 : 48,
+            ),
+          );
+        },
+      );
+    } else if (image.url.isNotEmpty) {
+      // Uploaded image - use network
+      return Image.network(
+        image.url,
+        fit: fit,
+        width: width,
+        height: height,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            width: width,
+            height: height,
+            color: colorScheme.errorContainer,
+            child: Icon(
+              Icons.broken_image,
+              color: colorScheme.error,
+              size: width != null ? width / 2 : 48,
+            ),
+          );
+        },
+      );
+    } else {
+      // No image data available
+      return Container(
+        width: width,
+        height: height,
+        color: colorScheme.surfaceContainerHighest,
+        child: Icon(
+          Icons.image_not_supported,
+          color: colorScheme.onSurfaceVariant,
+          size: width != null ? width / 2 : 48,
+        ),
+      );
+    }
   }
 
   Widget _buildBasicInformationSection(AddProductState state) {

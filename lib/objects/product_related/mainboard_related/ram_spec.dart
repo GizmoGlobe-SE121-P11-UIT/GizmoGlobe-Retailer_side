@@ -13,12 +13,8 @@ class RamSpec {
     required this.maxSingleDimmGb,
   });
 
-  void updateRamSpec({
-    RAMType? type,
-    int? slots,
-    int? maxSingleDimmGb,
-    int? maxTotalGb
-  }) {
+  void updateRamSpec(
+      {RAMType? type, int? slots, int? maxSingleDimmGb, int? maxTotalGb}) {
     this.type = type ?? this.type;
     this.slots = slots ?? this.slots;
     this.maxSingleDimmGb = maxSingleDimmGb ?? this.maxSingleDimmGb;
@@ -28,9 +24,19 @@ class RamSpec {
         type: RAMType.values.firstWhere(
             (e) => e.toString() == 'RAMType.${json['type']?.toString() ?? ''}',
             orElse: () => RAMType.unknown),
-        slots: (json['slots'] is num) ? (json['slots'] as num).toInt() : int.tryParse(json['slots']?.toString() ?? '') ?? 0,
-        maxSingleDimmGb: (json['maxSingleDimmGb'] is num) ? (json['maxSingleDimmGb'] as num).toInt() : int.tryParse(json['maxSingleDimmGb']?.toString() ?? '') ?? 0,
-  );
+        slots: (json['slots'] is num)
+            ? (json['slots'] as num).toInt()
+            : int.tryParse(json['slots']?.toString() ?? '') ?? 0,
+        maxSingleDimmGb: (json['maxSingleDimmGb'] is num)
+            ? (json['maxSingleDimmGb'] as num).toInt()
+            : int.tryParse(json['maxSingleDimmGb']?.toString() ?? '') ?? 0,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'type': type.getName(),
+        'slots': slots,
+        'maxSingleDimmGb': maxSingleDimmGb,
+      };
 
   @override
   String toString() {
@@ -48,9 +54,10 @@ class RamSpecControllers {
     RAMType? type,
     int? slots,
     int? maxSingleDimmGb,
-  }) : typeController = TextEditingController(text: type.toString()),
-       slotsController = TextEditingController(text: slots.toString()),
-       maxSingleDimmGbController = TextEditingController(text: maxSingleDimmGb.toString());
+  })  : typeController = TextEditingController(text: type.toString()),
+        slotsController = TextEditingController(text: slots.toString()),
+        maxSingleDimmGbController =
+            TextEditingController(text: maxSingleDimmGb.toString());
 
   void dispose() {
     typeController.dispose();

@@ -72,11 +72,24 @@ class SalesInvoice {
   }
 
   factory SalesInvoice.fromMap(String id, Map<String, dynamic> map) {
-    final addressID = map['address'] as String;
-    final address = Database().addressList.firstWhere(
-          (addr) => addr.addressID == addressID,
-          orElse: () => Address.nullAddress,
-        );
+    Address address;
+    final addressData = map['address'];
+
+    if (addressData is String) {
+      // Legacy format: address is stored as addressID string
+      address = Database().addressList.firstWhere(
+            (addr) => addr.addressID == addressData,
+            orElse: () => Address.nullAddress,
+          );
+    } else if (addressData is Map<String, dynamic>) {
+      // New format: address is stored as a Map object
+      address = Address.fromMap(addressData);
+    } else if (addressData is Map) {
+      // Handle LinkedMap or other Map types
+      address = Address.fromMap(Map<String, dynamic>.from(addressData));
+    } else {
+      address = Address.nullAddress;
+    }
 
     return SalesInvoice(
       salesInvoiceID: id,
