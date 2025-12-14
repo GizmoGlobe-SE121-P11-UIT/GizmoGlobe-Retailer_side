@@ -99,7 +99,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
         }
 
         if (bytes != null) {
-          final newPosition = _activeImages.length;
+          final newPosition = _activeImages.length + 1;
           final newImage = ProductImage.pending(
             bytes: bytes,
             fileName: fileName,
@@ -120,7 +120,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
 
   /// Add image from URL locally
   void _addImageFromUrl(String url) {
-    final newPosition = _activeImages.length;
+    final newPosition = _activeImages.length + 1;
     final newImage = ProductImage(
       url: url,
       position: newPosition,
@@ -177,9 +177,9 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
         ..removeAt(oldIndex)
         ..insert(newIndex, movedImage);
 
-      // Update positions
+      // Update positions (1-indexed)
       final updatedActive = reorderedActive.asMap().entries.map((entry) {
-        return entry.value.copyWith(position: entry.key);
+        return entry.value.copyWith(position: entry.key + 1);
       }).toList();
 
       // Merge back with deleted images
@@ -198,7 +198,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
         _localImages.where((img) => img.markedForDeletion).toList();
 
     final reindexed = activeImages.asMap().entries.map((entry) {
-      return entry.value.copyWith(position: entry.key);
+      return entry.value.copyWith(position: entry.key + 1);
     }).toList();
 
     _localImages = [...reindexed, ...deletedImages];

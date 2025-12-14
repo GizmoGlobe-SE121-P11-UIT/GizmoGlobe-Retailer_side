@@ -236,8 +236,8 @@ class AddProductCubit extends Cubit<AddProductState> {
         throw Exception('Invalid URL format');
       }
 
-      // Add new image with next position
-      final newPosition = state.activeImages.length;
+      // Add new image with next position (1-indexed)
+      final newPosition = state.activeImages.length + 1;
       final newImage = ProductImage(
         url: url,
         position: newPosition,
@@ -265,8 +265,8 @@ class AddProductCubit extends Cubit<AddProductState> {
       final bytes = await imageFile.readAsBytes();
       final String fileName = imageFile.path.split('/').last;
 
-      // Add as pending image
-      final newPosition = state.activeImages.length;
+      // Add as pending image (1-indexed)
+      final newPosition = state.activeImages.length + 1;
       final newImage = ProductImage.pending(
         bytes: bytes,
         fileName: fileName,
@@ -291,8 +291,8 @@ class AddProductCubit extends Cubit<AddProductState> {
   /// Add image bytes as pending (for web - will be uploaded when modal is saved)
   Future<void> uploadImageBytes(Uint8List bytes, String fileName) async {
     try {
-      // Add as pending image
-      final newPosition = state.activeImages.length;
+      // Add as pending image (1-indexed)
+      final newPosition = state.activeImages.length + 1;
       final newImage = ProductImage.pending(
         bytes: bytes,
         fileName: fileName,
@@ -373,9 +373,9 @@ class AddProductCubit extends Cubit<AddProductState> {
       ..removeAt(oldIndex)
       ..insert(newIndex, movedImage);
 
-    // Update positions
+    // Update positions (1-indexed)
     final updatedActive = reorderedActive.asMap().entries.map((entry) {
-      return entry.value.copyWith(position: entry.key);
+      return entry.value.copyWith(position: entry.key + 1);
     }).toList();
 
     // Merge back with deleted images
@@ -390,7 +390,7 @@ class AddProductCubit extends Cubit<AddProductState> {
     final deletedImages = images.where((img) => img.markedForDeletion).toList();
 
     final reindexed = activeImages.asMap().entries.map((entry) {
-      return entry.value.copyWith(position: entry.key);
+      return entry.value.copyWith(position: entry.key + 1);
     }).toList();
 
     return [...reindexed, ...deletedImages];
