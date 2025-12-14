@@ -77,7 +77,6 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
                   isSelected: isSelected,
                   isCompact: isCompactMode,
                   onTap: () {
-                    widget.onItemSelected(index);
                     String target = '/main';
                     switch (index) {
                       case 0:
@@ -99,7 +98,13 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
                     // Only navigate if different to reduce redundant pushes
                     final current = ModalRoute.of(context)?.settings.name;
                     if (current != target) {
-                      Navigator.pushReplacementNamed(context, target);
+                      Navigator.pushReplacementNamed(context, target).then((_) {
+                        // Update selection after navigation completes
+                        widget.onItemSelected(index);
+                      });
+                    } else {
+                      // Still call the callback if we're already on the route
+                      widget.onItemSelected(index);
                     }
                   },
                 );

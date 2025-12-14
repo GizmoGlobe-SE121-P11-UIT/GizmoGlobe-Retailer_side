@@ -29,6 +29,7 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
   String _selectedChartInterval = '';
   int? _selectedYear;
   int? _selectedMonth;
+  int _touchedPieIndex = -1; // For pie chart interaction
 
   @override
   void initState() {
@@ -404,8 +405,30 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                                 ? const Center(
                                     child: CircularProgressIndicator(),
                                   )
-                                : _buildCategoryLineChart(
-                                    context, displayCategorySales, isDaily),
+                                : Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Line chart - 60% width
+                                      Expanded(
+                                        flex: 6,
+                                        child: _buildCategoryLineChart(context,
+                                            displayCategorySales, isDaily),
+                                      ),
+                                      const SizedBox(width: 24),
+                                      // Pie chart - 40% width
+                                      Expanded(
+                                        flex: 4,
+                                        child: state.isLoadingProductCounts
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              )
+                                            : _buildCategoryPieChart(
+                                                context, state),
+                                      ),
+                                    ],
+                                  ),
                           ),
                         ],
                       ),
@@ -475,13 +498,38 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
     );
   }
 
+  // Get category icon
+  IconData _getCategoryIcon(String category) {
+    try {
+      final categoryEnum = CategoryEnumExtension.fromName(category);
+      switch (categoryEnum) {
+        case CategoryEnum.ram:
+          return Icons.memory;
+        case CategoryEnum.cpu:
+          return Icons.computer;
+        case CategoryEnum.psu:
+          return Icons.power;
+        case CategoryEnum.gpu:
+          return Icons.videogame_asset;
+        case CategoryEnum.drive:
+          return Icons.storage;
+        case CategoryEnum.mainboard:
+          return Icons.developer_board;
+        default:
+          return Icons.device_unknown;
+      }
+    } catch (e) {
+      return Icons.device_unknown;
+    }
+  }
+
   // Get category display name from CategoryEnum
   String _getCategoryDisplayName(String category) {
     try {
       final categoryEnum =
           CategoryEnumExtension.fromName(category.toLowerCase());
       if (categoryEnum != CategoryEnum.empty) {
-        return categoryEnum.getLocalizedDescription(context);
+        return categoryEnum.description;
       }
       // Fallback: capitalize first letter
       return category.isNotEmpty
@@ -493,6 +541,232 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
           ? category[0].toUpperCase() + category.substring(1).toLowerCase()
           : category;
     }
+  }
+
+  // Get consistent color for a category across all charts
+  Color _getCategoryColor(String category) {
+    try {
+      final categoryEnum =
+          CategoryEnumExtension.fromName(category.toLowerCase());
+      switch (categoryEnum) {
+        case CategoryEnum.ram:
+          return Colors.blue;
+        case CategoryEnum.cpu:
+          return Colors.green;
+        case CategoryEnum.psu:
+          return Colors.orange;
+        case CategoryEnum.gpu:
+          return Colors.purple;
+        case CategoryEnum.drive:
+          return Colors.teal;
+        case CategoryEnum.mainboard:
+          return Colors.indigo;
+        default:
+          return Colors.grey;
+      }
+    } catch (e) {
+      return Colors.grey;
+    }
+  }
+
+  // Category distribution pie chart
+  Widget _buildCategoryPieChart(BuildContext context, HomeScreenState state) {
+    final categoryCounts = state.productCountsByCategory;
+    if (categoryCounts.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.pie_chart_outline,
+              size: 48,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              S.of(context).noData,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Calculate total for percentage
+    final total =
+        categoryCounts.values.fold<int>(0, (sum, count) => sum + count);
+    if (total == 0) {
+      return const SizedBox.shrink();
+    }
+
+    // Sort categories by count (descending)
+    final sortedCategories = categoryCounts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    // No longer needed - colors are now determined by category
+
+    return Column(
+      children: [
+        // Title
+        Text(
+          'Product Category Distribution',
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 16),
+        // Pie Chart
+        Expanded(
+          child: PieChart(
+            PieChartData(
+              pieTouchData: PieTouchData(
+                touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                  setState(() {
+                    if (!event.isInterestedForInteractions ||
+                        pieTouchResponse == null ||
+                        pieTouchResponse.touchedSection == null) {
+                      _touchedPieIndex = -1;
+                      return;
+                    }
+                    _touchedPieIndex =
+                        pieTouchResponse.touchedSection!.touchedSectionIndex;
+                  });
+                },
+              ),
+              borderData: FlBorderData(show: false),
+              sectionsSpace: 2,
+              centerSpaceRadius: 30,
+              sections: List.generate(sortedCategories.length, (i) {
+                final entry = sortedCategories[i];
+                final category = entry.key;
+                final count = entry.value;
+                final percentage = (count / total * 100);
+                final isTouched = i == _touchedPieIndex;
+                final fontSize = isTouched ? 14.0 : 12.0;
+                final radius = isTouched ? 70.0 : 60.0;
+                final widgetSize = isTouched ? 40.0 : 30.0;
+                const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+                final color = _getCategoryColor(category);
+
+                return PieChartSectionData(
+                  color: color,
+                  value: count.toDouble(),
+                  title: percentage >= 5
+                      ? '${percentage.toStringAsFixed(1)}%'
+                      : '',
+                  radius: radius,
+                  titleStyle: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xffffffff),
+                    shadows: shadows,
+                  ),
+                  badgeWidget: _CategoryBadge(
+                    icon: _getCategoryIcon(category),
+                    size: widgetSize,
+                    borderColor: Theme.of(context).colorScheme.outline,
+                  ),
+                  badgePositionPercentageOffset: .98,
+                );
+              }),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        // Legend - 2-column grid layout
+        Expanded(
+          child: GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 6,
+              childAspectRatio: 5,
+            ),
+            itemCount: sortedCategories.length,
+            itemBuilder: (context, i) {
+              final entry = sortedCategories[i];
+              final category = entry.key;
+              final count = entry.value;
+              final color = _getCategoryColor(category);
+              final isTouched = i == _touchedPieIndex;
+              final displayName = _getCategoryDisplayName(category);
+
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    _touchedPieIndex = _touchedPieIndex == i ? -1 : i;
+                  });
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isTouched
+                        ? color.withValues(alpha: 0.15)
+                        : Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest
+                            .withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isTouched
+                          ? color
+                          : Theme.of(context)
+                              .colorScheme
+                              .outline
+                              .withValues(alpha: 0.2),
+                      width: isTouched ? 2 : 1,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      // Color indicator
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      // Category name
+                      Expanded(
+                        child: Text(
+                          displayName,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    fontWeight: isTouched
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                    fontSize: 11,
+                                  ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      // Count
+                      Text(
+                        '$count',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: color,
+                              fontSize: 11,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   // Multi-line chart for category sales
@@ -525,19 +799,7 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
       );
     }
 
-    // Generate colors for each category
-    final categoryColors = [
-      Colors.green,
-      Colors.pink,
-      Colors.cyan,
-      Colors.orange,
-      Colors.purple,
-      Colors.blue,
-      Colors.teal,
-      Colors.indigo,
-      Colors.red,
-      Colors.amber,
-    ];
+    // No longer needed - colors are now determined by category
 
     final categoryList = allCategories.toList();
     final maxX = (categorySales.length - 1).toDouble();
@@ -555,7 +817,7 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
     final lineBarsData = <LineChartBarData>[];
     for (int i = 0; i < categoryList.length; i++) {
       final category = categoryList[i];
-      final color = categoryColors[i % categoryColors.length];
+      final color = _getCategoryColor(category);
 
       final spots = <FlSpot>[];
       for (int j = 0; j < categorySales.length; j++) {
@@ -625,8 +887,7 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                     categoryDataMap[category] = {
                       'displayName': _getCategoryDisplayName(category),
                       'price': spot.y,
-                      'color':
-                          categoryColors[spot.barIndex % categoryColors.length],
+                      'color': _getCategoryColor(category),
                     };
                   }
                 }
@@ -775,6 +1036,51 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
           lineBarsData: lineBarsData,
         ),
         duration: const Duration(milliseconds: 250),
+      ),
+    );
+  }
+}
+
+// Category badge widget for pie chart
+class _CategoryBadge extends StatelessWidget {
+  const _CategoryBadge({
+    required this.icon,
+    required this.size,
+    required this.borderColor,
+  });
+
+  final IconData icon;
+  final double size;
+  final Color borderColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: PieChart.defaultDuration,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: borderColor,
+          width: 2,
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withValues(alpha: .5),
+            offset: const Offset(3, 3),
+            blurRadius: 3,
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(size * .15),
+      child: Center(
+        child: Icon(
+          icon,
+          size: size * 0.5,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }
