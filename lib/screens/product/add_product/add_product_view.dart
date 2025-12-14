@@ -41,7 +41,7 @@ import '../../../objects/product_related/ram_related/ram.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
 import '../../../widgets/general/multi_field_with_icon.dart';
-import '../../../widgets/dialog/image_manager_modal.dart';
+import '../../media/image_manager_modal.dart';
 import '../../../objects/product_related/product_image.dart';
 import 'add_product_state.dart';
 import 'add_product_cubit.dart';

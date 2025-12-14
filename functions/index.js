@@ -55,6 +55,17 @@ exports.aggregateProductCounts = onDocumentWritten(
 );
 
 /**
+ * Cloud Function to trigger product counts update when images are modified.
+ * Called when a product image is created, updated, or deleted.
+ */
+exports.aggregateProductCountsOnImageChange = onDocumentWritten(
+  'products/{productId}/images/{imageId}',
+  async (event) => {
+    await updateProductCounts();
+  }
+);
+
+/**
  * HTTP-callable function to manually recalculate product counts.
  * Useful for initial setup or fixing data inconsistencies.
  */
@@ -273,42 +284,28 @@ async function updateDashboardStats() {
 
 /**
  * Main function to calculate and store product counts by category.
- * Gets category information from sales_invoice_details collection.
+ * Gets category information directly from products collection.
  */
 async function updateProductCounts() {
   try {
-    // Get all sales invoice details to extract product categories
-    const detailsSnapshot = await db.collection('sales_invoice_details').get();
+    // Get all products to count by category
+    const productsSnapshot = await db.collection('products').get();
     
-    // Map to store productID -> category (to avoid counting same product multiple times)
-    const productCategoryMap = {}; // { "productId1": "RAM", "productId2": "CPU", ... }
-    const categoryCounts = {}; // { "RAM": 10, "CPU": 5, ... }
-    
-    // Process each detail to get product categories
-    detailsSnapshot.forEach(doc => {
-      const detail = doc.data();
-      const productID = detail.productID;
-      const category = detail.category || 'Unknown';
-      
-      // Only store the first category we encounter for each product
-      // (in case a product appears in multiple invoices with different categories)
-      if (productID && !productCategoryMap[productID]) {
-        productCategoryMap[productID] = category;
-      }
-    });
+    const categoryCounts = {}; // { "ram": 10, "cpu": 5, ... }
     
     // Count products by category
-    for (const productID in productCategoryMap) {
-      const category = productCategoryMap[productID];
+    productsSnapshot.forEach(doc => {
+      const product = doc.data();
+      const category = product.category || 'Unknown';
       categoryCounts[category] = (categoryCounts[category] || 0) + 1;
-    }
+    });
     
     // Convert to array format for easy consumption
     const categoryCountsArray = Object.entries(categoryCounts)
       .map(([category, count]) => ({ category, count }))
       .sort((a, b) => a.category.localeCompare(b.category));
     
-    const totalProducts = Object.keys(productCategoryMap).length;
+    const totalProducts = productsSnapshot.size;
     
     // Store the aggregated counts
     await db.collection('aggregations').doc('productCounts').set({

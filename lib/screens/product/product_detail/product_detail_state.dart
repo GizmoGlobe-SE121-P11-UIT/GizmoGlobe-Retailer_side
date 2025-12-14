@@ -36,6 +36,7 @@ class ProductDetailState extends Equatable {
   List<Object?> get props => [
         product,
         technicalSpecs,
+        imageUrls,
         processState,
         dialogName,
         notifyMessage,

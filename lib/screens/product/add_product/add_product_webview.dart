@@ -30,7 +30,7 @@ import '../../../enums/product_related/ram_enums/ram_type.dart';
 import '../../../objects/manufacturer.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../objects/product_related/product_image.dart';
-import '../../../widgets/dialog/image_manager_modal.dart';
+import '../../media/image_manager_modal.dart';
 import 'add_product_state.dart';
 import 'add_product_cubit.dart';
 
