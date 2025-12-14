@@ -105,7 +105,7 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
       // If Firestore complains about missing composite index (failed-precondition),
       // fall back to a client-side fetch so the app still shows data while the index is created.
       if (kDebugMode) print('fetchRatings: error fetching ratings: $e\n$st');
-      final String err = e?.toString() ?? '';
+      final String err = e.toString();
       final bool missingIndex = err.contains('requires an index') || (e is FirebaseException && e.code == 'failed-precondition');
       if (missingIndex) {
         if (kDebugMode) print('fetchRatings: missing index detected, falling back to client-side fetch');
@@ -116,8 +116,11 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
           for (var doc in allSnapshot.docs) {
             try {
               final rating = Rating.fromDoc(doc);
-              if (rating.reply != null) fallbackReplied.add(rating);
-              else fallbackNew.add(rating);
+              if (rating.reply != null) {
+                fallbackReplied.add(rating);
+              } else {
+                fallbackNew.add(rating);
+              }
               // best-effort username enrichment
               if (rating.userID.isNotEmpty) {
                 try {

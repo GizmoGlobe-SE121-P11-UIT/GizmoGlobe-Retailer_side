@@ -19,7 +19,7 @@ class _FullscreenMediaViewerState extends State<FullscreenMediaViewer> {
   void initState() {
     super.initState();
     if (widget.videoUrl != null && widget.videoUrl!.isNotEmpty) {
-      _videoController = VideoPlayerController.network(widget.videoUrl!)
+      _videoController = VideoPlayerController.networkUrl(widget.videoUrl! as Uri)
         ..initialize().then((_) {
           setState(() {
             _videoInitialized = true;

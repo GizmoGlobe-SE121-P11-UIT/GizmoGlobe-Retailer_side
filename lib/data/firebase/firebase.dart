@@ -2355,9 +2355,10 @@ class Firebase {
             }
           }
         } catch (e) {
-          if (kDebugMode)
+          if (kDebugMode) {
             print(
                 'Warning: could not fetch username for rating ${rating.ratingID}: $e');
+          }
         }
 
         ratings.add(rating);
@@ -2378,12 +2379,14 @@ class Firebase {
   Future<RatingsPage> getRatingsPageByProduct(String productId,
       {DocumentSnapshot? startAfter, int limit = 5}) async {
     try {
-      if (productId.isEmpty)
+      if (productId.isEmpty) {
         return RatingsPage(ratings: [], lastDocument: null, hasMore: false);
+      }
 
-      if (kDebugMode)
+      if (kDebugMode) {
         print(
             'getRatingsPageByProduct: productId=$productId startAfter=${startAfter?.id} limit=$limit');
+      }
 
       Query query = _firestore
           .collection('order_ratings')
@@ -2397,9 +2400,10 @@ class Firebase {
 
       if (kDebugMode) {
         print('getRatingsPageByProduct: got ${snapshot.docs.length} docs');
-        if (snapshot.docs.isNotEmpty)
+        if (snapshot.docs.isNotEmpty) {
           print(
               'getRatingsPageByProduct: first doc data=${snapshot.docs.first.data()}');
+        }
       }
 
       final List<Rating> ratings = [];
@@ -2407,9 +2411,10 @@ class Firebase {
         final data = doc.data() as Map<String, dynamic>;
         final rating = Rating.fromMap(doc.id, data);
 
-        if (kDebugMode)
+        if (kDebugMode) {
           print(
               'Parsed rating (paged) ${doc.id}: productID=${rating.productID} userID=${rating.userID} rating=${rating.rating} time=${rating.timeSent}');
+        }
 
         // attach username if possible
         try {
@@ -2432,9 +2437,10 @@ class Firebase {
       final lastDoc = snapshot.docs.isNotEmpty ? snapshot.docs.last : null;
       final hasMore = snapshot.docs.length == limit;
 
-      if (kDebugMode)
+      if (kDebugMode) {
         print(
             'getRatingsPageByProduct: returning ${ratings.length} ratings, hasMore=$hasMore');
+      }
 
       return RatingsPage(
           ratings: ratings, lastDocument: lastDoc, hasMore: hasMore);
@@ -2489,16 +2495,17 @@ class Firebase {
         final data = doc.data() as Map<String, dynamic>;
         final ratingVal = data['rating'];
         int parsed = 0;
-        if (ratingVal is int)
+        if (ratingVal is int) {
           parsed = ratingVal;
-        else if (ratingVal is num)
+        } else if (ratingVal is num) {
           parsed = ratingVal.toInt();
-        else if (ratingVal is String)
+        } else if (ratingVal is String) {
           parsed = int.tryParse(ratingVal) ?? 0;
-        else
+        } else {
           parsed = 0;
-        sum += parsed;
-        count += 1;
+          sum += parsed;
+          count += 1;
+        }
       }
 
       final average = (count > 0) ? (sum / count) : 0.0;

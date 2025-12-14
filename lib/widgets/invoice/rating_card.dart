@@ -99,8 +99,8 @@ class RatingCard extends StatelessWidget {
                             fit: StackFit.expand,
                             children: [
                               Image.network(r.videoUrl!, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const SizedBox()),
-                              Center(
-                                child: Icon(Icons.play_circle, color: const Color.fromRGBO(255, 255, 255, 0.9), size: 56),
+                              const Center(
+                                child: Icon(Icons.play_circle, color: Color.fromRGBO(255, 255, 255, 0.9), size: 56),
                               ),
                             ],
                           ),

@@ -679,9 +679,9 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                     );
                   } else {
                     // Other items are empty (they won't be displayed separately)
-                    return LineTooltipItem(
+                    return const LineTooltipItem(
                       '',
-                      const TextStyle(
+                      TextStyle(
                         color: Colors.transparent,
                         fontSize: 0,
                       ),

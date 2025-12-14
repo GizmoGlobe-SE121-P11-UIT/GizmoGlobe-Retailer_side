@@ -103,7 +103,7 @@ class SalesInvoicePdfService {
       padding: const pw.EdgeInsets.all(20),
       decoration: pw.BoxDecoration(
         color: PdfColors.green50,
-        borderRadius: pw.BorderRadius.all(const pw.Radius.circular(8)),
+        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
         border: pw.Border.all(color: PdfColors.green400, width: 1),
       ),
       child: pw.Column(

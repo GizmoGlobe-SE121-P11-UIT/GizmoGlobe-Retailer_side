@@ -341,7 +341,7 @@ class _BusinessReportDialogState extends State<BusinessReportDialog> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<ReportPeriod>(
-              value: _selectedPeriod,
+              initialValue: _selectedPeriod,
               decoration: InputDecoration(
                 labelText: S.of(context).period,
                 border: OutlineInputBorder(
@@ -381,7 +381,7 @@ class _BusinessReportDialogState extends State<BusinessReportDialog> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<CategoryEnum?>(
-              value: _selectedCategory,
+              initialValue: _selectedCategory,
               decoration: InputDecoration(
                 labelText: S.of(context).category,
                 border: OutlineInputBorder(

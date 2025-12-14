@@ -14,7 +14,6 @@ import '../../../enums/product_related/product_status_enum.dart';
 import '../../../enums/product_related/category_enum.dart';
 import '../../../enums/stakeholders/manufacturer_status.dart';
 import '../../../functions/helper.dart';
-import '../../../objects/invoice_related/rating.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../data/database/database.dart';
@@ -918,26 +917,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   rating: r,
                   onPostReply: (ratingId, comment, {productId}) async {
                     // delegate to ProductDetailCubit and then pop to signal parent
-                    if (kDebugMode)
+                    if (kDebugMode) {
                       print('ProductDetailScreen: posting reply for $ratingId');
+                    }
                     try {
                       await cubit.replyToRating(
                           ratingId: ratingId,
                           comment: comment,
                           productId: r.productID);
-                      if (kDebugMode)
+                      if (kDebugMode) {
                         print(
                             'ProductDetailScreen: reply posted, popping with success (scheduled)');
+                      }
                       if (context.mounted) {
                         // schedule the pop to avoid navigator locked assertion during rebuild
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (context.mounted)
+                          if (context.mounted) {
                             Navigator.of(context).pop(ProcessState.success);
+                          }
                         });
                       }
                     } catch (e) {
-                      if (kDebugMode)
+                      if (kDebugMode) {
                         print('ProductDetailScreen: error posting reply: $e');
+                      }
                       rethrow;
                     }
                   },
