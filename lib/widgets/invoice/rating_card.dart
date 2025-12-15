@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
-import 'package:gizmoglobe_client/localization/app_localization.dart';
-import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
-import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
+import '../../localization/app_localization.dart';
 import '../../screens/media/fullscreen_media_viewer.dart';
+import '../dialog/information_dialog.dart';
 import '../product/product_minicard.dart';
 import '../../objects/product_related/product.dart';
+import '../snackbar/snackbar_service.dart';
 
 class RatingCard extends StatelessWidget {
   final dynamic rating;
-  // Optional callback when the user taps "Reply" for ratings without a reply.
-  // Provides the rating's id as argument.
   final void Function(String ratingId)? onReply;
-  // Optional callback to post a reply (ratingId, comment, optional productId).
-  // If provided, the RatingCard will show the reply dialog and call this to post.
-  final Future<void> Function(String ratingId, String comment,
-      {String? productId})? onPostReply;
-  // Optional: attach a product mini card at the top of the rating card
+  final Future<void> Function(String ratingId, String comment, {String? productId})? onPostReply;
   final bool attachProduct;
   final Product? product;
 
@@ -79,10 +73,7 @@ class RatingCard extends StatelessWidget {
                 DateFormat('dd/MM/yyyy').format(r.timeSent),
                 style: TextStyle(
                   fontSize: 12,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.6),
+                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
             ),
@@ -102,8 +93,7 @@ class RatingCard extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) =>
-                                FullscreenMediaViewer(videoUrl: r.videoUrl),
+                            builder: (_) => FullscreenMediaViewer(videoUrl: r.videoUrl),
                           ));
                         },
                         child: Container(
@@ -137,17 +127,11 @@ class RatingCard extends StatelessWidget {
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                      builder: (_) =>
-                                          FullscreenMediaViewer(imageUrl: img),
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => FullscreenMediaViewer(imageUrl: img),
                                     ));
                                   },
-                                  child: Image.network(img,
-                                      height: 80,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (_, __, ___) =>
-                                          const SizedBox()),
+                                  child: Image.network(img, height: 80, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const SizedBox()),
                                 ),
                               );
                             }).toList(),
@@ -222,130 +206,142 @@ class RatingCard extends StatelessWidget {
 
   void _showReplyDialog(BuildContext parentCtx, String ratingId,
       {String? productId}) {
-    if (kDebugMode) {
-      print('RatingCard: _showReplyDialog called for id=$ratingId');
-    }
-    final TextEditingController controller = TextEditingController();
-    bool posting = false;
-
+    // Show a dedicated stateful dialog widget that owns its controller so it
+    // can safely dispose it in its own State.dispose(). This avoids lifecycle
+    // races where the controller might be disposed while Flutter is still
+    // rebuilding the TextField.
     if (kDebugMode) {
       print('RatingCard: showing dialog for id=$ratingId using parentCtx');
     }
+
     showDialog<void>(
       context: parentCtx,
       barrierDismissible: false,
-      builder: (dialogCtx) {
-        if (kDebugMode) print('RatingCard: building dialog for id=$ratingId');
-        return StatefulBuilder(builder: (contextSB, setStateSB) {
-          return AlertDialog(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(S.of(parentCtx).reply),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(dialogCtx).pop();
-                  },
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-            content: SizedBox(
-              width: 400,
-              height: 120,
-              child: TextField(
-                controller: controller,
-                maxLines: null,
-                expands: true,
-                textAlignVertical: TextAlignVertical.top,
-                keyboardType: TextInputType.multiline,
-                decoration: InputDecoration(
-                  hintText: S.of(parentCtx).writeAReply,
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: posting ? null : () => Navigator.of(dialogCtx).pop(),
-                child: Text(S.of(parentCtx).cancel),
-              ),
-              ElevatedButton(
-                onPressed: posting
-                    ? null
-                    : () async {
-                        final text = controller.text.trim();
-                        if (text.isEmpty) return;
-                        setStateSB(() => posting = true);
-                        // show a simple loading dialog while posting
-                        bool loadingShown = false;
-                        void showLoading() {
-                          if (!loadingShown && dialogCtx.mounted) {
-                            loadingShown = true;
-                            showDialog<void>(
-                              context: dialogCtx,
-                              barrierDismissible: false,
-                              builder: (_) => WillPopScope(
-                                onWillPop: () async => false,
-                                child: const Center(
-                                    child: CircularProgressIndicator()),
-                              ),
-                            );
-                          }
-                        }
+      builder: (dialogCtx) => _ReplyDialog(
+        ratingId: ratingId,
+        productId: productId,
+        parentCtx: parentCtx,
+        onPostReply: onPostReply,
+      ),
+    );
+  }
+}
 
-                        void hideLoading() {
-                          if (loadingShown && dialogCtx.mounted) {
-                            try {
-                              Navigator.of(dialogCtx).pop();
-                            } catch (_) {}
-                            loadingShown = false;
-                          }
-                        }
+class _ReplyDialog extends StatefulWidget {
+  final String ratingId;
+  final String? productId;
+  final BuildContext parentCtx;
+  final Future<void> Function(String ratingId, String comment, {String? productId})? onPostReply;
 
-                        showLoading();
-                        try {
-                          await onPostReply!(ratingId, text,
-                              productId: productId);
-                          hideLoading();
-                          if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
-                          if (parentCtx.mounted) {
-                            SnackbarService.showSuccess(
-                              parentCtx,
-                              S.of(parentCtx).replyPostedSuccessfully,
-                              '',
-                            );
-                          }
-                        } catch (e) {
-                          hideLoading();
-                          if (parentCtx.mounted) {
-                            showDialog(
-                              context: parentCtx,
-                              builder: (_) => InformationDialog(
-                                title: S.of(parentCtx).errorOccurred,
-                                content: e.toString(),
-                                buttonText: S.of(parentCtx).confirm,
-                              ),
-                            );
-                          }
-                        } finally {
-                          if (contextSB.mounted) {
-                            setStateSB(() => posting = false);
-                          }
-                        }
-                      },
-                child: posting
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2, color: Colors.white))
-                    : Text(S.of(parentCtx).postReply),
-              ),
-            ],
-          );
-        });
-      },
+  const _ReplyDialog({
+    Key? key,
+    required this.ratingId,
+    this.productId,
+    required this.parentCtx,
+    this.onPostReply,
+  }) : super(key: key);
+
+  @override
+  State<_ReplyDialog> createState() => _ReplyDialogState();
+}
+
+class _ReplyDialogState extends State<_ReplyDialog> {
+  late final TextEditingController _controller;
+  bool _posting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   // No nested loading dialog anymore. We rely on the `_posting` boolean
+  // to render an inline progress indicator on the Post button.
+
+   @override
+   Widget build(BuildContext context) {
+    final loc = S.of(context);
+    return AlertDialog(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(loc.reply),
+          IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.close),
+          ),
+        ],
+      ),
+      content: SizedBox(
+        width: 400,
+        height: 120,
+        child: TextField(
+          controller: _controller,
+          maxLines: null,
+          expands: true,
+          textAlignVertical: TextAlignVertical.top,
+          keyboardType: TextInputType.multiline,
+          decoration: InputDecoration(
+            hintText: loc.writeAReply,
+            border: const OutlineInputBorder(),
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _posting ? null : () => Navigator.of(context).pop(),
+          child: Text(loc.cancel),
+        ),
+        ElevatedButton(
+          onPressed: _posting
+              ? null
+              : () async {
+                  final text = _controller.text.trim();
+                  if (text.isEmpty) return;
+                  setState(() => _posting = true);
+                  try {
+                    if (widget.onPostReply == null) {
+                      throw Exception('No reply handler');
+                    }
+                    await widget.onPostReply!(widget.ratingId, text,
+                        productId: widget.productId);
+                    if (mounted) Navigator.of(context).pop();
+                    if (widget.parentCtx.mounted) {
+                      SnackbarService.showSuccess(
+                        widget.parentCtx,
+                        S.of(widget.parentCtx).replyPostedSuccessfully,
+                        '',
+                      );
+                    }
+                  } catch (e) {
+                    if (widget.parentCtx.mounted) {
+                      showDialog(
+                        context: widget.parentCtx,
+                        builder: (_) => InformationDialog(
+                          title: S.of(widget.parentCtx).errorOccurred,
+                          content: e.toString(),
+                          buttonText: S.of(widget.parentCtx).confirm,
+                        ),
+                      );
+                    }
+                  } finally {
+                    if (mounted) setState(() => _posting = false);
+                  }
+                },
+          child: _posting
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+              : Text(loc.postReply),
+        ),
+      ],
     );
   }
 }
