@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/voucher_display_type.dart';
 
 import '../../enums/voucher_related/voucher_status.dart';
 
@@ -6,13 +7,14 @@ abstract class Voucher {
   String? voucherID;
   String voucherName;
   DateTime startTime;
-  double discountValue;
+  int discountValue;
   int minimumPurchase;
   int maxUsagePerPerson;
-  bool isVisible;
+  VoucherDisplayType displayType;
   bool isEnabled;
   String? enDescription;
   String? viDescription;
+  int redeemPrice;
 
   bool isPercentage;
   bool hasEndTime;
@@ -25,27 +27,27 @@ abstract class Voucher {
     required this.discountValue,
     required this.minimumPurchase,
     required this.maxUsagePerPerson,
-    required this.isVisible,
+    required this.displayType,
     required this.isEnabled,
     this.enDescription,
     this.viDescription,
-
     required this.isPercentage,
     required this.hasEndTime,
     required this.isLimited,
+    this.redeemPrice = 0,
   });
 
   void updateVoucher({
     String? voucherID,
     String? voucherName,
-    double? discountValue,
+    int? discountValue,
     int? minimumPurchase,
     int? maxUsagePerPerson,
     DateTime? startTime,
-
     String? enDescription,
     String? viDescription,
-    bool? isVisible,
+    VoucherDisplayType? displayType,
+    int? redeemPrice,
     bool? isEnabled,
   }) {
     this.voucherID = voucherID ?? this.voucherID;
@@ -54,20 +56,22 @@ abstract class Voucher {
     this.discountValue = discountValue ?? this.discountValue;
     this.minimumPurchase = minimumPurchase ?? this.minimumPurchase;
     this.maxUsagePerPerson = maxUsagePerPerson ?? this.maxUsagePerPerson;
-    this.isVisible = isVisible ?? this.isVisible;
+    this.displayType = displayType ?? this.displayType;
     this.isEnabled = isEnabled ?? this.isEnabled;
     this.enDescription = enDescription ?? this.enDescription;
     this.viDescription = viDescription ?? this.viDescription;
+    this.redeemPrice = redeemPrice ?? this.redeemPrice;
   }
 
   Voucher copyWith({
     String? voucherID,
     String? voucherName,
     DateTime? startTime,
-    double? discountValue,
+    int? discountValue,
     int? minimumPurchase,
     int? maxUsagePerPerson,
-    bool? isVisible,
+    int? redeemPrice,
+    VoucherDisplayType? displayType,
     bool? isEnabled,
     String? enDescription,
     String? viDescription,
@@ -81,4 +85,3 @@ abstract class Voucher {
   bool get voucherRanOut;
   Widget detailsWidget(BuildContext context);
 }
-

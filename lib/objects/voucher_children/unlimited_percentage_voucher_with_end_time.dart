@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/percentage_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
+import '../../enums/voucher_related/voucher_display_type.dart';
 import '../../enums/voucher_related/voucher_status.dart';
 import '../../functions/helper.dart';
 import '../voucher_related/end_time_interface.dart';
@@ -18,7 +19,8 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
     required super.discountValue,
     required super.minimumPurchase,
     required super.maxUsagePerPerson,
-    required super.isVisible,
+    required super.redeemPrice,
+    required super.displayType,
     required super.isEnabled,
     super.enDescription,
     super.viDescription,
@@ -45,10 +47,11 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
     String? voucherID,
     String? voucherName,
     DateTime? startTime,
-    double? discountValue,
+    int? discountValue,
     int? minimumPurchase,
     int? maxUsagePerPerson,
-    bool? isVisible,
+    int? redeemPrice,
+    VoucherDisplayType? displayType,
     bool? isEnabled,
     String? enDescription,
     String? viDescription,
@@ -62,7 +65,8 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
       discountValue: discountValue,
       minimumPurchase: minimumPurchase,
       maxUsagePerPerson: maxUsagePerPerson,
-      isVisible: isVisible,
+      redeemPrice: redeemPrice,
+      displayType: displayType,
       isEnabled: isEnabled,
       enDescription: enDescription,
       viDescription: viDescription,
@@ -113,14 +117,19 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
           ),
         ),
         const SizedBox(height: 4),
-        if (!isVisible)
-          Text(
-            s.hidden,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.primary,
+        Column(
+          children: [
+            Text(
+              displayType == VoucherDisplayType.redeemable
+                  ? '${displayType.description} for $redeemPrice'
+                  : displayType.description,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.primary,
+              ),
             ),
-          ),
-        if (!isVisible) const SizedBox(height: 4),
+          ],
+        ),
+        const SizedBox(height: 4),
         if (!isEnabled)
           Text(
             s.disabled,
@@ -154,10 +163,11 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
     String? voucherID,
     String? voucherName,
     DateTime? startTime,
-    double? discountValue,
+    int? discountValue,
     int? minimumPurchase,
     int? maxUsagePerPerson,
-    bool? isVisible,
+    int? redeemPrice,
+    VoucherDisplayType? displayType,
     bool? isEnabled,
     String? enDescription,
     String? viDescription,
@@ -174,7 +184,8 @@ class UnlimitedPercentageVoucherWithEndTime extends Voucher
       discountValue: discountValue ?? this.discountValue,
       minimumPurchase: minimumPurchase ?? this.minimumPurchase,
       maxUsagePerPerson: maxUsagePerPerson ?? this.maxUsagePerPerson,
-      isVisible: isVisible ?? this.isVisible,
+      redeemPrice: redeemPrice ?? this.redeemPrice,
+      displayType: displayType ?? this.displayType,
       isEnabled: isEnabled ?? this.isEnabled,
       enDescription: enDescription ?? this.enDescription,
       viDescription: viDescription ?? this.viDescription,

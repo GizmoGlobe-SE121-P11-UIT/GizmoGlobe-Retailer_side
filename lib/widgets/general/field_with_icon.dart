@@ -11,6 +11,8 @@ class FieldWithIcon extends StatelessWidget {
   final VoidCallback? onPrefixIconPressed;
   final Icon? suffixIcon;
   final VoidCallback? onSuffixIconPressed;
+  final String? suffixText;
+  final Widget? suffix;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final double fontSize;
@@ -35,6 +37,8 @@ class FieldWithIcon extends StatelessWidget {
     this.onPrefixIconPressed,
     this.suffixIcon,
     this.onSuffixIconPressed,
+    this.suffixText,
+    this.suffix,
     this.keyboardType,
     this.inputFormatters,
     this.fontSize = 16,
@@ -92,12 +96,25 @@ class FieldWithIcon extends StatelessWidget {
                   child: prefixIcon,
                 )
               : null,
-          suffixIcon: suffixIcon != null
-              ? InkWell(
-                  onTap: onSuffixIconPressed,
-                  child: suffixIcon,
-                )
-              : null,
+          suffix: (() {
+            if (suffix != null) return InkWell(onTap: onSuffixIconPressed, child: suffix);
+            if (suffixIcon != null) return InkWell(onTap: onSuffixIconPressed, child: suffixIcon);
+            if (suffixText != null) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Text(
+                  suffixText!,
+                  style: TextStyle(
+                    color: effectiveHintTextColor,
+                    fontFamily: 'Montserrat',
+                    fontSize: fontSize * 0.9,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              );
+            }
+            return null;
+          })(),
           border: OutlineInputBorder(
             borderRadius: borderRadius,
             borderSide: borderSide,

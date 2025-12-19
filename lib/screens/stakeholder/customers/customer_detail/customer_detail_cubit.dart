@@ -8,6 +8,7 @@ import '../../../../data/database/database.dart';
 import '../../../../enums/processing/dialog_name_enum.dart';
 import '../../../../enums/processing/notify_message_enum.dart';
 import '../../../../enums/processing/process_state_enum.dart';
+import '../../../../enums/voucher_related/voucher_display_type.dart';
 import '../../../../enums/voucher_related/voucher_status.dart';
 import '../../../../objects/address_related/address.dart';
 import '../../../../objects/address_related/district.dart';
@@ -42,7 +43,7 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
       final availableVouchers = (vouchers).where((v) {
         return v.isEnabled &&
             v.voucherTimeStatus != VoucherTimeStatus.expired &&
-            !v.isVisible &&
+            v.displayType == VoucherDisplayType.adminOnly &&
             !v.voucherRanOut &&
             !ownedVoucherIds.contains(v.voucherID);
       }).toList();

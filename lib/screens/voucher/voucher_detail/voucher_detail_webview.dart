@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gizmoglobe_client/functions/converter.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/limited_interface.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_state.dart';
@@ -10,6 +9,7 @@ import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
+import '../../../functions/helper.dart';
 import '../../../objects/voucher_related/end_time_interface.dart';
 import '../../../objects/voucher_related/percentage_interface.dart';
 import '../../../objects/voucher_related/voucher.dart';
@@ -315,8 +315,8 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
           const SizedBox(height: 8),
           Text(
             state.voucher.isPercentage
-                ? '${Converter.formatDouble(state.voucher.discountValue)}%'
-                : '\$${Converter.formatDouble(state.voucher.discountValue)}',
+                ? '${state.voucher.discountValue}%'
+                : Helper.toCurrencyFormat(state.voucher.discountValue),
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -363,17 +363,17 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
               _buildInfoRow(
                 S.of(context).discountValue,
                 state.voucher.isPercentage
-                    ? '${Converter.formatDouble(state.voucher.discountValue)}%'
-                    : '\$${Converter.formatDouble(state.voucher.discountValue)}',
+                    ? '${state.voucher.discountValue}%'
+                    : Helper.toCurrencyFormat(state.voucher.discountValue),
               ),
               if (state.voucher.isPercentage)
                 _buildInfoRow(
                   S.of(context).maximumDiscountValue,
-                  '\$${Converter.formatDouble((state.voucher as PercentageInterface).maximumDiscountValue.toDouble())}',
+                  Helper.toCurrencyFormat((state.voucher as PercentageInterface).maximumDiscountValue),
                 ),
               _buildInfoRow(
                 S.of(context).minimumPurchase,
-                '\$${Converter.formatDouble(state.voucher.minimumPurchase.toDouble())}',
+                Helper.toCurrencyFormat(state.voucher.minimumPurchase),
               ),
               if (state.voucher.isLimited)
                 _buildInfoRow(
@@ -452,7 +452,8 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
               Row(
                 children: [
                   Text(
-                    '${S.of(context).visibility}: ',
+                    // '${S.of(context).visibility}: ',
+                    'Display Type: ',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -460,9 +461,7 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
                     ),
                   ),
                   StatusBadge(
-                    status: state.voucher.isVisible
-                        ? S.of(context).visible
-                        : S.of(context).hidden,
+                    status: state.voucher.displayType.description
                   ),
                 ],
               ),

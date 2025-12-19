@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 
 import '../../../enums/processing/process_state_enum.dart';
+import '../../../enums/voucher_related/voucher_display_type.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
@@ -316,7 +317,7 @@ class _EditVoucherWebViewState extends State<EditVoucherWebView> {
             Row(
               children: [
                 Expanded(
-                  child: buildInputWidget<double>(
+                  child: buildInputWidget<int>(
                     S.of(context).discountValue,
                     discountValueController,
                     state.voucherArgument?.discountValue,
@@ -536,15 +537,17 @@ class _EditVoucherWebViewState extends State<EditVoucherWebView> {
             Row(
               children: [
                 Expanded(
-                  child: buildToggleSwitch(
-                    label: S.of(context).visibility,
-                    value: state.voucherArgument?.isVisible ?? true,
-                    leftLabel: S.of(context).hidden,
-                    rightLabel: S.of(context).visible,
-                    onChanged: (value) {
-                      cubit.updateVoucherArgument(
-                          state.voucherArgument!.copyWith(isVisible: value));
+                  child: buildInputWidget<VoucherDisplayType>(
+                    'Display Type',
+                    TextEditingController(),
+                    state.voucherArgument?.displayType ?? VoucherDisplayType.everyone,
+                        (value) {
+                      if (value != null) {
+                        cubit.updateVoucherArgument(state.voucherArgument!.copyWith(displayType: value));
+                      }
                     },
+                    VoucherDisplayType.values,
+                    null,
                   ),
                 ),
                 const SizedBox(width: 16),

@@ -33,7 +33,7 @@ class Helper {
   }
 
   static String toCurrencyFormat(num value) {
-    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: 'VND', decimalDigits: 0);
+    final formatter = NumberFormat.currency(locale: 'vi_VN', symbol: 'đ', decimalDigits: 0);
     return formatter.format(value * 1000);
   }
 }

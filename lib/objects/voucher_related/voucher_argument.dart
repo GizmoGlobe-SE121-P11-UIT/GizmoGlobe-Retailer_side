@@ -1,3 +1,4 @@
+import 'package:gizmoglobe_client/enums/voucher_related/voucher_display_type.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/end_time_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/percentage_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
@@ -9,10 +10,11 @@ class VoucherArgument {
   String? voucherID;
   String? voucherName;
   DateTime? startTime;
-  double? discountValue;
+  int? discountValue;
   int? minimumPurchase;
   int? maxUsagePerPerson;
-  bool? isVisible;
+  int? redeemPrice;
+  VoucherDisplayType? displayType;
   bool? isEnabled;
   String? enDescription;
   String? viDescription;
@@ -35,7 +37,8 @@ class VoucherArgument {
     this.discountValue,
     this.minimumPurchase,
     this.maxUsagePerPerson,
-    this.isVisible,
+    this.redeemPrice,
+    this.displayType,
     this.isEnabled,
     this.enDescription,
     this.viDescription,
@@ -52,10 +55,11 @@ class VoucherArgument {
     String? voucherID,
     String? voucherName,
     DateTime? startTime,
-    double? discountValue,
+    int? discountValue,
     int? minimumPurchase,
     int? maxUsagePerPerson,
-    bool? isVisible,
+    int? redeemPrice,
+    VoucherDisplayType? displayType,
     bool? isEnabled,
     String? enDescription,
     String? viDescription,
@@ -74,7 +78,8 @@ class VoucherArgument {
       discountValue: discountValue ?? this.discountValue,
       minimumPurchase: minimumPurchase ?? this.minimumPurchase,
       maxUsagePerPerson: maxUsagePerPerson ?? this.maxUsagePerPerson,
-      isVisible: isVisible ?? this.isVisible,
+      redeemPrice: redeemPrice ?? this.redeemPrice,
+      displayType: displayType ?? this.displayType,
       isEnabled: isEnabled ?? this.isEnabled,
       enDescription: enDescription ?? this.enDescription,
       viDescription: viDescription ?? this.viDescription,
@@ -93,6 +98,36 @@ class VoucherArgument {
       if (isLimited == null || isPercentage == null || hasEndTime == null) {
         throw Exception('Voucher type properties must not be null');
       }
+
+      // Validate required fields depending on chosen voucher options
+      final List<String> missing = [];
+
+      if (voucherName == null || voucherName!.trim().isEmpty) missing.add('Voucher Name');
+      if (startTime == null) missing.add('Start Time');
+      if (discountValue == null || discountValue == 0) missing.add('Discount Value');
+      if (minimumPurchase == null || minimumPurchase == 0) missing.add('Minimum Purchase');
+      if (maxUsagePerPerson == null || maxUsagePerPerson == 0) missing.add('Max Usage Per Person');
+
+      if (isPercentage == true) {
+        if (maximumDiscountValue == null || maximumDiscountValue == 0) missing.add('Maximum Discount Value');
+      }
+
+      if (isLimited == true) {
+        if (maximumUsage == null || maximumUsage == 0) missing.add('Maximum Usage');
+      }
+
+      if (hasEndTime == true) {
+        if (endTime == null) missing.add('End Time');
+      }
+
+      if (displayType == VoucherDisplayType.redeemable) {
+        if (redeemPrice == null || redeemPrice == 0) missing.add('Redeem Price');
+      }
+
+      if (missing.isNotEmpty) {
+        throw Exception('Missing required fields for voucher creation: ${missing.join(', ')}');
+      }
+
       return VoucherFactory.createVoucher(
         isLimited: isLimited!,
         isPercentage: isPercentage!,
@@ -101,14 +136,15 @@ class VoucherArgument {
           'voucherID': voucherID,
           'voucherName': voucherName,
           'startTime': startTime,
-          'discountValue': discountValue ?? 0.0,
-          'minimumPurchase': minimumPurchase ?? 0.0,
+          'discountValue': discountValue ?? 0,
+          'minimumPurchase': minimumPurchase ?? 0,
           'maxUsagePerPerson': maxUsagePerPerson ?? 1,
-          'isVisible': isVisible ?? true,
+          'redeemPrice': redeemPrice ?? 0,
+          'displayType': displayType != null ? displayType!.name : VoucherDisplayType.adminOnly.name,
           'isEnabled': isEnabled ?? true,
           'enDescription': enDescription ?? '',
           'viDescription': viDescription ?? '',
-          'maximumDiscountValue': maximumDiscountValue ?? 0.0,
+          'maximumDiscountValue': maximumDiscountValue ?? 0,
           'maximumUsage': maximumUsage ?? 0,
           'usageLeft': usageLeft ?? 0,
           'endTime': endTime,
@@ -138,13 +174,15 @@ class VoucherArgument {
       discountValue: voucher.discountValue,
       minimumPurchase: voucher.minimumPurchase,
       maxUsagePerPerson: voucher.maxUsagePerPerson,
-      isVisible: voucher.isVisible,
+      redeemPrice: voucher.redeemPrice,
+      displayType: voucher.displayType,
       isEnabled: voucher.isEnabled,
       enDescription: voucher.enDescription,
       viDescription: voucher.viDescription,
       isPercentage: voucher.isPercentage,
       hasEndTime: voucher.hasEndTime,
       isLimited: voucher.isLimited,
+
     );
 
     if (voucher is PercentageInterface) {

@@ -6,6 +6,7 @@ import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import '../../../enums/processing/dialog_name_enum.dart';
 import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
+import '../../../enums/voucher_related/voucher_display_type.dart';
 import '../../../objects/voucher_related/voucher.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -18,10 +19,9 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
             isLimited: false,
             isPercentage: false,
             hasEndTime: false,
-            isVisible: true,
+            displayType: VoucherDisplayType.everyone,
             isEnabled: true,
             startTime: DateTime.now(),
-
             enDescription: '',
             viDescription: '',
           ),
@@ -34,7 +34,8 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
         isLimited: voucherArgument.isLimited,
         isPercentage: voucherArgument.isPercentage,
         hasEndTime: voucherArgument.hasEndTime,
-        isVisible: voucherArgument.isVisible,
+        redeemPrice: voucherArgument.redeemPrice,
+        voucherName: voucherArgument.voucherName,
         isEnabled: voucherArgument.isEnabled,
         startTime: voucherArgument.startTime ?? now,
         maxUsagePerPerson: voucherArgument.maxUsagePerPerson,

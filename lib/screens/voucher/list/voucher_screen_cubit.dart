@@ -55,7 +55,12 @@ class VoucherScreenCubit extends Cubit<VoucherScreenState> {
       if (kDebugMode) {
         print('Error initializing voucher list: $e');
       }
-      emit(state.copyWith(isLoading: false));
+      emit(state.copyWith(
+        processState: ProcessState.failure,
+        dialogName: DialogName.failure,
+        notifyMessage: NotifyMessage.msg25,
+        isLoading: false,
+      ));
     }
   }
 

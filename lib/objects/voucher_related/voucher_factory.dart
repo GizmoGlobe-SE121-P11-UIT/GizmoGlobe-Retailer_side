@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/voucher_display_type.dart';
 import 'package:gizmoglobe_client/objects/voucher_children/limited_percentage_voucher_with_end_time.dart';
 import 'package:gizmoglobe_client/objects/voucher_children/limited_percentage_voucher_without_end_time.dart';
 import 'package:gizmoglobe_client/objects/voucher_children/limited_amount_voucher_with_end_time.dart';
@@ -12,24 +13,34 @@ import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 typedef VoucherConstructor = Voucher Function(Map<String, dynamic>);
 
 class VoucherFactory {
+  // Helper to coerce dynamic numeric values into int safely
+  static int _numToInt(dynamic v, [int fallback = 0]) {
+    if (v == null) return fallback;
+    if (v is int) return v;
+    if (v is num) return v.toInt();
+    if (v is String) return int.tryParse(v) ?? fallback;
+    return fallback;
+  }
+
   static final Map<String, VoucherConstructor> voucherConstructors = {
     'limited_percentage_end': (props) => LimitedPercentageVoucherWithEndTime(
       voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
-      discountValue: props['discountValue'],
-      minimumPurchase: props['minimumPurchase'],
-      maxUsagePerPerson: props['maxUsagePerPerson'],
-      isVisible: props['isVisible'],
+      discountValue: _numToInt(props['discountValue']),
+      minimumPurchase: _numToInt(props['minimumPurchase']),
+      maxUsagePerPerson: _numToInt(props['maxUsagePerPerson']),
+      redeemPrice: _numToInt(props['redeemPrice']),
+      displayType: VoucherDisplayTypeExtension.fromName(props['displayType']),
       isEnabled: props['isEnabled'],
       enDescription: props['enDescription'],
       viDescription: props['viDescription'],
       isPercentage: true,
       isLimited: true,
       hasEndTime: true,
-      maximumUsage: props['maximumUsage'],
-      usageLeft: props['usageLeft'],
-      maximumDiscountValue: props['maximumDiscountValue'],
+      maximumUsage: _numToInt(props['maximumUsage']),
+      usageLeft: _numToInt(props['usageLeft']),
+      maximumDiscountValue: _numToInt(props['maximumDiscountValue']),
       endTime: props['endTime'],
     ),
 
@@ -37,37 +48,39 @@ class VoucherFactory {
       voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
-      discountValue: props['discountValue'],
-      minimumPurchase: props['minimumPurchase'],
-      maxUsagePerPerson: props['maxUsagePerPerson'],
-      isVisible: props['isVisible'],
+      discountValue: _numToInt(props['discountValue']),
+      minimumPurchase: _numToInt(props['minimumPurchase']),
+      maxUsagePerPerson: _numToInt(props['maxUsagePerPerson']),
+      redeemPrice: _numToInt(props['redeemPrice']),
+      displayType: VoucherDisplayTypeExtension.fromName(props['displayType']),
       isEnabled: props['isEnabled'],
       enDescription: props['enDescription'],
       viDescription: props['viDescription'],
       isPercentage: true,
       isLimited: true,
       hasEndTime: false,
-      maximumUsage: props['maximumUsage'],
-      usageLeft: props['usageLeft'],
-      maximumDiscountValue: props['maximumDiscountValue'],
+      maximumUsage: _numToInt(props['maximumUsage']),
+      usageLeft: _numToInt(props['usageLeft']),
+      maximumDiscountValue: _numToInt(props['maximumDiscountValue']),
     ),
 
     'limited_amount_end': (props) => LimitedAmountVoucherWithEndTime(
       voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
-      discountValue: props['discountValue'],
-      minimumPurchase: props['minimumPurchase'],
-      maxUsagePerPerson: props['maxUsagePerPerson'],
-      isVisible: props['isVisible'],
+      discountValue: _numToInt(props['discountValue']),
+      minimumPurchase: _numToInt(props['minimumPurchase']),
+      maxUsagePerPerson: _numToInt(props['maxUsagePerPerson']),
+      redeemPrice: _numToInt(props['redeemPrice']),
+      displayType: VoucherDisplayTypeExtension.fromName(props['displayType']),
       isEnabled: props['isEnabled'],
       enDescription: props['enDescription'],
       viDescription: props['viDescription'],
       isPercentage: false,
       isLimited: true,
       hasEndTime: true,
-      maximumUsage: props['maximumUsage'],
-      usageLeft: props['usageLeft'],
+      maximumUsage: _numToInt(props['maximumUsage']),
+      usageLeft: _numToInt(props['usageLeft']),
       endTime: props['endTime'],
     ),
 
@@ -75,35 +88,37 @@ class VoucherFactory {
       voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
-      discountValue: props['discountValue'],
-      minimumPurchase: props['minimumPurchase'],
-      maxUsagePerPerson: props['maxUsagePerPerson'],
-      isVisible: props['isVisible'],
+      discountValue: _numToInt(props['discountValue']),
+      minimumPurchase: _numToInt(props['minimumPurchase']),
+      maxUsagePerPerson: _numToInt(props['maxUsagePerPerson']),
+      redeemPrice: _numToInt(props['redeemPrice']),
+      displayType: VoucherDisplayTypeExtension.fromName(props['displayType']),
       isEnabled: props['isEnabled'],
       enDescription: props['enDescription'],
       viDescription: props['viDescription'],
       isPercentage: false,
       isLimited: true,
       hasEndTime: false,
-      maximumUsage: props['maximumUsage'],
-      usageLeft: props['usageLeft'],
+      maximumUsage: _numToInt(props['maximumUsage']),
+      usageLeft: _numToInt(props['usageLeft']),
     ),
 
     'unlimited_percentage_end': (props) => UnlimitedPercentageVoucherWithEndTime(
       voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
-      discountValue: props['discountValue'],
-      minimumPurchase: props['minimumPurchase'],
-      maxUsagePerPerson: props['maxUsagePerPerson'],
-      isVisible: props['isVisible'],
+      discountValue: _numToInt(props['discountValue']),
+      minimumPurchase: _numToInt(props['minimumPurchase']),
+      maxUsagePerPerson: _numToInt(props['maxUsagePerPerson']),
+      redeemPrice: _numToInt(props['redeemPrice']),
+      displayType: VoucherDisplayTypeExtension.fromName(props['displayType']),
       isEnabled: props['isEnabled'],
       enDescription: props['enDescription'],
       viDescription: props['viDescription'],
       isPercentage: true,
       isLimited: false,
       hasEndTime: true,
-      maximumDiscountValue: props['maximumDiscountValue'],
+      maximumDiscountValue: _numToInt(props['maximumDiscountValue']),
       endTime: props['endTime'],
     ),
 
@@ -111,27 +126,29 @@ class VoucherFactory {
       voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
-      discountValue: props['discountValue'],
-      minimumPurchase: props['minimumPurchase'],
-      maxUsagePerPerson: props['maxUsagePerPerson'],
-      isVisible: props['isVisible'],
+      discountValue: _numToInt(props['discountValue']),
+      minimumPurchase: _numToInt(props['minimumPurchase']),
+      maxUsagePerPerson: _numToInt(props['maxUsagePerPerson']),
+      redeemPrice: _numToInt(props['redeemPrice']),
+      displayType: VoucherDisplayTypeExtension.fromName(props['displayType']),
       isEnabled: props['isEnabled'],
       enDescription: props['enDescription'],
       viDescription: props['viDescription'],
       isPercentage: true,
       isLimited: false,
       hasEndTime: false,
-      maximumDiscountValue: props['maximumDiscountValue'],
+      maximumDiscountValue: _numToInt(props['maximumDiscountValue']),
     ),
 
     'unlimited_amount_end': (props) => UnlimitedAmountVoucherWithEndTime(
       voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
-      discountValue: props['discountValue'],
-      minimumPurchase: props['minimumPurchase'],
-      maxUsagePerPerson: props['maxUsagePerPerson'],
-      isVisible: props['isVisible'],
+      discountValue: _numToInt(props['discountValue']),
+      minimumPurchase: _numToInt(props['minimumPurchase']),
+      maxUsagePerPerson: _numToInt(props['maxUsagePerPerson']),
+      redeemPrice: _numToInt(props['redeemPrice']),
+      displayType: VoucherDisplayTypeExtension.fromName(props['displayType']),
       isEnabled: props['isEnabled'],
       enDescription: props['enDescription'],
       viDescription: props['viDescription'],
@@ -145,10 +162,11 @@ class VoucherFactory {
       voucherID: props['voucherID'],
       voucherName: props['voucherName'],
       startTime: props['startTime'],
-      discountValue: props['discountValue'],
-      minimumPurchase: props['minimumPurchase'],
-      maxUsagePerPerson: props['maxUsagePerPerson'],
-      isVisible: props['isVisible'],
+      discountValue: _numToInt(props['discountValue']),
+      minimumPurchase: _numToInt(props['minimumPurchase']),
+      maxUsagePerPerson: _numToInt(props['maxUsagePerPerson']),
+      redeemPrice: _numToInt(props['redeemPrice']),
+      displayType: VoucherDisplayTypeExtension.fromName(props['displayType']),
       isEnabled: props['isEnabled'],
       enDescription: props['enDescription'],
       viDescription: props['viDescription'],
@@ -171,28 +189,15 @@ class VoucherFactory {
   static Map<String, dynamic> _normalizeProperties(Map<String, dynamic> props) {
     final Map<String, dynamic> copy = Map<String, dynamic>.from(props);
 
-    // Keys expected as double
-    final List<String> doubleKeys = [
-      'discountValue',
-    ];
-
-    for (final key in doubleKeys) {
-      final v = copy[key];
-      if (v == null) continue;
-      if (v is num) {
-        copy[key] = v.toDouble();
-      } else if (v is String) {
-        final parsed = double.tryParse(v);
-        if (parsed != null) copy[key] = parsed;
-      }
-    }
-
+    // Normalize integer-valued numeric fields to int
     final List<String> intKeys = [
+      'discountValue',
       'minimumPurchase',
       'maximumDiscountValue',
       'maximumUsage',
       'usageLeft',
       'maxUsagePerPerson',
+      'redeemPrice',
     ];
 
     for (final key in intKeys) {
@@ -226,13 +231,13 @@ class VoucherFactory {
     copy['enDescription'] ??= '';
     copy['viDescription'] ??= '';
 
-    // Defaults for numeric fields and ensure correct types
-    if (copy['discountValue'] == null) copy['discountValue'] = 0.0;
-    if (copy['minimumPurchase'] == null) copy['minimumPurchase'] = 0; // int
-    if (copy['maxUsagePerPerson'] == null) copy['maxUsagePerPerson'] = 1.0;
-    if (copy['maximumUsage'] == null) copy['maximumUsage'] = 0.0;
-    if (copy['usageLeft'] == null) copy['usageLeft'] = 0.0;
-    if (copy['maximumDiscountValue'] == null) copy['maximumDiscountValue'] = 0; // int
+    // Defaults for numeric fields and ensure correct types (integers)
+    if (copy['discountValue'] == null) copy['discountValue'] = 0;
+    if (copy['minimumPurchase'] == null) copy['minimumPurchase'] = 0;
+    if (copy['maxUsagePerPerson'] == null) copy['maxUsagePerPerson'] = 1;
+    if (copy['maximumUsage'] == null) copy['maximumUsage'] = 0;
+    if (copy['usageLeft'] == null) copy['usageLeft'] = 0;
+    if (copy['maximumDiscountValue'] == null) copy['maximumDiscountValue'] = 0;
 
     copy['isVisible'] ??= true;
     copy['isEnabled'] ??= true;

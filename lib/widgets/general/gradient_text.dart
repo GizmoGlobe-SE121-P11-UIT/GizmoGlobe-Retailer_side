@@ -14,12 +14,12 @@ class GradientText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontFamily: 'Montserrat',
         fontSize: fontSize,
         fontWeight: FontWeight.bold,
         color: Theme.of(context).colorScheme.primary,
-        overflow: TextOverflow.ellipsis,
       ),
     );
   }

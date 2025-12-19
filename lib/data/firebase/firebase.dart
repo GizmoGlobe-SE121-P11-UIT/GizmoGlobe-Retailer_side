@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/voucher_display_type.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/owned_voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher_factory.dart';
@@ -1949,7 +1950,7 @@ class Firebase {
 
         // Handle required fields with default values
         data['voucherName'] ??= '';
-        data['discountValue'] ??= 0.0;
+        data['discountValue'] ??= 0;
         data['minimumPurchase'] ??= 0;
         data['maxUsagePerPerson'] ??= 1;
         data['isVisible'] ??= true;
@@ -1977,6 +1978,26 @@ class Firebase {
         }
         if (data['hasEndTime'] == true && data['endTime'] is! DateTime) {
           data['endTime'] = DateTime.now().add(const Duration(days: 30));
+        }
+
+        final List<String> intKeys = [
+          'discountValue',
+          'minimumPurchase',
+          'maxUsagePerPerson',
+          'maximumUsage',
+          'usageLeft',
+          'maximumDiscountValue',
+          'redeemPrice',
+        ];
+        for (final key in intKeys) {
+          final v = data[key];
+          if (v == null) continue;
+          if (v is num) {
+            data[key] = v.toInt();
+          } else if (v is String) {
+            final parsed = int.tryParse(v);
+            if (parsed != null) data[key] = parsed;
+          }
         }
 
         return VoucherFactory.fromMap(doc.id, data);
@@ -2022,7 +2043,8 @@ class Firebase {
       'minimumPurchase': voucher.minimumPurchase,
       'isPercentage': voucher.isPercentage,
       'isLimited': voucher.isLimited,
-      'isVisible': voucher.isVisible,
+      'redeemPrice': voucher.redeemPrice,
+      'displayType': voucher.displayType.name,
       'isEnabled': voucher.isEnabled,
       'startTime': voucher.startTime.toIso8601String(),
       'hasEndTime': voucher.hasEndTime,
@@ -2043,6 +2065,12 @@ class Firebase {
 
     if (voucher.hasEndTime) {
       map['endTime'] = (voucher as EndTimeInterface).endTime.toIso8601String();
+    }
+
+    if (voucher.displayType == VoucherDisplayType.redeemable) {
+      map['maxUsagePerPerson'] = 1;
+    } else {
+      map['redeemPrice'] = 0;
     }
 
     return map;
