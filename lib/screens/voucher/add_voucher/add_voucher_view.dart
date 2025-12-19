@@ -138,7 +138,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
         ],
       ),
       body: BlocConsumer<AddVoucherCubit, AddVoucherState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state.processState == ProcessState.success) {
             if (state.notifyMessage == NotifyMessage.msg21) {
               enDescriptionController.text =
@@ -146,40 +146,60 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
               viDescriptionController.text =
                   state.voucherArgument?.viDescription ?? '';
 
-              showDialog(
+              void handleOk() {
+                cubit.toIdle();
+              }
+
+              final result = await showDialog<bool>(
                 context: context,
+                barrierDismissible: true,
                 builder: (context) => InformationDialog(
                   title: state.dialogName.getLocalizedName(context),
                   content: state.notifyMessage.getLocalizedMessage(context),
-                  onPressed: () {
-                    cubit.toIdle();
-                    //Navigator.pop(context);
-                  },
+                  onPressed: handleOk,
                 ),
               );
+
+              if (result == null) {
+                handleOk();
+              }
             } else {
-              showDialog(
+              void handleOk() {
+                Navigator.pop(context, state.processState);
+              }
+
+              final result = await showDialog<bool>(
                 context: context,
+                barrierDismissible: true,
                 builder: (context) => InformationDialog(
                   title: state.dialogName.getLocalizedName(context),
                   content: state.notifyMessage.getLocalizedMessage(context),
-                  onPressed: () {
-                    Navigator.pop(context, state.processState);
-                  },
+                  onPressed: handleOk,
                 ),
               );
+
+              if (result == null) {
+                handleOk();
+              }
             }
           } else if (state.processState == ProcessState.failure) {
-            showDialog(
+            void handleOk() {
+              cubit.toIdle();
+            }
+
+            final result = await showDialog<bool>(
               context: context,
+              barrierDismissible: true,
               builder: (context) => InformationDialog(
                 title: state.dialogName.getLocalizedName(context),
                 content: state.notifyMessage.getLocalizedMessage(context),
-                onPressed: () {
-                  cubit.toIdle();
-                },
+                onPressed: handleOk,
               ),
             );
+
+            if (result == null) {
+              handleOk();
+            }
           }
         },
         builder: (context, state) {

@@ -11,6 +11,7 @@ import '../../../objects/voucher_related/voucher.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio/dio.dart';
+import 'package:genai/genai.dart';
 
 class AddVoucherCubit extends Cubit<AddVoucherState> {
   AddVoucherCubit()
@@ -146,40 +147,20 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
 Future<String> translateIntoEnglish(String inputText) async {
   try {
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
 
-    final dio = Dio();
-    final response = await dio.post(
-      url,
-      options: Options(headers: {'Content-Type': 'application/json'}),
-      data: {
-        'contents': [{
-          'parts': [{
-            'text': 'Translate this Vietnamese text to English changing special character like ₫ or %. Return only the translated text: $inputText'
-          }]
-        }],
-        'generationConfig': {
-          'temperature': 0.2,
-          'topP': 0.8,
-          'maxOutputTokens': 100
-        }
-      },
+    final request = AIRequestModel(
+      modelApiProvider: ModelAPIProvider.gemini, // or openai, anthropic, etc.
+      model: "gemini-2.0-flash",
+      apiKey: apiKey,
+      url: kGeminiUrl,
+      systemPrompt: "You are a translator, and you are translating the following Vietnamese text to English.",
+      userPrompt: inputText,
+      stream: false,
     );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = response.data;
-      final candidates = jsonResponse['candidates'] as List;
-      if (candidates.isNotEmpty) {
-        final content = candidates[0]['content'];
-        final parts = content['parts'] as List;
-        if (parts.isNotEmpty) {
-          final translatedText = parts[0]['text'] as String;
-          return translatedText.trim();
-        }
-      }
-    }
+    final answer = await executeGenAIRequest(request);
 
-    return inputText;
+    return answer ?? inputText;
   } catch (e) {
     if (kDebugMode) {
       print('Error translating to English: $e');
@@ -190,40 +171,21 @@ Future<String> translateIntoEnglish(String inputText) async {
 
 Future<String> translateIntoVietnamese(String inputText) async {
   try {
-    if (inputText.isEmpty) {
-      return '';
-    }
-
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
 
-    final dio = Dio();
-    final response = await dio.post(
-      url,
-      options: Options(headers: {'Content-Type': 'application/json'}),
-      data: {
-        'contents': [{
-          'parts': [{
-            'text': 'INSTRUCTION: Translate the following English text to Vietnamese without changing special character like ₫ or %.\n\nENGLISH TEXT: $inputText\n\nTRANSLATION (in Vietnamese only, no English explanation or notes):'
-          }]
-        }],
-      },
+    final request = AIRequestModel(
+      modelApiProvider: ModelAPIProvider.gemini,
+      model: "gemini-2.0-flash",
+      apiKey: apiKey,
+      url: kGeminiUrl,
+      systemPrompt: "You are a translator, and you are translating the following Englist text to Vietnamese.",
+      userPrompt: inputText,
+      stream: false,
     );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = response.data;
-      final candidates = jsonResponse['candidates'] as List;
-      if (candidates.isNotEmpty) {
-        final content = candidates[0]['content'];
-        final parts = content['parts'] as List;
-        if (parts.isNotEmpty) {
-          final translatedText = parts[0]['text'] as String;
-          return translatedText.trim();
-        }
-      }
-    }
+    final answer = await executeGenAIRequest(request);
 
-    return inputText;
+    return answer ?? inputText;
   } catch (e) {
     if (kDebugMode) {
       print('Error translating to Vietnamese: $e');
@@ -235,56 +197,39 @@ Future<String> translateIntoVietnamese(String inputText) async {
 Future<String> generateDescription(VoucherArgument inputVoucher) async {
   try {
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
 
-    final dio = Dio();
     final voucherInfo = inputVoucher;
     final promptDetails = [
-      'Discount value: ${voucherInfo.discountValue}',
-      ',Minimum purchase amount: ${voucherInfo.minimumPurchase}',
+      'Discount value: ${voucherInfo.discountValue}${(voucherInfo.isPercentage! ? '%' : '₫')}',
+      'Minimum purchase amount: ${voucherInfo.minimumPurchase}₫',
       'Discount type: ${voucherInfo.isPercentage ?? false ? 'Percentage' : 'Fixed amount'}',
-      if (voucherInfo.isPercentage ?? false) 'Maximum discount value: ${voucherInfo.maximumDiscountValue}',
+      if (voucherInfo.isPercentage ?? false) 'Maximum discount value: ${voucherInfo.maximumDiscountValue}₫',
       'Usage limit per person: ${voucherInfo.maxUsagePerPerson}',
       if (voucherInfo.isLimited ?? false) 'Maximum total usage: ${voucherInfo.maximumUsage}',
       'Valid from: ${voucherInfo.startTime?.toString().substring(0, 10)}',
       if (voucherInfo.hasEndTime ?? false) 'Valid until: ${voucherInfo.endTime?.toString().substring(0, 10)}',
+      'Claim type: ${voucherInfo.displayType?.description}',
+      if (voucherInfo.displayType == VoucherDisplayType.redeemable) 'Redeem price: ${voucherInfo.redeemPrice} points',
     ].join('\n');
-    final response = await dio.post(
-      url,
-      options: Options(headers: {'Content-Type': 'application/json'}),
-      data: {
-        'contents': [{
-          'parts': [{
-            'text': 'Create a short, professional 1-2 sentence voucher description in English based on these details:\n$promptDetails\n\nMake it concise, appealing and marketing-oriented. Return ONLY the description, no additional text, and use special character like ₫ or % if needed.'
-          }]
-        }],
-        'generationConfig': {
-          'temperature': 0.2,
-          'topP': 0.8,
-          'maxOutputTokens': 100
-        }
-      },
+
+    final request = AIRequestModel(
+      modelApiProvider: ModelAPIProvider.gemini, // or openai, anthropic, etc.
+      model: "gemini-2.0-flash",
+      apiKey: apiKey,
+      url: kGeminiUrl,
+      systemPrompt: "You are an assistant for an online store, and you are making description for vouchers.",
+      userPrompt: promptDetails,
+      stream: false,
     );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = response.data;
-      final candidates = jsonResponse['candidates'] as List;
-      if (candidates.isNotEmpty) {
-        final content = candidates[0]['content'];
-        final parts = content['parts'] as List;
-        if (parts.isNotEmpty) {
-          final translatedText = parts[0]['text'] as String;
-          return translatedText.trim();
-        }
-      }
-    }
+    final answer = await executeGenAIRequest(request);
 
-    return '';
+    return answer ?? promptDetails;
   } catch (e) {
     if (kDebugMode) {
       print('Error generating description: $e');
     }
-    return '';
+    return '$e';
   }
 }
 

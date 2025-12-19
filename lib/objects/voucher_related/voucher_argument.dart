@@ -105,7 +105,7 @@ class VoucherArgument {
       if (voucherName == null || voucherName!.trim().isEmpty) missing.add('Voucher Name');
       if (startTime == null) missing.add('Start Time');
       if (discountValue == null || discountValue == 0) missing.add('Discount Value');
-      if (minimumPurchase == null || minimumPurchase == 0) missing.add('Minimum Purchase');
+      if (minimumPurchase == null) missing.add('Minimum Purchase');
       if (maxUsagePerPerson == null || maxUsagePerPerson == 0) missing.add('Max Usage Per Person');
 
       if (isPercentage == true) {

@@ -45,7 +45,7 @@ class InformationDialog extends StatelessWidget {
 
               StandardButton(
                 onPress: () {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(true);
                   onPressed?.call();
                 },
                 text: buttonText,
