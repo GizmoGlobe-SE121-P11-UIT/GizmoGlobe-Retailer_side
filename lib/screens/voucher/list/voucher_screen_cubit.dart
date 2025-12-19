@@ -15,11 +15,6 @@ class VoucherScreenCubit extends Cubit<VoucherScreenState> {
 
   Future<void> initialize() async {
     try {
-      // Skip if already loaded to prevent unnecessary refresh
-      if (state.voucherList.isNotEmpty && !state.isLoading) {
-        return;
-      }
-
       emit(state.copyWith(processState: ProcessState.loading, isLoading: true));
 
       final List<Voucher> voucherList = await _firebase.getVouchers();

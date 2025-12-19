@@ -57,7 +57,6 @@ class _VoucherScreenState extends State<VoucherScreen>
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
 
-    // Initialize cubit lazily
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         cubit.initialize();
@@ -82,7 +81,6 @@ class _VoucherScreenState extends State<VoucherScreen>
 
   @override
   Widget build(BuildContext context) {
-    // For web, return minimal widget since webview is handled by newInstanceWithTab
     if (kIsWeb) {
       return const SizedBox.shrink();
     }
@@ -150,7 +148,7 @@ class _VoucherScreenState extends State<VoucherScreen>
                         });
                       }
                     }
-                    cubit.initialize(); // Refresh the list after adding
+                    await cubit.initialize();
                   },
                   fillColor: Colors.transparent,
                 ),
