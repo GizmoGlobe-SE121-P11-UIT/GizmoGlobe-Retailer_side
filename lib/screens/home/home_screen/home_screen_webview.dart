@@ -26,7 +26,8 @@ class HomeScreenWebView extends StatefulWidget {
 class _HomeScreenWebViewState extends State<HomeScreenWebView> {
   HomeScreenCubit get cubit => context.read<HomeScreenCubit>();
 
-  String _selectedChartInterval = '';
+  String _selectedChartInterval =
+      'yearMonthly'; // Use constant key instead of localized string
   int? _selectedYear;
   int? _selectedMonth;
   int _touchedPieIndex = -1; // For pie chart interaction
@@ -34,14 +35,6 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_selectedChartInterval.isEmpty) {
-      _selectedChartInterval = S.of(context).yearMonthly;
-    }
   }
 
   Future<void> _showYearPicker(BuildContext context) async {
@@ -114,7 +107,7 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
         String chartTitle;
         bool isDaily = false;
 
-        if (_selectedChartInterval == S.of(context).monthDaily) {
+        if (_selectedChartInterval == 'monthDaily') {
           // Daily mode: filter dailyCategorySales for selected year and month
           isDaily = true;
           final daysInMonth =
@@ -352,24 +345,30 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                               ),
                               const SizedBox(width: 32),
                               DropdownButton<String>(
-                                value: _selectedChartInterval,
+                                value: _selectedChartInterval.isNotEmpty &&
+                                        (_selectedChartInterval ==
+                                                'yearMonthly' ||
+                                            _selectedChartInterval ==
+                                                'monthDaily')
+                                    ? _selectedChartInterval
+                                    : 'yearMonthly',
                                 items: [
                                   DropdownMenuItem(
-                                      value: S.of(context).yearMonthly,
+                                      value: 'yearMonthly',
                                       child: Text(S.of(context).yearMonthly)),
                                   DropdownMenuItem(
-                                      value: S.of(context).monthDaily,
+                                      value: 'monthDaily',
                                       child: Text(S.of(context).monthDaily)),
                                 ],
                                 onChanged: (val) {
-                                  setState(() {
-                                    _selectedChartInterval =
-                                        val ?? S.of(context).yearMonthly;
-                                  });
+                                  if (val != null) {
+                                    setState(() {
+                                      _selectedChartInterval = val;
+                                    });
+                                  }
                                 },
                               ),
-                              if (_selectedChartInterval ==
-                                  S.of(context).yearMonthly) ...[
+                              if (_selectedChartInterval == 'yearMonthly') ...[
                                 const SizedBox(width: 12),
                                 ElevatedButton(
                                   onPressed: () => _showYearPicker(context),
@@ -882,13 +881,17 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                 // Collect unique categories with their data (avoid duplicates)
                 final categoryDataMap = <String, Map<String, dynamic>>{};
                 for (final spot in touchedSpots) {
-                  final category = categoryList[spot.barIndex];
-                  if (!categoryDataMap.containsKey(category)) {
-                    categoryDataMap[category] = {
-                      'displayName': _getCategoryDisplayName(category),
-                      'price': spot.y,
-                      'color': _getCategoryColor(category),
-                    };
+                  // Add bounds check to prevent index out of range error
+                  if (spot.barIndex >= 0 &&
+                      spot.barIndex < categoryList.length) {
+                    final category = categoryList[spot.barIndex];
+                    if (!categoryDataMap.containsKey(category)) {
+                      categoryDataMap[category] = {
+                        'displayName': _getCategoryDisplayName(category),
+                        'price': spot.y,
+                        'color': _getCategoryColor(category),
+                      };
+                    }
                   }
                 }
 

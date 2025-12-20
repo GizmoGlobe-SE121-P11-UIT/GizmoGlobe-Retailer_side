@@ -308,33 +308,39 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   child: BlocConsumer<ProductDetailCubit, ProductDetailState>(
                     listener: (context, state) {
+                      if (!mounted) return;
                       if (state.processState == ProcessState.success) {
-                        showDialog(
-                            context: context,
-                            builder: (context) => InformationDialog(
-                                  title: state.dialogName
-                                      .getLocalizedName(context),
-                                  content: state.notifyMessage
-                                      .getLocalizedMessage(context),
-                                  onPressed: () {},
-                                ));
+                        if (context.mounted) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => InformationDialog(
+                                    title: state.dialogName
+                                        .getLocalizedName(context),
+                                    content: state.notifyMessage
+                                        .getLocalizedMessage(context),
+                                    onPressed: () {},
+                                  ));
+                        }
                       } else if (state.processState == ProcessState.failure) {
-                        showDialog(
-                            context: context,
-                            builder: (context) => InformationDialog(
-                                  title: state.dialogName
-                                      .getLocalizedName(context),
-                                  content: state.notifyMessage
-                                      .getLocalizedMessage(context),
-                                  onPressed: () {
-                                    cubit.toIdle();
-                                  },
-                                ));
+                        if (context.mounted) {
+                          showDialog(
+                              context: context,
+                              builder: (context) => InformationDialog(
+                                    title: state.dialogName
+                                        .getLocalizedName(context),
+                                    content: state.notifyMessage
+                                        .getLocalizedMessage(context),
+                                    onPressed: () {
+                                      cubit.toIdle();
+                                    },
+                                  ));
+                        }
                       }
                     },
                     builder: (context, state) => FutureBuilder<bool>(
                       future: Database().isUserAdmin(),
                       builder: (context, snapshot) {
+                        if (!mounted) return const SizedBox.shrink();
                         if (snapshot.hasData && snapshot.data == true) {
                           return Row(
                             children: [
@@ -474,9 +480,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 itemCount: images.length,
                 physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (index) {
-                  setState(() {
-                    _currentImageIndex = index;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _currentImageIndex = index;
+                    });
+                  }
                 },
                 itemBuilder: (context, index) {
                   final imageUrl = images[index];
@@ -529,10 +537,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   left: 8,
                   child: IconButton(
                     onPressed: () {
-                      _imagePageController.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
+                      if (mounted && _imagePageController.hasClients) {
+                        _imagePageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
                     },
                     icon: Container(
                       padding: const EdgeInsets.all(8),
@@ -551,10 +561,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   right: 8,
                   child: IconButton(
                     onPressed: () {
-                      _imagePageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
+                      if (mounted && _imagePageController.hasClients) {
+                        _imagePageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
                     },
                     icon: Container(
                       padding: const EdgeInsets.all(8),
@@ -632,39 +644,69 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   List<Widget> _buildProductSpecificDetails(
       BuildContext context, Product product, Map<String, String> specs) {
-    return specs.entries
-        .map((entry) => _buildSpecificationRow(
-            _getLocalizedSpecKey(context, entry.key), entry.value))
-        .toList();
+    // Convert specs to list of entries
+    final entries = specs.entries.toList();
+
+    // Calculate how many rows we need (2 items per row)
+    final rowCount = (entries.length / 2).ceil();
+
+    // Build 2-column layout
+    return List.generate(rowCount, (rowIndex) {
+      final leftIndex = rowIndex * 2;
+      final rightIndex = leftIndex + 1;
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Left column spec
+            Expanded(
+              child: _buildSpecificationItem(
+                _getLocalizedSpecKey(context, entries[leftIndex].key),
+                entries[leftIndex].value,
+              ),
+            ),
+            const SizedBox(width: 8),
+            // Right column spec (if exists)
+            Expanded(
+              child: rightIndex < entries.length
+                  ? _buildSpecificationItem(
+                      _getLocalizedSpecKey(context, entries[rightIndex].key),
+                      entries[rightIndex].value,
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget _buildSpecificationRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              label,
-              style: TextStyle(
-                color: Colors.grey[400],
-                fontSize: 14,
-              ),
+  Widget _buildSpecificationItem(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 80,
+          child: Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey[400],
+              fontSize: 13,
             ),
           ),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -799,17 +841,41 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   String _getLocalizedSpecKey(BuildContext context, String key) {
-    switch (key.toLowerCase()) {
+    // Remove trailing colon if present
+    final cleanKey = key.replaceAll(':', '').trim().toLowerCase();
+
+    switch (cleanKey) {
+      // RAM
       case 'type':
-        return S.of(context).driveType;
-      case 'capacity':
-        return S.of(context).driveCapacity;
+        return S.of(context).type;
+      case 'bus':
+        return S.of(context).bus;
+      case 'cl latency':
+        return S.of(context).clLatency;
+      case 'kit stick count':
+        return S.of(context).kitStickCount;
+      case 'capacity per stick':
+        return S.of(context).capacityPerStick;
       case 'ram bus':
         return S.of(context).ramBus;
       case 'ram capacity':
         return S.of(context).ramCapacity;
       case 'ram type':
         return S.of(context).ramType;
+
+      // CPU
+      case 'cores':
+        return S.of(context).cores;
+      case 'threads':
+        return S.of(context).threads;
+      case 'base clock':
+        return S.of(context).baseClock;
+      case 'turbo clock':
+        return S.of(context).turboClock;
+      case 'tdp':
+        return S.of(context).tdp;
+      case 'socket':
+        return S.of(context).socket;
       case 'cpu family':
         return S.of(context).cpuFamily;
       case 'cpu core':
@@ -818,12 +884,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         return S.of(context).cpuThread;
       case 'cpu clock speed':
         return S.of(context).cpuClockSpeed;
-      case 'psu wattage':
-        return S.of(context).psuWattage;
-      case 'psu efficiency':
-        return S.of(context).psuEfficiency;
-      case 'psu modular':
-        return S.of(context).psuModular;
+
+      // GPU
+      case 'version':
+        return S.of(context).version;
+      case 'memory':
+        return S.of(context).memory;
+      case 'clock speed':
+        return S.of(context).clockSpeed;
+      case 'i/o ports':
+        return S.of(context).ioPorts;
       case 'gpu series':
         return S.of(context).gpuSeries;
       case 'gpu capacity':
@@ -832,8 +902,50 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         return S.of(context).gpuBus;
       case 'gpu clock speed':
         return S.of(context).gpuClockSpeed;
+
+      // Mainboard
+      case 'chipset':
+        return S.of(context).chipset;
       case 'form factor':
         return S.of(context).formFactor;
+      case 'ram spec':
+        return S.of(context).ramSpec;
+      case 'storage':
+        return S.of(context).storage;
+      case 'pcie slots':
+        return S.of(context).pcieSlots;
+
+      // Drive
+      case 'drive type':
+        return S.of(context).driveType;
+      case 'generation':
+        return S.of(context).generation;
+      case 'capacity':
+        return S.of(context).driveCapacity;
+      case 'interface':
+        return S.of(context).interfaceType;
+      case 'read speed':
+        return S.of(context).readSpeed;
+      case 'write speed':
+        return S.of(context).writeSpeed;
+
+      // PSU
+      case 'wattage':
+        return S.of(context).psuWattage;
+      case 'efficiency rating':
+        return S.of(context).efficiencyRating;
+      case 'modularity':
+        return S.of(context).modularity;
+      case 'connectors':
+        return S.of(context).connectors;
+      case 'psu wattage':
+        return S.of(context).psuWattage;
+      case 'psu efficiency':
+        return S.of(context).psuEfficiency;
+      case 'psu modular':
+        return S.of(context).psuModular;
+
+      // Other
       case 'series':
         return S.of(context).series;
       case 'compatibility':
@@ -852,7 +964,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Ratings & Reviews',
+          S.of(context).ratingsAndReviews,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -887,8 +999,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   const SizedBox(width: 12),
                   Text(
                     (state.totalRatingsCount > 0)
-                        ? '${state.totalRatingsCount} reviews'
-                        : 'No ratings yet',
+                        ? '${state.totalRatingsCount} ${S.of(context).reviews}'
+                        : S.of(context).noRatingsYet,
                     style: TextStyle(
                       color: Theme.of(context)
                           .colorScheme
@@ -910,25 +1022,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         else
           Column(
             children: [
-              for (final r in ratings) ...[
-                if (kDebugMode)
-                  Text('DEBUG: rating ${r.ratingID} reply=${r.reply != null}'),
+              for (final r in ratings)
                 RatingCard(
                   rating: r,
                   onPostReply: (ratingId, comment, {productId}) async {
-                    // delegate to ProductDetailCubit and then pop to signal parent
-                    if (kDebugMode) {
-                      print('ProductDetailScreen: posting reply for $ratingId');
-                    }
                     try {
                       await cubit.replyToRating(
                           ratingId: ratingId,
                           comment: comment,
                           productId: r.productID);
-                      if (kDebugMode) {
-                        print(
-                            'ProductDetailScreen: reply posted, popping with success (scheduled)');
-                      }
                       if (context.mounted) {
                         // schedule the pop to avoid navigator locked assertion during rebuild
                         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -938,14 +1040,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         });
                       }
                     } catch (e) {
-                      if (kDebugMode) {
-                        print('ProductDetailScreen: error posting reply: $e');
-                      }
                       rethrow;
                     }
                   },
                 ),
-              ],
             ],
           ),
         // Show more button
@@ -958,7 +1056,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 onPressed: () async {
                   await cubit.loadMoreRatings();
                 },
-                child: const Text('Show more'),
+                child: Text(S.of(context).showMore),
               ),
             ),
           ),

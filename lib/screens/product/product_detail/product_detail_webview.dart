@@ -20,6 +20,7 @@ import '../../../widgets/general/status_badge.dart';
 import '../../../widgets/snackbar/snackbar_service.dart';
 import '../../../functions/helper.dart';
 import '../../product/add_product/add_product_webview.dart';
+import '../../../widgets/invoice/rating_card.dart';
 
 class ProductDetailWebView extends StatefulWidget {
   final Product product;
@@ -53,26 +54,31 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
 
     final content = BlocConsumer<ProductDetailCubit, ProductDetailState>(
       listener: (context, state) {
+        if (!mounted) return;
         if (state.processState == ProcessState.success) {
-          showDialog(
-            context: context,
-            builder: (context) => InformationDialog(
-              title: state.dialogName.getLocalizedName(context),
-              content: state.notifyMessage.getLocalizedMessage(context),
-              onPressed: () {},
-            ),
-          );
+          if (context.mounted) {
+            showDialog(
+              context: context,
+              builder: (context) => InformationDialog(
+                title: state.dialogName.getLocalizedName(context),
+                content: state.notifyMessage.getLocalizedMessage(context),
+                onPressed: () {},
+              ),
+            );
+          }
         } else if (state.processState == ProcessState.failure) {
-          showDialog(
-            context: context,
-            builder: (context) => InformationDialog(
-              title: state.dialogName.getLocalizedName(context),
-              content: state.notifyMessage.getLocalizedMessage(context),
-              onPressed: () {
-                cubit.toIdle();
-              },
-            ),
-          );
+          if (context.mounted) {
+            showDialog(
+              context: context,
+              builder: (context) => InformationDialog(
+                title: state.dialogName.getLocalizedName(context),
+                content: state.notifyMessage.getLocalizedMessage(context),
+                onPressed: () {
+                  cubit.toIdle();
+                },
+              ),
+            );
+          }
         }
       },
       builder: (context, state) {
@@ -155,132 +161,150 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
               constraints: const BoxConstraints(maxWidth: 1200),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Row(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Left: image panel
-                    Expanded(
-                      flex: 5,
-                      child: Card(
-                        elevation: 0,
-                        color: colorScheme.surface,
-                        child: AspectRatio(
-                          aspectRatio: 16 / 12,
-                          child: _buildProductImage(context, state),
+                    // Breadcrumbs at top
+                    _buildBreadcrumbs(context, state),
+                    const SizedBox(height: 16),
+
+                    // 2-column layout: Image on left, Info on right
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Left column: Image carousel
+                        Expanded(
+                          flex: 5,
+                          child: Card(
+                            elevation: 0,
+                            color: colorScheme.surface,
+                            child: AspectRatio(
+                              aspectRatio: 16 / 12,
+                              child: _buildProductImage(context, state),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    // Right: info panel
-                    Expanded(
-                      flex: 7,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildBreadcrumbs(context, state),
-                          const SizedBox(height: 12),
-                          _buildHeading(
-                              context, S.of(context).basicInformation),
-                          const SizedBox(height: 8),
-                          _buildNameRow(context, state),
-                          const SizedBox(height: 8),
-                          _buildInfoRow(
-                            context,
-                            icon: Icons.category,
-                            title: S.of(context).category,
-                            value: _getLocalizedCategory(
-                                context, state.product.category),
-                          ),
-                          _buildInfoRow(
-                            context,
-                            icon: Icons.business,
-                            title: S.of(context).manufacturer,
-                            value: state.product.manufacturer.manufacturerName,
-                          ),
-                          // Import Price
-                          _buildInfoRow(
-                            context,
-                            icon: Icons.file_download_outlined,
-                            title: S.of(context).importPrice,
-                            value: Helper.toCurrencyFormat(
-                                state.product.importPrice),
-                          ),
-                          // Selling Price with discount
-                          _buildPriceSection(
-                            context,
-                            importPrice: state.product.importPrice,
-                            sellingPrice: state.product.sellingPrice,
-                            discount: state.product.discount,
-                          ),
-                          const SizedBox(height: 16),
-                          _buildHeading(context, S.of(context).overview),
-                          const SizedBox(height: 8),
-                          Row(
+                        const SizedBox(width: 24),
+                        // Right column: Basic info, Overview, Specifications
+                        Expanded(
+                          flex: 7,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              StatusBadge(status: state.product.displayStatus),
-                              const SizedBox(width: 16),
-                              Icon(
-                                state.product.stock > 0
-                                    ? Icons.check_circle
-                                    : Icons.error,
-                                color: state.product.stock > 0
-                                    ? colorScheme.tertiary
-                                    : colorScheme.error,
-                                size: 16,
+                              // Basic Information
+                              _buildHeading(
+                                  context, S.of(context).basicInformation),
+                              const SizedBox(height: 8),
+                              _buildNameRow(context, state),
+                              const SizedBox(height: 8),
+                              _buildInfoRow(
+                                context,
+                                icon: Icons.category,
+                                title: S.of(context).category,
+                                value: _getLocalizedCategory(
+                                    context, state.product.category),
                               ),
-                              const SizedBox(width: 4),
-                              Text(
-                                '${S.of(context).stock}: ${state.product.stock}',
-                                style: TextStyle(
-                                  color: state.product.stock > 0
-                                      ? colorScheme.tertiary
-                                      : colorScheme.error,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              _buildInfoRow(
+                                context,
+                                icon: Icons.business,
+                                title: S.of(context).manufacturer,
+                                value:
+                                    state.product.manufacturer.manufacturerName,
                               ),
+                              _buildInfoRow(
+                                context,
+                                icon: Icons.file_download_outlined,
+                                title: S.of(context).importPrice,
+                                value: Helper.toCurrencyFormat(
+                                    state.product.importPrice),
+                              ),
+                              _buildPriceSection(
+                                context,
+                                importPrice: state.product.importPrice,
+                                sellingPrice: state.product.sellingPrice,
+                                discount: state.product.discount,
+                              ),
+
+                              const SizedBox(height: 16),
+                              // Overview
+                              _buildHeading(context, S.of(context).overview),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  StatusBadge(
+                                      status: state.product.displayStatus),
+                                  const SizedBox(width: 16),
+                                  Icon(
+                                    state.product.stock > 0
+                                        ? Icons.check_circle
+                                        : Icons.error,
+                                    color: state.product.stock > 0
+                                        ? colorScheme.tertiary
+                                        : colorScheme.error,
+                                    size: 16,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${S.of(context).stock}: ${state.product.stock}',
+                                    style: TextStyle(
+                                      color: state.product.stock > 0
+                                          ? colorScheme.tertiary
+                                          : colorScheme.error,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 24),
+                                  Icon(Icons.calendar_today,
+                                      size: 16,
+                                      color: colorScheme.onSurfaceVariant),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${S.of(context).releaseDate}: ${DateFormat('dd/MM/yyyy').format(state.product.release)}',
+                                    style: TextStyle(
+                                      color: colorScheme.onSurface,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 16),
+                              // Specifications
+                              _buildHeading(
+                                  context,
+                                  '${S.of(context).categorySpecifications} : '
+                                  '${_getLocalizedCategory(context, state.product.category)}'),
+                              const SizedBox(height: 8),
+                              ..._buildProductSpecificDetails(
+                                  context, state.product, state.technicalSpecs),
                             ],
                           ),
-                          const SizedBox(height: 8),
-                          _buildInfoRow(
-                            context,
-                            icon: Icons.calendar_today,
-                            title: S.of(context).releaseDate,
-                            value: DateFormat('dd/MM/yyyy')
-                                .format(state.product.release),
-                          ),
-                          const SizedBox(height: 16),
-                          _buildHeading(
-                              context,
-                              '${S.of(context).categorySpecifications} : '
-                              '${_getLocalizedCategory(context, state.product.category)}'),
-                          const SizedBox(height: 8),
-                          ..._buildProductSpecificDetails(
-                              context, state.product, state.technicalSpecs),
-                          const SizedBox(height: 16),
-                          _buildHeading(
-                              context, S.of(context).productDescription),
-                          const SizedBox(height: 8),
-                          if (state.product.enDescription != null &&
-                              state.product.enDescription!.isNotEmpty)
-                            _buildDescriptionBlock(
-                              context,
-                              title: S.of(context).enDescription,
-                              text: state.product.enDescription!,
-                            ),
-                          if (state.product.viDescription != null &&
-                              state.product.viDescription!.isNotEmpty)
-                            _buildDescriptionBlock(
-                              context,
-                              title: S.of(context).viDescription,
-                              text: state.product.viDescription!,
-                            ),
-                          const SizedBox(height: 24),
-                          _buildRatingsSection(context),
-                          const SizedBox(
-                              height: 100), // space for sticky footer
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+
+                    const SizedBox(height: 24),
+                    // Product Description - Full width below
+                    _buildHeading(context, S.of(context).productDescription),
+                    const SizedBox(height: 8),
+                    if (state.product.enDescription != null &&
+                        state.product.enDescription!.isNotEmpty)
+                      _buildDescriptionBlock(
+                        context,
+                        title: S.of(context).enDescription,
+                        text: state.product.enDescription!,
+                      ),
+                    if (state.product.viDescription != null &&
+                        state.product.viDescription!.isNotEmpty)
+                      _buildDescriptionBlock(
+                        context,
+                        title: S.of(context).viDescription,
+                        text: state.product.viDescription!,
+                      ),
+
+                    const SizedBox(height: 24),
+                    _buildRatingsSection(context),
+                    const SizedBox(height: 100), // space for sticky footer
                   ],
                 ),
               ),
@@ -463,16 +487,24 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
                 itemCount: images.length,
                 physics: const NeverScrollableScrollPhysics(), // Disable swipe
                 onPageChanged: (index) {
-                  setState(() {
-                    _currentImageIndex = index;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _currentImageIndex = index;
+                    });
+                  }
                 },
                 itemBuilder: (context, index) {
+                  if (!mounted) {
+                    return const SizedBox.shrink();
+                  }
                   final imageUrl = images[index];
                   return Image.network(
                     imageUrl,
                     fit: BoxFit.contain,
                     loadingBuilder: (context, child, loadingProgress) {
+                      if (!mounted) {
+                        return const SizedBox.shrink();
+                      }
                       if (loadingProgress == null) return child;
                       return Stack(
                         children: [
@@ -499,6 +531,9 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
                       );
                     },
                     errorBuilder: (context, error, stackTrace) {
+                      if (!mounted) {
+                        return const SizedBox.shrink();
+                      }
                       return Center(
                         child: Icon(
                           _getCategoryIcon(state.product.category),
@@ -524,10 +559,12 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
                       child: InkWell(
                         customBorder: const CircleBorder(),
                         onTap: () {
-                          _imagePageController.previousPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
+                          if (mounted && _imagePageController.hasClients) {
+                            _imagePageController.previousPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8),
@@ -555,10 +592,12 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
                       child: InkWell(
                         customBorder: const CircleBorder(),
                         onTap: () {
-                          _imagePageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
+                          if (mounted && _imagePageController.hasClients) {
+                            _imagePageController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8),
@@ -668,43 +707,72 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
 
   List<Widget> _buildProductSpecificDetails(
       BuildContext context, Product product, Map<String, String> specs) {
-    return specs.entries
-        .map((entry) => _buildSpecificationRow(
-              context,
-              _getLocalizedSpecKey(context, entry.key),
-              entry.value,
-            ))
-        .toList();
+    // Convert specs to list of entries
+    final entries = specs.entries.toList();
+
+    // Calculate how many rows we need (2 items per row)
+    final rowCount = (entries.length / 2).ceil();
+
+    // Build 2-column layout
+    return List.generate(rowCount, (rowIndex) {
+      final leftIndex = rowIndex * 2;
+      final rightIndex = leftIndex + 1;
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Left column spec
+            Expanded(
+              child: _buildSpecificationItem(
+                context,
+                _getLocalizedSpecKey(context, entries[leftIndex].key),
+                entries[leftIndex].value,
+              ),
+            ),
+            const SizedBox(width: 16),
+            // Right column spec (if exists)
+            Expanded(
+              child: rightIndex < entries.length
+                  ? _buildSpecificationItem(
+                      context,
+                      _getLocalizedSpecKey(context, entries[rightIndex].key),
+                      entries[rightIndex].value,
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget _buildSpecificationRow(
+  Widget _buildSpecificationItem(
       BuildContext context, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 160,
-            child: Text(
-              label,
-              style: TextStyle(
-                color: Colors.grey[400],
-                fontSize: 14,
-              ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 120,
+          child: Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey[400],
+              fontSize: 14,
             ),
           ),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -740,6 +808,7 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
     return FutureBuilder<bool>(
       future: Database().isUserAdmin(),
       builder: (context, snapshot) {
+        if (!mounted) return const SizedBox.shrink();
         if (snapshot.hasData && snapshot.data == true) {
           final isManufacturerActive =
               state.product.manufacturer.status != ManufacturerStatus.inactive;
@@ -835,135 +904,107 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
   }
 
   Widget _buildRatingsSection(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildHeading(context, 'Ratings & Reviews'),
-        const SizedBox(height: 12),
-        // Summary row
-        Row(
+    return BlocBuilder<ProductDetailCubit, ProductDetailState>(
+      builder: (context, state) {
+        final ratings = state.ratings;
+        final hasRatings = ratings.isNotEmpty;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.star, color: colorScheme.tertiary, size: 20),
-            const SizedBox(width: 4),
-            Text(
-              '4.7',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(width: 8),
-            Text('(123 reviews)',
-                style: Theme.of(context).textTheme.bodyMedium),
-          ],
-        ),
-        const SizedBox(height: 12),
-        // Mock comments list
-        Column(
-          children: List.generate(3, (index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .outline
-                        .withValues(alpha: 0.15),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            _buildHeading(context, S.of(context).ratingsAndReviews),
+            const SizedBox(height: 12),
+
+            // Average summary
+            Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        children: [
-                          Icon(Icons.person, color: colorScheme.primary),
-                          const SizedBox(width: 8),
-                          Text('User ${index + 1}',
-                              style: Theme.of(context).textTheme.titleSmall),
-                          const Spacer(),
-                          Row(
-                              children: List.generate(5, (i) {
-                            return Icon(
-                              i < 4 ? Icons.star : Icons.star_border,
-                              size: 16,
-                              color: colorScheme.tertiary,
-                            );
-                          })),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
                       Text(
-                        'This is a placeholder review for demonstration purposes.',
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        (state.averageRating > 0)
+                            ? state.averageRating.toStringAsFixed(1)
+                            : '0.0',
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 12),
                       Text(
-                        '2025-10-31',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: colorScheme.onSurfaceVariant),
-                      ),
-                      const SizedBox(height: 10),
-                      // Owner reply placeholder
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(Icons.store_mall_directory,
-                              color: colorScheme.primary, size: 18),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: colorScheme.surface,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: colorScheme.outline
-                                      .withValues(alpha: 0.12),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Shop reply',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              color: colorScheme.primary),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      'Reply placeholder from the shop owner to the customer review.',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        (state.totalRatingsCount > 0)
+                            ? '${state.totalRatingsCount} ${S.of(context).reviews}'
+                            : S.of(context).noRatingsYet,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.75),
+                        ),
                       ),
                     ],
                   ),
                 ),
+              ],
+            ),
+
+            const SizedBox(height: 12),
+
+            // Individual rating cards
+            if (!hasRatings)
+              const SizedBox()
+            else
+              Column(
+                children: [
+                  for (final r in ratings)
+                    RatingCard(
+                      rating: r,
+                      onPostReply: (ratingId, comment, {productId}) async {
+                        try {
+                          await cubit.replyToRating(
+                              ratingId: ratingId,
+                              comment: comment,
+                              productId: r.productID);
+                          if (context.mounted) {
+                            // schedule the pop to avoid navigator locked assertion during rebuild
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (context.mounted) {
+                                Navigator.of(context).pop(ProcessState.success);
+                              }
+                            });
+                          }
+                        } catch (e) {
+                          rethrow;
+                        }
+                      },
+                    ),
+                ],
               ),
-            );
-          }),
-        ),
-      ],
+            // Show more button
+            if (state.hasMoreRatings)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      await cubit.loadMoreRatings();
+                    },
+                    child: Text(S.of(context).showMore),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 
@@ -1068,17 +1109,41 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
   }
 
   String _getLocalizedSpecKey(BuildContext context, String key) {
-    switch (key.toLowerCase()) {
+    // Remove trailing colon if present
+    final cleanKey = key.replaceAll(':', '').trim().toLowerCase();
+
+    switch (cleanKey) {
+      // RAM
       case 'type':
-        return S.of(context).driveType;
-      case 'capacity':
-        return S.of(context).driveCapacity;
+        return S.of(context).type;
+      case 'bus':
+        return S.of(context).bus;
+      case 'cl latency':
+        return S.of(context).clLatency;
+      case 'kit stick count':
+        return S.of(context).kitStickCount;
+      case 'capacity per stick':
+        return S.of(context).capacityPerStick;
       case 'ram bus':
         return S.of(context).ramBus;
       case 'ram capacity':
         return S.of(context).ramCapacity;
       case 'ram type':
         return S.of(context).ramType;
+
+      // CPU
+      case 'cores':
+        return S.of(context).cores;
+      case 'threads':
+        return S.of(context).threads;
+      case 'base clock':
+        return S.of(context).baseClock;
+      case 'turbo clock':
+        return S.of(context).turboClock;
+      case 'tdp':
+        return S.of(context).tdp;
+      case 'socket':
+        return S.of(context).socket;
       case 'cpu family':
         return S.of(context).cpuFamily;
       case 'cpu core':
@@ -1087,12 +1152,16 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
         return S.of(context).cpuThread;
       case 'cpu clock speed':
         return S.of(context).cpuClockSpeed;
-      case 'psu wattage':
-        return S.of(context).psuWattage;
-      case 'psu efficiency':
-        return S.of(context).psuEfficiency;
-      case 'psu modular':
-        return S.of(context).psuModular;
+
+      // GPU
+      case 'version':
+        return S.of(context).version;
+      case 'memory':
+        return S.of(context).memory;
+      case 'clock speed':
+        return S.of(context).clockSpeed;
+      case 'i/o ports':
+        return S.of(context).ioPorts;
       case 'gpu series':
         return S.of(context).gpuSeries;
       case 'gpu capacity':
@@ -1101,8 +1170,50 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
         return S.of(context).gpuBus;
       case 'gpu clock speed':
         return S.of(context).gpuClockSpeed;
+
+      // Mainboard
+      case 'chipset':
+        return S.of(context).chipset;
       case 'form factor':
         return S.of(context).formFactor;
+      case 'ram spec':
+        return S.of(context).ramSpec;
+      case 'storage':
+        return S.of(context).storage;
+      case 'pcie slots':
+        return S.of(context).pcieSlots;
+
+      // Drive
+      case 'drive type':
+        return S.of(context).driveType;
+      case 'generation':
+        return S.of(context).generation;
+      case 'capacity':
+        return S.of(context).driveCapacity;
+      case 'interface':
+        return S.of(context).interfaceType;
+      case 'read speed':
+        return S.of(context).readSpeed;
+      case 'write speed':
+        return S.of(context).writeSpeed;
+
+      // PSU
+      case 'wattage':
+        return S.of(context).psuWattage;
+      case 'efficiency rating':
+        return S.of(context).efficiencyRating;
+      case 'modularity':
+        return S.of(context).modularity;
+      case 'connectors':
+        return S.of(context).connectors;
+      case 'psu wattage':
+        return S.of(context).psuWattage;
+      case 'psu efficiency':
+        return S.of(context).psuEfficiency;
+      case 'psu modular':
+        return S.of(context).psuModular;
+
+      // Other
       case 'series':
         return S.of(context).series;
       case 'compatibility':

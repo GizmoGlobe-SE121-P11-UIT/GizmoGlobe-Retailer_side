@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/database/database.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
@@ -111,16 +110,18 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
         break;
 
       default:
-        if (kDebugMode) {
-          print('Unknown category');
-        } //Danh mục không xác định
+        break;
     }
 
-    emit(state.copyWith(technicalSpecs: specs));
+    if (!isClosed) {
+      emit(state.copyWith(technicalSpecs: specs));
+    }
   }
 
   void toLoading() {
-    emit(state.copyWith(processState: ProcessState.loading));
+    if (!isClosed) {
+      emit(state.copyWith(processState: ProcessState.loading));
+    }
   }
 
   Future<void> _loadImages() async {
@@ -128,11 +129,11 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     if (productId == null) return;
     try {
       final urls = await Firebase().getProductImages(productId);
-      emit(state.copyWith(imageUrls: urls));
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error loading product images: $e');
+      if (!isClosed) {
+        emit(state.copyWith(imageUrls: urls));
       }
+    } catch (e) {
+      // Silently handle error
     }
   }
 
@@ -153,20 +154,20 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
       Product product = state.product;
       product.updateProduct(status: status);
-      emit(state.copyWith(product: product));
-
-      emit(state.copyWith(
-          processState: ProcessState.success,
-          notifyMessage: NotifyMessage.msg15,
-          dialogName: DialogName.success));
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
+      if (!isClosed) {
+        emit(state.copyWith(product: product));
+        emit(state.copyWith(
+            processState: ProcessState.success,
+            notifyMessage: NotifyMessage.msg15,
+            dialogName: DialogName.success));
       }
-      emit(state.copyWith(
-          processState: ProcessState.failure,
-          notifyMessage: NotifyMessage.msg16,
-          dialogName: DialogName.failure));
+    } catch (e) {
+      if (!isClosed) {
+        emit(state.copyWith(
+            processState: ProcessState.failure,
+            notifyMessage: NotifyMessage.msg16,
+            dialogName: DialogName.failure));
+      }
     }
   }
 
@@ -174,13 +175,17 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     Product product = Database()
         .productList
         .firstWhere((element) => element.productID == state.product.productID);
-    emit(state.copyWith(product: product));
-    _initializeTechnicalSpecs();
-    _loadImages(); // Reload images from Firebase
+    if (!isClosed) {
+      emit(state.copyWith(product: product));
+      _initializeTechnicalSpecs();
+      _loadImages(); // Reload images from Firebase
+    }
   }
 
   void toIdle() {
-    emit(state.copyWith(processState: ProcessState.idle));
+    if (!isClosed) {
+      emit(state.copyWith(processState: ProcessState.idle));
+    }
   }
 
   Future<void> loadRatingsPage({int limit = 5}) async {
@@ -191,22 +196,23 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
         final page =
             await _firebase.getRatingsPageByProduct(productId, limit: limit);
         _lastRatingsDoc = page.lastDocument;
-        emit(state.copyWith(
-            ratings: page.ratings, hasMoreRatings: page.hasMore));
+        if (!isClosed) {
+          emit(state.copyWith(
+              ratings: page.ratings, hasMoreRatings: page.hasMore));
+        }
       } catch (e) {
         // Server-side paging may fail due to missing index; fallback to client-side full fetch then local pagination
-        if (kDebugMode) {
-          print('Falling back to client-side fetch for ratings: $e');
-        }
         final all = await _firebase.getRatingsByProductWithUsername(productId);
         final initial = all.take(limit).toList();
         final hasMore = all.length > initial.length;
         // note: cannot set a lastDocument for client-side fallback; we'll store current offset
         _lastRatingsDoc = null;
-        emit(state.copyWith(ratings: initial, hasMoreRatings: hasMore));
+        if (!isClosed) {
+          emit(state.copyWith(ratings: initial, hasMoreRatings: hasMore));
+        }
       }
     } catch (e) {
-      if (kDebugMode) print('Error loading ratings page: $e');
+      // Silently handle error
     }
   }
 
@@ -214,13 +220,29 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     try {
       final productId = state.product.productID ?? '';
       if (productId.isEmpty) return;
+      
+      // Try to get pre-aggregated data from database first
+      final aggregated = await _firebase.getAggregatedProductRating(productId);
+      if (aggregated != null) {
+        final avg = (aggregated['avgRating'] as num?)?.toDouble() ?? 0.0;
+        final count = (aggregated['ratingCount'] as int?) ?? 
+                     (aggregated['ratingCount'] as num?)?.toInt() ?? 0;
+        if (!isClosed) {
+          emit(state.copyWith(averageRating: avg, totalRatingsCount: count));
+        }
+        return;
+      }
+      
+      // Fallback to recalculation if aggregated data doesn't exist
       final result = await _firebase.getAverageRatingForProduct(productId);
       final avg = (result['average'] as num?)?.toDouble() ?? 0.0;
       final count =
           (result['count'] as int?) ?? (result['count'] as num?)?.toInt() ?? 0;
-      emit(state.copyWith(averageRating: avg, totalRatingsCount: count));
+      if (!isClosed) {
+        emit(state.copyWith(averageRating: avg, totalRatingsCount: count));
+      }
     } catch (e) {
-      if (kDebugMode) print('Error refreshing average rating: $e');
+      // Silently handle error
     }
   }
 
@@ -235,7 +257,9 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
             startAfter: _lastRatingsDoc, limit: limit);
         _lastRatingsDoc = page.lastDocument;
         final combined = List<Rating>.from(state.ratings)..addAll(page.ratings);
-        emit(state.copyWith(ratings: combined, hasMoreRatings: page.hasMore));
+        if (!isClosed) {
+          emit(state.copyWith(ratings: combined, hasMoreRatings: page.hasMore));
+        }
         return;
       }
 
@@ -243,15 +267,19 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       final all = await _firebase.getRatingsByProductWithUsername(productId);
       final current = state.ratings.length;
       if (current >= all.length) {
-        emit(state.copyWith(hasMoreRatings: false));
+        if (!isClosed) {
+          emit(state.copyWith(hasMoreRatings: false));
+        }
         return;
       }
       final next = all.skip(current).take(limit).toList();
       final combined = List<Rating>.from(state.ratings)..addAll(next);
       final hasMore = combined.length < all.length;
-      emit(state.copyWith(ratings: combined, hasMoreRatings: hasMore));
+      if (!isClosed) {
+        emit(state.copyWith(ratings: combined, hasMoreRatings: hasMore));
+      }
     } catch (e) {
-      if (kDebugMode) print('Error loading more ratings: $e');
+      // Silently handle error
     }
   }
 
@@ -271,7 +299,6 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       await loadRatingsPage();
       await refreshAverage();
     } catch (e) {
-      if (kDebugMode) print('ProductDetailCubit.replyToRating error: $e');
       rethrow;
     }
   }

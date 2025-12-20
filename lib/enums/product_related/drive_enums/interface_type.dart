@@ -12,7 +12,9 @@ enum InterfaceType {
   }
 
   static List<InterfaceType> getValues() {
-    return InterfaceType.values.where((e) => e != InterfaceType.unknown).toList();
+    return InterfaceType.values
+        .where((e) => e != InterfaceType.unknown)
+        .toList();
   }
 
   @override
@@ -23,9 +25,24 @@ enum InterfaceType {
 
 extension InterfaceTypeExtension on InterfaceType {
   static InterfaceType fromName(String name) {
-    return InterfaceType.values.firstWhere(
-      (e) => e.getName() == name,
-      orElse: () => InterfaceType.unknown,
-    );
+    // Normalize the input name
+    final normalized = name.toLowerCase().trim();
+
+    // Handle variations and aliases
+    switch (normalized) {
+      case 'sata':
+        return InterfaceType.sata;
+      case 'nvme':
+      case 'pcie':
+      case 'pci-e':
+      case 'pci express':
+        return InterfaceType.pcie;
+      default:
+        // Try exact match with enum name
+        return InterfaceType.values.firstWhere(
+          (e) => e.getName().toLowerCase() == normalized,
+          orElse: () => InterfaceType.unknown,
+        );
+    }
   }
 }

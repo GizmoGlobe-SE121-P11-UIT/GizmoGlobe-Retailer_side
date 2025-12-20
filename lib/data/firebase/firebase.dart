@@ -2383,11 +2383,6 @@ class Firebase {
         return RatingsPage(ratings: [], lastDocument: null, hasMore: false);
       }
 
-      if (kDebugMode) {
-        print(
-            'getRatingsPageByProduct: productId=$productId startAfter=${startAfter?.id} limit=$limit');
-      }
-
       Query query = _firestore
           .collection('order_ratings')
           .where('productID', isEqualTo: productId)
@@ -2398,23 +2393,10 @@ class Firebase {
 
       final QuerySnapshot snapshot = await query.get();
 
-      if (kDebugMode) {
-        print('getRatingsPageByProduct: got ${snapshot.docs.length} docs');
-        if (snapshot.docs.isNotEmpty) {
-          print(
-              'getRatingsPageByProduct: first doc data=${snapshot.docs.first.data()}');
-        }
-      }
-
       final List<Rating> ratings = [];
       for (final doc in snapshot.docs) {
         final data = doc.data() as Map<String, dynamic>;
         final rating = Rating.fromMap(doc.id, data);
-
-        if (kDebugMode) {
-          print(
-              'Parsed rating (paged) ${doc.id}: productID=${rating.productID} userID=${rating.userID} rating=${rating.rating} time=${rating.timeSent}');
-        }
 
         // attach username if possible
         try {
@@ -2437,27 +2419,9 @@ class Firebase {
       final lastDoc = snapshot.docs.isNotEmpty ? snapshot.docs.last : null;
       final hasMore = snapshot.docs.length == limit;
 
-      if (kDebugMode) {
-        print(
-            'getRatingsPageByProduct: returning ${ratings.length} ratings, hasMore=$hasMore');
-      }
-
       return RatingsPage(
           ratings: ratings, lastDocument: lastDoc, hasMore: hasMore);
     } catch (e) {
-      if (kDebugMode) {
-        final text = e.toString();
-        // Extract firebase console create_composite link if present
-        final match = RegExp(
-                r'https:\/\/console\.firebase\.google\.com\S+create_composite\S+')
-            .firstMatch(text);
-        if (match != null) {
-          print(
-              'Server-side paged query failed and requires a composite index. Create it here: ${match.group(0)}');
-        } else {
-          print('Server-side paged query failed: $e');
-        }
-      }
       rethrow; // let caller handle fallback
     }
   }
@@ -2503,9 +2467,9 @@ class Firebase {
           parsed = int.tryParse(ratingVal) ?? 0;
         } else {
           parsed = 0;
-          sum += parsed;
-          count += 1;
         }
+        sum += parsed;
+        count += 1;
       }
 
       final average = (count > 0) ? (sum / count) : 0.0;
@@ -2513,6 +2477,43 @@ class Firebase {
     } catch (e) {
       if (kDebugMode) print('Error computing average rating: $e');
       return {'average': 0.0, 'count': 0, 'sum': 0};
+    }
+  }
+
+  /// Get aggregated product rating from Cloud Functions aggregation
+  /// Returns null if no aggregated data exists for this product
+  Future<Map<String, dynamic>?> getAggregatedProductRating(
+      String productId) async {
+    try {
+      if (productId.isEmpty) return null;
+
+      final doc = await _firestore
+          .collection('aggregations')
+          .doc('productRatings')
+          .get();
+
+      if (!doc.exists) return null;
+
+      final data = doc.data();
+      final products = data?['products'] as Map<String, dynamic>?;
+
+      if (products == null || !products.containsKey(productId)) {
+        return null;
+      }
+
+      final productRating = products[productId] as Map<String, dynamic>?;
+      if (productRating == null) return null;
+
+      return {
+        'avgRating': productRating['avgRating'] ?? 0.0,
+        'ratingCount': productRating['ratingCount'] ?? 0,
+        'lastUpdated': productRating['lastUpdated'],
+      };
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting aggregated rating for product $productId: $e');
+      }
+      return null;
     }
   }
 
