@@ -25,11 +25,16 @@ class CustomerAddScreen extends StatefulWidget {
       return Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const CustomerAddScreen(),
+          builder: (context) => CustomerAddScreen.newInstance(),
         ),
       );
     }
   }
+
+  static Widget newInstance() => BlocProvider(
+    create: (context) => CustomersScreenCubit(),
+    child: const CustomerAddScreen(),
+  );
 
   @override
   State<CustomerAddScreen> createState() => _CustomerAddScreenState();
