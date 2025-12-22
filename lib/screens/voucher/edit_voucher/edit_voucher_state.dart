@@ -9,29 +9,33 @@ class EditVoucherState extends Equatable {
   final ProcessState processState;
   final DialogName dialogName;
   final NotifyMessage notifyMessage;
+  final String errorMessage;
 
   const EditVoucherState({
     this.voucherArgument,
     this.processState = ProcessState.idle,
     this.dialogName = DialogName.empty,
     this.notifyMessage = NotifyMessage.empty,
+    this.errorMessage = '',
   });
 
   @override
   List<Object?> get props =>
-      [voucherArgument, processState, dialogName, notifyMessage];
+      [voucherArgument, processState, dialogName, notifyMessage, errorMessage];
 
   EditVoucherState copyWith({
     VoucherArgument? voucherArgument,
     ProcessState? processState,
     DialogName? dialogName,
     NotifyMessage? notifyMessage,
+    String? errorMessage,
   }) {
     return EditVoucherState(
       voucherArgument: voucherArgument ?? this.voucherArgument,
       processState: processState ?? this.processState,
       dialogName: dialogName ?? this.dialogName,
       notifyMessage: notifyMessage ?? this.notifyMessage,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 }

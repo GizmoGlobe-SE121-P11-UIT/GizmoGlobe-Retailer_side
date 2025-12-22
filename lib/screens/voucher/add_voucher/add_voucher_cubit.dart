@@ -232,4 +232,3 @@ Future<String> generateDescription(VoucherArgument inputVoucher) async {
     return '$e';
   }
 }
-

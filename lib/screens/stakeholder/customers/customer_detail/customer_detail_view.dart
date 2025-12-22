@@ -51,10 +51,10 @@ class CustomerDetailScreen extends StatefulWidget {
         ),
       );
     } else {
-      return Navigator.push(
+      return Navigator.push<bool>(
         context,
         MaterialPageRoute(
-          builder: (context) => CustomerDetailScreen(
+          builder: (context) => CustomerDetailScreen.newInstance(
             customer: customer,
             readOnly: readOnly,
           ),

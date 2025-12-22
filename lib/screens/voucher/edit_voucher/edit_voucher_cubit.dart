@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/voucher/edit_voucher/edit_voucher_state.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:dio/dio.dart';
+import 'package:genai/genai.dart';
 
 import '../../../enums/processing/dialog_name_enum.dart';
 import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
+import '../../../enums/voucher_related/voucher_display_type.dart';
 import '../../../objects/voucher_related/voucher.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 
@@ -25,30 +26,26 @@ class EditVoucherCubit extends Cubit<EditVoucherState> {
   void updateVoucherArgument(VoucherArgument voucherArgument) {
     if (!isClosed) {
       final now = DateTime.now();
+      final existing = state.voucherArgument;
       emit(state.copyWith(
         voucherArgument: voucherArgument.copyWith(
           isLimited: voucherArgument.isLimited,
           isPercentage: voucherArgument.isPercentage,
           hasEndTime: voucherArgument.hasEndTime,
-          redeemPrice: voucherArgument.redeemPrice,
-          voucherName: voucherArgument.voucherName,
-          isEnabled: voucherArgument.isEnabled,
-          startTime: voucherArgument.startTime ?? now,
-          maxUsagePerPerson: voucherArgument.maxUsagePerPerson,
+          redeemPrice: voucherArgument.redeemPrice ?? existing?.redeemPrice,
+          voucherName: voucherArgument.voucherName ?? existing?.voucherName,
+          isEnabled: voucherArgument.isEnabled ?? existing?.isEnabled,
+          startTime: voucherArgument.startTime ?? existing?.startTime ?? now,
+          maxUsagePerPerson: voucherArgument.maxUsagePerPerson ?? existing?.maxUsagePerPerson,
           endTime: (voucherArgument.hasEndTime ?? false)
-              ? (voucherArgument.endTime ?? now.add(const Duration(days: 7)))
-              : null,
-          maximumUsage: (voucherArgument.isLimited ?? false)
-              ? voucherArgument.maximumUsage
-              : 0,
-          usageLeft: (voucherArgument.isLimited ?? false)
-              ? voucherArgument.usageLeft
-              : 0,
-          maximumDiscountValue: (voucherArgument.isPercentage ?? false)
-              ? (voucherArgument.maximumDiscountValue ?? 0)
-              : 0,
-          enDescription: voucherArgument.enDescription ?? '',
-          viDescription: voucherArgument.viDescription ?? '',
+              ? (voucherArgument.endTime ?? existing?.endTime ?? now.add(const Duration(days: 7)))
+              : existing?.endTime,
+          // Preserve previous numeric values when toggling flags off then on
+          maximumUsage: voucherArgument.maximumUsage ?? existing?.maximumUsage,
+          usageLeft: voucherArgument.usageLeft ?? existing?.usageLeft,
+          maximumDiscountValue: voucherArgument.maximumDiscountValue ?? existing?.maximumDiscountValue,
+          enDescription: voucherArgument.enDescription ?? existing?.enDescription ?? '',
+          viDescription: voucherArgument.viDescription ?? existing?.viDescription ?? '',
         ),
       ));
     }
@@ -84,90 +81,91 @@ class EditVoucherCubit extends Cubit<EditVoucherState> {
         emit(state.copyWith(
             processState: ProcessState.failure,
             dialogName: DialogName.failure,
-            notifyMessage: NotifyMessage.msg23));
+            notifyMessage: NotifyMessage.msg23,
+            errorMessage: ', error: $e'
+        ));
       }
     }
   }
 
   Future<void> generateEnDescription() async {
-    String enDescription = '';
-    if (!state.voucherArgument!.isViEmpty) {
-      enDescription = await translateIntoEnglish(
-        state.voucherArgument?.viDescription ?? '',
-      );
-    } else {
-      enDescription = await generateEnglishDescription(state.voucherArgument!);
-    }
-    updateVoucherArgument(
-        state.voucherArgument!.copyWith(enDescription: enDescription));
-    emit(state.copyWith(
-        processState: ProcessState.success,
-        dialogName: DialogName.success,
-        notifyMessage: NotifyMessage.msg21));
-  }
+    if (state.voucherArgument!.isEnEmpty) {
+      String enDescription = '';
+      String viDescription = '';
 
-  Future<void> generateViDescription() async {
-    String viDescription = '';
-    if (!state.voucherArgument!.isEnEmpty) {
-      viDescription = await translateIntoVietnamese(
-        state.voucherArgument?.enDescription ?? '',
-      );
-    } else {
-      viDescription =
-          await generateVietnameseDescription(state.voucherArgument!);
+      if (!state.voucherArgument!.isViEmpty) {
+        enDescription = await translateIntoEnglish(
+          state.voucherArgument?.viDescription ?? '',
+        );
+
+        updateVoucherArgument(
+            state.voucherArgument!.copyWith(enDescription: enDescription));
+      }
+      else {
+        enDescription = await generateDescription(state.voucherArgument!);
+        viDescription = await translateIntoVietnamese(enDescription);
+
+        updateVoucherArgument(state.voucherArgument!.copyWith(
+            enDescription: enDescription,
+            viDescription: viDescription
+        ));
+      }
+
+      emit(state.copyWith(
+          processState: ProcessState.success,
+          dialogName: DialogName.success,
+          notifyMessage: NotifyMessage.msg21));
     }
-    updateVoucherArgument(
-        state.voucherArgument!.copyWith(viDescription: viDescription));
-    emit(state.copyWith(
-        processState: ProcessState.success,
-        dialogName: DialogName.success,
-        notifyMessage: NotifyMessage.msg21));
-  }
-}
+   }
+
+   Future<void> generateViDescription() async {
+    if (state.voucherArgument!.isViEmpty) {
+      String enDescription = '';
+      String viDescription = '';
+
+      if (!state.voucherArgument!.isEnEmpty) {
+        viDescription = await translateIntoVietnamese(
+          state.voucherArgument?.enDescription ?? '',
+        );
+
+        updateVoucherArgument(
+            state.voucherArgument!.copyWith(viDescription: viDescription));
+      }
+      else {
+        enDescription = await generateDescription(state.voucherArgument!);
+        viDescription = await translateIntoVietnamese(enDescription);
+
+        updateVoucherArgument(state.voucherArgument!.copyWith(
+            enDescription: enDescription,
+            viDescription: viDescription
+        ));
+      }
+
+      emit(state.copyWith(
+          processState: ProcessState.success,
+          dialogName: DialogName.success,
+          notifyMessage: NotifyMessage.msg21));
+    }
+   }
+ }
 
 Future<String> translateIntoEnglish(String inputText) async {
   try {
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url =
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=[0m$apiKey';
 
-    final dio = Dio();
-    final response = await dio.post(
-      url,
-      options: Options(headers: {'Content-Type': 'application/json'}),
-      data: {
-        'contents': [
-          {
-            'parts': [
-              {
-                'text':
-                    'Translate this Vietnamese text to English changing special character like \$ or %. Return only the translated text: $inputText'
-              }
-            ]
-          }
-        ],
-        'generationConfig': {
-          'temperature': 0.2,
-          'topP': 0.8,
-          'maxOutputTokens': 100
-        }
-      },
+    final request = AIRequestModel(
+      modelApiProvider: ModelAPIProvider.gemini, // or openai, anthropic, etc.
+      model: "gemini-2.0-flash",
+      apiKey: apiKey,
+      url: kGeminiUrl,
+      systemPrompt: "You are a translator, and you are translating the following Vietnamese text to English.",
+      userPrompt: inputText,
+      stream: false,
     );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = response.data;
-      final candidates = jsonResponse['candidates'] as List;
-      if (candidates.isNotEmpty) {
-        final content = candidates[0]['content'];
-        final parts = content['parts'] as List;
-        if (parts.isNotEmpty) {
-          final translatedText = parts[0]['text'] as String;
-          return translatedText.trim();
-        }
-      }
-    }
+    final answer = await executeGenAIRequest(request);
 
-    return inputText;
+    return answer ?? inputText;
   } catch (e) {
     if (kDebugMode) {
       print('Error translating to English: $e');
@@ -176,113 +174,23 @@ Future<String> translateIntoEnglish(String inputText) async {
   }
 }
 
-Future<String> generateEnglishDescription(VoucherArgument inputVoucher) async {
-  try {
-    final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url =
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
-
-    final dio = Dio();
-    final voucherInfo = inputVoucher;
-    final promptDetails = [
-      'Discount value: [0m${voucherInfo.discountValue}',
-      ',Minimum purchase amount: ${voucherInfo.minimumPurchase}',
-      'Discount type: ${voucherInfo.isPercentage ?? false ? 'Percentage' : 'Fixed amount'}',
-      if (voucherInfo.isPercentage ?? false)
-        'Maximum discount value: ${voucherInfo.maximumDiscountValue}',
-      'Usage limit per person: ${voucherInfo.maxUsagePerPerson}',
-      if (voucherInfo.isLimited ?? false)
-        'Maximum total usage: ${voucherInfo.maximumUsage}',
-      'Valid from: ${voucherInfo.startTime?.toString().substring(0, 10)}',
-      if (voucherInfo.hasEndTime ?? false)
-        'Valid until: ${voucherInfo.endTime?.toString().substring(0, 10)}',
-    ].join('\n');
-    final response = await dio.post(
-      url,
-      options: Options(headers: {'Content-Type': 'application/json'}),
-      data: {
-        'contents': [
-          {
-            'parts': [
-              {
-                'text':
-                    'Create a short, professional 1-2 sentence voucher description in English based on these details:\n$promptDetails\n\nMake it concise, appealing and marketing-oriented. Return ONLY the description, no additional text, and use special character like \$ or % if needed.'
-              }
-            ]
-          }
-        ],
-        'generationConfig': {
-          'temperature': 0.2,
-          'topP': 0.8,
-          'maxOutputTokens': 100
-        }
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final jsonResponse = response.data;
-      final candidates = jsonResponse['candidates'] as List;
-      if (candidates.isNotEmpty) {
-        final content = candidates[0]['content'];
-        final parts = content['parts'] as List;
-        if (parts.isNotEmpty) {
-          final translatedText = parts[0]['text'] as String;
-          return translatedText.trim();
-        }
-      }
-    }
-
-    return '';
-  } catch (e) {
-    if (kDebugMode) {
-      print('Error generating English description: $e');
-    }
-    return '';
-  }
-}
-
 Future<String> translateIntoVietnamese(String inputText) async {
   try {
-    if (inputText.isEmpty) {
-      return '';
-    }
-
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url =
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
 
-    final dio = Dio();
-    final response = await dio.post(
-      url,
-      options: Options(headers: {'Content-Type': 'application/json'}),
-      data: {
-        'contents': [
-          {
-            'parts': [
-              {
-                'text':
-                    'INSTRUCTION: Translate the following English text to Vietnamese without changing special character like \$ or %.\n\nENGLISH TEXT: $inputText\n\nTRANSLATION (in Vietnamese only, no English explanation or notes):'
-              }
-            ]
-          }
-        ],
-      },
+    final request = AIRequestModel(
+      modelApiProvider: ModelAPIProvider.gemini,
+      model: "gemini-2.0-flash",
+      apiKey: apiKey,
+      url: kGeminiUrl,
+      systemPrompt: "You are a translator, and you are translating the following Englist text to Vietnamese.",
+      userPrompt: inputText,
+      stream: false,
     );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = response.data;
-      final candidates = jsonResponse['candidates'] as List;
-      if (candidates.isNotEmpty) {
-        final content = candidates[0]['content'];
-        final parts = content['parts'] as List;
-        if (parts.isNotEmpty) {
-          final translatedText = parts[0]['text'] as String;
-          return translatedText.trim();
-        }
-      }
-    }
+    final answer = await executeGenAIRequest(request);
 
-    return inputText;
+    return answer ?? inputText;
   } catch (e) {
     if (kDebugMode) {
       print('Error translating to Vietnamese: $e');
@@ -291,68 +199,41 @@ Future<String> translateIntoVietnamese(String inputText) async {
   }
 }
 
-Future<String> generateVietnameseDescription(
-    VoucherArgument inputVoucher) async {
+Future<String> generateDescription(VoucherArgument inputVoucher) async {
   try {
     final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-    final url =
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
 
-    final dio = Dio();
     final voucherInfo = inputVoucher;
     final promptDetails = [
-      'Discount value: ${voucherInfo.discountValue}',
-      ',Minimum purchase amount: ${voucherInfo.minimumPurchase}',
+      'Discount value: ${voucherInfo.discountValue}${(voucherInfo.isPercentage! ? '%' : '₫')}',
+      'Minimum purchase amount: ${voucherInfo.minimumPurchase}₫',
       'Discount type: ${voucherInfo.isPercentage ?? false ? 'Percentage' : 'Fixed amount'}',
-      if (voucherInfo.isPercentage ?? false)
-        'Maximum discount value: ${voucherInfo.maximumDiscountValue}',
+      if (voucherInfo.isPercentage ?? false) 'Maximum discount value: ${voucherInfo.maximumDiscountValue}₫',
       'Usage limit per person: ${voucherInfo.maxUsagePerPerson}',
-      if (voucherInfo.isLimited ?? false)
-        'Maximum total usage: ${voucherInfo.maximumUsage}',
+      if (voucherInfo.isLimited ?? false) 'Maximum total usage: ${voucherInfo.maximumUsage}',
       'Valid from: ${voucherInfo.startTime?.toString().substring(0, 10)}',
-      if (voucherInfo.hasEndTime ?? false)
-        'Valid until: ${voucherInfo.endTime?.toString().substring(0, 10)}',
+      if (voucherInfo.hasEndTime ?? false) 'Valid until: ${voucherInfo.endTime?.toString().substring(0, 10)}',
+      'Claim type: ${voucherInfo.displayType?.description}',
+      if (voucherInfo.displayType == VoucherDisplayType.redeemable) 'Redeem price: ${voucherInfo.redeemPrice} points',
     ].join('\n');
-    final response = await dio.post(
-      url,
-      options: Options(headers: {'Content-Type': 'application/json'}),
-      data: {
-        'contents': [
-          {
-            'parts': [
-              {
-                'text':
-                    'Create a short, professional 1-2 sentence voucher description in Vietnamese based on these details:\n$promptDetails\n\nMake it concise, appealing and marketing-oriented. Return ONLY the description, no additional text special character like \$ or % if needed.'
-              }
-            ]
-          }
-        ],
-        'generationConfig': {
-          'temperature': 0.2,
-          'topP': 0.8,
-          'maxOutputTokens': 100
-        }
-      },
+
+    final request = AIRequestModel(
+      modelApiProvider: ModelAPIProvider.gemini, // or openai, anthropic, etc.
+      model: "gemini-2.0-flash",
+      apiKey: apiKey,
+      url: kGeminiUrl,
+      systemPrompt: "You are an assistant for an online store, and you are making description for vouchers.",
+      userPrompt: promptDetails,
+      stream: false,
     );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = response.data;
-      final candidates = jsonResponse['candidates'] as List;
-      if (candidates.isNotEmpty) {
-        final content = candidates[0]['content'];
-        final parts = content['parts'] as List;
-        if (parts.isNotEmpty) {
-          final translatedText = parts[0]['text'] as String;
-          return translatedText.trim();
-        }
-      }
-    }
+    final answer = await executeGenAIRequest(request);
 
-    return '';
+    return answer ?? promptDetails;
   } catch (e) {
     if (kDebugMode) {
-      print('Error generating Vietnamese description: $e');
+      print('Error generating description: $e');
     }
-    return '';
+    return '$e';
   }
 }

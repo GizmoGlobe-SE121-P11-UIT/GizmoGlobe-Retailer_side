@@ -108,7 +108,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
         elevation: 0,
         leading: GradientIconButton(
           icon: Icons.chevron_left,
-          onPressed: () => Navigator.pop(context, ProcessState.idle),
+          onPressed: () => Navigator.pop(context, null),
           fillColor: Colors.transparent,
         ),
         title: GradientText(text: S.of(context).addVoucher),
@@ -165,7 +165,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
               }
             } else {
               void handleOk() {
-                Navigator.pop(context, state.processState);
+                Navigator.pop(context, state.processState == ProcessState.success);
               }
 
               final result = await showDialog<bool>(

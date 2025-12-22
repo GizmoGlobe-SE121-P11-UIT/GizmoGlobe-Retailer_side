@@ -186,20 +186,20 @@ class VoucherArgument {
     );
 
     if (voucher is PercentageInterface) {
-      result.copyWith(
+      result = result.copyWith(
           maximumDiscountValue:
               (voucher as PercentageInterface).maximumDiscountValue);
     }
 
     if (voucher is LimitedInterface) {
-      result.copyWith(
+      result = result.copyWith(
         maximumUsage: (voucher as LimitedInterface).maximumUsage,
         usageLeft: (voucher as LimitedInterface).usageLeft,
       );
     }
 
     if (voucher is EndTimeInterface) {
-      result.copyWith(endTime: (voucher as EndTimeInterface).endTime);
+      result = result.copyWith(endTime: (voucher as EndTimeInterface).endTime);
     }
 
     return result;
