@@ -4,9 +4,11 @@ enum Socket {
   lga1200('LGA 1200'),
   lga1151('LGA 1151'),
   lga1150('LGA 1150'),
+  lga1851('LGA 1851'),
   am4('AM4'),
   am5('AM5'),
   tr4('TR4'),
+  sTR5('sTR5'),
   sTRX4('sTRX4'),
   sWRX8('sWRX8'),
   sp3('SP3'),
@@ -32,10 +34,7 @@ enum Socket {
 
 extension SocketExtension on Socket {
   static Socket fromName(String name) {
-    return Socket.values.firstWhere(
-        (e) => e.getName() == name,
-        orElse: () => Socket.unknown
-    );
+    return Socket.values
+        .firstWhere((e) => e.getName() == name, orElse: () => Socket.unknown);
   }
 }
-
