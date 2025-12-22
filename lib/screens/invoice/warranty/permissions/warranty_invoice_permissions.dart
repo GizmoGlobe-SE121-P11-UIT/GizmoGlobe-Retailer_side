@@ -3,8 +3,7 @@ import '../../../../objects/invoice_related/warranty_invoice.dart';
 
 class WarrantyInvoicePermissions {
   static bool canEditStatus(String? userRole, WarrantyInvoice invoice) {
-    return userRole == 'admin' && 
-           invoice.status != WarrantyStatus.completed && 
+    return invoice.status != WarrantyStatus.completed &&
            invoice.status != WarrantyStatus.denied;
   }
 } 

@@ -3,6 +3,6 @@ import '../../../../objects/invoice_related/incoming_invoice.dart';
 
 class IncomingInvoicePermissions {
   static bool canEditPaymentStatus(String? userRole, IncomingInvoice invoice) {
-    return userRole == 'admin' && invoice.status == PaymentStatus.unpaid;
+    return (userRole == 'admin' || userRole == 'manager') && invoice.status == PaymentStatus.unpaid;
   }
 } 

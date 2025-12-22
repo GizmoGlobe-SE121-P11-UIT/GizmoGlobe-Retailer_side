@@ -17,7 +17,7 @@ class SalesInvoicePermissions {
     if (invoice.paymentStatus == PaymentStatus.paid) {
       return false;
     }
-    return userRole == 'admin';
+    return userRole == 'admin' || userRole == 'manager';
   }
 
   static bool canEditSalesStatus(String userRole, SalesInvoice invoice) {
@@ -27,7 +27,7 @@ class SalesInvoicePermissions {
         invoice.salesStatus == SalesStatus.shipped) {
       return false;
     }
-    return userRole == 'admin';
+    return true;
   }
 
   static bool canEditAddress(String userRole, SalesInvoice invoice) {
@@ -37,6 +37,6 @@ class SalesInvoicePermissions {
         invoice.salesStatus == SalesStatus.shipped) {
       return false;
     }
-    return userRole == 'admin';
+    return true;
   }
 }
