@@ -6,7 +6,7 @@ import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import '../../../enums/processing/dialog_name_enum.dart';
 import '../../../enums/processing/notify_message_enum.dart';
 import '../../../enums/processing/process_state_enum.dart';
-import '../../../enums/voucher_related/voucher_display_type.dart';
+import '../../../enums/voucher_related/distribution_type.dart';
 import '../../../objects/voucher_related/voucher.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -20,7 +20,7 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
             isLimited: false,
             isPercentage: false,
             hasEndTime: false,
-            displayType: VoucherDisplayType.everyone,
+            distributionType: DistributionType.public,
             isEnabled: true,
             startTime: DateTime.now(),
             enDescription: '',
@@ -208,8 +208,8 @@ Future<String> generateDescription(VoucherArgument inputVoucher) async {
       if (voucherInfo.isLimited ?? false) 'Maximum total usage: ${voucherInfo.maximumUsage}',
       'Valid from: ${voucherInfo.startTime?.toString().substring(0, 10)}',
       if (voucherInfo.hasEndTime ?? false) 'Valid until: ${voucherInfo.endTime?.toString().substring(0, 10)}',
-      'Claim type: ${voucherInfo.displayType?.description}',
-      if (voucherInfo.displayType == VoucherDisplayType.redeemable) 'Redeem price: ${voucherInfo.redeemPrice} points',
+      'Claim type: ${voucherInfo.distributionType?.description}',
+      if (voucherInfo.distributionType == DistributionType.rewards) 'Redeem price: ${voucherInfo.redeemPrice} points',
     ].join('\n');
 
     final request = AIRequestModel(

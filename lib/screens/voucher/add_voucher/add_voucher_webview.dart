@@ -11,7 +11,7 @@ import 'package:gizmoglobe_client/widgets/general/multi_field_with_icon.dart';
 import 'package:intl/intl.dart';
 
 import '../../../enums/processing/process_state_enum.dart';
-import '../../../enums/voucher_related/voucher_display_type.dart';
+import '../../../enums/voucher_related/distribution_type.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
@@ -511,16 +511,16 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
             Row(
               children: [
                 Expanded(
-                  child: buildInputWidget<VoucherDisplayType>(
+                  child: buildInputWidget<DistributionType>(
                     'Display Type',
                     TextEditingController(),
-                    state.voucherArgument?.displayType ?? VoucherDisplayType.everyone,
+                    state.voucherArgument?.distributionType ?? DistributionType.public,
                         (value) {
                       if (value != null) {
-                        cubit.updateVoucherArgument(state.voucherArgument!.copyWith(displayType: value));
+                        cubit.updateVoucherArgument(state.voucherArgument!.copyWith(distributionType: value));
                       }
                     },
-                    VoucherDisplayType.values,
+                    DistributionType.values,
                     null,
                   ),
                 ),

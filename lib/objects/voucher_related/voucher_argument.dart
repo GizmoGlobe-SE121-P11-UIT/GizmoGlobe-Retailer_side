@@ -1,4 +1,4 @@
-import 'package:gizmoglobe_client/enums/voucher_related/voucher_display_type.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/distribution_type.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/end_time_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/percentage_interface.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
@@ -14,7 +14,7 @@ class VoucherArgument {
   int? minimumPurchase;
   int? maxUsagePerPerson;
   int? redeemPrice;
-  VoucherDisplayType? displayType;
+  DistributionType? distributionType;
   bool? isEnabled;
   String? enDescription;
   String? viDescription;
@@ -38,7 +38,7 @@ class VoucherArgument {
     this.minimumPurchase,
     this.maxUsagePerPerson,
     this.redeemPrice,
-    this.displayType,
+    this.distributionType,
     this.isEnabled,
     this.enDescription,
     this.viDescription,
@@ -59,7 +59,7 @@ class VoucherArgument {
     int? minimumPurchase,
     int? maxUsagePerPerson,
     int? redeemPrice,
-    VoucherDisplayType? displayType,
+    DistributionType? distributionType,
     bool? isEnabled,
     String? enDescription,
     String? viDescription,
@@ -79,7 +79,7 @@ class VoucherArgument {
       minimumPurchase: minimumPurchase ?? this.minimumPurchase,
       maxUsagePerPerson: maxUsagePerPerson ?? this.maxUsagePerPerson,
       redeemPrice: redeemPrice ?? this.redeemPrice,
-      displayType: displayType ?? this.displayType,
+      distributionType: distributionType ?? this.distributionType,
       isEnabled: isEnabled ?? this.isEnabled,
       enDescription: enDescription ?? this.enDescription,
       viDescription: viDescription ?? this.viDescription,
@@ -120,7 +120,7 @@ class VoucherArgument {
         if (endTime == null) missing.add('End Time');
       }
 
-      if (displayType == VoucherDisplayType.redeemable) {
+      if (distributionType == DistributionType.rewards) {
         if (redeemPrice == null || redeemPrice == 0) missing.add('Redeem Price');
       }
 
@@ -140,7 +140,7 @@ class VoucherArgument {
           'minimumPurchase': minimumPurchase ?? 0,
           'maxUsagePerPerson': maxUsagePerPerson ?? 1,
           'redeemPrice': redeemPrice ?? 0,
-          'displayType': displayType != null ? displayType!.name : VoucherDisplayType.adminOnly.name,
+          'distributionType': distributionType != null ? distributionType!.name : DistributionType.staffIssued.name,
           'isEnabled': isEnabled ?? true,
           'enDescription': enDescription ?? '',
           'viDescription': viDescription ?? '',
@@ -175,7 +175,7 @@ class VoucherArgument {
       minimumPurchase: voucher.minimumPurchase,
       maxUsagePerPerson: voucher.maxUsagePerPerson,
       redeemPrice: voucher.redeemPrice,
-      displayType: voucher.displayType,
+      distributionType: voucher.distributionType,
       isEnabled: voucher.isEnabled,
       enDescription: voucher.enDescription,
       viDescription: voucher.viDescription,
