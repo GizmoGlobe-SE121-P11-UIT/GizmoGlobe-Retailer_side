@@ -16,16 +16,60 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// );
 /// ```
 class DefaultFirebaseOptions {
+  // Web Firebase config from --dart-define (compile-time constants)
+  // These are populated at build time via: flutter build web --dart-define-from-file=.env
+  static const String _webApiKey =
+      String.fromEnvironment('FIREBASE_WEB_API_KEY');
+  static const String _webAppId = String.fromEnvironment('FIREBASE_WEB_APP_ID');
+  static const String _webMessagingSenderId =
+      String.fromEnvironment('FIREBASE_WEB_MESSAGING_SENDER_ID');
+  static const String _webProjectId =
+      String.fromEnvironment('FIREBASE_WEB_PROJECT_ID');
+  static const String _webAuthDomain =
+      String.fromEnvironment('FIREBASE_WEB_AUTH_DOMAIN');
+  static const String _webStorageBucket =
+      String.fromEnvironment('FIREBASE_WEB_STORAGE_BUCKET');
+  static const String _webMeasurementId =
+      String.fromEnvironment('FIREBASE_WEB_MEASUREMENT_ID');
+
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
+      // For web: use dart-define constants (production) or fallback to dotenv (local dev)
+      final apiKey = _webApiKey.isNotEmpty
+          ? _webApiKey
+          : dotenv.env['FIREBASE_WEB_API_KEY'] ?? '';
+      final appId = _webAppId.isNotEmpty
+          ? _webAppId
+          : dotenv.env['FIREBASE_WEB_APP_ID'] ?? '';
+      final messagingSenderId = _webMessagingSenderId.isNotEmpty
+          ? _webMessagingSenderId
+          : dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID'] ?? '';
+      final projectId = _webProjectId.isNotEmpty
+          ? _webProjectId
+          : dotenv.env['FIREBASE_WEB_PROJECT_ID'] ?? '';
+      final authDomain = _webAuthDomain.isNotEmpty
+          ? _webAuthDomain
+          : dotenv.env['FIREBASE_WEB_AUTH_DOMAIN'];
+      final storageBucket = _webStorageBucket.isNotEmpty
+          ? _webStorageBucket
+          : dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'];
+      final measurementId = _webMeasurementId.isNotEmpty
+          ? _webMeasurementId
+          : dotenv.env['FIREBASE_WEB_MEASUREMENT_ID'];
+
+      if (apiKey.isEmpty || appId.isEmpty || projectId.isEmpty) {
+        throw Exception('Firebase Web configuration is missing. '
+            'Build with: flutter build web --dart-define-from-file=.env');
+      }
+
       return FirebaseOptions(
-        apiKey: dotenv.env['FIREBASE_WEB_API_KEY']!,
-        appId: dotenv.env['FIREBASE_WEB_APP_ID']!,
-        messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID']!,
-        projectId: dotenv.env['FIREBASE_WEB_PROJECT_ID']!,
-        authDomain: dotenv.env['FIREBASE_WEB_AUTH_DOMAIN'],
-        storageBucket: dotenv.env['FIREBASE_WEB_STORAGE_BUCKET'],
-        measurementId: dotenv.env['FIREBASE_WEB_MEASUREMENT_ID'],
+        apiKey: apiKey,
+        appId: appId,
+        messagingSenderId: messagingSenderId,
+        projectId: projectId,
+        authDomain: authDomain,
+        storageBucket: storageBucket,
+        measurementId: measurementId,
       );
     }
     switch (defaultTargetPlatform) {
