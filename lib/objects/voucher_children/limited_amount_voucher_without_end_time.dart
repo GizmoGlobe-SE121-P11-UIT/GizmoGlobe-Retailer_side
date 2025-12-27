@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
-import '../../enums/voucher_related/voucher_display_type.dart';
+import '../../enums/voucher_related/distribution_type.dart';
 import '../../enums/voucher_related/voucher_status.dart';
 import '../../functions/helper.dart';
 import '../voucher_related/limited_interface.dart';
@@ -18,7 +18,7 @@ class LimitedAmountVoucherWithoutEndTime extends Voucher
     required super.discountValue,
     required super.minimumPurchase,
     required super.maxUsagePerPerson,
-    required super.displayType,
+    required super.distributionType,
     required super.redeemPrice,
     required super.isEnabled,
     super.enDescription,
@@ -50,7 +50,7 @@ class LimitedAmountVoucherWithoutEndTime extends Voucher
     int? minimumPurchase,
     int? maxUsagePerPerson,
     int? redeemPrice,
-    VoucherDisplayType? displayType,
+    DistributionType? distributionType,
     bool? isEnabled,
     String? enDescription,
     String? viDescription,
@@ -65,7 +65,7 @@ class LimitedAmountVoucherWithoutEndTime extends Voucher
       minimumPurchase: minimumPurchase,
       maxUsagePerPerson: maxUsagePerPerson,
       redeemPrice: redeemPrice,
-      displayType: displayType,
+      distributionType: distributionType,
       isEnabled: isEnabled,
       enDescription: enDescription,
       viDescription: viDescription,
@@ -144,9 +144,9 @@ class LimitedAmountVoucherWithoutEndTime extends Voucher
         Column(
           children: [
             Text(
-              displayType == VoucherDisplayType.redeemable
-                  ? '${displayType.description} for $redeemPrice'
-                  : displayType.description,
+              distributionType == DistributionType.rewards
+                  ? '${distributionType.description} for $redeemPrice'
+                  : distributionType.description,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.primary,
               ),
@@ -175,7 +175,7 @@ class LimitedAmountVoucherWithoutEndTime extends Voucher
     int? minimumPurchase,
     int? maxUsagePerPerson,
     int? redeemPrice,
-    VoucherDisplayType? displayType,
+    DistributionType? distributionType,
     bool? isEnabled,
     String? enDescription,
     String? viDescription,
@@ -193,7 +193,7 @@ class LimitedAmountVoucherWithoutEndTime extends Voucher
       minimumPurchase: minimumPurchase ?? this.minimumPurchase,
       maxUsagePerPerson: maxUsagePerPerson ?? this.maxUsagePerPerson,
       redeemPrice: redeemPrice ?? this.redeemPrice,
-      displayType: displayType ?? this.displayType,
+      distributionType: distributionType ?? this.distributionType,
       isEnabled: isEnabled ?? this.isEnabled,
       enDescription: enDescription ?? this.enDescription,
       viDescription: viDescription ?? this.viDescription,

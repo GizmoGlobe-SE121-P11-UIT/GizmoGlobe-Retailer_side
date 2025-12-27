@@ -153,7 +153,7 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                       fontWeight: FontWeight.w900,
                                     ),
                                   ),
-                                  StatusBadge(status: state.voucher.displayType.description),
+                                  StatusBadge(status: state.voucher.distributionType.description),
                                 ],
                               ),
                               Row(

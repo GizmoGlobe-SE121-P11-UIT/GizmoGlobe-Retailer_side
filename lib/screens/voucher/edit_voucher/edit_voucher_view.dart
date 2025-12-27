@@ -15,7 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../enums/processing/process_state_enum.dart';
-import '../../../enums/voucher_related/voucher_display_type.dart';
+import '../../../enums/voucher_related/distribution_type.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 import '../../../widgets/general/field_with_icon.dart';
 import '../../../widgets/general/gradient_dropdown.dart';
@@ -513,21 +513,21 @@ class _EditVoucherScreen extends State<EditVoucherScreen> {
                                   ),
 
                                 const SizedBox(height: 24),
-                                buildInputWidget<VoucherDisplayType>(
+                                buildInputWidget<DistributionType>(
                                   'Voucher Type',
                                   TextEditingController(),
-                                  state.voucherArgument?.displayType ?? VoucherDisplayType.everyone,
+                                  state.voucherArgument?.distributionType ?? DistributionType.public,
                                   (value) {
                                     if (value != null) {
-                                      if (value == VoucherDisplayType.redeemable) {
-                                        final updated = state.voucherArgument!.copyWith(displayType: value, maxUsagePerPerson: 1);
+                                      if (value == DistributionType.rewards) {
+                                        final updated = state.voucherArgument!.copyWith(distributionType: value, maxUsagePerPerson: 1);
                                         cubit.updateVoucherArgument(updated);
                                       } else {
-                                        cubit.updateVoucherArgument(state.voucherArgument!.copyWith(displayType: value));
+                                        cubit.updateVoucherArgument(state.voucherArgument!.copyWith(distributionType: value));
                                       }
                                     }
                                   },
-                                  VoucherDisplayType.values,
+                                  DistributionType.values,
                                   null,
                                 ),
                               ],
@@ -536,7 +536,7 @@ class _EditVoucherScreen extends State<EditVoucherScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      if (state.voucherArgument?.displayType == VoucherDisplayType.redeemable)
+                      if (state.voucherArgument?.distributionType == DistributionType.rewards)
                         ...[
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16.0),

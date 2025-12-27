@@ -461,7 +461,7 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
                     ),
                   ),
                   StatusBadge(
-                    status: state.voucher.displayType.description
+                    status: state.voucher.distributionType.description
                   ),
                 ],
               ),

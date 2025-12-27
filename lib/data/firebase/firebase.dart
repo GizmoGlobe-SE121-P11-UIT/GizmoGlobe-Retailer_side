@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
-import 'package:gizmoglobe_client/enums/voucher_related/voucher_display_type.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/distribution_type.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/owned_voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher.dart';
 import 'package:gizmoglobe_client/objects/voucher_related/voucher_factory.dart';
@@ -2044,7 +2044,7 @@ class Firebase {
       'isPercentage': voucher.isPercentage,
       'isLimited': voucher.isLimited,
       'redeemPrice': voucher.redeemPrice,
-      'displayType': voucher.displayType.name,
+      'distributionType': voucher.distributionType.name,
       'isEnabled': voucher.isEnabled,
       'startTime': voucher.startTime.toIso8601String(),
       'hasEndTime': voucher.hasEndTime,
@@ -2067,7 +2067,7 @@ class Firebase {
       map['endTime'] = (voucher as EndTimeInterface).endTime.toIso8601String();
     }
 
-    if (voucher.displayType == VoucherDisplayType.redeemable) {
+    if (voucher.distributionType == DistributionType.rewards) {
       map['maxUsagePerPerson'] = 1;
     } else {
       map['redeemPrice'] = 0;

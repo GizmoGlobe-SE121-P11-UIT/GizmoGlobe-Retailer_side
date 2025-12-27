@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
-import 'package:gizmoglobe_client/enums/voucher_related/voucher_display_type.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/distribution_type.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_cubit.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_state.dart';
@@ -263,7 +263,7 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                   },
                                 ),
                                 const SizedBox(height: 16),
-                                if (state.voucherArgument?.displayType == VoucherDisplayType.redeemable)
+                                if (state.voucherArgument?.distributionType == DistributionType.rewards)
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -435,25 +435,25 @@ class _AddVoucherScreen extends State<AddVoucherScreen> {
                                   ),
 
                                 const SizedBox(height: 16),
-                                buildInputWidget<VoucherDisplayType>(
+                                buildInputWidget<DistributionType>(
                                   'Voucher Type',
                                   TextEditingController(),
-                                  state.voucherArgument?.displayType ?? VoucherDisplayType.everyone,
+                                  state.voucherArgument?.distributionType ?? DistributionType.public,
                                       (value) {
                                     if (value != null) {
-                                      if (value == VoucherDisplayType.redeemable) {
-                                        final updated = state.voucherArgument!.copyWith(displayType: value, maxUsagePerPerson: 1);
+                                      if (value == DistributionType.rewards) {
+                                        final updated = state.voucherArgument!.copyWith(distributionType: value, maxUsagePerPerson: 1);
                                         cubit.updateVoucherArgument(updated);
                                       } else {
-                                        cubit.updateVoucherArgument(state.voucherArgument!.copyWith(displayType: value));
+                                        cubit.updateVoucherArgument(state.voucherArgument!.copyWith(distributionType: value));
                                       }
                                     }
                                   },
-                                  VoucherDisplayType.values,
+                                  DistributionType.values,
                                   null,
                                 ),
                                 const SizedBox(height: 16),
-                                if (state.voucherArgument?.displayType == VoucherDisplayType.redeemable)
+                                if (state.voucherArgument?.distributionType == DistributionType.rewards)
                                   ...[
                                     buildInputWidget<int>(
                                       'Redeem points',
