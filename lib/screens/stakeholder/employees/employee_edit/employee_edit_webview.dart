@@ -6,7 +6,7 @@ import 'package:gizmoglobe_client/objects/employee.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
-import '../permissions/employee_permissions.dart';
+import '../../permissions/stakeholder_permissions.dart';
 
 class EmployeeEditWebView extends StatefulWidget {
   final Employee employee;
@@ -322,8 +322,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                                   ),
                                 ),
                                 enabled:
-                                    EmployeePermissions.canEditEmployeeRole(
-                                        widget.userRole, widget.employee),
+                                    StakeholderPermissions.canPromoteEmployees(),
                               ),
                               dropdownColor: Theme.of(context).cardColor,
                               items: RoleEnum.values
@@ -337,10 +336,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,
-                                      fontStyle: EmployeePermissions
-                                              .canEditEmployeeRole(
-                                                  widget.userRole,
-                                                  widget.employee)
+                                      fontStyle: StakeholderPermissions.canPromoteEmployees()
                                           ? FontStyle.normal
                                           : FontStyle.italic,
                                     ),
@@ -348,8 +344,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                                 );
                               }).toList(),
                               onChanged:
-                                  EmployeePermissions.canEditEmployeeRole(
-                                          widget.userRole, widget.employee)
+                                  StakeholderPermissions.canPromoteEmployees()
                                       ? (RoleEnum? value) {
                                           if (value != null && mounted) {
                                             setState(() => role = value);

@@ -14,6 +14,7 @@ import '../../../widgets/general/gradient_icon_button.dart';
 import '../../../widgets/snackbar/snackbar_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
+import '../permissions/product_permissions.dart';
 
 class ProductScreen extends StatefulWidget {
   final List<Product>? initialProducts;
@@ -155,36 +156,28 @@ class _ProductScreenState extends State<ProductScreen>
               },
             ),
             actions: [
-              FutureBuilder<bool>(
-                future: Database().isUserAdmin(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data == true) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 16),
-                      child: GradientIconButton(
-                        icon: Icons.add,
-                        iconSize: 32,
-                        onPressed: () async {
-                          final result =
-                              await AddProductScreen.showModal(context);
-                          if (result == true && mounted) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              if (!mounted) return;
-                              SnackbarService.showSuccess(
-                                context,
-                                S.of(context).success,
-                                S.of(context).productAddedSuccess,
-                              );
-                              cubit.initialize(Database().productList);
-                            });
-                          }
-                        },
-                      ),
-                    );
-                  }
-                  return Container();
-                },
-              ),
+              if (ProductPermissions.canAddProducts())
+                Container(
+                  margin: const EdgeInsets.only(right: 16),
+                  child: GradientIconButton(
+                    icon: Icons.add,
+                    iconSize: 32,
+                    onPressed: () async {
+                      final result = await AddProductScreen.showModal(context);
+                      if (result == true && mounted) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (!mounted) return;
+                          SnackbarService.showSuccess(
+                            context,
+                            S.of(context).success,
+                            S.of(context).productAddedSuccess,
+                          );
+                          cubit.initialize(Database().productList);
+                        });
+                      }
+                    },
+                  ),
+                ),
             ],
             bottom: TabBar(
               controller: tabController,

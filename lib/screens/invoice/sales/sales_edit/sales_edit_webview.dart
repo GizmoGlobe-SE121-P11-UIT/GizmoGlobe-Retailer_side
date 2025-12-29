@@ -311,8 +311,7 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                             ),
                                           ),
                                           if (SalesInvoicePermissions
-                                              .canEditAddress(state.userRole,
-                                                  state.invoice))
+                                              .canEditAddress(state.invoice))
                                             TextButton.icon(
                                               onPressed:
                                                   _showAddressBottomSheet,

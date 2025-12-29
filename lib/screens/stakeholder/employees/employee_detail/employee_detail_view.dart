@@ -6,8 +6,8 @@ import 'package:gizmoglobe_client/objects/employee.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
+import '../../permissions/stakeholder_permissions.dart';
 import '../employee_edit/employee_edit_view.dart';
-import '../permissions/employee_permissions.dart';
 import 'employee_detail_cubit.dart';
 import 'employee_detail_state.dart';
 import 'employee_detail_webview.dart';
@@ -256,8 +256,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
       ),
       child: Row(
         children: [
-          if (EmployeePermissions.canEditEmployee(
-              state.userRole, state.employee))
+          if (StakeholderPermissions.canEditEmployees())
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () => _handleEdit(context, state),
@@ -272,13 +271,10 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                 ),
               ),
             ),
-          if (EmployeePermissions.canEditEmployee(
-                  state.userRole, state.employee) &&
-              EmployeePermissions.canDeleteEmployee(
-                  state.userRole, state.employee))
+          if (StakeholderPermissions.canEditEmployees() &&
+              StakeholderPermissions.canFireEmployees())
             const SizedBox(width: 16),
-          if (EmployeePermissions.canDeleteEmployee(
-              state.userRole, state.employee))
+          if (StakeholderPermissions.canFireEmployees())
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () => _handleDelete(context),

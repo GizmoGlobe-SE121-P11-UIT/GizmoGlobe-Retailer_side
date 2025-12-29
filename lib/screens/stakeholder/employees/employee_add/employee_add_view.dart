@@ -6,6 +6,7 @@ import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
+import '../../permissions/stakeholder_permissions.dart';
 import '../employees_screen_cubit.dart';
 import 'employee_add_webview.dart';
 
@@ -98,6 +99,7 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
                           ),
                         ),
                         const SizedBox(height: 24),
+                        // name, email, phone fields...
                         TextFormField(
                           controller: _nameController,
                           decoration: InputDecoration(
@@ -134,8 +136,8 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
                               color: Theme.of(context).colorScheme.onSurface,
                             ),
                             floatingLabelStyle:
-                                WidgetStateTextStyle.resolveWith(
-                              (states) => TextStyle(
+                            WidgetStateTextStyle.resolveWith(
+                                  (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).colorScheme.primary
                                     : Theme.of(context).colorScheme.onSurface,
@@ -195,8 +197,8 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
                               color: Theme.of(context).colorScheme.onSurface,
                             ),
                             floatingLabelStyle:
-                                WidgetStateTextStyle.resolveWith(
-                              (states) => TextStyle(
+                            WidgetStateTextStyle.resolveWith(
+                                  (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).colorScheme.primary
                                     : Theme.of(context).colorScheme.onSurface,
@@ -260,8 +262,8 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
                                   .withValues(alpha: 0.7),
                             ),
                             floatingLabelStyle:
-                                WidgetStateTextStyle.resolveWith(
-                              (states) => TextStyle(
+                            WidgetStateTextStyle.resolveWith(
+                                  (states) => TextStyle(
                                 color: states.contains(WidgetState.focused)
                                     ? Theme.of(context).colorScheme.primary
                                     : Theme.of(context).colorScheme.onSurface,
@@ -280,90 +282,91 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
                           keyboardType: TextInputType.phone,
                         ),
                         const SizedBox(height: 16),
-                        StatefulBuilder(
-                          builder: (context, setState) {
-                            return DropdownButtonFormField<RoleEnum>(
-                              initialValue: selectedRole,
-                              decoration: InputDecoration(
-                                labelText: S.of(context).role,
-                                prefixIcon: Icon(
-                                  Icons.work_outline,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
+                        if (StakeholderPermissions.canPromoteEmployees())
+                          StatefulBuilder(
+                            builder: (context, setState) {
+                              return DropdownButtonFormField<RoleEnum>(
+                                initialValue: selectedRole,
+                                decoration: InputDecoration(
+                                  labelText: S.of(context).role,
+                                  prefixIcon: Icon(
+                                    Icons.work_outline,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                                filled: true,
-                                fillColor: Theme.of(context)
-                                    .colorScheme
-                                    .surface
-                                    .withValues(alpha: 0.8),
-                                labelStyle: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                floatingLabelStyle:
-                                    WidgetStateTextStyle.resolveWith(
-                                  (states) => TextStyle(
-                                    color: states.contains(WidgetState.focused)
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                  ),
-                                ),
-                              ),
-                              items: RoleEnum.values
-                                  .where((role) => role != RoleEnum.owner)
-                                  .map((role) {
-                                return DropdownMenuItem(
-                                  value: role,
-                                  child: Text(
-                                    role.localizedName(context),
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withValues(alpha: 0.7),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color:
+                                      Theme.of(context).colorScheme.outline,
                                     ),
                                   ),
-                                );
-                              }).toList(),
-                              onChanged: (RoleEnum? value) {
-                                if (value != null) {
-                                  setState(() => selectedRole = value);
-                                }
-                              },
-                              dropdownColor:
-                                  Theme.of(context).colorScheme.surface,
-                              icon: Icon(
-                                Icons.arrow_drop_down,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                            );
-                          },
-                        ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color:
+                                      Theme.of(context).colorScheme.outline,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color:
+                                      Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  filled: true,
+                                  fillColor: Theme.of(context)
+                                      .colorScheme
+                                      .surface
+                                      .withValues(alpha: 0.8),
+                                  labelStyle: TextStyle(
+                                    color:
+                                    Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  floatingLabelStyle:
+                                  WidgetStateTextStyle.resolveWith(
+                                        (states) => TextStyle(
+                                      color: states.contains(WidgetState.focused)
+                                          ? Theme.of(context).colorScheme.primary
+                                          : Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                    ),
+                                  ),
+                                ),
+                                items: RoleEnum.values
+                                    .where((role) => role != RoleEnum.owner)
+                                    .map((role) {
+                                  return DropdownMenuItem(
+                                    value: role,
+                                    child: Text(
+                                      role.localizedName(context),
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: 0.7),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (RoleEnum? value) {
+                                  if (value != null) {
+                                    setState(() => selectedRole = value);
+                                  }
+                                },
+                                dropdownColor:
+                                Theme.of(context).colorScheme.surface,
+                                icon: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              );
+                            },
+                          ),
                         const SizedBox(height: 32),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -388,7 +391,7 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
-                                      Theme.of(context).colorScheme.primary,
+                                  Theme.of(context).colorScheme.primary,
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 8,
                                     vertical: 12,
@@ -402,7 +405,7 @@ class _EmployeeAddScreenState extends State<EmployeeAddScreen> {
                                   style: TextStyle(
                                     fontSize: 14,
                                     color:
-                                        Theme.of(context).colorScheme.onPrimary,
+                                    Theme.of(context).colorScheme.onPrimary,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

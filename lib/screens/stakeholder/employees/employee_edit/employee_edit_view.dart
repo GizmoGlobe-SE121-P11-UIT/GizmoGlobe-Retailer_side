@@ -4,9 +4,9 @@ import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
 
-import '../../../../screens/stakeholder/employees/permissions/employee_permissions.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
 import '../../../../widgets/general/gradient_text.dart';
+import '../../permissions/stakeholder_permissions.dart';
 import 'employee_edit_webview.dart';
 
 class EmployeeEditScreen extends StatefulWidget {
@@ -243,8 +243,7 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                               borderSide: BorderSide(
                                   color: Theme.of(context).colorScheme.primary),
                             ),
-                            enabled: EmployeePermissions.canEditEmployeeRole(
-                                widget.userRole, widget.employee),
+                            enabled: StakeholderPermissions.canPromoteEmployees(),
                           ),
                           dropdownColor: Theme.of(context).cardColor,
                           items: RoleEnum.values
@@ -258,16 +257,14 @@ class _EmployeeEditScreenState extends State<EmployeeEditScreen> {
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
                                   fontStyle:
-                                      EmployeePermissions.canEditEmployeeRole(
-                                              widget.userRole, widget.employee)
+                                      StakeholderPermissions.canPromoteEmployees()
                                           ? FontStyle.normal
                                           : FontStyle.italic,
                                 ),
                               ),
                             );
                           }).toList(),
-                          onChanged: EmployeePermissions.canEditEmployeeRole(
-                                  widget.userRole, widget.employee)
+                          onChanged: StakeholderPermissions.canPromoteEmployees()
                               ? (RoleEnum? value) {
                                   if (value != null) {
                                     setState(() => role = value);

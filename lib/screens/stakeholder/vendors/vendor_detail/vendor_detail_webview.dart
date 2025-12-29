@@ -6,8 +6,8 @@ import 'package:gizmoglobe_client/objects/manufacturer.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 import '../../../../enums/stakeholders/manufacturer_status.dart';
+import '../../permissions/stakeholder_permissions.dart';
 import '../vendor_edit/vendor_edit_view.dart';
-import '../permissions/vendor_permissions.dart';
 import 'vendor_detail_cubit.dart';
 import 'vendor_detail_state.dart';
 
@@ -130,7 +130,7 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
                   ],
                 ),
                 child: !widget.readOnly &&
-                        VendorPermissions.canManageVendors(state.userRole)
+                        StakeholderPermissions.canManageVendors()
                     ? Row(
                         children: [
                           Expanded(

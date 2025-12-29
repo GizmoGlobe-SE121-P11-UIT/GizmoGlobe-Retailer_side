@@ -4,7 +4,8 @@ import 'package:flutter/widgets.dart';
 enum RoleEnum {
   owner('Owner'), // Chủ sở hữu
   manager('Manager'), // Quản lý
-  employee('Employee'); // Nhân viên
+  employee('Employee'), // Nhân viên
+  unknown('Unknown');
 
   final String description;
 
@@ -22,6 +23,9 @@ enum RoleEnum {
         return S.of(context).roleManager;
       case RoleEnum.employee:
         return S.of(context).roleEmployee;
+      default:
+        return S.of(context).unknown;
+
     }
   }
 
@@ -31,7 +35,7 @@ enum RoleEnum {
   }
 }
 
-extension CategoryEnumExtension on RoleEnum {
+extension RoleEnumExtension on RoleEnum {
   static RoleEnum fromName(String name) {
     return RoleEnum.values.firstWhere((e) => e.getName() == name);
   }

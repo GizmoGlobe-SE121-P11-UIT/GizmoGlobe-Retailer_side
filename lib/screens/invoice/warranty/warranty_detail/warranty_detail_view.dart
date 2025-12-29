@@ -284,8 +284,7 @@ class _WarrantyDetailView extends StatelessWidget {
                                 );
                               },
                             ),
-                            if (WarrantyInvoicePermissions.canEditStatus(
-                                state.userRole, state.invoice)) ...[
+                            if (WarrantyInvoicePermissions.canEditStatus(state.invoice)) ...[
                               const SizedBox(height: 32),
                               SizedBox(
                                 width: double.infinity,

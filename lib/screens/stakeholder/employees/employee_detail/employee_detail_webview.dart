@@ -5,8 +5,8 @@ import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/employee.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
+import '../../permissions/stakeholder_permissions.dart';
 import '../employee_edit/employee_edit_view.dart';
-import '../permissions/employee_permissions.dart';
 import 'employee_detail_cubit.dart';
 import 'employee_detail_state.dart';
 
@@ -148,8 +148,7 @@ class _EmployeeDetailWebViewState extends State<EmployeeDetailWebView> {
                   ],
                 ),
                 child: !widget.readOnly &&
-                        EmployeePermissions.canEditEmployee(
-                            state.userRole, state.employee)
+                        StakeholderPermissions.canEditEmployees()
                     ? Row(
                         children: [
                           Expanded(
@@ -206,11 +205,9 @@ class _EmployeeDetailWebViewState extends State<EmployeeDetailWebView> {
                               ),
                             ),
                           ),
-                          if (EmployeePermissions.canDeleteEmployee(
-                              state.userRole, state.employee))
+                          if (StakeholderPermissions.canFireEmployees())
                             const SizedBox(width: 16),
-                          if (EmployeePermissions.canDeleteEmployee(
-                              state.userRole, state.employee))
+                          if (StakeholderPermissions.canFireEmployees())
                             Expanded(
                               child: ElevatedButton.icon(
                                 onPressed: () => _handleDelete(context),

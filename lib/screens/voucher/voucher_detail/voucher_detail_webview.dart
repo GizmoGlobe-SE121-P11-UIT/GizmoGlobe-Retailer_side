@@ -6,7 +6,6 @@ import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_
 import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 
-import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import '../../../functions/helper.dart';
@@ -177,90 +176,67 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
                     ),
                   ],
                 ),
-                child: FutureBuilder<bool>(
-                  future: Database().isUserAdmin(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData && snapshot.data == true) {
-                      return Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () async {
-                                final result =
-                                    await EditVoucherScreen.showModal(
-                                  context,
-                                  state.voucher,
-                                );
-                                if (result == true) {
-                                  if (mounted) {
-                                    Navigator.of(context).pop(true);
-                                  }
-                                }
-                              },
-                              icon: Icon(
-                                Icons.edit,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final result = await EditVoucherScreen.showModal(
+                            context,
+                            state.voucher,
+                          );
+                          if (result == true) {
+                            if (mounted) {
+                              Navigator.of(context).pop(true);
+                            }
+                          }
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        label: Text(
+                          S.of(context).edit,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.tertiary,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
+                        builder: (context, state) {
+                          return ElevatedButton.icon(
+                            onPressed: () {
+                              cubit.toLoading();
+                              cubit.changeVoucherStatus();
+                            },
+                            icon: Icon(
+                              state.voucher.isEnabled ? Icons.not_interested : Icons.check,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                            label: Text(
+                              state.voucher.isEnabled ? S.of(context).disabled : S.of(context).enabled,
+                              style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),
-                              label: Text(
-                                S.of(context).edit,
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.tertiary,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                              ),
                             ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: BlocBuilder<VoucherDetailCubit,
-                                VoucherDetailState>(
-                              builder: (context, state) {
-                                return ElevatedButton.icon(
-                                  onPressed: () {
-                                    cubit.toLoading();
-                                    cubit.changeVoucherStatus();
-                                  },
-                                  icon: Icon(
-                                    state.voucher.isEnabled
-                                        ? Icons.not_interested
-                                        : Icons.check,
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                  ),
-                                  label: Text(
-                                    state.voucher.isEnabled
-                                        ? S.of(context).disabled
-                                        : S.of(context).enabled,
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: state.voucher.isEnabled
-                                        ? Theme.of(context).colorScheme.error
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12),
-                                  ),
-                                );
-                              },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: state.voucher.isEnabled
+                                  ? Theme.of(context).colorScheme.error
+                                  : Theme.of(context).colorScheme.secondary,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
                             ),
-                          ),
-                        ],
-                      );
-                    }
-                    return Container();
-                  },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

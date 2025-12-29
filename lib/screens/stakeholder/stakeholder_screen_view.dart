@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:gizmoglobe_client/screens/stakeholder/permissions/stakeholder_permissions.dart';
 import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -33,23 +34,41 @@ class StakeholderScreen extends StatefulWidget {
   State<StakeholderScreen> createState() => _StakeholderScreenState();
 }
 
+// dart
 class _StakeholderScreenState extends State<StakeholderScreen>
     with SingleTickerProviderStateMixin {
   StreamSubscription<dynamic>? _hashChangeSubscription;
   late TabController _tabController;
 
+  /// Maps the visible tab index -> cubit logical index (0: customers, 1: employees, 2: vendors)
+  late List<int> _displayedToCubitIndex;
+
+  /// Reverse map: cubit logical index -> visible tab index
+  late Map<int, int> _cubitToDisplayedIndex;
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+
+    final showEmployees = StakeholderPermissions.canViewEmployees();
+
+    _displayedToCubitIndex = showEmployees ? [0, 1, 2] : [0, 2];
+    _cubitToDisplayedIndex = {
+      for (int i = 0; i < _displayedToCubitIndex.length; i++)
+        _displayedToCubitIndex[i]: i
+    };
+
+    _tabController =
+        TabController(length: _displayedToCubitIndex.length, vsync: this);
 
     // Sync TabController with cubit state after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         final cubit = context.read<StakeholderScreenCubit>();
-        if (_tabController.index != cubit.state.selectedTabIndex) {
-          _tabController.animateTo(cubit.state.selectedTabIndex,
-              duration: Duration.zero);
+        final displayed =
+            _cubitToDisplayedIndex[cubit.state.selectedTabIndex] ?? 0;
+        if (_tabController.index != displayed) {
+          _tabController.animateTo(displayed, duration: Duration.zero);
         }
       }
     });
@@ -58,10 +77,10 @@ class _StakeholderScreenState extends State<StakeholderScreen>
     if (kIsWeb) {
       _hashChangeSubscription =
           PlatformSpecificUtils.onHashChange.listen((event) {
-        if (mounted) {
-          _handleHashChange();
-        }
-      });
+            if (mounted) {
+              _handleHashChange();
+            }
+          });
     }
   }
 
@@ -75,15 +94,11 @@ class _StakeholderScreenState extends State<StakeholderScreen>
   void _handleHashChange() {
     if (kIsWeb) {
       final cubit = context.read<StakeholderScreenCubit>();
-      // Don't react to hash changes if we're already changing tabs (prevents loop)
-      if (cubit.state.isChangingTab) {
-        return;
-      }
+      if (cubit.state.isChangingTab) return;
 
       final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
       final hash = uri.fragment;
 
-      // Parse hash like /#/stakeholders/customers, /#/stakeholders/employees, /#/stakeholders/vendors
       if (hash.startsWith('/stakeholders/')) {
         final pathSegments = hash.split('/');
         if (pathSegments.length >= 3) {
@@ -100,10 +115,9 @@ class _StakeholderScreenState extends State<StakeholderScreen>
               tabIndex = 2;
               break;
             default:
-              tabIndex = 0; // Default to customers
+              tabIndex = 0;
           }
 
-          // Update tab if it's different from current
           if (cubit.state.selectedTabIndex != tabIndex) {
             cubit.changeTab(tabIndex);
           }
@@ -116,14 +130,38 @@ class _StakeholderScreenState extends State<StakeholderScreen>
   Widget build(BuildContext context) {
     return BlocListener<StakeholderScreenCubit, StakeholderScreenState>(
       listener: (context, state) {
-        // Sync TabController with state
-        if (_tabController.index != state.selectedTabIndex) {
-          _tabController.animateTo(state.selectedTabIndex,
-              duration: Duration.zero);
+        final displayed = _cubitToDisplayedIndex[state.selectedTabIndex] ?? 0;
+        if (_tabController.index != displayed) {
+          _tabController.animateTo(displayed, duration: Duration.zero);
         }
       },
       child: BlocBuilder<StakeholderScreenCubit, StakeholderScreenState>(
-      builder: (context, state) {
+        builder: (context, state) {
+          // Build visible tabs and children according to the mapping
+          final tabs = _displayedToCubitIndex.map((cubitIndex) {
+            switch (cubitIndex) {
+              case 0:
+                return Tab(text: S.of(context).customers);
+              case 1:
+                return Tab(text: S.of(context).employees);
+              case 2:
+              default:
+                return Tab(text: S.of(context).vendors);
+            }
+          }).toList();
+
+          final children = _displayedToCubitIndex.map((cubitIndex) {
+            switch (cubitIndex) {
+              case 0:
+                return CustomersScreen.newInstance();
+              case 1:
+                return EmployeesScreen.newInstance();
+              case 2:
+              default:
+                return VendorsScreen.newInstance();
+            }
+          }).toList();
+
           final content = GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
@@ -135,18 +173,19 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                 elevation: 0,
                 bottom: TabBar(
                   controller: _tabController,
-                  onTap: (index) async {
-                    // Animate tab immediately without transition
-                    _tabController.animateTo(index, duration: Duration.zero);
+                  onTap: (displayedIndex) async {
+                    _tabController.animateTo(displayedIndex,
+                        duration: Duration.zero);
+
+                    final actualCubitIndex =
+                    _displayedToCubitIndex[displayedIndex];
                     await context
                         .read<StakeholderScreenCubit>()
-                        .changeTab(index);
+                        .changeTab(actualCubitIndex);
 
-                    // Update URL for web navigation using hash routing
-                    // Do this after loading completes to prevent hash change loop
                     if (kIsWeb) {
                       String tabName;
-                      switch (index) {
+                      switch (actualCubitIndex) {
                         case 0:
                           tabName = 'customers';
                           break;
@@ -154,12 +193,9 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                           tabName = 'employees';
                           break;
                         case 2:
-                          tabName = 'vendors';
-                          break;
                         default:
-                          tabName = 'customers';
+                          tabName = 'vendors';
                       }
-                      // Use replaceState to avoid adding to history during loading
                       PlatformSpecificUtils.replaceState(
                           '/#/stakeholders/$tabName');
                     }
@@ -171,25 +207,17 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                       .withValues(alpha: 0.7),
                   indicatorColor: Theme.of(context).colorScheme.primary,
                   dividerColor: Colors.transparent,
-                  tabs: [
-                    Tab(text: S.of(context).customers),
-                    Tab(text: S.of(context).employees),
-                    Tab(text: S.of(context).vendors),
-                  ],
+                  tabs: tabs,
                 ),
               ),
               body: SafeArea(
                 child: Stack(
                   children: [
                     IndexedStack(
-                  index: state.selectedTabIndex,
-                  children: [
-                    CustomersScreen.newInstance(),
-                    EmployeesScreen.newInstance(),
-                    VendorsScreen.newInstance(),
-                  ],
-                ),
-                    // Show loading indicator overlay during tab change
+                      index:
+                      _cubitToDisplayedIndex[state.selectedTabIndex] ?? 0,
+                      children: children,
+                    ),
                     if (state.isChangingTab)
                       Positioned.fill(
                         child: IgnorePointer(
@@ -205,7 +233,7 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                                   padding: const EdgeInsets.all(24),
                                   child: CircularProgressIndicator(
                                     color:
-                                        Theme.of(context).colorScheme.primary,
+                                    Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
@@ -214,62 +242,55 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                         ),
                       ),
                   ],
+                ),
               ),
             ),
-          ),
-        );
-
-        // Use web layout for web platform - only show full layout when accessed directly
-        if (kIsWeb && widget.showFullLayout) {
-          final items = buildDefaultSidebarItems(
-            home: S.of(context).home,
-            product: S.of(context).product,
-            invoice: S.of(context).invoice,
-            stakeholder: S.of(context).stakeholder,
-            voucher: S.of(context).voucher,
-            profile: S.of(context).profile,
           );
 
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Column(
-              children: [
-                // Web Header
-                const WebHeader(
-                  unreadChats: 0,
-                  isSidebarCompact: false,
-                ),
-                // Main content with sidebar
-                Expanded(
-                  child: Row(
-                    children: [
-                      WebSidebarModes(
-                        currentIndex: 3, // Stakeholder index
-                        onItemSelected: (value) {
-                          // Navigation is handled inside WebSidebarModes to avoid duplicates
-                        },
-                        items: items,
-                        onCompactModeChanged: (isCompact) {
-                          // Handle sidebar compact mode if needed
-                        },
-                      ),
-                      const VerticalDivider(width: 1),
-                      Expanded(child: content),
-                    ],
+          if (kIsWeb && widget.showFullLayout) {
+            final items = buildDefaultSidebarItems(
+              home: S.of(context).home,
+              product: S.of(context).product,
+              invoice: S.of(context).invoice,
+              stakeholder: S.of(context).stakeholder,
+              voucher: S.of(context).voucher,
+              profile: S.of(context).profile,
+            );
+
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: Column(
+                children: [
+                  const WebHeader(
+                    unreadChats: 0,
+                    isSidebarCompact: false,
                   ),
-                ),
-              ],
-            ),
-          );
-        }
+                  Expanded(
+                    child: Row(
+                      children: [
+                        WebSidebarModes(
+                          currentIndex: 3,
+                          onItemSelected: (value) {},
+                          items: items,
+                          onCompactModeChanged: (isCompact) {},
+                        ),
+                        const VerticalDivider(width: 1),
+                        Expanded(child: content),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
 
-        // Use regular layout for mobile
-        return content;
-      },
+          return content;
+        },
       ),
     );
   }
 }
+
 
 // Widget to handle initial tab index for web navigation
 class StakeholderScreenWithInitialTab extends StatefulWidget {

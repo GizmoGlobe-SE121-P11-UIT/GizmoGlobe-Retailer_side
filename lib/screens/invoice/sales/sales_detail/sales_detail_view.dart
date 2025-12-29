@@ -147,8 +147,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                 fillColor: Colors.transparent,
               ),
               actions: [
-                if (SalesInvoicePermissions.canEditInvoice(
-                    state.userRole, state.invoice))
+                if (SalesInvoicePermissions.canEditInvoice(state.invoice))
                   IconButton(
                     icon: const Icon(Icons.edit),
                     onPressed: () async {
@@ -451,8 +450,7 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                   ),
                   child: Row(
                     children: [
-                      if (SalesInvoicePermissions.canEditInvoice(
-                              state.userRole, state.invoice) &&
+                      if (SalesInvoicePermissions.canEditInvoice(state.invoice) &&
                           state.invoice.paymentStatus != PaymentStatus.paid &&
                           state.invoice.salesStatus != SalesStatus.completed &&
                           state.invoice.salesStatus != SalesStatus.cancelled)

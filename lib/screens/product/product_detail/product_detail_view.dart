@@ -21,6 +21,7 @@ import '../../../widgets/general/status_badge.dart';
 import '../../../widgets/general/gradient_text.dart';
 import '../../../widgets/invoice/rating_card.dart';
 import '../../product/add_product/add_product_view.dart';
+import '../permissions/product_permissions.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -337,90 +338,74 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         }
                       }
                     },
-                    builder: (context, state) => FutureBuilder<bool>(
-                      future: Database().isUserAdmin(),
-                      builder: (context, snapshot) {
-                        if (!mounted) return const SizedBox.shrink();
-                        if (snapshot.hasData && snapshot.data == true) {
-                          return Row(
-                            children: [
+                    builder: (context, state) {
+                      // Show buttons only if current user has permission
+                      if (ProductPermissions.canEditProducts()) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  final result = await AddProductScreen.showModal(
+                                    context,
+                                    product: state.product,
+                                  );
+                                  if (result == true && mounted) {
+                                    cubit.updateProduct();
+                                  }
+                                },
+                                icon: Icon(Icons.edit,
+                                    color: Theme.of(context).colorScheme.onPrimary),
+                                label: Text(
+                                  S.of(context).edit,
+                                  style: TextStyle(
+                                      color: Theme.of(context).colorScheme.onPrimary),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                ),
+                              ),
+                            ),
+
+                            // Only show enable/disable button if manufacturer is active
+                            // If manufacturer is inactive, product will be displayed as discontinued
+                            // and we don't want to allow changing its status
+                            if (state.product.manufacturer.status != ManufacturerStatus.inactive) ...[
+                              const SizedBox(width: 16),
                               Expanded(
                                 child: ElevatedButton.icon(
-                                  onPressed: () async {
-                                    final result =
-                                        await AddProductScreen.showModal(
-                                      context,
-                                      product: state.product,
-                                    );
-                                    if (result == true && mounted) {
-                                      cubit.updateProduct();
-                                    }
+                                  onPressed: () {
+                                    cubit.toLoading();
+                                    cubit.changeProductStatus();
                                   },
-                                  icon: Icon(Icons.edit,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary),
+                                  icon: Icon(
+                                    state.product.status == ProductStatusEnum.discontinued
+                                        ? Icons.refresh
+                                        : Icons.cancel,
+                                    color: Colors.white,
+                                  ),
                                   label: Text(
-                                    S.of(context).edit,
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary),
+                                    state.product.status == ProductStatusEnum.discontinued
+                                        ? S.of(context).reactivate
+                                        : S.of(context).discontinue,
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.primary,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12),
+                                    backgroundColor: state.product.status == ProductStatusEnum.discontinued
+                                        ? Theme.of(context).colorScheme.tertiary
+                                        : Theme.of(context).colorScheme.error,
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
                                   ),
                                 ),
                               ),
-// Only show enable/disable button if manufacturer is active
-// If manufacturer is inactive, product will be displayed as discontinued
-// and we don't want to allow changing its status
-                              if (state.product.manufacturer.status !=
-                                  ManufacturerStatus.inactive) ...[
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: ElevatedButton.icon(
-                                    onPressed: () {
-                                      cubit.toLoading();
-                                      cubit.changeProductStatus();
-                                    },
-                                    icon: Icon(
-                                      state.product.status ==
-                                              ProductStatusEnum.discontinued
-                                          ? Icons.refresh
-                                          : Icons.cancel,
-                                      color: Colors.white,
-                                    ),
-                                    label: Text(
-                                      state.product.status ==
-                                              ProductStatusEnum.discontinued
-                                          ? S.of(context).reactivate
-                                          : S.of(context).discontinue,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: state.product.status ==
-                                              ProductStatusEnum.discontinued
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .tertiary
-                                          : Theme.of(context).colorScheme.error,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                    ),
-                                  ),
-                                ),
-                              ],
                             ],
-                          );
-                        }
-                        return Container();
-                      },
-                    ),
+                          ],
+                        );
+                      }
+
+                      return Container();
+                    },
                   ),
                 ),
               ),

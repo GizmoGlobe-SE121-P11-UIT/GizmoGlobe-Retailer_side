@@ -6,12 +6,12 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
+import '../permissions/stakeholder_permissions.dart';
 import 'customer_add/customer_add_view.dart';
 import 'customer_detail/customer_detail_view.dart';
 import 'customer_edit/customer_edit_view.dart';
 import 'customers_screen_cubit.dart';
 import 'customers_screen_state.dart';
-import 'permissions/customer_permissions.dart';
 
 class CustomersScreen extends StatefulWidget {
   const CustomersScreen({super.key});
@@ -64,8 +64,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                             color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
-                    if (CustomerPermissions.canAddCustomers(
-                        state.userRole)) ...[
+                    if (StakeholderPermissions.canAddCustomers()) ...[
                       const SizedBox(width: 8),
                       GradientIconButton(
                         icon: Icons.person_add,
@@ -116,8 +115,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                   await CustomerDetailScreen.showModal(
                                 context,
                                 customer,
-                                readOnly: !CustomerPermissions.canEditCustomers(
-                                    state.userRole),
+                                readOnly: !StakeholderPermissions.canEditCustomers(),
                               );
                               if (result == true && mounted) {
                                 WidgetsBinding.instance
@@ -164,15 +162,13 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                                   .showModal(
                                                 context,
                                                 customer,
-                                                readOnly: !CustomerPermissions
-                                                    .canEditCustomers(
-                                                        state.userRole),
+                                                readOnly: !StakeholderPermissions
+                                                    .canEditCustomers(),
                                               );
                                             },
                                           ),
-                                          if (CustomerPermissions
-                                              .canEditCustomers(
-                                                  state.userRole)) ...[
+                                          if (StakeholderPermissions
+                                              .canEditCustomers()) ...[
                                             ListTile(
                                               dense: true,
                                               leading: const Icon(

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
-import 'package:gizmoglobe_client/screens/stakeholder/customers/permissions/customer_permissions.dart';
+import '../../permissions/stakeholder_permissions.dart';
 import 'package:gizmoglobe_client/widgets/dialog/confirmation_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
@@ -627,7 +627,7 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
                     ),
                   ],
                 ),
-                child: CustomerPermissions.canEditCustomers(state.userRole)
+                child: StakeholderPermissions.canEditCustomers()
                     ? Row(
                         children: [
                           Expanded(

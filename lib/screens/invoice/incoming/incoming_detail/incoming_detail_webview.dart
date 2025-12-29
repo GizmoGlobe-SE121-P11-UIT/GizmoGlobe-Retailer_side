@@ -337,8 +337,7 @@ class _IncomingDetailWebViewState extends State<IncomingDetailWebView> {
                           },
                         ),
                         const SizedBox(height: 18),
-                        if (IncomingInvoicePermissions.canEditPaymentStatus(
-                            state.userRole, state.invoice))
+                        if (IncomingInvoicePermissions.canEditPaymentStatus(state.invoice))
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton.icon(

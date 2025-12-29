@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
-import 'package:gizmoglobe_client/screens/stakeholder/vendors/permissions/vendor_permissions.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 
 import '../../../../enums/stakeholders/manufacturer_status.dart';
+import '../../permissions/stakeholder_permissions.dart';
 import '../vendor_edit/vendor_edit_view.dart';
 import 'vendor_detail_cubit.dart';
 import 'vendor_detail_state.dart';
@@ -114,7 +114,7 @@ class _VendorDetailScreenState extends State<VendorDetailScreen> {
                     ],
                   ),
                   child: (widget.readOnly ||
-                          !VendorPermissions.canManageVendors(state.userRole))
+                          !StakeholderPermissions.canManageVendors())
                       ? null
                       : Row(
                           children: [

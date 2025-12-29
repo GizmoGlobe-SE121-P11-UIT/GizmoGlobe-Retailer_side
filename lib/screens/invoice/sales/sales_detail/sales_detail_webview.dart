@@ -457,8 +457,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                 ),
                 child: Row(
                   children: [
-                    if (SalesInvoicePermissions.canEditInvoice(
-                        state.userRole, state.invoice))
+                    if (SalesInvoicePermissions.canEditInvoice(state.invoice))
                       Expanded(
                         child: ElevatedButton.icon(
                           onPressed: () async {

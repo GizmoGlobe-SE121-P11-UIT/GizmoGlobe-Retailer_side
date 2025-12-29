@@ -21,6 +21,7 @@ import '../../../widgets/snackbar/snackbar_service.dart';
 import '../../../functions/helper.dart';
 import '../../product/add_product/add_product_webview.dart';
 import '../../../widgets/invoice/rating_card.dart';
+import '../permissions/product_permissions.dart';
 
 class ProductDetailWebView extends StatefulWidget {
   final Product product;
@@ -805,101 +806,94 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
   }
 
   Widget _buildAdminActions(BuildContext context, ProductDetailState state) {
-    return FutureBuilder<bool>(
-      future: Database().isUserAdmin(),
-      builder: (context, snapshot) {
-        if (!mounted) return const SizedBox.shrink();
-        if (snapshot.hasData && snapshot.data == true) {
-          final isManufacturerActive =
-              state.product.manufacturer.status != ManufacturerStatus.inactive;
-          return Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, -4),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      final result = await showDialog<bool>(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (context) => Dialog(
-                          backgroundColor: Colors.transparent,
-                          child: AddProductWebView.editInstance(state.product),
-                        ),
-                      );
+    // Show admin actions only if current user has permission
+    if (!mounted) return const SizedBox.shrink();
+    if (!ProductPermissions.canEditProducts()) return const SizedBox.shrink();
 
-                      if (result == true && mounted) {
-                        cubit.updateProduct();
-                        // Show success snackbar
-                        SnackbarService.showSuccess(
-                          context,
-                          S.of(context).success,
-                          S.of(context).productUpdatedSuccess,
-                        );
-                      }
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    label: Text(
-                      S.of(context).edit,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
+    final isManufacturerActive =
+        state.product.manufacturer.status != ManufacturerStatus.inactive;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 8,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                final result = await showDialog<bool>(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (context) => Dialog(
+                    backgroundColor: Colors.transparent,
+                    child: AddProductWebView.editInstance(state.product),
                   ),
+                );
+
+                if (result == true && mounted) {
+                  cubit.updateProduct();
+                  // Show success snackbar
+                  SnackbarService.showSuccess(
+                    context,
+                    S.of(context).success,
+                    S.of(context).productUpdatedSuccess,
+                  );
+                }
+              },
+              icon: Icon(
+                Icons.edit,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              label: Text(
+                S.of(context).edit,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
-                if (isManufacturerActive) ...[
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        cubit.toLoading();
-                        cubit.changeProductStatus();
-                      },
-                      icon: Icon(
-                        state.product.status == ProductStatusEnum.discontinued
-                            ? Icons.refresh
-                            : Icons.cancel,
-                        color: Colors.white,
-                      ),
-                      label: Text(
-                        state.product.status == ProductStatusEnum.discontinued
-                            ? S.of(context).reactivate
-                            : S.of(context).discontinue,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: state.product.status ==
-                                ProductStatusEnum.discontinued
-                            ? Theme.of(context).colorScheme.tertiary
-                            : Theme.of(context).colorScheme.error,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                    ),
-                  ),
-                ],
-              ],
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
             ),
-          );
-        }
-        return const SizedBox.shrink();
-      },
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () {
+                cubit.toLoading();
+                cubit.changeProductStatus();
+              },
+              icon: Icon(
+                state.product.status == ProductStatusEnum.discontinued
+                    ? Icons.refresh
+                    : Icons.cancel,
+                color: Colors.white,
+              ),
+              label: Text(
+                state.product.status == ProductStatusEnum.discontinued
+                    ? S.of(context).reactivate
+                    : S.of(context).discontinue,
+                style: const TextStyle(color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: state.product.status ==
+                        ProductStatusEnum.discontinued
+                    ? Theme.of(context).colorScheme.tertiary
+                    : Theme.of(context).colorScheme.error,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

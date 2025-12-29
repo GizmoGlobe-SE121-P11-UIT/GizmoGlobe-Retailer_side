@@ -8,7 +8,6 @@ import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';
 
-import '../../../data/database/database.dart';
 import '../../../enums/processing/process_state_enum.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import '../../../objects/voucher_related/end_time_interface.dart';
@@ -242,98 +241,93 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                   ));
                         }
                       },
-                      builder: (context, state) => FutureBuilder<bool>(
-                        future: Database().isUserAdmin(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData && snapshot.data == true) {
-                            return Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton.icon(
-                                    onPressed: () async {
-                                      final result = await EditVoucherScreen.showModal(context, state.voucher);
-                                      if (result == true) {
-                                        if (mounted) Navigator.pop(context, true);
-                                      }
+                      builder: (context, state) {
+                        // Show action buttons unconditionally (remove admin-only check)
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  final result = await EditVoucherScreen.showModal(context, state.voucher);
+                                  if (result == true) {
+                                    if (mounted) Navigator.pop(context, true);
+                                  }
+                                },
+                                icon: Icon(Icons.edit, color: theme.colorScheme.onPrimary),
+                                label: Text(
+                                  S.of(context).edit,
+                                  style: TextStyle(color: theme.colorScheme.onPrimary),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: theme.colorScheme.primary,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
+                                builder: (context, state) {
+                                  return ElevatedButton.icon(
+                                    onPressed: () {
+                                      cubit.toLoading();
+                                      cubit.changeVoucherStatus();
                                     },
-                                    icon: Icon(Icons.edit, color: theme.colorScheme.onPrimary),
+                                    icon: Icon(
+                                      state.voucher.isEnabled ? Icons.not_interested : Icons.check,
+                                      color: theme.colorScheme.onPrimary,
+                                    ),
                                     label: Text(
-                                      S.of(context).edit,
+                                      state.voucher.isEnabled ? S.of(context).disabled : S.of(context).enabled,
                                       style: TextStyle(color: theme.colorScheme.onPrimary),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: theme.colorScheme.primary,
+                                      backgroundColor: state.voucher.isEnabled ? theme.colorScheme.error : theme.colorScheme.secondary,
                                       padding: const EdgeInsets.symmetric(vertical: 12),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
-                                    builder: (context, state) {
-                                      return ElevatedButton.icon(
-                                        onPressed: () {
-                                          cubit.toLoading();
-                                          cubit.changeVoucherStatus();
-                                        },
-                                        icon: Icon(
-                                          state.voucher.isEnabled ? Icons.not_interested : Icons.check,
-                                          color: theme.colorScheme.onPrimary,
-                                        ),
-                                        label: Text(
-                                          state.voucher.isEnabled ? S.of(context).disabled : S.of(context).enabled,
-                                          style: TextStyle(color: theme.colorScheme.onPrimary),
-                                        ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: state.voucher.isEnabled ? theme.colorScheme.error : theme.colorScheme.secondary,
-                                          padding: const EdgeInsets.symmetric(vertical: 12),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                          return Container();
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                     ),
+                   ),
+                 ),
+               ],
+             ),
+           );
+         },
+       ),
+     );
+   }
 
-  Widget _buildInfoRow({
-    required String title,
-    required String value,
-    required ThemeData theme,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Text(
-            '$title: ',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+   Widget _buildInfoRow({
+     required String title,
+     required String value,
+     required ThemeData theme,
+   }) {
+     return Padding(
+       padding: const EdgeInsets.symmetric(vertical: 8.0),
+       child: Row(
+         children: [
+           Text(
+             '$title: ',
+             style: theme.textTheme.titleMedium?.copyWith(
+               fontWeight: FontWeight.w900,
+             ),
+           ),
+           Expanded(
+             child: Text(
+               value,
+               style: theme.textTheme.bodyLarge?.copyWith(
+                 fontWeight: FontWeight.w400,
+               ),
+             ),
+           ),
+         ],
+       ),
+     );
+   }
 }

@@ -370,12 +370,18 @@ class Database {
           .get();
       username = userDoc['username'];
       email = userDoc['email'];
+
+      role = await getCurrentRole();
     } else {
       // Clear user data if no user is authenticated
       username = null;
       email = null;
-      role = null;
+      role = RoleEnum.unknown;
     }
+  }
+
+  Future<RoleEnum> getCurrentRole() async {
+    return RoleEnumExtension.fromName(await Firebase().getCurrentUserRoleFromFirebase());
   }
 
   Future<List<Province>> fetchProvinces() async {
@@ -420,33 +426,13 @@ class Database {
     this.voucherList = voucherList;
   }
 
-  Future<bool> isUserAdmin() async {
-    try {
-      final User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-
-        return userDoc['role'] == 'admin';
-      }
-      return false;
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error checking admin status: $e');
-      } // Lỗi khi kiểm tra quyền admin
-      return false;
-    }
-  }
-
   String? get userId => FirebaseAuth.instance.currentUser?.uid;
 
   // Clear cached user data when user logs out
   void clearUserData() {
     username = null;
     email = null;
-    role = null;
+    role = RoleEnum.unknown;
     if (kDebugMode) {
       print('Database - User data cleared');
     }

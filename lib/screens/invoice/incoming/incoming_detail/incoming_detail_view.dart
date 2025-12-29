@@ -301,8 +301,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                         ),
                       ),
                     ),
-                    if (IncomingInvoicePermissions.canEditPaymentStatus(
-                        state.userRole, state.invoice))
+                    if (IncomingInvoicePermissions.canEditPaymentStatus(state.invoice))
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(

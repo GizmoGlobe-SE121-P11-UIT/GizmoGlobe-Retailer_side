@@ -159,9 +159,7 @@ class _WarrantyScreenState extends State<WarrantyScreen> {
                                                           context, invoice),
                                                 ),
                                                 if (WarrantyInvoicePermissions
-                                                    .canEditStatus(
-                                                        state.userRole,
-                                                        invoice))
+                                                    .canEditStatus(invoice))
                                                   ListTile(
                                                     dense: true,
                                                     leading: const Icon(

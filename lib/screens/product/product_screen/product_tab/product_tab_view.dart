@@ -22,6 +22,7 @@ import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/utils/platform_specific_utils.dart';
 import 'product_tab_cubit.dart';
 import 'product_tab_state.dart';
+import '../../permissions/product_permissions.dart';
 
 class ProductTab extends StatefulWidget {
   const ProductTab({super.key});
@@ -296,8 +297,8 @@ class _ProductTabState extends State<ProductTab>
                             },
                             onLongPress: () async {
                               cubit.setSelectedProduct(product);
-                              final bool isAdmin =
-                                  await Database().isUserAdmin();
+                              final bool canEdit =
+                                  ProductPermissions.canEditProducts();
 
                               showDialog(
                                 context: context,
@@ -351,7 +352,7 @@ class _ProductTabState extends State<ProductTab>
                                               );
                                             },
                                           ),
-                                          if (isAdmin) ...[
+                                          if (canEdit) ...[
                                             ListTile(
                                               dense: true,
                                               leading: Icon(

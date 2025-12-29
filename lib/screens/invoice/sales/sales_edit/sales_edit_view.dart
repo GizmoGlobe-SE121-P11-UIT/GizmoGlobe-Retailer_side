@@ -282,8 +282,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    if (SalesInvoicePermissions.canEditAddress(
-                                        state.userRole, state.invoice))
+                                    if (SalesInvoicePermissions.canEditAddress(state.invoice))
                                       TextButton.icon(
                                         onPressed: _showAddressBottomSheet,
                                         icon: const Icon(Icons.edit, size: 16),

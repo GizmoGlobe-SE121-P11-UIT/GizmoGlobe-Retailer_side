@@ -249,9 +249,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                                 invoice),
                                                       ),
                                                       if (IncomingInvoicePermissions
-                                                          .canEditPaymentStatus(
-                                                              state.userRole,
-                                                              invoice))
+                                                          .canEditPaymentStatus(invoice))
                                                         ListTile(
                                                           dense: true,
                                                           leading: Icon(

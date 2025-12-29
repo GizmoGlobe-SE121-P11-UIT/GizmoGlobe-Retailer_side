@@ -7,12 +7,12 @@ import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
+import '../permissions/stakeholder_permissions.dart';
 import 'employee_add/employee_add_view.dart';
 import 'employee_detail/employee_detail_view.dart';
 import 'employee_edit/employee_edit_view.dart';
 import 'employees_screen_cubit.dart';
 import 'employees_screen_state.dart';
-import 'permissions/employee_permissions.dart';
 
 class EmployeesScreen extends StatefulWidget {
   const EmployeesScreen({super.key});
@@ -154,8 +154,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                       iconSize: 32,
                       onPressed: _showFilterDialog,
                     ),
-                    if (EmployeePermissions.canAddEmployees(
-                        state.userRole)) ...[
+                    if (StakeholderPermissions.canAddEmployees()) ...[
                       const SizedBox(width: 8),
                       GradientIconButton(
                         icon: Icons.person_add,
@@ -249,16 +248,11 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                               EmployeeDetailScreen.showModal(
                                                 context,
                                                 employee,
-                                                readOnly: !EmployeePermissions
-                                                    .canEditEmployee(
-                                                        state.userRole,
-                                                        employee),
+                                                readOnly: !StakeholderPermissions.canEditEmployees(),
                                               );
                                             },
                                           ),
-                                          if (EmployeePermissions
-                                              .canEditEmployee(state.userRole,
-                                                  employee)) ...[
+                                          if (StakeholderPermissions.canEditEmployees()) ...[
                                             ListTile(
                                               dense: true,
                                               leading: Icon(
@@ -325,9 +319,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                               },
                                             ),
                                           ],
-                                          if (EmployeePermissions
-                                              .canDeleteEmployee(state.userRole,
-                                                  employee)) ...[
+                                          if (StakeholderPermissions.canFireEmployees()) ...[
                                             ListTile(
                                               dense: true,
                                               leading: Icon(

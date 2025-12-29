@@ -46,8 +46,27 @@ class Firebase {
 
   Firebase._internal();
 
-  // Thêm getter để lấy current user ID
   String? get currentUserId => _auth.currentUser?.uid;
+
+  Future<String> getCurrentUserRoleFromFirebase() async {
+    try {
+
+      final DocumentSnapshot userDoc = await _firestore
+          .collection('employees')
+          .doc(currentUserId)
+          .get();
+
+      if (!userDoc.exists) return 'unknown';
+      final data = userDoc.data() as Map<String, dynamic>?;
+      final dynamic roleField = data?['role'];
+      if (roleField == null) return 'unknown';
+
+      return roleField is String ? roleField : roleField.toString();
+    } catch (e) {
+      if (kDebugMode) print('Error fetching user role: $e');
+      return 'unknown';
+    }
+  }
 
   Future<List<Customer>> getCustomers() async {
     try {
