@@ -363,8 +363,9 @@ class _HomeScreen extends State<HomeScreen> {
                                           borderRadius:
                                               BorderRadius.circular(8),
                                         ),
-                                        child: Row(
+                                        child: Column(
                                           mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             _buildModeButton(
                                               label: S.of(context).monthly,
