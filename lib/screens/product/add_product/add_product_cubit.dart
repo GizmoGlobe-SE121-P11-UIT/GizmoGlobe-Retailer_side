@@ -20,6 +20,7 @@ import '../../../enums/product_related/category_enum.dart';
 import '../../../objects/product_related/mainboard_related/pcie_slot.dart';
 import '../../../objects/product_related/product_image.dart';
 import 'add_product_state.dart';
+import '../../../objects/product_related/mainboard_related/storage_slot.dart';
 
 class AddProductCubit extends Cubit<AddProductState> {
   final ImagePicker _picker = ImagePicker();
@@ -36,8 +37,26 @@ class AddProductCubit extends Cubit<AddProductState> {
   void initialize() {
     final editingProduct = _editingProduct;
     if (editingProduct != null) {
-      // Initialize from existing product for edit mode
-      final productArg = ProductArgument.fromProduct(editingProduct);
+      var productArg = ProductArgument.fromProduct(editingProduct);
+
+      if (productArg.connectors == null || productArg.connectors!.isEmpty) {
+        productArg = productArg.copyWith(
+            connectors: [Connector(type: '', quantity: 0)]);
+      }
+      if (productArg.ioPorts == null || productArg.ioPorts!.isEmpty) {
+        productArg = productArg.copyWith(
+            ioPorts: [IOPort(port: '', quantity: 0)]);
+      }
+      if (productArg.pcieSlots == null || productArg.pcieSlots!.isEmpty) {
+        productArg = productArg.copyWith(pcieSlots: [
+          PCIeSlot(physicalSize: 0, electricalSpeed: 0, gen: 0, quantity: 0)
+        ]);
+      }
+      if (productArg.storageSlot == null) {
+        productArg = productArg.copyWith(
+            storageSlot: StorageSlot(m2Slots: 0, sataPorts: 0));
+      }
+
       emit(state.copyWith(
         productArgument: productArg,
       ));
@@ -62,6 +81,7 @@ class AddProductCubit extends Cubit<AddProductState> {
         connectors: [Connector(type: '', quantity: 0)],
         ioPorts: [IOPort(port: '', quantity: 0)],
         pcieSlots: [PCIeSlot(physicalSize: 0, electricalSpeed: 0, gen: 0, quantity: 0)],
+        storageSlot: StorageSlot(m2Slots: 0, sataPorts: 0),
       )));
     }
   }
@@ -680,6 +700,7 @@ class AddProductCubit extends Cubit<AddProductState> {
               arg.mainboardFormFactor == null ||
               (arg.pcieSlots == null || arg.pcieSlots!.isEmpty) ||
               arg.storageSlot == null ||
+              (arg.ioPorts == null || arg.ioPorts!.isEmpty) ||
               arg.type == null ||
               arg.capacity == null ||
               arg.stickCount == null) {

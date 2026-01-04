@@ -257,23 +257,10 @@ class _AddProductState extends State<AddProductScreen> {
           TextEditingController(text: (widget.product as GPU).tdp.toString());
       turboClockController = TextEditingController(
           text: (widget.product as GPU).boostClock.toString());
-
-      final ioPorts = (widget.product as GPU).ports;
-      if (ioPorts.isNotEmpty) {
-        ioPortsControllers = ioPorts
-            .map((port) => IOPortControllers(
-          port: port.port,
-          quantity: port.quantity.toString(),
-        ))
-            .toList();
-      } else {
-        ioPortsControllers = [IOPortControllers()];
-      }
     } else {
       gpuSeriesController = TextEditingController();
       gpuVersionController = TextEditingController();
       tdpController = TextEditingController();
-      ioPortsControllers = [IOPortControllers()];
     }
 
     // Mainboard controllers
@@ -283,6 +270,11 @@ class _AddProductState extends State<AddProductScreen> {
           text: (widget.product as Mainboard).formFactor.toString());
       chipsetCodeController = TextEditingController(
           text: (widget.product as Mainboard).chipsetCode.toString());
+      socketController.text = (widget.product as Mainboard).socket.toString();
+      stickCountController = TextEditingController(
+          text: (widget.product as Mainboard).ramSpec.slots.toString());
+      capacityController = TextEditingController(
+          text: (widget.product as Mainboard).ramSpec.maxSingleDimmGb.toString());
 
       final pcieSlots = (widget.product as Mainboard).pcieSlots;
       if (pcieSlots.isNotEmpty) {
@@ -312,6 +304,36 @@ class _AddProductState extends State<AddProductScreen> {
         m2Slots: '0',
         sataPorts: '0',
       );
+    }
+
+    // Initialize ioPortsControllers (shared between GPU and Mainboard)
+    if (widget.product?.category == CategoryEnum.gpu && widget.product is GPU) {
+      final ioPorts = (widget.product as GPU).ports;
+      if (ioPorts.isNotEmpty) {
+        ioPortsControllers = ioPorts
+            .map((port) => IOPortControllers(
+          port: port.port,
+          quantity: port.quantity.toString(),
+        ))
+            .toList();
+      } else {
+        ioPortsControllers = [IOPortControllers()];
+      }
+    } else if (widget.product?.category == CategoryEnum.mainboard &&
+        widget.product is Mainboard) {
+      final ioPorts = (widget.product as Mainboard).ioPorts;
+      if (ioPorts.isNotEmpty) {
+        ioPortsControllers = ioPorts
+            .map((port) => IOPortControllers(
+          port: port.port,
+          quantity: port.quantity.toString(),
+        ))
+            .toList();
+      } else {
+        ioPortsControllers = [IOPortControllers()];
+      }
+    } else {
+      ioPortsControllers = [IOPortControllers()];
     }
 
     // Drive controllers
@@ -753,6 +775,12 @@ class _AddProductState extends State<AddProductScreen> {
                     state.productArgument!.copyWith(type: value));
               }, RAMType.getValues()),
           const SizedBox(height: 8),
+          buildInputWidget<Socket>(S.of(context).cpuSocket,
+              TextEditingController(), state.productArgument?.socket, (value) {
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(socket: value));
+              }, Socket.getValues()),
+          const SizedBox(height: 8),
           buildInputWidget<int>(
               S.of(context).maximumSingleRamCapacity,
               capacityController,
@@ -760,6 +788,17 @@ class _AddProductState extends State<AddProductScreen> {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(capacity: value));
           }, null),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(
+            S.of(context).kitStickCount,
+            stickCountController,
+            state.productArgument?.stickCount,
+                (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(stickCount: value));
+            },
+            null,
+          ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).numberOfM2Slots,
@@ -1751,3 +1790,4 @@ class _FocusableFieldWithIconState extends State<_FocusableFieldWithIcon> {
     );
   }
 }
+
