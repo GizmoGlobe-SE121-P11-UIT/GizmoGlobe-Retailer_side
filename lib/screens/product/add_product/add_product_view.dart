@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/product_related/cpu_enums/cpu_series.dart';
 import 'package:gizmoglobe_client/enums/product_related/cpu_enums/socket.dart';
 import 'package:gizmoglobe_client/enums/product_related/drive_enums/drive_gen.dart';
+import 'package:gizmoglobe_client/enums/product_related/drive_enums/interface_type.dart';
 import 'package:gizmoglobe_client/enums/product_related/gpu_enums/gpu_version.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 import 'package:gizmoglobe_client/widgets/general/app_text_style.dart';
@@ -790,7 +791,7 @@ class _AddProductState extends State<AddProductScreen> {
           }, null),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            S.of(context).kitStickCount,
+            'Number of ram slots',
             stickCountController,
             state.productArgument?.stickCount,
                 (value) {
@@ -979,18 +980,24 @@ class _AddProductState extends State<AddProductScreen> {
                 state.productArgument!.copyWith(driveType: value));
           }, DriveType.getValues()),
           const SizedBox(height: 8),
-          TextFormField(
-              controller: capacityController,
-              decoration: InputDecoration(labelText: S.of(context).capacity),
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              validator: _validateField),
+          buildInputWidget<int>(
+            S.of(context).capacity,
+            capacityController,
+            state.productArgument?.capacity,
+                (value) {
+              cubit.updateProductArgument(
+                  state.productArgument!.copyWith(capacity: value));
+            },
+            null,
+          ),
           const SizedBox(height: 8),
-          TextFormField(
-              controller: interfaceTypeController,
-              decoration:
-              InputDecoration(labelText: S.of(context).interfaceType),
-              validator: _validateField),
+          buildInputWidget<InterfaceType>(
+              S.of(context).interfaceType,
+              interfaceTypeController,
+              state.productArgument?.interfaceType, (value) {
+            cubit.updateProductArgument(
+                state.productArgument!.copyWith(interfaceType: value));
+          }, InterfaceType.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<DriveFormFactor>(
               S.of(context).formFactor,
@@ -1028,12 +1035,7 @@ class _AddProductState extends State<AddProductScreen> {
     }
   }
 
-  String? _validateField(String? value) {
-    if (value == null || value.isEmpty) {
-      return S.of(context).thisFieldIsRequired;
-    }
-    return null;
-  }
+
 
   /// Helper to display ProductImage - handles both pending (memory) and uploaded (network) images
   Widget _buildImageWidget(
