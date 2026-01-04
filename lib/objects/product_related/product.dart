@@ -10,7 +10,7 @@ abstract class Product {
   CategoryEnum category;
   int importPrice;
   int sellingPrice;
-  double discount;
+  int discount;
   DateTime release;
   int sales;
   int stock;
@@ -56,7 +56,7 @@ abstract class Product {
     Manufacturer? manufacturer,
     int? importPrice,
     int? sellingPrice,
-    double? discount,
+    int? discount,
     DateTime? release,
     int? sales,
     int? stock,

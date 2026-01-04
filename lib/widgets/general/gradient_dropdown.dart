@@ -89,7 +89,16 @@ class GradientDropdown<T> extends StatelessWidget {
         ),
         textAlignVertical: TextAlignVertical.center,
       ),
-      onChanged: onChanged,
+      onBeforePopupOpening: (selectedItem) async {
+        FocusScope.of(context).unfocus();
+        return true;
+      },
+      onChanged: (value) {
+        onChanged(value);
+        Future.delayed(const Duration(milliseconds: 200), () {
+          FocusScope.of(context).unfocus();
+        });
+      },
       selectedItem: selectedItem,
     );
   }

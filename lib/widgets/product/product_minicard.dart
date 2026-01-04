@@ -91,7 +91,7 @@ class ProductMiniCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     // Compute discounted price (product.sellingPrice is an int)
     final double sp = product.sellingPrice.toDouble();
-    final double disc = product.discount;
+    final int disc = product.discount;
     final double discountedPrice = sp * (100 - disc) / 100.0;
 
     // Compact layout: smaller icon/photo area, 2-row display (name + price)

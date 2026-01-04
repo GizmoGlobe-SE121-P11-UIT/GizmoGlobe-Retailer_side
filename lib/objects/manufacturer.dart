@@ -28,4 +28,9 @@ class Manufacturer {
       status: status ?? this.status,
     );
   }
+
+  @override
+  String toString() {
+    return manufacturerName;
+  }
 }

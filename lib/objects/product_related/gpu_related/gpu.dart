@@ -45,7 +45,7 @@ class GPU extends Product {
     String? productName,
     int? importPrice,
     int? sellingPrice,
-    double? discount,
+    int? discount,
     DateTime? release,
     int? sales,
     int? stock,

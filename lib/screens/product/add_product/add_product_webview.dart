@@ -641,9 +641,9 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                     (value) {
                       final currentArg = cubit.state.productArgument;
                       if (currentArg == null) return;
-                      double? parsed;
+                      int? parsed;
                       if (value != null && value.isNotEmpty) {
-                        parsed = double.tryParse(value);
+                        parsed = int.tryParse(value);
                       }
                       cubit.updateProductArgument(
                           currentArg.copyWith(discount: parsed));

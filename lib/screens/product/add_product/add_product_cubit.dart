@@ -54,11 +54,14 @@ class AddProductCubit extends Cubit<AddProductState> {
         release: DateTime.now(),
         importPrice: 0,
         sellingPrice: 0,
-        discount: 0.0,
+        discount: 0,
         stock: 0,
         category: CategoryEnum.cpu,
         status: ProductStatusEnum.outOfStock,
         // manufacturer left null until selected by user from UI
+        connectors: [Connector(type: '', quantity: 0)],
+        ioPorts: [IOPort(port: '', quantity: 0)],
+        pcieSlots: [PCIeSlot(physicalSize: 0, electricalSpeed: 0, gen: 0, quantity: 0)],
       )));
     }
   }
@@ -88,7 +91,7 @@ class AddProductCubit extends Cubit<AddProductState> {
     updateProductArgument(arg.copyWith(sellingPrice: value.toInt()));
   }
 
-  void setDiscount(double value) {
+  void setDiscount(int value) {
     final arg = state.productArgument;
     if (arg == null) return;
     updateProductArgument(arg.copyWith(discount: value));
@@ -470,7 +473,7 @@ class AddProductCubit extends Cubit<AddProductState> {
     }
   }
 
-  /// Apply local images from modal to cubit state
+  /// Apply local images to cubit state
   /// Does NOT upload to Firebase - that happens during addProduct
   void applyLocalImages(List<ProductImage> localImages) {
     emit(state.copyWith(images: localImages));
@@ -569,7 +572,7 @@ class AddProductCubit extends Cubit<AddProductState> {
   Future<void> addProduct() async {
     emit(state.copyWith(processState: ProcessState.loading));
     try {
-      final arg = state.productArgument;
+      var arg = state.productArgument;
       if (arg == null) {
         emit(state.copyWith(
             processState: ProcessState.failure,
@@ -577,6 +580,26 @@ class AddProductCubit extends Cubit<AddProductState> {
             notifyMessage: NotifyMessage.msg14));
         return;
       }
+
+      // Cleanup lists
+      if (arg.connectors != null) {
+        final valid = arg.connectors!
+            .where((c) => c.type.isNotEmpty && c.quantity > 0)
+            .toList();
+        arg = arg.copyWith(connectors: valid);
+      }
+      if (arg.ioPorts != null) {
+        final valid = arg.ioPorts!
+            .where((p) => p.port.isNotEmpty && p.quantity > 0)
+            .toList();
+        arg = arg.copyWith(ioPorts: valid);
+      }
+      if (arg.pcieSlots != null) {
+        final valid = arg.pcieSlots!.where((s) => s.quantity > 0).toList();
+        arg = arg.copyWith(pcieSlots: valid);
+      }
+
+      updateProductArgument(arg);
 
       // Basic validation helper that tolerates numbers stored as different numeric types
       num? toNum(dynamic v) {
@@ -613,7 +636,6 @@ class AddProductCubit extends Cubit<AddProductState> {
         if (fail('category missing')) return;
       }
 
-      // Category-specific validation (mirror fields used in ProductArgument.buildProduct)
       switch (arg.category) {
         case CategoryEnum.ram:
           if (arg.type == null ||
@@ -638,7 +660,7 @@ class AddProductCubit extends Cubit<AddProductState> {
           if (arg.tdp == null ||
               arg.efficiency == null ||
               arg.modularity == null ||
-              arg.connectors == null) {
+              (arg.connectors == null || arg.connectors!.isEmpty)) {
             if (fail('PSU required fields missing')) return;
           }
           break;
@@ -647,7 +669,7 @@ class AddProductCubit extends Cubit<AddProductState> {
               arg.gpuVersion == null ||
               arg.capacity == null ||
               arg.tdp == null ||
-              arg.ioPorts == null ||
+              (arg.ioPorts == null || arg.ioPorts!.isEmpty) ||
               arg.turboClock == null) {
             if (fail('GPU required fields missing')) return;
           }
@@ -656,7 +678,7 @@ class AddProductCubit extends Cubit<AddProductState> {
           if (arg.chipsetCode == null ||
               arg.socket == null ||
               arg.mainboardFormFactor == null ||
-              arg.pcieSlots == null ||
+              (arg.pcieSlots == null || arg.pcieSlots!.isEmpty) ||
               arg.storageSlot == null ||
               arg.type == null ||
               arg.capacity == null ||
@@ -765,6 +787,60 @@ class AddProductCubit extends Cubit<AddProductState> {
           processState: ProcessState.success,
           dialogName: DialogName.success,
           notifyMessage: NotifyMessage.msg21));
+    }
+  }
+
+  void addConnector() {
+    final arg = state.productArgument;
+    if (arg == null) return;
+    final connectors = List<Connector>.from(arg.connectors ?? []);
+    connectors.add(Connector(type: '', quantity: 0));
+    updateProductArgument(arg.copyWith(connectors: connectors));
+  }
+
+  void removeConnector(int index) {
+    final arg = state.productArgument;
+    if (arg == null) return;
+    final connectors = List<Connector>.from(arg.connectors ?? []);
+    if (index >= 0 && index < connectors.length) {
+      connectors.removeAt(index);
+      updateProductArgument(arg.copyWith(connectors: connectors));
+    }
+  }
+
+  void addIoPort() {
+    final arg = state.productArgument;
+    if (arg == null) return;
+    final ioPorts = List<IOPort>.from(arg.ioPorts ?? []);
+    ioPorts.add(IOPort(port: '', quantity: 0));
+    updateProductArgument(arg.copyWith(ioPorts: ioPorts));
+  }
+
+  void removeIoPort(int index) {
+    final arg = state.productArgument;
+    if (arg == null) return;
+    final ioPorts = List<IOPort>.from(arg.ioPorts ?? []);
+    if (index >= 0 && index < ioPorts.length) {
+      ioPorts.removeAt(index);
+      updateProductArgument(arg.copyWith(ioPorts: ioPorts));
+    }
+  }
+
+  void addPcieSlot() {
+    final arg = state.productArgument;
+    if (arg == null) return;
+    final pcieSlots = List<PCIeSlot>.from(arg.pcieSlots ?? []);
+    pcieSlots.add(PCIeSlot(physicalSize: 0, electricalSpeed: 0, gen: 0, quantity: 0));
+    updateProductArgument(arg.copyWith(pcieSlots: pcieSlots));
+  }
+
+  void removePcieSlot(int index) {
+    final arg = state.productArgument;
+    if (arg == null) return;
+    final pcieSlots = List<PCIeSlot>.from(arg.pcieSlots ?? []);
+    if (index >= 0 && index < pcieSlots.length) {
+      pcieSlots.removeAt(index);
+      updateProductArgument(arg.copyWith(pcieSlots: pcieSlots));
     }
   }
 }

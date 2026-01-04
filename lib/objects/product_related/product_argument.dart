@@ -34,7 +34,7 @@ class ProductArgument {
   CategoryEnum? category;
   int? importPrice;
   int? sellingPrice;
-  double? discount;
+  int? discount;
   DateTime? release;
   int? sales;
   int? stock;
@@ -159,7 +159,7 @@ class ProductArgument {
     CategoryEnum? category,
     int? importPrice,
     int? sellingPrice,
-    double? discount,
+    int? discount,
     DateTime? release,
     int? sales,
     int? stock,

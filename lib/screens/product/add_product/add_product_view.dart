@@ -97,7 +97,6 @@ class AddProductScreen extends StatefulWidget {
 
 class _AddProductState extends State<AddProductScreen> {
   AddProductCubit get cubit => context.read<AddProductCubit>();
-  late CategoryEnum _selectedCategory;
   late TextEditingController productNameController;
   late TextEditingController importPriceController;
   late TextEditingController sellingPriceController;
@@ -172,8 +171,6 @@ class _AddProductState extends State<AddProductScreen> {
     viDescriptionController =
         TextEditingController(text: widget.product?.viDescription);
 
-    _selectedCategory = widget.product?.category ?? CategoryEnum.cpu;
-
     // Initialize all category specific controllers (with empty values if not editing)
     // RAM controllers
     if (widget.product?.category == CategoryEnum.ram && widget.product is RAM) {
@@ -234,9 +231,9 @@ class _AddProductState extends State<AddProductScreen> {
       if (connectors.isNotEmpty) {
         connectorControllers = connectors
             .map((c) => ConnectorControllers(
-                  type: c.type,
-                  quantity: c.quantity.toString(),
-                ))
+          type: c.type,
+          quantity: c.quantity.toString(),
+        ))
             .toList();
       } else {
         connectorControllers = [ConnectorControllers()];
@@ -265,9 +262,9 @@ class _AddProductState extends State<AddProductScreen> {
       if (ioPorts.isNotEmpty) {
         ioPortsControllers = ioPorts
             .map((port) => IOPortControllers(
-                  port: port.port,
-                  quantity: port.quantity.toString(),
-                ))
+          port: port.port,
+          quantity: port.quantity.toString(),
+        ))
             .toList();
       } else {
         ioPortsControllers = [IOPortControllers()];
@@ -291,11 +288,11 @@ class _AddProductState extends State<AddProductScreen> {
       if (pcieSlots.isNotEmpty) {
         pcieSlotsController = pcieSlots
             .map((slot) => PCIeSlotControllers(
-                  physicalSize: slot.physicalSize.toString(),
-                  electricalSpeed: slot.electricalSpeed.toString(),
-                  gen: slot.gen.toString(),
-                  quantity: slot.quantity.toString(),
-                ))
+          physicalSize: slot.physicalSize.toString(),
+          electricalSpeed: slot.electricalSpeed.toString(),
+          gen: slot.gen.toString(),
+          quantity: slot.quantity.toString(),
+        ))
             .toList();
       } else {
         pcieSlotsController = [PCIeSlotControllers()];
@@ -413,20 +410,21 @@ class _AddProductState extends State<AddProductScreen> {
 
   Widget buildCategorySpecificInputs(
       CategoryEnum category, AddProductState state, AddProductCubit cubit) {
-    switch (_selectedCategory) {
+    // Fix: Use the 'category' argument (from state) instead of '_selectedCategory' (from initState)
+    switch (category) {
       case CategoryEnum.ram:
         return Column(children: [
           buildInputWidget<RAMType>(S.of(context).ramType,
               TextEditingController(), state.productArgument?.type, (value) {
-            cubit.updateProductArgument(
-                state.productArgument!.copyWith(type: value));
-          }, RAMType.getValues()),
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(type: value));
+              }, RAMType.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).ramBus,
-            TextEditingController(),
+            busController,
             state.productArgument?.bus,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(bus: value));
             },
@@ -435,9 +433,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).capacityPerStick,
-            TextEditingController(),
+            capacityController,
             state.productArgument?.capacity,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(capacity: value));
             },
@@ -446,9 +444,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).kitStickCount,
-            TextEditingController(),
+            stickCountController,
             state.productArgument?.stickCount,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(stickCount: value));
             },
@@ -457,9 +455,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).clLatency,
-            TextEditingController(),
+            clLatencyController,
             state.productArgument?.clLatency,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(clLatency: value));
             },
@@ -480,9 +478,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).numberOfCpuCores,
-            TextEditingController(),
+            coreController,
             state.productArgument?.core,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(core: value));
             },
@@ -491,9 +489,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).numberOfCpuThreads,
-            TextEditingController(),
+            threadController,
             state.productArgument?.thread,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(thread: value));
             },
@@ -502,7 +500,7 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<double>(
               S.of(context).cpuBaseClock,
-              TextEditingController(),
+              baseClockController,
               state.productArgument?.baseClock, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(baseClock: value));
@@ -510,7 +508,7 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<double>(
               S.of(context).cpuTurboClock,
-              TextEditingController(),
+              turboClockController,
               state.productArgument?.turboClock, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(turboClock: value));
@@ -518,9 +516,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).cpuTdp,
-            TextEditingController(),
+            tdpController,
             state.productArgument?.tdp,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(tdp: value));
             },
@@ -529,18 +527,18 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<Socket>(S.of(context).cpuSocket,
               TextEditingController(), state.productArgument?.socket, (value) {
-            cubit.updateProductArgument(
-                state.productArgument!.copyWith(socket: value));
-          }, Socket.getValues()),
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(socket: value));
+              }, Socket.getValues()),
           const SizedBox(height: 8),
         ]);
       case CategoryEnum.psu:
         return Column(children: [
           buildInputWidget<int>(
             S.of(context).maxWattage,
-            TextEditingController(),
+            maxWattageController,
             state.productArgument?.tdp,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(tdp: value));
             },
@@ -570,12 +568,12 @@ class _AddProductState extends State<AddProductScreen> {
                 Expanded(
                   child: buildInputWidget<String>(
                     S.of(context).connectorType,
-                    TextEditingController(),
+                    connectorControllers[i].typeController,
                     state.productArgument?.connectors != null &&
-                            i < state.productArgument!.connectors!.length
+                        i < state.productArgument!.connectors!.length
                         ? state.productArgument!.connectors![i].type
                         : null,
-                    (value) {
+                        (value) {
                       cubit.changeConnectorType(value, i);
                     },
                   ),
@@ -584,12 +582,12 @@ class _AddProductState extends State<AddProductScreen> {
                 Expanded(
                   child: buildInputWidget<int>(
                     S.of(context).quantity,
-                    TextEditingController(),
+                    connectorControllers[i].quantityController,
                     state.productArgument?.connectors != null &&
-                            i < state.productArgument!.connectors!.length
+                        i < state.productArgument!.connectors!.length
                         ? state.productArgument!.connectors![i].quantity
                         : null,
-                    (value) {
+                        (value) {
                       cubit.changeConnectorQuantity(value, i);
                     },
                   ),
@@ -599,6 +597,7 @@ class _AddProductState extends State<AddProductScreen> {
                   onPressed: () {
                     setState(() {
                       connectorControllers.removeAt(i);
+                      cubit.removeConnector(i);
                     });
                   },
                 ),
@@ -613,6 +612,7 @@ class _AddProductState extends State<AddProductScreen> {
               onPressed: () {
                 setState(() {
                   connectorControllers.add(ConnectorControllers());
+                  cubit.addConnector();
                 });
               },
             ),
@@ -640,7 +640,7 @@ class _AddProductState extends State<AddProductScreen> {
             S.of(context).gpuMemory,
             capacityController,
             state.productArgument?.capacity,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(capacity: value));
             },
@@ -651,7 +651,7 @@ class _AddProductState extends State<AddProductScreen> {
             S.of(context).gpuTdp,
             tdpController,
             state.productArgument?.tdp,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(tdp: value));
             },
@@ -660,9 +660,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(width: 8),
           buildInputWidget<double>(S.of(context).gpuBoostClock,
               turboClockController, state.productArgument?.turboClock, (value) {
-            cubit.updateProductArgument(
-                state.productArgument!.copyWith(turboClock: value));
-          }, null),
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(turboClock: value));
+              }, null),
           const SizedBox(width: 8),
           ...ioPortsControllers.asMap().entries.map((entry) {
             final i = entry.key;
@@ -670,34 +670,35 @@ class _AddProductState extends State<AddProductScreen> {
               children: [
                 Expanded(
                     child: buildInputWidget<String>(
-                  S.of(context).port,
-                  TextEditingController(),
-                  state.productArgument?.ioPorts != null &&
+                      S.of(context).port,
+                      ioPortsControllers[i].portController,
+                      state.productArgument?.ioPorts != null &&
                           i < state.productArgument!.ioPorts!.length
-                      ? state.productArgument!.ioPorts![i].port
-                      : null,
-                  (value) {
-                    cubit.changeIoPortType(value, i);
-                  },
-                )),
+                          ? state.productArgument!.ioPorts![i].port
+                          : null,
+                          (value) {
+                        cubit.changeIoPortType(value, i);
+                      },
+                    )),
                 const SizedBox(width: 8),
                 Expanded(
                     child: buildInputWidget<int>(
-                  S.of(context).quantity,
-                  TextEditingController(),
-                  state.productArgument?.ioPorts != null &&
+                      S.of(context).quantity,
+                      ioPortsControllers[i].quantityController,
+                      state.productArgument?.ioPorts != null &&
                           i < state.productArgument!.ioPorts!.length
-                      ? state.productArgument!.ioPorts![i].quantity
-                      : null,
-                  (value) {
-                    cubit.changeIoPortQuantity(value, i);
-                  },
-                )),
+                          ? state.productArgument!.ioPorts![i].quantity
+                          : null,
+                          (value) {
+                        cubit.changeIoPortQuantity(value, i);
+                      },
+                    )),
                 IconButton(
                   icon: const Icon(Icons.remove_circle),
                   onPressed: () {
                     setState(() {
                       ioPortsControllers.removeAt(i);
+                      cubit.removeIoPort(i);
                     });
                   },
                 ),
@@ -712,6 +713,7 @@ class _AddProductState extends State<AddProductScreen> {
               onPressed: () {
                 setState(() {
                   ioPortsControllers.add(IOPortControllers());
+                  cubit.addIoPort();
                 });
               },
             ),
@@ -737,9 +739,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).ramBusSpeed,
-            TextEditingController(),
+            busController,
             state.productArgument?.bus,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(bus: value));
             },
@@ -747,13 +749,13 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<RAMType>(S.of(context).supportedRamType,
               TextEditingController(), state.productArgument?.type, (value) {
-            cubit.updateProductArgument(
-                state.productArgument!.copyWith(type: value));
-          }, RAMType.getValues()),
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(type: value));
+              }, RAMType.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
               S.of(context).maximumSingleRamCapacity,
-              TextEditingController(),
+              capacityController,
               state.productArgument?.capacity, (value) {
             cubit.updateProductArgument(
                 state.productArgument!.copyWith(capacity: value));
@@ -761,9 +763,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).numberOfM2Slots,
-            TextEditingController(),
+            storageSlotControllerSingle?.m2SlotsController ?? TextEditingController(),
             state.productArgument?.storageSlot?.m2Slots,
-            (value) {
+                (value) {
               cubit.updateProductArgument(state.productArgument!.copyWith(
                   storageSlot: state.productArgument!.storageSlot
                       ?.copyWith(m2Slots: value)));
@@ -772,9 +774,9 @@ class _AddProductState extends State<AddProductScreen> {
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).numberOfSataPorts,
-            TextEditingController(),
+            storageSlotControllerSingle?.sataPortsController ?? TextEditingController(),
             state.productArgument?.storageSlot?.sataPorts,
-            (value) {
+                (value) {
               cubit.updateProductArgument(state.productArgument!.copyWith(
                   storageSlot: state.productArgument!.storageSlot
                       ?.copyWith(sataPorts: value)));
@@ -787,34 +789,35 @@ class _AddProductState extends State<AddProductScreen> {
               children: [
                 Expanded(
                     child: buildInputWidget<String>(
-                  S.of(context).port,
-                  TextEditingController(),
-                  state.productArgument?.ioPorts != null &&
+                      S.of(context).port,
+                      ioPortsControllers[i].portController,
+                      state.productArgument?.ioPorts != null &&
                           i < state.productArgument!.ioPorts!.length
-                      ? state.productArgument!.ioPorts![i].port
-                      : null,
-                  (value) {
-                    cubit.changeIoPortType(value, i);
-                  },
-                )),
+                          ? state.productArgument!.ioPorts![i].port
+                          : null,
+                          (value) {
+                        cubit.changeIoPortType(value, i);
+                      },
+                    )),
                 const SizedBox(width: 8),
                 Expanded(
                     child: buildInputWidget<int>(
-                  S.of(context).quantity,
-                  TextEditingController(),
-                  state.productArgument?.ioPorts != null &&
+                      S.of(context).quantity,
+                      ioPortsControllers[i].quantityController,
+                      state.productArgument?.ioPorts != null &&
                           i < state.productArgument!.ioPorts!.length
-                      ? state.productArgument!.ioPorts![i].quantity
-                      : null,
-                  (value) {
-                    cubit.changeIoPortQuantity(value, i);
-                  },
-                )),
+                          ? state.productArgument!.ioPorts![i].quantity
+                          : null,
+                          (value) {
+                        cubit.changeIoPortQuantity(value, i);
+                      },
+                    )),
                 IconButton(
                   icon: const Icon(Icons.remove_circle),
                   onPressed: () {
                     setState(() {
                       ioPortsControllers.removeAt(i);
+                      cubit.removeIoPort(i);
                     });
                   },
                 ),
@@ -829,6 +832,7 @@ class _AddProductState extends State<AddProductScreen> {
               onPressed: () {
                 setState(() {
                   ioPortsControllers.add(IOPortControllers());
+                  cubit.addIoPort();
                 });
               },
             ),
@@ -844,10 +848,10 @@ class _AddProductState extends State<AddProductScreen> {
                     S.of(context).physicalSize,
                     controller.physicalSizeController,
                     state.productArgument?.pcieSlots != null &&
-                            i < state.productArgument!.pcieSlots!.length
+                        i < state.productArgument!.pcieSlots!.length
                         ? state.productArgument!.pcieSlots![i].physicalSize
                         : null,
-                    (value) {
+                        (value) {
                       cubit.changePCIeSlotPhysicalSize(value, i);
                     },
                   ),
@@ -858,10 +862,10 @@ class _AddProductState extends State<AddProductScreen> {
                     S.of(context).electricalSpeed,
                     controller.electricalSpeedController,
                     state.productArgument?.pcieSlots != null &&
-                            i < state.productArgument!.pcieSlots!.length
+                        i < state.productArgument!.pcieSlots!.length
                         ? state.productArgument!.pcieSlots![i].electricalSpeed
                         : null,
-                    (value) {
+                        (value) {
                       cubit.changePCIeSlotElectricalSpeed(value, i);
                     },
                   ),
@@ -872,10 +876,10 @@ class _AddProductState extends State<AddProductScreen> {
                     S.of(context).generation,
                     controller.genController,
                     state.productArgument?.pcieSlots != null &&
-                            i < state.productArgument!.pcieSlots!.length
+                        i < state.productArgument!.pcieSlots!.length
                         ? state.productArgument!.pcieSlots![i].gen
                         : null,
-                    (value) {
+                        (value) {
                       cubit.changePCIeSlotGen(value, i);
                     },
                   ),
@@ -886,10 +890,10 @@ class _AddProductState extends State<AddProductScreen> {
                     S.of(context).quantity,
                     controller.quantityController,
                     state.productArgument?.pcieSlots != null &&
-                            i < state.productArgument!.pcieSlots!.length
+                        i < state.productArgument!.pcieSlots!.length
                         ? state.productArgument!.pcieSlots![i].quantity
                         : null,
-                    (value) {
+                        (value) {
                       cubit.changePCIeSlotQuantity(value, i);
                     },
                   ),
@@ -899,6 +903,7 @@ class _AddProductState extends State<AddProductScreen> {
                   onPressed: () {
                     setState(() {
                       pcieSlotsController.removeAt(i);
+                      cubit.removePcieSlot(i);
                     });
                   },
                 ),
@@ -913,6 +918,7 @@ class _AddProductState extends State<AddProductScreen> {
               onPressed: () {
                 setState(() {
                   pcieSlotsController.add(PCIeSlotControllers());
+                  cubit.addPcieSlot();
                 });
               },
             ),
@@ -922,9 +928,9 @@ class _AddProductState extends State<AddProductScreen> {
         return Column(children: [
           buildInputWidget<DriveGen>(S.of(context).driveGeneration,
               TextEditingController(), state.productArgument?.gen, (value) {
-            cubit.updateProductArgument(
-                state.productArgument!.copyWith(gen: value));
-          }, DriveGen.getValues()),
+                cubit.updateProductArgument(
+                    state.productArgument!.copyWith(gen: value));
+              }, DriveGen.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<DriveType>(
               S.of(context).driveType,
@@ -944,7 +950,7 @@ class _AddProductState extends State<AddProductScreen> {
           TextFormField(
               controller: interfaceTypeController,
               decoration:
-                  InputDecoration(labelText: S.of(context).interfaceType),
+              InputDecoration(labelText: S.of(context).interfaceType),
               validator: _validateField),
           const SizedBox(height: 8),
           buildInputWidget<DriveFormFactor>(
@@ -959,7 +965,7 @@ class _AddProductState extends State<AddProductScreen> {
             S.of(context).readSpeed,
             readMbpsController,
             state.productArgument?.readMbps,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(readMbps: value));
             },
@@ -970,7 +976,7 @@ class _AddProductState extends State<AddProductScreen> {
             S.of(context).writeSpeed,
             writeMbpsController,
             state.productArgument?.writeMbps,
-            (value) {
+                (value) {
               cubit.updateProductArgument(
                   state.productArgument!.copyWith(writeMbps: value));
             },
@@ -992,11 +998,11 @@ class _AddProductState extends State<AddProductScreen> {
 
   /// Helper to display ProductImage - handles both pending (memory) and uploaded (network) images
   Widget _buildImageWidget(
-    ProductImage image, {
-    double? width,
-    double? height,
-    BoxFit fit = BoxFit.cover,
-  }) {
+      ProductImage image, {
+        double? width,
+        double? height,
+        BoxFit fit = BoxFit.cover,
+      }) {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (image.hasPendingUpload && image.pendingBytes != null) {
@@ -1076,36 +1082,54 @@ class _AddProductState extends State<AddProductScreen> {
             padding: const EdgeInsets.only(right: 8.0),
             child: BlocBuilder<AddProductCubit, AddProductState>(
               buildWhen: (previous, current) =>
-                  previous.processState != current.processState,
+              previous.processState != current.processState,
               builder: (context, state) {
                 return state.processState == ProcessState.loading
                     ? const Center(
-                        child: SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      )
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                )
                     : GradientIconButton(
-                        icon: Icons.check,
-                        onPressed: () => cubit.addProduct(),
-                        fillColor: Colors.transparent,
-                      );
+                  icon: Icons.check,
+                  onPressed: () => cubit.addProduct(),
+                  fillColor: Colors.transparent,
+                );
               },
             ),
           ),
         ],
       ),
-      body: BlocConsumer<AddProductCubit, AddProductState>(
-        listener: (context, state) {
-          if (state.processState == ProcessState.success) {
-            if (state.notifyMessage == NotifyMessage.msg21) {
-              // Description generation - show dialog to notify
-              enDescriptionController.text =
-                  state.productArgument?.enDescription ?? '';
-              viDescriptionController.text =
-                  state.productArgument?.viDescription ?? '';
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: BlocConsumer<AddProductCubit, AddProductState>(
+          listener: (context, state) {
+            if (state.processState == ProcessState.success) {
+              if (state.notifyMessage == NotifyMessage.msg21) {
+                // Description generation - show dialog to notify
+                enDescriptionController.text =
+                    state.productArgument?.enDescription ?? '';
+                viDescriptionController.text =
+                    state.productArgument?.viDescription ?? '';
 
+                showDialog(
+                  context: context,
+                  builder: (context) => InformationDialog(
+                    title: state.dialogName.getLocalizedName(context),
+                    content: state.notifyMessage.getLocalizedMessage(context),
+                    onPressed: () {
+                      cubit.toIdle();
+                    },
+                  ),
+                );
+              } else {
+                // Product add/edit success - close and let parent show snackbar
+                Navigator.pop(context, true);
+              }
+            } else if (state.processState == ProcessState.failure) {
+              // Show error dialog
               showDialog(
                 context: context,
                 builder: (context) => InformationDialog(
@@ -1116,364 +1140,113 @@ class _AddProductState extends State<AddProductScreen> {
                   },
                 ),
               );
-            } else {
-              // Product add/edit success - close and let parent show snackbar
-              Navigator.pop(context, true);
             }
-          } else if (state.processState == ProcessState.failure) {
-            // Show error dialog
-            showDialog(
-              context: context,
-              builder: (context) => InformationDialog(
-                title: state.dialogName.getLocalizedName(context),
-                content: state.notifyMessage.getLocalizedMessage(context),
-                onPressed: () {
-                  cubit.toIdle();
-                },
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () => ImageManagerModal.show(context),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: colorScheme.shadow.withValues(alpha: 0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
+          },
+          builder: (context, state) {
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => ImageManagerModal.show(context),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface,
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
                         ),
-                      ],
-                    ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        if (state.activeImages.isNotEmpty)
-                          Center(
-                            child: _buildImageWidget(
-                              state.activeImages.first,
-                              fit: BoxFit.contain,
-                            ),
-                          )
-                        else
-                          Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.add_photo_alternate,
-                                  size: 48,
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  S.of(context).addProductImage,
-                                  style: TextStyle(
+                        boxShadow: [
+                          BoxShadow(
+                            color: colorScheme.shadow.withValues(alpha: 0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          if (state.activeImages.isNotEmpty)
+                            Center(
+                              child: _buildImageWidget(
+                                state.activeImages.first,
+                                fit: BoxFit.contain,
+                              ),
+                            )
+                          else
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.add_photo_alternate,
+                                    size: 48,
                                     color: colorScheme.onSurfaceVariant,
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        // Image count badge
-                        if (state.activeImages.isNotEmpty)
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: colorScheme.primary,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(Icons.photo_library,
-                                      size: 16, color: Colors.white),
-                                  const SizedBox(width: 4),
+                                  const SizedBox(height: 8),
                                   Text(
-                                    '${state.activeImages.length}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                                    S.of(context).addProductImage,
+                                    style: TextStyle(
+                                      color: colorScheme.onSurfaceVariant,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                        if (state.isUploadingImage || state.isLoadingImages)
-                          Positioned.fill(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: Color.fromRGBO(0, 0, 0, 0.5),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                              ),
-                              child: Center(
-                                child: CircularProgressIndicator(
+                          // Image count badge
+                          if (state.activeImages.isNotEmpty)
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
                                   color: colorScheme.primary,
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            S.of(context).basicInformation,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.onSurface,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          buildInputWidget<String>(
-                            S.of(context).productName,
-                            productNameController,
-                            state.productArgument?.productName,
-                            (value) {
-                              cubit.updateProductArgument(state.productArgument!
-                                  .copyWith(productName: value));
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: buildInputWidget<int>(
-                                  S.of(context).importPrice,
-                                  importPriceController,
-                                  state.productArgument?.importPrice,
-                                  (value) {
-                                    cubit.updateProductArgument(state
-                                        .productArgument!
-                                        .copyWith(importPrice: value));
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: buildInputWidget<int>(
-                                  S.of(context).sellingPrice,
-                                  sellingPriceController,
-                                  state.productArgument?.sellingPrice,
-                                  (value) {
-                                    cubit.updateProductArgument(state
-                                        .productArgument!
-                                        .copyWith(sellingPrice: value));
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: buildInputWidget<String>(
-                                  S.of(context).discount,
-                                  discountController,
-                                  state.productArgument?.discount?.toString(),
-                                  (value) {
-                                    double? parsed;
-                                    if (value != null && value.isNotEmpty) {
-                                      parsed = double.tryParse(value);
-                                    }
-                                    cubit.updateProductArgument(state
-                                        .productArgument!
-                                        .copyWith(discount: parsed));
-                                  },
-                                  null,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: buildInputWidget<int>(
-                                  S.of(context).stock,
-                                  stockController,
-                                  state.productArgument?.stock,
-                                  (value) {
-                                    final newStatus = value! > 0
-                                        ? ProductStatusEnum.active
-                                        : ProductStatusEnum.outOfStock;
-                                    cubit.updateProductArgument(
-                                        state.productArgument!.copyWith(
-                                            stock: value, status: newStatus));
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            S.of(context).additionalInformation,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.onSurface,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          buildInputWidget<DateTime>(
-                            S.of(context).releaseDate,
-                            TextEditingController(),
-                            state.productArgument?.release ?? DateTime.now(),
-                            (value) {
-                              cubit.updateProductArgument(state.productArgument!
-                                  .copyWith(release: value));
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          buildInputWidget<CategoryEnum>(
-                            S.of(context).category,
-                            TextEditingController(),
-                            state.productArgument?.category ?? CategoryEnum.cpu,
-                            (value) {
-                              cubit.updateProductArgument(state.productArgument!
-                                  .copyWith(category: value));
-                            },
-                            CategoryEnum.getValues(),
-                          ),
-                          const SizedBox(height: 16),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              buildInputWidget<Manufacturer>(
-                                S.of(context).manufacturer,
-                                TextEditingController(),
-                                state.productArgument?.manufacturer,
-                                (value) {
-                                  cubit.updateProductArgument(state
-                                      .productArgument!
-                                      .copyWith(manufacturer: value));
-                                },
-                                Database().manufacturerList,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(S.of(context).status,
-                                  style: AppTextStyle.smallText),
-                              const SizedBox(height: 8),
-                              BlocBuilder<AddProductCubit, AddProductState>(
-                                builder: (context, state) {
-                                  final status =
-                                      (state.productArgument?.stock ?? 0) > 0
-                                          ? ProductStatusEnum.active
-                                          : ProductStatusEnum.outOfStock;
-
-                                  return Container(
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 12),
-                                    decoration: BoxDecoration(
-                                      color: status == ProductStatusEnum.active
-                                          ? colorScheme.tertiary
-                                              .withValues(alpha: 0.1)
-                                          : colorScheme.error
-                                              .withValues(alpha: 0.1),
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color:
-                                            status == ProductStatusEnum.active
-                                                ? colorScheme.tertiary
-                                                : colorScheme.error,
-                                        width: 2,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.photo_library,
+                                        size: 16, color: Colors.white),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${state.activeImages.length}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          status == ProductStatusEnum.active
-                                              ? Icons.check_circle
-                                              : Icons.error,
-                                          color:
-                                              status == ProductStatusEnum.active
-                                                  ? Colors.green
-                                                  : Colors.red,
-                                          size: 20,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          status == ProductStatusEnum.active
-                                              ? S.of(context).active
-                                              : S.of(context).outOfStock,
-                                          style: TextStyle(
-                                            color: status ==
-                                                    ProductStatusEnum.active
-                                                ? Colors.green
-                                                : Colors.red,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                          if (state.isUploadingImage || state.isLoadingImages)
+                            Positioned.fill(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Color.fromRGBO(0, 0, 0, 0.5),
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),
                   ),
-                ),
-                if (state.productArgument?.category != null &&
-                    state.productArgument?.category != CategoryEnum.empty)
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Card(
@@ -1487,7 +1260,7 @@ class _AddProductState extends State<AddProductScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${S.of(context).categorySpecifications} ${state.productArgument?.category.toString()}',
+                              S.of(context).basicInformation,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -1495,61 +1268,295 @@ class _AddProductState extends State<AddProductScreen> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            buildCategorySpecificInputs(
-                              state.productArgument?.category ??
-                                  CategoryEnum.empty,
-                              state,
-                              cubit,
-                            ),
-                            MultiFieldWithIcon(
-                              controller: enDescriptionController,
-                              hintText: S
-                                  .of(context)
-                                  .enterField(S.of(context).enDescription),
-                              labelText: S.of(context).enDescription,
-                              onChanged: (value) {
-                                cubit.updateProductArgument(state
-                                    .productArgument!
-                                    .copyWith(enDescription: value));
-                              },
-                              suffixIcon: (state.productArgument!.isEnEmpty &&
-                                      state.productArgument!.isViEmpty)
-                                  ? Icons.add_comment
-                                  : Icons.g_translate,
-                              onSuffixIconPressed: () {
-                                cubit.generateEnDescription();
+                            buildInputWidget<String>(
+                              S.of(context).productName,
+                              productNameController,
+                              state.productArgument?.productName,
+                                  (value) {
+                                cubit.updateProductArgument(state.productArgument!
+                                    .copyWith(productName: value));
                               },
                             ),
                             const SizedBox(height: 16),
-                            MultiFieldWithIcon(
-                              controller: viDescriptionController,
-                              hintText: S
-                                  .of(context)
-                                  .enterField(S.of(context).viDescription),
-                              labelText: S.of(context).viDescription,
-                              onChanged: (value) {
-                                cubit.updateProductArgument(state
-                                    .productArgument!
-                                    .copyWith(viDescription: value));
-                              },
-                              suffixIcon: (state.productArgument!.isEnEmpty &&
-                                      state.productArgument!.isViEmpty)
-                                  ? Icons.add_comment
-                                  : Icons.g_translate,
-                              onSuffixIconPressed: () {
-                                cubit.generateViDescription();
-                              },
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: buildInputWidget<int>(
+                                    S.of(context).importPrice,
+                                    importPriceController,
+                                    state.productArgument?.importPrice,
+                                        (value) {
+                                      cubit.updateProductArgument(state.productArgument!
+                                          .copyWith(importPrice: value));
+                                    },
+                                    null,
+                                    '.000đ',
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: buildInputWidget<int>(
+                                    S.of(context).sellingPrice,
+                                    sellingPriceController,
+                                    state.productArgument?.sellingPrice,
+                                        (value) {
+                                      cubit.updateProductArgument(state.productArgument!
+                                          .copyWith(sellingPrice: value));
+                                    },
+                                    null,
+                                    '.000đ',
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: buildInputWidget<int>(
+                                    S.of(context).discount,
+                                    discountController,
+                                    state.productArgument?.discount,
+                                        (value) {
+                                      cubit.updateProductArgument(
+                                          state.productArgument!.copyWith(discount: value));
+                                    },
+                                    null,
+                                    '%',
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: buildInputWidget<int>(
+                                    S.of(context).stock,
+                                    stockController,
+                                    state.productArgument?.stock,
+                                        (value) {
+                                      final newStatus = value! > 0
+                                          ? ProductStatusEnum.active
+                                          : ProductStatusEnum.outOfStock;
+                                      cubit.updateProductArgument(
+                                          state.productArgument!.copyWith(
+                                              stock: value, status: newStatus));
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
-              ],
-            ),
-          );
-        },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              S.of(context).additionalInformation,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.onSurface,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            buildInputWidget<DateTime>(
+                              S.of(context).releaseDate,
+                              TextEditingController(),
+                              state.productArgument?.release ?? DateTime.now(),
+                                  (value) {
+                                cubit.updateProductArgument(state.productArgument!
+                                    .copyWith(release: value));
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            buildInputWidget<CategoryEnum>(
+                              S.of(context).category,
+                              TextEditingController(),
+                              state.productArgument?.category ?? CategoryEnum.cpu,
+                                  (value) {
+                                cubit.updateProductArgument(state.productArgument!
+                                    .copyWith(category: value));
+                              },
+                              CategoryEnum.getValues(),
+                            ),
+                            const SizedBox(height: 16),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                buildInputWidget<Manufacturer>(
+                                  S.of(context).manufacturer,
+                                  TextEditingController(),
+                                  state.productArgument?.manufacturer,
+                                      (value) {
+                                    cubit.updateProductArgument(state
+                                        .productArgument!
+                                        .copyWith(manufacturer: value));
+                                  },
+                                  Database().manufacturerList,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(S.of(context).status,
+                                    style: AppTextStyle.smallText),
+                                const SizedBox(height: 8),
+                                BlocBuilder<AddProductCubit, AddProductState>(
+                                  builder: (context, state) {
+                                    final status =
+                                    (state.productArgument?.stock ?? 0) > 0
+                                        ? ProductStatusEnum.active
+                                        : ProductStatusEnum.outOfStock;
+
+                                    return Container(
+                                      margin:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 12),
+                                      decoration: BoxDecoration(
+                                        color: status == ProductStatusEnum.active
+                                            ? colorScheme.tertiary
+                                            .withValues(alpha: 0.1)
+                                            : colorScheme.error
+                                            .withValues(alpha: 0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color:
+                                          status == ProductStatusEnum.active
+                                              ? colorScheme.tertiary
+                                              : colorScheme.error,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            status == ProductStatusEnum.active
+                                                ? Icons.check_circle
+                                                : Icons.error,
+                                            color:
+                                            status == ProductStatusEnum.active
+                                                ? Colors.green
+                                                : Colors.red,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            status == ProductStatusEnum.active
+                                                ? S.of(context).active
+                                                : S.of(context).outOfStock,
+                                            style: TextStyle(
+                                              color: status ==
+                                                  ProductStatusEnum.active
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (state.productArgument?.category != null &&
+                      state.productArgument?.category != CategoryEnum.empty)
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${S.of(context).categorySpecifications} ${state.productArgument?.category.toString()}',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme.onSurface,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              buildCategorySpecificInputs(
+                                state.productArgument?.category ??
+                                    CategoryEnum.empty,
+                                state,
+                                cubit,
+                              ),
+                              MultiFieldWithIcon(
+                                controller: enDescriptionController,
+                                hintText: S
+                                    .of(context)
+                                    .enterField(S.of(context).enDescription),
+                                labelText: S.of(context).enDescription,
+                                onChanged: (value) {
+                                  cubit.updateProductArgument(state
+                                      .productArgument!
+                                      .copyWith(enDescription: value));
+                                },
+                                suffixIcon: (state.productArgument!.isEnEmpty &&
+                                    state.productArgument!.isViEmpty)
+                                    ? Icons.add_comment
+                                    : Icons.g_translate,
+                                onSuffixIconPressed: () {
+                                  cubit.generateEnDescription();
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              MultiFieldWithIcon(
+                                controller: viDescriptionController,
+                                hintText: S
+                                    .of(context)
+                                    .enterField(S.of(context).viDescription),
+                                labelText: S.of(context).viDescription,
+                                onChanged: (value) {
+                                  cubit.updateProductArgument(state
+                                      .productArgument!
+                                      .copyWith(viDescription: value));
+                                },
+                                suffixIcon: (state.productArgument!.isEnEmpty &&
+                                    state.productArgument!.isViEmpty)
+                                    ? Icons.add_comment
+                                    : Icons.g_translate,
+                                onSuffixIconPressed: () {
+                                  cubit.generateViDescription();
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -1559,58 +1566,43 @@ class _AddProductState extends State<AddProductScreen> {
       TextEditingController controller,
       T? propertyValue,
       void Function(T?) onChanged,
-      [List<T>? enumValues]) {
+      [List<T>? enumValues,
+        String? suffixText]) {
     return Builder(builder: (BuildContext context) {
       final colorScheme = Theme.of(context).colorScheme;
 
       if (T == DateTime) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(propertyName, style: AppTextStyle.smallText),
+            const SizedBox(height: 4),
             GestureDetector(
               onTap: () async {
-                final DateTime? picked = await showDatePicker(
+                final DateTime? pickedDate = await showDatePicker(
                   context: context,
                   initialDate: propertyValue as DateTime? ?? DateTime.now(),
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2100),
-                  builder: (context, child) {
-                    return Theme(
-                      data: Theme.of(context).copyWith(
-                        colorScheme: ColorScheme.light(
-                          primary: colorScheme.primary,
-                          onPrimary: colorScheme.onPrimary,
-                          onSurface: colorScheme.onSurface,
-                        ),
-                        textButtonTheme: TextButtonThemeData(
-                          style: TextButton.styleFrom(
-                            foregroundColor: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      child: child!,
-                    );
-                  },
                 );
-                if (picked != null) {
-                  onChanged(picked as T?);
+
+                if (pickedDate != null) {
+                  onChanged(pickedDate as T?);
                 }
               },
               child: AbsorbPointer(
                 child: FieldWithIcon(
                   controller: TextEditingController(
-                    text: (propertyValue as DateTime?) != null &&
-                            propertyValue != null
-                        ? DateFormat('dd/MM/yyyy')
-                            .format(propertyValue as DateTime)
+                    text: (propertyValue as DateTime?) != null
+                        ? DateFormat('yyyy-MM-dd')
+                        .format(propertyValue as DateTime)
                         : '',
                   ),
                   readOnly: true,
-                  hintText: propertyName,
+                  hintText: S.of(context).selectField(propertyName),
                   fillColor: colorScheme.surface,
-                  suffixIcon: Icon(Icons.calendar_today,
-                      color: colorScheme.onSurfaceVariant),
+                  textColor: colorScheme.onSurface,
+                  suffixIcon: const Icon(Icons.calendar_today),
                 ),
               ),
             ),
@@ -1618,101 +1610,144 @@ class _AddProductState extends State<AddProductScreen> {
         );
       } else if (enumValues != null) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(propertyName, style: AppTextStyle.smallText),
+            const SizedBox(height: 4),
             GradientDropdown<T>(
               items: (String filter, dynamic infiniteScrollProps) => enumValues,
-              compareFn: (T? d1, T? d2) {
-                if (d1 is Manufacturer && d2 is Manufacturer) {
-                  return d1.manufacturerID == d2.manufacturerID;
-                }
-                return d1 == d2;
-              },
-              itemAsString: (T d) =>
-                  d is Manufacturer ? d.manufacturerName : d.toString(),
-              onChanged: (value) {
-                if (value is Manufacturer) {
-                  final selected =
-                      (enumValues as List<Manufacturer>).firstWhere(
-                    (m) => m.manufacturerID == value.manufacturerID,
-                    orElse: () => value as Manufacturer,
-                  );
-                  onChanged(selected as T?);
-                } else {
-                  onChanged(value);
-                }
-              },
+              compareFn: (T? d1, T? d2) => d1 == d2,
+              itemAsString: (T d) => d.toString(),
+              onChanged: onChanged,
               selectedItem: propertyValue,
-              hintText: propertyName,
+              hintText: S.of(context).selectField(propertyName),
             ),
           ],
         );
       } else {
         TextInputType keyboardType;
-        List<TextInputFormatter> inputFormatters;
+        List<TextInputFormatter> inputFormatters = [];
 
-        if (T == int) {
-          keyboardType = TextInputType.number;
-          inputFormatters = [FilteringTextInputFormatter.digitsOnly];
-        } else if (T == double) {
+        if (T == double) {
           keyboardType = const TextInputType.numberWithOptions(decimal: true);
           inputFormatters = [
             FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-            if (propertyName == "Discount")
-              TextInputFormatter.withFunction((oldValue, newValue) {
-                if (newValue.text.isEmpty) return newValue;
-                try {
-                  final double? value = double.tryParse(newValue.text);
-                  if (value != null && value > 1) {
-                    return oldValue;
-                  }
-                } catch (_) {}
-                return newValue;
-              }),
           ];
+        } else if (T == int) {
+          keyboardType = TextInputType.number;
+          inputFormatters = [FilteringTextInputFormatter.digitsOnly];
         } else {
           keyboardType = TextInputType.text;
           inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'.*'))];
         }
 
         return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(propertyName, style: AppTextStyle.smallText),
-            FieldWithIcon(
+            const SizedBox(height: 4),
+            _FocusableFieldWithIcon(
               controller: controller,
-              hintText: propertyName,
+              hintText: S.of(context).enterField(propertyName),
               onChanged: (value) {
                 if (value.isEmpty) {
-                  onChanged(null);
+                  if (T == String) {
+                    onChanged('' as T?);
+                  } else {
+                    onChanged(null);
+                  }
                 } else if (T == int) {
                   final parsed = int.tryParse(value);
                   if (parsed != null) {
                     onChanged(parsed as T?);
                   }
                 } else if (T == double) {
-                  if (value == '.' || value.endsWith('.')) return;
                   final parsed = double.tryParse(value);
                   if (parsed != null) {
-                    if (propertyName == "Discount" && parsed > 1) {
-                      controller.text = "0";
-                      onChanged(1.0 as T?);
-                    } else {
-                      onChanged(parsed as T?);
-                    }
+                    onChanged(parsed as T?);
+                  } else if (value == '.' || value.endsWith('.')) {
+                    controller.text = value;
+                    controller.selection = TextSelection.fromPosition(
+                      TextPosition(offset: controller.text.length),
+                    );
                   }
                 } else {
                   onChanged(value as T?);
                 }
               },
               fillColor: colorScheme.surface,
+              textColor: colorScheme.onSurface,
               keyboardType: keyboardType,
               inputFormatters: inputFormatters,
+              suffixText: suffixText,
             ),
           ],
         );
       }
     });
+  }
+}
+
+class _FocusableFieldWithIcon extends StatefulWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final ValueChanged<String>? onChanged;
+  final Color fillColor;
+  final Color textColor;
+  final TextInputType keyboardType;
+  final List<TextInputFormatter> inputFormatters;
+  final String? suffixText;
+
+  const _FocusableFieldWithIcon({
+    required this.controller,
+    required this.hintText,
+    this.onChanged,
+    required this.fillColor,
+    required this.textColor,
+    required this.keyboardType,
+    required this.inputFormatters,
+    this.suffixText,
+  });
+
+  @override
+  State<_FocusableFieldWithIcon> createState() => _FocusableFieldWithIconState();
+}
+
+class _FocusableFieldWithIconState extends State<_FocusableFieldWithIcon> {
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_onFocusChange);
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FieldWithIcon(
+      controller: widget.controller,
+      focusNode: _focusNode,
+      hintText: _isFocused ? '' : widget.hintText,
+      onChanged: widget.onChanged,
+      fillColor: widget.fillColor,
+      textColor: widget.textColor,
+      keyboardType: widget.keyboardType,
+      inputFormatters: widget.inputFormatters,
+      suffixText: widget.suffixText,
+    );
   }
 }

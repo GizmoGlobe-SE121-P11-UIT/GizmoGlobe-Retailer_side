@@ -1221,7 +1221,7 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
     BuildContext context, {
     required int importPrice,
     required int sellingPrice,
-    required double discount,
+    required int discount,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     final discountedPrice = sellingPrice * (100 - discount) / 100;
