@@ -26,7 +26,7 @@ class ChatCard extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.primary,
           child: Text(
             displayName.substring(0, 1).toUpperCase(),
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
         ),
         title: Text(

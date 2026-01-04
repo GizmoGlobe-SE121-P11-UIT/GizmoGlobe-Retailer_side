@@ -82,7 +82,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   child: Text(
                     widget.receiverName.substring(0, 1).toUpperCase(),
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                   ),
                 ),
                 const SizedBox(width: 12),

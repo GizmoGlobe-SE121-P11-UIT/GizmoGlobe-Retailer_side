@@ -217,7 +217,9 @@ class _SalesScreenState extends State<SalesScreen> {
                                     child: Container(
                                       margin: const EdgeInsets.only(bottom: 12),
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
                                         borderRadius: BorderRadius.circular(12),
                                         border: Border.all(
                                           color: state.selectedIndex == index
@@ -277,12 +279,13 @@ class _SalesScreenState extends State<SalesScreen> {
                                             const SizedBox(height: 12),
 
                                             // Row 3: Sales Status and Payment Status
-                                            Row(
+                                            Wrap(
+                                              spacing: 8,
+                                              runSpacing: 8,
                                               children: [
                                                 StatusBadge(
                                                     status:
                                                         invoice.salesStatus),
-                                                const SizedBox(width: 8),
                                                 StatusBadge(
                                                     status:
                                                         invoice.paymentStatus),
@@ -345,7 +348,9 @@ class _SalesScreenState extends State<SalesScreen> {
           child: GestureDetector(
             onTap: () {},
             child: Container(
-              width: 300,
+              constraints: const BoxConstraints(
+                maxWidth: 350,
+              ),
               decoration: BoxDecoration(
                 color: Theme.of(dialogContext).colorScheme.surface,
                 borderRadius: BorderRadius.circular(8),
@@ -455,11 +460,13 @@ class _SalesScreenState extends State<SalesScreen> {
                 color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(width: 12),
-              Text(
-                title,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 16,
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],

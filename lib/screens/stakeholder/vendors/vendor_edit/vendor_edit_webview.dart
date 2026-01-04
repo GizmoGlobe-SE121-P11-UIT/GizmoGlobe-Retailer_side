@@ -40,16 +40,23 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 500;
+    
     return Container(
-      width: MediaQuery.of(context).size.width * 0.35,
-      height: MediaQuery.of(context).size.height * 0.4,
-      constraints: const BoxConstraints(
-        maxWidth: 450,
-        maxHeight: 350,
+      width: isMobile
+          ? screenWidth - 16
+          : MediaQuery.of(context).size.width * 0.35,
+      height: isMobile
+          ? MediaQuery.of(context).size.height * 0.7
+          : MediaQuery.of(context).size.height * 0.4,
+      constraints: BoxConstraints(
+        maxWidth: isMobile ? screenWidth - 16 : 450,
+        maxHeight: isMobile ? MediaQuery.of(context).size.height * 0.8 : 350,
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -62,13 +69,13 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
         children: [
           // Header with close and save buttons
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(isMobile ? 6 : 8),
             decoration: BoxDecoration(
               color:
                   Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(isMobile ? 12 : 16),
+                topRight: Radius.circular(isMobile ? 12 : 16),
               ),
             ),
             child: Row(
@@ -76,11 +83,14 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                 Icon(
                   Icons.edit,
                   color: Theme.of(context).colorScheme.primary,
-                  size: 24,
+                  size: isMobile ? 16 : 24,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: isMobile ? 4 : 8),
                 Expanded(
-                  child: GradientText(text: S.of(context).editManufacturer),
+                  child: GradientText(
+                    text: S.of(context).editManufacturer,
+                    fontSize: isMobile ? 12 : 16,
+                  ),
                 ),
                 IconButton(
                   onPressed: () async {
@@ -113,19 +123,27 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                       }
                     }
                   },
-                  icon: const Icon(Icons.check),
+                  icon: Icon(Icons.check, size: isMobile ? 16 : 24),
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     foregroundColor: Theme.of(context).colorScheme.primary,
+                    padding: EdgeInsets.all(isMobile ? 2 : 8),
+                    minimumSize: Size(isMobile ? 28 : 48, isMobile ? 28 : 48),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: isMobile ? VisualDensity.compact : VisualDensity.standard,
                   ),
                 ),
-                const SizedBox(width: 4),
+                SizedBox(width: isMobile ? 0 : 4),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(null),
-                  icon: const Icon(Icons.close),
+                  icon: Icon(Icons.close, size: isMobile ? 16 : 24),
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     foregroundColor: Theme.of(context).colorScheme.primary,
+                    padding: EdgeInsets.all(isMobile ? 2 : 8),
+                    minimumSize: Size(isMobile ? 28 : 48, isMobile ? 28 : 48),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: isMobile ? VisualDensity.compact : VisualDensity.standard,
                   ),
                 ),
               ],
@@ -134,7 +152,7 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
           // Content
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(isMobile ? 6 : 8),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -144,10 +162,10 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                     Card(
                       elevation: 2,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(isMobile ? 10 : 12),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8),
+                        padding: EdgeInsets.all(isMobile ? 10 : 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -156,19 +174,22 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                 Icon(
                                   Icons.business_outlined,
                                   color: Theme.of(context).colorScheme.primary,
-                                  size: 20,
+                                  size: isMobile ? 18 : 20,
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  S.of(context).manufacturerInformation,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                SizedBox(width: isMobile ? 6 : 8),
+                                Flexible(
+                                  child: Text(
+                                    S.of(context).manufacturerInformation,
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 14 : 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: isMobile ? 6 : 8),
                             TextFormField(
                               initialValue: manufacturerName,
                               decoration: InputDecoration(
@@ -176,6 +197,7 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                 labelStyle: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
+                                  fontSize: isMobile ? 14 : 16,
                                 ),
                                 floatingLabelStyle:
                                     WidgetStateTextStyle.resolveWith(
@@ -185,31 +207,38 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                         : Theme.of(context)
                                             .colorScheme
                                             .onSurface,
+                                    fontSize: isMobile ? 14 : 16,
                                   ),
                                 ),
                                 prefixIcon: Icon(
                                   Icons.business,
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
+                                  size: isMobile ? 20 : 24,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: isMobile ? 12 : 16,
+                                  vertical: isMobile ? 12 : 16,
                                 ),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                                   borderSide: BorderSide(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                                   borderSide: BorderSide(
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
+                              style: TextStyle(fontSize: isMobile ? 14 : 16),
                               onChanged: (value) {
                                 if (mounted) {
                                   manufacturerName = value;
@@ -222,14 +251,16 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: isMobile ? 6 : 8),
                             DropdownButtonFormField<ManufacturerStatus>(
                               initialValue: status,
+                              isExpanded: true,
                               decoration: InputDecoration(
                                 labelText: S.of(context).status,
                                 labelStyle: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
+                                  fontSize: isMobile ? 14 : 16,
                                 ),
                                 floatingLabelStyle:
                                     WidgetStateTextStyle.resolveWith(
@@ -239,25 +270,31 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                         : Theme.of(context)
                                             .colorScheme
                                             .onSurface,
+                                    fontSize: isMobile ? 14 : 16,
                                   ),
                                 ),
                                 prefixIcon: Icon(
                                   Icons.info_outline,
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
+                                  size: isMobile ? 20 : 24,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: isMobile ? 12 : 16,
+                                  vertical: isMobile ? 12 : 16,
                                 ),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                                   borderSide: BorderSide(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                                   borderSide: BorderSide(
                                     color:
                                         Theme.of(context).colorScheme.primary,
@@ -276,7 +313,9 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,
+                                      fontSize: isMobile ? 14 : 16,
                                     ),
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 );
                               }).toList(),

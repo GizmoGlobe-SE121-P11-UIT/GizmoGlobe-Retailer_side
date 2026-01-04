@@ -72,8 +72,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       iconSize: 32,
                       onPressed: _showFilterDialog,
                     ),
-                    if (state.userRole == 'admin') const SizedBox(width: 8),
-                    if (state.userRole == 'admin')
+                    if (IncomingInvoicePermissions.canAddInvoice())
+                      const SizedBox(width: 8),
+                    if (IncomingInvoicePermissions.canAddInvoice())
                       GradientIconButton(
                         icon: Icons.add,
                         iconSize: 32,
@@ -249,7 +250,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                                                 invoice),
                                                       ),
                                                       if (IncomingInvoicePermissions
-                                                          .canEditPaymentStatus(invoice))
+                                                          .canEditPaymentStatus(
+                                                              invoice))
                                                         ListTile(
                                                           dense: true,
                                                           leading: Icon(
@@ -292,98 +294,88 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                         ? 1.0
                                         : 0.3,
                                     child: Container(
-                                      margin: const EdgeInsets.only(bottom: 8),
+                                      margin: const EdgeInsets.only(bottom: 12),
                                       decoration: BoxDecoration(
-                                        color: state.selectedIndex == index
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .primary
-                                                .withValues(alpha: 0.1)
-                                            : Theme.of(context)
-                                                .colorScheme
-                                                .surface,
-                                        borderRadius: BorderRadius.circular(8),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .surface,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: state.selectedIndex == index
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .outline
+                                                  .withValues(alpha: 0.2),
+                                          width: state.selectedIndex == index
+                                              ? 2
+                                              : 1,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black
+                                                .withValues(alpha: 0.08),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
                                       ),
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 12,
-                                        ),
-                                        child: Row(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            CircleAvatar(
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryContainer,
-                                              child: Icon(
-                                                Icons.inventory,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    '${S.of(context).invoiceDetails} #${invoice.incomingInvoiceID}',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurface,
-                                                    ),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Wrap(
-                                                    spacing: 8,
-                                                    runSpacing: 4,
-                                                    crossAxisAlignment:
-                                                        WrapCrossAlignment
-                                                            .center,
-                                                    children: [
-                                                      StatusBadge(
-                                                          status:
-                                                              invoice.status),
-                                                      Text(
-                                                        DateFormat('dd/MM/yyyy')
-                                                            .format(
-                                                                invoice.date),
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .onSurface
-                                                                  .withValues(
-                                                                      alpha:
-                                                                          0.6),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
+                                            // Row 1: Invoice ID
                                             Text(
-                                              Helper.toCurrencyFormat(
-                                                  invoice.totalPrice),
+                                              '${S.of(context).invoiceDetails} #${invoice.incomingInvoiceID}',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 16,
                                                 color: Theme.of(context)
                                                     .colorScheme
+                                                    .onSurface,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 12),
+
+                                            // Row 2: Price
+                                            Text(
+                                              Helper.toCurrencyFormat(
+                                                  invoice.totalPrice),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: Theme.of(context)
+                                                    .colorScheme
                                                     .error,
                                               ),
+                                            ),
+                                            const SizedBox(height: 12),
+
+                                            // Row 3: Status and Date
+                                            Wrap(
+                                              spacing: 8,
+                                              runSpacing: 8,
+                                              children: [
+                                                StatusBadge(
+                                                    status: invoice.status),
+                                                Text(
+                                                  DateFormat('dd/MM/yyyy')
+                                                      .format(invoice.date),
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withValues(alpha: 0.6),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),

@@ -30,29 +30,38 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
   Widget build(BuildContext context) {
     return BlocBuilder<IncomingAddCubit, IncomingAddState>(
       builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isMobile = screenWidth < 500;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.9,
-          constraints: const BoxConstraints(
-            maxWidth: 1200,
-            maxHeight: 800,
+          width:
+              isMobile ? screenWidth : MediaQuery.of(context).size.width * 0.8,
+          height: isMobile
+              ? MediaQuery.of(context).size.height
+              : MediaQuery.of(context).size.height * 0.9,
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? double.infinity : 1200,
+            maxHeight: isMobile ? double.infinity : 800,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
+            borderRadius:
+                isMobile ? BorderRadius.zero : BorderRadius.circular(16),
+            boxShadow: isMobile
+                ? []
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
           ),
           child: Column(
             children: [
               // Header (match sales add)
               Container(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(isMobile ? 16 : 24),
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
@@ -107,7 +116,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
               // Main Content Sections
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: EdgeInsets.all(isMobile ? 12 : 24),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +125,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                         Card(
                           elevation: 2,
                           child: Padding(
-                            padding: const EdgeInsets.all(20),
+                            padding: EdgeInsets.all(isMobile ? 12 : 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -126,14 +135,17 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                                       Icons.business,
                                       color:
                                           Theme.of(context).colorScheme.primary,
-                                      size: 20,
+                                      size: isMobile ? 18 : 20,
                                     ),
                                     const SizedBox(width: 8),
-                                    Text(
-                                      S.of(context).selectManufacturer,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                    Expanded(
+                                      child: Text(
+                                        S.of(context).selectManufacturer,
+                                        style: TextStyle(
+                                          fontSize: isMobile ? 16 : 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
@@ -141,6 +153,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                                 const SizedBox(height: 16),
                                 DropdownButtonFormField<Manufacturer>(
                                   decoration: InputDecoration(
+                                    labelText: S.of(context).selectManufacturer,
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -155,7 +168,17 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                                           .withValues(alpha: 0.8),
                                     ),
                                   ),
+                                  isExpanded: true,
                                   initialValue: state.selectedManufacturer,
+                                  hint: Text(
+                                    S.of(context).selectManufacturer,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface
+                                          .withValues(alpha: 0.7),
+                                    ),
+                                  ),
                                   items:
                                       state.manufacturers.map((manufacturer) {
                                     return DropdownMenuItem(
@@ -163,6 +186,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                                       child: Text(
                                         manufacturer.manufacturerName,
                                         style: const TextStyle(fontSize: 16),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     );
                                   }).toList(),
@@ -184,51 +208,116 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                           _buildDetailsSection(state),
                           const SizedBox(height: 24),
                           // Summary
-                          Card(
-                            elevation: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.calculate,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        size: 20,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        S.of(context).totalPrice,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                          Builder(
+                            builder: (context) {
+                              final isMobileContext =
+                                  MediaQuery.of(context).size.width < 500;
+                              return Card(
+                                elevation: 2,
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.all(isMobileContext ? 12 : 20),
+                                  child: isMobileContext
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.calculate,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  size: 18,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    S.of(context).totalPrice,
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              Helper.toCurrencyFormat(
+                                                  state.totalPrice),
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context).colorScheme.tertiary,
+                                              ),
+                                              maxLines: 2,
+                                            ),
+                                          ],
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.calculate,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    size: 20,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Flexible(
+                                                    child: Text(
+                                                      S.of(context).totalPrice,
+                                                      style: const TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Flexible(
+                                              child: Text(
+                                                Helper.toCurrencyFormat(
+                                                    state.totalPrice),
+                                                style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Theme.of(context).colorScheme.tertiary,
+                                                ),
+                                                maxLines: 2,
+                                                textAlign: TextAlign.right,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    Helper.toCurrencyFormat(state.totalPrice),
-                                    style: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            },
                           ),
                           const SizedBox(height: 24),
                           // Payment status
                           Card(
                             elevation: 2,
                             child: Padding(
-                              padding: const EdgeInsets.all(20),
+                              padding: EdgeInsets.all(isMobile ? 12 : 20),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -239,14 +328,17 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .primary,
-                                        size: 20,
+                                        size: isMobile ? 18 : 20,
                                       ),
                                       const SizedBox(width: 8),
-                                      Text(
-                                        S.of(context).paymentStatus,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                      Expanded(
+                                        child: Text(
+                                          S.of(context).paymentStatus,
+                                          style: TextStyle(
+                                            fontSize: isMobile ? 16 : 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ],
@@ -303,54 +395,109 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
   }
 
   Widget _buildProductsSection(IncomingAddState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.inventory_2,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      S.of(context).products,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+            isMobile
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.inventory_2,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              S.of(context).products,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                ElevatedButton.icon(
-                  onPressed: () => _showAddProductDialog(context),
-                  icon: Icon(
-                    Icons.add,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () => _showAddProductDialog(context),
+                          icon: Icon(
+                            Icons.add,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                          label: Text(S.of(context).addProduct),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.inventory_2,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            S.of(context).products,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () => _showAddProductDialog(context),
+                        icon: Icon(
+                          Icons.add,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        label: Text(S.of(context).addProduct),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  label: Text(S.of(context).addProduct),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(height: 16),
             if (state.products.isEmpty)
               Container(
@@ -380,7 +527,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'No products available for this manufacturer',
+                        S.of(context).noProductsAvailableForManufacturer,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 16,
@@ -390,13 +537,15 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                   ),
                 ),
               )
+            else if (isMobile)
+              const SizedBox.shrink()
             else
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 3,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: isMobile ? 2 : 3,
+                  childAspectRatio: isMobile ? 1.3 : 1.6,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
                 ),
@@ -422,28 +571,36 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(12),
+                          padding: EdgeInsets.all(isMobile ? 10 : 12),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                product.productName,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    product.productName,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: isMobile ? 13 : 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: isMobile ? 6 : 8),
                               Text(
                                 Helper.toCurrencyFormat(product.importPrice),
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.primary,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  fontSize: isMobile ? 12 : 13,
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
@@ -458,10 +615,12 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
   }
 
   Widget _buildDetailsSection(IncomingAddState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -511,7 +670,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'No products added to invoice',
+                        S.of(context).noProductsAddedYet,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 16,
@@ -544,7 +703,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(isMobile ? 12 : 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -553,14 +712,19 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                               Expanded(
                                 child: Text(
                                   product.productName,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                    fontSize: isMobile ? 15 : 16,
                                   ),
+                                  maxLines: isMobile ? 3 : null,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.edit),
+                                icon: Icon(
+                                  Icons.edit,
+                                  size: isMobile ? 20 : 24,
+                                ),
                                 color: Theme.of(context).colorScheme.primary,
                                 onPressed: () => _showEditDetailDialog(
                                   context,
@@ -568,113 +732,423 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                                   product,
                                   detail,
                                 ),
-                                constraints: const BoxConstraints(
-                                  minWidth: 40,
-                                  minHeight: 40,
+                                constraints: BoxConstraints(
+                                  minWidth: isMobile ? 36 : 40,
+                                  minHeight: isMobile ? 36 : 40,
                                 ),
+                                padding: EdgeInsets.zero,
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete),
+                                icon: Icon(
+                                  Icons.delete,
+                                  size: isMobile ? 20 : 24,
+                                ),
                                 color: Theme.of(context).colorScheme.error,
                                 onPressed: () => cubit.removeDetail(index),
-                                constraints: const BoxConstraints(
-                                  minWidth: 40,
-                                  minHeight: 40,
+                                constraints: BoxConstraints(
+                                  minWidth: isMobile ? 36 : 40,
+                                  minHeight: isMobile ? 36 : 40,
                                 ),
+                                padding: EdgeInsets.zero,
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Import Price: ${Helper.toCurrencyFormat(detail.importPrice)}',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withValues(alpha: 0.8),
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryContainer
-                                      .withValues(alpha: 0.3),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                          SizedBox(height: isMobile ? 10 : 12),
+                          isMobile
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.remove_circle_outline,
-                                        color: detail.quantity > 1
-                                            ? Theme.of(context)
-                                                .colorScheme
-                                                .primary
-                                            : Theme.of(context)
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${S.of(context).importPrice}: ',
+                                          style: TextStyle(
+                                            color: Theme.of(context)
                                                 .colorScheme
                                                 .onSurface
-                                                .withValues(alpha: 0.3),
-                                        size: 20,
-                                      ),
-                                      onPressed: detail.quantity > 1
-                                          ? () => cubit.updateDetailQuantity(
-                                              index, detail.quantity - 1)
-                                          : null,
-                                      constraints: const BoxConstraints(
-                                        minWidth: 32,
-                                        minHeight: 32,
+                                                .withValues(alpha: 0.7),
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            Helper.toCurrencyFormat(
+                                                detail.importPrice),
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface
+                                                  .withValues(alpha: 0.9),
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: isMobile ? 10 : 12),
+                                    isMobile
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryContainer
+                                                      .withValues(alpha: 0.3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    IconButton(
+                                                      icon: Icon(
+                                                        Icons
+                                                            .remove_circle_outline,
+                                                        color: detail.quantity >
+                                                                1
+                                                            ? Theme.of(context)
+                                                                .colorScheme
+                                                                .primary
+                                                            : Theme.of(context)
+                                                                .colorScheme
+                                                                .onSurface
+                                                                .withValues(
+                                                                    alpha: 0.3),
+                                                        size: 20,
+                                                      ),
+                                                      onPressed: detail
+                                                                  .quantity >
+                                                              1
+                                                          ? () => cubit
+                                                              .updateDetailQuantity(
+                                                                  index,
+                                                                  detail.quantity -
+                                                                      1)
+                                                          : null,
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                        minWidth: 32,
+                                                        minHeight: 32,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width: 48,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 8),
+                                                      child: Text(
+                                                        '${detail.quantity}',
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 16,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                    IconButton(
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .add_circle_outline,
+                                                        color: Colors.blue,
+                                                        size: 20,
+                                                      ),
+                                                      onPressed: () => cubit
+                                                          .updateDetailQuantity(
+                                                        index,
+                                                        detail.quantity + 1,
+                                                      ),
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                        minWidth: 32,
+                                                        minHeight: 32,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    S.of(context).subtotal,
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface
+                                                          .withValues(
+                                                              alpha: 0.6),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 2),
+                                                  Text(
+                                                    Helper.toCurrencyFormat(
+                                                        detail.subtotal),
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                      color: Colors.green,
+                                                    ),
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                        : Row(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryContainer
+                                                      .withValues(alpha: 0.3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    IconButton(
+                                                      icon: Icon(
+                                                        Icons
+                                                            .remove_circle_outline,
+                                                        color: detail.quantity >
+                                                                1
+                                                            ? Theme.of(context)
+                                                                .colorScheme
+                                                                .primary
+                                                            : Theme.of(context)
+                                                                .colorScheme
+                                                                .onSurface
+                                                                .withValues(
+                                                                    alpha: 0.3),
+                                                        size: 20,
+                                                      ),
+                                                      onPressed: detail
+                                                                  .quantity >
+                                                              1
+                                                          ? () => cubit
+                                                              .updateDetailQuantity(
+                                                                  index,
+                                                                  detail.quantity -
+                                                                      1)
+                                                          : null,
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                        minWidth: 32,
+                                                        minHeight: 32,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width: 48,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 8),
+                                                      child: Text(
+                                                        '${detail.quantity}',
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 16,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                    IconButton(
+                                                      icon: const Icon(
+                                                        Icons
+                                                            .add_circle_outline,
+                                                        color: Colors.blue,
+                                                        size: 20,
+                                                      ),
+                                                      onPressed: () => cubit
+                                                          .updateDetailQuantity(
+                                                        index,
+                                                        detail.quantity + 1,
+                                                      ),
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                        minWidth: 32,
+                                                        minHeight: 32,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const Spacer(),
+                                              Flexible(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      S.of(context).subtotal,
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface
+                                                            .withValues(
+                                                                alpha: 0.6),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 2),
+                                                    Text(
+                                                      Helper.toCurrencyFormat(
+                                                          detail.subtotal),
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                        color: Colors.green,
+                                                      ),
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        '${S.of(context).importPrice}: ${Helper.toCurrencyFormat(detail.importPrice)}',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.8),
+                                          fontSize: 14,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     Container(
-                                      width: 48,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                      child: Text(
-                                        '${detail.quantity}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                        ),
-                                        textAlign: TextAlign.center,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer
+                                            .withValues(alpha: 0.3),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.remove_circle_outline,
+                                              color: detail.quantity > 1
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                  : Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface
+                                                      .withValues(alpha: 0.3),
+                                              size: 20,
+                                            ),
+                                            onPressed: detail.quantity > 1
+                                                ? () =>
+                                                    cubit.updateDetailQuantity(
+                                                        index,
+                                                        detail.quantity - 1)
+                                                : null,
+                                            constraints: const BoxConstraints(
+                                              minWidth: 32,
+                                              minHeight: 32,
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 48,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                            child: Text(
+                                              '${detail.quantity}',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 16,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(
+                                              Icons.add_circle_outline,
+                                              color: Colors.blue,
+                                              size: 20,
+                                            ),
+                                            onPressed: () =>
+                                                cubit.updateDetailQuantity(
+                                              index,
+                                              detail.quantity + 1,
+                                            ),
+                                            constraints: const BoxConstraints(
+                                              minWidth: 32,
+                                              minHeight: 32,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.add_circle_outline,
-                                        color: Colors.blue,
-                                        size: 20,
-                                      ),
-                                      onPressed: () =>
-                                          cubit.updateDetailQuantity(
-                                        index,
-                                        detail.quantity + 1,
-                                      ),
-                                      constraints: const BoxConstraints(
-                                        minWidth: 32,
-                                        minHeight: 32,
-                                      ),
+                                    const SizedBox(width: 16),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          S.of(context).subtotal,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withValues(alpha: 0.6),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          Helper.toCurrencyFormat(
+                                              detail.subtotal),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.green,
+                                          ),
+                                          maxLines: 2,
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ),
-                              const SizedBox(width: 16),
-                              Text(
-                                Helper.toCurrencyFormat(detail.subtotal),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.green,
-                                ),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
@@ -715,7 +1189,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
       labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
       floatingLabelStyle:
           TextStyle(color: Theme.of(context).colorScheme.primary),
-      hintStyle: TextStyle(color: Colors.grey[400]),
+      hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
       fillColor: Theme.of(context).colorScheme.surface,
       filled: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -860,7 +1334,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
       labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
       floatingLabelStyle:
           TextStyle(color: Theme.of(context).colorScheme.primary),
-      hintStyle: TextStyle(color: Colors.grey[400]),
+      hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
       fillColor: Theme.of(context).cardColor,
       filled: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

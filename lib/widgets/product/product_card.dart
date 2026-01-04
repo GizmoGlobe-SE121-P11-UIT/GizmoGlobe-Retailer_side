@@ -106,123 +106,119 @@ class ProductCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
 
-                      // Row 2: Product details
-                      Row(
-                        children: [
-                          // Stock information
-                          Expanded(
-                            flex: 2,
-                            child: Row(
+                      // Row 2: Product details - responsive layout
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isNarrow = constraints.maxWidth < 280;
+
+                          if (isNarrow) {
+                            // Stack into 2 rows for narrow screens
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  Icons.inventory_2_outlined,
-                                  size: 14,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+                                // First row: Stock and Sales
+                                Row(
+                                  children: [
+                                    _buildDetailItem(
+                                      context,
+                                      Icons.inventory_2_outlined,
+                                      '${product.stock}',
+                                      product.stock > 0
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                          : Theme.of(context).colorScheme.error,
+                                    ),
+                                    const SizedBox(width: 16),
+                                    _buildDetailItem(
+                                      context,
+                                      Icons.trending_up,
+                                      '${product.sales}',
+                                      Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '${product.stock}',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: product.stock > 0
-                                        ? Theme.of(context)
+                                const SizedBox(height: 4),
+                                // Second row: Prices
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildPriceItem(
+                                        context,
+                                        Icons.file_download_outlined,
+                                        Helper.toCurrencyFormat(
+                                            product.importPrice),
+                                        Theme.of(context)
                                             .colorScheme
-                                            .onSurface
-                                        : Theme.of(context).colorScheme.error,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                            .onSurfaceVariant,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: _buildPriceItem(
+                                        context,
+                                        Icons.file_upload_outlined,
+                                        Helper.toCurrencyFormat(
+                                            product.sellingPrice),
+                                        Theme.of(context).colorScheme.primary,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
-                            ),
-                          ),
+                            );
+                          }
 
-                          // Sales information
-                          Expanded(
-                            flex: 2,
-                            child: Row(
-                              children: [
-                                Icon(
+                          // Original single row for wider screens
+                          return Row(
+                            children: [
+                              // Stock information
+                              Expanded(
+                                flex: 2,
+                                child: _buildDetailItem(
+                                  context,
+                                  Icons.inventory_2_outlined,
+                                  '${product.stock}',
+                                  product.stock > 0
+                                      ? Theme.of(context).colorScheme.onSurface
+                                      : Theme.of(context).colorScheme.error,
+                                ),
+                              ),
+                              // Sales information
+                              Expanded(
+                                flex: 2,
+                                child: _buildDetailItem(
+                                  context,
                                   Icons.trending_up,
-                                  size: 14,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
                                   '${product.sales}',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                  Theme.of(context).colorScheme.onSurface,
                                 ),
-                              ],
-                            ),
-                          ),
-
-                          // Import price with download icon
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: [
-                                Icon(
+                              ),
+                              // Import price
+                              Expanded(
+                                flex: 3,
+                                child: _buildPriceItem(
+                                  context,
                                   Icons.file_download_outlined,
-                                  size: 14,
-                                  color: Theme.of(context)
+                                  Helper.toCurrencyFormat(product.importPrice),
+                                  Theme.of(context)
                                       .colorScheme
                                       .onSurfaceVariant,
                                 ),
-                                const SizedBox(width: 2),
-                                Flexible(
-                                  child: Text(
-                                    Helper.toCurrencyFormat(
-                                        product.importPrice),
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          // Selling price with upload icon
-                          Expanded(
-                            flex: 3,
-                            child: Row(
-                              children: [
-                                Icon(
+                              ),
+                              // Selling price
+                              Expanded(
+                                flex: 3,
+                                child: _buildPriceItem(
+                                  context,
                                   Icons.file_upload_outlined,
-                                  size: 14,
-                                  color: Theme.of(context).colorScheme.primary,
+                                  Helper.toCurrencyFormat(product.sellingPrice),
+                                  Theme.of(context).colorScheme.primary,
                                 ),
-                                const SizedBox(width: 2),
-                                Flexible(
-                                  child: Text(
-                                    Helper.toCurrencyFormat(
-                                        product.sellingPrice),
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -252,5 +248,54 @@ class ProductCard extends StatelessWidget {
       default:
         return Icons.device_unknown;
     }
+  }
+
+  Widget _buildDetailItem(
+      BuildContext context, IconData icon, String value, Color valueColor) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          size: 14,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 12,
+            color: valueColor,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPriceItem(
+      BuildContext context, IconData icon, String value, Color color) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
+          size: 14,
+          color: color,
+        ),
+        const SizedBox(width: 2),
+        Flexible(
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 11,
+              color: color,
+              fontWeight: FontWeight.w500,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
   }
 }

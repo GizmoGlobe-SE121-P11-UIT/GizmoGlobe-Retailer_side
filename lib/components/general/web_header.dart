@@ -6,6 +6,8 @@ class WebHeader extends StatelessWidget {
   final VoidCallback? onChatPressed;
   final List<Widget>? actions;
   final bool isSidebarCompact;
+  final bool isMobileMode;
+  final VoidCallback? onMenuPressed;
 
   const WebHeader({
     super.key,
@@ -13,6 +15,8 @@ class WebHeader extends StatelessWidget {
     this.onChatPressed,
     this.actions,
     this.isSidebarCompact = false,
+    this.isMobileMode = false,
+    this.onMenuPressed,
   });
 
   @override
@@ -46,6 +50,18 @@ class WebHeader extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
+            // Hamburger menu for mobile mode
+            if (isMobileMode) ...[
+              IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: colorScheme.onSurface,
+                ),
+                onPressed: onMenuPressed,
+                tooltip: 'Menu',
+              ),
+              const SizedBox(width: 8),
+            ],
             // Logo/Brand section
             InkWell(
               onTap: () {

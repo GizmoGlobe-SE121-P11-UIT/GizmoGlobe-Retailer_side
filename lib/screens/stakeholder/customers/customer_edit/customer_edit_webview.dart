@@ -50,12 +50,14 @@ class _CustomerEditWebViewState extends State<CustomerEditWebView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+    final containerWidth = isMobile ? screenWidth * 0.95 : screenWidth * 0.35;
+
     return Container(
-      width: MediaQuery.of(context).size.width * 0.3,
-      height: MediaQuery.of(context).size.height * 0.3,
+      width: containerWidth.clamp(320.0, 450.0),
       constraints: const BoxConstraints(
-        maxWidth: 400,
-        maxHeight: 300,
+        maxWidth: 500,
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -69,6 +71,7 @@ class _CustomerEditWebViewState extends State<CustomerEditWebView> {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           // Header with close and save buttons
           Container(
@@ -141,178 +144,169 @@ class _CustomerEditWebViewState extends State<CustomerEditWebView> {
             ),
           ),
           // Content
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(8),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Customer Information Card
-                    Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.person_outline,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(8),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Customer Information Card
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.person_outline,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
                                   S.of(context).customerInformation,
                                   style: const TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            TextFormField(
-                              focusNode: _nameFocusNode,
-                              initialValue: customerName,
-                              decoration: InputDecoration(
-                                labelText: S.of(context).fullName,
-                                labelStyle: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                floatingLabelStyle:
-                                    WidgetStateTextStyle.resolveWith(
-                                  (states) => TextStyle(
-                                    color: states.contains(WidgetState.focused)
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                  ),
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.person,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              textInputAction: TextInputAction.next,
-                              onChanged: (value) {
-                                if (mounted) {
-                                  setState(() {
-                                    customerName = value;
-                                  });
-                                }
-                              },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return S.of(context).nameIsRequired;
-                                }
-                                if (value.length < 2) {
-                                  return S.of(context).nameMin2Chars;
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 8),
-                            TextFormField(
-                              focusNode: _phoneFocusNode,
-                              initialValue: phoneNumber,
-                              decoration: InputDecoration(
-                                labelText: S.of(context).phoneNumber,
-                                labelStyle: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                floatingLabelStyle:
-                                    WidgetStateTextStyle.resolveWith(
-                                  (states) => TextStyle(
-                                    color: states.contains(WidgetState.focused)
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                  ),
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.phone,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                                hintText: '+84 xxx xxx xxx',
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          TextFormField(
+                            focusNode: _nameFocusNode,
+                            initialValue: customerName,
+                            decoration: InputDecoration(
+                              labelText: S.of(context).fullName,
+                              labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
-                              keyboardType: TextInputType.phone,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                  RegExp(r'[\d\s+-]'),
+                              floatingLabelStyle:
+                                  WidgetStateTextStyle.resolveWith(
+                                (states) => TextStyle(
+                                  color: states.contains(WidgetState.focused)
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
                                 ),
-                              ],
-                              onChanged: (value) {
-                                if (mounted) {
-                                  setState(() {
-                                    phoneNumber = value;
-                                  });
-                                }
-                              },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return S.of(context).phoneNumberIsRequired;
-                                }
-                                if (!isValidPhone(value)) {
-                                  return S
-                                      .of(context)
-                                      .pleaseEnterValidPhoneNumber;
-                                }
-                                return null;
-                              },
+                              ),
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
+                            textInputAction: TextInputAction.next,
+                            onChanged: (value) {
+                              if (mounted) {
+                                setState(() {
+                                  customerName = value;
+                                });
+                              }
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return S.of(context).nameIsRequired;
+                              }
+                              if (value.length < 2) {
+                                return S.of(context).nameMin2Chars;
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          TextFormField(
+                            focusNode: _phoneFocusNode,
+                            initialValue: phoneNumber,
+                            decoration: InputDecoration(
+                              labelText: S.of(context).phoneNumber,
+                              labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              floatingLabelStyle:
+                                  WidgetStateTextStyle.resolveWith(
+                                (states) => TextStyle(
+                                  color: states.contains(WidgetState.focused)
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                              prefixIcon: Icon(
+                                Icons.phone,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              hintText: '+84 xxx xxx xxx',
+                            ),
+                            keyboardType: TextInputType.phone,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[\d\s+-]'),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              if (mounted) {
+                                setState(() {
+                                  phoneNumber = value;
+                                });
+                              }
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return S.of(context).phoneNumberIsRequired;
+                              }
+                              if (!isValidPhone(value)) {
+                                return S
+                                    .of(context)
+                                    .pleaseEnterValidPhoneNumber;
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -74,6 +74,8 @@ class AppLocalizations {
   String get salesStatus => _getTranslation('salesStatus');
   String get totalAmount => _getTranslation('totalAmount');
   String get noProductsAddedYet => _getTranslation('noProductsAddedYet');
+  String get noProductsAvailableForManufacturer =>
+      _getTranslation('noProductsAvailableForManufacturer');
   String get price => _getTranslation('price');
   String get availableStock => _getTranslation('availableStock');
   String get pleaseSelectCustomerFirst =>
@@ -286,6 +288,8 @@ class AppLocalizations {
   String get newRatings => _getTranslation('newRatings');
   String get repliedRatings => _getTranslation('repliedRatings');
   String get ratingsAndReplies => _getTranslation('ratingsAndReplies');
+  String get clickToManageImages => _getTranslation('clickToManageImages');
+  String get manage => _getTranslation('manage');
   String get writeAReply => _getTranslation('writeAReply');
   String get from => _getTranslation('from');
   String get to => _getTranslation('to');
@@ -588,6 +592,7 @@ class AppLocalizations {
   String get electricalSpeed => _getTranslation('electricalSpeed');
   String get generation => _getTranslation('generation');
   String get interfaceType => _getTranslation('interfaceType');
+  String get driveFormFactor => _getTranslation('driveFormFactor');
   String get maxWattage => _getTranslation('maxWattage');
   String get psuModularity => _getTranslation('psuModularity');
   String get port => _getTranslation('port');
@@ -603,6 +608,8 @@ class AppLocalizations {
   String get generateBusinessReport =>
       _getTranslation('generateBusinessReport');
   String get noData => _getTranslation('noData');
+  String get productCategoryDistribution =>
+      _getTranslation('productCategoryDistribution');
 
   // Methods with parameters
   String lowStockAlert(int count) =>
@@ -653,6 +660,13 @@ class AppLocalizations {
           .replaceAll('{name}', name);
   String sendingVerificationLink(String email) =>
       _getTranslation('sendingVerificationLink').replaceAll('{email}', email);
+  // Voucher distribution types
+  String get distributionPublic => _getTranslation('distributionPublic');
+  String get distributionRewards => _getTranslation('distributionRewards');
+  String get distributionStaffIssued =>
+      _getTranslation('distributionStaffIssued');
+  String rewardsFor(String points) =>
+      _getTranslation('rewardsFor').replaceAll('{points}', points);
 
   String _getTranslation(String key) {
     final translations = locale.languageCode == 'vi' ? _vi : _en;

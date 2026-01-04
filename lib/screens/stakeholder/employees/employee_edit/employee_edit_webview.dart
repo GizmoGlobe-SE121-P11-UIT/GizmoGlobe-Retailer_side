@@ -57,9 +57,15 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+    final containerWidth = isMobile ? screenWidth * 0.95 : screenWidth * 0.4;
+
     return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
-      height: MediaQuery.of(context).size.height * 0.35,
+      width: containerWidth.clamp(380.0, 500.0),
+      constraints: const BoxConstraints(
+        maxWidth: 550,
+      ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
@@ -72,6 +78,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           // Header with close and save buttons
           Container(
@@ -145,225 +152,208 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
             ),
           ),
           // Content
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(8),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Employee Information Card
-                    Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextFormField(
-                              focusNode: _nameFocusNode,
-                              initialValue: employeeName,
-                              decoration: InputDecoration(
-                                labelText: S.of(context).fullName,
-                                labelStyle: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                floatingLabelStyle:
-                                    WidgetStateTextStyle.resolveWith(
-                                  (states) => TextStyle(
-                                    color: states.contains(WidgetState.focused)
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                  ),
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.person,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(8),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Employee Information Card
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormField(
+                            focusNode: _nameFocusNode,
+                            initialValue: employeeName,
+                            decoration: InputDecoration(
+                              labelText: S.of(context).fullName,
+                              labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              floatingLabelStyle:
+                                  WidgetStateTextStyle.resolveWith(
+                                (states) => TextStyle(
+                                  color: states.contains(WidgetState.focused)
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
                                 ),
                               ),
-                              textInputAction: TextInputAction.next,
-                              onChanged: (value) {
-                                if (mounted) {
-                                  setState(() {
-                                    employeeName = value;
-                                  });
-                                }
-                              },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return S.of(context).pleaseEnterName;
-                                }
-                                return null;
-                              },
+                              prefixIcon: Icon(
+                                Icons.person,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
                             ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              focusNode: _phoneFocusNode,
-                              initialValue: phoneNumber,
-                              decoration: InputDecoration(
-                                labelText: S.of(context).phoneNumber,
-                                labelStyle: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                floatingLabelStyle:
-                                    WidgetStateTextStyle.resolveWith(
-                                  (states) => TextStyle(
-                                    color: states.contains(WidgetState.focused)
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                  ),
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.phone,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                                hintText: '+84 xxx xxx xxx',
+                            textInputAction: TextInputAction.next,
+                            onChanged: (value) {
+                              if (mounted) {
+                                setState(() {
+                                  employeeName = value;
+                                });
+                              }
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return S.of(context).pleaseEnterName;
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            focusNode: _phoneFocusNode,
+                            initialValue: phoneNumber,
+                            decoration: InputDecoration(
+                              labelText: S.of(context).phoneNumber,
+                              labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
-                              keyboardType: TextInputType.phone,
-                              onChanged: (value) {
-                                if (mounted) {
-                                  setState(() {
-                                    phoneNumber = value;
-                                  });
-                                }
-                              },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return S.of(context).pleaseEnterPhoneNumber;
-                                }
-                                return null;
-                              },
+                              floatingLabelStyle:
+                                  WidgetStateTextStyle.resolveWith(
+                                (states) => TextStyle(
+                                  color: states.contains(WidgetState.focused)
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                              prefixIcon: Icon(
+                                Icons.phone,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              hintText: '+84 xxx xxx xxx',
                             ),
-                            const SizedBox(height: 16),
-                            DropdownButtonFormField<RoleEnum>(
-                              initialValue: role,
-                              decoration: InputDecoration(
-                                labelText: S.of(context).role,
-                                labelStyle: TextStyle(
+                            keyboardType: TextInputType.phone,
+                            onChanged: (value) {
+                              if (mounted) {
+                                setState(() {
+                                  phoneNumber = value;
+                                });
+                              }
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return S.of(context).pleaseEnterPhoneNumber;
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          DropdownButtonFormField<RoleEnum>(
+                            initialValue: role,
+                            decoration: InputDecoration(
+                              labelText: S.of(context).role,
+                              labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              floatingLabelStyle:
+                                  WidgetStateTextStyle.resolveWith(
+                                (states) => TextStyle(
+                                  color: states.contains(WidgetState.focused)
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                              prefixIcon: Icon(
+                                Icons.work,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
                                 ),
-                                floatingLabelStyle:
-                                    WidgetStateTextStyle.resolveWith(
-                                  (states) => TextStyle(
-                                    color: states.contains(WidgetState.focused)
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                  ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
-                                prefixIcon: Icon(
-                                  Icons.work,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
+                              ),
+                              enabled:
+                                  StakeholderPermissions.canPromoteEmployees(),
+                            ),
+                            dropdownColor: Theme.of(context).cardColor,
+                            items: RoleEnum.values
+                                .where((role) => role != RoleEnum.owner)
+                                .map((role) {
+                              return DropdownMenuItem(
+                                value: role,
+                                child: Text(
+                                  role.localizedName(context),
+                                  style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
+                                    fontStyle: StakeholderPermissions
+                                            .canPromoteEmployees()
+                                        ? FontStyle.normal
+                                        : FontStyle.italic,
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                                enabled:
-                                    StakeholderPermissions.canPromoteEmployees(),
-                              ),
-                              dropdownColor: Theme.of(context).cardColor,
-                              items: RoleEnum.values
-                                  .where((role) => role != RoleEnum.owner)
-                                  .map((role) {
-                                return DropdownMenuItem(
-                                  value: role,
-                                  child: Text(
-                                    role.localizedName(context),
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      fontStyle: StakeholderPermissions.canPromoteEmployees()
-                                          ? FontStyle.normal
-                                          : FontStyle.italic,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged:
-                                  StakeholderPermissions.canPromoteEmployees()
-                                      ? (RoleEnum? value) {
-                                          if (value != null && mounted) {
-                                            setState(() => role = value);
-                                          }
+                              );
+                            }).toList(),
+                            onChanged:
+                                StakeholderPermissions.canPromoteEmployees()
+                                    ? (RoleEnum? value) {
+                                        if (value != null && mounted) {
+                                          setState(() => role = value);
                                         }
-                                      : null,
-                              validator: (value) {
-                                if (value == null) {
-                                  return S.of(context).pleaseSelectRole;
-                                }
-                                return null;
-                              },
-                            ),
-                          ],
-                        ),
+                                      }
+                                    : null,
+                            validator: (value) {
+                              if (value == null) {
+                                return S.of(context).pleaseSelectRole;
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

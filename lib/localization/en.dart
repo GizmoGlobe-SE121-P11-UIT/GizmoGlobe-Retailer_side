@@ -53,6 +53,8 @@ const Map<String, String> en = {
   'salesStatus': 'Sales Status',
   'totalAmount': 'Total Amount',
   'noProductsAddedYet': 'No products added yet',
+  'noProductsAvailableForManufacturer':
+      'No products available for this manufacturer',
   'price': 'Price',
   'availableStock': 'Available stock',
   'pleaseSelectCustomerFirst': 'Please select a customer first',
@@ -267,6 +269,8 @@ const Map<String, String> en = {
   'newRatings': 'New',
   'repliedRatings': 'Replied',
   'ratingsAndReplies': 'Ratings & Replies',
+  'clickToManageImages': 'Click to manage images',
+  'manage': 'Manage',
   'ongoing': 'Ongoing',
   'upcoming': 'Upcoming',
   'noVouchersAvailable': 'No vouchers available',
@@ -540,6 +544,7 @@ const Map<String, String> en = {
   'electricalSpeed': 'Electrical Speed',
   'generation': 'Generation',
   'interfaceType': 'Interface Type',
+  'driveFormFactor': 'Drive Form Factor',
   'capacityPerStick': 'Capacity per Stick (GB)',
   'kitStickCount': 'Kit Stick Count',
   'clLatency': 'CL Latency',
@@ -556,6 +561,7 @@ const Map<String, String> en = {
   'year': 'Year',
   'generateBusinessReport': 'Generate Business Report',
   'noData': 'No Data',
+  'productCategoryDistribution': 'Product Category Distribution',
   'ratingsAndReviews': 'Ratings & Reviews',
   'reviews': 'reviews',
   'noRatingsYet': 'No ratings yet',
@@ -579,4 +585,9 @@ const Map<String, String> en = {
   'modularity': 'Modularity',
   'bus': 'Bus',
   'type': 'Type',
+  // Voucher distribution types
+  'distributionPublic': 'Public',
+  'distributionRewards': 'Rewards',
+  'distributionStaffIssued': 'Staff-Issued',
+  'rewardsFor': 'Rewards for {points}',
 };

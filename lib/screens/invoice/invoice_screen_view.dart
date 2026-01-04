@@ -291,6 +291,6 @@ class _InvoiceScreenWithInitialTabState
 
   @override
   Widget build(BuildContext context) {
-    return const InvoiceScreen(showFullLayout: true);
+    return const InvoiceScreen(showFullLayout: false);
   }
 }

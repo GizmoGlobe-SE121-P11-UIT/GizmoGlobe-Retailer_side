@@ -36,6 +36,7 @@ import 'package:gizmoglobe_client/components/general/web_header.dart';
 import 'package:gizmoglobe_client/screens/product/product_detail/product_detail_webview.dart';
 import 'package:gizmoglobe_client/objects/product_related/product.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart'
+    // ignore: library_prefixes
     as FirebaseService;
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -442,6 +443,8 @@ class AuthWrapper extends StatelessWidget {
 }
 
 // Chat route handler for /#/chat and /#/chat?id=chat-document-id
+// NOTE: Hash change handling is done inside ChatListScreenWebView to avoid
+// recreating the cubit on every URL change. This handler only parses initial URL.
 class ChatRouteHandler extends StatefulWidget {
   const ChatRouteHandler({super.key});
 
@@ -455,19 +458,26 @@ class _ChatRouteHandlerState extends State<ChatRouteHandler> {
   @override
   void initState() {
     super.initState();
+    // Only parse URL on initial load - ChatListScreenWebView handles subsequent URL changes
     _parseUrlParameters();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void _parseUrlParameters() {
     if (kIsWeb) {
       // Parse URL parameters for web
+      // The URL format is /#/chat or /#/chat/userId (path-based)
       final uri = Uri.parse(PlatformSpecificUtils.getCurrentUrl());
-      selectedChatId = uri.queryParameters['id'];
+      final fragment = uri.fragment; // e.g., "/chat" or "/chat/userId"
+
+      if (fragment.isNotEmpty && fragment.startsWith('/chat')) {
+        // Split the fragment path to extract the chat ID
+        // /chat -> no ID, /chat/userId -> userId
+        final pathSegments = fragment.split('/');
+        // pathSegments: ['', 'chat'] or ['', 'chat', 'userId']
+        if (pathSegments.length >= 3 && pathSegments[2].isNotEmpty) {
+          selectedChatId = pathSegments[2];
+        }
+      }
     }
   }
 
@@ -482,6 +492,7 @@ class _ChatRouteHandlerState extends State<ChatRouteHandler> {
     }
 
     // Return chat list screen with optional selected chat
+    // The ChatListScreenWebView handles subsequent URL changes internally
     return ChatListScreen.newInstance(selectedChatId: selectedChatId);
   }
 }
@@ -520,7 +531,9 @@ class ErrorBoundary extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       'Please refresh the page or try again later.',
-                      style: TextStyle(color: Colors.grey[600]),
+                      style: TextStyle(
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
@@ -566,8 +579,12 @@ class _MainRouteHandlerState extends State<MainRouteHandler> {
       _hashChangeSubscription =
           PlatformSpecificUtils.onHashChange.listen((event) {
         if (mounted) {
-          _parseUrlParameters();
-          setState(() {});
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _parseUrlParameters();
+              setState(() {});
+            }
+          });
         }
       });
     }
@@ -618,6 +635,30 @@ class InvoiceRouteHandler extends StatefulWidget {
 class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
   int? initialTabIndex;
   StreamSubscription<dynamic>? _hashChangeSubscription;
+  bool isMobileSidebarVisible = false;
+  bool isSidebarCompact = false;
+
+  // Breakpoints matching MainScreen
+  static const double mobileBreakpoint = 900.0;
+  static const double compactBreakpoint = 1100.0;
+
+  bool _isMobileMode(BuildContext context) {
+    return MediaQuery.of(context).size.width <= mobileBreakpoint;
+  }
+
+  void _toggleMobileSidebar() {
+    setState(() {
+      isMobileSidebarVisible = !isMobileSidebarVisible;
+    });
+  }
+
+  void _closeMobileSidebar() {
+    if (isMobileSidebarVisible) {
+      setState(() {
+        isMobileSidebarVisible = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -629,8 +670,12 @@ class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
       _hashChangeSubscription =
           PlatformSpecificUtils.onHashChange.listen((event) {
         if (mounted) {
-          _parseUrlParameters();
-          setState(() {});
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _parseUrlParameters();
+              setState(() {});
+            }
+          });
         }
       });
     }
@@ -710,8 +755,107 @@ class _InvoiceRouteHandlerState extends State<InvoiceRouteHandler> {
       });
     }
 
-    // Return invoice screen with optional initial tab index
-    return InvoiceScreen.newInstanceWithTab(initialTabIndex: initialTabIndex);
+    // For non-web, just return the invoice screen
+    if (!kIsWeb) {
+      return InvoiceScreen.newInstanceWithTab(initialTabIndex: initialTabIndex);
+    }
+
+    final items = buildDefaultSidebarItems(
+      home: AppLocalizations.of(context).home,
+      product: AppLocalizations.of(context).product,
+      invoice: AppLocalizations.of(context).invoice,
+      stakeholder: AppLocalizations.of(context).stakeholder,
+      voucher: AppLocalizations.of(context).voucher,
+      profile: AppLocalizations.of(context).profile,
+    );
+
+    final isMobile = _isMobileMode(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final shouldAutoCompact = screenWidth < compactBreakpoint && !isMobile;
+
+    // Build the main content widget
+    Widget mainContent =
+        InvoiceScreen.newInstanceWithTab(initialTabIndex: initialTabIndex);
+
+    return Scaffold(
+      body: Column(
+        children: [
+          WebHeader(
+            unreadChats: 0,
+            isSidebarCompact: isSidebarCompact,
+            isMobileMode: isMobile,
+            onMenuPressed: _toggleMobileSidebar,
+          ),
+          Expanded(
+            child: Stack(
+              children: [
+                // Main content area
+                Row(
+                  children: [
+                    // Desktop sidebar (hidden on mobile)
+                    if (!isMobile) ...[
+                      WebSidebarModes(
+                        currentIndex: 2, // Invoice index
+                        initialCompactMode: shouldAutoCompact,
+                        onItemSelected: (value) {
+                          // Navigation handled inside sidebar; no-op here
+                        },
+                        items: items,
+                        onCompactModeChanged: (isCompact) {
+                          setState(() {
+                            isSidebarCompact = isCompact;
+                          });
+                        },
+                      ),
+                      const VerticalDivider(width: 1),
+                    ],
+                    Expanded(child: mainContent),
+                  ],
+                ),
+                // Mobile sidebar overlay
+                if (isMobile && isMobileSidebarVisible) ...[
+                  // Backdrop
+                  Positioned.fill(
+                    child: GestureDetector(
+                      onTap: _closeMobileSidebar,
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                  // Sidebar drawer
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      child: Material(
+                        elevation: 16,
+                        child: WebSidebarModes(
+                          currentIndex: 2, // Invoice index
+                          hideCollapseButton: true,
+                          onItemSelected: (value) {
+                            _closeMobileSidebar();
+                          },
+                          items: items,
+                          onCompactModeChanged: (isCompact) {
+                            setState(() {
+                              isSidebarCompact = isCompact;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -738,8 +882,12 @@ class _StakeholderRouteHandlerState extends State<StakeholderRouteHandler> {
       _hashChangeSubscription =
           PlatformSpecificUtils.onHashChange.listen((event) {
         if (mounted) {
-          _parseUrlParameters();
-          setState(() {});
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _parseUrlParameters();
+              setState(() {});
+            }
+          });
         }
       });
     }
@@ -845,8 +993,12 @@ class _VoucherRouteHandlerState extends State<VoucherRouteHandler> {
       _hashChangeSubscription =
           PlatformSpecificUtils.onHashChange.listen((event) {
         if (mounted) {
-          _parseUrlParameters();
-          setState(() {});
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _parseUrlParameters();
+              setState(() {});
+            }
+          });
         }
       });
     }
@@ -959,6 +1111,30 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
   String? selectedProductId;
   Product? selectedProduct;
   Future<Product?>? _productFuture;
+  bool isMobileSidebarVisible = false;
+  bool isSidebarCompact = false;
+
+  // Breakpoints matching MainScreen
+  static const double mobileBreakpoint = 900.0;
+  static const double compactBreakpoint = 1100.0;
+
+  bool _isMobileMode(BuildContext context) {
+    return MediaQuery.of(context).size.width <= mobileBreakpoint;
+  }
+
+  void _toggleMobileSidebar() {
+    setState(() {
+      isMobileSidebarVisible = !isMobileSidebarVisible;
+    });
+  }
+
+  void _closeMobileSidebar() {
+    if (isMobileSidebarVisible) {
+      setState(() {
+        isMobileSidebarVisible = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -969,8 +1145,12 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
       _hashChangeSubscription =
           PlatformSpecificUtils.onHashChange.listen((event) {
         if (mounted) {
-          _parseUrlParameters();
-          setState(() {});
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _parseUrlParameters();
+              setState(() {});
+            }
+          });
         }
       });
     }
@@ -1080,70 +1260,125 @@ class _ProductRouteHandlerState extends State<ProductRouteHandler> {
       profile: AppLocalizations.of(context).profile,
     );
 
+    final isMobile = _isMobileMode(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final shouldAutoCompact = screenWidth < compactBreakpoint && !isMobile;
+
+    // Build the main content widget
+    Widget mainContent = _productFuture != null
+        ? FutureBuilder<Product?>(
+            future: _productFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                );
+              }
+              if (snapshot.hasData && snapshot.data != null) {
+                // Update selectedProduct for future renders
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    setState(() {
+                      selectedProduct = snapshot.data;
+                      _productFuture = null;
+                    });
+                  }
+                });
+                return ProductDetailWebView.newInstance(snapshot.data!);
+              }
+              // Product not found, show product list
+              return ProductScreen.newInstanceWithTab(
+                initialTabIndex: initialTabIndex,
+              );
+            },
+          )
+        : selectedProductId != null && selectedProduct == null
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              )
+            : selectedProduct != null
+                ? ProductDetailWebView.newInstance(selectedProduct!)
+                : ProductScreen.newInstanceWithTab(
+                    initialTabIndex: initialTabIndex,
+                  );
+
     return Scaffold(
       body: Column(
         children: [
-          const WebHeader(
+          WebHeader(
             unreadChats: 0,
-            isSidebarCompact: false,
+            isSidebarCompact: isSidebarCompact,
+            isMobileMode: isMobile,
+            onMenuPressed: _toggleMobileSidebar,
           ),
           Expanded(
-            child: Row(
+            child: Stack(
               children: [
-                WebSidebarModes(
-                  currentIndex: 1, // Product index
-                  onItemSelected: (value) {
-                    // Navigation handled inside sidebar; no-op here
-                  },
-                  items: items,
-                  onCompactModeChanged: (isCompact) {},
+                // Main content area
+                Row(
+                  children: [
+                    // Desktop sidebar (hidden on mobile)
+                    if (!isMobile) ...[
+                      WebSidebarModes(
+                        currentIndex: 1, // Product index
+                        initialCompactMode: shouldAutoCompact,
+                        onItemSelected: (value) {
+                          // Navigation handled inside sidebar; no-op here
+                        },
+                        items: items,
+                        onCompactModeChanged: (isCompact) {
+                          setState(() {
+                            isSidebarCompact = isCompact;
+                          });
+                        },
+                      ),
+                      const VerticalDivider(width: 1),
+                    ],
+                    Expanded(child: mainContent),
+                  ],
                 ),
-                const VerticalDivider(width: 1),
-                Expanded(
-                  child: _productFuture != null
-                      ? FutureBuilder<Product?>(
-                          future: _productFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              );
-                            }
-                            if (snapshot.hasData && snapshot.data != null) {
-                              // Update selectedProduct for future renders
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                if (mounted) {
-                                  setState(() {
-                                    selectedProduct = snapshot.data;
-                                    _productFuture = null;
-                                  });
-                                }
-                              });
-                              return ProductDetailWebView.newInstance(
-                                  snapshot.data!);
-                            }
-                            // Product not found, show product list
-                            return ProductScreen.newInstanceWithTab(
-                              initialTabIndex: initialTabIndex,
-                            );
+                // Mobile sidebar overlay
+                if (isMobile && isMobileSidebarVisible) ...[
+                  // Backdrop
+                  Positioned.fill(
+                    child: GestureDetector(
+                      onTap: _closeMobileSidebar,
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                  // Sidebar drawer
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      child: Material(
+                        elevation: 16,
+                        child: WebSidebarModes(
+                          currentIndex: 1, // Product index
+                          hideCollapseButton: true,
+                          onItemSelected: (value) {
+                            _closeMobileSidebar();
                           },
-                        )
-                      : selectedProductId != null && selectedProduct == null
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            )
-                          : selectedProduct != null
-                              ? ProductDetailWebView.newInstance(
-                                  selectedProduct!)
-                              : ProductScreen.newInstanceWithTab(
-                                  initialTabIndex: initialTabIndex,
-                                ),
-                ),
+                          items: items,
+                          onCompactModeChanged: (isCompact) {
+                            setState(() {
+                              isSidebarCompact = isCompact;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

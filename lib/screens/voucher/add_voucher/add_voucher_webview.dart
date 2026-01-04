@@ -124,23 +124,32 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
         }
       },
       builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final screenHeight = MediaQuery.of(context).size.height;
+        final isMobile = screenWidth < 600;
+        final containerWidth = isMobile ? screenWidth * 0.98 : screenWidth * 0.8;
+        final containerHeight = isMobile ? screenHeight * 0.95 : screenHeight * 0.9;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.9,
-          constraints: const BoxConstraints(
-            maxWidth: 1200,
-            maxHeight: 800,
+          width: containerWidth,
+          height: containerHeight,
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? screenWidth * 0.98 : 1200,
+            maxHeight: isMobile ? screenHeight * 0.95 : 800,
+            minWidth: 300,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
+            borderRadius: BorderRadius.circular(isMobile ? 0 : 16),
+            boxShadow: isMobile
+                ? []
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
           ),
           child: Column(
             children: [
@@ -162,8 +171,9 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
   }
 
   Widget _buildHeader(AddVoucherState state) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isMobile ? 12 : 24),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         borderRadius: const BorderRadius.only(
@@ -176,9 +186,9 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
           Icon(
             Icons.card_giftcard,
             color: Theme.of(context).colorScheme.primary,
-            size: 28,
+            size: isMobile ? 24 : 28,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: isMobile ? 8 : 12),
           Expanded(
             child: GradientText(
               text: S.of(context).addVoucher,
@@ -225,8 +235,9 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
   }
 
   Widget _buildContent(AddVoucherState state) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isMobile ? 12 : 24),
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -234,7 +245,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildBasicInformationSection(state),
-              const SizedBox(height: 24),
+              SizedBox(height: isMobile ? 16 : 24),
               _buildVoucherSettingsSection(state),
             ],
           ),
@@ -244,13 +255,14 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
   }
 
   Widget _buildBasicInformationSection(AddVoucherState state) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -272,7 +284,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: isMobile ? 12 : 16),
             buildInputWidget<String>(
               S.of(context).voucherName,
               voucherNameController,
@@ -282,37 +294,70 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                     state.voucherArgument!.copyWith(voucherName: value));
               },
             ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: buildInputWidget<int>(
-                    S.of(context).discountValue,
-                    discountValueController,
-                    state.voucherArgument?.discountValue,
-                    (value) {
-                      cubit.updateVoucherArgument(state.voucherArgument!.copyWith(discountValue: value));
-                    },
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: buildInputWidget<double>(
-                    S.of(context).minimumPurchase,
-                    minimumPurchaseController,
-                    state.voucherArgument?.minimumPurchase?.toDouble(),
-                    (value) {
-                      cubit.updateVoucherArgument(state.voucherArgument!
-                          .copyWith(minimumPurchase: value?.toInt()));
-                    },
-                    null,
-                    null,
-                    '.000',
-                  ),
-                ),
-              ],
+            SizedBox(height: isMobile ? 12 : 16),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final isNarrow = constraints.maxWidth < 400;
+                if (isNarrow) {
+                  // Stack vertically on narrow screens
+                  return Column(
+                    children: [
+                      buildInputWidget<int>(
+                        S.of(context).discountValue,
+                        discountValueController,
+                        state.voucherArgument?.discountValue,
+                        (value) {
+                          cubit.updateVoucherArgument(
+                              state.voucherArgument!.copyWith(discountValue: value));
+                        },
+                      ),
+                      SizedBox(height: isMobile ? 12 : 16),
+                      buildInputWidget<double>(
+                        S.of(context).minimumPurchase,
+                        minimumPurchaseController,
+                        state.voucherArgument?.minimumPurchase?.toDouble(),
+                        (value) {
+                          cubit.updateVoucherArgument(state.voucherArgument!
+                              .copyWith(minimumPurchase: value?.toInt()));
+                        },
+                      ),
+                    ],
+                  );
+                } else {
+                  // Use row layout for wider screens
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: buildInputWidget<int>(
+                          S.of(context).discountValue,
+                          discountValueController,
+                          state.voucherArgument?.discountValue,
+                          (value) {
+                            cubit.updateVoucherArgument(state.voucherArgument!.copyWith(discountValue: value));
+                          },
+                        ),
+                      ),
+                      SizedBox(width: isMobile ? 8 : 16),
+                      Expanded(
+                        child: buildInputWidget<double>(
+                          S.of(context).minimumPurchase,
+                          minimumPurchaseController,
+                          state.voucherArgument?.minimumPurchase?.toDouble(),
+                          (value) {
+                            cubit.updateVoucherArgument(state.voucherArgument!
+                                .copyWith(minimumPurchase: value?.toInt()));
+                          },
+                          null,
+                          null,
+                          '.000',
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              },
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: isMobile ? 12 : 16),
             buildInputWidget<DateTime>(
               S.of(context).startTime,
               TextEditingController(),
@@ -322,7 +367,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                     state.voucherArgument!.copyWith(startTime: value));
               },
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: isMobile ? 12 : 16),
             buildInputWidget<int>(
               S.of(context).maxUsagePerPerson,
               maxUsagePerPersonController,
@@ -332,7 +377,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                     state.voucherArgument!.copyWith(maxUsagePerPerson: value));
               },
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: isMobile ? 12 : 16),
             MultiFieldWithIcon(
               controller: enDescriptionController,
               hintText: S.of(context).enterField(S.of(context).enDescription),
@@ -373,13 +418,14 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
   }
 
   Widget _buildVoucherSettingsSection(AddVoucherState state) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -401,7 +447,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: isMobile ? 16 : 20),
             // Discount Type Toggle
             buildToggleSwitch(
               label: S.of(context).discountType,
@@ -417,7 +463,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
             // Show maximum discount value field if percentage is selected
             if (state.voucherArgument?.isPercentage == true)
               Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: isMobile ? 12.0 : 16.0),
                 child: buildInputWidget<double>(
                   S.of(context).maximumDiscountValue,
                   maximumDiscountValueController,
@@ -432,7 +478,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                 ),
               ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: isMobile ? 16 : 24),
             // Usage Limit Toggle
             buildToggleSwitch(
               label: S.of(context).usageLimit,
@@ -448,7 +494,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
             // Show maximum usage field if limited is selected
             if (state.voucherArgument?.isLimited == true)
               Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: isMobile ? 12.0 : 16.0),
                 child: buildInputWidget<double>(
                   S.of(context).maximumUsage,
                   maximumUsageController,
@@ -461,7 +507,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                 ),
               ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: isMobile ? 16 : 24),
             // Time Limit Toggle
             buildToggleSwitch(
               label: S.of(context).timeLimit,
@@ -483,7 +529,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
             // Show end time picker if time limit is selected
             if (state.voucherArgument?.hasEndTime == true)
               Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: isMobile ? 12.0 : 16.0),
                 child: buildInputWidget<DateTime>(
                   S.of(context).endTime,
                   TextEditingController(),
@@ -497,7 +543,7 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
               )
             else
               Padding(
-                padding: const EdgeInsets.only(top: 16.0),
+                padding: EdgeInsets.only(top: isMobile ? 12.0 : 16.0),
                 child: Text(
                   S.of(context).voucherWillNotExpire,
                   style: const TextStyle(
@@ -507,37 +553,75 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                 ),
               ),
 
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: buildInputWidget<DistributionType>(
-                    'Display Type',
-                    TextEditingController(),
-                    state.voucherArgument?.distributionType ?? DistributionType.public,
+            SizedBox(height: isMobile ? 16 : 24),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final isNarrow = constraints.maxWidth < 500;
+                if (isNarrow) {
+                  // Stack vertically on narrow screens
+                  return Column(
+                    children: [
+                      buildInputWidget<DistributionType>(
+                        S.of(context).visibility,
+                        TextEditingController(),
+                        state.voucherArgument?.distributionType ?? DistributionType.public,
                         (value) {
-                      if (value != null) {
-                        cubit.updateVoucherArgument(state.voucherArgument!.copyWith(distributionType: value));
-                      }
-                    },
-                    DistributionType.values,
-                    null,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: buildToggleSwitch(
-                    label: S.of(context).status,
-                    value: state.voucherArgument?.isEnabled ?? true,
-                    leftLabel: S.of(context).disabled,
-                    rightLabel: S.of(context).enabled,
-                    onChanged: (value) {
-                      cubit.updateVoucherArgument(
-                          state.voucherArgument!.copyWith(isEnabled: value));
-                    },
-                  ),
-                ),
-              ],
+                          if (value != null) {
+                            cubit.updateVoucherArgument(state.voucherArgument!.copyWith(distributionType: value));
+                          }
+                        },
+                        DistributionType.values,
+                        null,
+                      ),
+                      SizedBox(height: isMobile ? 16 : 24),
+                      buildToggleSwitch(
+                        label: S.of(context).status,
+                        value: state.voucherArgument?.isEnabled ?? true,
+                        leftLabel: S.of(context).disabled,
+                        rightLabel: S.of(context).enabled,
+                        onChanged: (value) {
+                          cubit.updateVoucherArgument(
+                              state.voucherArgument!.copyWith(isEnabled: value));
+                        },
+                      ),
+                    ],
+                  );
+                } else {
+                  // Use row layout for wider screens
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: buildInputWidget<DistributionType>(
+                          S.of(context).visibility,
+                          TextEditingController(),
+                          state.voucherArgument?.distributionType ?? DistributionType.public,
+                          (value) {
+                            if (value != null) {
+                              cubit.updateVoucherArgument(state.voucherArgument!.copyWith(distributionType: value));
+                            }
+                          },
+                          DistributionType.values,
+                          null,
+                        ),
+                      ),
+                      SizedBox(width: isMobile ? 8 : 16),
+                      Expanded(
+                        child: buildToggleSwitch(
+                          label: S.of(context).status,
+                          value: state.voucherArgument?.isEnabled ?? true,
+                          leftLabel: S.of(context).disabled,
+                          rightLabel: S.of(context).enabled,
+                          onChanged: (value) {
+                            cubit.updateVoucherArgument(
+                                state.voucherArgument!.copyWith(isEnabled: value));
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              },
             ),
           ],
         ),
@@ -553,12 +637,16 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
     required String rightLabel,
     required Function(bool) onChanged,
   }) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: AppTextStyle.smallText),
-        const SizedBox(height: 8),
+        SizedBox(height: isMobile ? 6 : 8),
         Container(
+          constraints: const BoxConstraints(
+            minHeight: 44,
+          ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
@@ -569,7 +657,10 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                 child: GestureDetector(
                   onTap: () => onChanged(false),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(
+                      vertical: isMobile ? 10 : 12,
+                      horizontal: isMobile ? 4 : 8,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.horizontal(
                           left: Radius.circular(10)),
@@ -582,10 +673,13 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
+                        fontSize: isMobile ? 12 : 14,
                         color: !value
                             ? Theme.of(context).colorScheme.onPrimary
                             : Theme.of(context).colorScheme.onSurface,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
                 ),
@@ -594,7 +688,10 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                 child: GestureDetector(
                   onTap: () => onChanged(true),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(
+                      vertical: isMobile ? 10 : 12,
+                      horizontal: isMobile ? 4 : 8,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.horizontal(
                           right: Radius.circular(10)),
@@ -607,10 +704,13 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
+                        fontSize: isMobile ? 12 : 14,
                         color: value
                             ? Theme.of(context).colorScheme.onPrimary
                             : Theme.of(context).colorScheme.onSurface,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
                 ),
@@ -752,7 +852,13 @@ class _AddVoucherWebViewState extends State<AddVoucherWebView> {
                 items: (String filter, dynamic infiniteScrollProps) =>
                     enumValues,
                 compareFn: (T? d1, T? d2) => d1 == d2,
-                itemAsString: (T d) => d.toString(),
+                itemAsString: (T d) {
+                  // Handle DistributionType with proper localization
+                  if (d is DistributionType) {
+                    return d.getLocalizedName(context);
+                  }
+                  return d.toString();
+                },
                 onChanged: onChanged,
                 selectedItem: propertyValue,
                 hintText: S.of(context).selectField(propertyName),

@@ -34,29 +34,37 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final isMobile = screenWidth < 600;
+    final containerWidth = isMobile ? screenWidth * 0.98 : screenWidth * 0.6;
+
     return Container(
-      width: MediaQuery.of(context).size.width * 0.6,
-      height: MediaQuery.of(context).size.height * 0.7,
-      constraints: const BoxConstraints(
-        maxWidth: 800,
-        maxHeight: 600,
+      width: containerWidth,
+      constraints: BoxConstraints(
+        maxWidth: isMobile ? screenWidth * 0.98 : 800,
+        maxHeight: screenHeight * 0.9,
+        minWidth: 300,
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(isMobile ? 0 : 16),
+        boxShadow: isMobile
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           // Header with close button
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(isMobile ? 12 : 16),
             decoration: BoxDecoration(
               color:
                   Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
@@ -70,17 +78,18 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
                 Icon(
                   Icons.person,
                   color: Theme.of(context).colorScheme.primary,
-                  size: 28,
+                  size: isMobile ? 24 : 28,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: isMobile ? 8 : 12),
                 Expanded(
                   child: Text(
                     S.of(context).profile,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: isMobile ? 18 : 20,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 IconButton(
@@ -95,17 +104,18 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
             ),
           ),
           // Content
-          Expanded(
+          Flexible(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(isMobile ? 12 : 16),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildProfileHeader(context),
-                    const SizedBox(height: 16),
+                    SizedBox(height: isMobile ? 12 : 16),
                     _buildAccountSettings(context),
-                    const SizedBox(height: 16),
+                    SizedBox(height: isMobile ? 12 : 16),
                     _buildLogoutButton(context),
                   ],
                 ),
@@ -118,11 +128,12 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
   }
 
   Widget _buildProfileHeader(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return BlocBuilder<UserScreenCubit, UserScreenState>(
       builder: (context, state) {
         return Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(isMobile ? 12 : 16),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -132,7 +143,7 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
                 Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
               ],
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
             boxShadow: [
               BoxShadow(
                 color: Theme.of(context)
@@ -147,59 +158,69 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: EdgeInsets.all(isMobile ? 8 : 12),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(isMobile ? 10 : 12),
                   border: Border.all(
                     color: Colors.white.withValues(alpha: 0.2),
                     width: 1,
                   ),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.person,
                   color: Colors.white,
-                  size: 32,
+                  size: isMobile ? 24 : 32,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: isMobile ? 12 : 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       state.username,
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: TextStyle(
+                        fontSize: isMobile ? 18 : 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         letterSpacing: 0.5,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: isMobile ? 6 : 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                      constraints: const BoxConstraints(
+                        maxWidth: double.infinity,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 6 : 8,
+                        vertical: isMobile ? 3 : 4,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(isMobile ? 8 : 12),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
                             Icons.email_outlined,
-                            size: 14,
+                            size: isMobile ? 12 : 14,
                             color: Colors.white.withValues(alpha: 0.9),
                           ),
-                          const SizedBox(width: 6),
-                          Text(
-                            state.email,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white.withValues(alpha: 0.9),
+                          SizedBox(width: isMobile ? 4 : 6),
+                          Flexible(
+                            child: Text(
+                              state.email,
+                              style: TextStyle(
+                                fontSize: isMobile ? 11 : 12,
+                                color: Colors.white.withValues(alpha: 0.9),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                           ),
                         ],
@@ -216,17 +237,19 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
   }
 
   Widget _buildAccountSettings(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           S.of(context).accountSettings,
-          style: const TextStyle(
-            fontSize: 18,
+          style: TextStyle(
+            fontSize: isMobile ? 16 : 18,
             fontWeight: FontWeight.bold,
           ),
+          overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: isMobile ? 10 : 12),
         _buildSettingsItem(
           icon: Icons.person_outline,
           title: S.of(context).editProfile,
@@ -253,9 +276,10 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
   }
 
   Widget _buildLogoutButton(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Container(
       width: double.infinity,
-      height: 50,
+      height: isMobile ? 44 : 50,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.centerLeft,
@@ -283,20 +307,21 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.logout_rounded,
                   color: Colors.white,
-                  size: 20,
+                  size: isMobile ? 18 : 20,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: isMobile ? 6 : 8),
                 Text(
                   S.of(context).signOut,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: isMobile ? 14 : 16,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.5,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -313,11 +338,12 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
     required VoidCallback onTap,
     required Color iconColor,
   }) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.only(bottom: isMobile ? 6 : 8),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(isMobile ? 10 : 12),
         border: Border.all(
           color: Colors.grey.withValues(alpha: 0.1),
           width: 1,
@@ -333,58 +359,64 @@ class _UserScreenWebViewState extends State<UserScreenWebView> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(isMobile ? 10 : 12),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(isMobile ? 10 : 12),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(isMobile ? 6 : 8),
                   decoration: BoxDecoration(
                     color: iconColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                   ),
                   child: Icon(
                     icon,
                     color: iconColor,
-                    size: 20,
+                    size: isMobile ? 18 : 20,
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: isMobile ? 10 : 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style: TextStyle(
+                          fontSize: isMobile ? 13 : 14,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.3,
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: isMobile ? 2 : 4),
                       Text(
                         subtitle,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: isMobile ? 11 : 12,
                           color: Theme.of(context)
                               .colorScheme
                               .onSurface
                               .withValues(alpha: 0.6),
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                       ),
                     ],
                   ),
                 ),
+                SizedBox(width: isMobile ? 4 : 8),
                 Icon(
                   Icons.chevron_right,
                   color: Theme.of(context)
                       .colorScheme
                       .onSurface
                       .withValues(alpha: 0.3),
-                  size: 20,
+                  size: isMobile ? 18 : 20,
                 ),
               ],
             ),

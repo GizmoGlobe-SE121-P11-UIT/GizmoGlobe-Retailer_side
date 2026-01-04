@@ -109,8 +109,8 @@ class UnlimitedAmountVoucherWithEndTime extends Voucher
           children: [
             Text(
               distributionType == DistributionType.rewards
-                  ? '${distributionType.description} for $redeemPrice'
-                  : distributionType.description,
+                  ? s.rewardsFor(redeemPrice.toString())
+                  : distributionType.getLocalizedName(context),
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.primary,
               ),

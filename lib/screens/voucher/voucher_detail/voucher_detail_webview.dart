@@ -90,12 +90,21 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
           );
         }
 
+        final screenWidth = MediaQuery.of(context).size.width;
+        final screenHeight = MediaQuery.of(context).size.height;
+        final isMobile = screenWidth < 600;
+        final containerWidth =
+            isMobile ? screenWidth * 0.95 : screenWidth * 0.6;
+        final containerHeight =
+            isMobile ? screenHeight * 0.9 : screenHeight * 0.85;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.7,
-          constraints: const BoxConstraints(
-            maxWidth: 800,
-            maxHeight: 600,
+          width: containerWidth,
+          height: containerHeight,
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? screenWidth * 0.98 : 800,
+            maxHeight: isMobile ? screenHeight * 0.95 : 700,
+            minWidth: 300,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
@@ -149,14 +158,14 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(isMobile ? 12 : 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildHeaderSection(context, state),
-                        const SizedBox(height: 16),
+                        SizedBox(height: isMobile ? 12 : 16),
                         _buildInfoSection(context, state),
-                        const SizedBox(height: 16),
+                        SizedBox(height: isMobile ? 12 : 16),
                         _buildStatusSection(context, state),
                       ],
                     ),
@@ -165,7 +174,7 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
               ),
               // Bottom action buttons
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(isMobile ? 12 : 16),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   boxShadow: [
@@ -194,22 +203,28 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
                         icon: Icon(
                           Icons.edit,
                           color: Theme.of(context).colorScheme.onPrimary,
+                          size: isMobile ? 18 : 24,
                         ),
                         label: Text(
                           S.of(context).edit,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: isMobile ? 14 : 16,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.tertiary,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          padding: EdgeInsets.symmetric(
+                            vertical: isMobile ? 10 : 12,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: isMobile ? 8 : 16),
                     Expanded(
-                      child: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
+                      child:
+                          BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
                         builder: (context, state) {
                           return ElevatedButton.icon(
                             onPressed: () {
@@ -217,20 +232,28 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
                               cubit.changeVoucherStatus();
                             },
                             icon: Icon(
-                              state.voucher.isEnabled ? Icons.not_interested : Icons.check,
+                              state.voucher.isEnabled
+                                  ? Icons.not_interested
+                                  : Icons.check,
                               color: Theme.of(context).colorScheme.onPrimary,
+                              size: isMobile ? 18 : 24,
                             ),
                             label: Text(
-                              state.voucher.isEnabled ? S.of(context).disabled : S.of(context).enabled,
+                              state.voucher.isEnabled
+                                  ? S.of(context).disabled
+                                  : S.of(context).enabled,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: isMobile ? 14 : 16,
                               ),
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: state.voucher.isEnabled
                                   ? Theme.of(context).colorScheme.error
                                   : Theme.of(context).colorScheme.secondary,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              padding: EdgeInsets.symmetric(
+                                vertical: isMobile ? 10 : 12,
+                              ),
                             ),
                           );
                         },
@@ -247,10 +270,11 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
   }
 
   Widget _buildHeaderSection(BuildContext context, VoucherDetailState state) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.all(isMobile ? 12 : 16),
+      margin: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 12),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
         borderRadius: const BorderRadius.all(Radius.circular(30)),
@@ -269,36 +293,42 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
           Hero(
             tag: 'voucher_icon_${state.voucher.voucherID}',
             child: CircleAvatar(
-              radius: 60,
+              radius: isMobile ? 40 : 60,
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               child: Icon(
                 Icons.card_giftcard,
-                size: 60,
+                size: isMobile ? 40 : 60,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: isMobile ? 12 : 16),
           Text(
             state.voucher.voucherName,
-            style: const TextStyle(
-              fontSize: 28,
+            style: TextStyle(
+              fontSize: isMobile ? 20 : 28,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: isMobile ? 6 : 8),
           Text(
             state.voucher.isPercentage
                 ? '${state.voucher.discountValue}%'
                 : Helper.toCurrencyFormat(state.voucher.discountValue),
-            style: const TextStyle(
-              fontSize: 20,
+            style: TextStyle(
+              fontSize: isMobile ? 16 : 20,
               fontWeight: FontWeight.w600,
-              color: Colors.white70,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onPrimary
+                  .withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -306,15 +336,16 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
   }
 
   Widget _buildInfoSection(BuildContext context, VoucherDetailState state) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 12),
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(isMobile ? 10 : 12),
           child: Column(
             children: [
               Row(
@@ -325,12 +356,15 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    S.of(context).voucher,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                  Flexible(
+                    child: Text(
+                      S.of(context).voucher,
+                      style: TextStyle(
+                        fontSize: isMobile ? 18 : 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -345,7 +379,8 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
               if (state.voucher.isPercentage)
                 _buildInfoRow(
                   S.of(context).maximumDiscountValue,
-                  Helper.toCurrencyFormat((state.voucher as PercentageInterface).maximumDiscountValue),
+                  Helper.toCurrencyFormat((state.voucher as PercentageInterface)
+                      .maximumDiscountValue),
                 ),
               _buildInfoRow(
                 S.of(context).minimumPurchase,
@@ -395,15 +430,16 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
   }
 
   Widget _buildStatusSection(BuildContext context, VoucherDetailState state) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 8 : 12),
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(isMobile ? 10 : 12),
           child: Column(
             children: [
               Row(
@@ -414,50 +450,130 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    S.of(context).status,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                  Flexible(
+                    child: Text(
+                      S.of(context).status,
+                      style: TextStyle(
+                        fontSize: isMobile ? 18 : 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Text(
-                    // '${S.of(context).visibility}: ',
-                    'Display Type: ',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  StatusBadge(
-                    status: state.voucher.distributionType.description
-                  ),
-                ],
+              // Display Type row - use Column for small screens to prevent overflow
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  if (constraints.maxWidth < 300) {
+                    // Stack vertically on very small screens
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${S.of(context).visibility}: ',
+                          style: TextStyle(
+                            fontSize: isMobile ? 14 : 16,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        SizedBox(
+                          width: double.infinity,
+                          child: StatusBadge(
+                            status: state.voucher.distributionType,
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    // Use Row for wider screens
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            '${S.of(context).visibility}: ',
+                            style: TextStyle(
+                              fontSize: isMobile ? 14 : 16,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: StatusBadge(
+                            status: state.voucher.distributionType,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                },
               ),
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    '${S.of(context).status}: ',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  StatusBadge(
-                    status: state.voucher.isEnabled
-                        ? S.of(context).active
-                        : S.of(context).inactive,
-                  ),
-                ],
+              // Status row - use Column for small screens to prevent overflow
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  if (constraints.maxWidth < 300) {
+                    // Stack vertically on very small screens
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${S.of(context).status}: ',
+                          style: TextStyle(
+                            fontSize: isMobile ? 14 : 16,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        SizedBox(
+                          width: double.infinity,
+                          child: StatusBadge(
+                            status: state.voucher.isEnabled
+                                ? S.of(context).active
+                                : S.of(context).inactive,
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    // Use Row for wider screens
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            '${S.of(context).status}: ',
+                            style: TextStyle(
+                              fontSize: isMobile ? 14 : 16,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: StatusBadge(
+                            status: state.voucher.isEnabled
+                                ? S.of(context).active
+                                : S.of(context).inactive,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                },
               ),
             ],
           ),
@@ -470,23 +586,32 @@ class _VoucherDetailWebViewState extends State<VoucherDetailWebView> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
+            flex: 2,
             child: Text(
               label,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
                 fontWeight: FontWeight.w500,
               ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
             ),
           ),
+          const SizedBox(width: 8),
           Expanded(
+            flex: 3,
             child: Text(
               value,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
             ),
           ),
         ],

@@ -235,203 +235,301 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
                           alignment: Alignment.center,
                           child: const CircularProgressIndicator(),
                         )
-                      : Column(
-                          children: [
-                            // Row 1: Products, Customers, Orders, Manufacturers, Employees (5 tiles)
-                            GridView.count(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              crossAxisCount: 5,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16,
-                              childAspectRatio: 1.3,
+                      : LayoutBuilder(
+                          builder: (context, constraints) {
+                            final availableWidth = constraints.maxWidth;
+
+                            // Calculate card width based on available space
+                            int cardsPerRow;
+                            if (availableWidth < 400) {
+                              cardsPerRow = 1;
+                            } else if (availableWidth < 600) {
+                              cardsPerRow = 2;
+                            } else if (availableWidth < 800) {
+                              cardsPerRow = 3;
+                            } else if (availableWidth < 1000) {
+                              cardsPerRow = 4;
+                            } else {
+                              cardsPerRow = 5;
+                            }
+
+                            const spacing = 16.0;
+                            final cardWidth = cardsPerRow == 1
+                                ? availableWidth
+                                : (availableWidth -
+                                        (spacing * (cardsPerRow - 1))) /
+                                    cardsPerRow;
+
+                            // Stats card data
+                            final statsData = [
+                              (
+                                Icons.inventory_2_rounded,
+                                S.of(context).products,
+                                state.totalProducts.toString(),
+                                Colors.blue
+                              ),
+                              (
+                                Icons.people_alt_rounded,
+                                S.of(context).customers,
+                                state.totalCustomers.toString(),
+                                Colors.green
+                              ),
+                              (
+                                Icons.receipt_long_rounded,
+                                S.of(context).orders,
+                                state.totalOrders.toString(),
+                                Colors.amber
+                              ),
+                              (
+                                Icons.factory_rounded,
+                                S.of(context).manufacturer,
+                                state.totalManufacturers.toString(),
+                                Colors.teal
+                              ),
+                              (
+                                Icons.badge_rounded,
+                                S.of(context).employees,
+                                state.totalEmployees.toString(),
+                                Colors.indigo
+                              ),
+                            ];
+
+                            // Calculate how many cards are in the last row
+                            final totalCards = statsData.length;
+                            final cardsInLastRow = totalCards % cardsPerRow == 0
+                                ? cardsPerRow
+                                : totalCards % cardsPerRow;
+                            final lastRowStartIndex =
+                                totalCards - cardsInLastRow;
+
+                            return Column(
                               children: [
-                                _buildStatsCard(
-                                  context,
-                                  icon: Icons.inventory_2_rounded,
-                                  title: S.of(context).products,
-                                  value: state.totalProducts.toString(),
-                                  color: Colors.blue,
+                                // Stats cards using Wrap for flexible layout
+                                Wrap(
+                                  spacing: spacing,
+                                  runSpacing: spacing,
+                                  alignment: WrapAlignment.center,
+                                  children:
+                                      List.generate(statsData.length, (index) {
+                                    final data = statsData[index];
+                                    // Check if this card is alone in the last row
+                                    final isLastRowSingleCard =
+                                        cardsInLastRow == 1 &&
+                                            index >= lastRowStartIndex;
+                                    final thisCardWidth = isLastRowSingleCard
+                                        ? availableWidth
+                                        : cardWidth;
+
+                                    return SizedBox(
+                                      width: thisCardWidth,
+                                      child: _buildStatsCard(
+                                        context,
+                                        icon: data.$1,
+                                        title: data.$2,
+                                        value: data.$3,
+                                        color: data.$4,
+                                      ),
+                                    );
+                                  }),
                                 ),
-                                _buildStatsCard(
-                                  context,
-                                  icon: Icons.people_alt_rounded,
-                                  title: S.of(context).customers,
-                                  value: state.totalCustomers.toString(),
-                                  color: Colors.green,
-                                ),
-                                _buildStatsCard(
-                                  context,
-                                  icon: Icons.receipt_long_rounded,
-                                  title: S.of(context).orders,
-                                  value: state.totalOrders.toString(),
-                                  color: Colors.amber,
-                                ),
-                                _buildStatsCard(
-                                  context,
-                                  icon: Icons.factory_rounded,
-                                  title: S.of(context).manufacturer,
-                                  value: state.totalManufacturers.toString(),
-                                  color: Colors.teal,
-                                ),
-                                _buildStatsCard(
-                                  context,
-                                  icon: Icons.badge_rounded,
-                                  title: S.of(context).employees,
-                                  value: state.totalEmployees.toString(),
-                                  color: Colors.indigo,
+                                const SizedBox(height: 16),
+                                // Revenue and Avg Income - responsive wrap
+                                Wrap(
+                                  spacing: spacing,
+                                  runSpacing: spacing,
+                                  alignment: WrapAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: cardsPerRow == 1
+                                          ? availableWidth
+                                          : (availableWidth - spacing) / 2,
+                                      child: _buildStatsCard(
+                                        context,
+                                        icon: Icons.payments_rounded,
+                                        title: S.of(context).revenue,
+                                        value: Helper.toCurrencyFormat(
+                                            state.totalRevenue),
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: cardsPerRow == 1
+                                          ? availableWidth
+                                          : (availableWidth - spacing) / 2,
+                                      child: _buildStatsCard(
+                                        context,
+                                        icon: Icons.trending_up_rounded,
+                                        title: S.of(context).avgIncome,
+                                        value: Helper.toCurrencyFormat(
+                                            state.totalOrders > 0
+                                                ? state.totalRevenue /
+                                                    state.totalOrders
+                                                : 0),
+                                        color: Colors.purple,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
-                            ),
-                            const SizedBox(height: 16),
-                            // Row 2: Revenue and Avg Income (2 tiles, span equally)
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _buildStatsCard(
-                                    context,
-                                    icon: Icons.payments_rounded,
-                                    title: S.of(context).revenue,
-                                    value: Helper.toCurrencyFormat(
-                                        state.totalRevenue),
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: _buildStatsCard(
-                                    context,
-                                    icon: Icons.trending_up_rounded,
-                                    title: S.of(context).avgIncome,
-                                    value: Helper.toCurrencyFormat(
-                                        state.totalOrders > 0
-                                            ? state.totalRevenue /
-                                                state.totalOrders
-                                            : 0),
-                                    color: Colors.purple,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                            );
+                          },
                         ),
 
                   const SizedBox(height: 32),
                   // Sales Chart
-                  Card(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .outline
-                            .withValues(alpha: 0.2),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isNarrowChart = constraints.maxWidth < 700;
+
+                      return Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .outline
+                                .withValues(alpha: 0.2),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(isNarrowChart ? 16 : 24),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                chartTitle,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(width: 32),
-                              DropdownButton<String>(
-                                value: _selectedChartInterval.isNotEmpty &&
-                                        (_selectedChartInterval ==
-                                                'yearMonthly' ||
-                                            _selectedChartInterval ==
-                                                'monthDaily')
-                                    ? _selectedChartInterval
-                                    : 'yearMonthly',
-                                items: [
-                                  DropdownMenuItem(
-                                      value: 'yearMonthly',
-                                      child: Text(S.of(context).yearMonthly)),
-                                  DropdownMenuItem(
-                                      value: 'monthDaily',
-                                      child: Text(S.of(context).monthDaily)),
+                              // Chart header - wraps on small screens
+                              Wrap(
+                                spacing: 12,
+                                runSpacing: 12,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  Text(
+                                    chartTitle,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  DropdownButton<String>(
+                                    value: _selectedChartInterval.isNotEmpty &&
+                                            (_selectedChartInterval ==
+                                                    'yearMonthly' ||
+                                                _selectedChartInterval ==
+                                                    'monthDaily')
+                                        ? _selectedChartInterval
+                                        : 'yearMonthly',
+                                    items: [
+                                      DropdownMenuItem(
+                                          value: 'yearMonthly',
+                                          child:
+                                              Text(S.of(context).yearMonthly)),
+                                      DropdownMenuItem(
+                                          value: 'monthDaily',
+                                          child:
+                                              Text(S.of(context).monthDaily)),
+                                    ],
+                                    onChanged: (val) {
+                                      if (val != null) {
+                                        setState(() {
+                                          _selectedChartInterval = val;
+                                        });
+                                      }
+                                    },
+                                  ),
+                                  if (_selectedChartInterval ==
+                                      'yearMonthly') ...[
+                                    ElevatedButton(
+                                      onPressed: () => _showYearPicker(context),
+                                      child: Text(S.of(context).chooseYear),
+                                    ),
+                                    Text('${_selectedYear ?? now.year}'),
+                                  ] else ...[
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        await _showYearPicker(context);
+                                        await _showMonthPicker(context);
+                                      },
+                                      child: Text(S.of(context).chooseMonth),
+                                    ),
+                                    Text(_selectedYear != null &&
+                                            _selectedMonth != null
+                                        ? '${_selectedYear!}-${_selectedMonth!.toString().padLeft(2, '0')}'
+                                        : ''),
+                                  ],
                                 ],
-                                onChanged: (val) {
-                                  if (val != null) {
-                                    setState(() {
-                                      _selectedChartInterval = val;
-                                    });
-                                  }
-                                },
                               ),
-                              if (_selectedChartInterval == 'yearMonthly') ...[
-                                const SizedBox(width: 12),
-                                ElevatedButton(
-                                  onPressed: () => _showYearPicker(context),
-                                  child: Text(S.of(context).chooseYear),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text('${_selectedYear ?? now.year}'),
-                                ),
-                              ] else ...[
-                                const SizedBox(width: 12),
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    await _showYearPicker(context);
-                                    await _showMonthPicker(context);
-                                  },
-                                  child: Text(S.of(context).chooseMonth),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(_selectedYear != null &&
-                                          _selectedMonth != null
-                                      ? '${_selectedYear!}-${_selectedMonth!.toString().padLeft(2, '0')}'
-                                      : ''),
-                                ),
-                              ],
+                              const SizedBox(height: 24),
+                              // Charts - stack vertically on narrow screens
+                              state.isLoadingChart
+                                  ? const SizedBox(
+                                      height: 300,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    )
+                                  : isNarrowChart
+                                      // Vertical layout for narrow screens
+                                      ? Column(
+                                          children: [
+                                            // Line chart
+                                            SizedBox(
+                                              height: 300,
+                                              child: _buildCategoryLineChart(
+                                                  context,
+                                                  displayCategorySales,
+                                                  isDaily),
+                                            ),
+                                            const SizedBox(height: 24),
+                                            // Pie chart
+                                            SizedBox(
+                                              height: 400,
+                                              child:
+                                                  state.isLoadingProductCounts
+                                                      ? const Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        )
+                                                      : _buildCategoryPieChart(
+                                                          context, state),
+                                            ),
+                                          ],
+                                        )
+                                      // Horizontal layout for wider screens
+                                      : SizedBox(
+                                          height: 400,
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              // Line chart - 60% width
+                                              Expanded(
+                                                flex: 6,
+                                                child: _buildCategoryLineChart(
+                                                    context,
+                                                    displayCategorySales,
+                                                    isDaily),
+                                              ),
+                                              const SizedBox(width: 24),
+                                              // Pie chart - 40% width
+                                              Expanded(
+                                                flex: 4,
+                                                child: state
+                                                        .isLoadingProductCounts
+                                                    ? const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      )
+                                                    : _buildCategoryPieChart(
+                                                        context, state),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                             ],
                           ),
-                          const SizedBox(height: 24),
-                          SizedBox(
-                            height: 400,
-                            child: state.isLoadingChart
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Line chart - 60% width
-                                      Expanded(
-                                        flex: 6,
-                                        child: _buildCategoryLineChart(context,
-                                            displayCategorySales, isDaily),
-                                      ),
-                                      const SizedBox(width: 24),
-                                      // Pie chart - 40% width
-                                      Expanded(
-                                        flex: 4,
-                                        child: state.isLoadingProductCounts
-                                            ? const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              )
-                                            : _buildCategoryPieChart(
-                                                context, state),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 24),
@@ -608,7 +706,7 @@ class _HomeScreenWebViewState extends State<HomeScreenWebView> {
       children: [
         // Title
         Text(
-          'Product Category Distribution',
+          S.of(context).productCategoryDistribution,
           style: Theme.of(context)
               .textTheme
               .titleMedium

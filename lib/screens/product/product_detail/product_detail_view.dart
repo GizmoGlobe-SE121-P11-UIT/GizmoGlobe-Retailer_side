@@ -16,7 +16,6 @@ import '../../../enums/stakeholders/manufacturer_status.dart';
 import '../../../functions/helper.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../widgets/dialog/information_dialog.dart';
-import '../../../data/database/database.dart';
 import '../../../widgets/general/status_badge.dart';
 import '../../../widgets/general/gradient_text.dart';
 import '../../../widgets/invoice/rating_card.dart';
@@ -346,7 +345,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             Expanded(
                               child: ElevatedButton.icon(
                                 onPressed: () async {
-                                  final result = await AddProductScreen.showModal(
+                                  final result =
+                                      await AddProductScreen.showModal(
                                     context,
                                     product: state.product,
                                   );
@@ -355,15 +355,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   }
                                 },
                                 icon: Icon(Icons.edit,
-                                    color: Theme.of(context).colorScheme.onPrimary),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
                                 label: Text(
                                   S.of(context).edit,
                                   style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onPrimary),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary),
                                 ),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).colorScheme.primary,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                 ),
                               ),
                             ),
@@ -371,7 +377,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             // Only show enable/disable button if manufacturer is active
                             // If manufacturer is inactive, product will be displayed as discontinued
                             // and we don't want to allow changing its status
-                            if (state.product.manufacturer.status != ManufacturerStatus.inactive) ...[
+                            if (state.product.manufacturer.status !=
+                                ManufacturerStatus.inactive) ...[
                               const SizedBox(width: 16),
                               Expanded(
                                 child: ElevatedButton.icon(
@@ -380,22 +387,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     cubit.changeProductStatus();
                                   },
                                   icon: Icon(
-                                    state.product.status == ProductStatusEnum.discontinued
+                                    state.product.status ==
+                                            ProductStatusEnum.discontinued
                                         ? Icons.refresh
                                         : Icons.cancel,
                                     color: Colors.white,
                                   ),
                                   label: Text(
-                                    state.product.status == ProductStatusEnum.discontinued
+                                    state.product.status ==
+                                            ProductStatusEnum.discontinued
                                         ? S.of(context).reactivate
                                         : S.of(context).discontinue,
-                                    style: const TextStyle(color: Colors.white),
+                                    style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: state.product.status == ProductStatusEnum.discontinued
+                                    backgroundColor: state.product.status ==
+                                            ProductStatusEnum.discontinued
                                         ? Theme.of(context).colorScheme.tertiary
                                         : Theme.of(context).colorScheme.error,
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
                                   ),
                                 ),
                               ),

@@ -450,7 +450,8 @@ class _SalesDetailScreenState extends State<SalesDetailScreen> {
                   ),
                   child: Row(
                     children: [
-                      if (SalesInvoicePermissions.canEditInvoice(state.invoice) &&
+                      if (SalesInvoicePermissions.canEditInvoice(
+                              state.invoice) &&
                           state.invoice.paymentStatus != PaymentStatus.paid &&
                           state.invoice.salesStatus != SalesStatus.completed &&
                           state.invoice.salesStatus != SalesStatus.cancelled)

@@ -11,6 +11,7 @@ import 'package:gizmoglobe_client/widgets/snackbar/snackbar_service.dart';
 import 'package:gizmoglobe_client/widgets/dialog/information_dialog.dart';
 
 import '../../../enums/stakeholders/manufacturer_status.dart';
+import '../permissions/stakeholder_permissions.dart';
 import 'vendors_screen_cubit.dart';
 import 'vendors_screen_state.dart';
 
@@ -56,6 +57,15 @@ class _VendorsScreenState extends State<VendorsScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<VendorsScreenCubit, VendorsScreenState>(
       builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isSmallScreen = screenWidth < 600;
+        final isMobile = screenWidth < 500;
+        final padding = isMobile
+            ? 8.0
+            : isSmallScreen
+                ? 12.0
+                : 16.0;
+
         return GestureDetector(
           onTap: () {
             if (state.selectedIndex != null) {
@@ -63,7 +73,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
             }
           },
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(padding),
             child: Column(
               children: [
                 Row(
@@ -80,17 +90,26 @@ class _VendorsScreenState extends State<VendorsScreen> {
                             color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
-                    if (state.userRole == 'admin') ...[
-                      const SizedBox(width: 8),
+                    if (StakeholderPermissions.canAddVendors()) ...[
+                      SizedBox(width: isSmallScreen ? 4 : 8),
                       GradientIconButton(
                         icon: Icons.add,
-                        iconSize: 32,
+                        iconSize: isMobile
+                            ? 24
+                            : isSmallScreen
+                                ? 28
+                                : 32,
                         onPressed: _showAddManufacturerModal,
                       ),
                     ],
                   ],
                 ),
-                const SizedBox(height: 16),
+                SizedBox(
+                    height: isMobile
+                        ? 8
+                        : isSmallScreen
+                            ? 12
+                            : 16),
                 Expanded(
                   child: BlocBuilder<VendorsScreenCubit, VendorsScreenState>(
                     builder: (context, state) {
@@ -106,6 +125,18 @@ class _VendorsScreenState extends State<VendorsScreen> {
                       }
 
                       return ListView.builder(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isMobile
+                              ? 0
+                              : isSmallScreen
+                                  ? 4
+                                  : 0,
+                          vertical: isMobile
+                              ? 4
+                              : isSmallScreen
+                                  ? 8
+                                  : 0,
+                        ),
                         itemCount: state.manufacturers.length,
                         itemBuilder: (context, index) {
                           final manufacturer = state.manufacturers[index];
@@ -126,7 +157,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                     backgroundColor: Colors.transparent,
                                     contentPadding: EdgeInsets.zero,
                                     content: Container(
-                                      width: 120,
+                                      width: isMobile ? 100 : 120,
                                       decoration: BoxDecoration(
                                         color: Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(8),
@@ -158,11 +189,13 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                 context,
                                                 manufacturer,
                                                 readOnly:
-                                                    state.userRole != 'admin',
+                                                    !StakeholderPermissions
+                                                        .canEditVendors(),
                                               );
                                             },
                                           ),
-                                          if (state.userRole == 'admin') ...[
+                                          if (StakeholderPermissions
+                                              .canEditVendors()) ...[
                                             ListTile(
                                               dense: true,
                                               leading: Icon(
@@ -190,16 +223,22 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                   manufacturer,
                                                 );
 
-                                                if (updatedManufacturer != null) {
+                                                if (updatedManufacturer !=
+                                                    null) {
                                                   try {
-                                                    await cubit.updateManufacturer(updatedManufacturer);
+                                                    await cubit
+                                                        .updateManufacturer(
+                                                            updatedManufacturer);
                                                     if (mounted) {
-                                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) {
                                                         if (!mounted) return;
-                                                        SnackbarService.showSuccess(
+                                                        SnackbarService
+                                                            .showSuccess(
                                                           context,
-                                                        S.of(context).success,
-                                                        "Manufacturer updated successfully.",
+                                                          S.of(context).success,
+                                                          "Manufacturer updated successfully.",
                                                         );
                                                       });
                                                     }
@@ -207,12 +246,15 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                     if (mounted) {
                                                       showDialog(
                                                         context: context,
-                                                        builder: (context) => InformationDialog(
-                                                          title: S.of(context).failure,
+                                                        builder: (context) =>
+                                                            InformationDialog(
+                                                          title: S
+                                                              .of(context)
+                                                              .failure,
                                                           content: e.toString(),
                                                           buttonText: 'OK',
                                                         ),
-                                                  );
+                                                      );
                                                     }
                                                   }
                                                 }
@@ -297,29 +339,54 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                         ),
                                                         TextButton(
                                                           onPressed: () async {
-                                                            Navigator.pop(context);
+                                                            Navigator.pop(
+                                                                context);
                                                             try {
-                                                              await cubit.toggleManufacturerStatus(manufacturer);
+                                                              await cubit
+                                                                  .toggleManufacturerStatus(
+                                                                      manufacturer);
                                                               if (mounted) {
-                                                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                                  if (!mounted) return;
-                                                                  SnackbarService.showSuccess(
+                                                                WidgetsBinding
+                                                                    .instance
+                                                                    .addPostFrameCallback(
+                                                                        (_) {
+                                                                  if (!mounted) {
+                                                                    return;
+                                                                  }
+                                                                  SnackbarService
+                                                                      .showSuccess(
                                                                     context,
-                                                                    S.of(context).success,
-                                                                    manufacturer.status == ManufacturerStatus.active
-                                                                        ? S.of(context).deactivate
-                                                                        : S.of(context).activate,
+                                                                    S
+                                                                        .of(context)
+                                                                        .success,
+                                                                    manufacturer.status ==
+                                                                            ManufacturerStatus
+                                                                                .active
+                                                                        ? S
+                                                                            .of(
+                                                                                context)
+                                                                            .deactivate
+                                                                        : S
+                                                                            .of(context)
+                                                                            .activate,
                                                                   );
                                                                 });
                                                               }
                                                             } catch (e) {
                                                               if (mounted) {
                                                                 showDialog(
-                                                                  context: context,
-                                                                  builder: (context) => InformationDialog(
-                                                                    title: S.of(context).failure,
-                                                                    content: e.toString(),
-                                                                    buttonText: 'OK',
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (context) =>
+                                                                          InformationDialog(
+                                                                    title: S
+                                                                        .of(context)
+                                                                        .failure,
+                                                                    content: e
+                                                                        .toString(),
+                                                                    buttonText:
+                                                                        'OK',
                                                                   ),
                                                                 );
                                                               }
@@ -372,43 +439,81 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                   ? 1.0
                                   : 0.3,
                               child: Container(
-                                margin: const EdgeInsets.only(bottom: 8),
+                                margin: EdgeInsets.only(
+                                  bottom: isMobile
+                                      ? 4
+                                      : isSmallScreen
+                                          ? 6
+                                          : 8,
+                                ),
                                 decoration: BoxDecoration(
                                   color: state.selectedIndex == index
                                       ? Theme.of(context)
                                           .primaryColor
                                           .withValues(alpha: 0.1)
                                       : Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(
+                                    isMobile ? 6 : 8,
+                                  ),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isMobile
+                                        ? 8
+                                        : isSmallScreen
+                                            ? 12
+                                            : 16,
+                                    vertical: isMobile
+                                        ? 8
+                                        : isSmallScreen
+                                            ? 10
+                                            : 12,
                                   ),
                                   child: Row(
                                     children: [
                                       CircleAvatar(
+                                        radius: isMobile
+                                            ? 16
+                                            : isSmallScreen
+                                                ? 18
+                                                : 20,
                                         backgroundColor: Theme.of(context)
                                             .colorScheme
                                             .primaryContainer,
                                         child: Icon(
                                           Icons.business_center,
+                                          size: isMobile
+                                              ? 16
+                                              : isSmallScreen
+                                                  ? 18
+                                                  : 20,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .primary,
                                         ),
                                       ),
-                                      const SizedBox(width: 16),
+                                      SizedBox(
+                                          width: isMobile
+                                              ? 8
+                                              : isSmallScreen
+                                                  ? 12
+                                                  : 16),
                                       Expanded(
                                         child: Text(
                                           manufacturer.manufacturerName,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 16,
+                                            fontSize: isMobile
+                                                ? 14
+                                                : isSmallScreen
+                                                    ? 15
+                                                    : 16,
                                           ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
+                                      SizedBox(width: isMobile ? 4 : 8),
                                       StatusBadge(
                                         status: manufacturer.status ==
                                                 ManufacturerStatus.active

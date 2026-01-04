@@ -12,7 +12,8 @@ import '../snackbar/snackbar_service.dart';
 class RatingCard extends StatelessWidget {
   final dynamic rating;
   final void Function(String ratingId)? onReply;
-  final Future<void> Function(String ratingId, String comment, {String? productId})? onPostReply;
+  final Future<void> Function(String ratingId, String comment,
+      {String? productId})? onPostReply;
   final bool attachProduct;
   final Product? product;
 
@@ -73,7 +74,10 @@ class RatingCard extends StatelessWidget {
                 DateFormat('dd/MM/yyyy').format(r.timeSent),
                 style: TextStyle(
                   fontSize: 12,
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.6),
                 ),
               ),
             ),
@@ -93,7 +97,8 @@ class RatingCard extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => FullscreenMediaViewer(videoUrl: r.videoUrl),
+                            builder: (_) =>
+                                FullscreenMediaViewer(videoUrl: r.videoUrl),
                           ));
                         },
                         child: Container(
@@ -127,11 +132,17 @@ class RatingCard extends StatelessWidget {
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => FullscreenMediaViewer(imageUrl: img),
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (_) =>
+                                          FullscreenMediaViewer(imageUrl: img),
                                     ));
                                   },
-                                  child: Image.network(img, height: 80, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const SizedBox()),
+                                  child: Image.network(img,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (_, __, ___) =>
+                                          const SizedBox()),
                                 ),
                               );
                             }).toList(),
@@ -231,15 +242,15 @@ class _ReplyDialog extends StatefulWidget {
   final String ratingId;
   final String? productId;
   final BuildContext parentCtx;
-  final Future<void> Function(String ratingId, String comment, {String? productId})? onPostReply;
+  final Future<void> Function(String ratingId, String comment,
+      {String? productId})? onPostReply;
 
   const _ReplyDialog({
-    Key? key,
     required this.ratingId,
     this.productId,
     required this.parentCtx,
     this.onPostReply,
-  }) : super(key: key);
+  });
 
   @override
   State<_ReplyDialog> createState() => _ReplyDialogState();
@@ -261,11 +272,11 @@ class _ReplyDialogState extends State<_ReplyDialog> {
     super.dispose();
   }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   // No nested loading dialog anymore. We rely on the `_posting` boolean
+  // No nested loading dialog anymore. We rely on the `_posting` boolean
   // to render an inline progress indicator on the Post button.
 
-   @override
-   Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     final loc = S.of(context);
     return AlertDialog(
       title: Row(
@@ -338,7 +349,8 @@ class _ReplyDialogState extends State<_ReplyDialog> {
               ? const SizedBox(
                   width: 18,
                   height: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: Colors.white))
               : Text(loc.postReply),
         ),
       ],

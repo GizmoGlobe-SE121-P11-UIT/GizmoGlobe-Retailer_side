@@ -38,9 +38,17 @@ class _VendorAddWebViewState extends State<VendorAddWebView> {
   Widget build(BuildContext context) {
     return BlocBuilder<VendorsScreenCubit, VendorsScreenState>(
       builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isMobile = screenWidth < 600;
+        final containerWidth = isMobile
+            ? screenWidth - 16 // 8px margin on each side
+            : screenWidth * 0.3;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.3,
-          height: MediaQuery.of(context).size.height * 0.275,
+          width: isMobile ? containerWidth : containerWidth.clamp(320.0, 450.0),
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? screenWidth : 450,
+          ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
@@ -53,6 +61,7 @@ class _VendorAddWebViewState extends State<VendorAddWebView> {
             ],
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Header with close and save buttons
               Container(
@@ -104,161 +113,153 @@ class _VendorAddWebViewState extends State<VendorAddWebView> {
                 ),
               ),
               // Content
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(8),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Manufacturer Information Card
-                        Card(
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextFormField(
-                                  controller: _nameController,
-                                  decoration: InputDecoration(
-                                    labelText: S.of(context).manufacturerName,
-                                    labelStyle: TextStyle(
+              SingleChildScrollView(
+                padding: const EdgeInsets.all(8),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Manufacturer Information Card
+                      Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                controller: _nameController,
+                                decoration: InputDecoration(
+                                  labelText: S.of(context).manufacturerName,
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  floatingLabelStyle:
+                                      WidgetStateTextStyle.resolveWith(
+                                    (states) => TextStyle(
+                                      color:
+                                          states.contains(WidgetState.focused)
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                    ),
+                                  ),
+                                  prefixIcon: Icon(
+                                    Icons.business,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,
                                     ),
-                                    floatingLabelStyle:
-                                        WidgetStateTextStyle.resolveWith(
-                                      (states) => TextStyle(
-                                        color:
-                                            states.contains(WidgetState.focused)
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                      ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
-                                    prefixIcon: Icon(
-                                      Icons.business,
+                                  ),
+                                ),
+                                textInputAction: TextInputAction.next,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return S.of(context).pleaseEnterName;
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              DropdownButtonFormField<ManufacturerStatus>(
+                                initialValue: selectedStatus,
+                                decoration: InputDecoration(
+                                  labelText: S.of(context).status,
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  floatingLabelStyle:
+                                      WidgetStateTextStyle.resolveWith(
+                                    (states) => TextStyle(
+                                      color:
+                                          states.contains(WidgetState.focused)
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                    ),
+                                  ),
+                                  prefixIcon: Icon(
+                                    Icons.info_outline,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,
                                     ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
+                                  ),
+                                ),
+                                dropdownColor: Theme.of(context).cardColor,
+                                isExpanded: true,
+                                items: ManufacturerStatus.values.map((status) {
+                                  return DropdownMenuItem(
+                                    value: status,
+                                    child: Text(
+                                      status == ManufacturerStatus.active
+                                          ? S.of(context).active
+                                          : S.of(context).inactive,
+                                      style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurface,
                                       ),
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ),
-                                  textInputAction: TextInputAction.next,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return S.of(context).pleaseEnterName;
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 16),
-                                DropdownButtonFormField<ManufacturerStatus>(
-                                  initialValue: selectedStatus,
-                                  decoration: InputDecoration(
-                                    labelText: S.of(context).status,
-                                    labelStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                    floatingLabelStyle:
-                                        WidgetStateTextStyle.resolveWith(
-                                      (states) => TextStyle(
-                                        color:
-                                            states.contains(WidgetState.focused)
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                      ),
-                                    ),
-                                    prefixIcon: Icon(
-                                      Icons.info_outline,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ),
-                                  dropdownColor: Theme.of(context).cardColor,
-                                  items:
-                                      ManufacturerStatus.values.map((status) {
-                                    return DropdownMenuItem(
-                                      value: status,
-                                      child: Text(
-                                        status == ManufacturerStatus.active
-                                            ? S.of(context).active
-                                            : S.of(context).inactive,
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (newValue) {
-                                    if (newValue != null && mounted) {
-                                      setState(() {
-                                        selectedStatus = newValue;
-                                      });
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  if (newValue != null && mounted) {
+                                    setState(() {
+                                      selectedStatus = newValue;
+                                    });
+                                  }
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

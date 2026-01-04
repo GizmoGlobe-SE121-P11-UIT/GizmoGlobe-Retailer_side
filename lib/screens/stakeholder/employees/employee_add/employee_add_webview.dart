@@ -43,9 +43,18 @@ class _EmployeeAddWebViewState extends State<EmployeeAddWebView> {
   Widget build(BuildContext context) {
     return BlocBuilder<EmployeesScreenCubit, EmployeesScreenState>(
       builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isMobile = screenWidth < 600;
+        // On mobile, use screen width minus margin. On desktop, use 45%.
+        final containerWidth = isMobile
+            ? screenWidth - 16 // 8px margin on each side
+            : screenWidth * 0.45;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.45,
-          height: MediaQuery.of(context).size.height * 0.5,
+          width: isMobile ? containerWidth : containerWidth.clamp(380.0, 550.0),
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? screenWidth : 550,
+          ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
@@ -58,6 +67,7 @@ class _EmployeeAddWebViewState extends State<EmployeeAddWebView> {
             ],
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Header with close and save buttons
               Container(
@@ -108,268 +118,256 @@ class _EmployeeAddWebViewState extends State<EmployeeAddWebView> {
                 ),
               ),
               // Content
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Employee Information Card
-                        Card(
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextFormField(
-                                  controller: _nameController,
-                                  decoration: InputDecoration(
-                                    labelText: S.of(context).fullName,
-                                    labelStyle: TextStyle(
+              SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Employee Information Card
+                      Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                controller: _nameController,
+                                decoration: InputDecoration(
+                                  labelText: S.of(context).fullName,
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  floatingLabelStyle:
+                                      WidgetStateTextStyle.resolveWith(
+                                    (states) => TextStyle(
+                                      color:
+                                          states.contains(WidgetState.focused)
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                    ),
+                                  ),
+                                  prefixIcon: Icon(
+                                    Icons.person,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,
                                     ),
-                                    floatingLabelStyle:
-                                        WidgetStateTextStyle.resolveWith(
-                                      (states) => TextStyle(
-                                        color:
-                                            states.contains(WidgetState.focused)
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                      ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
-                                    prefixIcon: Icon(
-                                      Icons.person,
+                                  ),
+                                ),
+                                textInputAction: TextInputAction.next,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return S.of(context).pleaseEnterName;
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              TextFormField(
+                                controller: _emailController,
+                                decoration: InputDecoration(
+                                  labelText: S.of(context).email,
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  floatingLabelStyle:
+                                      WidgetStateTextStyle.resolveWith(
+                                    (states) => TextStyle(
+                                      color:
+                                          states.contains(WidgetState.focused)
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                    ),
+                                  ),
+                                  prefixIcon: Icon(
+                                    Icons.email,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,
                                     ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
+                                  ),
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return S.of(context).pleaseEnterEmail;
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              TextFormField(
+                                controller: _phoneController,
+                                decoration: InputDecoration(
+                                  labelText: S.of(context).phoneNumber,
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  floatingLabelStyle:
+                                      WidgetStateTextStyle.resolveWith(
+                                    (states) => TextStyle(
+                                      color:
+                                          states.contains(WidgetState.focused)
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                    ),
+                                  ),
+                                  prefixIcon: Icon(
+                                    Icons.phone,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  hintText: '+84 xxx xxx xxx',
+                                ),
+                                keyboardType: TextInputType.phone,
+                              ),
+                              const SizedBox(height: 16),
+                              DropdownButtonFormField<RoleEnum>(
+                                initialValue: selectedRole,
+                                decoration: InputDecoration(
+                                  labelText: S.of(context).role,
+                                  labelStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  floatingLabelStyle:
+                                      WidgetStateTextStyle.resolveWith(
+                                    (states) => TextStyle(
+                                      color:
+                                          states.contains(WidgetState.focused)
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                    ),
+                                  ),
+                                  prefixIcon: Icon(
+                                    Icons.work,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                                dropdownColor: Theme.of(context).cardColor,
+                                isExpanded: true,
+                                items: RoleEnum.values
+                                    .where((role) => role != RoleEnum.owner)
+                                    .map((role) {
+                                  return DropdownMenuItem(
+                                    value: role,
+                                    child: Text(
+                                      role.localizedName(context),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurface,
                                       ),
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ),
-                                  textInputAction: TextInputAction.next,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return S.of(context).pleaseEnterName;
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 16),
-                                TextFormField(
-                                  controller: _emailController,
-                                  decoration: InputDecoration(
-                                    labelText: S.of(context).email,
-                                    labelStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                    floatingLabelStyle:
-                                        WidgetStateTextStyle.resolveWith(
-                                      (states) => TextStyle(
-                                        color:
-                                            states.contains(WidgetState.focused)
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                      ),
-                                    ),
-                                    prefixIcon: Icon(
-                                      Icons.email,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ),
-                                  keyboardType: TextInputType.emailAddress,
-                                  textInputAction: TextInputAction.next,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return S.of(context).pleaseEnterEmail;
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                const SizedBox(height: 16),
-                                TextFormField(
-                                  controller: _phoneController,
-                                  decoration: InputDecoration(
-                                    labelText: S.of(context).phoneNumber,
-                                    labelStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                    floatingLabelStyle:
-                                        WidgetStateTextStyle.resolveWith(
-                                      (states) => TextStyle(
-                                        color:
-                                            states.contains(WidgetState.focused)
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                      ),
-                                    ),
-                                    prefixIcon: Icon(
-                                      Icons.phone,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                    hintText: '+84 xxx xxx xxx',
-                                  ),
-                                  keyboardType: TextInputType.phone,
-                                ),
-                                const SizedBox(height: 16),
-                                DropdownButtonFormField<RoleEnum>(
-                                  initialValue: selectedRole,
-                                  decoration: InputDecoration(
-                                    labelText: S.of(context).role,
-                                    labelStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                    floatingLabelStyle:
-                                        WidgetStateTextStyle.resolveWith(
-                                      (states) => TextStyle(
-                                        color:
-                                            states.contains(WidgetState.focused)
-                                                ? Theme.of(context)
-                                                    .colorScheme
-                                                    .primary
-                                                : Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                      ),
-                                    ),
-                                    prefixIcon: Icon(
-                                      Icons.work,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ),
-                                  dropdownColor: Theme.of(context).cardColor,
-                                  items: RoleEnum.values
-                                      .where((role) => role != RoleEnum.owner)
-                                      .map((role) {
-                                    return DropdownMenuItem(
-                                      value: role,
-                                      child: Text(
-                                        role.localizedName(context),
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (RoleEnum? value) {
-                                    if (value != null) {
-                                      setState(() => selectedRole = value);
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
+                                  );
+                                }).toList(),
+                                onChanged: (RoleEnum? value) {
+                                  if (value != null) {
+                                    setState(() => selectedRole = value);
+                                  }
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

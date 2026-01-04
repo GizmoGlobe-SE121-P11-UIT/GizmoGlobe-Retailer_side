@@ -40,11 +40,38 @@ class _StakeholderScreenState extends State<StakeholderScreen>
   StreamSubscription<dynamic>? _hashChangeSubscription;
   late TabController _tabController;
 
+  // Mobile sidebar state
+  bool isSidebarCompact = false;
+  bool isMobileSidebarVisible = false;
+
+  // Mobile breakpoint threshold - collapse sidebar on narrower screens
+  static const double mobileBreakpoint = 900.0;
+  // Compact breakpoint - auto-compact sidebar on medium screens
+  static const double compactBreakpoint = 1100.0;
+
   /// Maps the visible tab index -> cubit logical index (0: customers, 1: employees, 2: vendors)
   late List<int> _displayedToCubitIndex;
 
   /// Reverse map: cubit logical index -> visible tab index
   late Map<int, int> _cubitToDisplayedIndex;
+
+  bool _isMobileMode(BuildContext context) {
+    return MediaQuery.of(context).size.width <= mobileBreakpoint;
+  }
+
+  void _toggleMobileSidebar() {
+    setState(() {
+      isMobileSidebarVisible = !isMobileSidebarVisible;
+    });
+  }
+
+  void _closeMobileSidebar() {
+    if (isMobileSidebarVisible) {
+      setState(() {
+        isMobileSidebarVisible = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -77,10 +104,10 @@ class _StakeholderScreenState extends State<StakeholderScreen>
     if (kIsWeb) {
       _hashChangeSubscription =
           PlatformSpecificUtils.onHashChange.listen((event) {
-            if (mounted) {
-              _handleHashChange();
-            }
-          });
+        if (mounted) {
+          _handleHashChange();
+        }
+      });
     }
   }
 
@@ -178,7 +205,7 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                         duration: Duration.zero);
 
                     final actualCubitIndex =
-                    _displayedToCubitIndex[displayedIndex];
+                        _displayedToCubitIndex[displayedIndex];
                     await context
                         .read<StakeholderScreenCubit>()
                         .changeTab(actualCubitIndex);
@@ -215,7 +242,7 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                   children: [
                     IndexedStack(
                       index:
-                      _cubitToDisplayedIndex[state.selectedTabIndex] ?? 0,
+                          _cubitToDisplayedIndex[state.selectedTabIndex] ?? 0,
                       children: children,
                     ),
                     if (state.isChangingTab)
@@ -233,7 +260,7 @@ class _StakeholderScreenState extends State<StakeholderScreen>
                                   padding: const EdgeInsets.all(24),
                                   child: CircularProgressIndicator(
                                     color:
-                                    Theme.of(context).colorScheme.primary,
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
@@ -248,6 +275,11 @@ class _StakeholderScreenState extends State<StakeholderScreen>
           );
 
           if (kIsWeb && widget.showFullLayout) {
+            final isMobile = _isMobileMode(context);
+            final screenWidth = MediaQuery.of(context).size.width;
+            final shouldAutoCompact =
+                screenWidth < compactBreakpoint && !isMobile;
+            final colorScheme = Theme.of(context).colorScheme;
             final items = buildDefaultSidebarItems(
               home: S.of(context).home,
               product: S.of(context).product,
@@ -261,21 +293,81 @@ class _StakeholderScreenState extends State<StakeholderScreen>
               resizeToAvoidBottomInset: false,
               body: Column(
                 children: [
-                  const WebHeader(
+                  WebHeader(
                     unreadChats: 0,
-                    isSidebarCompact: false,
+                    isSidebarCompact: isSidebarCompact,
+                    isMobileMode: isMobile,
+                    onMenuPressed: _toggleMobileSidebar,
                   ),
                   Expanded(
-                    child: Row(
+                    child: Stack(
                       children: [
-                        WebSidebarModes(
-                          currentIndex: 3,
-                          onItemSelected: (value) {},
-                          items: items,
-                          onCompactModeChanged: (isCompact) {},
+                        // Main content area
+                        Row(
+                          children: [
+                            // Desktop sidebar (hidden on mobile)
+                            if (!isMobile) ...[
+                              WebSidebarModes(
+                                currentIndex: 3,
+                                initialCompactMode: shouldAutoCompact,
+                                onItemSelected: (value) {
+                                  _closeMobileSidebar();
+                                },
+                                items: items,
+                                onCompactModeChanged: (isCompact) {
+                                  setState(() {
+                                    isSidebarCompact = isCompact;
+                                  });
+                                },
+                              ),
+                              const VerticalDivider(width: 1),
+                            ],
+                            Expanded(child: content),
+                          ],
                         ),
-                        const VerticalDivider(width: 1),
-                        Expanded(child: content),
+                        // Mobile sidebar overlay
+                        if (isMobile && isMobileSidebarVisible) ...[
+                          // Backdrop
+                          Positioned.fill(
+                            child: GestureDetector(
+                              onTap: _closeMobileSidebar,
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 250),
+                                color: Colors.black.withValues(alpha: 0.5),
+                              ),
+                            ),
+                          ),
+                          // Sidebar drawer
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            bottom: 0,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 250),
+                              curve: Curves.easeInOut,
+                              width: 280,
+                              decoration: BoxDecoration(
+                                color: colorScheme.surface,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.2),
+                                    blurRadius: 16,
+                                    offset: const Offset(4, 0),
+                                  ),
+                                ],
+                              ),
+                              child: WebSidebarModes(
+                                currentIndex: 3,
+                                hideCollapseButton: true,
+                                onItemSelected: (value) {
+                                  _closeMobileSidebar();
+                                },
+                                items: items,
+                                initialCompactMode: false,
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -290,7 +382,6 @@ class _StakeholderScreenState extends State<StakeholderScreen>
     );
   }
 }
-
 
 // Widget to handle initial tab index for web navigation
 class StakeholderScreenWithInitialTab extends StatefulWidget {

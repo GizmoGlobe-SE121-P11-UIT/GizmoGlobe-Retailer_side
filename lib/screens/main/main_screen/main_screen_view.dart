@@ -29,7 +29,13 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int index = 0;
   bool isSidebarCompact = false;
+  bool isMobileSidebarVisible = false;
   MainScreenCubit get cubit => context.read<MainScreenCubit>();
+
+  // Mobile breakpoint threshold - collapse sidebar on narrower screens
+  static const double mobileBreakpoint = 900.0;
+  // Compact breakpoint - auto-compact sidebar on medium screens
+  static const double compactBreakpoint = 1100.0;
 
   final List<Widget Function()> widgetList = [
     () => HomeScreen.newInstance(),
@@ -64,6 +70,24 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  bool _isMobileMode(BuildContext context) {
+    return MediaQuery.of(context).size.width <= mobileBreakpoint;
+  }
+
+  void _toggleMobileSidebar() {
+    setState(() {
+      isMobileSidebarVisible = !isMobileSidebarVisible;
+    });
+  }
+
+  void _closeMobileSidebar() {
+    if (isMobileSidebarVisible) {
+      setState(() {
+        isMobileSidebarVisible = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // CRITICAL SECURITY: Check authentication directly in MainScreen
@@ -84,6 +108,9 @@ class _MainScreenState extends State<MainScreen> {
 
     // Web: use left sidebar with header; Mobile: keep bottom navigation
     if (kIsWeb) {
+      final isMobile = _isMobileMode(context);
+      final screenWidth = MediaQuery.of(context).size.width;
+      final shouldAutoCompact = screenWidth < compactBreakpoint && !isMobile;
       final items = buildDefaultSidebarItems(
         home: S.of(context).home,
         product: S.of(context).product,
@@ -101,44 +128,117 @@ class _MainScreenState extends State<MainScreen> {
             WebHeader(
               unreadChats: 0,
               isSidebarCompact: isSidebarCompact,
+              isMobileMode: isMobile,
+              onMenuPressed: _toggleMobileSidebar,
             ),
             // Main content with sidebar
             Expanded(
-              child: Row(
+              child: Stack(
                 children: [
-                  WebSidebarModes(
-                    currentIndex: index,
-                    onItemSelected: (value) {
-                      if (value != index) {
-                        setState(() {
-                          index = value;
-                        });
+                  // Main content area
+                  Row(
+                    children: [
+                      // Desktop sidebar (hidden on mobile)
+                      if (!isMobile) ...[
+                        WebSidebarModes(
+                          currentIndex: index,
+                          initialCompactMode: shouldAutoCompact,
+                          onItemSelected: (value) {
+                            if (value != index) {
+                              setState(() {
+                                index = value;
+                              });
 
-                        // For web only: use Navigator for proper routing
-                        if (kIsWeb) {
-                          if (value == 2) {
-                            Navigator.pushReplacementNamed(
-                                context, '/invoices');
-                          } else if (value == 3) {
-                            Navigator.pushReplacementNamed(
-                                context, '/stakeholders');
-                          } else if (value == 4) {
-                            Navigator.pushReplacementNamed(
-                                context, '/vouchers');
-                          }
-                          // Profile section (value == 5) is handled directly in the sidebar
-                        }
-                      }
-                    },
-                    items: items,
-                    onCompactModeChanged: (isCompact) {
-                      setState(() {
-                        isSidebarCompact = isCompact;
-                      });
-                    },
+                              // For web only: use Navigator for proper routing
+                              if (kIsWeb) {
+                                if (value == 2) {
+                                  Navigator.pushReplacementNamed(
+                                      context, '/invoices');
+                                } else if (value == 3) {
+                                  Navigator.pushReplacementNamed(
+                                      context, '/stakeholders');
+                                } else if (value == 4) {
+                                  Navigator.pushReplacementNamed(
+                                      context, '/vouchers');
+                                }
+                                // Profile section (value == 5) is handled directly in the sidebar
+                              }
+                            }
+                          },
+                          items: items,
+                          onCompactModeChanged: (isCompact) {
+                            setState(() {
+                              isSidebarCompact = isCompact;
+                            });
+                          },
+                        ),
+                        const VerticalDivider(width: 1),
+                      ],
+                      Expanded(child: widgetList[index]()),
+                    ],
                   ),
-                  const VerticalDivider(width: 1),
-                  Expanded(child: widgetList[index]()),
+                  // Mobile sidebar overlay
+                  if (isMobile && isMobileSidebarVisible) ...[
+                    // Backdrop
+                    Positioned.fill(
+                      child: GestureDetector(
+                        onTap: _closeMobileSidebar,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 250),
+                          color: Colors.black.withValues(alpha: 0.5),
+                        ),
+                      ),
+                    ),
+                    // Sidebar drawer
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut,
+                        width: 280,
+                        decoration: BoxDecoration(
+                          color: colorScheme.surface,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.2),
+                              blurRadius: 16,
+                              offset: const Offset(4, 0),
+                            ),
+                          ],
+                        ),
+                        child: WebSidebarModes(
+                          currentIndex: index,
+                          hideCollapseButton: true,
+                          onItemSelected: (value) {
+                            _closeMobileSidebar();
+                            if (value != index) {
+                              setState(() {
+                                index = value;
+                              });
+
+                              // For web only: use Navigator for proper routing
+                              if (kIsWeb) {
+                                if (value == 2) {
+                                  Navigator.pushReplacementNamed(
+                                      context, '/invoices');
+                                } else if (value == 3) {
+                                  Navigator.pushReplacementNamed(
+                                      context, '/stakeholders');
+                                } else if (value == 4) {
+                                  Navigator.pushReplacementNamed(
+                                      context, '/vouchers');
+                                }
+                              }
+                            }
+                          },
+                          items: items,
+                          initialCompactMode: false,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

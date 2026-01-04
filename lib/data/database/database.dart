@@ -350,11 +350,44 @@ class Database {
   Future<void> getUsername() async {
     final User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      username = userDoc['username'];
+      try {
+        final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+        if (userDoc.exists) {
+          final userData = userDoc.data() as Map<String, dynamic>?;
+          username = userData?['username'] as String?;
+          // Fallback: if username is empty or null, use email prefix or "User"
+          if (username?.isEmpty ?? true) {
+            final emailStr = user.email ?? '';
+            if (emailStr.isNotEmpty) {
+              username = emailStr.split('@').first;
+            } else {
+              username = 'User';
+            }
+          }
+        } else {
+          // Document doesn't exist, use email from auth as fallback
+          final emailStr = user.email ?? '';
+          if (emailStr.isNotEmpty) {
+            username = emailStr.split('@').first;
+          } else {
+            username = 'User';
+          }
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error fetching username: $e');
+        }
+        // On error, use email as fallback
+        final emailStr = user.email ?? '';
+        if (emailStr.isNotEmpty) {
+          username = emailStr.split('@').first;
+        } else {
+          username = 'User';
+        }
+      }
     } else {
       // Clear username if no user is authenticated
       username = null;
@@ -364,14 +397,45 @@ class Database {
   Future<void> getUser() async {
     final User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-      username = userDoc['username'];
-      email = userDoc['email'];
-
-      role = await getCurrentRole();
+      try {
+        final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+        if (userDoc.exists) {
+          final userData = userDoc.data() as Map<String, dynamic>?;
+          username = userData?['username'] as String?;
+          email = userData?['email'] as String? ?? user.email;
+          // Fallback: if username is empty or null, use email prefix or "User"
+          if (username?.isEmpty ?? true) {
+            final emailStr = email ?? user.email ?? '';
+            if (emailStr.isNotEmpty) {
+              username = emailStr.split('@').first;
+            } else {
+              username = 'User';
+            }
+          }
+          role = await getCurrentRole();
+        } else {
+          // Document doesn't exist, use email from auth as fallback
+          final emailStr = user.email ?? '';
+          if (emailStr.isNotEmpty) {
+            username = emailStr.split('@').first;
+          } else {
+            username = 'User';
+          }
+          email = user.email;
+          role = await getCurrentRole();
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error fetching user data: $e');
+        }
+        // On error, use email from auth as fallback
+        username = null;
+        email = user.email;
+        role = RoleEnum.unknown;
+      }
     } else {
       // Clear user data if no user is authenticated
       username = null;

@@ -41,8 +41,35 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
   static int _lastSelectedTabIndex = 0;
   bool _isChangingTab = false;
 
+  // Mobile sidebar state
+  bool isSidebarCompact = false;
+  bool isMobileSidebarVisible = false;
+
+  // Mobile breakpoint threshold - collapse sidebar on narrower screens
+  static const double mobileBreakpoint = 900.0;
+  // Compact breakpoint - auto-compact sidebar on medium screens
+  static const double compactBreakpoint = 1100.0;
+
   VoucherScreenCubit get cubit => context.read<VoucherScreenCubit>();
   late TabController _tabController;
+
+  bool _isMobileMode(BuildContext context) {
+    return MediaQuery.of(context).size.width <= mobileBreakpoint;
+  }
+
+  void _toggleMobileSidebar() {
+    setState(() {
+      isMobileSidebarVisible = !isMobileSidebarVisible;
+    });
+  }
+
+  void _closeMobileSidebar() {
+    if (isMobileSidebarVisible) {
+      setState(() {
+        isMobileSidebarVisible = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -380,6 +407,11 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
     );
 
     // Web layout with header and sidebar
+    final isMobile = _isMobileMode(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final shouldAutoCompact =
+        screenWidth < compactBreakpoint && !isMobile;
+    final colorScheme = Theme.of(context).colorScheme;
     final items = buildDefaultSidebarItems(
       home: S.of(context).home,
       product: S.of(context).product,
@@ -394,47 +426,126 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
       body: Column(
         children: [
           // Web Header
-          const WebHeader(
+          WebHeader(
             unreadChats: 0,
-            isSidebarCompact: false,
+            isSidebarCompact: isSidebarCompact,
+            isMobileMode: isMobile,
+            onMenuPressed: _toggleMobileSidebar,
           ),
           // Main content with sidebar
           Expanded(
-            child: Row(
+            child: Stack(
               children: [
-                WebSidebarModes(
-                  currentIndex: 4, // Voucher index
-                  onItemSelected: (value) {
-                    if (!mounted) return;
+                // Main content area
+                Row(
+                  children: [
+                    // Desktop sidebar (hidden on mobile)
+                    if (!isMobile) ...[
+                      WebSidebarModes(
+                        currentIndex: 4, // Voucher index
+                        initialCompactMode: shouldAutoCompact,
+                        onItemSelected: (value) {
+                          _closeMobileSidebar();
+                          if (!mounted) return;
 
-                    // Handle sidebar navigation using Navigator
-                    try {
-                      if (value == 0) {
-                        Navigator.pushReplacementNamed(context, '/main');
-                      } else if (value == 1) {
-                        Navigator.pushReplacementNamed(context, '/main');
-                      } else if (value == 2) {
-                        Navigator.pushReplacementNamed(context, '/invoices');
-                      } else if (value == 3) {
-                        Navigator.pushReplacementNamed(
-                            context, '/stakeholders');
-                      } else if (value == 5) {
-                        Navigator.pushReplacementNamed(context, '/main');
-                      }
-                      // value == 4 (Voucher) is handled by staying in current screen
-                    } catch (e) {
-                      if (kDebugMode) {
-                        print('Error in sidebar navigation: $e');
-                      }
-                    }
-                  },
-                  items: items,
-                  onCompactModeChanged: (isCompact) {
-                    // Handle sidebar compact mode if needed
-                  },
+                          // Handle sidebar navigation using Navigator
+                          try {
+                            if (value == 0) {
+                              Navigator.pushReplacementNamed(context, '/main');
+                            } else if (value == 1) {
+                              Navigator.pushReplacementNamed(context, '/main');
+                            } else if (value == 2) {
+                              Navigator.pushReplacementNamed(context, '/invoices');
+                            } else if (value == 3) {
+                              Navigator.pushReplacementNamed(
+                                  context, '/stakeholders');
+                            } else if (value == 5) {
+                              Navigator.pushReplacementNamed(context, '/main');
+                            }
+                            // value == 4 (Voucher) is handled by staying in current screen
+                          } catch (e) {
+                            if (kDebugMode) {
+                              print('Error in sidebar navigation: $e');
+                            }
+                          }
+                        },
+                        items: items,
+                        onCompactModeChanged: (isCompact) {
+                          setState(() {
+                            isSidebarCompact = isCompact;
+                          });
+                        },
+                      ),
+                      const VerticalDivider(width: 1),
+                    ],
+                    Expanded(child: content),
+                  ],
                 ),
-                const VerticalDivider(width: 1),
-                Expanded(child: content),
+                // Mobile sidebar overlay
+                if (isMobile && isMobileSidebarVisible) ...[
+                  // Backdrop
+                  Positioned.fill(
+                    child: GestureDetector(
+                      onTap: _closeMobileSidebar,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        color: Colors.black.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                  // Sidebar drawer
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      width: 280,
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 16,
+                            offset: const Offset(4, 0),
+                          ),
+                        ],
+                      ),
+                      child: WebSidebarModes(
+                        currentIndex: 4, // Voucher index
+                        hideCollapseButton: true,
+                        onItemSelected: (value) {
+                          _closeMobileSidebar();
+                          if (!mounted) return;
+
+                          // Handle sidebar navigation using Navigator
+                          try {
+                            if (value == 0) {
+                              Navigator.pushReplacementNamed(context, '/main');
+                            } else if (value == 1) {
+                              Navigator.pushReplacementNamed(context, '/main');
+                            } else if (value == 2) {
+                              Navigator.pushReplacementNamed(context, '/invoices');
+                            } else if (value == 3) {
+                              Navigator.pushReplacementNamed(
+                                  context, '/stakeholders');
+                            } else if (value == 5) {
+                              Navigator.pushReplacementNamed(context, '/main');
+                            }
+                            // value == 4 (Voucher) is handled by staying in current screen
+                          } catch (e) {
+                            if (kDebugMode) {
+                              print('Error in sidebar navigation: $e');
+                            }
+                          }
+                        },
+                        items: items,
+                        initialCompactMode: false,
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

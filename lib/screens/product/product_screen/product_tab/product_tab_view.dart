@@ -5,7 +5,6 @@ import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/manufacturer_status.dart';
 import 'package:gizmoglobe_client/widgets/product/product_card.dart';
 
-import '../../../../data/database/database.dart';
 import '../../../../enums/processing/process_state_enum.dart';
 import '../../../../enums/processing/sort_enum.dart';
 import '../../../../enums/product_related/product_status_enum.dart';
@@ -98,6 +97,59 @@ class _ProductTabState extends State<ProductTab>
     with SingleTickerProviderStateMixin, TabMixin<ProductTab> {
   TabCubit get cubit => context.read<TabCubit>();
 
+  String _getSortDisplayText(BuildContext context, SortEnum value) {
+    switch (value) {
+      case SortEnum.salesHighest:
+        return S.of(context).salesHighest;
+      case SortEnum.salesLowest:
+        return S.of(context).salesLowest;
+      case SortEnum.releaseLatest:
+        return S.of(context).releaseLatest;
+      case SortEnum.releaseOldest:
+        return S.of(context).releaseOldest;
+      case SortEnum.stockHighest:
+        return S.of(context).stockHighest;
+      case SortEnum.stockLowest:
+        return S.of(context).stockLowest;
+    }
+  }
+
+  void _showSortBottomSheet(BuildContext context, TabState state) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                S.of(context).sortBy,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+            ...SortEnum.values.map((value) => ListTile(
+                  leading: Icon(
+                    state.selectedSortOption == value
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_off,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  title: Text(_getSortDisplayText(context, value)),
+                  onTap: () {
+                    cubit.updateSortOption(value);
+                    Navigator.pop(context);
+                  },
+                )),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -111,116 +163,108 @@ class _ProductTabState extends State<ProductTab>
             children: [
               BlocBuilder<TabCubit, TabState>(
                 builder: (context, state) {
-                  return Row(
-                    children: [
-                      Text(
-                        S.of(context).sortBy,
-                        style: AppTextStyle.smallText,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: DropdownButton<SortEnum>(
-                          isExpanded: true,
-                          itemHeight: kMinInteractiveDimension,
-                          value: state.selectedSortOption,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          underline: Container(
-                            height: 1,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.5),
-                          ),
-                          onChanged: (SortEnum? newValue) {
-                            if (newValue != null &&
-                                newValue != state.selectedSortOption) {
-                              cubit.updateSortOption(newValue);
-                            }
-                          },
-                          items: SortEnum.values
-                              .map<DropdownMenuItem<SortEnum>>(
-                                  (SortEnum value) {
-                            String displayText;
-                            switch (value) {
-                              case SortEnum.salesHighest:
-                                displayText = S.of(context).salesHighest;
-                                                                                                                                                                             break;
-                              case SortEnum.salesLowest:
-                                displayText = S.of(context).salesLowest;
-                                break;
-                              case SortEnum.releaseLatest:
-                                displayText = S.of(context).releaseLatest;
-                                break;
-                              case SortEnum.releaseOldest:
-                                displayText = S.of(context).releaseOldest;
-                                break;
-                              case SortEnum.stockHighest:
-                                displayText = S.of(context).stockHighest;
-                                break;
-                              case SortEnum.stockLowest:
-                                displayText = S.of(context).stockLowest;
-                                break;
-                            }
-                            return DropdownMenuItem<SortEnum>(
-                              value: value,
-                              child: Container(
-                                constraints:
-                                    const BoxConstraints(minHeight: 40),
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  displayText,
-                                  overflow: TextOverflow.visible,
-                                  softWrap: true,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      Center(
-                        child: IconButton(
-                          icon: const Icon(Icons.filter_list_alt),
-                          iconSize: 28,
-                          color: Theme.of(context).colorScheme.primary,
-                          onPressed: () async {
-                            final FilterArgument arguments = state
-                                .filterArgument
-                                .copy(filter: state.filterArgument);
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isMobile = constraints.maxWidth < 500;
 
-                            final result = kIsWeb
-                                ? await showDialog<FilterArgument?>(
-                                    context: context,
-                                    barrierDismissible: true,
-                                    builder: (context) =>
-                                        FilterScreenWebView.newInstance(
-                                      arguments: arguments,
-                                      selectedTabIndex: cubit.getIndex(),
-                                      manufacturerList:
-                                          cubit.getManufacturerList(),
-                                    ),
-                                  )
-                                : await Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          FilterScreen.newInstance(
-                                        arguments: arguments,
-                                        selectedTabIndex: cubit.getIndex(),
-                                        manufacturerList:
-                                            cubit.getManufacturerList(),
-                                      ),
+                      return Row(
+                        children: [
+                          if (isMobile) ...[
+                            // Mobile: Sort icon that opens bottom sheet
+                            IconButton(
+                              icon: const Icon(Icons.sort),
+                              iconSize: 28,
+                              color: Theme.of(context).colorScheme.primary,
+                              onPressed: () {
+                                _showSortBottomSheet(context, state);
+                              },
+                            ),
+                          ] else ...[
+                            // Desktop: Full dropdown
+                            Text(
+                              S.of(context).sortBy,
+                              style: AppTextStyle.smallText,
+                            ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: DropdownButton<SortEnum>(
+                                isExpanded: false,
+                                itemHeight: kMinInteractiveDimension,
+                                value: state.selectedSortOption,
+                                icon: const Icon(Icons.keyboard_arrow_down),
+                                underline: Container(
+                                  height: 1,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withValues(alpha: 0.5),
+                                ),
+                                onChanged: (SortEnum? newValue) {
+                                  if (newValue != null &&
+                                      newValue != state.selectedSortOption) {
+                                    cubit.updateSortOption(newValue);
+                                  }
+                                },
+                                items: SortEnum.values
+                                    .map<DropdownMenuItem<SortEnum>>(
+                                        (SortEnum value) {
+                                  return DropdownMenuItem<SortEnum>(
+                                    value: value,
+                                    child: Text(
+                                      _getSortDisplayText(context, value),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                          Center(
+                            child: IconButton(
+                              icon: const Icon(Icons.filter_list_alt),
+                              iconSize: 28,
+                              color: Theme.of(context).colorScheme.primary,
+                              onPressed: () async {
+                                final FilterArgument arguments = state
+                                    .filterArgument
+                                    .copy(filter: state.filterArgument);
 
-                            if (result is FilterArgument) {
-                              cubit.updateFilter(
-                                filter: result,
-                              );
-                              cubit.applyFilters();
-                            }
-                          },
-                        ),
-                      )
-                    ],
+                                final result = kIsWeb
+                                    ? await showDialog<FilterArgument?>(
+                                        context: context,
+                                        barrierDismissible: true,
+                                        builder: (context) =>
+                                            FilterScreenWebView.newInstance(
+                                          arguments: arguments,
+                                          selectedTabIndex: cubit.getIndex(),
+                                          manufacturerList:
+                                              cubit.getManufacturerList(),
+                                        ),
+                                      )
+                                    : await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              FilterScreen.newInstance(
+                                            arguments: arguments,
+                                            selectedTabIndex: cubit.getIndex(),
+                                            manufacturerList:
+                                                cubit.getManufacturerList(),
+                                          ),
+                                        ),
+                                      );
+
+                                if (result is FilterArgument) {
+                                  cubit.updateFilter(
+                                    filter: result,
+                                  );
+                                  cubit.applyFilters();
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
               ),

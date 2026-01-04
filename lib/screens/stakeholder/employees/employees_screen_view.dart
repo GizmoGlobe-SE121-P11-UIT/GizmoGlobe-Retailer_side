@@ -195,6 +195,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                 context,
                                 employee,
                               );
+                              // ignore: unrelated_type_equality_checks
                               if (result == true && mounted) {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
@@ -248,11 +249,14 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                               EmployeeDetailScreen.showModal(
                                                 context,
                                                 employee,
-                                                readOnly: !StakeholderPermissions.canEditEmployees(),
+                                                readOnly:
+                                                    !StakeholderPermissions
+                                                        .canEditEmployees(),
                                               );
                                             },
                                           ),
-                                          if (StakeholderPermissions.canEditEmployees()) ...[
+                                          if (StakeholderPermissions
+                                              .canEditEmployees()) ...[
                                             ListTile(
                                               dense: true,
                                               leading: Icon(
@@ -319,7 +323,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                               },
                                             ),
                                           ],
-                                          if (StakeholderPermissions.canFireEmployees()) ...[
+                                          if (StakeholderPermissions
+                                              .canFireEmployees()) ...[
                                             ListTile(
                                               dense: true,
                                               leading: Icon(

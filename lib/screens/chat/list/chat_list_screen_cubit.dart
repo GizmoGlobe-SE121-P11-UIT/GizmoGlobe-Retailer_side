@@ -11,9 +11,26 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
   final Database db = Database();
   final Firebase _firebase = Firebase();
   StreamSubscription? _chatsSubscription;
+  bool _isClosed = false;
 
   ChatListScreenCubit() : super(const ChatListScreenState()) {
     _initialize();
+  }
+
+  /// Safely emits a new state, handling the case where the cubit may be closed
+  /// due to race conditions with stream listeners.
+  void _safeEmit(ChatListScreenState newState) {
+    // Check both our custom flag and the built-in isClosed getter
+    if (_isClosed || isClosed) return;
+
+    try {
+      emit(newState);
+    } catch (e) {
+      // Ignore errors from attempting to emit after close
+      if (kDebugMode) {
+        print('ChatListScreenCubit: Ignored emit after close');
+      }
+    }
   }
 
   Future<String> _getUsernameFromUserId(String userId) async {
@@ -33,12 +50,14 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
   }
 
   Future<void> _initialize() async {
-    emit(state.copyWith(isLoading: true));
+    if (_isClosed || isClosed) return;
+
+    _safeEmit(state.copyWith(isLoading: true));
     await db.initialize();
     final userId = db.userId;
 
     if (userId == null) {
-      emit(state.copyWith(
+      _safeEmit(state.copyWith(
         isLoading: false,
         error: 'User not authenticated',
       ));
@@ -55,6 +74,9 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
         .collection('chats')
         .snapshots()
         .listen((snapshot) async {
+      // Don't process if cubit is closed
+      if (_isClosed || isClosed) return;
+
       try {
         final List<Chat> allAdminMessages = [];
         for (var userDoc in snapshot.docs) {
@@ -118,7 +140,7 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
               return bLastMessage.compareTo(aLastMessage);
             }),
         );
-        emit(state.copyWith(
+        _safeEmit(state.copyWith(
           isLoading: false,
           conversations: sortedConversations,
           currentUserId: userId,
@@ -128,7 +150,7 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
         if (kDebugMode) {
           print('Error in real-time chat list: $e');
         }
-        emit(state.copyWith(
+        _safeEmit(state.copyWith(
           isLoading: false,
           error: 'Failed to load chats',
         ));
@@ -138,7 +160,9 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
 
   @override
   Future<void> close() {
+    _isClosed = true;
     _chatsSubscription?.cancel();
+    _chatsSubscription = null;
     return super.close();
   }
 
@@ -172,12 +196,12 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
         print('Updated conversations: ${updatedConversations.keys.toList()}');
       }
 
-      emit(state.copyWith(conversations: updatedConversations));
+      _safeEmit(state.copyWith(conversations: updatedConversations));
     } catch (e) {
       if (kDebugMode) {
         print('Error sending message: $e');
       }
-      emit(state.copyWith(error: 'Failed to send message'));
+      _safeEmit(state.copyWith(error: 'Failed to send message'));
     }
   }
 
@@ -206,7 +230,7 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
         }).toList();
       }
 
-      emit(state.copyWith(conversations: updatedConversations));
+      _safeEmit(state.copyWith(conversations: updatedConversations));
     } catch (e) {
       if (kDebugMode) {
         print('Error marking message as read: $e');
@@ -234,7 +258,7 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
           Map<String, List<Chat>>.from(state.conversations);
       updatedConversations['admin'] = messages;
 
-      emit(state.copyWith(conversations: updatedConversations));
+      _safeEmit(state.copyWith(conversations: updatedConversations));
     } catch (e) {
       if (kDebugMode) {
         print('Error loading conversation: $e');

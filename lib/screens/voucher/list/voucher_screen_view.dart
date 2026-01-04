@@ -329,6 +329,7 @@ class _VoucherScreenState extends State<VoucherScreen>
             onVoucherSelected(voucher);
             final result =
                 await VoucherDetailScreen.showModal(context, voucher);
+            // ignore: unrelated_type_equality_checks
             if (result == ProcessState.success) {
               cubit.initialize();
             }

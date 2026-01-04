@@ -33,30 +33,36 @@ class _WarrantyDetailWebViewState extends State<WarrantyDetailWebView> {
     return BlocBuilder<WarrantyDetailCubit, WarrantyDetailState>(
       builder: (context, state) {
         final cubit = context.read<WarrantyDetailCubit>();
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isMobile = screenWidth < 500;
 
         return Container(
-          width: 900,
-          height: 700,
-          constraints: const BoxConstraints(
-            maxWidth: 1000,
-            maxHeight: 800,
+          width: isMobile ? screenWidth : 900,
+          height: isMobile
+              ? MediaQuery.of(context).size.height
+              : 700,
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? double.infinity : 1000,
+            maxHeight: isMobile ? double.infinity : 800,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
+            borderRadius: isMobile ? BorderRadius.zero : BorderRadius.circular(16),
+            boxShadow: isMobile
+                ? []
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
           ),
           child: Column(
             children: [
               // Header with close button
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(isMobile ? 12 : 16),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primaryContainer,
                   borderRadius: const BorderRadius.only(
@@ -66,17 +72,19 @@ class _WarrantyDetailWebViewState extends State<WarrantyDetailWebView> {
                 ),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Text(
-                        S.of(context).warrantyReceipt(
-                            state.invoice.warrantyInvoiceID.toString()),
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSurface,
+                      Expanded(
+                        child: Text(
+                          S.of(context).warrantyReceipt(
+                              state.invoice.warrantyInvoiceID.toString()),
+                          style: TextStyle(
+                            fontSize: isMobile ? 16 : 20,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(false),
                       icon: const Icon(Icons.close),
@@ -93,19 +101,19 @@ class _WarrantyDetailWebViewState extends State<WarrantyDetailWebView> {
                 child: state.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : SingleChildScrollView(
-                        padding: const EdgeInsets.all(16),
+                        padding: EdgeInsets.all(isMobile ? 12 : 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Center(
                               child: CircleAvatar(
-                                radius: 50,
+                                radius: isMobile ? 40 : 50,
                                 backgroundColor: Theme.of(context)
                                     .colorScheme
                                     .primaryContainer,
                                 child: Icon(
                                   Icons.build_circle,
-                                  size: 50,
+                                  size: isMobile ? 40 : 50,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
@@ -114,50 +122,74 @@ class _WarrantyDetailWebViewState extends State<WarrantyDetailWebView> {
                             Text(
                               S.of(context).warrantyInformation,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: isMobile ? 18 : 20,
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
-                            const SizedBox(height: 24),
+                            SizedBox(height: isMobile ? 16 : 24),
                             _buildInfoRow(
                                 S.of(context).customer,
                                 state.invoice.customerName ??
-                                    S.of(context).unknownProduct),
+                                    S.of(context).unknownProduct,
+                                isMobile),
                             _buildInfoRow(
                                 S.of(context).date,
                                 DateFormat('dd/MM/yyyy')
-                                    .format(state.invoice.date)),
+                                    .format(state.invoice.date),
+                                isMobile),
                             _buildInfoRow(S.of(context).salesInvoice,
-                                '#${state.invoice.salesInvoiceID}'),
+                                '#${state.invoice.salesInvoiceID}',
+                                isMobile),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    S.of(context).status,
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withValues(alpha: 0.6),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
+                              child: isMobile
+                                  ? Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          S.of(context).status,
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withValues(alpha: 0.6),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        StatusBadge(
+                                            status: state.invoice.status
+                                                .localized(context)),
+                                      ],
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          S.of(context).status,
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withValues(alpha: 0.6),
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        StatusBadge(
+                                            status: state.invoice.status
+                                                .localized(context)),
+                                      ],
                                     ),
-                                  ),
-                                  StatusBadge(
-                                      status: state.invoice.status
-                                          .localized(context)),
-                                ],
-                              ),
                             ),
                             const SizedBox(height: 16),
                             Container(
                               width: double.infinity,
-                              padding: const EdgeInsets.all(16),
+                              padding: EdgeInsets.all(isMobile ? 12 : 16),
                               decoration: BoxDecoration(
                                 color: Theme.of(context)
                                     .colorScheme
@@ -201,12 +233,12 @@ class _WarrantyDetailWebViewState extends State<WarrantyDetailWebView> {
                             Text(
                               S.of(context).productsUnderWarranty,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: isMobile ? 18 : 20,
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: isMobile ? 12 : 16),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -489,34 +521,72 @@ class _WarrantyDetailWebViewState extends State<WarrantyDetailWebView> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
+  Widget _buildInfoRow(String label, String value, bool isMobile) {
     return Builder(
       builder: (context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.6),
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
+        child: isMobile
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.6),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.6),
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 2,
+                      textAlign: TextAlign.right,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Text(
-              value,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

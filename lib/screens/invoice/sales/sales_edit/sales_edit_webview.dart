@@ -90,38 +90,50 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
       create: (context) => cubit,
       child: BlocBuilder<SalesEditCubit, SalesEditState>(
         builder: (context, state) {
+          final screenWidth = MediaQuery.of(context).size.width;
+          final isMobile = screenWidth < 500;
+
           return Container(
-            width: 900,
-            height: 700,
-            constraints: const BoxConstraints(
-              maxWidth: 1000,
-              maxHeight: 800,
+            width: isMobile
+                ? screenWidth
+                : MediaQuery.of(context).size.width * 0.8,
+            height: isMobile
+                ? MediaQuery.of(context).size.height
+                : MediaQuery.of(context).size.height * 0.9,
+            constraints: BoxConstraints(
+              maxWidth: isMobile ? double.infinity : 1200,
+              maxHeight: isMobile ? double.infinity : 800,
             ),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
-              ],
+              borderRadius:
+                  isMobile ? BorderRadius.zero : BorderRadius.circular(16),
+              boxShadow: isMobile
+                  ? []
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
             ),
             child: Column(
               children: [
                 // Header (match SalesAddWebView style)
                 Container(
-                  padding: const EdgeInsets.all(24),
+                  padding: EdgeInsets.all(isMobile ? 12 : 24),
                   decoration: BoxDecoration(
                     color: Theme.of(context)
                         .colorScheme
                         .primary
                         .withValues(alpha: 0.1),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
+                    borderRadius: isMobile
+                        ? BorderRadius.zero
+                        : const BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
+                          ),
                   ),
                   child: Row(
                     children: [
@@ -166,7 +178,7 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(isMobile ? 12 : 24),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -180,72 +192,147 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                     .withValues(alpha: 0.1),
                               ),
                             ),
-                            padding: const EdgeInsets.all(16),
+                            padding: EdgeInsets.all(isMobile ? 12 : 16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primaryContainer,
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Text(
-                                        '#${state.invoice.salesInvoiceID}',
-                                        style: TextStyle(
+                                if (isMobile)
+                                  // Stack vertically on mobile
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .primary,
-                                          fontWeight: FontWeight.bold,
+                                              .primaryContainer,
+                                          borderRadius:
+                                              BorderRadius.circular(6),
                                         ),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 6),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .surfaceContainerHighest,
-                                        borderRadius: BorderRadius.circular(6),
-                                        border: Border.all(
-                                          color: Theme.of(context)
-                                              .dividerColor
-                                              .withValues(alpha: 0.1),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.calendar_today_outlined,
-                                            size: 16,
+                                        child: Text(
+                                          '#${state.invoice.salesInvoiceID}',
+                                          style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
                                           ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            DateFormat('dd/MM/yyyy')
-                                                .format(state.invoice.date),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .surfaceContainerHighest,
+                                          borderRadius: BorderRadius.circular(6),
+                                          border: Border.all(
+                                            color: Theme.of(context)
+                                                .dividerColor
+                                                .withValues(alpha: 0.1),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.calendar_today_outlined,
+                                              size: 16,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              DateFormat('dd/MM/yyyy')
+                                                  .format(state.invoice.date),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                else
+                                  // Row layout on desktop
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primaryContainer,
+                                            borderRadius:
+                                                BorderRadius.circular(6),
+                                          ),
+                                          child: Text(
+                                            '#${state.invoice.salesInvoiceID}',
                                             style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .onSurface,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
+                                                  .primary,
+                                              fontWeight: FontWeight.bold,
                                             ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                      const Spacer(),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .surfaceContainerHighest,
+                                          borderRadius: BorderRadius.circular(6),
+                                          border: Border.all(
+                                            color: Theme.of(context)
+                                                .dividerColor
+                                                .withValues(alpha: 0.1),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.calendar_today_outlined,
+                                              size: 16,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              DateFormat('dd/MM/yyyy')
+                                                  .format(state.invoice.date),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 const SizedBox(height: 16),
                                 Row(
                                   children: [
@@ -275,6 +362,8 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 const SizedBox(height: 16),
                                 Row(
@@ -309,6 +398,8 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500,
                                             ),
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                           if (SalesInvoicePermissions
                                               .canEditAddress(state.invoice))
@@ -494,6 +585,8 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                             style: const TextStyle(
                                               fontWeight: FontWeight.w600,
                                             ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
@@ -508,10 +601,16 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                                         ],
                                       ),
                                     ),
-                                    Text(
-                                      Helper.toCurrencyFormat(detail.subtotal),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                    const SizedBox(width: 8),
+                                    Flexible(
+                                      child: Text(
+                                        Helper.toCurrencyFormat(
+                                            detail.subtotal),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 2,
+                                        textAlign: TextAlign.right,
                                       ),
                                     ),
                                   ],
@@ -539,24 +638,32 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  S.of(context).totalAmount,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                Expanded(
+                                  child: Text(
+                                    S.of(context).totalAmount,
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 16 : 18,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
                                   ),
                                 ),
-                                Text(
-                                  Helper.toCurrencyFormat(
-                                      state.invoice.totalPrice),
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    Helper.toCurrencyFormat(
+                                        state.invoice.totalPrice),
+                                    style: TextStyle(
+                                      fontSize: isMobile ? 18 : 20,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    maxLines: 2,
+                                    textAlign: TextAlign.right,
                                   ),
                                 ),
                               ],

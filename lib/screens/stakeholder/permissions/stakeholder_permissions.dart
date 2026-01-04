@@ -41,7 +41,21 @@ class StakeholderPermissions {
     return Database().role == RoleEnum.owner;
   }
 
+  static bool canViewVendors() {
+    return Database().role == RoleEnum.owner ||
+        Database().role == RoleEnum.manager ||
+        Database().role == RoleEnum.employee;
+  }
+
+  static bool canAddVendors() {
+    return Database().role == RoleEnum.owner;
+  }
+
+  static bool canEditVendors() {
+    return Database().role == RoleEnum.owner;
+  }
+
   static bool canManageVendors() {
     return Database().role == RoleEnum.owner;
   }
-} 
+}

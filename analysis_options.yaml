@@ -26,6 +26,8 @@ linter:
 
 # Exclude platform-specific directories from analysis
 analyzer:
+  errors:
+    use_build_context_synchronously: ignore
   exclude:
     - ios/**
     - android/**

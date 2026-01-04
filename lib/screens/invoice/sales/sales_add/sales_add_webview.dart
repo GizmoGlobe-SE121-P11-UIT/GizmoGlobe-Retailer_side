@@ -82,8 +82,10 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
               ),
               content: ConstrainedBox(
                 constraints: BoxConstraints(
-                  minWidth: 480,
-                  maxWidth: MediaQuery.of(context).size.width * 0.7,
+                  minWidth: MediaQuery.of(context).size.width < 500
+                      ? MediaQuery.of(context).size.width * 0.8
+                      : 480,
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
                 ),
                 child: SingleChildScrollView(
                   child: Column(
@@ -139,49 +141,73 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                         items: state.products
                             .where((product) => product.stock > 0)
                             .map((product) {
+                          final isMobile =
+                              MediaQuery.of(context).size.width < 500;
                           return DropdownMenuItem<Product>(
                             value: product,
-                            child: Container(
-                              constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * 0.4,
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      product.productName,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
+                            child: isMobile
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        product.productName,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                        ),
                                       ),
-                                    ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        '${Helper.toCurrencyFormat(product.sellingPrice)} • Stock: ${product.stock}',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          product.productName,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        '(${Helper.toCurrencyFormat(product.sellingPrice)})',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '[${product.stock}]',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withValues(alpha: 0.7),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    '(${Helper.toCurrencyFormat(product.sellingPrice)})',
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .tertiary,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '[${product.stock}]',
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withValues(alpha: 0.7),
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           );
                         }).toList(),
                         dropdownColor: Theme.of(context).colorScheme.surface,
@@ -190,6 +216,20 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                         ),
                         isExpanded: true,
                         menuMaxHeight: MediaQuery.of(context).size.height * 0.5,
+                        selectedItemBuilder: (context) {
+                          return state.products
+                              .where((product) => product.stock > 0)
+                              .map((product) {
+                            return Text(
+                              product.productName,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            );
+                          }).toList();
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextField(
@@ -461,23 +501,32 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
   Widget build(BuildContext context) {
     return BlocBuilder<SalesAddCubit, SalesAddState>(
       builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isMobile = screenWidth < 500;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.9,
-          constraints: const BoxConstraints(
-            maxWidth: 1200,
-            maxHeight: 800,
+          width:
+              isMobile ? screenWidth : MediaQuery.of(context).size.width * 0.8,
+          height: isMobile
+              ? MediaQuery.of(context).size.height
+              : MediaQuery.of(context).size.height * 0.9,
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? double.infinity : 1200,
+            maxHeight: isMobile ? double.infinity : 800,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
+            borderRadius:
+                isMobile ? BorderRadius.zero : BorderRadius.circular(16),
+            boxShadow: isMobile
+                ? []
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
           ),
           child: Column(
             children: [
@@ -499,14 +548,18 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
   }
 
   Widget _buildHeader(SalesAddState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isMobile ? 12 : 24),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
+        borderRadius: isMobile
+            ? BorderRadius.zero
+            : const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
       ),
       child: Row(
         children: [
@@ -548,8 +601,10 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
   }
 
   Widget _buildContent(SalesAddState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isMobile ? 12 : 24),
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -569,10 +624,12 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
   }
 
   Widget _buildCustomerSection(SalesAddState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -584,11 +641,13 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                   size: 20,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  S.of(context).customerInformation,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    S.of(context).customerInformation,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -596,6 +655,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
             const SizedBox(height: 16),
             DropdownButtonFormField<Customer>(
               initialValue: state.selectedCustomer,
+              isExpanded: true,
               hint: Text(
                 S.of(context).selectCustomer,
                 style: TextStyle(
@@ -604,6 +664,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                       .onSurface
                       .withValues(alpha: 0.7),
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
               decoration: InputDecoration(
                 labelText: S.of(context).customer,
@@ -668,10 +729,13 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        customer.customerName,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
+                      Expanded(
+                        child: Text(
+                          customer.customerName,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -760,10 +824,12 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
   }
 
   Widget _buildInvoiceDetailsSection(SalesAddState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -775,75 +841,132 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                   size: 20,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  S.of(context).invoiceDetails,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    S.of(context).invoiceDetails,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        S.of(context).paymentStatus,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.8),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      _buildStatusDropdown<PaymentStatus>(
-                        value: state.paymentStatus,
-                        items: PaymentStatus.values,
-                        onChanged: (status) {
-                          if (status != null) {
-                            cubit.updatePaymentStatus(status);
-                          }
-                        },
-                      ),
-                    ],
+            // Status dropdowns - stack vertically on mobile
+            if (isMobile) ...[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    S.of(context).paymentStatus,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.8),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        S.of(context).salesStatus,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.8),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      _buildStatusDropdown<SalesStatus>(
-                        value: state.salesStatus,
-                        items: SalesStatus.values,
-                        onChanged: (status) {
-                          if (status != null) {
-                            cubit.updateSalesStatus(status);
-                          }
-                        },
-                      ),
-                    ],
+                  const SizedBox(height: 8),
+                  _buildStatusDropdown<PaymentStatus>(
+                    value: state.paymentStatus,
+                    items: PaymentStatus.values,
+                    onChanged: (status) {
+                      if (status != null) {
+                        cubit.updatePaymentStatus(status);
+                      }
+                    },
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    S.of(context).salesStatus,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.8),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildStatusDropdown<SalesStatus>(
+                    value: state.salesStatus,
+                    items: SalesStatus.values,
+                    onChanged: (status) {
+                      if (status != null) {
+                        cubit.updateSalesStatus(status);
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ] else ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.of(context).paymentStatus,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.8),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildStatusDropdown<PaymentStatus>(
+                          value: state.paymentStatus,
+                          items: PaymentStatus.values,
+                          onChanged: (status) {
+                            if (status != null) {
+                              cubit.updatePaymentStatus(status);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.of(context).salesStatus,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.8),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildStatusDropdown<SalesStatus>(
+                          value: state.salesStatus,
+                          items: SalesStatus.values,
+                          onChanged: (status) {
+                            if (status != null) {
+                              cubit.updateSalesStatus(status);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
             const SizedBox(height: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -860,7 +983,8 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<PaymentMethod>(
-                  value: state.paymentMethod,
+                  initialValue: state.paymentMethod,
+                  isExpanded: true,
                   items: PaymentMethod.values
                       .map((method) => DropdownMenuItem<PaymentMethod>(
                             value: method,
@@ -872,6 +996,7 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ))
                       .toList(),
@@ -921,45 +1046,49 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(12),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 12 : 20, vertical: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onPrimary
-                              .withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(
-                          Icons.attach_money,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          size: 24,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        S.of(context).totalAmount,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    Helper.toCurrencyFormat(state.totalPrice),
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimary
+                          .withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.attach_money,
                       color: Theme.of(context).colorScheme.onPrimary,
-                      letterSpacing: 0.5,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      S.of(context).totalAmount,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      Helper.toCurrencyFormat(state.totalPrice),
+                      style: TextStyle(
+                        fontSize: isMobile ? 18 : 24,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        letterSpacing: 0.5,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
                     ),
                   ),
                 ],
@@ -972,34 +1101,40 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
   }
 
   Widget _buildProductsSection(SalesAddState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.inventory_2,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
+            // Header - stack vertically on mobile
+            if (isMobile) ...[
+              Row(
+                children: [
+                  Icon(
+                    Icons.inventory_2,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
                       S.of(context).products,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
-                ElevatedButton.icon(
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
                   onPressed: () => _showAddProductDialog(context),
                   icon: Icon(
                     Icons.add,
@@ -1019,8 +1154,51 @@ class _SalesAddWebViewState extends State<SalesAddWebView> {
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ] else ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.inventory_2,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        S.of(context).products,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () => _showAddProductDialog(context),
+                    icon: Icon(
+                      Icons.add,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    label: Text(
+                      S.of(context).addProduct,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
             const SizedBox(height: 16),
             if (state.invoiceDetails.isEmpty)
               Container(

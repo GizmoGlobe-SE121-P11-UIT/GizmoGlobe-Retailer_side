@@ -180,23 +180,30 @@ class _AddProductWebViewState extends State<AddProductWebView> {
         }
       },
       builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final screenHeight = MediaQuery.of(context).size.height;
+        final isMobile = screenWidth < 500;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height * 0.95,
-          constraints: const BoxConstraints(
-            maxWidth: 1400,
-            maxHeight: 1000,
+          width: isMobile ? screenWidth : screenWidth * 0.9,
+          height: isMobile ? screenHeight : screenHeight * 0.95,
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? double.infinity : 1400,
+            maxHeight: isMobile ? double.infinity : 1000,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
+            borderRadius:
+                isMobile ? BorderRadius.zero : BorderRadius.circular(16),
+            boxShadow: isMobile
+                ? null
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
           ),
           child: Column(
             children: [
@@ -218,23 +225,27 @@ class _AddProductWebViewState extends State<AddProductWebView> {
   }
 
   Widget _buildHeader(AddProductState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isMobile ? 12 : 24),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
+        borderRadius: isMobile
+            ? BorderRadius.zero
+            : const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
       ),
       child: Row(
         children: [
           Icon(
             Icons.add_box,
             color: Theme.of(context).colorScheme.primary,
-            size: 28,
+            size: isMobile ? 24 : 28,
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
             child: GradientText(
               text: widget.product == null
@@ -257,7 +268,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
               onPressed: () => cubit.addProduct(),
               fillColor: Colors.transparent,
             ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
           GradientIconButton(
             icon: Icons.close,
             onPressed: () => _safeClose(null),
@@ -407,7 +418,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Click to manage images',
+                        S.of(context).clickToManageImages,
                         style: TextStyle(
                           fontSize: 12,
                           color: colorScheme.onSurfaceVariant
@@ -479,7 +490,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                       Icon(Icons.edit, size: 14, color: colorScheme.primary),
                       const SizedBox(width: 4),
                       Text(
-                        'Manage',
+                        S.of(context).manage,
                         style: TextStyle(
                           color: colorScheme.primary,
                           fontSize: 12,
@@ -562,10 +573,12 @@ class _AddProductWebViewState extends State<AddProductWebView> {
   }
 
   Widget _buildBasicInformationSection(AddProductState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -577,11 +590,13 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                   size: 20,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  S.of(context).basicInformation,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    S.of(context).basicInformation,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -599,77 +614,137 @@ class _AddProductWebViewState extends State<AddProductWebView> {
               },
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: buildInputWidget<int>(
-                    S.of(context).importPrice,
-                    importPriceController,
-                    state.productArgument?.importPrice,
-                    (value) {
-                      final currentArg = cubit.state.productArgument;
-                      if (currentArg == null) return;
-                      cubit.updateProductArgument(
-                          currentArg.copyWith(importPrice: value));
-                    },
+            if (isMobile) ...[
+              // Mobile: Stack vertically
+              buildInputWidget<int>(
+                S.of(context).importPrice,
+                importPriceController,
+                state.productArgument?.importPrice,
+                (value) {
+                  final currentArg = cubit.state.productArgument;
+                  if (currentArg == null) return;
+                  cubit.updateProductArgument(
+                      currentArg.copyWith(importPrice: value));
+                },
+              ),
+              const SizedBox(height: 16),
+              buildInputWidget<int>(
+                S.of(context).sellingPrice,
+                sellingPriceController,
+                state.productArgument?.sellingPrice,
+                (value) {
+                  final currentArg = cubit.state.productArgument;
+                  if (currentArg == null) return;
+                  cubit.updateProductArgument(
+                      currentArg.copyWith(sellingPrice: value));
+                },
+              ),
+              const SizedBox(height: 16),
+              buildInputWidget<String>(
+                S.of(context).discount,
+                discountController,
+                state.productArgument?.discount?.toString(),
+                (value) {
+                  final currentArg = cubit.state.productArgument;
+                  if (currentArg == null) return;
+                  double? parsed;
+                  if (value != null && value.isNotEmpty) {
+                    parsed = double.tryParse(value);
+                  }
+                  cubit.updateProductArgument(
+                      currentArg.copyWith(discount: parsed?.toInt()));
+                },
+                null,
+              ),
+              const SizedBox(height: 16),
+              buildInputWidget<int>(
+                S.of(context).stock,
+                stockController,
+                state.productArgument?.stock,
+                (value) {
+                  final currentArg = cubit.state.productArgument;
+                  if (currentArg == null) return;
+                  final newStatus = (value ?? 0) > 0
+                      ? ProductStatusEnum.active
+                      : ProductStatusEnum.outOfStock;
+                  cubit.updateProductArgument(currentArg.copyWith(
+                      stock: value ?? 0, status: newStatus));
+                },
+              ),
+            ] else ...[
+              // Desktop: Side by side
+              Row(
+                children: [
+                  Expanded(
+                    child: buildInputWidget<int>(
+                      S.of(context).importPrice,
+                      importPriceController,
+                      state.productArgument?.importPrice,
+                      (value) {
+                        final currentArg = cubit.state.productArgument;
+                        if (currentArg == null) return;
+                        cubit.updateProductArgument(
+                            currentArg.copyWith(importPrice: value));
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: buildInputWidget<int>(
-                    S.of(context).sellingPrice,
-                    sellingPriceController,
-                    state.productArgument?.sellingPrice,
-                    (value) {
-                      final currentArg = cubit.state.productArgument;
-                      if (currentArg == null) return;
-                      cubit.updateProductArgument(
-                          currentArg.copyWith(sellingPrice: value));
-                    },
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: buildInputWidget<int>(
+                      S.of(context).sellingPrice,
+                      sellingPriceController,
+                      state.productArgument?.sellingPrice,
+                      (value) {
+                        final currentArg = cubit.state.productArgument;
+                        if (currentArg == null) return;
+                        cubit.updateProductArgument(
+                            currentArg.copyWith(sellingPrice: value));
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: buildInputWidget<String>(
-                    S.of(context).discount,
-                    discountController,
-                    state.productArgument?.discount?.toString(),
-                    (value) {
-                      final currentArg = cubit.state.productArgument;
-                      if (currentArg == null) return;
-                      int? parsed;
-                      if (value != null && value.isNotEmpty) {
-                        parsed = int.tryParse(value);
-                      }
-                      cubit.updateProductArgument(
-                          currentArg.copyWith(discount: parsed));
-                    },
-                    null,
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: buildInputWidget<String>(
+                      S.of(context).discount,
+                      discountController,
+                      state.productArgument?.discount?.toString(),
+                      (value) {
+                        final currentArg = cubit.state.productArgument;
+                        if (currentArg == null) return;
+                        double? parsed;
+                        if (value != null && value.isNotEmpty) {
+                          parsed = double.tryParse(value);
+                        }
+                        cubit.updateProductArgument(
+                            currentArg.copyWith(discount: parsed?.toInt()));
+                      },
+                      null,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: buildInputWidget<int>(
-                    S.of(context).stock,
-                    stockController,
-                    state.productArgument?.stock,
-                    (value) {
-                      final currentArg = cubit.state.productArgument;
-                      if (currentArg == null) return;
-                      final newStatus = (value ?? 0) > 0
-                          ? ProductStatusEnum.active
-                          : ProductStatusEnum.outOfStock;
-                      cubit.updateProductArgument(currentArg.copyWith(
-                          stock: value ?? 0, status: newStatus));
-                    },
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: buildInputWidget<int>(
+                      S.of(context).stock,
+                      stockController,
+                      state.productArgument?.stock,
+                      (value) {
+                        final currentArg = cubit.state.productArgument;
+                        if (currentArg == null) return;
+                        final newStatus = (value ?? 0) > 0
+                            ? ProductStatusEnum.active
+                            : ProductStatusEnum.outOfStock;
+                        cubit.updateProductArgument(currentArg.copyWith(
+                            stock: value ?? 0, status: newStatus));
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
@@ -677,10 +752,12 @@ class _AddProductWebViewState extends State<AddProductWebView> {
   }
 
   Widget _buildAdditionalInformationSection(AddProductState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -692,11 +769,13 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                   size: 20,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  S.of(context).additionalInformation,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    S.of(context).additionalInformation,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -806,6 +885,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
   }
 
   Widget _buildCategorySpecificationsSection(AddProductState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
     final enDescriptionController =
         TextEditingController(text: state.productArgument?.enDescription ?? '');
     final viDescriptionController =
@@ -814,7 +894,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isMobile ? 12 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -826,11 +906,13 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                   size: 20,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  '${S.of(context).categorySpecifications} ${state.productArgument?.category.toString()}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Text(
+                    '${S.of(context).categorySpecifications} ${state.productArgument?.category.toString()}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -889,16 +971,15 @@ class _AddProductWebViewState extends State<AddProductWebView> {
     switch (category) {
       case CategoryEnum.ram:
         return Column(key: const ValueKey('ram_fields'), children: [
-          buildInputWidget<RAMType>(
-              'RAM type', TextEditingController(), state.productArgument?.type,
-              (value) {
+          buildInputWidget<RAMType>(S.of(context).ramType,
+              TextEditingController(), state.productArgument?.type, (value) {
             final currentArg = cubit.state.productArgument;
             if (currentArg == null) return;
             cubit.updateProductArgument(currentArg.copyWith(type: value));
           }, RAMType.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'RAM bus',
+            S.of(context).ramBus,
             _getController('ram_bus', state.productArgument?.bus?.toString()),
             state.productArgument?.bus,
             (value) {
@@ -909,7 +990,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Capacity per stick (GB)',
+            S.of(context).capacityPerStick,
             _getController(
                 'ram_capacity', state.productArgument?.capacity?.toString()),
             state.productArgument?.capacity,
@@ -921,7 +1002,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Kit stick count',
+            S.of(context).kitStickCount,
             _getController('ram_stickCount',
                 state.productArgument?.stickCount?.toString()),
             state.productArgument?.stickCount,
@@ -934,7 +1015,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'CL Latency',
+            S.of(context).clLatency,
             _getController(
                 'ram_clLatency', state.productArgument?.clLatency?.toString()),
             state.productArgument?.clLatency,
@@ -950,7 +1031,9 @@ class _AddProductWebViewState extends State<AddProductWebView> {
 
       case CategoryEnum.cpu:
         return Column(key: const ValueKey('cpu_fields'), children: [
-          buildInputWidget<CPUSeries>('CPU series', TextEditingController(),
+          buildInputWidget<CPUSeries>(
+              S.of(context).cpuSeries,
+              TextEditingController(),
               state.productArgument?.cpuSeries, (value) {
             final currentArg = cubit.state.productArgument;
             if (currentArg == null) return;
@@ -958,7 +1041,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }, CPUSeries.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Number of CPU cores',
+            S.of(context).numberOfCpuCores,
             _getController('cpu_core', state.productArgument?.core?.toString()),
             state.productArgument?.core,
             (value) {
@@ -969,7 +1052,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Number of CPU threads',
+            S.of(context).numberOfCpuThreads,
             _getController(
                 'cpu_thread', state.productArgument?.thread?.toString()),
             state.productArgument?.thread,
@@ -981,7 +1064,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<double>(
-              'CPU base clock speed (GHz)',
+              S.of(context).cpuBaseClock,
               _getController('cpu_baseClock',
                   state.productArgument?.baseClock?.toString()),
               state.productArgument?.baseClock, (value) {
@@ -991,7 +1074,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }),
           const SizedBox(height: 8),
           buildInputWidget<double>(
-              'CPU turbo clock speed (GHz)',
+              S.of(context).cpuTurboClock,
               _getController('cpu_turboClock',
                   state.productArgument?.turboClock?.toString()),
               state.productArgument?.turboClock, (value) {
@@ -1001,7 +1084,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'CPU TDP (W)',
+            S.of(context).cpuTdp,
             _getController('cpu_tdp', state.productArgument?.tdp?.toString()),
             state.productArgument?.tdp,
             (value) {
@@ -1011,8 +1094,8 @@ class _AddProductWebViewState extends State<AddProductWebView> {
             },
           ),
           const SizedBox(height: 8),
-          buildInputWidget<Socket>('CPU socket', TextEditingController(),
-              state.productArgument?.socket, (value) {
+          buildInputWidget<Socket>(S.of(context).cpuSocket,
+              TextEditingController(), state.productArgument?.socket, (value) {
             final currentArg = cubit.state.productArgument;
             if (currentArg == null) return;
             cubit.updateProductArgument(currentArg.copyWith(socket: value));
@@ -1022,7 +1105,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
       case CategoryEnum.psu:
         return Column(key: const ValueKey('psu_fields'), children: [
           buildInputWidget<int>(
-            'Max wattage (W)',
+            S.of(context).maxWattage,
             _getController(
                 'psu_maxWattage', state.productArgument?.tdp?.toString()),
             state.productArgument?.tdp,
@@ -1034,7 +1117,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<PSUEfficiency>(
-              'PSU efficiency',
+              S.of(context).psuEfficiency,
               TextEditingController(),
               state.productArgument?.efficiency, (value) {
             final currentArg = cubit.state.productArgument;
@@ -1043,7 +1126,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }, PSUEfficiency.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<PSUModular>(
-              'PSU modularity',
+              S.of(context).psuModularity,
               TextEditingController(),
               state.productArgument?.modularity, (value) {
             final currentArg = cubit.state.productArgument;
@@ -1055,14 +1138,18 @@ class _AddProductWebViewState extends State<AddProductWebView> {
         ]);
       case CategoryEnum.gpu:
         return Column(key: const ValueKey('gpu_fields'), children: [
-          buildInputWidget<GPUSeries>('GPU series', TextEditingController(),
+          buildInputWidget<GPUSeries>(
+              S.of(context).gpuSeries,
+              TextEditingController(),
               state.productArgument?.gpuSeries, (value) {
             final currentArg = cubit.state.productArgument;
             if (currentArg == null) return;
             cubit.updateProductArgument(currentArg.copyWith(gpuSeries: value));
           }, GPUSeries.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<GPUVersion>('GPU version', TextEditingController(),
+          buildInputWidget<GPUVersion>(
+              S.of(context).gpuVersion,
+              TextEditingController(),
               state.productArgument?.gpuVersion, (value) {
             final currentArg = cubit.state.productArgument;
             if (currentArg == null) return;
@@ -1070,7 +1157,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }, GPUVersion.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'GPU memory (GB)',
+            S.of(context).gpuMemory,
             _getController(
                 'gpu_capacity', state.productArgument?.capacity?.toString()),
             state.productArgument?.capacity,
@@ -1082,7 +1169,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'GPU TDP (W)',
+            S.of(context).gpuTdp,
             _getController('gpu_tdp', state.productArgument?.tdp?.toString()),
             state.productArgument?.tdp,
             (value) {
@@ -1093,7 +1180,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<double>(
-              'GPU boost clock (GHz)',
+              S.of(context).gpuBoostClock,
               _getController('gpu_turboClock',
                   state.productArgument?.turboClock?.toString()),
               state.productArgument?.turboClock, (value) {
@@ -1107,7 +1194,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
       case CategoryEnum.mainboard:
         return Column(key: const ValueKey('mainboard_fields'), children: [
           buildInputWidget<String>(
-              'Chipset code',
+              S.of(context).chipsetCode,
               _getController(
                   'mb_chipsetCode', state.productArgument?.chipsetCode),
               state.productArgument?.chipsetCode, (value) {
@@ -1118,7 +1205,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }),
           const SizedBox(height: 8),
           buildInputWidget<MainboardFormFactor>(
-              'Mainboard form factor',
+              S.of(context).mainboardFormFactor,
               TextEditingController(),
               state.productArgument?.mainboardFormFactor, (value) {
             final currentArg = cubit.state.productArgument;
@@ -1128,7 +1215,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }, MainboardFormFactor.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'RAM bus speed (MHz)',
+            S.of(context).ramBusSpeed,
             _getController('mb_bus', state.productArgument?.bus?.toString()),
             state.productArgument?.bus,
             (value) {
@@ -1138,7 +1225,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
             },
           ),
           const SizedBox(height: 8),
-          buildInputWidget<RAMType>('Supported RAM type',
+          buildInputWidget<RAMType>(S.of(context).supportedRamType,
               TextEditingController(), state.productArgument?.type, (value) {
             final currentArg = cubit.state.productArgument;
             if (currentArg == null) return;
@@ -1146,7 +1233,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }, RAMType.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-              'Maximum single RAM capacity (GB)',
+              S.of(context).maximumSingleRamCapacity,
               _getController(
                   'mb_capacity', state.productArgument?.capacity?.toString()),
               state.productArgument?.capacity, (value) {
@@ -1156,7 +1243,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Number of M.2 slots',
+            S.of(context).numberOfM2Slots,
             _getController('mb_m2',
                 state.productArgument?.storageSlot?.m2Slots.toString()),
             state.productArgument?.storageSlot?.m2Slots,
@@ -1170,7 +1257,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Number of SATA ports',
+            S.of(context).numberOfSataPorts,
             _getController('mb_sata',
                 state.productArgument?.storageSlot?.sataPorts.toString()),
             state.productArgument?.storageSlot?.sataPorts,
@@ -1189,14 +1276,16 @@ class _AddProductWebViewState extends State<AddProductWebView> {
         ]);
       case CategoryEnum.drive:
         return Column(key: const ValueKey('drive_fields'), children: [
-          buildInputWidget<DriveGen>('Drive generation',
+          buildInputWidget<DriveGen>(S.of(context).driveGeneration,
               TextEditingController(), state.productArgument?.gen, (value) {
             final currentArg = cubit.state.productArgument;
             if (currentArg == null) return;
             cubit.updateProductArgument(currentArg.copyWith(gen: value));
           }, DriveGen.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<DriveType>('Drive type', TextEditingController(),
+          buildInputWidget<DriveType>(
+              S.of(context).driveType,
+              TextEditingController(),
               state.productArgument?.driveType, (value) {
             final currentArg = cubit.state.productArgument;
             if (currentArg == null) return;
@@ -1204,7 +1293,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }, DriveType.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Capacity (GB)',
+            S.of(context).capacity,
             _getController(
                 'drive_capacity', state.productArgument?.capacity?.toString()),
             state.productArgument?.capacity,
@@ -1216,7 +1305,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<InterfaceType>(
-            'Interface type',
+            S.of(context).interfaceType,
             TextEditingController(),
             state.productArgument?.interfaceType,
             (value) {
@@ -1229,7 +1318,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<DriveFormFactor>(
-              'Drive form factor',
+              S.of(context).driveFormFactor,
               TextEditingController(),
               state.productArgument?.driveFormFactor, (value) {
             final currentArg = cubit.state.productArgument;
@@ -1239,7 +1328,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }, DriveFormFactor.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Read speed (MB/s)',
+            S.of(context).readSpeed,
             _getController(
                 'drive_readMbps', state.productArgument?.readMbps?.toString()),
             state.productArgument?.readMbps,
@@ -1251,7 +1340,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Write speed (MB/s)',
+            S.of(context).writeSpeed,
             _getController('drive_writeMbps',
                 state.productArgument?.writeMbps?.toString()),
             state.productArgument?.writeMbps,

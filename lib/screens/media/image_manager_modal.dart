@@ -450,7 +450,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
             },
             child: Text(
               S.of(context).delete,
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(color: colorScheme.onError),
             ),
           ),
         ],

@@ -54,6 +54,8 @@ const Map<String, String> vi = {
   'salesStatus': 'Trạng thái bán hàng',
   'totalAmount': 'Tổng số tiền',
   'noProductsAddedYet': 'Chưa thêm sản phẩm nào',
+  'noProductsAvailableForManufacturer':
+      'Không có sản phẩm nào cho nhà sản xuất này',
   'price': 'Giá',
   'availableStock': 'Hàng tồn kho',
   'pleaseSelectCustomerFirst': 'Vui lòng chọn khách hàng trước',
@@ -85,6 +87,8 @@ const Map<String, String> vi = {
   'newRatings': 'Mới',
   'repliedRatings': 'Đã trả lời',
   'ratingsAndReplies': 'Đánh giá & Phản hồi',
+  'clickToManageImages': 'Nhấn để quản lý hình ảnh',
+  'manage': 'Quản lý',
   'save': 'Lưu',
   'updateStatus': 'Cập nhật trạng thái',
   'noSalesInvoicesAvailable': 'Không có hóa đơn bán hàng',
@@ -542,6 +546,7 @@ const Map<String, String> vi = {
   'electricalSpeed': 'Tốc độ Điện',
   'generation': 'Thế hệ',
   'interfaceType': 'Loại Giao tiếp',
+  'driveFormFactor': 'Kích thước Ổ cứng',
   'capacityPerStick': 'Dung lượng mỗi thanh',
   'kitStickCount': 'Số thanh / bộ',
   'clLatency': 'Độ trễ CL',
@@ -558,6 +563,7 @@ const Map<String, String> vi = {
   'year': 'Năm',
   'generateBusinessReport': 'Tạo Báo cáo Kinh doanh',
   'noData': 'Không có dữ liệu',
+  'productCategoryDistribution': 'Phân bố Danh mục Sản phẩm',
   'ratingsAndReviews': 'Đánh giá & Nhận xét',
   'reviews': 'đánh giá',
   'noRatingsYet': 'Chưa có đánh giá',
@@ -581,4 +587,9 @@ const Map<String, String> vi = {
   'modularity': 'Tính mô-đun',
   'bus': 'Bus',
   'type': 'Loại',
+  // Voucher distribution types
+  'distributionPublic': 'Công khai',
+  'distributionRewards': 'Đổi điểm',
+  'distributionStaffIssued': 'Nhân viên tặng',
+  'rewardsFor': 'Đổi lấy {points}',
 };

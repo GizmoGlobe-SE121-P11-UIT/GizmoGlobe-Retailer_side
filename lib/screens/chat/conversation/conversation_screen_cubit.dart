@@ -11,6 +11,7 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
   final Database db = Database();
   final Firebase _firebase = Firebase();
   StreamSubscription? _chatSubscription;
+  bool _isClosed = false;
 
   ConversationScreenCubit({
     required String receiverId,
@@ -22,13 +23,31 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
     _initialize();
   }
 
+  /// Safely emits a new state, handling the case where the cubit may be closed
+  /// due to race conditions with stream listeners.
+  void _safeEmit(ConversationScreenState newState) {
+    // Check both our custom flag and the built-in isClosed getter
+    if (_isClosed || isClosed) return;
+
+    try {
+      emit(newState);
+    } catch (e) {
+      // Ignore errors from attempting to emit after close
+      if (kDebugMode) {
+        print('ConversationScreenCubit: Ignored emit after close');
+      }
+    }
+  }
+
   Future<void> _initialize() async {
-    emit(state.copyWith(isLoading: true));
+    if (_isClosed || isClosed) return;
+
+    _safeEmit(state.copyWith(isLoading: true));
     await db.initialize();
     final userId = db.userId;
 
     if (userId == null) {
-      emit(state.copyWith(
+      _safeEmit(state.copyWith(
         isLoading: false,
         error: 'User not authenticated',
       ));
@@ -42,6 +61,9 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
         .doc(state.receiverId)
         .snapshots()
         .listen((doc) {
+      // Don't process if cubit is closed
+      if (_isClosed || isClosed) return;
+
       try {
         final data = doc.data();
         final messages = (data?['messages'] as List<dynamic>? ?? [])
@@ -62,7 +84,9 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
                     msg.isAIMode == false))
             .toList();
         messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-        emit(state.copyWith(
+
+        // Use _safeEmit to handle race conditions
+        _safeEmit(state.copyWith(
           isLoading: false,
           messages: messages,
           currentUserId: userId,
@@ -71,15 +95,26 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
         if (kDebugMode) {
           print('Error reading conversation: $e');
         }
-        emit(state.copyWith(
+
+        // Use _safeEmit to handle race conditions
+        _safeEmit(state.copyWith(
           isLoading: false,
           error: 'Failed to load messages',
         ));
+      }
+    }, onError: (error) {
+      // Handle stream errors without emitting if closed
+      if (!_isClosed) {
+        if (kDebugMode) {
+          print('Chat stream error: $error');
+        }
       }
     });
   }
 
   Future<void> sendMessage(String content) async {
+    if (_isClosed || isClosed) return;
+
     try {
       final chat = Chat(
         messageId: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -95,7 +130,7 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
       if (kDebugMode) {
         print('Error sending message: $e');
       }
-      emit(state.copyWith(error: 'Failed to send message'));
+      _safeEmit(state.copyWith(error: 'Failed to send message'));
     }
   }
 
@@ -111,7 +146,9 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
 
   @override
   Future<void> close() {
+    _isClosed = true;
     _chatSubscription?.cancel();
+    _chatSubscription = null;
     return super.close();
   }
 }

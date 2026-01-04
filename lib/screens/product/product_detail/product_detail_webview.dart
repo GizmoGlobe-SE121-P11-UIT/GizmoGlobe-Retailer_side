@@ -13,7 +13,6 @@ import '../../../enums/product_related/product_status_enum.dart';
 import '../../../enums/stakeholders/manufacturer_status.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../objects/product_related/product_extensions.dart';
-import '../../../data/database/database.dart';
 import '../../../widgets/dialog/information_dialog.dart';
 import '../../../widgets/general/gradient_text.dart';
 import '../../../widgets/general/status_badge.dart';
@@ -380,28 +379,35 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
                     const SizedBox(height: 16),
                     _buildHeading(context, S.of(context).overview),
                     const SizedBox(height: 8),
-                    Row(
+                    Wrap(
+                      spacing: 16,
+                      runSpacing: 8,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         StatusBadge(status: state.product.displayStatus),
-                        const SizedBox(width: 16),
-                        Icon(
-                          state.product.stock > 0
-                              ? Icons.check_circle
-                              : Icons.error,
-                          color: state.product.stock > 0
-                              ? colorScheme.tertiary
-                              : colorScheme.error,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${S.of(context).stock}: ${state.product.stock}',
-                          style: TextStyle(
-                            color: state.product.stock > 0
-                                ? colorScheme.tertiary
-                                : colorScheme.error,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              state.product.stock > 0
+                                  ? Icons.check_circle
+                                  : Icons.error,
+                              color: state.product.stock > 0
+                                  ? colorScheme.tertiary
+                                  : colorScheme.error,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${S.of(context).stock}: ${state.product.stock}',
+                              style: TextStyle(
+                                color: state.product.stock > 0
+                                    ? colorScheme.tertiary
+                                    : colorScheme.error,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -653,22 +659,9 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
   }
 
   Widget _buildNameRow(BuildContext context, ProductDetailState state) {
-    return Row(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                Text(
-                  state.product.productName,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+    return Text(
+      state.product.productName,
+      style: Theme.of(context).textTheme.titleLarge,
     );
   }
 
@@ -711,10 +704,29 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
     // Convert specs to list of entries
     final entries = specs.entries.toList();
 
+    // Use LayoutBuilder in calling widget to determine if mobile
+    // For now, check screen width directly
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 450;
+
+    if (isMobile) {
+      // Single column layout for mobile
+      return entries
+          .map((entry) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: _buildSpecificationItemMobile(
+                  context,
+                  _getLocalizedSpecKey(context, entry.key),
+                  entry.value,
+                ),
+              ))
+          .toList();
+    }
+
     // Calculate how many rows we need (2 items per row)
     final rowCount = (entries.length / 2).ceil();
 
-    // Build 2-column layout
+    // Build 2-column layout for desktop
     return List.generate(rowCount, (rowIndex) {
       final leftIndex = rowIndex * 2;
       final rightIndex = leftIndex + 1;
@@ -777,6 +789,38 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
     );
   }
 
+  /// Mobile-optimized specification item with flexible label width
+  Widget _buildSpecificationItemMobile(
+      BuildContext context, String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey[400],
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          flex: 3,
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildDescriptionBlock(
     BuildContext context, {
     required String title,
@@ -812,6 +856,7 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
 
     final isManufacturerActive =
         state.product.manufacturer.status != ManufacturerStatus.inactive;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -824,75 +869,102 @@ class _ProductDetailWebViewState extends State<ProductDetailWebView> {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                final result = await showDialog<bool>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (context) => Dialog(
-                    backgroundColor: Colors.transparent,
-                    child: AddProductWebView.editInstance(state.product),
-                  ),
-                );
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < 400;
 
-                if (result == true && mounted) {
-                  cubit.updateProduct();
-                  // Show success snackbar
-                  SnackbarService.showSuccess(
-                    context,
-                    S.of(context).success,
-                    S.of(context).productUpdatedSuccess,
-                  );
-                }
-              },
-              icon: Icon(
-                Icons.edit,
+          final editButton = ElevatedButton.icon(
+            onPressed: () async {
+              final result = await showDialog<bool>(
+                context: context,
+                barrierDismissible: true,
+                builder: (context) => Dialog(
+                  backgroundColor: Colors.transparent,
+                  child: AddProductWebView.editInstance(state.product),
+                ),
+              );
+
+              if (result == true && mounted) {
+                cubit.updateProduct();
+                // Show success snackbar
+                SnackbarService.showSuccess(
+                  context,
+                  S.of(context).success,
+                  S.of(context).productUpdatedSuccess,
+                );
+              }
+            },
+            icon: Icon(
+              Icons.edit,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+            label: Text(
+              S.of(context).edit,
+              style: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
-              label: Text(
-                S.of(context).edit,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: ElevatedButton.icon(
-              onPressed: () {
-                cubit.toLoading();
-                cubit.changeProductStatus();
-              },
-              icon: Icon(
-                state.product.status == ProductStatusEnum.discontinued
-                    ? Icons.refresh
-                    : Icons.cancel,
-                color: Colors.white,
-              ),
-              label: Text(
-                state.product.status == ProductStatusEnum.discontinued
-                    ? S.of(context).reactivate
-                    : S.of(context).discontinue,
-                style: const TextStyle(color: Colors.white),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: state.product.status ==
-                        ProductStatusEnum.discontinued
-                    ? Theme.of(context).colorScheme.tertiary
-                    : Theme.of(context).colorScheme.error,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             ),
-          ),
-        ],
+          );
+
+          final statusButton = isManufacturerActive
+              ? ElevatedButton.icon(
+                  onPressed: () {
+                    cubit.toLoading();
+                    cubit.changeProductStatus();
+                  },
+                  icon: Icon(
+                    state.product.status == ProductStatusEnum.discontinued
+                        ? Icons.refresh
+                        : Icons.cancel,
+                    color: Colors.white,
+                  ),
+                  label: Text(
+                    state.product.status == ProductStatusEnum.discontinued
+                        ? S.of(context).reactivate
+                        : S.of(context).discontinue,
+                    style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        state.product.status == ProductStatusEnum.discontinued
+                            ? Theme.of(context).colorScheme.tertiary
+                            : Theme.of(context).colorScheme.error,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
+                  ),
+                )
+              : null;
+
+          if (isMobile) {
+            // Vertical layout for mobile
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                editButton,
+                if (statusButton != null) ...[
+                  const SizedBox(height: 8),
+                  statusButton,
+                ],
+              ],
+            );
+          }
+
+          // Horizontal layout for desktop
+          return Row(
+            children: [
+              Expanded(child: editButton),
+              if (statusButton != null) ...[
+                const SizedBox(width: 16),
+                Expanded(child: statusButton),
+              ],
+            ],
+          );
+        },
       ),
     );
   }

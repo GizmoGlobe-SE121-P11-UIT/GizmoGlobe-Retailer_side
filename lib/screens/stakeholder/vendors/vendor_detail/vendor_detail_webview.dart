@@ -44,12 +44,16 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
   Widget build(BuildContext context) {
     return BlocBuilder<VendorDetailCubit, VendorDetailState>(
       builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isMobile = screenWidth < 600;
+        final containerWidth = isMobile
+            ? screenWidth - 16 // 8px margin on each side
+            : screenWidth * 0.6;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.7,
-          constraints: const BoxConstraints(
-            maxWidth: 800,
-            maxHeight: 600,
+          width: isMobile ? containerWidth : containerWidth.clamp(400.0, 800.0),
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? screenWidth : 800,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
@@ -63,10 +67,11 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
             ],
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Header with close button
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(isMobile ? 8 : 16),
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
@@ -82,26 +87,27 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
                     Icon(
                       Icons.business,
                       color: Theme.of(context).colorScheme.primary,
-                      size: 28,
+                      size: isMobile ? 20 : 28,
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: isMobile ? 8 : 12),
                     Expanded(
                       child:
                           GradientText(text: S.of(context).manufacturerDetail),
                     ),
                     IconButton(
                       onPressed: () => Navigator.of(context).pop(null),
-                      icon: const Icon(Icons.close),
+                      icon: Icon(Icons.close, size: isMobile ? 20 : 24),
                       style: IconButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         foregroundColor: Theme.of(context).colorScheme.primary,
+                        padding: EdgeInsets.all(isMobile ? 8 : 12),
                       ),
                     ),
                   ],
                 ),
               ),
               // Content
-              Expanded(
+              Flexible(
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -131,73 +137,171 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
                 ),
                 child: !widget.readOnly &&
                         StakeholderPermissions.canManageVendors()
-                    ? Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () async {
-                                final updatedManufacturer =
-                                    await VendorEditScreen.showModal(
-                                  context,
-                                  state.manufacturer,
-                                );
+                    ? Builder(
+                        builder: (context) {
+                          final isMobile =
+                              MediaQuery.of(context).size.width < 500;
+                          if (isMobile) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      final updatedManufacturer =
+                                          await VendorEditScreen.showModal(
+                                        context,
+                                        state.manufacturer,
+                                      );
 
-                                if (updatedManufacturer != null) {
-                                  cubit.updateManufacturer(updatedManufacturer);
-                                  Navigator.of(context)
-                                      .pop(updatedManufacturer);
-                                }
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                              label: Text(S.of(context).edit,
-                                  style: TextStyle(
+                                      if (updatedManufacturer != null) {
+                                        cubit.updateManufacturer(
+                                            updatedManufacturer);
+                                        Navigator.of(context)
+                                            .pop(updatedManufacturer);
+                                      }
+                                    },
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ),
+                                    label: Text(S.of(context).edit,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                        )),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () =>
+                                        _handleStatusToggle(context, state),
+                                    icon: Icon(
+                                      state.manufacturer.status ==
+                                              ManufacturerStatus.active
+                                          ? Icons.block
+                                          : Icons.check_circle,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ),
+                                    label: Text(
+                                      state.manufacturer.status ==
+                                              ManufacturerStatus.active
+                                          ? S.of(context).deactivate
+                                          : S.of(context).activate,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                      ),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: state
+                                                  .manufacturer.status ==
+                                              ManufacturerStatus.active
+                                          ? Theme.of(context).colorScheme.error
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: () async {
+                                    final updatedManufacturer =
+                                        await VendorEditScreen.showModal(
+                                      context,
+                                      state.manufacturer,
+                                    );
+
+                                    if (updatedManufacturer != null) {
+                                      cubit.updateManufacturer(
+                                          updatedManufacturer);
+                                      Navigator.of(context)
+                                          .pop(updatedManufacturer);
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
                                     color:
                                         Theme.of(context).colorScheme.onPrimary,
-                                  )),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.tertiary,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () =>
-                                  _handleStatusToggle(context, state),
-                              icon: Icon(
-                                state.manufacturer.status ==
-                                        ManufacturerStatus.active
-                                    ? Icons.block
-                                    : Icons.check_circle,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                              label: Text(
-                                state.manufacturer.status ==
-                                        ManufacturerStatus.active
-                                    ? S.of(context).deactivate
-                                    : S.of(context).activate,
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                  label: Text(S.of(context).edit,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                      )),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.tertiary,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
+                                  ),
                                 ),
                               ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: state.manufacturer.status ==
-                                        ManufacturerStatus.active
-                                    ? Theme.of(context).colorScheme.error
-                                    : Theme.of(context).colorScheme.tertiary,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: () =>
+                                      _handleStatusToggle(context, state),
+                                  icon: Icon(
+                                    state.manufacturer.status ==
+                                            ManufacturerStatus.active
+                                        ? Icons.block
+                                        : Icons.check_circle,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                  label: Text(
+                                    state.manufacturer.status ==
+                                            ManufacturerStatus.active
+                                        ? S.of(context).deactivate
+                                        : S.of(context).activate,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: state
+                                                .manufacturer.status ==
+                                            ManufacturerStatus.active
+                                        ? Theme.of(context).colorScheme.error
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ],
+                            ],
+                          );
+                        },
                       )
                     : null,
               ),
@@ -209,13 +313,14 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
   }
 
   Widget _buildHeaderSection(BuildContext context, VendorDetailState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.all(isMobile ? 12 : 16),
+      margin: EdgeInsets.symmetric(horizontal: isMobile ? 4 : 12),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
-        borderRadius: const BorderRadius.all(Radius.circular(30)),
+        borderRadius: BorderRadius.all(Radius.circular(isMobile ? 20 : 30)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -231,58 +336,66 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
           Hero(
             tag: 'vendor_avatar_${state.manufacturer.manufacturerID}',
             child: CircleAvatar(
-              radius: 60,
+              radius: isMobile ? 40 : 60,
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               child: Icon(
                 Icons.business,
-                size: 60,
+                size: isMobile ? 40 : 60,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: isMobile ? 12 : 16),
           Text(
             state.manufacturer.manufacturerName,
-            style: const TextStyle(
-              fontSize: 28,
+            style: TextStyle(
+              fontSize: isMobile ? 20 : 28,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 8),
-          _buildStatusBadge(state.manufacturer.status),
+          SizedBox(height: isMobile ? 8 : 12),
+          _buildStatusBadge(state.manufacturer.status, isMobile: isMobile),
         ],
       ),
     );
   }
 
-  Widget _buildStatusBadge(ManufacturerStatus status) {
+  Widget _buildStatusBadge(ManufacturerStatus status, {bool isMobile = false}) {
     final isActive = status == ManufacturerStatus.active;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 10 : 12,
+        vertical: isMobile ? 5 : 6,
+      ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(isMobile ? 16 : 20),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             isActive ? Icons.check_circle : Icons.cancel,
-            size: 16,
+            size: isMobile ? 14 : 16,
             color: Theme.of(context).colorScheme.onPrimary,
           ),
-          const SizedBox(width: 4),
-          Text(
-            (status == ManufacturerStatus.active
-                    ? S.of(context).active
-                    : S.of(context).inactive)
-                .toUpperCase(),
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
+          SizedBox(width: isMobile ? 4 : 6),
+          Flexible(
+            child: Text(
+              (status == ManufacturerStatus.active
+                      ? S.of(context).active
+                      : S.of(context).inactive)
+                  .toUpperCase(),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+                fontSize: isMobile ? 10 : 12,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
@@ -291,15 +404,16 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
   }
 
   Widget _buildInfoSection(BuildContext context, VendorDetailState state) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: EdgeInsets.symmetric(horizontal: isMobile ? 4 : 12),
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(isMobile ? 10 : 12),
           child: Column(
             children: [
               Row(
@@ -308,22 +422,27 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
                   Icon(
                     Icons.info_outline,
                     color: Theme.of(context).colorScheme.primary,
+                    size: isMobile ? 18 : 24,
                   ),
-                  const SizedBox(width: 8),
-                  Text(
-                    S.of(context).manufacturerInformation,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                  SizedBox(width: isMobile ? 6 : 8),
+                  Flexible(
+                    child: Text(
+                      S.of(context).manufacturerInformation,
+                      style: TextStyle(
+                        fontSize: isMobile ? 14 : 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: isMobile ? 12 : 16),
               _buildInfoRow(
                 S.of(context).manufacturerName,
                 state.manufacturer.manufacturerName,
+                isMobile: isMobile,
               ),
               _buildInfoRow(
                 S.of(context).status,
@@ -337,6 +456,7 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
                 icon: state.manufacturer.status == ManufacturerStatus.active
                     ? Icons.check_circle
                     : Icons.cancel,
+                isMobile: isMobile,
               ),
             ],
           ),
@@ -346,7 +466,47 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
   }
 
   Widget _buildInfoRow(String label, String value,
-      {Color? valueColor, IconData? icon}) {
+      {Color? valueColor, IconData? icon, bool isMobile = false}) {
+    if (isMobile) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, size: 16, color: valueColor),
+                  const SizedBox(width: 4),
+                ],
+                Flexible(
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                      color:
+                          valueColor ?? Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -368,12 +528,17 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
                   Icon(icon, size: 16, color: valueColor),
                   const SizedBox(width: 4),
                 ],
-                Text(
-                  value,
-                  style: TextStyle(
-                    color:
-                        valueColor ?? Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                      color:
+                          valueColor ?? Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    textAlign: TextAlign.end,
                   ),
                 ),
               ],

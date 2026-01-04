@@ -73,8 +73,9 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
             allNewRatings.add(rating);
           }
         } catch (e, st) {
-          if (kDebugMode)
+          if (kDebugMode) {
             print('fetchRatings: parse doc error ${doc.id}: $e\n$st');
+          }
         }
       }
 
@@ -281,8 +282,9 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
       // Refresh list after posting reply
       await fetchRatings();
     } catch (e, st) {
-      if (kDebugMode)
+      if (kDebugMode) {
         print('replyToRating: error replying to $ratingId: $e\n$st');
+      }
       emit(RatingReplyError(e.toString()));
       rethrow;
     }

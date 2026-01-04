@@ -539,12 +539,18 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
           );
         }
 
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isMobile = screenWidth < 600;
+        final containerWidth =
+            isMobile ? screenWidth * 0.95 : screenWidth * 0.6;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.7,
-          constraints: const BoxConstraints(
+          width: containerWidth,
+          height: MediaQuery.of(context).size.height * 0.85,
+          constraints: BoxConstraints(
             maxWidth: 800,
-            maxHeight: 600,
+            maxHeight: isMobile ? double.infinity : 700,
+            minWidth: 300,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
@@ -729,10 +735,10 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
           const SizedBox(height: 16),
           Text(
             state.customer.customerName,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -759,14 +765,18 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
                   Icon(
                     Icons.info_outline,
                     color: Theme.of(context).colorScheme.primary,
+                    size: 20,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    S.of(context).customerInformation,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                  Flexible(
+                    child: Text(
+                      S.of(context).customerInformation,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -900,14 +910,18 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
                   Icon(
                     Icons.card_giftcard,
                     color: Theme.of(context).colorScheme.primary,
+                    size: 20,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    S.of(context).giftVouchers,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+                  Flexible(
+                    child: Text(
+                      S.of(context).giftVouchers,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

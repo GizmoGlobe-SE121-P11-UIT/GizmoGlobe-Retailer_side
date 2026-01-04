@@ -59,7 +59,7 @@ class GradientDropdown<T> extends StatelessWidget {
             ),
             filled: false,
             hintText: 'Search',
-            hintStyle: const TextStyle(color: Colors.grey),
+            hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
         ),
       ),

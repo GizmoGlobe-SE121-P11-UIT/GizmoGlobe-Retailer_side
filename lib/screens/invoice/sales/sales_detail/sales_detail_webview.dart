@@ -109,9 +109,11 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
   }
 
   Widget _buildTotalPriceRow(String label, String value) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(isMobile ? 12 : 16),
       decoration: BoxDecoration(
         color: Theme.of(context)
             .colorScheme
@@ -123,67 +125,102 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
           width: 1,
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+      child: isMobile
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  value,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Flexible(
+                  child: Text(
+                    value,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.5,
-            ),
-          )
-        ],
-      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 500;
+
     return BlocBuilder<SalesDetailCubit, SalesDetailState>(
       builder: (context, state) {
         return Container(
-          width: 800,
-          height: 600,
-          constraints: const BoxConstraints(
-            maxWidth: 900,
-            maxHeight: 700,
+          width: isMobile ? screenWidth : 800,
+          height: isMobile ? MediaQuery.of(context).size.height : 600,
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? double.infinity : 900,
+            maxHeight: isMobile ? double.infinity : 700,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
+            borderRadius:
+                isMobile ? BorderRadius.zero : BorderRadius.circular(16),
+            boxShadow: isMobile
+                ? []
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
           ),
           child: Column(
             children: [
               // Header (match SalesAddWebView style)
               Container(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(isMobile ? 12 : 24),
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
                       .primary
                       .withValues(alpha: 0.1),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                  ),
+                  borderRadius: isMobile
+                      ? BorderRadius.zero
+                      : const BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
                 ),
                 child: Row(
                   children: [
@@ -224,7 +261,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(isMobile ? 12 : 16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -264,38 +301,76 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
                         // Payment Status Row
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                S.of(context).paymentStatus,
-                                style: TextStyle(
-                                  color: Colors.grey[400],
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
+                          child: isMobile
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      S.of(context).paymentStatus,
+                                      style: TextStyle(
+                                        color: Colors.grey[400],
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    StatusBadge(
+                                        status: state.invoice.paymentStatus),
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      S.of(context).paymentStatus,
+                                      style: TextStyle(
+                                        color: Colors.grey[400],
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    StatusBadge(
+                                        status: state.invoice.paymentStatus),
+                                  ],
                                 ),
-                              ),
-                              StatusBadge(status: state.invoice.paymentStatus),
-                            ],
-                          ),
                         ),
                         // Sales Status Row
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                S.of(context).salesStatus,
-                                style: TextStyle(
-                                  color: Colors.grey[400],
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
+                          child: isMobile
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      S.of(context).salesStatus,
+                                      style: TextStyle(
+                                        color: Colors.grey[400],
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    StatusBadge(
+                                        status: state.invoice.salesStatus),
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      S.of(context).salesStatus,
+                                      style: TextStyle(
+                                        color: Colors.grey[400],
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    StatusBadge(
+                                        status: state.invoice.salesStatus),
+                                  ],
                                 ),
-                              ),
-                              StatusBadge(status: state.invoice.salesStatus),
-                            ],
-                          ),
                         ),
                         // Payment Method Row
                         _buildInfoRow(
@@ -501,7 +576,37 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
   }
 
   Widget _buildInfoRow(String label, String value,
-      {Color? valueColor, bool wrap = false, double? maxWidth}) {
+      {Color? valueColor, bool wrap = false}) {
+    final isMobile = MediaQuery.of(context).size.width < 500;
+
+    if (isMobile) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: Colors.grey[400],
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: TextStyle(
+                color: valueColor ?? Theme.of(context).colorScheme.onSurface,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -518,8 +623,7 @@ class _SalesDetailWebViewState extends State<SalesDetailWebView> {
             ),
           ),
           const SizedBox(width: 12),
-          SizedBox(
-            width: maxWidth,
+          Flexible(
             child: Text(
               value,
               style: TextStyle(

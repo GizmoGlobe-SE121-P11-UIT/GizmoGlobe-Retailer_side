@@ -71,21 +71,29 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          Text(
-            value,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.tertiary,
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              value,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.tertiary,
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+              ),
+              maxLines: 2,
+              textAlign: TextAlign.right,
             ),
           ),
         ],
@@ -199,9 +207,8 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       S.of(context).paymentStatus,
@@ -213,6 +220,7 @@ class _IncomingDetailScreenState extends State<IncomingDetailScreen> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
+                                    const SizedBox(height: 8),
                                     StatusBadge(status: state.invoice.status),
                                   ],
                                 ),

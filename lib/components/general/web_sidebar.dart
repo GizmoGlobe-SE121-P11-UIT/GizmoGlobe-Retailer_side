@@ -11,6 +11,7 @@ class WebSidebarModes extends StatefulWidget {
   final List<SidebarItem> items;
   final void Function(bool)? onCompactModeChanged;
   final bool initialCompactMode;
+  final bool hideCollapseButton;
 
   const WebSidebarModes({
     super.key,
@@ -19,6 +20,7 @@ class WebSidebarModes extends StatefulWidget {
     required this.items,
     this.onCompactModeChanged,
     this.initialCompactMode = false,
+    this.hideCollapseButton = false,
   });
 
   @override
@@ -32,6 +34,17 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
   void initState() {
     super.initState();
     isCompactMode = widget.initialCompactMode;
+  }
+
+  @override
+  void didUpdateWidget(WebSidebarModes oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Sync compact mode when initialCompactMode prop changes
+    if (oldWidget.initialCompactMode != widget.initialCompactMode) {
+      setState(() {
+        isCompactMode = widget.initialCompactMode;
+      });
+    }
   }
 
   @override
@@ -50,21 +63,22 @@ class _WebSidebarModesState extends State<WebSidebarModes> {
       color: colorScheme.surface.withValues(alpha: 0.7),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(
-                isCompactMode ? Icons.chevron_right : Icons.chevron_left,
+          if (!widget.hideCollapseButton)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: Icon(
+                  isCompactMode ? Icons.chevron_right : Icons.chevron_left,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isCompactMode = !isCompactMode;
+                  });
+                  widget.onCompactModeChanged?.call(isCompactMode);
+                },
+                tooltip: isCompactMode ? 'Expand' : 'Collapse',
               ),
-              onPressed: () {
-                setState(() {
-                  isCompactMode = !isCompactMode;
-                });
-                widget.onCompactModeChanged?.call(isCompactMode);
-              },
-              tooltip: isCompactMode ? 'Expand' : 'Collapse',
             ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: mainItems.length,

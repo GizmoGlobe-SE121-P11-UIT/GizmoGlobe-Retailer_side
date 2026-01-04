@@ -101,24 +101,29 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                 title: S.of(context).discountValue,
                                 value: state.voucher.isPercentage
                                     ? '${state.voucher.discountValue}%'
-                                    : Helper.toCurrencyFormat(state.voucher.discountValue),
+                                    : Helper.toCurrencyFormat(
+                                        state.voucher.discountValue),
                                 theme: theme,
                               ),
                               if (state.voucher.isPercentage)
                                 _buildInfoRow(
                                   title: S.of(context).maximumDiscountValue,
-                                  value: Helper.toCurrencyFormat((state.voucher as PercentageInterface).maximumDiscountValue),
+                                  value: Helper.toCurrencyFormat(
+                                      (state.voucher as PercentageInterface)
+                                          .maximumDiscountValue),
                                   theme: theme,
                                 ),
                               _buildInfoRow(
                                 title: S.of(context).minimumPurchase,
-                                value: Helper.toCurrencyFormat(state.voucher.minimumPurchase),
+                                value: Helper.toCurrencyFormat(
+                                    state.voucher.minimumPurchase),
                                 theme: theme,
                               ),
                               if (state.voucher.isLimited)
                                 _buildInfoRow(
                                   title: S.of(context).usageLeft,
-                                  value: '${(state.voucher as LimitedInterface).usageLeft} / ${(state.voucher as LimitedInterface).maximumUsage}',
+                                  value:
+                                      '${(state.voucher as LimitedInterface).usageLeft} / ${(state.voucher as LimitedInterface).maximumUsage}',
                                   theme: theme,
                                 ),
                               _buildInfoRow(
@@ -128,13 +133,17 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                               ),
                               _buildInfoRow(
                                 title: S.of(context).startTime,
-                                value: DateFormat('hh:mm:ss dd/MM/yyyy').format(state.voucher.startTime),
+                                value: DateFormat('hh:mm:ss dd/MM/yyyy')
+                                    .format(state.voucher.startTime),
                                 theme: theme,
                               ),
                               if (state.voucher.hasEndTime)
                                 _buildInfoRow(
                                   title: S.of(context).endTime,
-                                  value: DateFormat('hh:mm:ss dd/MM/yyyy').format((state.voucher as EndTimeInterface).endTime),
+                                  value: DateFormat('hh:mm:ss dd/MM/yyyy')
+                                      .format(
+                                          (state.voucher as EndTimeInterface)
+                                              .endTime),
                                   theme: theme,
                                 )
                               else
@@ -143,28 +152,69 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                   value: S.of(context).noEndTime,
                                   theme: theme,
                                 ),
-                              Row(
-                                children: [
-                                  Text(
-                                    // '${S.of(context).visibility}: ',
-                                    'Display Type: ',
-                                    style: theme.textTheme.titleMedium?.copyWith(
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                  StatusBadge(status: state.voucher.distributionType.description),
-                                ],
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  if (constraints.maxWidth < 200) {
+                                    // Stack vertically on very small screens
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${S.of(context).visibility}: ',
+                                          style:
+                                              theme.textTheme.titleMedium?.copyWith(
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: StatusBadge(
+                                            status: state.voucher.distributionType,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    // Use Row for wider screens
+                                    return Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            '${S.of(context).visibility}: ',
+                                            style:
+                                                theme.textTheme.titleMedium?.copyWith(
+                                              fontWeight: FontWeight.w900,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: StatusBadge(
+                                            status: state.voucher.distributionType,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                },
                               ),
                               Row(
                                 children: [
                                   Text(
                                     '${S.of(context).status}: ',
-                                    style: theme.textTheme.titleMedium?.copyWith(
+                                    style:
+                                        theme.textTheme.titleMedium?.copyWith(
                                       fontWeight: FontWeight.w900,
                                     ),
                                   ),
                                   StatusBadge(
-                                    status: state.voucher.isEnabled ? S.of(context).active : S.of(context).inactive,
+                                    status: state.voucher.isEnabled
+                                        ? S.of(context).active
+                                        : S.of(context).inactive,
                                   ),
                                 ],
                               ),
@@ -173,12 +223,15 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                       children: [
                                         Text(
                                           '${S.of(context).status}: ',
-                                          style: theme.textTheme.titleMedium?.copyWith(
+                                          style: theme.textTheme.titleMedium
+                                              ?.copyWith(
                                             fontWeight: FontWeight.w900,
                                           ),
                                         ),
                                         StatusBadge(
-                                          status: state.voucher.isEnabled ? S.of(context).active : S.of(context).inactive,
+                                          status: state.voucher.isEnabled
+                                              ? S.of(context).active
+                                              : S.of(context).inactive,
                                         ),
                                       ],
                                     )
@@ -225,16 +278,20 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                           showDialog(
                               context: context,
                               builder: (context) => InformationDialog(
-                                    title: state.dialogName.getLocalizedName(context),
-                                    content: state.notifyMessage.getLocalizedMessage(context),
+                                    title: state.dialogName
+                                        .getLocalizedName(context),
+                                    content: state.notifyMessage
+                                        .getLocalizedMessage(context),
                                     onPressed: () {},
                                   ));
                         } else if (state.processState == ProcessState.failure) {
                           showDialog(
                               context: context,
                               builder: (context) => InformationDialog(
-                                    title: state.dialogName.getLocalizedName(context),
-                                    content: state.notifyMessage.getLocalizedMessage(context),
+                                    title: state.dialogName
+                                        .getLocalizedName(context),
+                                    content: state.notifyMessage
+                                        .getLocalizedMessage(context),
                                     onPressed: () {
                                       cubit.toIdle();
                                     },
@@ -248,25 +305,31 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                             Expanded(
                               child: ElevatedButton.icon(
                                 onPressed: () async {
-                                  final result = await EditVoucherScreen.showModal(context, state.voucher);
+                                  final result =
+                                      await EditVoucherScreen.showModal(
+                                          context, state.voucher);
                                   if (result == true) {
                                     if (mounted) Navigator.pop(context, true);
                                   }
                                 },
-                                icon: Icon(Icons.edit, color: theme.colorScheme.onPrimary),
+                                icon: Icon(Icons.edit,
+                                    color: theme.colorScheme.onPrimary),
                                 label: Text(
                                   S.of(context).edit,
-                                  style: TextStyle(color: theme.colorScheme.onPrimary),
+                                  style: TextStyle(
+                                      color: theme.colorScheme.onPrimary),
                                 ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: theme.colorScheme.primary,
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 16),
                             Expanded(
-                              child: BlocBuilder<VoucherDetailCubit, VoucherDetailState>(
+                              child: BlocBuilder<VoucherDetailCubit,
+                                  VoucherDetailState>(
                                 builder: (context, state) {
                                   return ElevatedButton.icon(
                                     onPressed: () {
@@ -274,16 +337,24 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                                       cubit.changeVoucherStatus();
                                     },
                                     icon: Icon(
-                                      state.voucher.isEnabled ? Icons.not_interested : Icons.check,
+                                      state.voucher.isEnabled
+                                          ? Icons.not_interested
+                                          : Icons.check,
                                       color: theme.colorScheme.onPrimary,
                                     ),
                                     label: Text(
-                                      state.voucher.isEnabled ? S.of(context).disabled : S.of(context).enabled,
-                                      style: TextStyle(color: theme.colorScheme.onPrimary),
+                                      state.voucher.isEnabled
+                                          ? S.of(context).disabled
+                                          : S.of(context).enabled,
+                                      style: TextStyle(
+                                          color: theme.colorScheme.onPrimary),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: state.voucher.isEnabled ? theme.colorScheme.error : theme.colorScheme.secondary,
-                                      padding: const EdgeInsets.symmetric(vertical: 12),
+                                      backgroundColor: state.voucher.isEnabled
+                                          ? theme.colorScheme.error
+                                          : theme.colorScheme.secondary,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
                                     ),
                                   );
                                 },
@@ -292,42 +363,42 @@ class _VoucherDetailScreen extends State<VoucherDetailScreen> {
                           ],
                         );
                       },
-                     ),
-                   ),
-                 ),
-               ],
-             ),
-           );
-         },
-       ),
-     );
-   }
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 
-   Widget _buildInfoRow({
-     required String title,
-     required String value,
-     required ThemeData theme,
-   }) {
-     return Padding(
-       padding: const EdgeInsets.symmetric(vertical: 8.0),
-       child: Row(
-         children: [
-           Text(
-             '$title: ',
-             style: theme.textTheme.titleMedium?.copyWith(
-               fontWeight: FontWeight.w900,
-             ),
-           ),
-           Expanded(
-             child: Text(
-               value,
-               style: theme.textTheme.bodyLarge?.copyWith(
-                 fontWeight: FontWeight.w400,
-               ),
-             ),
-           ),
-         ],
-       ),
-     );
-   }
+  Widget _buildInfoRow({
+    required String title,
+    required String value,
+    required ThemeData theme,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Text(
+            '$title: ',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

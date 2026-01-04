@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gizmoglobe_client/enums/product_related/product_status_enum.dart';
+import 'package:gizmoglobe_client/enums/voucher_related/distribution_type.dart';
 
 class StatusBadge extends StatelessWidget {
   final dynamic status;
@@ -19,11 +20,15 @@ class StatusBadge extends StatelessWidget {
     // Always use localized text for ProductStatusEnum
     if (status is ProductStatusEnum) {
       text = (status as ProductStatusEnum).localized(context);
+    } else if (status is DistributionType) {
+      // Handle DistributionType with proper localization
+      text = (status as DistributionType).getLocalizedName(context);
     } else {
       // Try to get localized text if the status object has getLocalizedName method
       try {
-        if (status.getLocalizedName != null) {
-          text = status.getLocalizedName(context);
+        if (status is String) {
+          // If it's already a string, use it directly
+          text = status as String;
         } else if (status is Enum) {
           text = status.toString().split('.').last;
         } else {
@@ -86,12 +91,30 @@ class StatusBadge extends StatelessWidget {
       color = theme.colorScheme.tertiary;
       icon = Icons.check_circle;
     } else {
-      color = theme.colorScheme.outline;
-      icon = Icons.help;
+      // Default styling for distribution types and unknown statuses
+      if (text.toLowerCase().contains('public') ||
+          text.toLowerCase().contains('công khai')) {
+        color = theme.colorScheme.outline;
+        icon = Icons.public;
+      } else if (text.toLowerCase().contains('rewards') ||
+          text.toLowerCase().contains('đổi điểm')) {
+        color = Colors.orange;
+        icon = Icons.card_giftcard;
+      } else if (text.toLowerCase().contains('staff') ||
+          text.toLowerCase().contains('nhân viên')) {
+        color = Colors.blue;
+        icon = Icons.badge;
+      } else {
+        color = theme.colorScheme.outline;
+        icon = Icons.help;
+      }
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      constraints: const BoxConstraints(
+        maxWidth: double.infinity,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         border: Border.all(color: color),
@@ -105,14 +128,18 @@ class StatusBadge extends StatelessWidget {
             color: color,
             size: 16,
           ),
-          const SizedBox(width: 8),
-          Text(
-            text,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              text,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
-            // overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

@@ -10,7 +10,6 @@ import '../../../enums/voucher_related/distribution_type.dart';
 import '../../../objects/voucher_related/voucher.dart';
 import '../../../objects/voucher_related/voucher_argument.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:dio/dio.dart';
 import 'package:genai/genai.dart';
 
 class AddVoucherCubit extends Cubit<AddVoucherState> {
@@ -43,9 +42,15 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
         endTime: (voucherArgument.hasEndTime ?? false)
             ? (voucherArgument.endTime ?? now.add(const Duration(days: 7)))
             : null,
-        maximumUsage: (voucherArgument.isLimited ?? false) ? voucherArgument.maximumUsage : 0,
-        usageLeft: (voucherArgument.isLimited ?? false) ? voucherArgument.usageLeft : 0,
-        maximumDiscountValue: (voucherArgument.isPercentage ?? false) ? voucherArgument.maximumDiscountValue : 0,
+        maximumUsage: (voucherArgument.isLimited ?? false)
+            ? voucherArgument.maximumUsage
+            : 0,
+        usageLeft: (voucherArgument.isLimited ?? false)
+            ? voucherArgument.usageLeft
+            : 0,
+        maximumDiscountValue: (voucherArgument.isPercentage ?? false)
+            ? voucherArgument.maximumDiscountValue
+            : 0,
         enDescription: voucherArgument.enDescription ?? '',
         viDescription: voucherArgument.viDescription ?? '',
       ),
@@ -95,15 +100,12 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
 
         updateVoucherArgument(
             state.voucherArgument!.copyWith(enDescription: enDescription));
-      }
-      else {
+      } else {
         enDescription = await generateDescription(state.voucherArgument!);
         viDescription = await translateIntoVietnamese(enDescription);
 
         updateVoucherArgument(state.voucherArgument!.copyWith(
-            enDescription: enDescription,
-            viDescription: viDescription
-        ));
+            enDescription: enDescription, viDescription: viDescription));
       }
 
       emit(state.copyWith(
@@ -125,15 +127,12 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
 
         updateVoucherArgument(
             state.voucherArgument!.copyWith(viDescription: viDescription));
-      }
-      else {
+      } else {
         enDescription = await generateDescription(state.voucherArgument!);
         viDescription = await translateIntoVietnamese(enDescription);
 
         updateVoucherArgument(state.voucherArgument!.copyWith(
-            enDescription: enDescription,
-            viDescription: viDescription
-        ));
+            enDescription: enDescription, viDescription: viDescription));
       }
 
       emit(state.copyWith(
@@ -153,7 +152,8 @@ Future<String> translateIntoEnglish(String inputText) async {
       model: "gemini-2.0-flash",
       apiKey: apiKey,
       url: kGeminiUrl,
-      systemPrompt: "You are a translator, and you are translating the following Vietnamese text to English.",
+      systemPrompt:
+          "You are a translator, and you are translating the following Vietnamese text to English.",
       userPrompt: inputText,
       stream: false,
     );
@@ -178,7 +178,8 @@ Future<String> translateIntoVietnamese(String inputText) async {
       model: "gemini-2.0-flash",
       apiKey: apiKey,
       url: kGeminiUrl,
-      systemPrompt: "You are a translator, and you are translating the following Englist text to Vietnamese.",
+      systemPrompt:
+          "You are a translator, and you are translating the following Englist text to Vietnamese.",
       userPrompt: inputText,
       stream: false,
     );
@@ -203,13 +204,17 @@ Future<String> generateDescription(VoucherArgument inputVoucher) async {
       'Discount value: ${voucherInfo.discountValue}${(voucherInfo.isPercentage! ? '%' : '₫')}',
       'Minimum purchase amount: ${voucherInfo.minimumPurchase}₫',
       'Discount type: ${voucherInfo.isPercentage ?? false ? 'Percentage' : 'Fixed amount'}',
-      if (voucherInfo.isPercentage ?? false) 'Maximum discount value: ${voucherInfo.maximumDiscountValue}₫',
+      if (voucherInfo.isPercentage ?? false)
+        'Maximum discount value: ${voucherInfo.maximumDiscountValue}₫',
       'Usage limit per person: ${voucherInfo.maxUsagePerPerson}',
-      if (voucherInfo.isLimited ?? false) 'Maximum total usage: ${voucherInfo.maximumUsage}',
+      if (voucherInfo.isLimited ?? false)
+        'Maximum total usage: ${voucherInfo.maximumUsage}',
       'Valid from: ${voucherInfo.startTime?.toString().substring(0, 10)}',
-      if (voucherInfo.hasEndTime ?? false) 'Valid until: ${voucherInfo.endTime?.toString().substring(0, 10)}',
+      if (voucherInfo.hasEndTime ?? false)
+        'Valid until: ${voucherInfo.endTime?.toString().substring(0, 10)}',
       'Claim type: ${voucherInfo.distributionType?.description}',
-      if (voucherInfo.distributionType == DistributionType.rewards) 'Redeem price: ${voucherInfo.redeemPrice} points',
+      if (voucherInfo.distributionType == DistributionType.rewards)
+        'Redeem price: ${voucherInfo.redeemPrice} points',
     ].join('\n');
 
     final request = AIRequestModel(
@@ -217,7 +222,8 @@ Future<String> generateDescription(VoucherArgument inputVoucher) async {
       model: "gemini-2.0-flash",
       apiKey: apiKey,
       url: kGeminiUrl,
-      systemPrompt: "You are an assistant for an online store, and you are making description for vouchers.",
+      systemPrompt:
+          "You are an assistant for an online store, and you are making description for vouchers.",
       userPrompt: promptDetails,
       stream: false,
     );

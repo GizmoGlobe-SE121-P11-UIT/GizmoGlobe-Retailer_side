@@ -30,29 +30,38 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
   Widget build(BuildContext context) {
     return BlocBuilder<WarrantyAddCubit, WarrantyAddState>(
       builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isMobile = screenWidth < 500;
+
         return Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.9,
-          constraints: const BoxConstraints(
-            maxWidth: 1200,
-            maxHeight: 800,
+          width:
+              isMobile ? screenWidth : MediaQuery.of(context).size.width * 0.8,
+          height: isMobile
+              ? MediaQuery.of(context).size.height
+              : MediaQuery.of(context).size.height * 0.9,
+          constraints: BoxConstraints(
+            maxWidth: isMobile ? double.infinity : 1200,
+            maxHeight: isMobile ? double.infinity : 800,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
+            borderRadius:
+                isMobile ? BorderRadius.zero : BorderRadius.circular(16),
+            boxShadow: isMobile
+                ? []
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
           ),
           child: Column(
             children: [
               // Header with close and save buttons
               Container(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(isMobile ? 16 : 24),
                 decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
@@ -68,7 +77,7 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                     Icon(
                       Icons.build,
                       color: Theme.of(context).colorScheme.primary,
-                      size: 28,
+                      size: isMobile ? 24 : 28,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -108,7 +117,7 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
               // Content
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
+                  padding: EdgeInsets.all(isMobile ? 12 : 24),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -121,20 +130,21 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(16),
+                            padding: EdgeInsets.all(isMobile ? 12 : 16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   S.of(context).customerInformation,
-                                  style: const TextStyle(
-                                    fontSize: 18,
+                                  style: TextStyle(
+                                    fontSize: isMobile ? 16 : 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 const SizedBox(height: 16),
                                 // Customer Selection
                                 DropdownButtonFormField<String>(
+                                  isExpanded: true,
                                   initialValue: state.selectedCustomerId,
                                   decoration: InputDecoration(
                                     labelText: S.of(context).selectCustomer,
@@ -170,7 +180,10 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                       state.availableCustomers.map((customer) {
                                     return DropdownMenuItem(
                                       value: customer.customerID,
-                                      child: Text(customer.customerName),
+                                      child: Text(
+                                        customer.customerName,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     );
                                   }).toList(),
                                   onChanged: (value) {
@@ -199,7 +212,7 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.all(24),
+                                padding: EdgeInsets.all(isMobile ? 16 : 24),
                                 child: Column(
                                   children: [
                                     Icon(
@@ -213,11 +226,13 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                     const SizedBox(height: 16),
                                     Text(
                                       S.of(context).noSalesInvoicesAvailable,
-                                      style: const TextStyle(
-                                        fontSize: 18,
+                                      style: TextStyle(
+                                        fontSize: isMobile ? 16 : 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
@@ -227,9 +242,11 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                             .colorScheme
                                             .onSurface
                                             .withValues(alpha: 0.4),
-                                        fontSize: 16,
+                                        fontSize: isMobile ? 14 : 16,
                                       ),
                                       textAlign: TextAlign.center,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
@@ -249,14 +266,15 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                   children: [
                                     Text(
                                       S.of(context).invoiceDetails,
-                                      style: const TextStyle(
-                                        fontSize: 18,
+                                      style: TextStyle(
+                                        fontSize: isMobile ? 16 : 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     const SizedBox(height: 16),
                                     // Sales Invoice Selection
                                     DropdownButtonFormField<String>(
+                                      isExpanded: true,
                                       decoration: InputDecoration(
                                         labelText: S.of(context).salesInvoice,
                                         labelStyle: TextStyle(
@@ -305,6 +323,7 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                                 color: Theme.of(context)
                                                     .colorScheme
                                                     .onSurface),
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         );
                                       }).toList(),
@@ -401,8 +420,8 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                     children: [
                                       Text(
                                         S.of(context).selectProductsForWarranty,
-                                        style: const TextStyle(
-                                          fontSize: 18,
+                                        style: TextStyle(
+                                          fontSize: isMobile ? 16 : 18,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -522,8 +541,8 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                                         child: Text(
                                                           '${S.of(context).price}: ${Helper.toCurrencyFormat(detail.sellingPrice)}',
                                                           style:
-                                                              const TextStyle(
-                                                            color: Colors.green,
+                                                              TextStyle(
+                                                            color: Theme.of(context).colorScheme.tertiary,
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                             fontSize: 13,
@@ -534,166 +553,255 @@ class _WarrantyAddWebViewState extends State<WarrantyAddWebView> {
                                                   ),
                                                   const SizedBox(height: 8),
                                                   if (isSelected)
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Flexible(
-                                                          child: Text(
-                                                            '${S.of(context).availableStock}: ${detail.quantity}',
-                                                            style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .primary,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 14,
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 8),
-                                                        GestureDetector(
-                                                          onTap:
-                                                              () {}, // Prevent tap propagation
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
+                                                    isMobile
+                                                        ? Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                             children: [
-                                                              Material(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                child:
-                                                                    IconButton(
-                                                                  icon: Icon(
-                                                                    Icons
-                                                                        .remove_circle_outline,
-                                                                    color: state.productQuantities[detail.productID] ==
-                                                                            1
-                                                                        ? Theme.of(context)
-                                                                            .colorScheme
-                                                                            .onSurface
-                                                                            .withValues(
-                                                                                alpha:
-                                                                                    0.4)
-                                                                        : Theme.of(context)
-                                                                            .colorScheme
-                                                                            .primary,
-                                                                  ),
-                                                                  onPressed:
-                                                                      state.productQuantities[detail.productID] ==
-                                                                              1
-                                                                          ? null
-                                                                          : () {
-                                                                              cubit.decrementProductQuantity(detail.productID);
-                                                                            },
-                                                                  constraints:
-                                                                      const BoxConstraints(
-                                                                    minWidth:
-                                                                        40,
-                                                                    minHeight:
-                                                                        40,
-                                                                  ),
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .zero,
-                                                                ),
-                                                              ),
-                                                              Container(
-                                                                width: 40,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .colorScheme
-                                                                      .primary
-                                                                      .withValues(
-                                                                          alpha:
-                                                                              0.1),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .symmetric(
-                                                                        vertical:
-                                                                            4),
+                                                              Expanded(
                                                                 child: Text(
-                                                                  '${state.productQuantities[detail.productID] ?? 1}',
+                                                                  '${S.of(context).availableStock}: ${detail.quantity}',
                                                                   style:
                                                                       TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontSize:
-                                                                        16,
                                                                     color: Theme.of(
                                                                             context)
                                                                         .colorScheme
                                                                         .primary,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        12,
                                                                   ),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
                                                                 ),
                                                               ),
-                                                              Material(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                child:
-                                                                    IconButton(
-                                                                  icon: Icon(
-                                                                    Icons
-                                                                        .add_circle_outline,
-                                                                    color: (state.productQuantities[detail.productID] ??
+                                                              const SizedBox(
+                                                                  width: 4),
+                                                              Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  GestureDetector(
+                                                                    onTap: state.productQuantities[detail.productID] ==
+                                                                            1
+                                                                        ? null
+                                                                        : () =>
+                                                                            cubit.decrementProductQuantity(detail.productID),
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .remove_circle_outline,
+                                                                      size: 22,
+                                                                      color: state.productQuantities[detail.productID] ==
+                                                                              1
+                                                                          ? Theme.of(context)
+                                                                              .colorScheme
+                                                                              .onSurface
+                                                                              .withValues(alpha: 0.4)
+                                                                          : Theme.of(context).colorScheme.primary,
+                                                                    ),
+                                                                  ),
+                                                                  Container(
+                                                                    width: 28,
+                                                                    margin: const EdgeInsets
+                                                                        .symmetric(
+                                                                        horizontal:
+                                                                            2),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .primary
+                                                                          .withValues(
+                                                                              alpha: 0.1),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              6),
+                                                                    ),
+                                                                    padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                        vertical:
+                                                                            2),
+                                                                    child: Text(
+                                                                      '${state.productQuantities[detail.productID] ?? 1}',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                      ),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                    ),
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: (state.productQuantities[detail.productID] ??
                                                                                 1) >=
                                                                             detail
                                                                                 .quantity
-                                                                        ? Theme.of(context)
-                                                                            .colorScheme
-                                                                            .onSurface
-                                                                            .withValues(
-                                                                                alpha:
-                                                                                    0.4)
-                                                                        : Theme.of(context)
-                                                                            .colorScheme
-                                                                            .primary,
+                                                                        ? null
+                                                                        : () =>
+                                                                            cubit.incrementProductQuantity(detail.productID),
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .add_circle_outline,
+                                                                      size: 22,
+                                                                      color: (state.productQuantities[detail.productID] ?? 1) >=
+                                                                              detail
+                                                                                  .quantity
+                                                                          ? Theme.of(context)
+                                                                              .colorScheme
+                                                                              .onSurface
+                                                                              .withValues(alpha: 0.4)
+                                                                          : Theme.of(context).colorScheme.primary,
+                                                                    ),
                                                                   ),
-                                                                  onPressed: (state.productQuantities[detail.productID] ??
-                                                                              1) >=
-                                                                          detail
-                                                                              .quantity
-                                                                      ? null
-                                                                      : () {
-                                                                          cubit.incrementProductQuantity(
-                                                                              detail.productID);
-                                                                        },
-                                                                  constraints:
-                                                                      const BoxConstraints(
-                                                                    minWidth:
-                                                                        40,
-                                                                    minHeight:
-                                                                        40,
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          )
+                                                        : Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Flexible(
+                                                                child: Text(
+                                                                  '${S.of(context).availableStock}: ${detail.quantity}',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .primary,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        14,
                                                                   ),
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .zero,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                  width: 8),
+                                                              GestureDetector(
+                                                                onTap:
+                                                                    () {}, // Prevent tap propagation
+                                                                child: Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    Material(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      child:
+                                                                          IconButton(
+                                                                        icon:
+                                                                            Icon(
+                                                                          Icons
+                                                                              .remove_circle_outline,
+                                                                          color: state.productQuantities[detail.productID] == 1
+                                                                              ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4)
+                                                                              : Theme.of(context).colorScheme.primary,
+                                                                        ),
+                                                                        onPressed: state.productQuantities[detail.productID] ==
+                                                                                1
+                                                                            ? null
+                                                                            : () {
+                                                                                cubit.decrementProductQuantity(detail.productID);
+                                                                              },
+                                                                        constraints:
+                                                                            const BoxConstraints(
+                                                                          minWidth:
+                                                                              40,
+                                                                          minHeight:
+                                                                              40,
+                                                                        ),
+                                                                        padding:
+                                                                            EdgeInsets.zero,
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      width: 40,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .primary
+                                                                            .withValues(alpha: 0.1),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(8),
+                                                                      ),
+                                                                      padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                          vertical:
+                                                                              4),
+                                                                      child:
+                                                                          Text(
+                                                                        '${state.productQuantities[detail.productID] ?? 1}',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontSize:
+                                                                              16,
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                        ),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                      ),
+                                                                    ),
+                                                                    Material(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      child:
+                                                                          IconButton(
+                                                                        icon:
+                                                                            Icon(
+                                                                          Icons
+                                                                              .add_circle_outline,
+                                                                          color: (state.productQuantities[detail.productID] ?? 1) >= detail.quantity
+                                                                              ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4)
+                                                                              : Theme.of(context).colorScheme.primary,
+                                                                        ),
+                                                                        onPressed: (state.productQuantities[detail.productID] ?? 1) >=
+                                                                                detail.quantity
+                                                                            ? null
+                                                                            : () {
+                                                                                cubit.incrementProductQuantity(detail.productID);
+                                                                              },
+                                                                        constraints:
+                                                                            const BoxConstraints(
+                                                                          minWidth:
+                                                                              40,
+                                                                          minHeight:
+                                                                              40,
+                                                                        ),
+                                                                        padding:
+                                                                            EdgeInsets.zero,
+                                                                      ),
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ),
                                                             ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
+                                                          )
                                                   else
                                                     Text(
                                                       '${S.of(context).availableStock}: ${detail.quantity}',

@@ -5,9 +5,13 @@ import '../../../../enums/invoice_related/payment_status.dart';
 import '../../../../objects/invoice_related/incoming_invoice.dart';
 
 class IncomingInvoicePermissions {
+  static bool canAddInvoice() {
+    return Database().role == RoleEnum.owner;
+  }
+
   static bool canEditPaymentStatus(IncomingInvoice invoice) {
     return (Database().role == RoleEnum.owner ||
-        Database().role == RoleEnum.manager) &&
+            Database().role == RoleEnum.manager) &&
         invoice.status == PaymentStatus.unpaid;
   }
-} 
+}
