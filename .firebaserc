@@ -1,7 +1,16 @@
 {
   "projects": {
+    "default": "se121p11-gizmoglobe",
     "production": "se121p11-gizmoglobe"
   },
-  "targets": {},
+  "targets": {
+    "se121p11-gizmoglobe": {
+      "hosting": {
+        "gizmoglobe-retailer": [
+          "gizmoglobe-retailer"
+        ]
+      }
+    }
+  },
   "etags": {}
 }
