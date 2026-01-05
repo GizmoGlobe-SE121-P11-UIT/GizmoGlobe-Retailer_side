@@ -2,7 +2,9 @@
 
 A comprehensive Flutter-based inventory and sales management application for computer component retailers. This application enables retailers to manage products, customers, vendors, employees, invoices, vouchers, and communicate with customers through a built-in chat system.
 
-![GizmoGlobe Logo](lib/GIzmoGlobe.png)
+<p align="center">
+  <img src="lib/GIzmoGlobe.png" alt="GizmoGlobe Logo" width="200">
+</p>
 
 ## 🌐 Live Demo
 
