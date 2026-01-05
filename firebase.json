@@ -2,7 +2,7 @@
   "hosting": {
     "site": "gizmoglobe-retailer",
     "public": "build/web",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": ["firebase.json", "**/node_modules/**", "!.env"],
     "rewrites": [
       {
         "source": "**",
