@@ -18,16 +18,10 @@ jobs:
         with:
           channel: stable
           cache: true
-      - name: Create .env from .env.web (public keys only)
-        run: cp .env.web .env
       - name: Get Flutter dependencies
         run: flutter pub get
-      - name: Build Flutter web
-        run: flutter build web --release
-      - name: Copy .env to build output
-        run: |
-          cp .env build/web/.env
-          cp .env build/web/assets/.env
+      - name: Build Flutter web with compile-time config
+        run: flutter build web --release --dart-define-from-file=.env.web
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

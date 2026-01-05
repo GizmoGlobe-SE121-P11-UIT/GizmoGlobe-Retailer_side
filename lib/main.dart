@@ -57,7 +57,20 @@ void main() async {
     };
   }
 
-  await dotenv.load(fileName: ".env");
+  // Load .env file (optional for web - uses compile-time constants instead)
+  if (!kIsWeb) {
+    await dotenv.load(fileName: ".env");
+  } else {
+    // On web, try to load .env but don't fail if it's missing
+    // (production uses compile-time --dart-define-from-file)
+    try {
+      await dotenv.load(fileName: ".env");
+    } catch (e) {
+      if (kDebugMode) {
+        print('Note: .env file not loaded (using compile-time config): $e');
+      }
+    }
+  }
   await _setup();
   try {
     // Initialize Firebase with error handling
