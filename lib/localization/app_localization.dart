@@ -322,7 +322,7 @@ class AppLocalizations {
   String get max => _getTranslation('max');
   String get paid => _getTranslation('paid');
   String get unpaid => _getTranslation('unpaid');
-  String get pending => _getTranslation('pending');
+  String get pendingLabel => _getTranslation('pendingLabel');
   String get preparing => _getTranslation('preparing');
   String get shipping => _getTranslation('shipping');
   String get shipped => _getTranslation('shipped');
@@ -451,6 +451,14 @@ class AppLocalizations {
   String get backToChatList => _getTranslation('backToChatList');
   String get messages => _getTranslation('messages');
   String get noMessages => _getTranslation('noMessages');
+  String get manageProductImages => _getTranslation('manageProductImages');
+  String get uploadImage => _getTranslation('uploadImage');
+  String get addUrl => _getTranslation('addUrl');
+  String get primary => _getTranslation('primary');
+  String get pending => _getTranslation('pending');
+  String get newLabel => _getTranslation('newLabel');
+  String get pendingUpload => _getTranslation('pendingUpload');
+  String get closeWithoutSaving => _getTranslation('closeWithoutSaving');
   String get reactivate => _getTranslation('reactivate');
   String get discontinue => _getTranslation('discontinue');
   String get pleaseFillRequiredFields =>

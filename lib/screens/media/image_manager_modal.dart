@@ -472,7 +472,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
               Expanded(
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.upload_file),
-                  label: const Text('Upload Image'),
+                    label: Text(S.of(context).uploadImage),
                   onPressed: _pickImageFile,
                 ),
               ),
@@ -480,7 +480,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
               Expanded(
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.link),
-                  label: const Text('Add URL'),
+                    label: Text(S.of(context).addUrl),
                   onPressed: _showUrlInputDialog,
                 ),
               ),
@@ -535,7 +535,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
     if (!kIsWeb) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Manage Product Images'),
+          title: Text(S.of(context).manageProductImages),
           leading: IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => Navigator.pop(context),
@@ -543,7 +543,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
           actions: [
             IconButton(
               icon: const Icon(Icons.check),
-              tooltip: 'Save changes',
+              tooltip: S.of(context).saveChanges,
               onPressed: _saveChanges,
             ),
           ],
@@ -575,7 +575,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
                   Icon(Icons.photo_library, color: colorScheme.primary),
                   const SizedBox(width: 12),
                   Text(
-                    'Manage Product Images',
+                    S.of(context).manageProductImages,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -586,14 +586,14 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
                   // Save button
                   IconButton(
                     icon: Icon(Icons.check, color: colorScheme.primary),
-                    tooltip: 'Save changes',
+                    tooltip: S.of(context).saveChanges,
                     onPressed: _saveChanges,
                   ),
                   const SizedBox(width: 8),
                   // Close button
                   IconButton(
                     icon: const Icon(Icons.close),
-                    tooltip: 'Close without saving',
+                    tooltip: S.of(context).closeWithoutSaving,
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -654,7 +654,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                index == 0 ? 'Primary' : '#${index + 1}',
+                index == 0 ? S.of(context).primary : '#${index + 1}',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -675,7 +675,9 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  image.hasPendingUpload ? 'Pending' : 'New',
+                  image.hasPendingUpload
+                      ? S.of(context).pendingLabel
+                      : S.of(context).newLabel,
                   style: TextStyle(
                     fontSize: 10,
                     color:
@@ -688,7 +690,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
         ),
         subtitle: Text(
           image.hasPendingUpload
-              ? (image.pendingFileName ?? 'Pending upload')
+              ? (image.pendingFileName ?? S.of(context).pendingUpload)
               : image.url,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -703,7 +705,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
             IconButton(
               icon: Icon(Icons.delete, color: colorScheme.error),
               onPressed: () => _confirmDelete(index),
-              tooltip: 'Delete',
+              tooltip: S.of(context).delete,
             ),
             ReorderableDragStartListener(
               index: index,
