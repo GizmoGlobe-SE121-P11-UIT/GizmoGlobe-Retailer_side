@@ -112,9 +112,7 @@ class _ImageManagerModalState extends State<ImageManagerModal> {
         }
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error picking image: $e');
-      }
+      // Error picking image
     }
   }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice.dart';
@@ -109,9 +108,6 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
     try {
       return await _firebase.getProduct(productId);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading product: $e');
-      } // Lỗi khi load sản phẩm
       return null;
     }
   }
@@ -130,9 +126,6 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
       await PlatformSpecificUtils.downloadFile(
           bytes, 'Incoming_Invoice_${state.invoice.incomingInvoiceID}.pdf');
     } catch (e) {
-      if (kDebugMode) {
-        print('Error downloading invoice: $e');
-      }
       if (!isClosed) {
         emit(state.copyWith(errorMessage: 'Error downloading invoice: $e'));
       }
@@ -153,9 +146,6 @@ class IncomingDetailCubit extends Cubit<IncomingDetailState> {
       await PlatformSpecificUtils.downloadFile(
           bytes, 'Invoice_${state.invoice.incomingInvoiceID}.pdf');
     } catch (e) {
-      if (kDebugMode) {
-        print('Error downloading invoice: $e');
-      }
       if (!isClosed) {
         emit(state.copyWith(errorMessage: 'Error downloading invoice: $e'));
       }

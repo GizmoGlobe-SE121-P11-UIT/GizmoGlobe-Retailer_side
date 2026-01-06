@@ -37,14 +37,8 @@ class MobileUtils {
       final file = File('${directory.path}/$filename');
       await file.writeAsBytes(bytes);
 
-      // Show a message to the user (you might want to use a proper notification system)
-      if (kDebugMode) {
-        print('File downloaded to: ${file.path}');
-      }
+      // File downloaded successfully
     } catch (e) {
-      if (kDebugMode) {
-        print('Error downloading file: $e');
-      }
       rethrow;
     }
   }

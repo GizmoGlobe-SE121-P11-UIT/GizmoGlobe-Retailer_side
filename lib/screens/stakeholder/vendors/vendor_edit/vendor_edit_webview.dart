@@ -42,7 +42,7 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 500;
-    
+
     return Container(
       width: isMobile
           ? screenWidth - 16
@@ -105,7 +105,8 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                         // Show success snackbar before closing
                         _showSnackBar(
                           title: S.of(context).success,
-                          message: "Manufacturer updated successfully.",
+                          message:
+                              S.of(context).manufacturerUpdatedSuccessfully,
                           contentType: ContentType.success,
                         );
 
@@ -118,7 +119,7 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                       } catch (e) {
                         if (mounted) {
                           _showErrorDialog(
-                              "Failed to update manufacturer: ${e.toString()}");
+                              S.of(context).failedToUpdateManufacturer(e.toString()));
                         }
                       }
                     }
@@ -130,7 +131,9 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                     padding: EdgeInsets.all(isMobile ? 2 : 8),
                     minimumSize: Size(isMobile ? 28 : 48, isMobile ? 28 : 48),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    visualDensity: isMobile ? VisualDensity.compact : VisualDensity.standard,
+                    visualDensity: isMobile
+                        ? VisualDensity.compact
+                        : VisualDensity.standard,
                   ),
                 ),
                 SizedBox(width: isMobile ? 0 : 4),
@@ -143,7 +146,9 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                     padding: EdgeInsets.all(isMobile ? 2 : 8),
                     minimumSize: Size(isMobile ? 28 : 48, isMobile ? 28 : 48),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    visualDensity: isMobile ? VisualDensity.compact : VisualDensity.standard,
+                    visualDensity: isMobile
+                        ? VisualDensity.compact
+                        : VisualDensity.standard,
                   ),
                 ),
               ],
@@ -221,17 +226,20 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                   vertical: isMobile ? 12 : 16,
                                 ),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
+                                  borderRadius:
+                                      BorderRadius.circular(isMobile ? 6 : 8),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
+                                  borderRadius:
+                                      BorderRadius.circular(isMobile ? 6 : 8),
                                   borderSide: BorderSide(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
+                                  borderRadius:
+                                      BorderRadius.circular(isMobile ? 6 : 8),
                                   borderSide: BorderSide(
                                     color:
                                         Theme.of(context).colorScheme.primary,
@@ -284,17 +292,20 @@ class _VendorEditWebViewState extends State<VendorEditWebView> {
                                   vertical: isMobile ? 12 : 16,
                                 ),
                                 border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
+                                  borderRadius:
+                                      BorderRadius.circular(isMobile ? 6 : 8),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
+                                  borderRadius:
+                                      BorderRadius.circular(isMobile ? 6 : 8),
                                   borderSide: BorderSide(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
+                                  borderRadius:
+                                      BorderRadius.circular(isMobile ? 6 : 8),
                                   borderSide: BorderSide(
                                     color:
                                         Theme.of(context).colorScheme.primary,

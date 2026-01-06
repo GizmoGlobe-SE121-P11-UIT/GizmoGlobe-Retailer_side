@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../localization/app_localization.dart';
 import '../../screens/media/fullscreen_media_viewer.dart';
@@ -190,15 +189,8 @@ class RatingCard extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     final id = r.ratingID ?? '';
-                    if (kDebugMode) {
-                      print('RatingCard: Reply button pressed for id=$id');
-                    }
                     // If an inline post callback is provided, open the dialog and post here
                     if (onPostReply != null) {
-                      if (kDebugMode) {
-                        print(
-                            'RatingCard: onPostReply available, showing dialog');
-                      }
                       _showReplyDialog(context, id, productId: r.productID);
                       return;
                     }
@@ -221,9 +213,6 @@ class RatingCard extends StatelessWidget {
     // can safely dispose it in its own State.dispose(). This avoids lifecycle
     // races where the controller might be disposed while Flutter is still
     // rebuilding the TextField.
-    if (kDebugMode) {
-      print('RatingCard: showing dialog for id=$ratingId using parentCtx');
-    }
 
     showDialog<void>(
       context: parentCtx,

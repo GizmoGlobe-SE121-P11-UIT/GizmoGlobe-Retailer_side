@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/enums/processing/dialog_name_enum.dart';
@@ -47,9 +46,6 @@ class VoucherScreenCubit extends Cubit<VoucherScreenState> {
         isLoading: false,
       ));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error initializing voucher list: $e');
-      }
       emit(state.copyWith(
         processState: ProcessState.failure,
         dialogName: DialogName.failure,

@@ -118,6 +118,7 @@ class AppLocalizations {
   String get unknownProduct => _getTranslation('unknownProduct');
   String get salesInvoice => _getTranslation('salesInvoice');
   String get loading => _getTranslation('loading');
+  String get productInfoLoading => _getTranslation('productInfoLoading');
   String get category => _getTranslation('category');
   String get enterAddress => _getTranslation('enterAddress');
   String get createInvoiceSuccess => _getTranslation('createInvoiceSuccess');
@@ -194,6 +195,30 @@ class AppLocalizations {
   String get noEmployeesFound => _getTranslation('noEmployeesFound');
   String get employeeAddedSuccessfully =>
       _getTranslation('employeeAddedSuccessfully');
+  String get employeeUpdatedSuccessfully =>
+      _getTranslation('employeeUpdatedSuccessfully');
+  String get employeeDeletedSuccessfully =>
+      _getTranslation('employeeDeletedSuccessfully');
+  String get customerUpdatedSuccessfully =>
+      _getTranslation('customerUpdatedSuccessfully');
+  String get manufacturerUpdatedSuccessfully =>
+      _getTranslation('manufacturerUpdatedSuccessfully');
+  String get manufacturerDeactivatedSuccessfully =>
+      _getTranslation('manufacturerDeactivatedSuccessfully');
+  String get manufacturerActivatedSuccessfully =>
+      _getTranslation('manufacturerActivatedSuccessfully');
+  String failedToToggleManufacturerStatus(String error) =>
+      _getTranslation('failedToToggleManufacturerStatus')
+          .replaceAll('{error}', error);
+  String failedToUpdateManufacturer(String error) =>
+      _getTranslation('failedToUpdateManufacturer')
+          .replaceAll('{error}', error);
+  String failedToUpdateEmployee(String error) =>
+      _getTranslation('failedToUpdateEmployee').replaceAll('{error}', error);
+  String failedToDeleteEmployee(String error) =>
+      _getTranslation('failedToDeleteEmployee').replaceAll('{error}', error);
+  String failedToUpdateCustomer(String error) =>
+      _getTranslation('failedToUpdateCustomer').replaceAll('{error}', error);
   String get manufacturerDetail => _getTranslation('manufacturerDetail');
   String get deactivate => _getTranslation('deactivate');
   String get activate => _getTranslation('activate');
@@ -421,6 +446,9 @@ class AppLocalizations {
   String get productDescription => _getTranslation('productDescription');
   String get typeMessage => _getTranslation('typeMessage');
   String get selectConversation => _getTranslation('selectConversation');
+  String get selectConversationToStart =>
+      _getTranslation('selectConversationToStart');
+  String get backToChatList => _getTranslation('backToChatList');
   String get messages => _getTranslation('messages');
   String get noMessages => _getTranslation('noMessages');
   String get reactivate => _getTranslation('reactivate');

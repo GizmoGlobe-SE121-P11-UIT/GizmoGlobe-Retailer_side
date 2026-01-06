@@ -231,9 +231,6 @@ class _UserProfileCache {
         _stateController.add(null);
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error fetching user data in sidebar: $e');
-      }
       _cachedSnapshot = null;
       _stateController.add(null);
     }

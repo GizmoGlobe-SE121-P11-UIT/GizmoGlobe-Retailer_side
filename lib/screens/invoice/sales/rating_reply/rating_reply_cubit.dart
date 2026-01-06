@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import '../../../../objects/invoice_related/rating.dart';
 import 'rating_reply_state.dart';
 import '../../../../data/database/database.dart';
@@ -40,10 +39,6 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
           .orderBy('timeSent', descending: true)
           .get();
 
-      if (kDebugMode) {
-        print('fetchRatings: fetched ${allSnapshot.docs.length} total ratings');
-      }
-
       final List<Rating> allNewRatings = [];
       final List<Rating> allRepliedRatings = [];
 
@@ -72,16 +67,9 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
           } else {
             allNewRatings.add(rating);
           }
-        } catch (e, st) {
-          if (kDebugMode) {
-            print('fetchRatings: parse doc error ${doc.id}: $e\n$st');
-          }
+        } catch (e) {
+          // Parse doc error
         }
-      }
-
-      if (kDebugMode) {
-        print(
-            'fetchRatings: new=${allNewRatings.length}, replied=${allRepliedRatings.length}');
       }
 
       // Use client-side pagination
@@ -106,8 +94,8 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
         hasMoreNew: _hasMoreNew,
         hasMoreReplied: _hasMoreReplied,
       ));
-    } catch (e, st) {
-      if (kDebugMode) print('fetchRatings: error fetching ratings: $e\n$st');
+    } catch (e) {
+      // Error fetching ratings
       emit(RatingReplyError(e.toString()));
     }
   }
@@ -183,8 +171,8 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
           hasMoreReplied: state is RatingReplyLoaded
               ? (state as RatingReplyLoaded).hasMoreReplied
               : false));
-    } catch (e, st) {
-      if (kDebugMode) print('loadMoreNew error: $e\n$st');
+    } catch (e) {
+      // LoadMoreNew error
     }
   }
 
@@ -259,8 +247,8 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
               ? (state as RatingReplyLoaded).hasMoreNew
               : false,
           hasMoreReplied: _hasMoreReplied));
-    } catch (e, st) {
-      if (kDebugMode) print('loadMoreReplied error: $e\n$st');
+    } catch (e) {
+      // LoadMoreReplied error
     }
   }
 
@@ -281,10 +269,8 @@ class RatingReplyCubit extends Cubit<RatingReplyState> {
 
       // Refresh list after posting reply
       await fetchRatings();
-    } catch (e, st) {
-      if (kDebugMode) {
-        print('replyToRating: error replying to $ratingId: $e\n$st');
-      }
+    } catch (e) {
+      // Error replying to rating
       emit(RatingReplyError(e.toString()));
       rethrow;
     }

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/customer.dart';
@@ -28,9 +27,7 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
       final userRole = await Firebase().getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading user role: $e');
-      }
+      // Error loading user role
     }
   }
 
@@ -50,9 +47,7 @@ class CustomerDetailCubit extends Cubit<CustomerDetailState> {
 
       emit(state.copyWith(vouchers: availableVouchers));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading vouchers: $e');
-      } // Lỗi khi tải voucher
+      // Error loading vouchers
     }
   }
 

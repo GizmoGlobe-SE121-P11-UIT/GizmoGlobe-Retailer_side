@@ -464,9 +464,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                             }
                             // value == 4 (Voucher) is handled by staying in current screen
                           } catch (e) {
-                            if (kDebugMode) {
-                              print('Error in sidebar navigation: $e');
-                            }
+                            // Error in sidebar navigation
                           }
                         },
                         items: items,
@@ -535,9 +533,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                             }
                             // value == 4 (Voucher) is handled by staying in current screen
                           } catch (e) {
-                            if (kDebugMode) {
-                              print('Error in sidebar navigation: $e');
-                            }
+                            // Error in sidebar navigation
                           }
                         },
                         items: items,

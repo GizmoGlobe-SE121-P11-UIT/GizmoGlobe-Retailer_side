@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/voucher/voucher_detail/voucher_detail_state.dart';
 
@@ -38,9 +37,6 @@ class VoucherDetailCubit extends Cubit<VoucherDetailState> {
             dialogName: DialogName.success));
       }
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
       if (!isClosed) {
         emit(state.copyWith(
             processState: ProcessState.failure,

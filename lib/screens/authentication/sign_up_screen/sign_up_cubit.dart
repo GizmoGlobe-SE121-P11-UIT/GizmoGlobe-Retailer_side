@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/enums/processing/dialog_name_enum.dart';
 import 'package:gizmoglobe_client/enums/processing/notify_message_enum.dart';
 import '../../../data/firebase/firebase.dart';
@@ -153,19 +152,12 @@ class SignUpCubit extends Cubit<SignUpState> {
               dialogName: DialogName.success,
               message: NotifyMessage.msg6));
         } catch (firestoreError) {
-          if (kDebugMode) {
-            print('Firestore Error: $firestoreError');
-          } // Lỗi kết nối Firestore
-          // Xóa tài khoản Auth nếu có lỗi
+          // Firestore error, delete Auth account if error
           await userCredential.user?.delete();
           rethrow;
         }
       }
     } catch (error) {
-      if (kDebugMode) {
-        print('Sign Up Error: $error');
-      }
-
 // Đăng ký thất bại
       if (error is FirebaseAuthException) {
         switch (error.code) {

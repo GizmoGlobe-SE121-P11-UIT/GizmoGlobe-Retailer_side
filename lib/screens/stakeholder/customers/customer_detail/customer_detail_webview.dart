@@ -653,7 +653,9 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
                                     // Show success snackbar before closing
                                     _showSnackBar(
                                       title: S.of(context).success,
-                                      message: "Customer updated successfully.",
+                                      message: S
+                                          .of(context)
+                                          .customerUpdatedSuccessfully,
                                       contentType: ContentType.success,
                                     );
 
@@ -668,7 +670,7 @@ class _CustomerDetailWebViewState extends State<CustomerDetailWebView> {
                                 } catch (e) {
                                   if (mounted) {
                                     _showErrorDialog(
-                                        "Failed to update customer: ${e.toString()}");
+                                        S.of(context).failedToUpdateCustomer(e.toString()));
                                   }
                                 }
                               },

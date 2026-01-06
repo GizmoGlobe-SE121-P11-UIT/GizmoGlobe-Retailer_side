@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/screens/voucher/add_voucher/add_voucher_state.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
@@ -74,13 +73,8 @@ class AddVoucherCubit extends Cubit<AddVoucherState> {
           processState: ProcessState.success,
           dialogName: DialogName.success,
           notifyMessage: NotifyMessage.msg17));
-    } catch (e, stack) {
-      if (kDebugMode) {
-        print('Add voucher error: $e');
-      }
-      if (kDebugMode) {
-        print(stack);
-      }
+    } catch (e) {
+      // Add voucher error
       emit(state.copyWith(
           processState: ProcessState.failure,
           dialogName: DialogName.failure,
@@ -162,9 +156,7 @@ Future<String> translateIntoEnglish(String inputText) async {
 
     return answer ?? inputText;
   } catch (e) {
-    if (kDebugMode) {
-      print('Error translating to English: $e');
-    }
+    // Error translating to English
     return inputText;
   }
 }
@@ -188,9 +180,7 @@ Future<String> translateIntoVietnamese(String inputText) async {
 
     return answer ?? inputText;
   } catch (e) {
-    if (kDebugMode) {
-      print('Error translating to Vietnamese: $e');
-    }
+    // Error translating to Vietnamese
     return inputText;
   }
 }
@@ -232,9 +222,7 @@ Future<String> generateDescription(VoucherArgument inputVoucher) async {
 
     return answer ?? promptDetails;
   } catch (e) {
-    if (kDebugMode) {
-      print('Error generating description: $e');
-    }
+    // Error generating description
     return '$e';
   }
 }

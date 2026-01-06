@@ -40,12 +40,12 @@ class AddProductCubit extends Cubit<AddProductState> {
       var productArg = ProductArgument.fromProduct(editingProduct);
 
       if (productArg.connectors == null || productArg.connectors!.isEmpty) {
-        productArg = productArg.copyWith(
-            connectors: [Connector(type: '', quantity: 0)]);
+        productArg =
+            productArg.copyWith(connectors: [Connector(type: '', quantity: 0)]);
       }
       if (productArg.ioPorts == null || productArg.ioPorts!.isEmpty) {
-        productArg = productArg.copyWith(
-            ioPorts: [IOPort(port: '', quantity: 0)]);
+        productArg =
+            productArg.copyWith(ioPorts: [IOPort(port: '', quantity: 0)]);
       }
       if (productArg.pcieSlots == null || productArg.pcieSlots!.isEmpty) {
         productArg = productArg.copyWith(pcieSlots: [
@@ -80,7 +80,9 @@ class AddProductCubit extends Cubit<AddProductState> {
         // manufacturer left null until selected by user from UI
         connectors: [Connector(type: '', quantity: 0)],
         ioPorts: [IOPort(port: '', quantity: 0)],
-        pcieSlots: [PCIeSlot(physicalSize: 0, electricalSpeed: 0, gen: 0, quantity: 0)],
+        pcieSlots: [
+          PCIeSlot(physicalSize: 0, electricalSpeed: 0, gen: 0, quantity: 0)
+        ],
         storageSlot: StorageSlot(m2Slots: 0, sataPorts: 0),
       )));
     }
@@ -300,9 +302,6 @@ class AddProductCubit extends Cubit<AddProductState> {
         images: [...state.images, newImage],
       ));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error adding image file: $e');
-      }
       emit(state.copyWith(
         processState: ProcessState.failure,
         dialogName: DialogName.failure,
@@ -326,9 +325,6 @@ class AddProductCubit extends Cubit<AddProductState> {
         images: [...state.images, newImage],
       ));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error adding image bytes: $e');
-      }
       emit(state.copyWith(
         processState: ProcessState.failure,
         dialogName: DialogName.failure,
@@ -347,9 +343,6 @@ class AddProductCubit extends Cubit<AddProductState> {
         isLoadingImages: false,
       ));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading product images: $e');
-      }
       emit(state.copyWith(isLoadingImages: false));
     }
   }
@@ -456,9 +449,6 @@ class AddProductCubit extends Cubit<AddProductState> {
               isNew: true,
             ));
           } catch (e) {
-            if (kDebugMode) {
-              print('Error uploading image: $e');
-            }
             // Skip failed uploads
           }
         } else {
@@ -481,9 +471,6 @@ class AddProductCubit extends Cubit<AddProductState> {
         await loadProductImages(actualProductId);
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error saving images from modal: $e');
-      }
       emit(state.copyWith(
         isUploadingImage: false,
         processState: ProcessState.failure,
@@ -530,9 +517,6 @@ class AddProductCubit extends Cubit<AddProductState> {
               isNew: true,
             ));
           } catch (e) {
-            if (kDebugMode) {
-              print('Error uploading image: $e');
-            }
             // Skip failed uploads
           }
         } else {
@@ -547,9 +531,6 @@ class AddProductCubit extends Cubit<AddProductState> {
       // Save to Firebase subcollection
       await _firebase.saveProductImages(productId, processedImages);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error saving product images: $e');
-      }
       rethrow;
     }
   }
@@ -629,7 +610,6 @@ class AddProductCubit extends Cubit<AddProductState> {
       }
 
       bool fail(String reason) {
-        if (kDebugMode) print('AddProduct validation failed: $reason');
         emit(state.copyWith(
             processState: ProcessState.failure,
             dialogName: DialogName.failure,
@@ -748,10 +728,7 @@ class AddProductCubit extends Cubit<AddProductState> {
           processState: ProcessState.success,
           dialogName: DialogName.success,
           notifyMessage: NotifyMessage.msg13));
-    } catch (e, st) {
-      if (kDebugMode) {
-        print('Error in addProduct: $e\n$st');
-      }
+    } catch (e) {
       emit(state.copyWith(
           processState: ProcessState.failure,
           dialogName: DialogName.failure,
@@ -851,7 +828,8 @@ class AddProductCubit extends Cubit<AddProductState> {
     final arg = state.productArgument;
     if (arg == null) return;
     final pcieSlots = List<PCIeSlot>.from(arg.pcieSlots ?? []);
-    pcieSlots.add(PCIeSlot(physicalSize: 0, electricalSpeed: 0, gen: 0, quantity: 0));
+    pcieSlots.add(
+        PCIeSlot(physicalSize: 0, electricalSpeed: 0, gen: 0, quantity: 0));
     updateProductArgument(arg.copyWith(pcieSlots: pcieSlots));
   }
 
@@ -910,9 +888,6 @@ Future<String> translateIntoEnglish(String inputText) async {
 
     return inputText;
   } catch (e) {
-    if (kDebugMode) {
-      print('Error translating to English: $e');
-    }
     return inputText;
   }
 }
@@ -960,9 +935,6 @@ Future<String> translateIntoVietnamese(String inputText) async {
 
     return inputText;
   } catch (e) {
-    if (kDebugMode) {
-      print('Error translating to Vietnamese: $e');
-    }
     return inputText;
   }
 }
@@ -1072,9 +1044,6 @@ Future<String> generateDescription(ProductArgument inputProduct) async {
 
     return '';
   } catch (e) {
-    if (kDebugMode) {
-      print('Error generating description: $e');
-    }
     return '';
   }
 }

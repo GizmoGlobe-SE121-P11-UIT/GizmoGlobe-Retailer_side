@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../data/database/database.dart';
@@ -27,9 +26,6 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
       emit(newState);
     } catch (e) {
       // Ignore errors from attempting to emit after close
-      if (kDebugMode) {
-        print('ChatListScreenCubit: Ignored emit after close');
-      }
     }
   }
 
@@ -62,10 +58,6 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
         error: 'User not authenticated',
       ));
       return;
-    }
-
-    if (kDebugMode) {
-      print('Initializing chat list for user: $userId');
     }
 
     // Listen to chats collection for real-time updates
@@ -147,9 +139,7 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
           userIdToUsername: userIdToUsername,
         ));
       } catch (e) {
-        if (kDebugMode) {
-          print('Error in real-time chat list: $e');
-        }
+        // Error in real-time chat list
         _safeEmit(state.copyWith(
           isLoading: false,
           error: 'Failed to load chats',
@@ -168,10 +158,6 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
 
   Future<void> sendMessage(String receiverId, String content) async {
     try {
-      if (kDebugMode) {
-        print('Sending message to $receiverId: $content');
-      }
-
       final chat = Chat(
         messageId: DateTime.now().millisecondsSinceEpoch.toString(),
         senderId: state.currentUserId,
@@ -192,15 +178,9 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
       }
       updatedConversations['admin'] = [...updatedConversations['admin']!, chat];
 
-      if (kDebugMode) {
-        print('Updated conversations: ${updatedConversations.keys.toList()}');
-      }
-
       _safeEmit(state.copyWith(conversations: updatedConversations));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error sending message: $e');
-      }
+      // Error sending message
       _safeEmit(state.copyWith(error: 'Failed to send message'));
     }
   }
@@ -232,27 +212,17 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
 
       _safeEmit(state.copyWith(conversations: updatedConversations));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error marking message as read: $e');
-      }
+      // Error marking message as read
     }
   }
 
   Future<void> loadConversation(String receiverId) async {
     try {
-      if (kDebugMode) {
-        print('Loading conversation with $receiverId');
-      }
-
       final allMessages = await _firebase.getAllUsersAdminMessages();
       final messages = allMessages
           .where(
               (msg) => (msg.receiverId == 'admin') || msg.senderId == 'admin')
           .toList();
-
-      if (kDebugMode) {
-        print('Loaded ${messages.length} messages');
-      }
 
       final updatedConversations =
           Map<String, List<Chat>>.from(state.conversations);
@@ -260,9 +230,7 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
 
       _safeEmit(state.copyWith(conversations: updatedConversations));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading conversation: $e');
-      }
+      // Error loading conversation
     }
   }
 }

@@ -9,7 +9,7 @@ import '../../screens/product/product_detail/product_detail_webview.dart';
 import '../../utils/app_navigator.dart';
 import '../../data/database/database.dart';
 import '../../screens/invoice/sales/rating_reply/rating_reply_cubit.dart';
-
+import '../../localization/app_localization.dart';
 
 class ProductMiniCard extends StatelessWidget {
   final Product product;
@@ -18,7 +18,8 @@ class ProductMiniCard extends StatelessWidget {
 
   String get _name => product.productName;
 
-  String get _category => product.category.toString().split('.').last.toLowerCase();
+  String get _category =>
+      product.category.toString().split('.').last.toLowerCase();
 
   Future<void> _openProductDetail(BuildContext context) async {
     final p = product;
@@ -26,14 +27,16 @@ class ProductMiniCard extends StatelessWidget {
       // fallback to named navigation if product id missing
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Product info loading")),
+          SnackBar(content: Text(S.of(context).productInfoLoading)),
         );
       }
       return;
     }
 
     final route = MaterialPageRoute(
-      builder: (_) => kIsWeb ? ProductDetailWebView.newInstance(p) : ProductDetailScreen.newInstance(p),
+      builder: (_) => kIsWeb
+          ? ProductDetailWebView.newInstance(p)
+          : ProductDetailScreen.newInstance(p),
     );
 
     // Await the navigation result and then refresh ratings if needed
@@ -49,13 +52,11 @@ class ProductMiniCard extends StatelessWidget {
       }
     }
 
-    if (kDebugMode) print('ProductMiniCard: returned from detail for ${p.productID} with result=$result');
-
     // Refresh central rating cache and try to notify RatingReplyCubit if present in the widget tree
     try {
       await Database().getRating();
     } catch (e) {
-      if (kDebugMode) print('ProductMiniCard: error refreshing Database ratings: $e');
+      // Error refreshing Database ratings
     }
 
     try {
@@ -102,7 +103,8 @@ class ProductMiniCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: colorScheme.outline.withValues(alpha: 0.12)),
+          border:
+              Border.all(color: colorScheme.outline.withValues(alpha: 0.12)),
           boxShadow: [
             BoxShadow(
               color: colorScheme.outlineVariant.withValues(alpha: 0.08),

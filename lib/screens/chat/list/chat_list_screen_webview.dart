@@ -228,7 +228,7 @@ class _ChatListScreenWebViewState extends State<ChatListScreenWebView> {
                     padding:
                         EdgeInsets.symmetric(horizontal: isMobile ? 16 : 0),
                     child: Text(
-                      'Select a conversation to start chatting',
+                      S.of(context).selectConversationToStart,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontSize: isMobile ? 14 : null,
                             color: Theme.of(context).colorScheme.outline,

@@ -184,9 +184,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
             }
           }
         } catch (e) {
-          if (kDebugMode) {
-            print('Error loading dashboard stats: $e');
-          }
           // Fallback on error
           if (!isClosed) {
             emit(state.copyWith(
@@ -377,9 +374,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           }
         }
       } catch (e) {
-        if (kDebugMode) {
-          print('Error loading web dashboard data: $e');
-        }
         if (!isClosed) {
           emit(state.copyWith(
             totalProducts: db.productList.length,
@@ -430,9 +424,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
               }
             }
           } catch (e) {
-            if (kDebugMode) {
-              print('Error processing invoice ${invoice.salesInvoiceID}: $e');
-            }
+            // Error processing invoice
           }
         }
 
@@ -456,9 +448,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         }
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error initializing dashboard: $e');
-      } // Lỗi khởi tạo dashboard
+      // Error initializing dashboard
       // Optionally emit error state
       if (!isClosed) {
         emit(state.copyWith(
@@ -490,9 +480,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         emit(state.copyWith(isLoadingProductCounts: false));
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading product counts: $e');
-      }
       if (!isClosed) {
         emit(state.copyWith(isLoadingProductCounts: false));
       }

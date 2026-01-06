@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
 import 'package:gizmoglobe_client/enums/product_related/product_status_enum.dart';
@@ -66,9 +65,7 @@ abstract class TabCubit extends Cubit<TabState> {
           productList: Database().productList,
           filteredProductList: Database().productList));
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      // Error loading products
     }
   }
 
@@ -106,10 +103,6 @@ abstract class TabCubit extends Cubit<TabState> {
   }
 
   void applyFilters() {
-    if (kDebugMode) {
-      print('Apply filter');
-    }
-
     final allProducts = state.productList;
     final fa = state.filterArgument;
     final activeCategory = state.activeCategory;
@@ -195,9 +188,6 @@ abstract class TabCubit extends Cubit<TabState> {
       emit(state.copyWith(processState: ProcessState.success));
       applyFilters();
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
       emit(state.copyWith(processState: ProcessState.failure));
     }
   }

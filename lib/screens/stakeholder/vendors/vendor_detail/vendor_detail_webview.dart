@@ -577,8 +577,8 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
                     title: S.of(context).success,
                     message:
                         state.manufacturer.status == ManufacturerStatus.active
-                            ? "Manufacturer deactivated successfully."
-                            : "Manufacturer activated successfully.",
+                            ? S.of(context).manufacturerDeactivatedSuccessfully
+                            : S.of(context).manufacturerActivatedSuccessfully,
                     contentType: ContentType.success,
                   );
 
@@ -589,8 +589,9 @@ class _VendorDetailWebViewState extends State<VendorDetailWebView> {
                 }
               } catch (e) {
                 if (mounted) {
-                  _showErrorDialog(
-                      "Failed to toggle manufacturer status: ${e.toString()}");
+                  _showErrorDialog(S
+                      .of(context)
+                      .failedToToggleManufacturerStatus(e.toString()));
                 }
               }
             },

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
@@ -20,9 +19,7 @@ class VendorDetailCubit extends Cubit<VendorDetailState> {
         emit(state.copyWith(userRole: userRole));
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading user role: $e');
-      } // Lỗi khi tải vai trò người dùng
+      // Error loading user role
     }
   }
 
@@ -30,9 +27,7 @@ class VendorDetailCubit extends Cubit<VendorDetailState> {
     try {
       await _firebase.updateManufacturerAndProducts(manufacturer);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error updating manufacturer: $e');
-      } // Lỗi khi cập nhật nhà sản xuất
+      // Error updating manufacturer
     }
   }
 
@@ -47,9 +42,7 @@ class VendorDetailCubit extends Cubit<VendorDetailState> {
         emit(state.copyWith(manufacturer: updatedManufacturer));
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error deactivating manufacturer: $e');
-      } // Lỗi khi vô hiệu hóa nhà sản xuất
+      // Error deactivating manufacturer
     }
   }
 
@@ -68,9 +61,7 @@ class VendorDetailCubit extends Cubit<VendorDetailState> {
         emit(state.copyWith(manufacturer: updatedManufacturer));
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error toggling manufacturer status: $e');
-      } // Lỗi khi chuyển đổi trạng thái nhà sản xuất
+      // Error toggling manufacturer status
     }
   }
 }

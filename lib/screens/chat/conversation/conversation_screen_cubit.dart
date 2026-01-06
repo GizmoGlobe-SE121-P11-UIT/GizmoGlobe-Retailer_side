@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../data/database/database.dart';
@@ -33,9 +32,6 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
       emit(newState);
     } catch (e) {
       // Ignore errors from attempting to emit after close
-      if (kDebugMode) {
-        print('ConversationScreenCubit: Ignored emit after close');
-      }
     }
   }
 
@@ -92,9 +88,7 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
           currentUserId: userId,
         ));
       } catch (e) {
-        if (kDebugMode) {
-          print('Error reading conversation: $e');
-        }
+        // Error reading conversation
 
         // Use _safeEmit to handle race conditions
         _safeEmit(state.copyWith(
@@ -104,11 +98,7 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
       }
     }, onError: (error) {
       // Handle stream errors without emitting if closed
-      if (!_isClosed) {
-        if (kDebugMode) {
-          print('Chat stream error: $error');
-        }
-      }
+      // Chat stream error
     });
   }
 
@@ -127,9 +117,7 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
       // Upload reply to the user's messages array
       await _firebase.sendAdminMessage(state.receiverId, chat);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error sending message: $e');
-      }
+      // Error sending message
       _safeEmit(state.copyWith(error: 'Failed to send message'));
     }
   }
@@ -138,9 +126,7 @@ class ConversationScreenCubit extends Cubit<ConversationScreenState> {
     try {
       await _firebase.markAdminMessageAsRead(state.receiverId, messageId);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error marking message as read: $e');
-      }
+      // Error marking message as read
     }
   }
 

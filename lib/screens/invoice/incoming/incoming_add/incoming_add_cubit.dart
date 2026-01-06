@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
@@ -225,11 +224,7 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
           final updatedProduct = ProductFactory.createProduct(productProps);
           await _firebase.updateProduct(updatedProduct);
         } catch (e) {
-          // Log the error but don't fail the entire invoice creation
-          if (kDebugMode) {
-            print('Error updating product ${product.productID}: $e');
-          }
-          // Continue with other products
+          // Error updating product, continue with other products
         }
       }
 

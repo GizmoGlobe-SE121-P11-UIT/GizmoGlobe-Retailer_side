@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
@@ -37,9 +36,7 @@ class WarrantyScreenCubit extends Cubit<WarrantyScreenState> {
       final userRole = await _firebase.getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading user role: $e');
-      } // Lỗi load user role
+      // Error loading user role
     }
   }
 
@@ -62,26 +59,28 @@ class WarrantyScreenCubit extends Cubit<WarrantyScreenState> {
         ));
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading warranty invoices: $e');
-      } // Lỗi lấy hóa đơn
       if (!_isClosed) {
         emit(state.copyWith(isLoading: false));
       }
     }
   }
 
-  void searchInvoices(String query) {    
+  void searchInvoices(String query) {
     emit(state.copyWith(searchQuery: query));
-    
+
     if (query.isEmpty) {
       loadInvoices();
       return;
     }
 
     final filteredInvoices = state.invoices.where((invoice) {
-      final matchesName = invoice.customerName?.toLowerCase().contains(query.toLowerCase()) ?? false;
-      final matchesId = invoice.warrantyInvoiceID?.toLowerCase().contains(query.toLowerCase()) ?? false;
+      final matchesName =
+          invoice.customerName?.toLowerCase().contains(query.toLowerCase()) ??
+              false;
+      final matchesId = invoice.warrantyInvoiceID
+              ?.toLowerCase()
+              .contains(query.toLowerCase()) ??
+          false;
       return matchesName || matchesId;
     }).toList();
 
@@ -93,10 +92,12 @@ class WarrantyScreenCubit extends Cubit<WarrantyScreenState> {
     emit(state.copyWith(selectedIndex: index));
   }
 
-  Future<void> updateWarrantyStatus(String invoiceId, WarrantyStatus newStatus) async {
+  Future<void> updateWarrantyStatus(
+      String invoiceId, WarrantyStatus newStatus) async {
     if (_isClosed) return;
     try {
-      final invoice = state.invoices.firstWhere((inv) => inv.warrantyInvoiceID == invoiceId);
+      final invoice = state.invoices
+          .firstWhere((inv) => inv.warrantyInvoiceID == invoiceId);
       final updatedInvoice = WarrantyInvoice(
         warrantyInvoiceID: invoice.warrantyInvoiceID,
         customerID: invoice.customerID,
@@ -111,19 +112,19 @@ class WarrantyScreenCubit extends Cubit<WarrantyScreenState> {
       await _firebase.updateWarrantyInvoice(updatedInvoice);
       // Refresh will be handled through stream listener
     } catch (e) {
-      if (kDebugMode) {
-        print('Error updating warranty status: $e');
-      } // Lỗi cập nhật trạng thái bảo hành
+      // Error updating warranty status
     }
   }
 
   void sortInvoices(SortField field, [SortOrder? order]) {
     if (_isClosed) return;
-    
-    final currentOrder = order ?? 
-      (state.sortField == field ? 
-        (state.sortOrder == SortOrder.ascending ? SortOrder.descending : SortOrder.ascending)
-        : SortOrder.descending);
+
+    final currentOrder = order ??
+        (state.sortField == field
+            ? (state.sortOrder == SortOrder.ascending
+                ? SortOrder.descending
+                : SortOrder.ascending)
+            : SortOrder.descending);
 
     final sortedInvoices = List<WarrantyInvoice>.from(state.invoices);
 

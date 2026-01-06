@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:gizmoglobe_client/enums/stakeholders/employee_role.dart';
 import 'package:gizmoglobe_client/objects/manufacturer.dart';
@@ -194,9 +193,6 @@ class Database {
         product.setRating(rounded);
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error calculating product ratings: $e');
-      }
       rethrow;
     }
   }
@@ -212,7 +208,6 @@ class Database {
         await Firebase().getRatingsPageByProduct(productId);
       }
     } catch (e) {
-      if (kDebugMode) print('Error replying to rating $ratingId: $e');
       rethrow;
     }
   }
@@ -222,9 +217,7 @@ class Database {
     try {
       await fetchDataFromFirestore();
     } catch (e) {
-      if (kDebugMode) {
-        print('Error when initializing database: $e');
-      }
+      // Error when initializing database
       // Nếu không lấy được dữ liệu từ Firestore, sử dụng dữ liệu mẫu
       // _initializeSampleData();
     }
@@ -248,29 +241,15 @@ class Database {
 
   Future<void> fetchDataFromFirestore() async {
     try {
-      if (kDebugMode) {
-        print('Initializing connection to Firebase');
-      }
       await getUser();
       await getUsername();
-      if (kDebugMode) {
-        print('User: $username, Email: $email');
-      }
 
       manufacturerList = await Firebase().getManufacturers();
 
       // await migrateManufacturerData();
 
-      if (kDebugMode) {
-        print('Manufacturers: ${manufacturerList.length}');
-      }
-
       final productSnapshot =
           await FirebaseFirestore.instance.collection('products').get();
-
-      if (kDebugMode) {
-        print('Products: ${productSnapshot.docs.length}');
-      }
 
       // Process products sequentially to avoid memory pressure on mobile
       final List<Product> products = [];
@@ -278,10 +257,7 @@ class Database {
         try {
           final dynamic raw = doc.data();
           if (raw is! Map<String, dynamic>) {
-            if (kDebugMode) {
-              print(
-                  'Product ${doc.id} has unexpected data type: ${raw.runtimeType}');
-            }
+            // Product has unexpected data type
             continue;
           }
 
@@ -308,10 +284,8 @@ class Database {
 
           final product = ProductFactory.createProduct(data);
           products.add(product);
-        } catch (e, st) {
-          if (kDebugMode) {
-            print('Error processing product ${doc.id}: $e\n$st');
-          }
+        } catch (e) {
+          // Error processing product
         }
       }
 
@@ -326,24 +300,13 @@ class Database {
 
       await fetchAddress();
 
-      if (kDebugMode) {
-        print('Products: ${productList.length}');
-      }
-
       customerList = await Firebase().getCustomers();
       employeeList = await Firebase().getEmployees();
       voucherList = await Firebase().getVouchers();
       getRating();
-
-      if (kDebugMode) {
-        print('Customers: ${customerList.length}');
-        print('Employees: ${employeeList.length}');
-        print('Vouchers: ${voucherList.length}');
-      }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error fetching data: $e');
-      }
+      // Error fetching data
+      rethrow;
     }
   }
 
@@ -377,9 +340,7 @@ class Database {
           }
         }
       } catch (e) {
-        if (kDebugMode) {
-          print('Error fetching username: $e');
-        }
+        // Error fetching username
         // On error, use email as fallback
         final emailStr = user.email ?? '';
         if (emailStr.isNotEmpty) {
@@ -428,9 +389,7 @@ class Database {
           role = await getCurrentRole();
         }
       } catch (e) {
-        if (kDebugMode) {
-          print('Error fetching user data: $e');
-        }
+        // Error fetching user data
         // On error, use email from auth as fallback
         username = null;
         email = user.email;
@@ -445,7 +404,8 @@ class Database {
   }
 
   Future<RoleEnum> getCurrentRole() async {
-    return RoleEnumExtension.fromName(await Firebase().getCurrentUserRoleFromFirebase());
+    return RoleEnumExtension.fromName(
+        await Firebase().getCurrentUserRoleFromFirebase());
   }
 
   Future<List<Province>> fetchProvinces() async {
@@ -497,8 +457,6 @@ class Database {
     username = null;
     email = null;
     role = RoleEnum.unknown;
-    if (kDebugMode) {
-      print('Database - User data cleared');
-    }
+    // User data cleared
   }
 }

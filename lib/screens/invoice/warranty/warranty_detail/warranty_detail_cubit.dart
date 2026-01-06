@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/warranty_invoice.dart';
@@ -62,9 +61,7 @@ class WarrantyDetailCubit extends Cubit<WarrantyDetailState> {
       final userRole = await _firebase.getUserRole();
       emit(state.copyWith(userRole: userRole));
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading user role: $e');
-      } // Lỗi load phân quyền user
+      // Error loading user role
     }
   }
 
@@ -94,9 +91,6 @@ class WarrantyDetailCubit extends Cubit<WarrantyDetailState> {
     try {
       return await _firebase.getProduct(productId);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading product: $e');
-      } // Lỗi khi load sản phẩm
       return null;
     }
   }

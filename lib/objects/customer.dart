@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:gizmoglobe_client/data/database/database.dart';
 import 'package:gizmoglobe_client/objects/address_related/address.dart';
 
@@ -47,7 +46,8 @@ class Customer {
   }
 
   static Customer fromMap(String id, Map<String, dynamic> map) {
-    final addressList = Database().addressList.where((a) => a.customerID == id).toList();
+    final addressList =
+        Database().addressList.where((a) => a.customerID == id).toList();
 
     Customer customer = Customer(
       customerID: id,
@@ -58,9 +58,6 @@ class Customer {
       totalLoyaltyPoints: map['totalLoyaltyPoints'] ?? 0,
     );
 
-    if (kDebugMode) {
-      print(customer.addresses.toString());
-    }
     return customer;
   }
-} 
+}

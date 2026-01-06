@@ -115,7 +115,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                         // Show success snackbar before closing
                         _showSnackBar(
                           title: S.of(context).success,
-                          message: "Employee updated successfully.",
+                          message: S.of(context).employeeUpdatedSuccessfully,
                           contentType: ContentType.success,
                         );
 
@@ -128,7 +128,7 @@ class _EmployeeEditWebViewState extends State<EmployeeEditWebView> {
                       } catch (e) {
                         if (mounted) {
                           _showErrorDialog(
-                              "Failed to update employee: ${e.toString()}");
+                              S.of(context).failedToUpdateEmployee(e.toString()));
                         }
                       }
                     }

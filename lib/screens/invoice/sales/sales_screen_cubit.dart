@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
 import 'package:gizmoglobe_client/objects/invoice_related/sales_invoice.dart';
@@ -34,9 +33,6 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
         _subscribeToSales();
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error loading sales invoices: $e');
-      } // Lỗi khi load hóa đơn
       if (!isClosed) {
         emit(state.copyWith(
           isLoading: false,
@@ -117,9 +113,6 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
     try {
       await _firebase.updateSalesInvoice(invoice);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error updating sales invoice: $e');
-      } // Lỗi cập nhật hóa đơn
       if (!isClosed) emit(state.copyWith(error: e.toString()));
     }
   }
@@ -129,9 +122,6 @@ class SalesScreenCubit extends Cubit<SalesScreenState> {
       await _firebase.createSalesInvoice(invoice);
       return null;
     } catch (e) {
-      if (kDebugMode) {
-        print('Error creating sales invoice: $e');
-      } // Lỗi tạo hóa đơn
       return e.toString();
     }
   }

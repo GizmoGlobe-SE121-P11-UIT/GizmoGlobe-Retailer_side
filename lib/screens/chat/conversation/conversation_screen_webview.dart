@@ -118,7 +118,7 @@ class _ConversationScreenWebViewState extends State<ConversationScreenWebView> {
                         icon: const Icon(Icons.chevron_left),
                         iconSize: isMobile ? 24 : 28,
                         onPressed: _handleBack,
-                        tooltip: 'Back to chat list',
+                        tooltip: S.of(context).backToChatList,
                         padding: EdgeInsets.all(isMobile ? 8 : 4),
                         constraints: BoxConstraints(
                           minWidth: isMobile ? 40 : 44,
@@ -226,7 +226,7 @@ class _ConversationScreenWebViewState extends State<ConversationScreenWebView> {
                                           ),
                                           const SizedBox(height: 16),
                                           Text(
-                                            'No messages yet',
+                                            S.of(context).noMessages,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge

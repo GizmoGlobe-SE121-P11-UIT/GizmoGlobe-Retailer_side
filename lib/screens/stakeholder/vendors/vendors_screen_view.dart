@@ -238,7 +238,7 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                                             .showSuccess(
                                                           context,
                                                           S.of(context).success,
-                                                          "Manufacturer updated successfully.",
+                                                          S.of(context).manufacturerUpdatedSuccessfully,
                                                         );
                                                       });
                                                     }

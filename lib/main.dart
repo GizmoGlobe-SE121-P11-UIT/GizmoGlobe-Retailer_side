@@ -50,10 +50,7 @@ void main() async {
     setUrlStrategy(const HashUrlStrategy());
     // Set up error handling for web platform
     FlutterError.onError = (FlutterErrorDetails details) {
-      if (kDebugMode) {
-        print('Flutter Error: ${details.exception}');
-        print('Stack trace: ${details.stack}');
-      }
+      // Flutter error handled
     };
   }
 
@@ -66,9 +63,7 @@ void main() async {
     try {
       await dotenv.load(fileName: ".env");
     } catch (e) {
-      if (kDebugMode) {
-        print('Note: .env file not loaded (using compile-time config): $e');
-      }
+      // .env file not loaded (using compile-time config)
     }
   }
   await _setup();
@@ -81,10 +76,7 @@ void main() async {
           options: DefaultFirebaseOptions.currentPlatform,
         );
       } catch (webInitError) {
-        if (kDebugMode) {
-          print('Web Firebase init failed, trying fallback: $webInitError');
-        }
-        // Try without options as fallback
+        // Web Firebase init failed, trying fallback
         await Firebase.initializeApp();
       }
     } else {
@@ -104,10 +96,7 @@ void main() async {
         );
         FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
       } catch (appCheckError) {
-        if (kDebugMode) {
-          print('App Check initialization failed: $appCheckError');
-        }
-        // Continue without App Check if it fails
+        // App Check initialization failed, continue without App Check
       }
     }
 
@@ -115,10 +104,7 @@ void main() async {
     try {
       await Database().initialize();
     } catch (dbError) {
-      if (kDebugMode) {
-        print('Database initialization failed: $dbError');
-      }
-      // Continue without database if it fails
+      // Database initialization failed, continue without database
     }
 
     // Request permissions only on mobile
@@ -127,18 +113,13 @@ void main() async {
         await Permission.camera.request();
         await Permission.photos.request();
       } catch (permissionError) {
-        if (kDebugMode) {
-          print('Permission request failed: $permissionError');
-        }
+        // Permission request failed
       }
     }
 
     runApp(const ErrorBoundary(child: MyApp()));
   } catch (e) {
-    if (kDebugMode) {
-      print('Firebase initialization error: $e');
-    }
-    // Show error screen with more details
+    // Firebase initialization error, show error screen
     runApp(MaterialApp(
       home: Scaffold(
         body: Center(
@@ -522,11 +503,8 @@ class ErrorBoundary extends StatelessWidget {
       builder: (context) {
         try {
           return child;
-        } catch (error, stackTrace) {
-          if (kDebugMode) {
-            print('Error caught by ErrorBoundary: $error');
-            print('Stack trace: $stackTrace');
-          }
+        } catch (error) {
+          // Error caught by ErrorBoundary
 
           return MaterialApp(
             home: Scaffold(
@@ -1101,10 +1079,7 @@ class _VoucherRouteHandlerState extends State<VoucherRouteHandler> {
     try {
       return VoucherScreen.newInstanceWithTab(initialTabIndex: initialTabIndex);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error creating VoucherScreen: $e');
-      }
-      // Fallback to basic voucher screen
+      // Error creating VoucherScreen, fallback to basic voucher screen
       return VoucherScreen.newInstance();
     }
   }
