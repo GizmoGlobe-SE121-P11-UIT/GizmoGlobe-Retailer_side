@@ -602,7 +602,6 @@ class AddProductCubit extends Cubit<AddProductState> {
 
       updateProductArgument(arg);
 
-      // Basic validation helper that tolerates numbers stored as different numeric types
       num? toNum(dynamic v) {
         if (v == null) return null;
         if (v is num) return v;

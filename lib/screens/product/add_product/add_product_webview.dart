@@ -864,21 +864,16 @@ class _AddProductWebViewState extends State<AddProductWebView> {
               Row(
                 children: [
                   Expanded(
-                    child: buildInputWidget<String>(
+                    child: buildInputWidget<int>(
                       S.of(context).discount,
                       discountController,
-                      state.productArgument?.discount?.toString(),
-                      (value) {
-                        final currentArg = cubit.state.productArgument;
-                        if (currentArg == null) return;
-                        double? parsed;
-                        if (value != null && value.isNotEmpty) {
-                          parsed = double.tryParse(value);
-                        }
+                      state.productArgument?.discount,
+                          (value) {
                         cubit.updateProductArgument(
-                            currentArg.copyWith(discount: parsed?.toInt()));
+                            state.productArgument!.copyWith(discount: value));
                       },
                       null,
+                      '%',
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -1491,7 +1486,8 @@ class _AddProductWebViewState extends State<AddProductWebView> {
       TextEditingController controller,
       T? propertyValue,
       void Function(T?) onChanged,
-      [List<T>? enumValues, String? suffixText]) {
+      [List<T>? enumValues,
+        String? suffixText]) {
     return Builder(builder: (BuildContext context) {
       final colorScheme = Theme.of(context).colorScheme;
 
@@ -1503,24 +1499,29 @@ class _AddProductWebViewState extends State<AddProductWebView> {
             const SizedBox(height: 4),
             GestureDetector(
               onTap: () async {
-                final DateTime? picked = await showDatePicker(
+                final DateTime? pickedDate = await showDatePicker(
                   context: context,
                   initialDate: propertyValue as DateTime? ?? DateTime.now(),
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2100),
                 );
-                if (picked != null) onChanged(picked as T?);
+
+                if (pickedDate != null) {
+                  onChanged(pickedDate as T?);
+                }
               },
               child: AbsorbPointer(
                 child: FieldWithIcon(
                   controller: TextEditingController(
                     text: (propertyValue as DateTime?) != null
-                        ? DateFormat('yyyy-MM-dd').format(propertyValue as DateTime)
+                        ? DateFormat('yyyy-MM-dd')
+                        .format(propertyValue as DateTime)
                         : '',
                   ),
                   readOnly: true,
                   hintText: S.of(context).selectField(propertyName),
                   fillColor: colorScheme.surface,
+                  textColor: colorScheme.onSurface,
                   suffixIcon: const Icon(Icons.calendar_today),
                 ),
               ),
@@ -1535,59 +1536,26 @@ class _AddProductWebViewState extends State<AddProductWebView> {
             const SizedBox(height: 4),
             GradientDropdown<T>(
               items: (String filter, dynamic infiniteScrollProps) => enumValues,
-              compareFn: (T? d1, T? d2) {
-                if (d1 is Manufacturer && d2 is Manufacturer) {
-                  return d1.manufacturerID == d2.manufacturerID;
-                }
-                return d1 == d2;
-              },
-              itemAsString: (T d) =>
-                  d is Manufacturer ? d.manufacturerName : d.toString(),
-              onChanged: (value) {
-                // Remove focus from any text field
-                FocusScope.of(context).unfocus();
-
-                if (value is Manufacturer) {
-                  final selected =
-                      (enumValues as List<Manufacturer>).firstWhere(
-                    (m) => m.manufacturerID == value.manufacturerID,
-                    orElse: () => value as Manufacturer,
-                  );
-                  onChanged(selected as T?);
-                } else {
-                  onChanged(value);
-                }
-              },
+              compareFn: (T? d1, T? d2) => d1 == d2,
+              itemAsString: (T d) => d.toString(),
+              onChanged: onChanged,
               selectedItem: propertyValue,
-              hintText: propertyName,
+              hintText: S.of(context).selectField(propertyName),
             ),
           ],
         );
       } else {
         TextInputType keyboardType;
-        List<TextInputFormatter> inputFormatters;
-        String? finalSuffixText = suffixText;
+        List<TextInputFormatter> inputFormatters = [];
 
-        if (T == int) {
-          keyboardType = TextInputType.number;
-          inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))];
-          if (propertyName == S.of(context).importPrice ||
-              propertyName == S.of(context).sellingPrice) {
-            finalSuffixText = '.000đ';
-          }
-        } else if (T == double) {
+        if (T == double) {
           keyboardType = const TextInputType.numberWithOptions(decimal: true);
           inputFormatters = [
             FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
           ];
-          if (propertyName == S.of(context).discount) {
-            finalSuffixText = '%';
-            inputFormatters.add(TextInputFormatter.withFunction((oldValue, newValue) {
-              if (newValue.text.isEmpty) return newValue;
-              final double? value = double.tryParse(newValue.text);
-              return (value != null && value <= 100) ? newValue : oldValue;
-            }));
-          }
+        } else if (T == int) {
+          keyboardType = TextInputType.number;
+          inputFormatters = [FilteringTextInputFormatter.digitsOnly];
         } else {
           keyboardType = TextInputType.text;
           inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'.*'))];
@@ -1599,23 +1567,30 @@ class _AddProductWebViewState extends State<AddProductWebView> {
             Text(propertyName, style: AppTextStyle.smallText),
             const SizedBox(height: 4),
             _FocusableFieldWithIcon(
-              key: ValueKey(propertyName),
               controller: controller,
               hintText: S.of(context).enterField(propertyName),
-              suffixText: finalSuffixText,
               onChanged: (value) {
                 if (value.isEmpty) {
-                  onChanged(null);
+                  if (T == String) {
+                    onChanged('' as T?);
+                  } else {
+                    onChanged(null);
+                  }
                 } else if (T == int) {
                   final parsed = int.tryParse(value);
                   if (parsed != null) {
                     onChanged(parsed as T?);
                   }
                 } else if (T == double) {
-                  if (value == '.' || value.endsWith('.')) return;
                   final parsed = double.tryParse(value);
                   if (parsed != null) {
                     onChanged(parsed as T?);
+                  } else if (value == '.' || value.endsWith('.')) {
+                    // Allow typing decimal point
+                    controller.text = value;
+                    controller.selection = TextSelection.fromPosition(
+                      TextPosition(offset: controller.text.length),
+                    );
                   }
                 } else {
                   onChanged(value as T?);
@@ -1625,6 +1600,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
               textColor: colorScheme.onSurface,
               keyboardType: keyboardType,
               inputFormatters: inputFormatters,
+              suffixText: suffixText,
             ),
           ],
         );
