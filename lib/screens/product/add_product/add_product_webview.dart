@@ -1673,5 +1673,3 @@ class _FocusableFieldWithIconState extends State<_FocusableFieldWithIcon> {
     );
   }
 }
-
-

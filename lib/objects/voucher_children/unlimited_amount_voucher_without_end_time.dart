@@ -101,13 +101,13 @@ class UnlimitedAmountVoucherWithoutEndTime extends Voucher {
             ),
           ],
         ),
-        const SizedBox(height: 4),
-        Text(
-          s.disabled,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.error,
+        if (!isEnabled)
+          Text(
+            s.disabled,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.error,
+            ),
           ),
-        ),
         if (!isEnabled) const SizedBox(height: 4),
       ],
     );
