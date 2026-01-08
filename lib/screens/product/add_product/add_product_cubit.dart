@@ -613,7 +613,8 @@ class AddProductCubit extends Cubit<AddProductState> {
         emit(state.copyWith(
             processState: ProcessState.failure,
             dialogName: DialogName.failure,
-            notifyMessage: NotifyMessage.msg14));
+            notifyMessage: NotifyMessage.msg14,
+            exceptionError: reason));
         return true;
       }
 
@@ -628,6 +629,13 @@ class AddProductCubit extends Cubit<AddProductState> {
       }
       if (sellP == null || sellP <= 0) {
         if (fail('selling price invalid')) return;
+      }
+      if (sellP != null && importP != null && sellP < importP) {
+        if (fail('selling price lower than import price')) return;
+      }
+      final discount = toNum(arg.discount);
+      if (discount != null && (discount < 0 || discount > 100)) {
+        if (fail('discount invalid')) return;
       }
       if (arg.manufacturer == null) {
         if (fail('manufacturer missing')) return;

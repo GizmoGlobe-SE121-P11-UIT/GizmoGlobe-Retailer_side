@@ -13,6 +13,7 @@ class AddProductState extends Equatable {
   final List<ProductImage> images;
   final bool isUploadingImage;
   final bool isLoadingImages;
+  final String? exceptionError;
 
   const AddProductState({
     this.productArgument,
@@ -22,6 +23,7 @@ class AddProductState extends Equatable {
     this.images = const [],
     this.isUploadingImage = false,
     this.isLoadingImages = false,
+    this.exceptionError,
   });
 
   /// Get the first image URL for thumbnail display (only uploaded images, not pending)
@@ -45,6 +47,7 @@ class AddProductState extends Equatable {
         images,
         isUploadingImage,
         isLoadingImages,
+        exceptionError,
       ];
 
   AddProductState copyWith({
@@ -55,6 +58,7 @@ class AddProductState extends Equatable {
     List<ProductImage>? images,
     bool? isUploadingImage,
     bool? isLoadingImages,
+    String? exceptionError,
   }) {
     return AddProductState(
       productArgument: productArgument ?? this.productArgument,
@@ -64,6 +68,7 @@ class AddProductState extends Equatable {
       images: images ?? this.images,
       isUploadingImage: isUploadingImage ?? this.isUploadingImage,
       isLoadingImages: isLoadingImages ?? this.isLoadingImages,
+      exceptionError: exceptionError ?? this.exceptionError,
     );
   }
 }

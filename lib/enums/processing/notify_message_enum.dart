@@ -43,75 +43,81 @@ enum NotifyMessage {
     return name;
   }
 
-  String getLocalizedMessage(BuildContext context) {
+  String getLocalizedMessage(BuildContext context, [String? reason]) {
+    String message = '';
     switch (this) {
       case NotifyMessage.empty:
-        return '';
+        message = '';
       case NotifyMessage.msg1:
-        return S.of(context).signInSuccess;
+        message = S.of(context).signInSuccess;
       case NotifyMessage.msg2:
-        return S.of(context).signInFailed;
+        message = S.of(context).signInFailed;
       case NotifyMessage.msg3:
-        return S.of(context).verificationLinkFailed;
+        message = S.of(context).verificationLinkFailed;
       case NotifyMessage.msg4:
-        return S.of(context).changePasswordFailed;
+        message = S.of(context).changePasswordFailed;
       case NotifyMessage.msg5:
-        return S.of(context).passwordsDoNotMatch;
+        message = S.of(context).passwordsDoNotMatch;
       case NotifyMessage.msg6:
-        return S.of(context).verificationEmailSent;
+        message = S.of(context).verificationEmailSent;
       case NotifyMessage.msg7:
-        return S.of(context).signUpFailed;
+        message = S.of(context).signUpFailed;
       case NotifyMessage.msg8:
-        return S.of(context).resetPasswordLinkSent;
+        message = S.of(context).resetPasswordLinkSent;
       case NotifyMessage.msg9:
-        return S.of(context).signOutFailed;
+        message = S.of(context).signOutFailed;
       case NotifyMessage.msg10:
-        return S.of(context).emailNotVerified;
+        message = S.of(context).emailNotVerified;
       case NotifyMessage.msg11:
-        return S.of(context).invalidEmailOrPassword;
+        message = S.of(context).invalidEmailOrPassword;
       case NotifyMessage.msg12:
-        return S.of(context).emailNotRegistered;
+        message = S.of(context).emailNotRegistered;
       case NotifyMessage.msg13:
-        return S.of(context).productAddedSuccess;
+        message = S.of(context).productAddedSuccess;
       case NotifyMessage.msg14:
-        return S.of(context).productAddFailed;
+        message = S.of(context).productAddFailed;
       case NotifyMessage.msg15:
-        return S.of(context).productUpdatedSuccess;
+        message = S.of(context).productUpdatedSuccess;
       case NotifyMessage.msg16:
-        return S.of(context).productUpdateFailed;
+        message = S.of(context).productUpdateFailed;
       case NotifyMessage.msg17:
-        return S.of(context).voucherAddedSuccess;
+        message = S.of(context).voucherAddedSuccess;
       case NotifyMessage.msg18:
-        return S.of(context).voucherAddFailed;
+        message = S.of(context).voucherAddFailed;
       case NotifyMessage.msg19:
-        return S.of(context).voucherDeletedSuccess;
+        message = S.of(context).voucherDeletedSuccess;
       case NotifyMessage.msg20:
-        return S.of(context).voucherDeleteFailed;
+        message = S.of(context).voucherDeleteFailed;
       case NotifyMessage.msg21:
-        return S.of(context).descriptionGenerated;
+        message = S.of(context).descriptionGenerated;
       case NotifyMessage.msg22:
-        return S.of(context).voucherEditSuccess;
+        message = S.of(context).voucherEditSuccess;
       case NotifyMessage.msg23:
-        return S.of(context).errorUpdatingVoucher;
+        message = S.of(context).errorUpdatingVoucher;
       case NotifyMessage.msg24:
-        return S.of(context).voucherUpdateSuccess;
+        message = S.of(context).voucherUpdateSuccess;
       case NotifyMessage.msg25:
-        return S.of(context).voucherUpdateFailed;
+        message = S.of(context).voucherUpdateFailed;
       case NotifyMessage.msg26:
-        return S.of(context).giveVoucherSuccess;
+        message = S.of(context).giveVoucherSuccess;
       case NotifyMessage.msg27:
-        return S.of(context).giveVoucherFailed;
+        message = S.of(context).giveVoucherFailed;
       case NotifyMessage.msg28:
-        return S.of(context).addressAddedSuccess;
+        message = S.of(context).addressAddedSuccess;
       case NotifyMessage.msg29:
-        return S.of(context).addressAddFailed;
+        message = S.of(context).addressAddFailed;
       case NotifyMessage.msg30:
-        return S.of(context).addressUpdatedSuccess;
+        message = S.of(context).addressUpdatedSuccess;
       case NotifyMessage.msg31:
-        return S.of(context).addressUpdateFailed;
+        message = S.of(context).addressUpdateFailed;
       case NotifyMessage.error:
-        return S.of(context).unexpectedError;
+        message = S.of(context).unexpectedError;
     }
+
+    if (reason != null && reason.isNotEmpty) {
+      return '$message\nReason: $reason';
+    }
+    return message;
   }
 
   @override

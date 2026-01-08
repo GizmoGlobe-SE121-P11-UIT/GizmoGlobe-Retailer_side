@@ -30,6 +30,10 @@ import '../../../enums/product_related/ram_enums/ram_type.dart';
 import '../../../objects/manufacturer.dart';
 import '../../../objects/product_related/product.dart';
 import '../../../objects/product_related/product_image.dart';
+import '../../../objects/product_related/mainboard_related/io_port.dart';
+import '../../../objects/product_related/mainboard_related/pcie_slot.dart';
+import '../../../objects/product_related/mainboard_related/storage_slot.dart';
+import '../../../objects/product_related/psu_related/connector.dart';
 import '../../media/image_manager_modal.dart';
 import 'add_product_state.dart';
 import 'add_product_cubit.dart';
@@ -65,9 +69,52 @@ class _AddProductWebViewState extends State<AddProductWebView> {
   late final TextEditingController stockController;
   late final TextEditingController enDescriptionController;
   late final TextEditingController viDescriptionController;
+  late final TextEditingController releaseDateController;
 
-  // Cache for category-specific controllers
-  final Map<String, TextEditingController> _controllerCache = {};
+  // Category specific controllers
+  // RAM
+  late TextEditingController busController;
+  late TextEditingController typeController;
+  late TextEditingController stickCountController;
+  late TextEditingController clLatencyController;
+  late TextEditingController capacityController;
+
+  // CPU
+  late TextEditingController cpuSeriesController;
+  late TextEditingController socketController;
+  late TextEditingController coreController;
+  late TextEditingController threadController;
+  late TextEditingController baseClockController;
+  late TextEditingController turboClockController;
+  late TextEditingController tdpController;
+
+  // PSU
+  late TextEditingController maxWattageController;
+  late TextEditingController efficiencyController;
+  late TextEditingController modularityController;
+
+  // GPU
+  late TextEditingController gpuSeriesController;
+  late TextEditingController gpuVersionController;
+
+  // Mainboard
+  late TextEditingController mainboardFormFactorController;
+  late TextEditingController chipsetCodeController;
+  StorageSlotControllers? storageSlotControllerSingle;
+  late TextEditingController formFactorController;
+
+  // Drive
+  late TextEditingController genController;
+  late TextEditingController interfaceTypeController;
+  late TextEditingController writeMbpsController;
+  late TextEditingController readMbpsController;
+  late TextEditingController driveTypeController;
+  late TextEditingController driveFormFactorController;
+
+  // Controllers for list fields
+  final List<ConnectorControllers> connectorControllers = [];
+  final List<IOPortControllers> ioPortsControllers = [];
+  final List<PCIeSlotControllers> pcieSlotsController = [];
 
   AddProductCubit get cubit => context.read<AddProductCubit>();
 
@@ -81,24 +128,98 @@ class _AddProductWebViewState extends State<AddProductWebView> {
     stockController = TextEditingController();
     enDescriptionController = TextEditingController();
     viDescriptionController = TextEditingController();
+    releaseDateController = TextEditingController();
 
-    // Initialize from cubit state if available
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted &&
-          context.read<AddProductCubit>().state.productArgument != null) {
-        final state = context.read<AddProductCubit>().state;
-        final arg = state.productArgument;
-        if (arg != null) {
-          productNameController.text = arg.productName ?? '';
-          importPriceController.text = arg.importPrice?.toString() ?? '';
-          sellingPriceController.text = arg.sellingPrice?.toString() ?? '';
-          discountController.text = arg.discount?.toString() ?? '';
-          stockController.text = arg.stock?.toString() ?? '';
-          enDescriptionController.text = arg.enDescription ?? '';
-          viDescriptionController.text = arg.viDescription ?? '';
-        }
-      }
-    });
+    _initializeControllers();
+  }
+
+  void _initializeControllers() {
+    final arg = cubit.state.productArgument;
+
+    // Initialize explicit controllers (shared and specific)
+    // Initialize shared/reused controllers first to avoid lateness issues if we were to init them conditionally
+    // But since we use late, we must assign them.
+    // We will assign all of them, using defaults or values from arg.
+
+    // Helpers
+    String s(dynamic v) => v?.toString() ?? '';
+
+    // RAM
+    busController = TextEditingController(text: s(arg?.bus));
+    typeController = TextEditingController(text: s(arg?.type));
+    stickCountController = TextEditingController(text: s(arg?.stickCount));
+    clLatencyController = TextEditingController(text: s(arg?.clLatency));
+    capacityController = TextEditingController(text: s(arg?.capacity));
+
+    // CPU
+    cpuSeriesController = TextEditingController(text: s(arg?.cpuSeries));
+    socketController = TextEditingController(text: s(arg?.socket));
+    coreController = TextEditingController(text: s(arg?.core));
+    threadController = TextEditingController(text: s(arg?.thread));
+    baseClockController = TextEditingController(text: s(arg?.baseClock));
+    turboClockController = TextEditingController(text: s(arg?.turboClock));
+    tdpController = TextEditingController(text: s(arg?.tdp));
+
+    // PSU
+    maxWattageController = TextEditingController(text: s(arg?.tdp)); // PSU uses tdp field for maxWattage? checking cubit... yes
+    efficiencyController = TextEditingController(text: s(arg?.efficiency));
+    modularityController = TextEditingController(text: s(arg?.modularity));
+
+    // GPU
+    gpuSeriesController = TextEditingController(text: s(arg?.gpuSeries));
+    gpuVersionController = TextEditingController(text: s(arg?.gpuVersion));
+
+    // Mainboard
+    mainboardFormFactorController = TextEditingController(text: s(arg?.mainboardFormFactor));
+    chipsetCodeController = TextEditingController(text: s(arg?.chipsetCode));
+    // storageSlotControllerSingle
+    if (arg?.storageSlot != null) {
+      storageSlotControllerSingle = StorageSlotControllers(
+        m2Slots: s(arg!.storageSlot!.m2Slots),
+        sataPorts: s(arg.storageSlot!.sataPorts)
+      );
+    } else {
+       storageSlotControllerSingle = StorageSlotControllers(m2Slots: '0', sataPorts: '0');
+    }
+    formFactorController = TextEditingController(); // unused?
+
+    // Drive
+    genController = TextEditingController(text: s(arg?.gen));
+    interfaceTypeController = TextEditingController(text: s(arg?.interfaceType));
+    writeMbpsController = TextEditingController(text: s(arg?.writeMbps));
+    readMbpsController = TextEditingController(text: s(arg?.readMbps));
+    driveTypeController = TextEditingController(text: s(arg?.driveType));
+    driveFormFactorController = TextEditingController(text: s(arg?.driveFormFactor));
+
+    if (arg == null) return;
+
+    productNameController.text = arg.productName ?? '';
+    importPriceController.text = arg.importPrice?.toString() ?? '';
+    sellingPriceController.text = arg.sellingPrice?.toString() ?? '';
+    discountController.text = arg.discount?.toString() ?? '';
+    stockController.text = arg.stock?.toString() ?? '';
+    enDescriptionController.text = arg.enDescription ?? '';
+    viDescriptionController.text = arg.viDescription ?? '';
+    releaseDateController.text = arg.release != null ? DateFormat('yyyy-MM-dd').format(arg.release!) : '';
+
+    // Initialize list controllers
+    if (arg.connectors != null) {
+      connectorControllers.addAll(arg.connectors!.map((c) =>
+        ConnectorControllers(type: c.type, quantity: c.quantity.toString())));
+    }
+    if (arg.ioPorts != null) {
+      ioPortsControllers.addAll(arg.ioPorts!.map((p) =>
+        IOPortControllers(port: p.port, quantity: p.quantity.toString())));
+    }
+    if (arg.pcieSlots != null) {
+      pcieSlotsController.addAll(arg.pcieSlots!.map((s) =>
+        PCIeSlotControllers(
+          physicalSize: s.physicalSize.toString(),
+          electricalSpeed: s.electricalSpeed.toString(),
+          gen: s.gen.toString(),
+          quantity: s.quantity.toString()
+        )));
+    }
   }
 
   @override
@@ -110,24 +231,59 @@ class _AddProductWebViewState extends State<AddProductWebView> {
     stockController.dispose();
     enDescriptionController.dispose();
     viDescriptionController.dispose();
-    // Dispose cached controllers
-    for (var controller in _controllerCache.values) {
-      controller.dispose();
+    releaseDateController.dispose();
+
+    busController.dispose();
+    typeController.dispose();
+    stickCountController.dispose();
+    clLatencyController.dispose();
+    capacityController.dispose();
+
+    cpuSeriesController.dispose();
+    socketController.dispose();
+    coreController.dispose();
+    threadController.dispose();
+    baseClockController.dispose();
+    turboClockController.dispose();
+    tdpController.dispose();
+
+    maxWattageController.dispose();
+    efficiencyController.dispose();
+    modularityController.dispose();
+
+    gpuSeriesController.dispose();
+    gpuVersionController.dispose();
+
+    mainboardFormFactorController.dispose();
+    chipsetCodeController.dispose();
+    storageSlotControllerSingle?.m2SlotsController.dispose();
+    storageSlotControllerSingle?.sataPortsController.dispose();
+    formFactorController.dispose();
+
+    genController.dispose();
+    interfaceTypeController.dispose();
+    writeMbpsController.dispose();
+    readMbpsController.dispose();
+    driveTypeController.dispose();
+    driveFormFactorController.dispose();
+
+    for (var c in connectorControllers) {
+      c.typeController.dispose();
+      c.quantityController.dispose();
     }
-    _controllerCache.clear();
+    for (var c in ioPortsControllers) {
+      c.portController.dispose();
+      c.quantityController.dispose();
+    }
+    for (var c in pcieSlotsController) {
+      c.physicalSizeController.dispose();
+      c.electricalSpeedController.dispose();
+      c.genController.dispose();
+      c.quantityController.dispose();
+    }
     super.dispose();
   }
 
-  // Helper method to get or create a controller for a specific field
-  TextEditingController _getController(String fieldKey, String? initialValue) {
-    if (!_controllerCache.containsKey(fieldKey)) {
-      _controllerCache[fieldKey] = TextEditingController(text: initialValue);
-    } else if (_controllerCache[fieldKey]!.text != initialValue &&
-        initialValue != null) {
-      _controllerCache[fieldKey]!.text = initialValue;
-    }
-    return _controllerCache[fieldKey]!;
-  }
 
   void _safeClose(dynamic result) {
     if (_isClosing || !mounted) return;
@@ -141,86 +297,91 @@ class _AddProductWebViewState extends State<AddProductWebView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AddProductCubit, AddProductState>(
-      buildWhen: (previous, current) =>
-          previous.processState != current.processState ||
-          previous.images != current.images ||
-          previous.isUploadingImage != current.isUploadingImage ||
-          previous.productArgument != current.productArgument,
-      listener: (context, state) {
-        if (state.processState == ProcessState.success) {
-          if (state.notifyMessage == NotifyMessage.msg21) {
-            // Description generation - show dialog to notify
-            showDialog(
-              context: context,
-              builder: (context) => InformationDialog(
-                title: state.dialogName.getLocalizedName(context),
-                content: state.notifyMessage.getLocalizedMessage(context),
-                onPressed: () {
-                  cubit.toIdle();
-                },
-              ),
-            );
-          } else {
-            // Product add/edit success - close and let parent show snackbar
-            _safeClose(true);
-          }
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: BlocConsumer<AddProductCubit, AddProductState>(
+        buildWhen: (previous, current) =>
+            previous.processState != current.processState ||
+            previous.images != current.images ||
+            previous.isUploadingImage != current.isUploadingImage ||
+            previous.productArgument != current.productArgument,
+        listener: (context, state) {
+          if (state.processState == ProcessState.success) {
+            if (state.notifyMessage == NotifyMessage.msg21) {
+              // Description generation - show dialog to notify
+              showDialog(
+                context: context,
+                builder: (context) => InformationDialog(
+                  title: state.dialogName.getLocalizedName(context),
+                  content: state.notifyMessage.getLocalizedMessage(context),
+                  onPressed: () {
+                    cubit.toIdle();
+                  },
+                ),
+              );
+            } else {
+              // Product add/edit success - close and let parent show snackbar
+              _safeClose(true);
+            }
         } else if (state.processState == ProcessState.failure) {
           // Show error dialog in webview
           showDialog(
             context: context,
             builder: (context) => InformationDialog(
               title: state.dialogName.getLocalizedName(context),
-              content: state.notifyMessage.getLocalizedMessage(context),
+              content: state.notifyMessage.getLocalizedMessage(context, state.exceptionError),
               onPressed: () {
                 cubit.toIdle();
               },
             ),
           );
         }
-      },
-      builder: (context, state) {
-        final screenWidth = MediaQuery.of(context).size.width;
-        final screenHeight = MediaQuery.of(context).size.height;
-        final isMobile = screenWidth < 500;
+        },
+        builder: (context, state) {
+          final screenWidth = MediaQuery.of(context).size.width;
+          final screenHeight = MediaQuery.of(context).size.height;
+          final isMobile = screenWidth < 500;
 
-        return Container(
-          width: isMobile ? screenWidth : screenWidth * 0.9,
-          height: isMobile ? screenHeight : screenHeight * 0.95,
-          constraints: BoxConstraints(
-            maxWidth: isMobile ? double.infinity : 1400,
-            maxHeight: isMobile ? double.infinity : 1000,
-          ),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius:
-                isMobile ? BorderRadius.zero : BorderRadius.circular(16),
-            boxShadow: isMobile
-                ? null
-                : [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-          ),
-          child: Column(
-            children: [
-              _buildHeader(state),
-              Expanded(
-                child: state.processState == ProcessState.loading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      )
-                    : _buildContent(state),
-              ),
-            ],
-          ),
-        );
-      },
+          return Container(
+            width: isMobile ? screenWidth : screenWidth * 0.9,
+            height: isMobile ? screenHeight : screenHeight * 0.95,
+            constraints: BoxConstraints(
+              maxWidth: isMobile ? double.infinity : 1400,
+              maxHeight: isMobile ? double.infinity : 1000,
+            ),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius:
+                  isMobile ? BorderRadius.zero : BorderRadius.circular(16),
+              boxShadow: isMobile
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+            ),
+            child: Column(
+              children: [
+                _buildHeader(state),
+                Expanded(
+                  child: state.processState == ProcessState.loading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        )
+                      : _buildContent(state),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -295,12 +456,7 @@ class _AddProductWebViewState extends State<AddProductWebView> {
               _buildAdditionalInformationSection(state),
               if (state.productArgument?.category != null &&
                   state.productArgument?.category != CategoryEnum.empty)
-                Column(
-                  children: [
-                    const SizedBox(height: 24),
-                    _buildCategorySpecificationsSection(state),
-                  ],
-                ),
+                _buildCategorySpecificationsSection(state),
             ],
           ),
         ),
@@ -886,10 +1042,6 @@ class _AddProductWebViewState extends State<AddProductWebView> {
 
   Widget _buildCategorySpecificationsSection(AddProductState state) {
     final isMobile = MediaQuery.of(context).size.width < 500;
-    final enDescriptionController =
-        TextEditingController(text: state.productArgument?.enDescription ?? '');
-    final viDescriptionController =
-        TextEditingController(text: state.productArgument?.viDescription ?? '');
 
     return Card(
       elevation: 2,
@@ -923,23 +1075,19 @@ class _AddProductWebViewState extends State<AddProductWebView> {
               state,
               cubit,
             ),
+            const SizedBox(height: 16),
             MultiFieldWithIcon(
               controller: enDescriptionController,
               hintText: S.of(context).enterField(S.of(context).enDescription),
               labelText: S.of(context).enDescription,
               onChanged: (value) {
-                final currentArg = cubit.state.productArgument;
-                if (currentArg == null) return;
-                cubit.updateProductArgument(
-                    currentArg.copyWith(enDescription: value));
+                cubit.updateProductArgument(state.productArgument!.copyWith(enDescription: value));
               },
               suffixIcon: (state.productArgument?.isEnEmpty ?? true) &&
                       (state.productArgument?.isViEmpty ?? true)
                   ? Icons.add_comment
                   : Icons.g_translate,
-              onSuffixIconPressed: () {
-                cubit.generateEnDescription();
-              },
+              onSuffixIconPressed: () => cubit.generateEnDescription(),
             ),
             const SizedBox(height: 16),
             MultiFieldWithIcon(
@@ -947,18 +1095,13 @@ class _AddProductWebViewState extends State<AddProductWebView> {
               hintText: S.of(context).enterField(S.of(context).viDescription),
               labelText: S.of(context).viDescription,
               onChanged: (value) {
-                final currentArg = cubit.state.productArgument;
-                if (currentArg == null) return;
-                cubit.updateProductArgument(
-                    currentArg.copyWith(viDescription: value));
+                cubit.updateProductArgument(state.productArgument!.copyWith(viDescription: value));
               },
               suffixIcon: (state.productArgument?.isEnEmpty ?? true) &&
                       (state.productArgument?.isViEmpty ?? true)
                   ? Icons.add_comment
                   : Icons.g_translate,
-              onSuffixIconPressed: () {
-                cubit.generateViDescription();
-              },
+              onSuffixIconPressed: () => cubit.generateViDescription(),
             ),
           ],
         ),
@@ -972,567 +1115,374 @@ class _AddProductWebViewState extends State<AddProductWebView> {
       case CategoryEnum.ram:
         return Column(key: const ValueKey('ram_fields'), children: [
           buildInputWidget<RAMType>(S.of(context).ramType,
-              TextEditingController(), state.productArgument?.type, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(type: value));
+              typeController, state.productArgument?.type, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(type: value));
           }, RAMType.getValues()),
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).ramBus,
-            _getController('ram_bus', state.productArgument?.bus?.toString()),
+            busController,
             state.productArgument?.bus,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(bus: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(bus: value)),
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).capacityPerStick,
-            _getController(
-                'ram_capacity', state.productArgument?.capacity?.toString()),
+            capacityController,
             state.productArgument?.capacity,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(capacity: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(capacity: value)),
+            null,
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).kitStickCount,
-            _getController('ram_stickCount',
-                state.productArgument?.stickCount?.toString()),
+            stickCountController,
             state.productArgument?.stickCount,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(
-                  currentArg.copyWith(stickCount: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(stickCount: value)),
           ),
           const SizedBox(height: 8),
           buildInputWidget<int>(
             S.of(context).clLatency,
-            _getController(
-                'ram_clLatency', state.productArgument?.clLatency?.toString()),
+            clLatencyController,
             state.productArgument?.clLatency,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit
-                  .updateProductArgument(currentArg.copyWith(clLatency: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(clLatency: value)),
           ),
-          const SizedBox(height: 8),
         ]);
 
       case CategoryEnum.cpu:
         return Column(key: const ValueKey('cpu_fields'), children: [
           buildInputWidget<CPUSeries>(
               S.of(context).cpuSeries,
-              TextEditingController(),
+              cpuSeriesController,
               state.productArgument?.cpuSeries, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(cpuSeries: value));
+            cubit.updateProductArgument(state.productArgument!.copyWith(cpuSeries: value));
           }, CPUSeries.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).numberOfCpuCores,
-            _getController('cpu_core', state.productArgument?.core?.toString()),
+          buildInputWidget<int>(S.of(context).numberOfCpuCores,
+            coreController,
             state.productArgument?.core,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(core: value));
-            },
-          ),
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(core: value))),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).numberOfCpuThreads,
-            _getController(
-                'cpu_thread', state.productArgument?.thread?.toString()),
+          buildInputWidget<int>(S.of(context).numberOfCpuThreads,
+            threadController,
             state.productArgument?.thread,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(thread: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(thread: value))),
+          const SizedBox(height: 8),
+          buildInputWidget<double>(S.of(context).cpuBaseClock,
+            baseClockController,
+            state.productArgument?.baseClock,
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(baseClock: value)),
+            null, // Removed suffix text manually passed, handled by widget logic if needed but mostly handled inside buildInputWidget now
           ),
           const SizedBox(height: 8),
-          buildInputWidget<double>(
-              S.of(context).cpuBaseClock,
-              _getController('cpu_baseClock',
-                  state.productArgument?.baseClock?.toString()),
-              state.productArgument?.baseClock, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(baseClock: value));
-          }),
+          buildInputWidget<double>(S.of(context).cpuTurboClock,
+            turboClockController,
+            state.productArgument?.turboClock,
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(turboClock: value)),
+            null,
+          ),
           const SizedBox(height: 8),
-          buildInputWidget<double>(
-              S.of(context).cpuTurboClock,
-              _getController('cpu_turboClock',
-                  state.productArgument?.turboClock?.toString()),
-              state.productArgument?.turboClock, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(turboClock: value));
-          }),
-          const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).cpuTdp,
-            _getController('cpu_tdp', state.productArgument?.tdp?.toString()),
+          buildInputWidget<int>(S.of(context).cpuTdp,
+            tdpController,
             state.productArgument?.tdp,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(tdp: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(tdp: value)),
+            null,
           ),
           const SizedBox(height: 8),
           buildInputWidget<Socket>(S.of(context).cpuSocket,
-              TextEditingController(), state.productArgument?.socket, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(socket: value));
+              socketController, state.productArgument?.socket, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(socket: value));
           }, Socket.getValues()),
-          const SizedBox(height: 8),
         ]);
+
       case CategoryEnum.psu:
         return Column(key: const ValueKey('psu_fields'), children: [
-          buildInputWidget<int>(
-            S.of(context).maxWattage,
-            _getController(
-                'psu_maxWattage', state.productArgument?.tdp?.toString()),
+          buildInputWidget<int>(S.of(context).maxWattage,
+            maxWattageController,
             state.productArgument?.tdp,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(tdp: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(tdp: value)),
+            null,
           ),
           const SizedBox(height: 8),
-          buildInputWidget<PSUEfficiency>(
-              S.of(context).psuEfficiency,
-              TextEditingController(),
-              state.productArgument?.efficiency, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(efficiency: value));
+          buildInputWidget<PSUEfficiency>(S.of(context).psuEfficiency,
+              efficiencyController, state.productArgument?.efficiency, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(efficiency: value));
           }, PSUEfficiency.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<PSUModular>(
-              S.of(context).psuModularity,
-              TextEditingController(),
-              state.productArgument?.modularity, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(modularity: value));
+          buildInputWidget<PSUModular>(S.of(context).psuModularity,
+              modularityController, state.productArgument?.modularity, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(modularity: value));
           }, PSUModular.getValues()),
           const SizedBox(height: 8),
           ...buildConnectorFields(state, cubit),
         ]);
+
       case CategoryEnum.gpu:
         return Column(key: const ValueKey('gpu_fields'), children: [
-          buildInputWidget<GPUSeries>(
-              S.of(context).gpuSeries,
-              TextEditingController(),
-              state.productArgument?.gpuSeries, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(gpuSeries: value));
+          buildInputWidget<GPUSeries>(S.of(context).gpuSeries,
+              gpuSeriesController, state.productArgument?.gpuSeries, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(gpuSeries: value));
           }, GPUSeries.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<GPUVersion>(
-              S.of(context).gpuVersion,
-              TextEditingController(),
-              state.productArgument?.gpuVersion, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(gpuVersion: value));
+          buildInputWidget<GPUVersion>(S.of(context).gpuVersion,
+              gpuVersionController, state.productArgument?.gpuVersion, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(gpuVersion: value));
           }, GPUVersion.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).gpuMemory,
-            _getController(
-                'gpu_capacity', state.productArgument?.capacity?.toString()),
+          buildInputWidget<int>(S.of(context).gpuMemory,
+            capacityController,
             state.productArgument?.capacity,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(capacity: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(capacity: value)),
+            null,
           ),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).gpuTdp,
-            _getController('gpu_tdp', state.productArgument?.tdp?.toString()),
+          buildInputWidget<int>(S.of(context).gpuTdp,
+            tdpController,
             state.productArgument?.tdp,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(tdp: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(tdp: value)),
+            null,
           ),
           const SizedBox(height: 8),
-          buildInputWidget<double>(
-              S.of(context).gpuBoostClock,
-              _getController('gpu_turboClock',
-                  state.productArgument?.turboClock?.toString()),
-              state.productArgument?.turboClock, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(turboClock: value));
-          }),
+          buildInputWidget<double>(S.of(context).gpuBoostClock,
+            turboClockController,
+            state.productArgument?.turboClock,
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(turboClock: value)),
+            null,
+          ),
           const SizedBox(height: 8),
           ...buildIOPortFields(state, cubit),
         ]);
+
       case CategoryEnum.mainboard:
         return Column(key: const ValueKey('mainboard_fields'), children: [
-          buildInputWidget<String>(
-              S.of(context).chipsetCode,
-              _getController(
-                  'mb_chipsetCode', state.productArgument?.chipsetCode),
+          buildInputWidget<String>(S.of(context).chipsetCode,
+              chipsetCodeController,
               state.productArgument?.chipsetCode, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit
-                .updateProductArgument(currentArg.copyWith(chipsetCode: value));
+            cubit.updateProductArgument(state.productArgument!.copyWith(chipsetCode: value));
           }),
           const SizedBox(height: 8),
-          buildInputWidget<MainboardFormFactor>(
-              S.of(context).mainboardFormFactor,
-              TextEditingController(),
-              state.productArgument?.mainboardFormFactor, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(
-                currentArg.copyWith(mainboardFormFactor: value));
+          buildInputWidget<MainboardFormFactor>(S.of(context).mainboardFormFactor,
+              mainboardFormFactorController, state.productArgument?.mainboardFormFactor, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(mainboardFormFactor: value));
           }, MainboardFormFactor.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).ramBusSpeed,
-            _getController('mb_bus', state.productArgument?.bus?.toString()),
+          buildInputWidget<int>(S.of(context).ramBusSpeed,
+            busController,
             state.productArgument?.bus,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(bus: value));
-            },
-          ),
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(bus: value))),
           const SizedBox(height: 8),
           buildInputWidget<RAMType>(S.of(context).supportedRamType,
-              TextEditingController(), state.productArgument?.type, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(type: value));
+              typeController, state.productArgument?.type, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(type: value));
           }, RAMType.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-              S.of(context).maximumSingleRamCapacity,
-              _getController(
-                  'mb_capacity', state.productArgument?.capacity?.toString()),
+          buildInputWidget<Socket>(S.of(context).cpuSocket,
+              socketController, state.productArgument?.socket, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(socket: value));
+          }, Socket.getValues()),
+          const SizedBox(height: 8),
+          buildInputWidget<int>(S.of(context).maximumSingleRamCapacity,
+              capacityController,
               state.productArgument?.capacity, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(capacity: value));
-          }),
+            cubit.updateProductArgument(state.productArgument!.copyWith(capacity: value));
+          }, null,
+          ),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).numberOfM2Slots,
-            _getController('mb_m2',
-                state.productArgument?.storageSlot?.m2Slots.toString()),
+          buildInputWidget<int>('Number of RAM slots',
+            stickCountController,
+            state.productArgument?.stickCount,
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(stickCount: value))),
+          const SizedBox(height: 8),
+          if (storageSlotControllerSingle != null) ...[
+          buildInputWidget<int>(S.of(context).numberOfM2Slots,
+            storageSlotControllerSingle!.m2SlotsController,
             state.productArgument?.storageSlot?.m2Slots,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(
-                  storageSlot:
-                      currentArg.storageSlot?.copyWith(m2Slots: value)));
-            },
-          ),
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(
+                storageSlot: state.productArgument!.storageSlot?.copyWith(m2Slots: value)))),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).numberOfSataPorts,
-            _getController('mb_sata',
-                state.productArgument?.storageSlot?.sataPorts.toString()),
+          buildInputWidget<int>(S.of(context).numberOfSataPorts,
+            storageSlotControllerSingle!.sataPortsController,
             state.productArgument?.storageSlot?.sataPorts,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(
-                  storageSlot:
-                      currentArg.storageSlot?.copyWith(sataPorts: value)));
-            },
-          ),
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(
+                storageSlot: state.productArgument!.storageSlot?.copyWith(sataPorts: value)))),
+          ],
           const SizedBox(height: 8),
           ...buildIOPortFields(state, cubit),
           const SizedBox(height: 8),
           ...buildPCIeSlotFields(state, cubit),
         ]);
+
       case CategoryEnum.drive:
         return Column(key: const ValueKey('drive_fields'), children: [
           buildInputWidget<DriveGen>(S.of(context).driveGeneration,
-              TextEditingController(), state.productArgument?.gen, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(gen: value));
+              genController, state.productArgument?.gen, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(gen: value));
           }, DriveGen.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<DriveType>(
-              S.of(context).driveType,
-              TextEditingController(),
-              state.productArgument?.driveType, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(currentArg.copyWith(driveType: value));
+          buildInputWidget<DriveType>(S.of(context).driveType,
+              driveTypeController, state.productArgument?.driveType, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(driveType: value));
           }, DriveType.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).capacity,
-            _getController(
-                'drive_capacity', state.productArgument?.capacity?.toString()),
-            state.productArgument?.capacity,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(capacity: value));
-            },
+          buildInputWidget<int>(S.of(context).capacity,
+            capacityController,
+            state.productArgument?.capacity, (value) {
+              cubit.updateProductArgument(state.productArgument!.copyWith(capacity: value));
+            }, null,
           ),
           const SizedBox(height: 8),
-          buildInputWidget<InterfaceType>(
-            S.of(context).interfaceType,
-            TextEditingController(),
-            state.productArgument?.interfaceType,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(
-                  currentArg.copyWith(interfaceType: value));
-            },
-            InterfaceType.getValues(),
-          ),
+          buildInputWidget<InterfaceType>(S.of(context).interfaceType,
+            interfaceTypeController, state.productArgument?.interfaceType, (value) {
+              cubit.updateProductArgument(state.productArgument!.copyWith(interfaceType: value));
+            }, InterfaceType.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<DriveFormFactor>(
-              S.of(context).driveFormFactor,
-              TextEditingController(),
-              state.productArgument?.driveFormFactor, (value) {
-            final currentArg = cubit.state.productArgument;
-            if (currentArg == null) return;
-            cubit.updateProductArgument(
-                currentArg.copyWith(driveFormFactor: value));
+          buildInputWidget<DriveFormFactor>(S.of(context).driveFormFactor,
+              driveFormFactorController, state.productArgument?.driveFormFactor, (value) {
+            cubit.updateProductArgument(state.productArgument!.copyWith(driveFormFactor: value));
           }, DriveFormFactor.getValues()),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).readSpeed,
-            _getController(
-                'drive_readMbps', state.productArgument?.readMbps?.toString()),
+          buildInputWidget<int>(S.of(context).readSpeed,
+            readMbpsController,
             state.productArgument?.readMbps,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit.updateProductArgument(currentArg.copyWith(readMbps: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(readMbps: value)),
+            null,
           ),
           const SizedBox(height: 8),
-          buildInputWidget<int>(
-            S.of(context).writeSpeed,
-            _getController('drive_writeMbps',
-                state.productArgument?.writeMbps?.toString()),
+          buildInputWidget<int>(S.of(context).writeSpeed,
+            writeMbpsController,
             state.productArgument?.writeMbps,
-            (value) {
-              final currentArg = cubit.state.productArgument;
-              if (currentArg == null) return;
-              cubit
-                  .updateProductArgument(currentArg.copyWith(writeMbps: value));
-            },
+            (value) => cubit.updateProductArgument(state.productArgument!.copyWith(writeMbps: value)),
+            null,
           ),
-          const SizedBox(height: 8),
         ]);
       default:
         return Container();
     }
   }
 
-  List<Widget> buildConnectorFields(
-      AddProductState state, AddProductCubit cubit) {
+  List<Widget> buildConnectorFields(AddProductState state, AddProductCubit cubit) {
     final connectors = state.productArgument?.connectors ?? [];
-    final List<Widget> widgets = [];
-
-    for (int i = 0; i < connectors.length; i++) {
-      widgets.add(Row(
+    List<Widget> widgets = connectors.asMap().entries.map<Widget>((entry) {
+      final i = entry.key;
+      if (i >= connectorControllers.length) connectorControllers.add(ConnectorControllers());
+      return Row(
         children: [
-          Expanded(
-            child: buildInputWidget<String>(
-              'Connector type',
-              TextEditingController(),
-              i < connectors.length ? connectors[i].type : null,
-              (value) {
-                cubit.changeConnectorType(value, i);
-              },
-            ),
-          ),
+          Expanded(child: buildInputWidget<String>(S.of(context).connectorType,
+            connectorControllers[i].typeController, connectors[i].type,
+            (value) => cubit.changeConnectorType(value, i))),
           const SizedBox(width: 8),
-          Expanded(
-            child: buildInputWidget<int>(
-              'Quantity',
-              TextEditingController(),
-              i < connectors.length ? connectors[i].quantity : null,
-              (value) {
-                cubit.changeConnectorQuantity(value, i);
-              },
-            ),
-          ),
+          Expanded(child: buildInputWidget<int>(S.of(context).quantity,
+            connectorControllers[i].quantityController, connectors[i].quantity,
+            (value) => cubit.changeConnectorQuantity(value, i))),
           IconButton(
             icon: const Icon(Icons.remove_circle),
-            onPressed: () {
-              // Handle remove
-            },
+            onPressed: () => setState(() {
+              connectorControllers.removeAt(i);
+              cubit.removeConnector(i);
+            }),
           ),
         ],
-      ));
-    }
+      );
+    }).toList();
 
     widgets.add(Align(
       alignment: Alignment.centerLeft,
       child: TextButton.icon(
         icon: const Icon(Icons.add),
-        label: const Text('Add Connector'),
-        onPressed: () {
-          // Handle add
-        },
+        label: Text(S.of(context).addConnector),
+        onPressed: () => setState(() {
+          connectorControllers.add(ConnectorControllers());
+          cubit.addConnector();
+        }),
       ),
     ));
-
     return widgets;
   }
 
   List<Widget> buildIOPortFields(AddProductState state, AddProductCubit cubit) {
     final ioPorts = state.productArgument?.ioPorts ?? [];
-    final List<Widget> widgets = [];
-
-    for (int i = 0; i < ioPorts.length; i++) {
-      widgets.add(Row(
+    List<Widget> widgets = ioPorts.asMap().entries.map<Widget>((entry) {
+      final i = entry.key;
+      if (i >= ioPortsControllers.length) ioPortsControllers.add(IOPortControllers());
+      return Row(
         children: [
-          Expanded(
-              child: buildInputWidget<String>(
-            'Port',
-            TextEditingController(),
-            i < ioPorts.length ? ioPorts[i].port : null,
-            (value) {
-              cubit.changeIoPortType(value, i);
-            },
-          )),
+          Expanded(child: buildInputWidget<String>(S.of(context).port,
+            ioPortsControllers[i].portController, ioPorts[i].port,
+            (value) => cubit.changeIoPortType(value, i))),
           const SizedBox(width: 8),
-          Expanded(
-              child: buildInputWidget<int>(
-            'Quantity',
-            TextEditingController(),
-            i < ioPorts.length ? ioPorts[i].quantity : null,
-            (value) {
-              cubit.changeIoPortQuantity(value, i);
-            },
-          )),
+          Expanded(child: buildInputWidget<int>(S.of(context).quantity,
+            ioPortsControllers[i].quantityController, ioPorts[i].quantity,
+            (value) => cubit.changeIoPortQuantity(value, i))),
           IconButton(
             icon: const Icon(Icons.remove_circle),
-            onPressed: () {
-              // Handle remove
-            },
+            onPressed: () => setState(() {
+              ioPortsControllers.removeAt(i);
+              cubit.removeIoPort(i);
+            }),
           ),
         ],
-      ));
-    }
+      );
+    }).toList();
 
     widgets.add(Align(
       alignment: Alignment.centerLeft,
       child: TextButton.icon(
         icon: const Icon(Icons.add),
-        label: const Text('Add IO Port'),
-        onPressed: () {
-          // Handle add
-        },
+        label: Text(S.of(context).addIoPort),
+        onPressed: () => setState(() {
+          ioPortsControllers.add(IOPortControllers());
+          cubit.addIoPort();
+        }),
       ),
     ));
-
     return widgets;
   }
 
-  List<Widget> buildPCIeSlotFields(
-      AddProductState state, AddProductCubit cubit) {
+  List<Widget> buildPCIeSlotFields(AddProductState state, AddProductCubit cubit) {
     final pcieSlots = state.productArgument?.pcieSlots ?? [];
-    final List<Widget> widgets = [];
-
-    for (int i = 0; i < pcieSlots.length; i++) {
-      widgets.add(Row(
+    List<Widget> widgets = pcieSlots.asMap().entries.map<Widget>((entry) {
+      final i = entry.key;
+      if (i >= pcieSlotsController.length) pcieSlotsController.add(PCIeSlotControllers());
+      final controller = pcieSlotsController[i];
+      return Row(
         children: [
-          Expanded(
-            child: buildInputWidget<int>(
-              'Physical size',
-              TextEditingController(),
-              i < pcieSlots.length ? pcieSlots[i].physicalSize : null,
-              (value) {
-                cubit.changePCIeSlotPhysicalSize(value, i);
-              },
-            ),
-          ),
+          Expanded(child: buildInputWidget<int>(S.of(context).physicalSize,
+            controller.physicalSizeController, pcieSlots[i].physicalSize,
+            (v) => cubit.changePCIeSlotPhysicalSize(v, i))),
           const SizedBox(width: 8),
-          Expanded(
-            child: buildInputWidget<int>(
-              'Electrical speed',
-              TextEditingController(),
-              i < pcieSlots.length ? pcieSlots[i].electricalSpeed : null,
-              (value) {
-                cubit.changePCIeSlotElectricalSpeed(value, i);
-              },
-            ),
-          ),
+          Expanded(child: buildInputWidget<int>(S.of(context).electricalSpeed,
+            controller.electricalSpeedController, pcieSlots[i].electricalSpeed,
+            (v) => cubit.changePCIeSlotElectricalSpeed(v, i))),
           const SizedBox(width: 8),
-          Expanded(
-            child: buildInputWidget<int>(
-              'Generation',
-              TextEditingController(),
-              i < pcieSlots.length ? pcieSlots[i].gen : null,
-              (value) {
-                cubit.changePCIeSlotGen(value, i);
-              },
-            ),
-          ),
+          Expanded(child: buildInputWidget<int>(S.of(context).generation,
+            controller.genController, pcieSlots[i].gen,
+            (v) => cubit.changePCIeSlotGen(v, i))),
           const SizedBox(width: 8),
-          Expanded(
-            child: buildInputWidget<int>(
-              'Quantity',
-              TextEditingController(),
-              i < pcieSlots.length ? pcieSlots[i].quantity : null,
-              (value) {
-                cubit.changePCIeSlotQuantity(value, i);
-              },
-            ),
-          ),
+          Expanded(child: buildInputWidget<int>(S.of(context).quantity,
+            controller.quantityController, pcieSlots[i].quantity,
+            (v) => cubit.changePCIeSlotQuantity(v, i))),
           IconButton(
             icon: const Icon(Icons.remove_circle),
-            onPressed: () {
-              // Handle remove
-            },
+            onPressed: () => setState(() {
+              pcieSlotsController.removeAt(i);
+              cubit.removePcieSlot(i);
+            }),
           ),
         ],
-      ));
-    }
+      );
+    }).toList();
 
     widgets.add(Align(
       alignment: Alignment.centerLeft,
       child: TextButton.icon(
         icon: const Icon(Icons.add),
-        label: const Text('Add PCIe Slot'),
-        onPressed: () {
-          // Handle add
-        },
+        label: Text(S.of(context).addPcieSlot),
+        onPressed: () => setState(() {
+          pcieSlotsController.add(PCIeSlotControllers());
+          cubit.addPcieSlot();
+        }),
       ),
     ));
-
     return widgets;
   }
 
@@ -1541,15 +1491,16 @@ class _AddProductWebViewState extends State<AddProductWebView> {
       TextEditingController controller,
       T? propertyValue,
       void Function(T?) onChanged,
-      [List<T>? enumValues]) {
+      [List<T>? enumValues, String? suffixText]) {
     return Builder(builder: (BuildContext context) {
       final colorScheme = Theme.of(context).colorScheme;
 
       if (T == DateTime) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(propertyName, style: AppTextStyle.smallText),
+            const SizedBox(height: 4),
             GestureDetector(
               onTap: () async {
                 final DateTime? picked = await showDatePicker(
@@ -1557,42 +1508,20 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                   initialDate: propertyValue as DateTime? ?? DateTime.now(),
                   firstDate: DateTime(2000),
                   lastDate: DateTime(2100),
-                  builder: (context, child) {
-                    return Theme(
-                      data: Theme.of(context).copyWith(
-                        colorScheme: ColorScheme.light(
-                          primary: colorScheme.primary,
-                          onPrimary: colorScheme.onPrimary,
-                          onSurface: colorScheme.onSurface,
-                        ),
-                        textButtonTheme: TextButtonThemeData(
-                          style: TextButton.styleFrom(
-                            foregroundColor: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      child: child!,
-                    );
-                  },
                 );
-                if (picked != null) {
-                  onChanged(picked as T?);
-                }
+                if (picked != null) onChanged(picked as T?);
               },
               child: AbsorbPointer(
                 child: FieldWithIcon(
                   controller: TextEditingController(
-                    text: (propertyValue as DateTime?) != null &&
-                            propertyValue != null
-                        ? DateFormat('dd/MM/yyyy')
-                            .format(propertyValue as DateTime)
+                    text: (propertyValue as DateTime?) != null
+                        ? DateFormat('yyyy-MM-dd').format(propertyValue as DateTime)
                         : '',
                   ),
                   readOnly: true,
-                  hintText: propertyName,
+                  hintText: S.of(context).selectField(propertyName),
                   fillColor: colorScheme.surface,
-                  suffixIcon: Icon(Icons.calendar_today,
-                      color: colorScheme.onSurfaceVariant),
+                  suffixIcon: const Icon(Icons.calendar_today),
                 ),
               ),
             ),
@@ -1600,9 +1529,10 @@ class _AddProductWebViewState extends State<AddProductWebView> {
         );
       } else if (enumValues != null) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(propertyName, style: AppTextStyle.smallText),
+            const SizedBox(height: 4),
             GradientDropdown<T>(
               items: (String filter, dynamic infiniteScrollProps) => enumValues,
               compareFn: (T? d1, T? d2) {
@@ -1614,6 +1544,9 @@ class _AddProductWebViewState extends State<AddProductWebView> {
               itemAsString: (T d) =>
                   d is Manufacturer ? d.manufacturerName : d.toString(),
               onChanged: (value) {
+                // Remove focus from any text field
+                FocusScope.of(context).unfocus();
+
                 if (value is Manufacturer) {
                   final selected =
                       (enumValues as List<Manufacturer>).firstWhere(
@@ -1633,39 +1566,43 @@ class _AddProductWebViewState extends State<AddProductWebView> {
       } else {
         TextInputType keyboardType;
         List<TextInputFormatter> inputFormatters;
+        String? finalSuffixText = suffixText;
 
         if (T == int) {
           keyboardType = TextInputType.number;
-          inputFormatters = [FilteringTextInputFormatter.digitsOnly];
+          inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))];
+          if (propertyName == S.of(context).importPrice ||
+              propertyName == S.of(context).sellingPrice) {
+            finalSuffixText = '.000đ';
+          }
         } else if (T == double) {
           keyboardType = const TextInputType.numberWithOptions(decimal: true);
           inputFormatters = [
             FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-            if (propertyName == "Discount")
-              TextInputFormatter.withFunction((oldValue, newValue) {
-                if (newValue.text.isEmpty) return newValue;
-                try {
-                  final double? value = double.tryParse(newValue.text);
-                  if (value != null && value > 1) {
-                    return oldValue;
-                  }
-                } catch (_) {}
-                return newValue;
-              }),
           ];
+          if (propertyName == S.of(context).discount) {
+            finalSuffixText = '%';
+            inputFormatters.add(TextInputFormatter.withFunction((oldValue, newValue) {
+              if (newValue.text.isEmpty) return newValue;
+              final double? value = double.tryParse(newValue.text);
+              return (value != null && value <= 100) ? newValue : oldValue;
+            }));
+          }
         } else {
           keyboardType = TextInputType.text;
           inputFormatters = [FilteringTextInputFormatter.allow(RegExp(r'.*'))];
         }
 
         return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(propertyName, style: AppTextStyle.smallText),
-            FieldWithIcon(
+            const SizedBox(height: 4),
+            _FocusableFieldWithIcon(
               key: ValueKey(propertyName),
               controller: controller,
-              hintText: propertyName,
+              hintText: S.of(context).enterField(propertyName),
+              suffixText: finalSuffixText,
               onChanged: (value) {
                 if (value.isEmpty) {
                   onChanged(null);
@@ -1678,18 +1615,14 @@ class _AddProductWebViewState extends State<AddProductWebView> {
                   if (value == '.' || value.endsWith('.')) return;
                   final parsed = double.tryParse(value);
                   if (parsed != null) {
-                    if (propertyName == "Discount" && parsed > 1) {
-                      controller.text = "0";
-                      onChanged(1.0 as T?);
-                    } else {
-                      onChanged(parsed as T?);
-                    }
+                    onChanged(parsed as T?);
                   }
                 } else {
                   onChanged(value as T?);
                 }
               },
               fillColor: colorScheme.surface,
+              textColor: colorScheme.onSurface,
               keyboardType: keyboardType,
               inputFormatters: inputFormatters,
             ),
@@ -1699,3 +1632,70 @@ class _AddProductWebViewState extends State<AddProductWebView> {
     });
   }
 }
+
+class _FocusableFieldWithIcon extends StatefulWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final ValueChanged<String>? onChanged;
+  final Color fillColor;
+  final Color textColor;
+  final TextInputType keyboardType;
+  final List<TextInputFormatter> inputFormatters;
+  final String? suffixText;
+
+  const _FocusableFieldWithIcon({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    this.onChanged,
+    required this.fillColor,
+    required this.textColor,
+    required this.keyboardType,
+    required this.inputFormatters,
+    this.suffixText,
+  }) : super(key: key);
+
+  @override
+  State<_FocusableFieldWithIcon> createState() => _FocusableFieldWithIconState();
+}
+
+class _FocusableFieldWithIconState extends State<_FocusableFieldWithIcon> {
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_onFocusChange);
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FieldWithIcon(
+      controller: widget.controller,
+      focusNode: _focusNode,
+      hintText: _isFocused ? '' : widget.hintText,
+      onChanged: widget.onChanged,
+      fillColor: widget.fillColor,
+      textColor: widget.textColor,
+      keyboardType: widget.keyboardType,
+      inputFormatters: widget.inputFormatters,
+      suffixText: widget.suffixText,
+    );
+  }
+}
+
+
