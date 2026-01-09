@@ -41,6 +41,23 @@ enum SalesStatus {
   String toString() {
     return key;
   }
+
+  static List<SalesStatus> nextStatus(SalesStatus currentStatus) {
+    switch (currentStatus) {
+      case SalesStatus.pending:
+        return [SalesStatus.pending, SalesStatus.preparing, SalesStatus.cancelled];
+      case SalesStatus.preparing:
+        return [SalesStatus.preparing, SalesStatus.shipping, SalesStatus.cancelled];
+      case SalesStatus.shipping:
+        return [SalesStatus.shipping, SalesStatus.shipped];
+      default:
+        return [currentStatus];
+    }
+  }
+
+  static List<SalesStatus> outOfStockStatus(SalesStatus currentStatus) {
+    return [currentStatus, SalesStatus.cancelled];
+  }
 }
 
 extension SalesStatusExtension on SalesStatus {

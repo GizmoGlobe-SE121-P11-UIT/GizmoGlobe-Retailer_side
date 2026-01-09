@@ -343,11 +343,7 @@ class _SalesEditScreenState extends State<SalesEditScreen> {
                         ? StatusBadge(status: state.invoice.salesStatus)
                         : _buildStatusDropdown<SalesStatus>(
                             value: state.selectedSalesStatus,
-                            items: SalesStatus.values
-                                .where((status) =>
-                                    status != SalesStatus.completed &&
-                                    status != SalesStatus.received)
-                                .toList(),
+                            items: SalesStatus.nextStatus(state.invoice.salesStatus),
                             onChanged: (status) {
                               if (status != null) {
                                 context

@@ -468,11 +468,7 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
                               ? StatusBadge(status: state.invoice.salesStatus)
                               : _buildStatusDropdown<SalesStatus>(
                                   value: state.selectedSalesStatus,
-                                  items: SalesStatus.values
-                                      .where((status) =>
-                                  status != SalesStatus.completed &&
-                                      status != SalesStatus.received)
-                                      .toList(),
+                                  items: SalesStatus.nextStatus(widget.invoice.salesStatus),
                                   onChanged: (status) {
                                     if (status != null) {
                                       context
