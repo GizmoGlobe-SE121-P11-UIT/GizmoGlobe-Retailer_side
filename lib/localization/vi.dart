@@ -617,4 +617,5 @@ const Map<String, String> vi = {
   'refresh': 'Làm mới',
   'anonymous': 'Ẩn danh',
   'numberOfRamSlots': 'Số khe RAM',
+  'tryAgain': 'Vui lòng thử lại sau',
 };

@@ -227,12 +227,12 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
             ),
             const SizedBox(height: 16),
             Text(
-              'Error loading vouchers',
+              S.of(context).errorLoadingVouchers,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 8),
             Text(
-              'Please try again later',
+              S.of(context).tryAgain,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),
@@ -242,7 +242,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                   cubit.initialize();
                 }
               },
-              child: const Text('Refresh'),
+              child: Text(S.of(context).refresh),
             ),
           ],
         ),

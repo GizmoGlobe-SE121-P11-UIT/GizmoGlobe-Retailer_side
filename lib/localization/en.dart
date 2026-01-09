@@ -615,4 +615,6 @@ const Map<String, String> en = {
   'refresh': 'Refresh',
   'anonymous': 'Anonymous',
   'numberOfRamSlots': 'Number of RAM slots',
+  'tryAgain': 'Please try again later',
+
 };
