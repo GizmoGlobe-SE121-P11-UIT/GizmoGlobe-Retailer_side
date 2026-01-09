@@ -704,6 +704,7 @@ class AppLocalizations {
   String get refresh => _getTranslation('refresh');
   String get anonymous => _getTranslation('anonymous');
   String get numberOfRamSlots => _getTranslation('numberOfRamSlots');
+  String get tryAgain => _getTranslation('tryAgain');
 
   String rewardsFor(String points) =>
       _getTranslation('rewardsFor').replaceAll('{points}', points);

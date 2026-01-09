@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gizmoglobe_client/enums/invoice_related/payment_status.dart';
 import 'package:gizmoglobe_client/enums/product_related/product_status_enum.dart';
 import 'package:gizmoglobe_client/enums/voucher_related/distribution_type.dart';
+
+import '../../enums/invoice_related/sales_status.dart';
 
 class StatusBadge extends StatelessWidget {
   final dynamic status;
@@ -23,6 +26,10 @@ class StatusBadge extends StatelessWidget {
     } else if (status is DistributionType) {
       // Handle DistributionType with proper localization
       text = (status as DistributionType).getLocalizedName(context);
+    } else if (status is SalesStatus) {
+      text = (status as SalesStatus).getLocalizedName(context);
+    } else if (status is PaymentStatus) {
+      text = (status as PaymentStatus).getLocalizedName(context);
     } else {
       // Try to get localized text if the status object has getLocalizedName method
       try {
