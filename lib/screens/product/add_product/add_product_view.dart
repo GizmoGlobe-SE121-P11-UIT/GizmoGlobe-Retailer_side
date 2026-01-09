@@ -791,7 +791,7 @@ class _AddProductState extends State<AddProductScreen> {
           }, null),
           const SizedBox(height: 8),
           buildInputWidget<int>(
-            'Number of ram slots',
+            S.of(context).numberOfRamSlots,
             stickCountController,
             state.productArgument?.stickCount,
                 (value) {

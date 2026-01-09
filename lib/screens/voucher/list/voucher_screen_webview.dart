@@ -330,7 +330,7 @@ class _VoucherScreenWebViewState extends State<VoucherScreenWebView>
                                   cubit.initialize();
                                 }
                               },
-                              child: const Text('Refresh'),
+                              child: Text(S.of(context).refresh),
                             ),
                           ],
                         ),

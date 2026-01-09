@@ -701,6 +701,10 @@ class AppLocalizations {
   String get distributionRewards => _getTranslation('distributionRewards');
   String get distributionStaffIssued =>
       _getTranslation('distributionStaffIssued');
+  String get refresh => _getTranslation('refresh');
+  String get anonymous => _getTranslation('anonymous');
+  String get numberOfRamSlots => _getTranslation('numberOfRamSlots');
+
   String rewardsFor(String points) =>
       _getTranslation('rewardsFor').replaceAll('{points}', points);
 

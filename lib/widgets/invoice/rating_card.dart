@@ -54,7 +54,7 @@ class RatingCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      r.username ?? 'Anonymous',
+                      r.username ?? S.of(context).anonymous,
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ),

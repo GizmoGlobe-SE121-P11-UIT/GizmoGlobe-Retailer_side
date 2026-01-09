@@ -1283,7 +1283,8 @@ class _AddProductWebViewState extends State<AddProductWebView> {
           }, null,
           ),
           const SizedBox(height: 8),
-          buildInputWidget<int>('Number of RAM slots',
+          buildInputWidget<int>(
+            S.of(context).numberOfRamSlots,
             stickCountController,
             state.productArgument?.stickCount,
             (value) => cubit.updateProductArgument(state.productArgument!.copyWith(stickCount: value))),

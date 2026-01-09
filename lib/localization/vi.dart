@@ -614,4 +614,7 @@ const Map<String, String> vi = {
   'distributionRewards': 'Đổi điểm',
   'distributionStaffIssued': 'Nhân viên tặng',
   'rewardsFor': 'Đổi lấy {points}',
+  'refresh': 'Làm mới',
+  'anonymous': 'Ẩn danh',
+  'numberOfRamSlots': 'Số khe RAM',
 };

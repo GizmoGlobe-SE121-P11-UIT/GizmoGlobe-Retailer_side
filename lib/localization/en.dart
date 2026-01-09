@@ -612,4 +612,7 @@ const Map<String, String> en = {
   'distributionRewards': 'Rewards',
   'distributionStaffIssued': 'Staff-Issued',
   'rewardsFor': 'Rewards for {points}',
+  'refresh': 'Refresh',
+  'anonymous': 'Anonymous',
+  'numberOfRamSlots': 'Number of RAM slots',
 };
