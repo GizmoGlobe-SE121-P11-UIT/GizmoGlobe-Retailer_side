@@ -202,7 +202,6 @@ class _ProductScreenState extends State<ProductScreen>
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).colorScheme.primary,
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

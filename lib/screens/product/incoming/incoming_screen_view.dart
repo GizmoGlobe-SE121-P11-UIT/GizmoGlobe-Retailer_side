@@ -23,9 +23,9 @@ class IncomingScreen extends StatefulWidget {
   const IncomingScreen({super.key});
 
   static Widget newInstance() => BlocProvider(
-        create: (context) => IncomingScreenCubit(),
-        child: const IncomingScreen(),
-      );
+    create: (context) => IncomingScreenCubit(),
+    child: const IncomingScreen(),
+  );
 
   @override
   State<IncomingScreen> createState() => _IncomingScreenState();
@@ -38,369 +38,385 @@ class _IncomingScreenState extends State<IncomingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<IncomingScreenCubit, IncomingScreenState>(
-      builder: (context, state) {
-        return GestureDetector(
-          onTap: () {
-            if (state.selectedIndex != null) {
-              cubit.setSelectedIndex(null);
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: FieldWithIcon(
-                        controller: searchController,
-                        hintText: S.of(context).searchIncomingInvoices,
-                        fillColor: Theme.of(context).colorScheme.surface,
-                        onChanged: (value) {
-                          cubit.searchInvoices(value);
-                        },
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    GradientIconButton(
-                      icon: Icons.filter_list,
-                      iconSize: 32,
-                      onPressed: _showFilterDialog,
-                    ),
-                    if (IncomingInvoicePermissions.canAddInvoice())
-                      const SizedBox(width: 8),
-                    if (IncomingInvoicePermissions.canAddInvoice())
-                      GradientIconButton(
-                        icon: Icons.add,
-                        iconSize: 32,
-                        onPressed: () async {
-                          final successText = S.of(context).success;
-                          final invoiceAddedText =
-                              S.of(context).createIncomingInvoiceSuccess;
-                          final result =
-                              await IncomingAddScreen.showModal(context);
-                          if (result == true && mounted && kIsWeb) {
-                            Future.microtask(() {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                if (mounted) {
-                                  SnackbarService.showSuccess(
-                                    context,
-                                    successText,
-                                    invoiceAddedText,
-                                  );
-                                }
-                              });
-                            });
-                          }
-                          if (result == true && mounted) {
-                            context.read<IncomingScreenCubit>().loadInvoices();
-                          }
-                        },
-                      )
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: state.isLoading
-                      ? Center(
-                          child: CircularProgressIndicator(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Incoming Invoices',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      body: BlocBuilder<IncomingScreenCubit, IncomingScreenState>(
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () {
+              if (state.selectedIndex != null) {
+                cubit.setSelectedIndex(null);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FieldWithIcon(
+                          controller: searchController,
+                          hintText: S.of(context).searchIncomingInvoices,
+                          fillColor: Theme.of(context).colorScheme.surface,
+                          onChanged: (value) {
+                            cubit.searchInvoices(value);
+                          },
+                          prefixIcon: Icon(
+                            Icons.search,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                        )
-                      : state.invoices.isEmpty
-                          ? Center(
-                              child: Text(
-                                S.of(context).noIncomingInvoicesFound,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withValues(alpha: 0.6),
-                                ),
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: state.invoices.length,
-                              itemBuilder: (context, index) {
-                                final invoice = state.invoices[index];
-                                // final isSelected = state.selectedIndex == index;
-
-                                return GestureDetector(
-                                  onTap: () async {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (BuildContext context) {
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                        );
-                                      },
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      GradientIconButton(
+                        icon: Icons.filter_list,
+                        iconSize: 32,
+                        onPressed: _showFilterDialog,
+                      ),
+                      if (IncomingInvoicePermissions.canAddInvoice())
+                        const SizedBox(width: 8),
+                      if (IncomingInvoicePermissions.canAddInvoice())
+                        GradientIconButton(
+                          icon: Icons.add,
+                          iconSize: 32,
+                          onPressed: () async {
+                            final successText = S.of(context).success;
+                            final invoiceAddedText =
+                                S.of(context).createIncomingInvoiceSuccess;
+                            final result =
+                            await IncomingAddScreen.showModal(context);
+                            if (result == true && mounted && kIsWeb) {
+                              Future.microtask(() {
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  if (mounted) {
+                                    SnackbarService.showSuccess(
+                                      context,
+                                      successText,
+                                      invoiceAddedText,
                                     );
+                                  }
+                                });
+                              });
+                            }
+                            if (result == true && mounted) {
+                              context.read<IncomingScreenCubit>().loadInvoices();
+                            }
+                          },
+                        )
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: state.isLoading
+                        ? Center(
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    )
+                        : state.invoices.isEmpty
+                        ? Center(
+                      child: Text(
+                        S.of(context).noIncomingInvoicesFound,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.6),
+                        ),
+                      ),
+                    )
+                        : ListView.builder(
+                      itemCount: state.invoices.length,
+                      itemBuilder: (context, index) {
+                        final invoice = state.invoices[index];
+                        // final isSelected = state.selectedIndex == index;
 
-                                    try {
-                                      final detailedInvoice = await firebase
-                                          .getIncomingInvoiceWithDetails(
-                                              invoice.incomingInvoiceID!);
+                        return GestureDetector(
+                          onTap: () async {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
+                                  ),
+                                );
+                              },
+                            );
 
-                                      if (!mounted) return;
+                            try {
+                              final detailedInvoice = await firebase
+                                  .getIncomingInvoiceWithDetails(
+                                  invoice.incomingInvoiceID!);
 
-                                      Navigator.pop(context);
-                                      final successText = S.of(context).success;
-                                      final invoicePaidText = S
-                                          .of(context)
-                                          .updateIncomingInvoiceSuccess;
-                                      final detailResult =
-                                          await IncomingDetailScreen.showModal(
+                              if (!mounted) return;
+
+                              Navigator.pop(context);
+                              final successText = S.of(context).success;
+                              final invoicePaidText = S
+                                  .of(context)
+                                  .updateIncomingInvoiceSuccess;
+                              final detailResult =
+                              await IncomingDetailScreen.showModal(
+                                context,
+                                detailedInvoice,
+                              );
+                              if (detailResult == true &&
+                                  mounted &&
+                                  kIsWeb) {
+                                Future.microtask(() {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    if (mounted) {
+                                      SnackbarService.showSuccess(
                                         context,
-                                        detailedInvoice,
-                                      );
-                                      if (detailResult == true &&
-                                          mounted &&
-                                          kIsWeb) {
-                                        Future.microtask(() {
-                                          WidgetsBinding.instance
-                                              .addPostFrameCallback((_) {
-                                            if (mounted) {
-                                              SnackbarService.showSuccess(
-                                                context,
-                                                successText,
-                                                invoicePaidText,
-                                              );
-                                            }
-                                          });
-                                        });
-                                      }
-                                      if (detailResult == true && mounted) {
-                                        context
-                                            .read<IncomingScreenCubit>()
-                                            .loadInvoices();
-                                      }
-                                    } catch (e) {
-                                      Navigator.pop(context);
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => InformationDialog(
-                                          title: S.of(context).errorOccurred,
-                                          content:
-                                              '${S.of(context).errorLoadingInvoiceDetails('')}$e',
-                                          buttonText: 'OK',
-                                        ),
+                                        successText,
+                                        invoicePaidText,
                                       );
                                     }
-                                  },
-                                  onLongPress: kIsWeb
-                                      ? null
-                                      : () {
-                                          if (!mounted) return;
-                                          cubit.setSelectedIndex(index);
-                                          showDialog(
-                                            context: context,
-                                            barrierDismissible: true,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                contentPadding: EdgeInsets.zero,
-                                                content: Container(
-                                                  width: 120,
-                                                  decoration: BoxDecoration(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .surface,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                  ),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      ListTile(
-                                                        dense: true,
-                                                        leading: Icon(
-                                                          Icons
-                                                              .visibility_outlined,
-                                                          size: 20,
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .onSurface,
-                                                        ),
-                                                        title: Text(
-                                                          S.of(context).view,
-                                                          style: TextStyle(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .onSurface,
-                                                          ),
-                                                        ),
-                                                        onTap: () =>
-                                                            _handleViewInvoice(
-                                                                context,
-                                                                invoice),
-                                                      ),
-                                                      if (IncomingInvoicePermissions
-                                                          .canEditPaymentStatus(
-                                                              invoice))
-                                                        ListTile(
-                                                          dense: true,
-                                                          leading: Icon(
-                                                            Icons.edit_outlined,
-                                                            size: 20,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .onSurface,
-                                                          ),
-                                                          title: Text(
-                                                            S
-                                                                .of(context)
-                                                                .editPayment,
-                                                            style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .colorScheme
-                                                                  .onSurface,
-                                                            ),
-                                                          ),
-                                                          onTap: () =>
-                                                              _handleEditInvoice(
-                                                                  context,
-                                                                  invoice),
-                                                        ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ).then((_) {
-                                            cubit.setSelectedIndex(null);
-                                          });
-                                        },
-                                  child: AnimatedOpacity(
-                                    duration: const Duration(milliseconds: 200),
-                                    opacity: state.selectedIndex == null ||
-                                            state.selectedIndex == index
-                                        ? 1.0
-                                        : 0.3,
-                                    child: Container(
-                                      margin: const EdgeInsets.only(bottom: 12),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .surface,
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          color: state.selectedIndex == index
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .primary
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .outline
-                                                  .withValues(alpha: 0.2),
-                                          width: state.selectedIndex == index
-                                              ? 2
-                                              : 1,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black
-                                                .withValues(alpha: 0.08),
-                                            blurRadius: 8,
-                                            offset: const Offset(0, 2),
+                                  });
+                                });
+                              }
+                              if (detailResult == true && mounted) {
+                                context
+                                    .read<IncomingScreenCubit>()
+                                    .loadInvoices();
+                              }
+                            } catch (e) {
+                              Navigator.pop(context);
+                              showDialog(
+                                context: context,
+                                builder: (context) => InformationDialog(
+                                  title: S.of(context).errorOccurred,
+                                  content:
+                                  '${S.of(context).errorLoadingInvoiceDetails('')}$e',
+                                  buttonText: 'OK',
+                                ),
+                              );
+                            }
+                          },
+                          onLongPress: kIsWeb
+                              ? null
+                              : () {
+                            if (!mounted) return;
+                            cubit.setSelectedIndex(index);
+                            showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor:
+                                  Colors.transparent,
+                                  contentPadding: EdgeInsets.zero,
+                                  content: Container(
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .surface,
+                                      borderRadius:
+                                      BorderRadius.circular(
+                                          8),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize:
+                                      MainAxisSize.min,
+                                      children: [
+                                        ListTile(
+                                          dense: true,
+                                          leading: Icon(
+                                            Icons
+                                                .visibility_outlined,
+                                            size: 20,
+                                            color:
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
                                           ),
-                                        ],
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            // Row 1: Invoice ID
-                                            Text(
-                                              '${S.of(context).invoiceDetails} #${invoice.incomingInvoiceID}',
+                                          title: Text(
+                                            S.of(context).view,
+                                            style: TextStyle(
+                                              color: Theme.of(
+                                                  context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                            ),
+                                          ),
+                                          onTap: () =>
+                                              _handleViewInvoice(
+                                                  context,
+                                                  invoice),
+                                        ),
+                                        if (IncomingInvoicePermissions
+                                            .canEditPaymentStatus(
+                                            invoice))
+                                          ListTile(
+                                            dense: true,
+                                            leading: Icon(
+                                              Icons.edit_outlined,
+                                              size: 20,
+                                              color: Theme.of(
+                                                  context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                            ),
+                                            title: Text(
+                                              S
+                                                  .of(context)
+                                                  .editPayment,
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                color: Theme.of(context)
+                                                color: Theme.of(
+                                                    context)
                                                     .colorScheme
                                                     .onSurface,
                                               ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            const SizedBox(height: 12),
-
-                                            // Row 2: Price
-                                            Text(
-                                              Helper.toCurrencyFormat(
-                                                  invoice.totalPrice),
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .error,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 12),
-
-                                            // Row 3: Status and Date
-                                            Wrap(
-                                              spacing: 8,
-                                              runSpacing: 8,
-                                              children: [
-                                                StatusBadge(
-                                                    status: invoice.status),
-                                                Text(
-                                                  DateFormat('dd/MM/yyyy')
-                                                      .format(invoice.date),
-                                                  style: TextStyle(
-                                                    fontSize: 13,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onSurface
-                                                        .withValues(alpha: 0.6),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                            onTap: () =>
+                                                _handleEditInvoice(
+                                                    context,
+                                                    invoice),
+                                          ),
+                                      ],
                                     ),
                                   ),
                                 );
                               },
+                            ).then((_) {
+                              cubit.setSelectedIndex(null);
+                            });
+                          },
+                          child: AnimatedOpacity(
+                            duration: const Duration(milliseconds: 200),
+                            opacity: state.selectedIndex == null ||
+                                state.selectedIndex == index
+                                ? 1.0
+                                : 0.3,
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .surface,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: state.selectedIndex == index
+                                      ? Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      : Theme.of(context)
+                                      .colorScheme
+                                      .outline
+                                      .withValues(alpha: 0.2),
+                                  width: state.selectedIndex == index
+                                      ? 2
+                                      : 1,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black
+                                        .withValues(alpha: 0.08),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    // Row 1: Invoice ID
+                                    Text(
+                                      '${S.of(context).invoiceDetails} #${invoice.incomingInvoiceID}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 12),
+
+                                    // Row 2: Price
+                                    Text(
+                                      Helper.toCurrencyFormat(
+                                          invoice.totalPrice),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .error,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+
+                                    // Row 3: Status and Date
+                                    Wrap(
+                                      spacing: 8,
+                                      runSpacing: 8,
+                                      children: [
+                                        StatusBadge(
+                                            status: invoice.status),
+                                        Text(
+                                          DateFormat('dd/MM/yyyy')
+                                              .format(invoice.date),
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                                .withValues(alpha: 0.6),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                ),
-              ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
   Future<void> _handleViewInvoice(
       BuildContext contextDialog, IncomingInvoice invoice) async {
-    // Đóng dialog menu trước
+    // ... existing _handleViewInvoice code ...
+    // Note: Copied logic remains the same, implied from original file context
+    // Excerpt:
     Navigator.pop(contextDialog);
     cubit.setSelectedIndex(null);
 
-    // Hiển thị loading trong context chính
     if (!mounted) return;
     BuildContext dialogContext = context;
     showDialog(
@@ -420,18 +436,15 @@ class _IncomingScreenState extends State<IncomingScreen> {
           .getIncomingInvoiceWithDetails(invoice.incomingInvoiceID!);
 
       if (!mounted) return;
-      // Đóng dialog loading
       Navigator.of(dialogContext).pop();
 
       if (!mounted) return;
-      // Navigate to detail screen
       await IncomingDetailScreen.showModal(
         dialogContext,
         detailedInvoice,
       );
     } catch (e) {
       if (!mounted) return;
-      // Đóng dialog loading
       Navigator.of(dialogContext).pop();
 
       if (!mounted) return;
@@ -448,7 +461,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
 
   Future<void> _handleEditInvoice(
       BuildContext contextDialog, IncomingInvoice invoice) async {
-    // Chỉ cho phép chỉnh sửa từ unpaid sang paid
+    // ... existing _handleEditInvoice code ...
     if (invoice.status != PaymentStatus.unpaid) {
       showDialog(
         context: context,
@@ -465,7 +478,6 @@ class _IncomingScreenState extends State<IncomingScreen> {
     Navigator.pop(contextDialog);
     cubit.setSelectedIndex(null);
 
-    // Hiển thị dialog xác nhận
     if (!mounted) return;
     final confirmed = await showDialog<bool>(
       context: context,
@@ -514,6 +526,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
   }
 
   void _showFilterDialog() {
+    // ... existing _showFilterDialog code ...
     showDialog(
       context: context,
       builder: (BuildContext context) {
