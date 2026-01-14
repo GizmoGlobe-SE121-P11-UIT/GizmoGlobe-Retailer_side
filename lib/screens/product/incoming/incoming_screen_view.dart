@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/data/firebase/firebase.dart';
-import 'package:gizmoglobe_client/screens/invoice/incoming/permissions/incoming_invoice_permissions.dart';
+import 'package:gizmoglobe_client/screens/product/incoming/permissions/incoming_invoice_permissions.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
 import 'package:gizmoglobe_client/widgets/general/gradient_icon_button.dart';
 import 'package:intl/intl.dart';

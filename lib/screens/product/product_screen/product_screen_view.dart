@@ -5,6 +5,7 @@ import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_
 import 'package:gizmoglobe_client/screens/product/product_screen/product_screen_state.dart';
 import 'package:gizmoglobe_client/screens/product/product_screen/product_tab/product_tab_view.dart';
 import 'package:gizmoglobe_client/widgets/general/field_with_icon.dart';
+import 'package:gizmoglobe_client/screens/product/incoming/incoming_screen_view.dart';
 
 import '../../../data/database/database.dart';
 import '../../../enums/product_related/category_enum.dart';
@@ -23,14 +24,14 @@ class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key, this.initialProducts, this.initialTabIndex});
 
   static Widget newInstance({List<Product>? initialProducts}) => BlocProvider(
-        create: (context) => ProductScreenCubit(),
-        child: ProductScreen(initialProducts: initialProducts),
-      );
+    create: (context) => ProductScreenCubit(),
+    child: ProductScreen(initialProducts: initialProducts),
+  );
 
   static Widget newInstanceWithTab({int? initialTabIndex}) => BlocProvider(
-        create: (context) => ProductScreenCubit(),
-        child: ProductScreen(initialTabIndex: initialTabIndex),
-      );
+    create: (context) => ProductScreenCubit(),
+    child: ProductScreen(initialTabIndex: initialTabIndex),
+  );
 
   static Widget newInstanceWithTabKey({int? initialTabIndex, Key? key}) =>
       BlocProvider(
@@ -195,10 +196,21 @@ class _ProductScreenState extends State<ProductScreen>
               tabs: [
                 Tab(text: S.of(context).all),
                 ...CategoryEnum.getValues().map((category) => Tab(
-                      text: category.getLocalizedDescription(context),
-                    )),
+                  text: category.getLocalizedDescription(context),
+                )),
               ],
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => IncomingScreen.newInstance(),
+                ),
+              );
+            },
+            child: const Icon(Icons.move_to_inbox),
           ),
           body: SafeArea(
             child: BlocListener<ProductScreenCubit, ProductScreenState>(
@@ -218,8 +230,8 @@ class _ProductScreenState extends State<ProductScreen>
                       duration: Duration.zero);
                 }
               },
-            child: BlocBuilder<ProductScreenCubit, ProductScreenState>(
-              builder: (context, state) {
+              child: BlocBuilder<ProductScreenCubit, ProductScreenState>(
+                builder: (context, state) {
                   // Ensure pageController is positioned correctly
                   if (pageController.hasClients) {
                     final currentPage = pageController.page?.round();
@@ -236,28 +248,28 @@ class _ProductScreenState extends State<ProductScreen>
                       PageView(
                         controller: pageController,
                         physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    ProductTab.newInstance(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newRam(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newCpu(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newPsu(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newGpu(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newDrive(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
-                    ProductTab.newMainboard(
-                        searchText: state.searchText,
-                        initialProducts: state.initialProducts),
+                        children: [
+                          ProductTab.newInstance(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newRam(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newCpu(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newPsu(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newGpu(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newDrive(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
+                          ProductTab.newMainboard(
+                              searchText: state.searchText,
+                              initialProducts: state.initialProducts),
                         ],
                       ),
                       // Show loading indicator overlay during tab change
@@ -276,7 +288,7 @@ class _ProductScreenState extends State<ProductScreen>
                                     padding: const EdgeInsets.all(24),
                                     child: CircularProgressIndicator(
                                       color:
-                                          Theme.of(context).colorScheme.primary,
+                                      Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ),
@@ -284,9 +296,9 @@ class _ProductScreenState extends State<ProductScreen>
                             ),
                           ),
                         ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
               ),
             ),
           ),

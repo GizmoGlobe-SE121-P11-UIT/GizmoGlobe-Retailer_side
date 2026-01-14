@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
-import 'package:gizmoglobe_client/screens/invoice/incoming/incoming_screen_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_state.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_screen_view.dart';
@@ -118,9 +117,6 @@ class _InvoiceScreenState extends State<InvoiceScreen>
                           tabName = 'sales';
                           break;
                         case 1:
-                          tabName = 'incoming';
-                          break;
-                        case 2:
                           tabName = 'warranty';
                           break;
                         default:
@@ -140,7 +136,6 @@ class _InvoiceScreenState extends State<InvoiceScreen>
                   dividerColor: Colors.transparent,
                   tabs: [
                     Tab(text: S.of(context).sales),
-                    Tab(text: S.of(context).incoming),
                     Tab(text: S.of(context).warranty),
                   ],
                 ),
@@ -152,7 +147,6 @@ class _InvoiceScreenState extends State<InvoiceScreen>
                       index: state.selectedTabIndex,
                       children: [
                         SalesScreen.newInstance(),
-                        IncomingScreen.newInstance(),
                         WarrantyScreen.newInstance(),
                       ],
                     ),
