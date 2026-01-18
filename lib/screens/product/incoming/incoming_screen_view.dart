@@ -23,7 +23,7 @@ class IncomingScreen extends StatefulWidget {
   const IncomingScreen({super.key});
 
   static Widget newInstance() => BlocProvider(
-    create: (context) => IncomingScreenCubit(),
+    create: (context) => IncomingScreenCubit()..loadInvoices(),
     child: const IncomingScreen(),
   );
 
@@ -41,7 +41,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Incoming Invoices',
+          'Restock', // Changed from 'Incoming Invoices'
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
           ),
@@ -69,7 +69,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       Expanded(
                         child: FieldWithIcon(
                           controller: searchController,
-                          hintText: S.of(context).searchIncomingInvoices,
+                          hintText: 'Search restock invoices...', // Updated hint text
                           fillColor: Theme.of(context).colorScheme.surface,
                           onChanged: (value) {
                             cubit.searchInvoices(value);
@@ -100,7 +100,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                             await IncomingAddScreen.showModal(context);
                             if (result == true && mounted && kIsWeb) {
                               Future.microtask(() {
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
                                   if (mounted) {
                                     SnackbarService.showSuccess(
                                       context,
@@ -112,7 +113,9 @@ class _IncomingScreenState extends State<IncomingScreen> {
                               });
                             }
                             if (result == true && mounted) {
-                              context.read<IncomingScreenCubit>().loadInvoices();
+                              context
+                                  .read<IncomingScreenCubit>()
+                                  .loadInvoices();
                             }
                           },
                         )
@@ -142,8 +145,6 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       itemCount: state.invoices.length,
                       itemBuilder: (context, index) {
                         final invoice = state.invoices[index];
-                        // final isSelected = state.selectedIndex == index;
-
                         return GestureDetector(
                           onTap: () async {
                             showDialog(
@@ -168,12 +169,14 @@ class _IncomingScreenState extends State<IncomingScreen> {
                               if (!mounted) return;
 
                               Navigator.pop(context);
-                              final successText = S.of(context).success;
+                              final successText =
+                                  S.of(context).success;
                               final invoicePaidText = S
                                   .of(context)
                                   .updateIncomingInvoiceSuccess;
                               final detailResult =
-                              await IncomingDetailScreen.showModal(
+                              await IncomingDetailScreen
+                                  .showModal(
                                 context,
                                 detailedInvoice,
                               );
@@ -202,12 +205,13 @@ class _IncomingScreenState extends State<IncomingScreen> {
                               Navigator.pop(context);
                               showDialog(
                                 context: context,
-                                builder: (context) => InformationDialog(
-                                  title: S.of(context).errorOccurred,
-                                  content:
-                                  '${S.of(context).errorLoadingInvoiceDetails('')}$e',
-                                  buttonText: 'OK',
-                                ),
+                                builder: (context) =>
+                                    InformationDialog(
+                                      title: S.of(context).errorOccurred,
+                                      content:
+                                      '${S.of(context).errorLoadingInvoiceDetails('')}$e',
+                                      buttonText: 'OK',
+                                    ),
                               );
                             }
                           },
@@ -223,7 +227,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                 return AlertDialog(
                                   backgroundColor:
                                   Colors.transparent,
-                                  contentPadding: EdgeInsets.zero,
+                                  contentPadding:
+                                  EdgeInsets.zero,
                                   content: Container(
                                     width: 120,
                                     decoration: BoxDecoration(
@@ -244,8 +249,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                             Icons
                                                 .visibility_outlined,
                                             size: 20,
-                                            color:
-                                            Theme.of(context)
+                                            color: Theme.of(
+                                                context)
                                                 .colorScheme
                                                 .onSurface,
                                           ),
@@ -269,7 +274,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                           ListTile(
                                             dense: true,
                                             leading: Icon(
-                                              Icons.edit_outlined,
+                                              Icons
+                                                  .edit_outlined,
                                               size: 20,
                                               color: Theme.of(
                                                   context)
@@ -302,18 +308,21 @@ class _IncomingScreenState extends State<IncomingScreen> {
                             });
                           },
                           child: AnimatedOpacity(
-                            duration: const Duration(milliseconds: 200),
+                            duration:
+                            const Duration(milliseconds: 200),
                             opacity: state.selectedIndex == null ||
                                 state.selectedIndex == index
                                 ? 1.0
                                 : 0.3,
                             child: Container(
-                              margin: const EdgeInsets.only(bottom: 12),
+                              margin:
+                              const EdgeInsets.only(bottom: 12),
                               decoration: BoxDecoration(
                                 color: Theme.of(context)
                                     .colorScheme
                                     .surface,
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius:
+                                BorderRadius.circular(12),
                                 border: Border.all(
                                   color: state.selectedIndex == index
                                       ? Theme.of(context)
@@ -386,7 +395,8 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .onSurface
-                                                .withValues(alpha: 0.6),
+                                                .withValues(
+                                                alpha: 0.6),
                                           ),
                                         ),
                                       ],
@@ -411,9 +421,6 @@ class _IncomingScreenState extends State<IncomingScreen> {
 
   Future<void> _handleViewInvoice(
       BuildContext contextDialog, IncomingInvoice invoice) async {
-    // ... existing _handleViewInvoice code ...
-    // Note: Copied logic remains the same, implied from original file context
-    // Excerpt:
     Navigator.pop(contextDialog);
     cubit.setSelectedIndex(null);
 
@@ -461,7 +468,6 @@ class _IncomingScreenState extends State<IncomingScreen> {
 
   Future<void> _handleEditInvoice(
       BuildContext contextDialog, IncomingInvoice invoice) async {
-    // ... existing _handleEditInvoice code ...
     if (invoice.status != PaymentStatus.unpaid) {
       showDialog(
         context: context,
@@ -526,7 +532,6 @@ class _IncomingScreenState extends State<IncomingScreen> {
   }
 
   void _showFilterDialog() {
-    // ... existing _showFilterDialog code ...
     showDialog(
       context: context,
       builder: (BuildContext context) {
