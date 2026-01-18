@@ -20,6 +20,8 @@ jobs:
           cache: true
       - name: Get Flutter dependencies
         run: flutter pub get
+      - name: Create dummy .env file
+        run: touch .env
       - name: Build Flutter web with compile-time config
         run: flutter build web --release --dart-define-from-file=.env.web
       - uses: FirebaseExtended/action-hosting-deploy@v0
