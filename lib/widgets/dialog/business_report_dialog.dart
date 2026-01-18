@@ -301,10 +301,14 @@ class _BusinessReportDialogState extends State<BusinessReportDialog> {
   @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('dd/MM/yyyy');
+    final screenWidth = MediaQuery.of(context).size.width;
+    final dialogWidth = screenWidth > 750 ? 700.0 : screenWidth * 0.9;
 
     return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Container(
-        width: 500,
+        width: dialogWidth,
+        constraints: const BoxConstraints(maxWidth: 700),
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
