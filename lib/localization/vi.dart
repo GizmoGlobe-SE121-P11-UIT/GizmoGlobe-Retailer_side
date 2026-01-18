@@ -12,7 +12,7 @@ const Map<String, String> vi = {
   'daily': 'Ngày',
   'last12Months': '12 tháng qua',
   'last3Months': '3 tháng qua',
-  'newIncomingInvoice': 'Tạo hóa đơn nhập mới',
+  'newIncomingInvoice': 'Thêm hàng',
   'selectManufacturer': 'Chọn nhà sản xuất',
   'addProduct': 'Thêm sản phẩm',
   'invoiceDetails': 'Hóa đơn',

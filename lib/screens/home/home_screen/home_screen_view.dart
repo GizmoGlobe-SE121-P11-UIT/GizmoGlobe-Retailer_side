@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
 import 'package:gizmoglobe_client/screens/chat/list/chat_list_screen_view.dart';
 import 'package:gizmoglobe_client/enums/product_related/category_enum.dart';
+import 'package:gizmoglobe_client/widgets/dialog/business_report_dialog.dart';
 
 import 'home_screen_cubit.dart';
 import 'home_screen_webview.dart';
@@ -32,6 +33,10 @@ class _HomeScreen extends State<HomeScreen> {
   bool _isMonthlyMode = true; // Toggle between monthly and daily view
   DateTime _selectedMonth = DateTime.now(); // Selected month for daily view
   int _touchedPieIndex = -1; // For pie chart interaction
+
+  Future<void> _handleGenerateReport() async {
+    await BusinessReportDialog.show(context, cubit);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,33 +113,45 @@ class _HomeScreen extends State<HomeScreen> {
                     borderRadius: const BorderRadius.vertical(
                         bottom: Radius.circular(32)),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      GradientText(text: S.of(context).welcomeBack),
-                      if (state.isLoadingUsername)
-                        Container(
-                          height: 32,
-                          width: 150,
-                          margin: const EdgeInsets.only(top: 4),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHighest,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        )
-                      else
-                        Text(
-                          state.username,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.secondary,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GradientText(text: S.of(context).welcomeBack),
+                            if (state.isLoadingUsername)
+                              Container(
+                                height: 32,
+                                width: 150,
+                                margin: const EdgeInsets.only(top: 4),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerHighest,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              )
+                            else
+                              Text(
+                                state.username,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.secondary,
+                                    ),
                               ),
+                          ],
                         ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.assessment),
+                        tooltip: S.of(context).generateBusinessReport,
+                        onPressed: _handleGenerateReport,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ],
                   ),
                 ),

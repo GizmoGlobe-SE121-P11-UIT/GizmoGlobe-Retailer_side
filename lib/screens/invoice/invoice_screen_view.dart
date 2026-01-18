@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
-import 'package:gizmoglobe_client/screens/invoice/incoming/incoming_screen_view.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_cubit.dart';
 import 'package:gizmoglobe_client/screens/invoice/invoice_screen_state.dart';
 import 'package:gizmoglobe_client/screens/invoice/sales/sales_screen_view.dart';
@@ -19,15 +18,15 @@ class InvoiceScreen extends StatefulWidget {
   const InvoiceScreen({super.key, this.showFullLayout = false});
 
   static Widget newInstance() => BlocProvider(
-        create: (context) => InvoiceScreenCubit(),
-        child: const InvoiceScreen(showFullLayout: false),
-      );
+    create: (context) => InvoiceScreenCubit(),
+    child: const InvoiceScreen(showFullLayout: false),
+  );
 
   static Widget newInstanceWithTab({int? initialTabIndex}) => BlocProvider(
-        create: (context) =>
-            InvoiceScreenCubit(initialTabIndex: initialTabIndex),
-        child: InvoiceScreenWithInitialTab(initialTabIndex: initialTabIndex),
-      );
+    create: (context) =>
+        InvoiceScreenCubit(initialTabIndex: initialTabIndex),
+    child: InvoiceScreenWithInitialTab(initialTabIndex: initialTabIndex),
+  );
 
   @override
   State<InvoiceScreen> createState() => _InvoiceScreenState();
@@ -40,15 +39,24 @@ class _InvoiceScreenState extends State<InvoiceScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    // Only 2 tabs now: Sales, Warranty
+    _tabController = TabController(length: 2, vsync: this);
 
     // Sync TabController with cubit state after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         final cubit = context.read<InvoiceScreenCubit>();
-        if (_tabController.index != cubit.state.selectedTabIndex) {
-          _tabController.animateTo(cubit.state.selectedTabIndex,
-              duration: Duration.zero);
+        int targetIndex = cubit.state.selectedTabIndex;
+
+        // FIX: Check if the stored index is valid for the current number of tabs.
+        // If the Cubit remembers index 2 (Incoming) but we only have 0 and 1, reset to 0.
+        if (targetIndex >= _tabController.length) {
+          targetIndex = 0;
+          cubit.changeTab(targetIndex);
+        }
+
+        if (_tabController.index != targetIndex) {
+          _tabController.animateTo(targetIndex, duration: Duration.zero);
         }
       }
     });
@@ -64,10 +72,12 @@ class _InvoiceScreenState extends State<InvoiceScreen>
   Widget build(BuildContext context) {
     return BlocListener<InvoiceScreenCubit, InvoiceScreenState>(
       listener: (context, state) {
-        // Sync TabController with state
-        if (_tabController.index != state.selectedTabIndex) {
-          _tabController.animateTo(state.selectedTabIndex,
-              duration: Duration.zero);
+        // FIX: Add boundary check before animating to prevent RangeError
+        if (state.selectedTabIndex < _tabController.length) {
+          if (_tabController.index != state.selectedTabIndex) {
+            _tabController.animateTo(state.selectedTabIndex,
+                duration: Duration.zero);
+          }
         }
       },
       child: BlocBuilder<InvoiceScreenCubit, InvoiceScreenState>(
@@ -79,24 +89,24 @@ class _InvoiceScreenState extends State<InvoiceScreen>
             child: Scaffold(
               floatingActionButton: state.selectedTabIndex == 0
                   ? FloatingActionButton(
-                      onPressed: () {
-                        if (kIsWeb) {
-                          // Show modal on web
-                          showDialog(
-                            context: context,
-                            builder: (_) => RatingReplyWebView.newInstance(),
-                          );
-                        } else {
-                          // Navigate to screen on mobile
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => RatingReplyView.newInstance()),
-                          );
-                        }
-                      },
-                      tooltip: 'Open ratings',
-                      child: const Icon(Icons.rate_review),
-                    )
+                onPressed: () {
+                  if (kIsWeb) {
+                    // Show modal on web
+                    showDialog(
+                      context: context,
+                      builder: (_) => RatingReplyWebView.newInstance(),
+                    );
+                  } else {
+                    // Navigate to screen on mobile
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (_) => RatingReplyView.newInstance()),
+                    );
+                  }
+                },
+                tooltip: 'Open ratings',
+                child: const Icon(Icons.rate_review),
+              )
                   : null,
               appBar: AppBar(
                 toolbarHeight: 0,
@@ -118,9 +128,6 @@ class _InvoiceScreenState extends State<InvoiceScreen>
                           tabName = 'sales';
                           break;
                         case 1:
-                          tabName = 'incoming';
-                          break;
-                        case 2:
                           tabName = 'warranty';
                           break;
                         default:
@@ -140,7 +147,6 @@ class _InvoiceScreenState extends State<InvoiceScreen>
                   dividerColor: Colors.transparent,
                   tabs: [
                     Tab(text: S.of(context).sales),
-                    Tab(text: S.of(context).incoming),
                     Tab(text: S.of(context).warranty),
                   ],
                 ),
@@ -148,11 +154,13 @@ class _InvoiceScreenState extends State<InvoiceScreen>
               body: SafeArea(
                 child: Stack(
                   children: [
+                    // FIX: Ensure IndexedStack index is valid even if Cubit is out of sync momentarily
                     IndexedStack(
-                      index: state.selectedTabIndex,
+                      index: state.selectedTabIndex >= 2
+                          ? 0
+                          : state.selectedTabIndex,
                       children: [
                         SalesScreen.newInstance(),
-                        IncomingScreen.newInstance(),
                         WarrantyScreen.newInstance(),
                       ],
                     ),
@@ -172,7 +180,7 @@ class _InvoiceScreenState extends State<InvoiceScreen>
                                   padding: const EdgeInsets.all(24),
                                   child: CircularProgressIndicator(
                                     color:
-                                        Theme.of(context).colorScheme.primary,
+                                    Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
@@ -211,7 +219,7 @@ class _InvoiceScreenState extends State<InvoiceScreen>
                     child: Row(
                       children: [
                         WebSidebarModes(
-                          currentIndex: 2, // Invoice index
+                          currentIndex: 1, // Invoice tab default index
                           onItemSelected: (value) {
                             // Navigation is handled inside WebSidebarModes to avoid duplicates
                           },
@@ -251,6 +259,9 @@ class InvoiceScreenWithInitialTab extends StatefulWidget {
 
 class _InvoiceScreenWithInitialTabState
     extends State<InvoiceScreenWithInitialTab> {
+  // Hardcoded tab count for InvoiceScreen
+  final int _tabCount = 2;
+
   @override
   void initState() {
     super.initState();
@@ -259,10 +270,13 @@ class _InvoiceScreenWithInitialTabState
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           final cubit = context.read<InvoiceScreenCubit>();
-          // Don't update if already changing tabs
-          if (!cubit.state.isChangingTab &&
-              cubit.state.selectedTabIndex != widget.initialTabIndex) {
-            cubit.changeTab(widget.initialTabIndex!);
+          final idx = widget.initialTabIndex!;
+          // FIX: Bounds check before requesting tab change
+          if (idx >= 0 && idx < _tabCount) {
+            if (!cubit.state.isChangingTab &&
+                cubit.state.selectedTabIndex != idx) {
+              cubit.changeTab(idx);
+            }
           }
         }
       });
@@ -273,16 +287,18 @@ class _InvoiceScreenWithInitialTabState
   void didUpdateWidget(InvoiceScreenWithInitialTab oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Update tab when initialTabIndex changes (e.g., from URL change)
-    // Only update if not already changing tabs to prevent loops
     if (oldWidget.initialTabIndex != widget.initialTabIndex &&
         widget.initialTabIndex != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           final cubit = context.read<InvoiceScreenCubit>();
-          // Don't update if already changing tabs
-          if (!cubit.state.isChangingTab &&
-              cubit.state.selectedTabIndex != widget.initialTabIndex) {
-            cubit.changeTab(widget.initialTabIndex!);
+          final idx = widget.initialTabIndex!;
+          // FIX: Bounds check before requesting tab change
+          if (idx >= 0 && idx < _tabCount) {
+            if (!cubit.state.isChangingTab &&
+                cubit.state.selectedTabIndex != idx) {
+              cubit.changeTab(idx);
+            }
           }
         }
       });

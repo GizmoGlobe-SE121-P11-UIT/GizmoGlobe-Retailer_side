@@ -12,7 +12,7 @@ const Map<String, String> en = {
   'daily': 'Daily',
   'last12Months': 'Last 12 months',
   'last3Months': 'Last 3 months',
-  'newIncomingInvoice': 'New Incoming Invoice',
+  'newIncomingInvoice': 'Restock',
   'selectManufacturer': 'Select Manufacturer',
   'addProduct': 'Add Product',
   'invoiceDetails': 'Invoice Details',
