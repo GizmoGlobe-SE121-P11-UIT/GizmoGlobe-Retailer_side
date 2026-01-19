@@ -21,10 +21,8 @@ class RamSpec {
   }
 
   factory RamSpec.fromJson(Map<String, dynamic> json) => RamSpec(
-        type: RAMType.values.firstWhere(
-            (e) => e.toString() == 'RAMType.${json['type']?.toString() ?? ''}',
-            orElse: () => RAMType.unknown),
-        slots: (json['slots'] is num)
+    type: RAMTypeExtension.fromName(json['type']?.toString() ?? ''),
+    slots: (json['slots'] is num)
             ? (json['slots'] as num).toInt()
             : int.tryParse(json['slots']?.toString() ?? '') ?? 0,
         maxSingleDimmGb: (json['maxSingleDimmGb'] is num)
@@ -57,7 +55,7 @@ class RamSpecControllers {
   })  : typeController = TextEditingController(text: type.toString()),
         slotsController = TextEditingController(text: slots.toString()),
         maxSingleDimmGbController =
-            TextEditingController(text: maxSingleDimmGb.toString());
+        TextEditingController(text: maxSingleDimmGb.toString());
 
   void dispose() {
     typeController.dispose();
