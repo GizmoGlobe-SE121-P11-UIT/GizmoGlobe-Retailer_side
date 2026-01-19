@@ -70,14 +70,22 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
       if (_isClosed || isClosed) return;
 
       try {
-        final List<Chat> allAdminMessages = [];
+        // Create a map to store conversations per user
+        final Map<String, List<Chat>> conversations = {};
+        final Set<String> allUserIds = {};
+
+        // Process each user's chat document
         for (var userDoc in snapshot.docs) {
-          // final userId = userDoc.id;
+          final userId = userDoc.id;
           final data = userDoc.data();
           final messages = (data['messages'] as List<dynamic>?) ?? [];
+
+          // Get all messages involving admin (both sent and received)
           final adminMessages = messages
               .where((msg) =>
-                  msg['receiverId'] == 'admin' && msg['isAIMode'] == false)
+                  (msg['receiverId'] == 'admin' ||
+                      msg['senderId'] == 'admin') &&
+                  msg['isAIMode'] == false)
               .map((msg) {
             final map = msg as Map<String, dynamic>;
             if (map['timestamp'] is Timestamp) {
@@ -88,37 +96,26 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
             }
             return Chat.fromMap(map);
           }).toList();
-          allAdminMessages.addAll(adminMessages);
+
+          // If this user has any admin messages, create a conversation for them
+          if (adminMessages.isNotEmpty) {
+            conversations[userId] = adminMessages;
+            allUserIds.add(userId);
+          }
         }
-
-        // Filter messages for current user
-        final userAdminMessages = allAdminMessages
-            .where((msg) =>
-                (msg.receiverId == 'admin') || (msg.senderId == 'admin'))
-            .toList();
-
-        // Get all unique userIds (excluding admin)
-        final userIds = userAdminMessages
-            .map((chat) =>
-                chat.senderId == 'admin' ? chat.receiverId : chat.senderId)
-            .where((id) => id != 'admin')
-            .toSet();
 
         // Fetch usernames for all userIds
         final Map<String, String> userIdToUsername = {};
-        for (final id in userIds) {
+        for (final id in allUserIds) {
           userIdToUsername[id] = await _getUsernameFromUserId(id);
         }
         userIdToUsername['admin'] = 'Admin';
 
-        // Create conversations map
-        final conversations = <String, List<Chat>>{
-          'admin': userAdminMessages,
-        };
         // Sort messages in each conversation by timestamp ascending
         conversations.forEach((key, value) {
           value.sort((a, b) => a.timestamp.compareTo(b.timestamp));
         });
+
         // Sort conversations by last message timestamp (descending)
         final sortedConversations = Map.fromEntries(
           conversations.entries.toList()
@@ -132,6 +129,7 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
               return bLastMessage.compareTo(aLastMessage);
             }),
         );
+
         _safeEmit(state.copyWith(
           isLoading: false,
           conversations: sortedConversations,
@@ -160,23 +158,26 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
     try {
       final chat = Chat(
         messageId: DateTime.now().millisecondsSinceEpoch.toString(),
-        senderId: state.currentUserId,
+        senderId: 'admin',
         receiverId: receiverId,
         content: content,
         timestamp: DateTime.now(),
         isAIMode: false,
       );
 
-      // Send message to admin
-      await _firebase.sendAdminMessage(state.currentUserId, chat);
+      // Send message from admin to the user
+      await _firebase.sendAdminMessage(receiverId, chat);
 
-      // Update local state
+      // Update local state - conversation key is the userId
       final updatedConversations =
           Map<String, List<Chat>>.from(state.conversations);
-      if (!updatedConversations.containsKey('admin')) {
-        updatedConversations['admin'] = [];
+      if (!updatedConversations.containsKey(receiverId)) {
+        updatedConversations[receiverId] = [];
       }
-      updatedConversations['admin'] = [...updatedConversations['admin']!, chat];
+      updatedConversations[receiverId] = [
+        ...updatedConversations[receiverId]!,
+        chat
+      ];
 
       _safeEmit(state.copyWith(conversations: updatedConversations));
     } catch (e) {
@@ -185,16 +186,16 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
     }
   }
 
-  Future<void> markAsRead(String messageId, String senderId) async {
+  Future<void> markAsRead(String messageId, String userId) async {
     try {
-      await _firebase.markAdminMessageAsRead(state.currentUserId, messageId);
+      await _firebase.markAdminMessageAsRead(userId, messageId);
 
-      // Update local state
+      // Update local state - conversation key is the userId
       final updatedConversations =
           Map<String, List<Chat>>.from(state.conversations);
-      if (updatedConversations.containsKey('admin')) {
-        updatedConversations['admin'] =
-            updatedConversations['admin']!.map((chat) {
+      if (updatedConversations.containsKey(userId)) {
+        updatedConversations[userId] =
+            updatedConversations[userId]!.map((chat) {
           if (chat.messageId == messageId) {
             return Chat(
               messageId: chat.messageId,
@@ -216,19 +217,41 @@ class ChatListScreenCubit extends Cubit<ChatListScreenState> {
     }
   }
 
-  Future<void> loadConversation(String receiverId) async {
+  Future<void> loadConversation(String userId) async {
     try {
-      final allMessages = await _firebase.getAllUsersAdminMessages();
-      final messages = allMessages
-          .where(
-              (msg) => (msg.receiverId == 'admin') || msg.senderId == 'admin')
-          .toList();
+      // Get messages for this specific user from Firebase
+      final userDoc = await FirebaseFirestore.instance
+          .collection('chats')
+          .doc(userId)
+          .get();
 
-      final updatedConversations =
-          Map<String, List<Chat>>.from(state.conversations);
-      updatedConversations['admin'] = messages;
+      if (userDoc.exists) {
+        final data = userDoc.data() as Map<String, dynamic>;
+        final messages = (data['messages'] as List<dynamic>?) ?? [];
 
-      _safeEmit(state.copyWith(conversations: updatedConversations));
+        final adminMessages = messages
+            .where((msg) =>
+                (msg['receiverId'] == 'admin' || msg['senderId'] == 'admin') &&
+                msg['isAIMode'] == false)
+            .map((msg) {
+          final map = msg as Map<String, dynamic>;
+          if (map['timestamp'] is Timestamp) {
+            map['timestamp'] = (map['timestamp'] as Timestamp).toDate();
+          } else if (map['timestamp'] is int) {
+            map['timestamp'] =
+                DateTime.fromMillisecondsSinceEpoch(map['timestamp'] as int);
+          }
+          return Chat.fromMap(map);
+        }).toList();
+
+        adminMessages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+        final updatedConversations =
+            Map<String, List<Chat>>.from(state.conversations);
+        updatedConversations[userId] = adminMessages;
+
+        _safeEmit(state.copyWith(conversations: updatedConversations));
+      }
     } catch (e) {
       // Error loading conversation
     }
