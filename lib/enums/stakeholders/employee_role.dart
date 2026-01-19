@@ -25,7 +25,6 @@ enum RoleEnum {
         return S.of(context).roleEmployee;
       default:
         return S.of(context).unknown;
-
     }
   }
 
@@ -37,6 +36,9 @@ enum RoleEnum {
 
 extension RoleEnumExtension on RoleEnum {
   static RoleEnum fromName(String name) {
-    return RoleEnum.values.firstWhere((e) => e.getName() == name);
+    return RoleEnum.values.firstWhere(
+      (e) => e.getName().toLowerCase() == name.toLowerCase(),
+      orElse: () => RoleEnum.unknown,
+    );
   }
 }

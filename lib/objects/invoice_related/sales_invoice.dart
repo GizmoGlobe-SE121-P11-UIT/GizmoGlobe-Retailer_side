@@ -84,9 +84,10 @@ class SalesInvoice {
     if (addressData is String) {
       // Legacy format: address is stored as addressID string
       address = Database().addressList.firstWhere(
-            (addr) => addr.addressID == addressData,
-            orElse: () => Address.nullAddress,
-          );
+        (addr) => addr.addressID == addressData,
+        // Preserve the ID so callers can resolve it later if needed.
+        orElse: () => Address.nullAddress.copyWith(addressID: addressData),
+      );
     } else if (addressData is Map<String, dynamic>) {
       // New format: address is stored as a Map object
       address = Address.fromMap(addressData);
