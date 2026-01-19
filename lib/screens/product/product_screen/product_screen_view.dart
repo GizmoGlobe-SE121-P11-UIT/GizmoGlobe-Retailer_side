@@ -202,6 +202,7 @@ class _ProductScreenState extends State<ProductScreen>
             ),
           ),
           floatingActionButton: FloatingActionButton(
+            tooltip: S.of(context).incoming,
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

@@ -104,7 +104,7 @@ class _InvoiceScreenState extends State<InvoiceScreen>
                     );
                   }
                 },
-                tooltip: 'Open ratings',
+                tooltip: S.of(context).openRatings,
                 child: const Icon(Icons.rate_review),
               )
                   : null,

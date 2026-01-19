@@ -633,7 +633,7 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  S.of(context).invoiceDetails,
+                  S.of(context).receiptDetails,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

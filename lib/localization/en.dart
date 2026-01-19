@@ -16,6 +16,7 @@ const Map<String, String> en = {
   'selectManufacturer': 'Select Manufacturer',
   'addProduct': 'Add Product',
   'invoiceDetails': 'Invoice Details',
+  'receiptDetails': 'Receipt Details',
   'importPrice': 'Import Price',
   'quantity': 'Quantity',
   'totalPrice': 'Total Price: ',
@@ -28,10 +29,10 @@ const Map<String, String> en = {
   'update': 'Update',
   'createInvoiceSuccess': 'Invoice created successfully.',
   'editInvoiceSuccess': 'Invoice edited successfully.',
-  'createIncomingInvoiceSuccess': 'Incoming invoice created successfully.',
-  'updateIncomingInvoiceSuccess': 'Incoming invoice updated successfully.',
-  'searchIncomingInvoices': 'Find incoming invoices...',
-  'noIncomingInvoicesFound': 'No incoming invoices found',
+  'createIncomingInvoiceSuccess': 'Goods receipt created successfully.',
+  'updateIncomingInvoiceSuccess': 'Goods receipt updated successfully.',
+  'searchIncomingInvoices': 'Find goods receipts...',
+  'noIncomingInvoicesFound': 'No goods receipts found',
   'view': 'View',
   'editPayment': 'Edit Payment',
   'onlyUnpaidCanBeMarkedPaid': 'Only unpaid invoices can be marked as paid',
@@ -105,7 +106,7 @@ const Map<String, String> en = {
   'errorLoadingWarrantyInvoiceDetails':
       'Error loading warranty invoice details: {error}',
   'sales': 'Sales',
-  'incoming': 'Incoming',
+  'incoming': 'Restock',
   'warranty': 'Warranty',
   'hello': 'Hello!',
   'contactUs': 'Contact Us:',
@@ -492,7 +493,7 @@ const Map<String, String> en = {
   'totalProducts': 'Total Products',
   'totalCustomers': 'Total Customers',
   'totalSalesInvoices': 'Total Sales Invoices',
-  'totalIncomingInvoices': 'Total Incoming Invoices',
+  'totalIncomingInvoices': 'Total Goods Receipts',
   'topProducts': 'Top Products',
   'productId': 'Product ID',
   'quantitySold': 'Quantity Sold',
@@ -616,5 +617,5 @@ const Map<String, String> en = {
   'anonymous': 'Anonymous',
   'numberOfRamSlots': 'Number of RAM slots',
   'tryAgain': 'Please try again later',
-
+  'openRatings': 'Open ratings'
 };

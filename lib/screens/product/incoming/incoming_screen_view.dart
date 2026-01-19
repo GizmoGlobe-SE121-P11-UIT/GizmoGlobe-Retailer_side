@@ -41,7 +41,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Restock', // Changed from 'Incoming Invoices'
+          S.of(context).incoming,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
           ),
@@ -69,7 +69,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                       Expanded(
                         child: FieldWithIcon(
                           controller: searchController,
-                          hintText: 'Search restock invoices...', // Updated hint text
+                          hintText: S.of(context).searchIncomingInvoices,
                           fillColor: Theme.of(context).colorScheme.surface,
                           onChanged: (value) {
                             cubit.searchInvoices(value);
@@ -353,7 +353,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                   children: [
                                     // Row 1: Invoice ID
                                     Text(
-                                      '${S.of(context).invoiceDetails} #${invoice.incomingInvoiceID}',
+                                      '${S.of(context).receiptDetails} #${invoice.incomingInvoiceID}',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -381,12 +381,11 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                     const SizedBox(height: 12),
 
                                     // Row 3: Status and Date
-                                    Wrap(
-                                      spacing: 8,
-                                      runSpacing: 8,
+                                    Row(
                                       children: [
                                         StatusBadge(
                                             status: invoice.status),
+                                        const SizedBox(width: 8),
                                         Text(
                                           DateFormat('dd/MM/yyyy')
                                               .format(invoice.date),
@@ -400,6 +399,7 @@ class _IncomingScreenState extends State<IncomingScreen> {
                                           ),
                                         ),
                                       ],
+
                                     ),
                                   ],
                                 ),

@@ -176,7 +176,7 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          S.of(context).invoiceDetails,
+          S.of(context).receiptDetails,
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
