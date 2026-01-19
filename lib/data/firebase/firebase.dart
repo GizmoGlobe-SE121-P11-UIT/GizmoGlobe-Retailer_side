@@ -47,10 +47,37 @@ class Firebase {
 
   String? get currentUserId => _auth.currentUser?.uid;
 
+  /// Resolves legacy sales invoice `address` field that is stored as an addressID String
+  /// into a full address map, so UI can display address immediately without relying on
+  /// `Database().addressList` being preloaded.
+  Future<Map<String, dynamic>> _resolveSalesInvoiceAddress(
+    Map<String, dynamic> invoiceData,
+  ) async {
+    try {
+      final dynamic addressField = invoiceData['address'];
+      if (addressField is String && addressField.trim().isNotEmpty) {
+        final addressId = addressField.trim();
+        final addressDoc = await _firestore
+            .collection('addresses')
+            .doc(addressId)
+            .get();
+        final addressData = addressDoc.data();
+        if (addressDoc.exists && addressData != null) {
+          invoiceData['address'] = addressData;
+        }
+      }
+    } catch (_) {
+      // Best-effort: keep original value if address cannot be resolved.
+    }
+    return invoiceData;
+  }
+
   Future<String> getCurrentUserRoleFromFirebase() async {
     try {
-      final DocumentSnapshot userDoc =
-          await _firestore.collection('employees').doc(currentUserId).get();
+      final DocumentSnapshot userDoc = await _firestore
+          .collection('employees')
+          .doc(currentUserId)
+          .get();
 
       if (!userDoc.exists) return 'unknown';
       final data = userDoc.data() as Map<String, dynamic>?;
@@ -65,8 +92,9 @@ class Firebase {
 
   Future<List<Customer>> getCustomers() async {
     try {
-      final QuerySnapshot snapshot =
-          await FirebaseFirestore.instance.collection('customers').get();
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('customers')
+          .get();
 
       return snapshot.docs.map((doc) {
         return Customer.fromMap(doc.id, doc.data() as Map<String, dynamic>);
@@ -77,10 +105,9 @@ class Firebase {
   }
 
   Stream<List<Customer>> customersStream() {
-    return FirebaseFirestore.instance
-        .collection('customers')
-        .snapshots()
-        .map((snapshot) {
+    return FirebaseFirestore.instance.collection('customers').snapshots().map((
+      snapshot,
+    ) {
       return snapshot.docs.map((doc) {
         return Customer.fromMap(doc.id, doc.data());
       }).toList();
@@ -91,7 +118,8 @@ class Firebase {
     try {
       if (customer.customerID == null) {
         throw Exception(
-            'Customer ID cannot be null'); // ID khách hàng không thể trống
+          'Customer ID cannot be null',
+        ); // ID khách hàng không thể trống
       }
 
       // Update customer information
@@ -99,9 +127,9 @@ class Firebase {
           .collection('customers')
           .doc(customer.customerID)
           .update({
-        'customerName': customer.customerName,
-        'phoneNumber': customer.phoneNumber,
-      });
+            'customerName': customer.customerName,
+            'phoneNumber': customer.phoneNumber,
+          });
 
       // Update corresponding user information
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
@@ -110,12 +138,9 @@ class Firebase {
           .get();
 
       for (var doc in userSnapshot.docs) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(doc.id)
-            .update({
-          'username': customer.customerName,
-        });
+        await FirebaseFirestore.instance.collection('users').doc(doc.id).update(
+          {'username': customer.customerName},
+        );
       }
 
       // Fetch and update matched addresses
@@ -128,9 +153,7 @@ class Firebase {
         await FirebaseFirestore.instance
             .collection('addresses')
             .doc(doc.id)
-            .update({
-          'receiverName': customer.customerName,
-        });
+            .update({'receiverName': customer.customerName});
       }
     } catch (e) {
       rethrow;
@@ -183,11 +206,11 @@ class Firebase {
           .collection('users')
           .doc(customerId) // Sử dụng customerId làm document ID
           .set({
-        'email': customer.email,
-        'username': customer.customerName,
-        'role': 'customer',
-        'userID': customerId
-      });
+            'email': customer.email,
+            'username': customer.customerName,
+            'role': 'customer',
+            'userID': customerId,
+          });
     } catch (e) {
       rethrow;
     }
@@ -227,16 +250,16 @@ class Firebase {
           .collection('addresses')
           .doc(addressId)
           .set({
-        'addressID': addressId,
-        'customerID': address.customerID,
-        'receiverName': address.receiverName,
-        'receiverPhone': address.receiverPhone,
-        'provinceCode': address.province?.code,
-        'districtCode': address.district?.code,
-        'wardCode': address.ward?.code,
-        'street': address.street ?? '',
-        'hidden': address.hidden,
-      });
+            'addressID': addressId,
+            'customerID': address.customerID,
+            'receiverName': address.receiverName,
+            'receiverPhone': address.receiverPhone,
+            'provinceCode': address.province?.code,
+            'districtCode': address.district?.code,
+            'wardCode': address.ward?.code,
+            'street': address.street ?? '',
+            'hidden': address.hidden,
+          });
 
       await Database().fetchAddress();
     } catch (e) {
@@ -255,14 +278,14 @@ class Firebase {
           .collection('addresses')
           .doc(address.addressID)
           .update({
-        'receiverName': address.receiverName,
-        'receiverPhone': address.receiverPhone,
-        'provinceCode': address.province?.code,
-        'districtCode': address.district?.code,
-        'wardCode': address.ward?.code,
-        'street': address.street ?? '',
-        'hidden': address.hidden,
-      });
+            'receiverName': address.receiverName,
+            'receiverPhone': address.receiverPhone,
+            'provinceCode': address.province?.code,
+            'districtCode': address.district?.code,
+            'wardCode': address.ward?.code,
+            'street': address.street ?? '',
+            'hidden': address.hidden,
+          });
 
       await Database().fetchAddress();
     } catch (e) {
@@ -273,8 +296,9 @@ class Firebase {
   // Employee-related functions
   Future<List<Employee>> getEmployees() async {
     try {
-      final QuerySnapshot snapshot =
-          await FirebaseFirestore.instance.collection('employees').get();
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('employees')
+          .get();
 
       return snapshot.docs.map((doc) {
         return Employee.fromMap(doc.id, doc.data() as Map<String, dynamic>);
@@ -285,10 +309,9 @@ class Firebase {
   }
 
   Stream<List<Employee>> employeesStream() {
-    return FirebaseFirestore.instance
-        .collection('employees')
-        .snapshots()
-        .map((snapshot) {
+    return FirebaseFirestore.instance.collection('employees').snapshots().map((
+      snapshot,
+    ) {
       return snapshot.docs.map((doc) {
         return Employee.fromMap(doc.id, doc.data());
       }).toList();
@@ -299,7 +322,8 @@ class Firebase {
     try {
       if (employee.employeeID == null) {
         throw Exception(
-            'Employee ID cannot be null'); // ID nhân viên không thể trống
+          'Employee ID cannot be null',
+        ); // ID nhân viên không thể trống
       }
 
       // Lấy thông tin employee cũ trước khi cập nhật
@@ -393,7 +417,8 @@ class Firebase {
 
       if (existingEmployees.docs.isNotEmpty) {
         throw Exception(
-            'Email has already been registered'); // Email đã được đăng ký
+          'Email has already been registered',
+        ); // Email đã được đăng ký
       }
 
       // Thêm nhân viên mới vào collection employees
@@ -409,8 +434,9 @@ class Firebase {
         'email': employee.email,
         'username': employee.employeeName,
         'userID': docRef.id,
-        'role':
-            employee.role == RoleEnum.owner ? 'admin' : employee.role.getName(),
+        'role': employee.role == RoleEnum.owner
+            ? 'admin'
+            : employee.role.getName(),
       });
     } catch (e) {
       rethrow;
@@ -430,10 +456,14 @@ class Firebase {
   }
 
   Stream<List<Manufacturer>> manufacturersStream() {
-    return _firestore.collection('manufacturers').snapshots().map((snapshot) =>
-        snapshot.docs
-            .map((doc) => _mapManufacturerFromJson(doc.data()))
-            .toList());
+    return _firestore
+        .collection('manufacturers')
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => _mapManufacturerFromJson(doc.data()))
+              .toList(),
+        );
   }
 
   Future<void> updateManufacturer(Manufacturer manufacturer) async {
@@ -513,7 +543,9 @@ class Firebase {
   }
 
   Future<void> updateUserInformation(
-      String userId, Map<String, dynamic> userData) async {
+    String userId,
+    Map<String, dynamic> userData,
+  ) async {
     try {
       await FirebaseFirestore.instance
           .collection('users')
@@ -540,8 +572,9 @@ class Firebase {
   // Product-related functions
   Future<List<Product>> getProducts() async {
     try {
-      final QuerySnapshot snapshot =
-          await FirebaseFirestore.instance.collection('products').get();
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .get();
 
       List<Product> products = [];
       for (var doc in snapshot.docs) {
@@ -563,32 +596,37 @@ class Firebase {
         .collection('products')
         .snapshots()
         .asyncMap((snapshot) async {
-      List<Product> products = [];
-      for (var doc in snapshot.docs) {
-        try {
-          Map<String, dynamic> data = doc.data();
+          List<Product> products = [];
+          for (var doc in snapshot.docs) {
+            try {
+              Map<String, dynamic> data = doc.data();
 
-          Product product = ProductFactory.createProduct(data);
-          products.add(product);
-        } catch (e) {
-          // Error processing product
-          continue;
-        }
-      }
-      return products;
-    });
+              Product product = ProductFactory.createProduct(data);
+              products.add(product);
+            } catch (e) {
+              // Error processing product
+              continue;
+            }
+          }
+          return products;
+        });
   }
 
   Future<List<SalesInvoice>> getSalesInvoices() async {
     try {
-      final QuerySnapshot snapshot = await _firestore
+      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
           .collection('sales_invoices')
           .orderBy('date', descending: true)
           .get();
 
-      return snapshot.docs.map((doc) {
-        return SalesInvoice.fromMap(doc.id, doc.data() as Map<String, dynamic>);
-      }).toList();
+      final invoices = <SalesInvoice>[];
+      for (final doc in snapshot.docs) {
+        final data = await _resolveSalesInvoiceAddress(
+          Map<String, dynamic>.from(doc.data()),
+        );
+        invoices.add(SalesInvoice.fromMap(doc.id, data));
+      }
+      return invoices;
     } catch (e) {
       rethrow;
     }
@@ -600,21 +638,27 @@ class Firebase {
         .orderBy('date', descending: true)
         .snapshots()
         .asyncMap((snapshot) async {
-      List<SalesInvoice> invoices = [];
+          List<SalesInvoice> invoices = [];
 
-      for (var doc in snapshot.docs) {
-        // Create the invoice
-        final invoice = SalesInvoice.fromMap(doc.id, doc.data());
+          for (var doc in snapshot.docs) {
+            final data = await _resolveSalesInvoiceAddress(
+              Map<String, dynamic>.from(doc.data()),
+            );
 
-        // Get details for this invoice
-        final details = await getSalesInvoiceDetails(invoice.salesInvoiceID);
-        invoice.details = details;
+            // Create the invoice (now with resolved address when possible)
+            final invoice = SalesInvoice.fromMap(doc.id, data);
 
-        invoices.add(invoice);
-      }
+            // Get details for this invoice
+            final details = await getSalesInvoiceDetails(
+              invoice.salesInvoiceID,
+            );
+            invoice.details = details;
 
-      return invoices;
-    });
+            invoices.add(invoice);
+          }
+
+          return invoices;
+        });
   }
 
   Future<SalesInvoice?> createSalesInvoice(SalesInvoice invoice) async {
@@ -661,7 +705,10 @@ class Firebase {
         try {
           // stock decreases by quantity; sales increases by quantity
           await updateProductStockAndSales(
-              detail.productID, -detail.quantity, detail.quantity);
+            detail.productID,
+            -detail.quantity,
+            detail.quantity,
+          );
         } catch (_) {
           // ignore single product failures here; overall invoice is created
           // and any failed product updates can be corrected separately
@@ -676,7 +723,8 @@ class Firebase {
 
   // Add a method to fetch invoice details
   Future<List<SalesInvoiceDetail>> getSalesInvoiceDetails(
-      String invoiceId) async {
+    String invoiceId,
+  ) async {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('sales_invoice_details')
@@ -721,8 +769,10 @@ class Firebase {
 
   Future<Map<String, dynamic>> getCustomerDetails(String customerID) async {
     try {
-      final doc =
-          await _firestore.collection('customers').doc(customerID).get();
+      final doc = await _firestore
+          .collection('customers')
+          .doc(customerID)
+          .get();
 
       if (doc.exists) {
         final data = doc.data() as Map<String, dynamic>;
@@ -810,7 +860,8 @@ class Firebase {
 
   /// Get product images with document IDs for editing
   Future<List<ProductImage>> getProductImagesWithDetails(
-      String productID) async {
+    String productID,
+  ) async {
     try {
       final snapshot = await _firestore
           .collection('products')
@@ -830,15 +881,20 @@ class Firebase {
 
   /// Save product images to subcollection (Create, Update, Delete)
   Future<void> saveProductImages(
-      String productID, List<ProductImage> images) async {
+    String productID,
+    List<ProductImage> images,
+  ) async {
     try {
       final batch = _firestore.batch();
-      final imagesRef =
-          _firestore.collection('products').doc(productID).collection('images');
+      final imagesRef = _firestore
+          .collection('products')
+          .doc(productID)
+          .collection('images');
 
       // Process deletions
-      final imagesToDelete =
-          images.where((img) => img.markedForDeletion && img.id != null);
+      final imagesToDelete = images.where(
+        (img) => img.markedForDeletion && img.id != null,
+      );
       for (final img in imagesToDelete) {
         batch.delete(imagesRef.doc(img.id));
       }
@@ -864,19 +920,25 @@ class Firebase {
   Future<SalesInvoice> getSalesInvoiceWithDetails(String invoiceID) async {
     try {
       // Get the invoice document
-      final invoiceDoc =
-          await _firestore.collection('sales_invoices').doc(invoiceID).get();
+      final invoiceDoc = await _firestore
+          .collection('sales_invoices')
+          .doc(invoiceID)
+          .get();
 
       if (!invoiceDoc.exists) {
         throw Exception('Invoice not found'); // Không tìm thấy hóa đơn
       }
 
-      final data = invoiceDoc.data()!;
+      final data = Map<String, dynamic>.from(invoiceDoc.data()!);
 
       // Get customer details
-      final customerDetails =
-          await getCustomerDetails(data['customerID'] as String);
+      final customerDetails = await getCustomerDetails(
+        data['customerID'] as String,
+      );
       data['customerName'] = customerDetails['customerName'];
+
+      // Ensure address is resolvable even if `Database().addressList` isn't ready yet
+      await _resolveSalesInvoiceAddress(data);
 
       // Create the invoice
       final invoice = SalesInvoice.fromMap(invoiceDoc.id, data);
@@ -891,18 +953,21 @@ class Firebase {
       List<SalesInvoiceDetail> details = [];
       for (var detailDoc in detailsSnapshot.docs) {
         final detailData = detailDoc.data();
-        final productDetails =
-            await getProductDetails(detailData['productID'] as String);
+        final productDetails = await getProductDetails(
+          detailData['productID'] as String,
+        );
 
-        details.add(SalesInvoiceDetail(
-          salesInvoiceID: detailData['salesInvoiceID'] as String,
-          productID: detailData['productID'] as String,
-          productName: productDetails['productName'],
-          category: productDetails['category'],
-          quantity: (detailData['quantity'] as num?)?.toInt() ?? 0,
-          sellingPrice: (detailData['sellingPrice'] as num?)?.toInt() ?? 0,
-          subtotal: (detailData['subtotal'] as num?)?.toDouble() ?? 0.0,
-        ));
+        details.add(
+          SalesInvoiceDetail(
+            salesInvoiceID: detailData['salesInvoiceID'] as String,
+            productID: detailData['productID'] as String,
+            productName: productDetails['productName'],
+            category: productDetails['category'],
+            quantity: (detailData['quantity'] as num?)?.toInt() ?? 0,
+            sellingPrice: (detailData['sellingPrice'] as num?)?.toInt() ?? 0,
+            subtotal: (detailData['subtotal'] as num?)?.toDouble() ?? 0.0,
+          ),
+        );
       }
 
       invoice.details = details;
@@ -939,7 +1004,9 @@ class Firebase {
   }
 
   Future<void> deleteSalesInvoiceDetail(
-      String salesInvoiceID, String productID) async {
+    String salesInvoiceID,
+    String productID,
+  ) async {
     try {
       // Find the detail document
       final detailQuery = await _firestore
@@ -950,7 +1017,8 @@ class Firebase {
 
       if (detailQuery.docs.isEmpty) {
         throw Exception(
-            'Invoice detail not found'); // Không tìm thấy chi tiết hóa đơn
+          'Invoice detail not found',
+        ); // Không tìm thấy chi tiết hóa đơn
       }
 
       final detailDoc = detailQuery.docs.first;
@@ -996,16 +1064,16 @@ class Firebase {
           .collection('sales_invoice_details')
           .add(detail.toMap());
 
-      await docRef.update({
-        'salesInvoiceDetailID': docRef.id,
-      });
+      await docRef.update({'salesInvoiceDetailID': docRef.id});
     } catch (e) {
       rethrow;
     }
   }
 
   Future<void> changeProductStatus(
-      String productId, ProductStatusEnum status) async {
+    String productId,
+    ProductStatusEnum status,
+  ) async {
     try {
       // Find the document by productID attribute
       final querySnapshot = await FirebaseFirestore.instance
@@ -1037,7 +1105,8 @@ class Firebase {
 
       if (querySnapshot.docs.isEmpty) {
         throw Exception(
-            'Product not found with productID: ${product.productID}');
+          'Product not found with productID: ${product.productID}',
+        );
       }
 
       final docRef = querySnapshot.docs.first.reference;
@@ -1063,7 +1132,10 @@ class Firebase {
   }
 
   Future<void> updateProductStockAndSales(
-      String productID, int stockChange, int salesChange) async {
+    String productID,
+    int stockChange,
+    int salesChange,
+  ) async {
     try {
       // Find the document by productID attribute
       final querySnapshot = await FirebaseFirestore.instance
@@ -1085,7 +1157,7 @@ class Firebase {
       // Cập nhật cả stock và sales
       await docRef.update({
         'stock': currentStock + stockChange,
-        'sales': currentSales + salesChange
+        'sales': currentSales + salesChange,
       });
 
       // Cập nhật danh sách sản phẩm trong Database
@@ -1101,9 +1173,7 @@ class Firebase {
       await _firestore
           .collection('sales_invoices')
           .doc(salesInvoice.salesInvoiceID)
-          .update({
-        'salesStatus': SalesStatus.completed.getName(),
-      });
+          .update({'salesStatus': SalesStatus.completed.getName()});
 
       //await Database().fetchSalesInvoice();
     } catch (e) {
@@ -1126,11 +1196,10 @@ class Firebase {
           receiverName: data['receiverName'],
           receiverPhone: data['receiverPhone'],
           province: Database().provinceList.firstWhere(
-                (p) => p.code == data['provinceCode'],
-                orElse: () => Province.nullProvince,
-              ),
-          district: Database()
-              .provinceList
+            (p) => p.code == data['provinceCode'],
+            orElse: () => Province.nullProvince,
+          ),
+          district: Database().provinceList
               .firstWhere(
                 (p) => p.code == data['provinceCode'],
                 orElse: () => Province.nullProvince,
@@ -1140,8 +1209,7 @@ class Firebase {
                 (d) => d.code == data['districtCode'],
                 orElse: () => District.nullDistrict,
               ),
-          ward: Database()
-              .provinceList
+          ward: Database().provinceList
               .firstWhere(
                 (p) => p.code == data['provinceCode'],
                 orElse: () => Province.nullProvince,
@@ -1172,10 +1240,10 @@ class Firebase {
         .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return IncomingInvoice.fromMap(doc.id, doc.data());
-      }).toList();
-    });
+          return snapshot.docs.map((doc) {
+            return IncomingInvoice.fromMap(doc.id, doc.data());
+          }).toList();
+        });
   }
 
   Future<List<IncomingInvoice>> getIncomingInvoices() async {
@@ -1187,7 +1255,9 @@ class Firebase {
 
       return snapshot.docs.map((doc) {
         return IncomingInvoice.fromMap(
-            doc.id, doc.data() as Map<String, dynamic>);
+          doc.id,
+          doc.data() as Map<String, dynamic>,
+        );
       }).toList();
     } catch (e) {
       rethrow;
@@ -1195,11 +1265,14 @@ class Firebase {
   }
 
   Future<IncomingInvoice> getIncomingInvoiceWithDetails(
-      String invoiceId) async {
+    String invoiceId,
+  ) async {
     try {
       // Get the invoice
-      final DocumentSnapshot invoiceDoc =
-          await _firestore.collection('incoming_invoices').doc(invoiceId).get();
+      final DocumentSnapshot invoiceDoc = await _firestore
+          .collection('incoming_invoices')
+          .doc(invoiceId)
+          .get();
 
       if (!invoiceDoc.exists) {
         throw Exception('Invoice not found'); // Không tìm thấy hóa đơn
@@ -1235,7 +1308,8 @@ class Firebase {
     try {
       if (invoice.incomingInvoiceID == null) {
         throw Exception(
-            'Invoice ID cannot be null'); // ID hóa đơn không thể null
+          'Invoice ID cannot be null',
+        ); // ID hóa đơn không thể null
       }
 
       // Update invoice
@@ -1257,9 +1331,7 @@ class Firebase {
               .collection('incoming_invoice_details')
               .add(detail.toMap());
 
-          await docRef.update({
-            'incomingInvoiceDetailID': docRef.id,
-          });
+          await docRef.update({'incomingInvoiceDetailID': docRef.id});
         }
       }
     } catch (e) {
@@ -1270,13 +1342,12 @@ class Firebase {
   Future<String> createIncomingInvoice(IncomingInvoice invoice) async {
     try {
       // Create invoice
-      final docRef =
-          await _firestore.collection('incoming_invoices').add(invoice.toMap());
+      final docRef = await _firestore
+          .collection('incoming_invoices')
+          .add(invoice.toMap());
 
       // Update invoice with ID
-      await docRef.update({
-        'incomingInvoiceID': docRef.id,
-      });
+      await docRef.update({'incomingInvoiceID': docRef.id});
 
       // Create details
       for (var detail in invoice.details) {
@@ -1285,9 +1356,7 @@ class Firebase {
             .collection('incoming_invoice_details')
             .add(detail.toMap());
 
-        await detailRef.update({
-          'incomingInvoiceDetailID': detailRef.id,
-        });
+        await detailRef.update({'incomingInvoiceDetailID': detailRef.id});
       }
 
       return docRef.id;
@@ -1335,8 +1404,10 @@ class Firebase {
 
   Future<Customer> getCustomer(String customerId) async {
     try {
-      final doc =
-          await _firestore.collection('customers').doc(customerId).get();
+      final doc = await _firestore
+          .collection('customers')
+          .doc(customerId)
+          .get();
 
       if (!doc.exists) {
         throw Exception('Customer not found');
@@ -1374,21 +1445,23 @@ class Firebase {
           .orderBy('date', descending: true)
           .get();
 
-      return Future.wait(snapshot.docs.map((doc) async {
-        final invoice = SalesInvoice.fromMap(doc.id, doc.data());
+      return Future.wait(
+        snapshot.docs.map((doc) async {
+          final invoice = SalesInvoice.fromMap(doc.id, doc.data());
 
-        // Load details
-        final detailsSnapshot = await _firestore
-            .collection('sales_invoice_details')
-            .where('salesInvoiceID', isEqualTo: doc.id)
-            .get();
+          // Load details
+          final detailsSnapshot = await _firestore
+              .collection('sales_invoice_details')
+              .where('salesInvoiceID', isEqualTo: doc.id)
+              .get();
 
-        invoice.details = detailsSnapshot.docs
-            .map((doc) => SalesInvoiceDetail.fromMap(doc.data()))
-            .toList();
+          invoice.details = detailsSnapshot.docs
+              .map((doc) => SalesInvoiceDetail.fromMap(doc.data()))
+              .toList();
 
-        return invoice;
-      }));
+          return invoice;
+        }),
+      );
     } catch (e) {
       rethrow;
     }
@@ -1401,8 +1474,9 @@ class Firebase {
           .get();
 
       return snapshot.docs.map((doc) {
-        final Map<String, dynamic> data =
-            Map<String, dynamic>.from(doc.data() as Map);
+        final Map<String, dynamic> data = Map<String, dynamic>.from(
+          doc.data() as Map,
+        );
         return WarrantyInvoice.fromMap(doc.id, data);
       }).toList();
     } catch (e) {
@@ -1411,22 +1485,29 @@ class Firebase {
   }
 
   Future<WarrantyInvoice> getWarrantyInvoiceWithDetails(
-      String invoiceId) async {
+    String invoiceId,
+  ) async {
     try {
       // Get the invoice
-      final DocumentSnapshot invoiceDoc =
-          await _firestore.collection('warranty_invoices').doc(invoiceId).get();
+      final DocumentSnapshot invoiceDoc = await _firestore
+          .collection('warranty_invoices')
+          .doc(invoiceId)
+          .get();
 
       if (!invoiceDoc.exists) {
         throw Exception(
-            'Warranty invoice not found'); // Không tìm thấy hóa đơn bảo hành
+          'Warranty invoice not found',
+        ); // Không tìm thấy hóa đơn bảo hành
       }
 
       // Create invoice object
-      final Map<String, dynamic> invoiceData =
-          Map<String, dynamic>.from(invoiceDoc.data() as Map);
-      WarrantyInvoice invoice =
-          WarrantyInvoice.fromMap(invoiceDoc.id, invoiceData);
+      final Map<String, dynamic> invoiceData = Map<String, dynamic>.from(
+        invoiceDoc.data() as Map,
+      );
+      WarrantyInvoice invoice = WarrantyInvoice.fromMap(
+        invoiceDoc.id,
+        invoiceData,
+      );
 
       // Get invoice details
       final QuerySnapshot detailsSnapshot = await _firestore
@@ -1449,13 +1530,13 @@ class Firebase {
   }
 
   Stream<List<WarrantyInvoice>> warrantyInvoicesStream() {
-    return _firestore
-        .collection('warranty_invoices')
-        .snapshots()
-        .map((snapshot) {
+    return _firestore.collection('warranty_invoices').snapshots().map((
+      snapshot,
+    ) {
       return snapshot.docs.map((doc) {
-        final Map<String, dynamic> data =
-            Map<String, dynamic>.from(doc.data() as Map);
+        final Map<String, dynamic> data = Map<String, dynamic>.from(
+          doc.data() as Map,
+        );
         return WarrantyInvoice.fromMap(doc.id, data);
       }).toList();
     });
@@ -1486,16 +1567,15 @@ class Firebase {
       });
 
       // Update the document with its own ID
-      await docRef.update({
-        'warrantyInvoiceID': docRef.id,
-      });
+      await docRef.update({'warrantyInvoiceID': docRef.id});
 
       // Create warranty details
       final batch = _firestore.batch();
 
       for (var detail in invoice.details) {
-        final detailRef =
-            _firestore.collection('warranty_invoice_details').doc();
+        final detailRef = _firestore
+            .collection('warranty_invoice_details')
+            .doc();
         batch.set(detailRef, {
           'warrantyInvoiceID': docRef.id,
           'warrantyInvoiceDetailID': detailRef.id,
@@ -1518,9 +1598,7 @@ class Firebase {
           .collection('warranty_invoice_details')
           .add(detail.toMap());
 
-      await docRef.update({
-        'warrantyInvoiceDetailID': docRef.id,
-      });
+      await docRef.update({'warrantyInvoiceDetailID': docRef.id});
     } catch (e) {
       rethrow;
     }
@@ -1538,9 +1616,9 @@ class Firebase {
       // the local manufacturer list and product list in the Database singleton
 
       // Update manufacturer in the local list
-      int manufacturerIndex = Database()
-          .manufacturerList
-          .indexWhere((m) => m.manufacturerID == manufacturer.manufacturerID);
+      int manufacturerIndex = Database().manufacturerList.indexWhere(
+        (m) => m.manufacturerID == manufacturer.manufacturerID,
+      );
 
       if (manufacturerIndex >= 0) {
         Database().manufacturerList[manufacturerIndex] = manufacturer;
@@ -1751,8 +1829,9 @@ class Firebase {
 
   Future<List<Voucher>> getVouchers() async {
     try {
-      final QuerySnapshot snapshot =
-          await _firestore.collection('vouchers').get();
+      final QuerySnapshot snapshot = await _firestore
+          .collection('vouchers')
+          .get();
       return snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         data['voucherID'] = doc.id;
@@ -1769,8 +1848,9 @@ class Firebase {
           if (data['endTime'] is String) {
             data['endTime'] = DateTime.parse(data['endTime']);
           } else if (data['endTime'] == null) {
-            data['endTime'] = DateTime.now()
-                .add(const Duration(days: 30)); // Default to 30 days from now
+            data['endTime'] = DateTime.now().add(
+              const Duration(days: 30),
+            ); // Default to 30 days from now
           }
         }
 
@@ -1924,8 +2004,9 @@ class Firebase {
 
         // Filter admin messages
         final adminMessages = messages
-            .where((msg) =>
-                msg['receiverId'] == 'admin' && msg['isAIMode'] == false)
+            .where(
+              (msg) => msg['receiverId'] == 'admin' && msg['isAIMode'] == false,
+            )
             .map((msg) => Chat.fromMap(msg as Map<String, dynamic>))
             .toList();
 
@@ -1981,7 +2062,7 @@ class Firebase {
     try {
       // Add message to user's messages array
       await _firestore.collection('chats').doc(userId).update({
-        'messages': FieldValue.arrayUnion([chat.toMap()])
+        'messages': FieldValue.arrayUnion([chat.toMap()]),
       });
     } catch (e) {
       rethrow;
@@ -1989,16 +2070,19 @@ class Firebase {
   }
 
   Future<void> sendUserChat(
-      String senderId, String receiverId, Chat chat) async {
+    String senderId,
+    String receiverId,
+    Chat chat,
+  ) async {
     try {
       // Update sender's messages array
       await _firestore.collection('chats').doc(senderId).update({
-        'messages': FieldValue.arrayUnion([chat.toMap()])
+        'messages': FieldValue.arrayUnion([chat.toMap()]),
       });
 
       // Update receiver's messages array
       await _firestore.collection('chats').doc(receiverId).update({
-        'messages': FieldValue.arrayUnion([chat.toMap()])
+        'messages': FieldValue.arrayUnion([chat.toMap()]),
       });
     } catch (e) {
       rethrow;
@@ -2010,8 +2094,9 @@ class Firebase {
       final userDoc = await _firestore.collection('chats').doc(userId).get();
       if (userDoc.exists) {
         final data = userDoc.data() as Map<String, dynamic>;
-        final messages =
-            List<Map<String, dynamic>>.from(data['messages'] ?? []);
+        final messages = List<Map<String, dynamic>>.from(
+          data['messages'] ?? [],
+        );
 
         // Find and update the specific message
         for (var i = 0; i < messages.length; i++) {
@@ -2022,10 +2107,9 @@ class Firebase {
         }
 
         // Update the document with modified messages
-        await _firestore
-            .collection('chats')
-            .doc(userId)
-            .update({'messages': messages});
+        await _firestore.collection('chats').doc(userId).update({
+          'messages': messages,
+        });
       }
     } catch (e) {
       rethrow;
@@ -2033,13 +2117,17 @@ class Firebase {
   }
 
   Future<void> markUserChatAsRead(
-      String userId, String senderId, String messageId) async {
+    String userId,
+    String senderId,
+    String messageId,
+  ) async {
     try {
       final userDoc = await _firestore.collection('chats').doc(userId).get();
       if (userDoc.exists) {
         final data = userDoc.data() as Map<String, dynamic>;
-        final messages =
-            List<Map<String, dynamic>>.from(data['messages'] ?? []);
+        final messages = List<Map<String, dynamic>>.from(
+          data['messages'] ?? [],
+        );
 
         // Find and update the specific message
         for (var i = 0; i < messages.length; i++) {
@@ -2050,10 +2138,9 @@ class Firebase {
         }
 
         // Update the document with modified messages
-        await _firestore
-            .collection('chats')
-            .doc(userId)
-            .update({'messages': messages});
+        await _firestore.collection('chats').doc(userId).update({
+          'messages': messages,
+        });
       }
     } catch (e) {
       rethrow;
@@ -2074,7 +2161,8 @@ class Firebase {
       // Count unread messages where user is the receiver
       return messages
           .where(
-              (msg) => msg['receiverId'] == 'admin' && msg['isRead'] == false)
+            (msg) => msg['receiverId'] == 'admin' && msg['isRead'] == false,
+          )
           .length;
     } catch (e) {
       return 0;
@@ -2122,8 +2210,9 @@ class Firebase {
 
   Future<List<Rating>> getRatings() async {
     try {
-      final QuerySnapshot snapshot =
-          await _firestore.collection('order_ratings').get();
+      final QuerySnapshot snapshot = await _firestore
+          .collection('order_ratings')
+          .get();
 
       return snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
@@ -2182,8 +2271,11 @@ class Firebase {
     }
   }
 
-  Future<RatingsPage> getRatingsPageByProduct(String productId,
-      {DocumentSnapshot? startAfter, int limit = 5}) async {
+  Future<RatingsPage> getRatingsPageByProduct(
+    String productId, {
+    DocumentSnapshot? startAfter,
+    int limit = 5,
+  }) async {
     try {
       if (productId.isEmpty) {
         return RatingsPage(ratings: [], lastDocument: null, hasMore: false);
@@ -2226,14 +2318,19 @@ class Firebase {
       final hasMore = snapshot.docs.length == limit;
 
       return RatingsPage(
-          ratings: ratings, lastDocument: lastDoc, hasMore: hasMore);
+        ratings: ratings,
+        lastDocument: lastDoc,
+        hasMore: hasMore,
+      );
     } catch (e) {
       rethrow; // let caller handle fallback
     }
   }
 
-  Future<void> replyToRating(
-      {required String ratingId, required Reply reply}) async {
+  Future<void> replyToRating({
+    required String ratingId,
+    required Reply reply,
+  }) async {
     try {
       if (ratingId.isEmpty) throw Exception('ratingId is required');
 
@@ -2249,7 +2346,8 @@ class Firebase {
   }
 
   Future<Map<String, dynamic>> getAverageRatingForProduct(
-      String productId) async {
+    String productId,
+  ) async {
     try {
       if (productId.isEmpty) return {'average': 0.0, 'count': 0, 'sum': 0};
 
@@ -2287,7 +2385,8 @@ class Firebase {
   /// Get aggregated product rating from Cloud Functions aggregation
   /// Returns null if no aggregated data exists for this product
   Future<Map<String, dynamic>?> getAggregatedProductRating(
-      String productId) async {
+    String productId,
+  ) async {
     try {
       if (productId.isEmpty) return null;
 
@@ -2323,8 +2422,10 @@ class Firebase {
   /// Falls back to null if document doesn't exist (Cloud Function not deployed yet).
   Future<Map<String, dynamic>?> getDashboardStats() async {
     try {
-      final doc =
-          await _firestore.collection('aggregations').doc('dashboard').get();
+      final doc = await _firestore
+          .collection('aggregations')
+          .doc('dashboard')
+          .get();
       if (!doc.exists) {
         return null;
       }
