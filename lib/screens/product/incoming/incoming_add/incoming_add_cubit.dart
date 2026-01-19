@@ -45,24 +45,26 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
       details: [], // Reset details when manufacturer changes
     ));
 
+    await updateProducts(manufacturer);
+    emit(state.copyWith(isLoading: false));
+  }
+
+  Future<void> updateProducts(Manufacturer manufacturer) async {
     try {
-      // Load products for selected manufacturer
       final allProducts = await _firebase.getProducts();
       final manufacturerProducts = allProducts
           .where((product) =>
-              product.manufacturer.manufacturerID ==
-              manufacturer.manufacturerID)
+      product.manufacturer.manufacturerID ==
+          manufacturer.manufacturerID)
           .toList();
 
       emit(state.copyWith(
         products: manufacturerProducts,
-        isLoading: false,
       ));
     } catch (e) {
       emit(state.copyWith(
         errorMessage:
-            'Error loading products: $e', // Lỗi khi load dữ liệu sản phẩm
-        isLoading: false,
+        'Error loading products: $e',
       ));
     }
   }

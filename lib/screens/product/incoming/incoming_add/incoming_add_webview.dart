@@ -7,6 +7,7 @@ import 'package:gizmoglobe_client/objects/invoice_related/incoming_invoice_detai
 import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import '../../../../enums/invoice_related/payment_status.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
+import '../../add_product/add_product_view.dart';
 import 'incoming_add_cubit.dart';
 import 'incoming_add_state.dart';
 import 'package:gizmoglobe_client/localization/app_localization.dart';
@@ -129,6 +130,20 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton.icon(
+                                    icon: const Icon(Icons.add),
+                                    label: Text(S.of(context).addProduct),
+                                    onPressed: () async {
+                                      final result = await AddProductScreen.showModal(context);
+
+                                      if (result == true && context.mounted && state.selectedManufacturer != null) {
+                                        await cubit.updateProducts(state.selectedManufacturer!);
+                                      }
+                                    },
+                                  ),
+                                ),
                                 Row(
                                   children: [
                                     Icon(
@@ -474,27 +489,6 @@ class _IncomingAddWebViewState extends State<IncomingAddWebView> {
                             ),
                           ),
                         ],
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () => _showAddProductDialog(context),
-                        icon: Icon(
-                          Icons.add,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                        label: Text(S.of(context).addProduct),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          foregroundColor:
-                              Theme.of(context).colorScheme.onPrimary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                        ),
                       ),
                     ],
                   ),
