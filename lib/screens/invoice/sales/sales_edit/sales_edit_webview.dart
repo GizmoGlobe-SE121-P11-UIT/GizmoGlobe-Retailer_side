@@ -75,7 +75,8 @@ class _SalesEditWebViewState extends State<SalesEditWebView> {
     // Lock snapshot based on initial invoice when opening modal
     _lockPaymentOnInit = widget.invoice.paymentStatus == PaymentStatus.paid;
     _lockSalesOnInit = widget.invoice.salesStatus == SalesStatus.completed ||
-        widget.invoice.salesStatus == SalesStatus.cancelled;
+        widget.invoice.salesStatus == SalesStatus.cancelled ||
+        widget.invoice.salesStatus == SalesStatus.shipped;
   }
 
   @override
