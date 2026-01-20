@@ -40,7 +40,6 @@ class ConfirmationDialog extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-
               Text(
                 content,
                 style: AppTextStyle.regularText.copyWith(
@@ -50,7 +49,8 @@ class ConfirmationDialog extends StatelessWidget {
               const SizedBox(height: 40),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   StandardButton(
                     onPress: () {

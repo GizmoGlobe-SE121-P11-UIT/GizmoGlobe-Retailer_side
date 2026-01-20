@@ -203,16 +203,18 @@ class _ProductScreenState extends State<ProductScreen>
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: S.of(context).incoming,
-            onPressed: () async {
-              await Navigator.of(context).push(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(
                 MaterialPageRoute(
                   builder: (context) => IncomingScreen.newInstance(),
                 ),
-              );
-
-              if (mounted) {
-                cubit.initialize(Database().productList);
-              }
+              )
+                  .then((_) {
+                if (mounted) {
+                  cubit.initialize(Database().productList);
+                }
+              });
             },
             child: const Icon(Icons.move_to_inbox),
           ),

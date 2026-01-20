@@ -156,21 +156,24 @@ class ProductFactory {
               ? MainboardFormFactorExtension.fromName(
                   attrs['formFactor'].toString())
               : MainboardFormFactor.atx,
-          ramSpec: (attrs['ramSpec'] is Map<String, dynamic>)
-              ? RamSpec.fromJson(attrs['ramSpec'] as Map<String, dynamic>)
+          ramSpec: (attrs['ramSpec'] is Map)
+              ? RamSpec.fromJson(
+                  Map<String, dynamic>.from(attrs['ramSpec'] as Map))
               : RamSpec(type: RAMType.unknown, slots: 0, maxSingleDimmGb: 0),
           pcieSlots: (attrs['pcieSlots'] is Iterable)
               ? (attrs['pcieSlots'] as Iterable)
-                  .map((e) => PCIeSlot.fromJson(e as Map<String, dynamic>))
+                  .map((e) =>
+                      PCIeSlot.fromJson(Map<String, dynamic>.from(e as Map)))
                   .toList()
               : <PCIeSlot>[],
-          storageSlot: (attrs['storageSlots'] is Map<String, dynamic>)
+          storageSlot: (attrs['storageSlots'] is Map)
               ? StorageSlot.fromJson(
-                  attrs['storageSlots'] as Map<String, dynamic>)
+                  Map<String, dynamic>.from(attrs['storageSlots'] as Map))
               : StorageSlot(m2Slots: 0, sataPorts: 0),
           ioPorts: (attrs['ioPorts'] is Iterable)
               ? (attrs['ioPorts'] as Iterable)
-                  .map((e) => IOPort.fromJson(e as Map<String, dynamic>))
+                  .map((e) =>
+                      IOPort.fromJson(Map<String, dynamic>.from(e as Map)))
                   .toList()
               : <IOPort>[],
           stock: toInt(properties['stock']),

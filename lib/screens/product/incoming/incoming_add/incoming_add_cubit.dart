@@ -50,7 +50,13 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
   }
 
   Future<void> updateProducts(Manufacturer manufacturer) async {
+    // Only set loading if we don't have details that would be hidden
+    if (state.details.isEmpty) {
+      emit(state.copyWith(isLoading: true));
+    }
+
     try {
+      // Force refresh data from Firebase to get new products
       final allProducts = await _firebase.getProducts();
       final manufacturerProducts = allProducts
           .where((product) =>
@@ -60,11 +66,12 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
 
       emit(state.copyWith(
         products: manufacturerProducts,
+        isLoading: false,
       ));
     } catch (e) {
       emit(state.copyWith(
-        errorMessage:
-        'Error loading products: $e',
+        errorMessage: 'Error loading products: $e',
+        isLoading: false,
       ));
     }
   }
@@ -187,44 +194,13 @@ class IncomingAddCubit extends Cubit<IncomingAddState> {
           (p) => p.productID == detail.productID,
         );
 
-        // Create a map of product properties with updated values
-        final Map<String, dynamic> productProps = {
-          'productID': product.productID!,
-          'productName': product.productName,
-          'manufacturer': {
-            'manufacturerID': product.manufacturer.manufacturerID,
-            'manufacturerName': product.manufacturer.manufacturerName,
-            'status': product.manufacturer.status.name,
-          }, // Use Map not String!
-          'category': product.category.name,
-          'importPrice': detail.importPrice, // Use new import price from detail
-          'sellingPrice': product.sellingPrice,
-          'discount': product.discount,
-          'release': product.release,
-          'sales': product.sales,
-          'stock': product.stock + detail.quantity,
-          'status': product.status,
-        };
+        // Update import price and stock directly on the product object
+        product.importPrice = detail.importPrice.toInt();
+        product.stock += detail.quantity;
 
-        // Add specific properties based on product type
-        if (product is RAM) {
-          productProps.addAll({});
-        } else if (product is CPU) {
-          productProps.addAll({});
-        } else if (product is GPU) {
-          productProps.addAll({});
-        } else if (product is Mainboard) {
-          productProps.addAll({});
-        } else if (product is Drive) {
-          productProps.addAll({});
-        } else if (product is PSU) {
-          productProps.addAll({});
-        }
-
-        // Create new product instance and update
+        // Use updateProduct which handles serialization correctly
         try {
-          final updatedProduct = ProductFactory.createProduct(productProps);
-          await _firebase.updateProduct(updatedProduct);
+          await _firebase.updateProduct(product);
         } catch (e) {
           // Error updating product, continue with other products
         }
