@@ -304,8 +304,7 @@ class _BusinessReportDialogState extends State<BusinessReportDialog> {
     final screenWidth = MediaQuery.of(context).size.width;
     final dialogWidth = screenWidth > 750 ? 700.0 : screenWidth * 0.9;
 
-    return Dialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+    return Dialog(insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Container(
         width: dialogWidth,
         constraints: const BoxConstraints(maxWidth: 700),

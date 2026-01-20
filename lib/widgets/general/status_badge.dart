@@ -57,14 +57,15 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('inactive') ||
         text.toLowerCase().contains('discontinued') ||
         text.toLowerCase().contains('hidden') ||
+        text.toLowerCase().contains('deactivate') ||
+
         text.toLowerCase().contains('ẩn') ||
         text.toLowerCase().contains('đã hủy') ||
         text.toLowerCase().contains('chưa thanh toán') ||
         text.toLowerCase().contains('từ chối') ||
         text.toLowerCase().contains('vô hiệu hóa') ||
         text.toLowerCase().contains('không hoạt động') ||
-        text.toLowerCase().contains('ngừng kinh doanh') ||
-        text.toLowerCase().contains('ngừng sản xuất')) {
+        text.toLowerCase().contains('ngừng kinh doanh')) {
       color = theme.colorScheme.error;
       icon = Icons.cancel;
     } else if (text.toLowerCase().contains('pending') ||
@@ -72,9 +73,10 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('shipping') ||
         text.toLowerCase().contains('processing') ||
         text.toLowerCase().contains('out of stock') ||
+
         text.toLowerCase().contains('đang chờ') ||
         text.toLowerCase().contains('đang chuẩn bị') ||
-        text.toLowerCase().contains('đang vận chuyển') ||
+        text.toLowerCase().contains('đang giao') ||
         text.toLowerCase().contains('đang xử lý') ||
         text.toLowerCase().contains('chờ xử lý') ||
         text.toLowerCase().contains('hết hàng')) {
@@ -85,16 +87,17 @@ class StatusBadge extends StatelessWidget {
         text.toLowerCase().contains('active') ||
         text.toLowerCase().contains('shipped') ||
         text.toLowerCase().contains('received') ||
-        text.toLowerCase().contains('đã nhận') ||
         text.toLowerCase().contains('available') ||
+        text.toLowerCase().contains('completed') ||
         text.toLowerCase().contains('visible') ||
+
+        text.toLowerCase().contains('đã nhận') ||
         text.toLowerCase().contains('hiển thị') ||
         text.toLowerCase().contains('đã thanh toán') ||
         text.toLowerCase().contains('hoàn thành') ||
         text.toLowerCase().contains('đang hoạt động') ||
-        text.toLowerCase().contains('đã giao hàng') ||
-        text.toLowerCase().contains('còn hàng') ||
-        text.toLowerCase().contains('đã sử dụng')) {
+        text.toLowerCase().contains('đã giao') ||
+        text.toLowerCase().contains('còn hàng')) {
       color = theme.colorScheme.tertiary;
       icon = Icons.check_circle;
     } else {

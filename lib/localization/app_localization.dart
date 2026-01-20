@@ -48,6 +48,7 @@ class AppLocalizations {
   String get add => _getTranslation('add');
   String get editProductDetail => _getTranslation('editProductDetail');
   String get update => _getTranslation('update');
+  String get openRatings => _getTranslation('openRatings');
   String get searchIncomingInvoices =>
       _getTranslation('searchIncomingInvoices');
   String get noIncomingInvoicesFound =>
@@ -705,7 +706,6 @@ class AppLocalizations {
   String get anonymous => _getTranslation('anonymous');
   String get numberOfRamSlots => _getTranslation('numberOfRamSlots');
   String get tryAgain => _getTranslation('tryAgain');
-  String get openRatings => _getTranslation('openRatings');
   String get receiptDetails => _getTranslation('receiptDetails');
 
   String rewardsFor(String points) =>

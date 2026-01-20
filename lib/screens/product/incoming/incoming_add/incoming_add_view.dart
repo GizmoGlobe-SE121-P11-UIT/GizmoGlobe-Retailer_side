@@ -8,6 +8,7 @@ import 'package:gizmoglobe_client/widgets/general/gradient_text.dart';
 import '../../../../enums/invoice_related/payment_status.dart';
 import '../../../../functions/helper.dart';
 import '../../../../widgets/general/gradient_icon_button.dart';
+import '../../add_product/add_product_view.dart';
 import 'incoming_add_cubit.dart';
 import 'incoming_add_state.dart';
 import 'incoming_add_webview.dart';
@@ -91,6 +92,34 @@ class _IncomingAddScreenState extends State<IncomingAddScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () async {
+                              final result =
+                                  await AddProductScreen.showModal(context);
+                              if (result == true &&
+                                  state.selectedManufacturer != null) {
+                                await cubit.updateProducts(
+                                    state.selectedManufacturer!);
+                              }
+                            },
+                            icon: const Icon(Icons.add),
+                            label: Text(S.of(context).addProduct),
+                          ),
+                        ),
+                      ),
                       _buildManufacturerDropdown(state),
                       const SizedBox(height: 16),
                       if (state.selectedManufacturer != null) ...[
